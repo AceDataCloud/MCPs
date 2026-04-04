@@ -1,0 +1,9 @@
+version: "3"
+services:
+  mcp-shorturl:
+    platform: linux/amd64
+    container_name: "mcp-shorturl"
+    build: ./
+    image: "ghcr.io/acedatacloud/mcp-shorturl:${BUILD_NUMBER}"
+    ports:
+      - "8000:8000"

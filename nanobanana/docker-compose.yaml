@@ -1,0 +1,9 @@
+version: "3"
+services:
+  mcp-nanobanana:
+    platform: linux/amd64
+    container_name: "mcp-nanobanana"
+    build: ./
+    image: "ghcr.io/acedatacloud/mcp-nanobanana:${BUILD_NUMBER}"
+    ports:
+      - "8000:8000"

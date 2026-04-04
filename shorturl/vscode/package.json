@@ -1,0 +1,47 @@
+{
+  "name": "mcp-shorturl",
+  "displayName": "ShortURL MCP",
+  "description": "URL Shortening - Create and manage short URLs via Ace Data Cloud API",
+  "version": "0.1.0",
+  "publisher": "acedatacloud",
+  "icon": "icon.png",
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.99.0"
+  },
+  "categories": [
+    "AI",
+    "Chat"
+  ],
+  "keywords": [
+    "mcp",
+    "model context protocol",
+    "ai",
+    "copilot",
+    "ace data cloud",
+    "shorturl",
+    "url shortener",
+    "short link"
+  ],
+  "homepage": "https://github.com/AceDataCloud/ShortURLMCP",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AceDataCloud/ShortURLMCP"
+  },
+  "bugs": {
+    "url": "https://github.com/AceDataCloud/ShortURLMCP/issues"
+  },
+  "contributes": {
+    "mcpServers": {
+      "shorturl": {
+        "command": "uvx",
+        "args": [
+          "mcp-shorturl"
+        ],
+        "env": {
+          "ACEDATACLOUD_API_TOKEN": ""
+        }
+      }
+    }
+  }
+}

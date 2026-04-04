@@ -1,0 +1,83 @@
+<idea-plugin>
+    <id>com.acedatacloud.mcp.shorturl</id>
+    <name>ShortURL MCP</name>
+    <vendor email="dev@acedata.cloud" url="https://acedata.cloud">Ace Data Cloud</vendor>
+
+    <description><![CDATA[
+<p><b>URL Shortening</b> with <a href="https://surl.id">ShortURL</a> via
+<a href="https://modelcontextprotocol.io">Model Context Protocol (MCP)</a>.</p>
+
+<p>This plugin helps you set up the MCP ShortURL server with JetBrains AI Assistant.
+Once configured, AI Assistant can create and manage short urls
+— all powered by <a href="https://platform.acedata.cloud">Ace Data Cloud</a>.</p>
+
+<h3>Features</h3>
+<ul>
+    <li><b>4 AI Tools</b> — Create and manage short URLs</li>
+    <li><b>Easy Setup</b> — One-click copy MCP configuration for AI Assistant</li>
+    <li><b>Dual Mode</b> — STDIO (local) and HTTP (remote) server support</li>
+    <li><b>Token Management</b> — Store API token securely in IDE settings</li>
+</ul>
+
+<h3>Available Tools</h3>
+<ul>
+    <li><b>Create</b> — Shorten URLs with custom aliases</li>
+    <li><b>Manage</b> — Update and delete short links</li>
+    <li><b>Analytics</b> — Track click statistics</li>
+</ul>
+
+<h3>Quick Start</h3>
+<ol>
+    <li>Install this plugin</li>
+    <li>Open <b>Settings → Tools → ShortURL MCP</b></li>
+    <li>Enter your <a href="https://platform.acedata.cloud">Ace Data Cloud</a> API token</li>
+    <li>Click <b>Copy Config</b> and paste into <b>Settings → Tools → AI Assistant → MCP</b></li>
+</ol>
+
+<p>Requires <a href="https://github.com/astral-sh/uv">uv</a> (Python package runner) for STDIO mode,
+or use HTTP mode for zero-install remote access.</p>
+]]></description>
+
+    <depends>com.intellij.modules.platform</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <applicationService
+            serviceImplementation="com.acedatacloud.mcp.shorturl.McpSettings"/>
+
+        <applicationConfigurable
+            id="com.acedatacloud.mcp.shorturl.settings"
+            displayName="ShortURL MCP"
+            parentId="tools"
+            instance="com.acedatacloud.mcp.shorturl.McpSettingsConfigurable"/>
+
+        <postStartupActivity
+            implementation="com.acedatacloud.mcp.shorturl.McpStartupActivity"/>
+
+        <notificationGroup id="ShortURL MCP" displayType="BALLOON"/>
+    </extensions>
+
+    <actions>
+        <group id="com.acedatacloud.mcp.shorturl.Actions" text="ShortURL MCP" popup="true">
+            <action id="com.acedatacloud.mcp.shorturl.CopyStdioConfig"
+                class="com.acedatacloud.mcp.shorturl.CopyStdioConfigAction"
+                text="Copy STDIO Config"
+                description="Copy STDIO MCP configuration for AI Assistant"/>
+            <action id="com.acedatacloud.mcp.shorturl.CopyHttpConfig"
+                class="com.acedatacloud.mcp.shorturl.CopyHttpConfigAction"
+                text="Copy HTTP Config"
+                description="Copy HTTP MCP configuration for AI Assistant"/>
+            <add-to-group group-id="ToolsMenu" anchor="last"/>
+        </group>
+    </actions>
+
+    <change-notes><![CDATA[
+<h3>0.1.0</h3>
+<ul>
+    <li>Initial release</li>
+    <li>MCP server integration with JetBrains AI Assistant</li>
+    <li>STDIO and HTTP transport modes</li>
+    <li>Settings UI for API token management</li>
+    <li>One-click MCP config copy</li>
+</ul>
+]]></change-notes>
+</idea-plugin>

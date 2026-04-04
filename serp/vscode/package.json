@@ -1,0 +1,49 @@
+{
+  "name": "mcp-serp",
+  "displayName": "Serp MCP",
+  "description": "Google Search via SERP API - Web, Images, News, Videos, Maps and more via Ace Data Cloud API",
+  "version": "0.1.0",
+  "publisher": "acedatacloud",
+  "icon": "icon.png",
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.99.0"
+  },
+  "categories": [
+    "AI",
+    "Chat"
+  ],
+  "keywords": [
+    "mcp",
+    "model context protocol",
+    "ai",
+    "copilot",
+    "ace data cloud",
+    "serp",
+    "google search",
+    "web search",
+    "images",
+    "news"
+  ],
+  "homepage": "https://github.com/AceDataCloud/SerpMCP",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AceDataCloud/SerpMCP"
+  },
+  "bugs": {
+    "url": "https://github.com/AceDataCloud/SerpMCP/issues"
+  },
+  "contributes": {
+    "mcpServers": {
+      "serp": {
+        "command": "uvx",
+        "args": [
+          "mcp-serp"
+        ],
+        "env": {
+          "ACEDATACLOUD_API_TOKEN": ""
+        }
+      }
+    }
+  }
+}

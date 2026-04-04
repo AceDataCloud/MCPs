@@ -1,0 +1,83 @@
+<idea-plugin>
+    <id>com.acedatacloud.mcp.nanobanana</id>
+    <name>NanoBanana MCP</name>
+    <vendor email="dev@acedata.cloud" url="https://acedata.cloud">Ace Data Cloud</vendor>
+
+    <description><![CDATA[
+<p><b>AI Image Generation</b> with <a href="https://nanobanana.com">NanoBanana (Gemini-based)</a> via
+<a href="https://modelcontextprotocol.io">Model Context Protocol (MCP)</a>.</p>
+
+<p>This plugin helps you set up the MCP NanoBanana (Gemini-based) server with JetBrains AI Assistant.
+Once configured, AI Assistant can generate and edit images
+— all powered by <a href="https://platform.acedata.cloud">Ace Data Cloud</a>.</p>
+
+<h3>Features</h3>
+<ul>
+    <li><b>4 AI Tools</b> — Generate and edit images</li>
+    <li><b>Easy Setup</b> — One-click copy MCP configuration for AI Assistant</li>
+    <li><b>Dual Mode</b> — STDIO (local) and HTTP (remote) server support</li>
+    <li><b>Token Management</b> — Store API token securely in IDE settings</li>
+</ul>
+
+<h3>Available Tools</h3>
+<ul>
+    <li><b>Generate</b> — Create images from text prompts</li>
+    <li><b>Edit</b> — Transform and modify existing images</li>
+    <li><b>Gemini-powered</b> — Uses Google Gemini models</li>
+</ul>
+
+<h3>Quick Start</h3>
+<ol>
+    <li>Install this plugin</li>
+    <li>Open <b>Settings → Tools → NanoBanana MCP</b></li>
+    <li>Enter your <a href="https://platform.acedata.cloud">Ace Data Cloud</a> API token</li>
+    <li>Click <b>Copy Config</b> and paste into <b>Settings → Tools → AI Assistant → MCP</b></li>
+</ol>
+
+<p>Requires <a href="https://github.com/astral-sh/uv">uv</a> (Python package runner) for STDIO mode,
+or use HTTP mode for zero-install remote access.</p>
+]]></description>
+
+    <depends>com.intellij.modules.platform</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <applicationService
+            serviceImplementation="com.acedatacloud.mcp.nanobanana.McpSettings"/>
+
+        <applicationConfigurable
+            id="com.acedatacloud.mcp.nanobanana.settings"
+            displayName="NanoBanana MCP"
+            parentId="tools"
+            instance="com.acedatacloud.mcp.nanobanana.McpSettingsConfigurable"/>
+
+        <postStartupActivity
+            implementation="com.acedatacloud.mcp.nanobanana.McpStartupActivity"/>
+
+        <notificationGroup id="NanoBanana MCP" displayType="BALLOON"/>
+    </extensions>
+
+    <actions>
+        <group id="com.acedatacloud.mcp.nanobanana.Actions" text="NanoBanana MCP" popup="true">
+            <action id="com.acedatacloud.mcp.nanobanana.CopyStdioConfig"
+                class="com.acedatacloud.mcp.nanobanana.CopyStdioConfigAction"
+                text="Copy STDIO Config"
+                description="Copy STDIO MCP configuration for AI Assistant"/>
+            <action id="com.acedatacloud.mcp.nanobanana.CopyHttpConfig"
+                class="com.acedatacloud.mcp.nanobanana.CopyHttpConfigAction"
+                text="Copy HTTP Config"
+                description="Copy HTTP MCP configuration for AI Assistant"/>
+            <add-to-group group-id="ToolsMenu" anchor="last"/>
+        </group>
+    </actions>
+
+    <change-notes><![CDATA[
+<h3>0.1.0</h3>
+<ul>
+    <li>Initial release</li>
+    <li>MCP server integration with JetBrains AI Assistant</li>
+    <li>STDIO and HTTP transport modes</li>
+    <li>Settings UI for API token management</li>
+    <li>One-click MCP config copy</li>
+</ul>
+]]></change-notes>
+</idea-plugin>

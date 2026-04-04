@@ -1,0 +1,36 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.AceDataCloud/mcp-veo",
+  "description": "MCP server for Google Veo AI video generation",
+  "version": "2026.3.19.8",
+  "repository": {
+    "url": "https://github.com/AceDataCloud/VeoMCP",
+    "source": "github"
+  },
+  "packages": [
+    {
+      "identifier": "mcp-veo",
+      "version": "2026.3.19.8",
+      "transport": {
+        "type": "stdio"
+      },
+      "registryType": "pypi",
+      "runtimeHint": "uvx",
+      "environmentVariables": [
+        {
+          "name": "ACEDATACLOUD_API_TOKEN",
+          "description": "API token from Ace Data Cloud (https://platform.acedata.cloud)",
+          "isRequired": true,
+          "isSecret": true
+        }
+      ]
+    }
+  ],
+  "websiteUrl": "https://platform.acedata.cloud",
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://veo.mcp.acedata.cloud/mcp"
+    }
+  ]
+}

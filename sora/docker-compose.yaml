@@ -1,0 +1,9 @@
+version: "3"
+services:
+  mcp-sora:
+    platform: linux/amd64
+    container_name: "mcp-sora"
+    build: ./
+    image: "ghcr.io/acedatacloud/mcp-sora:${BUILD_NUMBER}"
+    ports:
+      - "8000:8000"

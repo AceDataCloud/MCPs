@@ -1,0 +1,9 @@
+version: "3"
+services:
+  mcp-luma:
+    platform: linux/amd64
+    container_name: "mcp-luma"
+    build: ./
+    image: "ghcr.io/acedatacloud/mcp-luma:${BUILD_NUMBER}"
+    ports:
+      - "8000:8000"

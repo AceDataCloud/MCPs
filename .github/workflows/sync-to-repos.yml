@@ -1,0 +1,118 @@
+name: Sync to Sub-Repos
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  detect-changes:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.changes.outputs.matrix }}
+      has_changes: ${{ steps.changes.outputs.has_changes }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Detect changed subdirectories
+        id: changes
+        run: |
+          # Get list of changed files
+          CHANGED=$(git diff --name-only HEAD~1 HEAD 2>/dev/null || git diff --name-only HEAD)
+
+          # Read sync.yaml to get mapping keys
+          DIRS=$(grep -E '^\s+\w+:$' sync.yaml | sed 's/://;s/^\s*//' | grep -v '^repo$\|^exclude$\|^mappings$')
+
+          MATRIX="[]"
+          HAS_CHANGES="false"
+
+          for dir in $DIRS; do
+            if echo "$CHANGED" | grep -q "^${dir}/"; then
+              # Extract repo from sync.yaml
+              REPO=$(awk "/^  ${dir}:/{found=1} found && /repo:/{print \$2; exit}" sync.yaml)
+              if [ -n "$REPO" ]; then
+                MATRIX=$(echo "$MATRIX" | jq -c --arg d "$dir" --arg r "$REPO" '. + [{"dir": $d, "repo": $r}]')
+                HAS_CHANGES="true"
+              fi
+            fi
+          done
+
+          echo "matrix={\"include\":$MATRIX}" >> $GITHUB_OUTPUT
+          echo "has_changes=$HAS_CHANGES" >> $GITHUB_OUTPUT
+          echo "Changes detected: $MATRIX"
+
+  sync:
+    needs: detect-changes
+    if: needs.detect-changes.outputs.has_changes == 'true'
+    runs-on: ubuntu-latest
+    strategy:
+      matrix: ${{ fromJson(needs.detect-changes.outputs.matrix) }}
+      fail-fast: false
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Sync ${{ matrix.dir }} to ${{ matrix.repo }}
+        env:
+          GH_TOKEN: ${{ secrets.SYNC_TOKEN }}
+        run: |
+          set -e
+
+          DIR="${{ matrix.dir }}"
+          REPO="${{ matrix.repo }}"
+
+          # Clone target repo
+          git clone "https://x-access-token:${GH_TOKEN}@github.com/${REPO}.git" /tmp/target
+          cd /tmp/target
+
+          # Configure git
+          git config user.name "Ace Data Cloud Dev"
+          git config user.email "dev@acedata.cloud"
+
+          # Read exclude patterns from sync.yaml
+          EXCLUDES=""
+          IN_EXCLUDES=false
+          while IFS= read -r line; do
+            if echo "$line" | grep -q "^  ${DIR}:"; then
+              IN_DIR=true
+              continue
+            fi
+            if [ "$IN_DIR" = true ] && echo "$line" | grep -q "exclude:"; then
+              IN_EXCLUDES=true
+              continue
+            fi
+            if [ "$IN_EXCLUDES" = true ]; then
+              if echo "$line" | grep -qE '^\s+- '; then
+                PATTERN=$(echo "$line" | sed 's/^\s*- //')
+                EXCLUDES="$EXCLUDES --exclude=$PATTERN"
+              else
+                break
+              fi
+            fi
+            # Reset if we hit a new top-level dir mapping
+            if echo "$line" | grep -qE '^\s+\w+:$' && [ "$IN_DIR" = true ]; then
+              break
+            fi
+          done < "$GITHUB_WORKSPACE/sync.yaml"
+
+          # Sync files: monorepo subdir -> target repo root
+          # Delete files in target that don't exist in source (except .git, .github, .gitbooks)
+          rsync -av --delete \
+            --exclude='.git' \
+            --exclude='.github' \
+            --exclude='.gitbooks' \
+            "$GITHUB_WORKSPACE/${DIR}/" /tmp/target/
+
+          # Check for changes
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No changes to sync for ${DIR}"
+            exit 0
+          fi
+
+          # Get the commit message from the monorepo
+          COMMIT_MSG=$(cd "$GITHUB_WORKSPACE" && git log -1 --pretty=format:"%s")
+
+          git commit -m "sync: ${COMMIT_MSG}" -m "Synced from monorepo directory: ${DIR}"
+          git push origin main
+          echo "Successfully synced ${DIR} to ${REPO}"

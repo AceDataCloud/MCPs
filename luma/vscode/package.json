@@ -1,0 +1,48 @@
+{
+  "name": "mcp-luma",
+  "displayName": "Luma MCP",
+  "description": "AI Video Generation with Luma Dream Machine - Generate and extend videos via Ace Data Cloud API",
+  "version": "0.1.0",
+  "publisher": "acedatacloud",
+  "icon": "icon.png",
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.99.0"
+  },
+  "categories": [
+    "AI",
+    "Chat"
+  ],
+  "keywords": [
+    "mcp",
+    "model context protocol",
+    "ai",
+    "copilot",
+    "ace data cloud",
+    "luma",
+    "video generation",
+    "dream machine",
+    "ai video"
+  ],
+  "homepage": "https://github.com/AceDataCloud/LumaMCP",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AceDataCloud/LumaMCP"
+  },
+  "bugs": {
+    "url": "https://github.com/AceDataCloud/LumaMCP/issues"
+  },
+  "contributes": {
+    "mcpServers": {
+      "luma": {
+        "command": "uvx",
+        "args": [
+          "mcp-luma"
+        ],
+        "env": {
+          "ACEDATACLOUD_API_TOKEN": ""
+        }
+      }
+    }
+  }
+}

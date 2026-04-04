@@ -1,0 +1,9 @@
+version: "3"
+services:
+  mcp-serp:
+    platform: linux/amd64
+    container_name: "mcp-serp"
+    build: ./
+    image: "ghcr.io/acedatacloud/mcp-serp:${BUILD_NUMBER}"
+    ports:
+      - "8000:8000"

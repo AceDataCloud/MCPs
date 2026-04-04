@@ -1,0 +1,48 @@
+{
+  "name": "mcp-nanobanana",
+  "displayName": "NanoBanana MCP",
+  "description": "AI Image Generation with NanoBanana (Gemini-based) - Generate and edit images via Ace Data Cloud API",
+  "version": "0.1.0",
+  "publisher": "acedatacloud",
+  "icon": "icon.png",
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.99.0"
+  },
+  "categories": [
+    "AI",
+    "Chat"
+  ],
+  "keywords": [
+    "mcp",
+    "model context protocol",
+    "ai",
+    "copilot",
+    "ace data cloud",
+    "nanobanana",
+    "image generation",
+    "gemini",
+    "ai art"
+  ],
+  "homepage": "https://github.com/AceDataCloud/NanoBananaMCP",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AceDataCloud/NanoBananaMCP"
+  },
+  "bugs": {
+    "url": "https://github.com/AceDataCloud/NanoBananaMCP/issues"
+  },
+  "contributes": {
+    "mcpServers": {
+      "nanobanana": {
+        "command": "uvx",
+        "args": [
+          "mcp-nanobanana-pro"
+        ],
+        "env": {
+          "ACEDATACLOUD_API_TOKEN": ""
+        }
+      }
+    }
+  }
+}

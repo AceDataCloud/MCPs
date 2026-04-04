@@ -1,0 +1,48 @@
+{
+  "name": "mcp-sora",
+  "displayName": "Sora MCP",
+  "description": "AI Video Generation with OpenAI Sora - Generate videos from text and images via Ace Data Cloud API",
+  "version": "0.1.0",
+  "publisher": "acedatacloud",
+  "icon": "icon.png",
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.99.0"
+  },
+  "categories": [
+    "AI",
+    "Chat"
+  ],
+  "keywords": [
+    "mcp",
+    "model context protocol",
+    "ai",
+    "copilot",
+    "ace data cloud",
+    "sora",
+    "video generation",
+    "openai sora",
+    "ai video"
+  ],
+  "homepage": "https://github.com/AceDataCloud/SoraMCP",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AceDataCloud/SoraMCP"
+  },
+  "bugs": {
+    "url": "https://github.com/AceDataCloud/SoraMCP/issues"
+  },
+  "contributes": {
+    "mcpServers": {
+      "sora": {
+        "command": "uvx",
+        "args": [
+          "mcp-sora"
+        ],
+        "env": {
+          "ACEDATACLOUD_API_TOKEN": ""
+        }
+      }
+    }
+  }
+}
