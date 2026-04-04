@@ -2,55 +2,44 @@ mappings:
   luma:
     repo: AceDataCloud/LumaMCP
     exclude:
-      - .github
       - .gitbooks
   suno:
     repo: AceDataCloud/SunoMCP
     exclude:
-      - .github
       - .gitbooks
   midjourney:
     repo: AceDataCloud/MidjourneyMCP
     exclude:
-      - .github
       - .gitbooks
   flux:
     repo: AceDataCloud/FluxMCP
     exclude:
-      - .github
       - .gitbooks
   sora:
     repo: AceDataCloud/SoraMCP
     exclude:
-      - .github
       - .gitbooks
   veo:
     repo: AceDataCloud/VeoMCP
     exclude:
-      - .github
       - .gitbooks
   serp:
     repo: AceDataCloud/SerpMCP
     exclude:
-      - .github
       - .gitbooks
   nanobanana:
     repo: AceDataCloud/NanoBananaMCP
     exclude:
-      - .github
       - .gitbooks
   seedance:
     repo: AceDataCloud/SeedanceMCP
     exclude:
-      - .github
       - .gitbooks
   seedream:
     repo: AceDataCloud/SeedreamMCP
     exclude:
-      - .github
       - .gitbooks
   shorturl:
     repo: AceDataCloud/ShortURLMCP
     exclude:
-      - .github
       - .gitbooks
