@@ -1,6 +1,7 @@
 # MCP Luma
 
 <!-- mcp-name: io.github.AceDataCloud/mcp-luma -->
+<!-- managed-by: https://github.com/AceDataCloud/MCPs -->
 
 [![PyPI version](https://img.shields.io/pypi/v/mcp-luma.svg)](https://pypi.org/project/mcp-luma/)
 [![PyPI downloads](https://img.shields.io/pypi/dm/mcp-luma.svg)](https://pypi.org/project/mcp-luma/)
