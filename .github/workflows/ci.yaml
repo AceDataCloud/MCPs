@@ -15,12 +15,13 @@ jobs:
     steps:
       - uses: actions/checkout@v6
         with:
-          fetch-depth: 2
+          fetch-depth: 0
 
       - name: Detect changed MCP subdirectories
         id: changes
         run: |
           if [ "${{ github.event_name }}" = "pull_request" ]; then
+            git fetch origin ${{ github.base_ref }} --depth=1 2>/dev/null || true
             CHANGED=$(git diff --name-only origin/${{ github.base_ref }}...HEAD)
           else
             CHANGED=$(git diff --name-only HEAD~1 HEAD 2>/dev/null || git diff --name-only HEAD)
