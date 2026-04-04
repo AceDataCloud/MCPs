@@ -6,7 +6,7 @@ from pydantic import Field
 
 from core.client import client
 from core.server import mcp
-from core.types import DEFAULT_ASPECT_RATIO, AspectRatio
+from core.types import DEFAULT_ASPECT_RATIO, DEFAULT_QUALITY, AspectRatio, LumaQuality
 from core.utils import format_video_result
 
 
@@ -34,6 +34,12 @@ async def luma_generate_video(
         bool,
         Field(description="If true, enable clarity enhancement for the video. Default is true."),
     ] = True,
+    quality: Annotated[
+        LumaQuality,
+        Field(
+            description="Video quality level. Options: 'standard' (default), 'high', 'ultra'."
+        ),
+    ] = DEFAULT_QUALITY,
     timeout: Annotated[
         int | None,
         Field(description="Timeout in seconds for the API to return data. Default is 300."),
@@ -66,6 +72,7 @@ async def luma_generate_video(
         aspect_ratio=aspect_ratio,
         loop=loop,
         enhancement=enhancement,
+        quality=quality,
         timeout=timeout,
         callback_url=callback_url,
     )
@@ -104,6 +111,12 @@ async def luma_generate_video_from_image(
         bool,
         Field(description="If true, enable clarity enhancement. Default is true."),
     ] = True,
+    quality: Annotated[
+        LumaQuality,
+        Field(
+            description="Video quality level. Options: 'standard' (default), 'high', 'ultra'."
+        ),
+    ] = DEFAULT_QUALITY,
     timeout: Annotated[
         int | None,
         Field(description="Timeout in seconds for the API to return data. Default is 300."),
@@ -139,6 +152,7 @@ async def luma_generate_video_from_image(
         "aspect_ratio": aspect_ratio,
         "loop": loop,
         "enhancement": enhancement,
+        "quality": quality,
         "timeout": timeout,
         "callback_url": callback_url,
     }
@@ -172,6 +186,12 @@ async def luma_extend_video(
             description="Optional URL of an image to use as the final frame of the extended video."
         ),
     ] = "",
+    quality: Annotated[
+        LumaQuality,
+        Field(
+            description="Video quality level. Options: 'standard' (default), 'high', 'ultra'."
+        ),
+    ] = DEFAULT_QUALITY,
 ) -> str:
     """Extend an existing video with additional content.
 
@@ -190,6 +210,7 @@ async def luma_extend_video(
         "action": "extend",
         "video_id": video_id,
         "prompt": prompt,
+        "quality": quality,
     }
 
     if end_image_url:
@@ -219,6 +240,12 @@ async def luma_extend_video_from_url(
             description="Optional URL of an image to use as the final frame of the extended video."
         ),
     ] = "",
+    quality: Annotated[
+        LumaQuality,
+        Field(
+            description="Video quality level. Options: 'standard' (default), 'high', 'ultra'."
+        ),
+    ] = DEFAULT_QUALITY,
 ) -> str:
     """Extend an existing video using its URL.
 
@@ -236,6 +263,7 @@ async def luma_extend_video_from_url(
         "action": "extend",
         "video_url": video_url,
         "prompt": prompt,
+        "quality": quality,
     }
 
     if end_image_url:

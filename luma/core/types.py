@@ -16,5 +16,11 @@ AspectRatio = Literal[
 # Luma video actions
 LumaAction = Literal["generate", "extend"]
 
+# Luma video quality
+LumaQuality = Literal["standard", "high", "ultra"]
+
 # Default aspect ratio
 DEFAULT_ASPECT_RATIO: AspectRatio = "16:9"
+
+# Default quality
+DEFAULT_QUALITY: LumaQuality = "standard"
