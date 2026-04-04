@@ -96,11 +96,10 @@ jobs:
           done < "$GITHUB_WORKSPACE/sync.yaml"
 
           # Sync files: monorepo subdir -> target repo root
-          # Delete files in target that don't exist in source (except .git, .github, .gitbooks)
+          # Delete files in target that don't exist in source (except .git and configured excludes)
           rsync -av --delete \
             --exclude='.git' \
-            --exclude='.github' \
-            --exclude='.gitbooks' \
+            $EXCLUDES \
             "$GITHUB_WORKSPACE/${DIR}/" /tmp/target/
 
           # Check for changes
