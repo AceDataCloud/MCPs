@@ -1,4 +1,4 @@
-# MCP ShortURL
+# ShortURLMCP
 
 <!-- mcp-name: io.github.AceDataCloud/mcp-shorturl -->
 

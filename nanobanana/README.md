@@ -1,4 +1,4 @@
-# MCP NanoBanana
+# NanoBananaMCP
 
 <!-- mcp-name: io.github.AceDataCloud/mcp-nanobanana-pro -->
 

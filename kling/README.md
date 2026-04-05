@@ -1,4 +1,4 @@
-# MCP Kling
+# KlingMCP
 
 <!-- mcp-name: io.github.AceDataCloud/mcp-kling -->
 

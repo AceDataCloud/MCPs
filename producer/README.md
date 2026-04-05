@@ -1,4 +1,4 @@
-# MCP Producer
+# ProducerMCP
 
 <!-- mcp-name: io.github.AceDataCloud/mcp-producer -->
 

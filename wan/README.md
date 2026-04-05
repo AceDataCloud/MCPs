@@ -1,4 +1,4 @@
-# MCP Wan
+# WanMCP
 
 <!-- mcp-name: io.github.AceDataCloud/mcp-wan -->
 

@@ -1,4 +1,4 @@
-# MCP Hailuo
+# HailuoMCP
 
 <!-- mcp-name: io.github.AceDataCloud/mcp-hailuo -->
 

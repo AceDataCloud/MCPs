@@ -1,4 +1,4 @@
-# MCP Luma
+# LumaMCP
 
 <!-- mcp-name: io.github.AceDataCloud/mcp-luma -->
 

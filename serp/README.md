@@ -1,4 +1,4 @@
-# MCP Serp
+# SerpMCP
 
 <!-- mcp-name: io.github.AceDataCloud/mcp-serp -->
 

@@ -1,4 +1,4 @@
-# MCP Sora
+# SoraMCP
 
 <!-- mcp-name: io.github.AceDataCloud/mcp-sora -->
 
