@@ -1,0 +1,9 @@
+version: "3"
+services:
+  mcp-wan:
+    platform: linux/amd64
+    container_name: "mcp-wan"
+    build: ./
+    image: "ghcr.io/acedatacloud/mcp-wan:${BUILD_NUMBER}"
+    ports:
+      - "8000:8000"

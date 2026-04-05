@@ -22,6 +22,19 @@ Generate AI videos directly from Claude, VS Code, or any MCP-compatible client.
 - **Clarity Enhancement** - Optional video quality enhancement
 - **Task Tracking** - Monitor generation progress and retrieve results
 
+## Tool Reference
+
+| Tool | Description |
+|------|-------------|
+| `luma_generate_video` | Generate AI video from a text prompt using Luma Dream Machine. |
+| `luma_generate_video_from_image` | Generate AI video using reference images as start and/or end frames. |
+| `luma_extend_video` | Extend an existing video with additional content. |
+| `luma_extend_video_from_url` | Extend an existing video using its URL. |
+| `luma_get_task` | Query the status and result of a video generation task. |
+| `luma_get_tasks_batch` | Query multiple video generation tasks at once. |
+| `luma_list_aspect_ratios` | List all available aspect ratios for Luma video generation. |
+| `luma_list_actions` | List all available Luma API actions and corresponding tools. |
+
 ## Quick Start
 
 ### 1. Get Your API Token

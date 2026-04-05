@@ -13,6 +13,7 @@ async def luma_list_aspect_ratios() -> str:
     Returns:
         Table of all aspect ratios with their descriptions and use cases.
     """
+    # Last updated: 2026-04-05
     return """Available Luma Aspect Ratios:
 
 | Aspect Ratio | Description          | Use Case                              |
@@ -39,6 +40,7 @@ async def luma_list_actions() -> str:
     Returns:
         Categorized list of all actions and their corresponding tools.
     """
+    # Last updated: 2026-04-05
     return """Available Luma Actions and Tools:
 
 Video Generation:

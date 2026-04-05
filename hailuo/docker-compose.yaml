@@ -1,0 +1,9 @@
+version: "3"
+services:
+  mcp-hailuo:
+    platform: linux/amd64
+    container_name: "mcp-hailuo"
+    build: ./
+    image: "ghcr.io/acedatacloud/mcp-hailuo:${BUILD_NUMBER}"
+    ports:
+      - "8000:8000"

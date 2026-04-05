@@ -13,6 +13,7 @@ async def shorturl_get_usage_guide() -> str:
     Returns:
         Complete usage guide for ShortURL tools.
     """
+    # Last updated: 2026-04-05
     return """# ShortURL Tools Usage Guide
 
 ## Available Tools
@@ -79,6 +80,7 @@ async def shorturl_get_api_info() -> str:
     Returns:
         API information and service details.
     """
+    # Last updated: 2026-04-05
     return """# ShortURL API Information
 
 ## Service Details

@@ -1,0 +1,88 @@
+<idea-plugin>
+    <id>com.acedatacloud.mcp.producer</id>
+    <name>Producer MCP</name>
+    <vendor email="dev@acedata.cloud" url="https://acedata.cloud">Ace Data Cloud</vendor>
+
+    <description><![CDATA[
+<p><b>AI Music Generation</b> with <a href="https://www.riffusion.com">Producer/Riffusion (FUZZ)</a> via
+<a href="https://modelcontextprotocol.io">Model Context Protocol (MCP)</a>.</p>
+
+<p>This plugin helps you set up the MCP Producer server with JetBrains AI Assistant.
+Once configured, AI Assistant can generate music, create covers, extend songs, and more
+— all powered by <a href="https://platform.acedata.cloud">Ace Data Cloud</a>.</p>
+
+<h3>Features</h3>
+<ul>
+    <li><b>18 AI Tools</b> — Generate, extend, cover, remix, and separate music</li>
+    <li><b>Easy Setup</b> — One-click copy MCP configuration for AI Assistant</li>
+    <li><b>Dual Mode</b> — STDIO (local) and HTTP (remote) server support</li>
+    <li><b>Token Management</b> — Store API token securely in IDE settings</li>
+</ul>
+
+<h3>Available Tools</h3>
+<ul>
+    <li><b>Generate</b> — Create music from text prompts</li>
+    <li><b>Custom</b> — Generate with custom lyrics, title, and style</li>
+    <li><b>Extend</b> — Extend songs from a timestamp</li>
+    <li><b>Cover</b> — Create covers in different styles</li>
+    <li><b>Variation</b> — Create variations of songs</li>
+    <li><b>Swap</b> — Swap vocals or instrumentals between songs</li>
+    <li><b>Stems</b> — Separate into vocal and instrument tracks</li>
+    <li><b>Lyrics</b> — Generate structured lyrics</li>
+</ul>
+
+<h3>Quick Start</h3>
+<ol>
+    <li>Install this plugin</li>
+    <li>Open <b>Settings → Tools → Producer MCP</b></li>
+    <li>Enter your <a href="https://platform.acedata.cloud">Ace Data Cloud</a> API token</li>
+    <li>Click <b>Copy Config</b> and paste into <b>Settings → Tools → AI Assistant → MCP</b></li>
+</ol>
+
+<p>Requires <a href="https://github.com/astral-sh/uv">uv</a> (Python package runner) for STDIO mode,
+or use HTTP mode for zero-install remote access.</p>
+]]></description>
+
+    <depends>com.intellij.modules.platform</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <applicationService
+            serviceImplementation="com.acedatacloud.mcp.producer.McpSettings"/>
+
+        <applicationConfigurable
+            id="com.acedatacloud.mcp.producer.settings"
+            displayName="Producer MCP"
+            parentId="tools"
+            instance="com.acedatacloud.mcp.producer.McpSettingsConfigurable"/>
+
+        <postStartupActivity
+            implementation="com.acedatacloud.mcp.producer.McpStartupActivity"/>
+
+        <notificationGroup id="Producer MCP" displayType="BALLOON"/>
+    </extensions>
+
+    <actions>
+        <group id="com.acedatacloud.mcp.producer.Actions" text="Producer MCP" popup="true">
+            <action id="com.acedatacloud.mcp.producer.CopyStdioConfig"
+                class="com.acedatacloud.mcp.producer.CopyStdioConfigAction"
+                text="Copy STDIO Config"
+                description="Copy STDIO MCP configuration for AI Assistant"/>
+            <action id="com.acedatacloud.mcp.producer.CopyHttpConfig"
+                class="com.acedatacloud.mcp.producer.CopyHttpConfigAction"
+                text="Copy HTTP Config"
+                description="Copy HTTP MCP configuration for AI Assistant"/>
+            <add-to-group group-id="ToolsMenu" anchor="last"/>
+        </group>
+    </actions>
+
+    <change-notes><![CDATA[
+<h3>0.1.0</h3>
+<ul>
+    <li>Initial release</li>
+    <li>MCP server integration with JetBrains AI Assistant</li>
+    <li>STDIO and HTTP transport modes</li>
+    <li>Settings UI for API token management</li>
+    <li>One-click MCP config copy</li>
+</ul>
+]]></change-notes>
+</idea-plugin>

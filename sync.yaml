@@ -43,3 +43,19 @@ mappings:
     repo: AceDataCloud/ShortURLMCP
     exclude:
       - .gitbooks
+  kling:
+    repo: AceDataCloud/KlingMCP
+    exclude:
+      - .gitbooks
+  hailuo:
+    repo: AceDataCloud/HailuoMCP
+    exclude:
+      - .gitbooks
+  wan:
+    repo: AceDataCloud/WanMCP
+    exclude:
+      - .gitbooks
+  producer:
+    repo: AceDataCloud/ProducerMCP
+    exclude:
+      - .gitbooks

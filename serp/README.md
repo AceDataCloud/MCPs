@@ -24,6 +24,22 @@ Perform Google searches and get structured results directly from Claude, VS Code
 - **Localization** - Support for multiple countries and languages
 - **Time Filtering** - Filter results by time range
 
+## Tool Reference
+
+| Tool | Description |
+|------|-------------|
+| `serp_google_search` | Search Google and get structured results using the SERP API. |
+| `serp_google_images` | Search Google Images and get image results. |
+| `serp_google_news` | Search Google News and get news article results. |
+| `serp_google_videos` | Search Google Videos and get video results. |
+| `serp_google_places` | Search Google for local places and businesses. |
+| `serp_google_maps` | Search Google Maps for locations. |
+| `serp_list_search_types` | List all available Google search types. |
+| `serp_list_countries` | List commonly used country codes for Google search. |
+| `serp_list_languages` | List commonly used language codes for Google search. |
+| `serp_list_time_ranges` | List available time range filters for Google search. |
+| `serp_get_usage_guide` | Get a comprehensive guide for using the Google SERP tools. |
+
 ## Quick Start
 
 ### 1. Get Your API Token

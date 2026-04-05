@@ -13,6 +13,7 @@ async def serp_list_search_types() -> str:
     Returns:
         Table of all search types with descriptions.
     """
+    # Last updated: 2026-04-05
     return """Available Google Search Types:
 
 | Type      | Description                                    | Use Case                           |
@@ -42,6 +43,7 @@ async def serp_list_countries() -> str:
     Returns:
         Table of country codes and their countries.
     """
+    # Last updated: 2026-04-05
     return """Common Country Codes for Google Search:
 
 | Code | Country           | Code | Country           |
@@ -71,6 +73,7 @@ async def serp_list_languages() -> str:
     Returns:
         Table of language codes and their languages.
     """
+    # Last updated: 2026-04-05
     return """Common Language Codes for Google Search:
 
 | Code    | Language              | Code    | Language              |
@@ -99,6 +102,7 @@ async def serp_list_time_ranges() -> str:
     Returns:
         Table of time range codes and their meanings.
     """
+    # Last updated: 2026-04-05
     return """Time Range Filters for Google Search:
 
 | Code    | Time Range   | Description                    |
@@ -129,6 +133,7 @@ async def serp_get_usage_guide() -> str:
     Returns:
         Complete usage guide for SERP tools.
     """
+    # Last updated: 2026-04-05
     return """# Google SERP Tools Usage Guide
 
 ## Available Tools

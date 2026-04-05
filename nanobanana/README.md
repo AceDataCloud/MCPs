@@ -20,6 +20,15 @@ Generate and edit AI images directly from Claude, VS Code, or any MCP-compatible
 - **Product Placement** - Place products in realistic scenes
 - **Task Tracking** - Monitor generation progress and retrieve results
 
+## Tool Reference
+
+| Tool | Description |
+|------|-------------|
+| `nanobanana_generate_image` | Generate an AI image from a text prompt using Google's Nano Banana model. |
+| `nanobanana_edit_image` | Edit or combine images using AI based on a text prompt. |
+| `nanobanana_get_task` | Query the status and result of an image generation or edit task. |
+| `nanobanana_get_tasks_batch` | Query multiple image generation/edit tasks at once. |
+
 ## Quick Start
 
 ### 1. Get Your API Token
