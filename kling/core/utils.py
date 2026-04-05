@@ -58,9 +58,7 @@ def format_video_result(data: dict[str, Any]) -> str:
         JSON string representation of the result
     """
     return json.dumps(
-        _with_submission_guidance(
-            data, "kling_get_task", "kling_get_tasks_batch"
-        ),
+        _with_submission_guidance(data, "kling_get_task", "kling_get_tasks_batch"),
         ensure_ascii=False,
         indent=2,
     )
@@ -76,9 +74,7 @@ def format_motion_result(data: dict[str, Any]) -> str:
         JSON string representation of the result
     """
     return json.dumps(
-        _with_submission_guidance(
-            data, "kling_get_task", "kling_get_tasks_batch"
-        ),
+        _with_submission_guidance(data, "kling_get_task", "kling_get_tasks_batch"),
         ensure_ascii=False,
         indent=2,
     )
@@ -94,9 +90,7 @@ def format_task_result(data: dict[str, Any]) -> str:
         JSON string representation of the result
     """
     return json.dumps(
-        _with_task_guidance(
-            data, "kling_get_task", "kling_get_tasks_batch"
-        ),
+        _with_task_guidance(data, "kling_get_task", "kling_get_tasks_batch"),
         ensure_ascii=False,
         indent=2,
     )

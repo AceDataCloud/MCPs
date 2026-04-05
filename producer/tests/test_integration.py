@@ -14,9 +14,7 @@ import sys
 import pytest
 
 # Add project root to path
-sys.path.insert(
-    0, os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-)
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 # Load environment variables
 from dotenv import load_dotenv
@@ -29,10 +27,7 @@ HAS_API_TOKEN = bool(os.getenv("ACEDATACLOUD_API_TOKEN"))
 # Decorator to skip tests that require API token
 requires_api_token = pytest.mark.skipif(
     not HAS_API_TOKEN,
-    reason=(
-        "ACEDATACLOUD_API_TOKEN not configured - "
-        "skipping integration test"
-    ),
+    reason=("ACEDATACLOUD_API_TOKEN not configured - skipping integration test"),
 )
 
 
@@ -63,10 +58,7 @@ class TestAudioTools:
         from tools.audio_tools import producer_generate_custom_music
 
         result = await producer_generate_custom_music(
-            lyric=(
-                "[Verse]\nThis is a test song\nJust for testing\n"
-                "[Chorus]\nTest test test"
-            ),
+            lyric=("[Verse]\nThis is a test song\nJust for testing\n[Chorus]\nTest test test"),
             title="Test Song",
             style="pop, simple",
             model="FUZZ-2.0",

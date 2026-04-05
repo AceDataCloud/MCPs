@@ -35,9 +35,7 @@ def get_request_api_token() -> str | None:
 class ProducerClient:
     """Async HTTP client for AceDataCloud Producer API."""
 
-    def __init__(
-        self, api_token: str | None = None, base_url: str | None = None
-    ):
+    def __init__(self, api_token: str | None = None, base_url: str | None = None):
         """Initialize the Producer API client.
 
         Args:
@@ -97,9 +95,7 @@ class ProducerClient:
         request_timeout = timeout or self.timeout
 
         logger.info(f"POST {url}")
-        logger.debug(
-            f"Request payload: {json.dumps(payload, ensure_ascii=False, indent=2)}"
-        )
+        logger.debug(f"Request payload: {json.dumps(payload, ensure_ascii=False, indent=2)}")
         logger.debug(f"Timeout: {request_timeout}s")
 
         async with httpx.AsyncClient() as http_client:
@@ -119,16 +115,12 @@ class ProducerClient:
 
                 if response.status_code == 403:
                     logger.error("Access denied: Check API permissions")
-                    raise ProducerAuthError(
-                        "Access denied. Check your API permissions."
-                    )
+                    raise ProducerAuthError("Access denied. Check your API permissions.")
 
                 response.raise_for_status()
 
                 result = response.json()
-                logger.success(
-                    f"Request successful! Task ID: {result.get('task_id', 'N/A')}"
-                )
+                logger.success(f"Request successful! Task ID: {result.get('task_id', 'N/A')}")
 
                 # Log summary of response
                 if result.get("success"):
@@ -143,21 +135,14 @@ class ProducerClient:
                                     f"{item.get('duration', 0):.1f}s"
                                 )
                             elif "text" in item:
-                                logger.info(
-                                    f"   Lyrics {i}: "
-                                    f"{item.get('title', 'Untitled')}"
-                                )
+                                logger.info(f"   Lyrics {i}: {item.get('title', 'Untitled')}")
                 else:
-                    logger.warning(
-                        f"API returned success=false: {result.get('error', {})}"
-                    )
+                    logger.warning(f"API returned success=false: {result.get('error', {})}")
 
                 return result  # type: ignore[no-any-return]
 
             except httpx.TimeoutException as e:
-                logger.error(
-                    f"Request timeout after {request_timeout}s: {e}"
-                )
+                logger.error(f"Request timeout after {request_timeout}s: {e}")
                 raise ProducerTimeoutError(
                     f"Request to {endpoint} timed out after {request_timeout}s"
                 ) from e
@@ -166,9 +151,7 @@ class ProducerClient:
                 raise
 
             except httpx.HTTPStatusError as e:
-                logger.error(
-                    f"HTTP error {e.response.status_code}: {e.response.text}"
-                )
+                logger.error(f"HTTP error {e.response.status_code}: {e.response.text}")
                 raise ProducerAPIError(
                     message=e.response.text,
                     code=f"http_{e.response.status_code}",
@@ -182,45 +165,28 @@ class ProducerClient:
     # Convenience methods for specific endpoints
     async def generate_audio(self, **kwargs: Any) -> dict[str, Any]:
         """Generate audio using the audios endpoint."""
-        logger.info(
-            f"Generating audio with action: {kwargs.get('action', 'generate')}"
-        )
-        return await self.request(
-            "/producer/audios", self._with_async_callback(kwargs)
-        )
+        logger.info(f"Generating audio with action: {kwargs.get('action', 'generate')}")
+        return await self.request("/producer/audios", self._with_async_callback(kwargs))
 
     async def generate_lyrics(self, **kwargs: Any) -> dict[str, Any]:
         """Generate lyrics using the lyrics endpoint."""
-        logger.info(
-            f"Generating lyrics with prompt: "
-            f"{kwargs.get('prompt', '')[:50]}..."
-        )
+        logger.info(f"Generating lyrics with prompt: {kwargs.get('prompt', '')[:50]}...")
         return await self.request("/producer/lyrics", kwargs)
 
     async def upload_audio(self, **kwargs: Any) -> dict[str, Any]:
         """Upload audio from a URL."""
-        logger.info(
-            f"Uploading audio: {kwargs.get('audio_url', '')[:50]}..."
-        )
+        logger.info(f"Uploading audio: {kwargs.get('audio_url', '')[:50]}...")
         return await self.request("/producer/upload", kwargs)
 
     async def generate_video(self, **kwargs: Any) -> dict[str, Any]:
         """Generate video for a song."""
-        logger.info(
-            f"Generating video for audio: {kwargs.get('audio_id', '')}"
-        )
-        return await self.request(
-            "/producer/videos", self._with_async_callback(kwargs)
-        )
+        logger.info(f"Generating video for audio: {kwargs.get('audio_id', '')}")
+        return await self.request("/producer/videos", self._with_async_callback(kwargs))
 
     async def generate_wav(self, **kwargs: Any) -> dict[str, Any]:
         """Get WAV format of a song."""
-        logger.info(
-            f"Getting WAV for audio: {kwargs.get('audio_id', '')}"
-        )
-        return await self.request(
-            "/producer/wav", self._with_async_callback(kwargs)
-        )
+        logger.info(f"Getting WAV for audio: {kwargs.get('audio_id', '')}")
+        return await self.request("/producer/wav", self._with_async_callback(kwargs))
 
     async def query_task(self, **kwargs: Any) -> dict[str, Any]:
         """Query task status using the tasks endpoint."""

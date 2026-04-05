@@ -73,9 +73,7 @@ async def producer_generate_custom_music(
     ],
     title: Annotated[
         str,
-        Field(
-            description="Title of the song. Keep it concise and memorable."
-        ),
+        Field(description="Title of the song. Keep it concise and memorable."),
     ],
     style: Annotated[
         str,
@@ -97,9 +95,7 @@ async def producer_generate_custom_music(
     ] = False,
     callback_url: Annotated[
         str | None,
-        Field(
-            description="Webhook callback URL for asynchronous notifications."
-        ),
+        Field(description="Webhook callback URL for asynchronous notifications."),
     ] = None,
 ) -> str:
     """Generate AI music with full control over lyrics, title, and style.
@@ -166,9 +162,7 @@ async def producer_extend_music(
     ] = DEFAULT_MODEL,
     callback_url: Annotated[
         str | None,
-        Field(
-            description="Webhook callback URL for asynchronous notifications."
-        ),
+        Field(description="Webhook callback URL for asynchronous notifications."),
     ] = None,
 ) -> str:
     """Extend an existing song from a specific timestamp with new content.
@@ -227,9 +221,7 @@ async def producer_cover_music(
     ] = DEFAULT_MODEL,
     callback_url: Annotated[
         str | None,
-        Field(
-            description="Webhook callback URL for asynchronous notifications."
-        ),
+        Field(description="Webhook callback URL for asynchronous notifications."),
     ] = None,
 ) -> str:
     """Create a cover or remix version of an existing song in a different style.
@@ -265,9 +257,7 @@ async def producer_cover_music(
 async def producer_variation_music(
     audio_id: Annotated[
         str,
-        Field(
-            description="ID of the audio to create a variation of."
-        ),
+        Field(description="ID of the audio to create a variation of."),
     ],
     prompt: Annotated[
         str,
@@ -287,9 +277,7 @@ async def producer_variation_music(
     ] = DEFAULT_MODEL,
     callback_url: Annotated[
         str | None,
-        Field(
-            description="Webhook callback URL for asynchronous notifications."
-        ),
+        Field(description="Webhook callback URL for asynchronous notifications."),
     ] = None,
 ) -> str:
     """Create a variation of an existing song with modifications.
@@ -325,21 +313,15 @@ async def producer_variation_music(
 async def producer_swap_vocals(
     audio_id: Annotated[
         str,
-        Field(
-            description="ID of the base audio whose vocals will be replaced."
-        ),
+        Field(description="ID of the base audio whose vocals will be replaced."),
     ],
     swap_audio_id: Annotated[
         str,
-        Field(
-            description="ID of the audio whose vocals to use as replacement."
-        ),
+        Field(description="ID of the audio whose vocals to use as replacement."),
     ],
     callback_url: Annotated[
         str | None,
-        Field(
-            description="Webhook callback URL for asynchronous notifications."
-        ),
+        Field(description="Webhook callback URL for asynchronous notifications."),
     ] = None,
 ) -> str:
     """Swap the vocals of one song with vocals from another song.
@@ -368,21 +350,15 @@ async def producer_swap_vocals(
 async def producer_swap_instrumentals(
     audio_id: Annotated[
         str,
-        Field(
-            description="ID of the base audio whose instrumentals will be replaced."
-        ),
+        Field(description="ID of the base audio whose instrumentals will be replaced."),
     ],
     swap_audio_id: Annotated[
         str,
-        Field(
-            description="ID of the audio whose instrumentals to use as replacement."
-        ),
+        Field(description="ID of the audio whose instrumentals to use as replacement."),
     ],
     callback_url: Annotated[
         str | None,
-        Field(
-            description="Webhook callback URL for asynchronous notifications."
-        ),
+        Field(description="Webhook callback URL for asynchronous notifications."),
     ] = None,
 ) -> str:
     """Swap the instrumental track of one song with instrumentals from another.
@@ -415,15 +391,11 @@ async def producer_replace_section(
     ],
     replace_section_start: Annotated[
         float,
-        Field(
-            description="Start time in seconds of the section to replace."
-        ),
+        Field(description="Start time in seconds of the section to replace."),
     ],
     replace_section_end: Annotated[
         float,
-        Field(
-            description="End time in seconds of the section to replace."
-        ),
+        Field(description="End time in seconds of the section to replace."),
     ],
     lyric: Annotated[
         str | None,
@@ -441,9 +413,7 @@ async def producer_replace_section(
     ] = DEFAULT_MODEL,
     callback_url: Annotated[
         str | None,
-        Field(
-            description="Webhook callback URL for asynchronous notifications."
-        ),
+        Field(description="Webhook callback URL for asynchronous notifications."),
     ] = None,
 ) -> str:
     """Replace a specific time range in a song with new generated content.
@@ -482,15 +452,11 @@ async def producer_replace_section(
 async def producer_stems_music(
     audio_id: Annotated[
         str,
-        Field(
-            description="ID of the audio to separate into stems."
-        ),
+        Field(description="ID of the audio to separate into stems."),
     ],
     callback_url: Annotated[
         str | None,
-        Field(
-            description="Webhook callback URL for asynchronous notifications."
-        ),
+        Field(description="Webhook callback URL for asynchronous notifications."),
     ] = None,
 ) -> str:
     """Separate a song into individual stems (vocals and instruments).

@@ -20,9 +20,7 @@ class ProducerAuthError(ProducerError):
 class ProducerAPIError(ProducerError):
     """API request error."""
 
-    def __init__(
-        self, message: str, code: str = "api_error", status_code: int | None = None
-    ):
+    def __init__(self, message: str, code: str = "api_error", status_code: int | None = None):
         self.status_code = status_code
         super().__init__(message, code)
 

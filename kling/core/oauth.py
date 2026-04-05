@@ -71,9 +71,7 @@ class AceDataCloudOAuthProvider:
         # Generate PKCE pair for auth.acedata.cloud token exchange
         code_verifier = secrets.token_urlsafe(48)
         digest = hashlib.sha256(code_verifier.encode("ascii")).digest()
-        auth_code_challenge = (
-            base64.urlsafe_b64encode(digest).rstrip(b"=").decode("ascii")
-        )
+        auth_code_challenge = base64.urlsafe_b64encode(digest).rstrip(b"=").decode("ascii")
 
         self._pending_auth[mcp_state] = {
             "client_id": client.client_id,
@@ -99,17 +97,11 @@ class AceDataCloudOAuthProvider:
             "code_challenge": auth_code_challenge,
             "code_challenge_method": "S256",
         }
-        auth_url = (
-            f"{settings.auth_base_url}/oauth2/authorize?{urlencode(auth_params)}"
-        )
-        logger.info(
-            f"OAuth authorize: redirecting to consent page (mcp_state={mcp_state})"
-        )
+        auth_url = f"{settings.auth_base_url}/oauth2/authorize?{urlencode(auth_params)}"
+        logger.info(f"OAuth authorize: redirecting to consent page (mcp_state={mcp_state})")
         return auth_url
 
-    async def handle_callback(
-        self, request: Request
-    ) -> RedirectResponse | JSONResponse:
+    async def handle_callback(self, request: Request) -> RedirectResponse | JSONResponse:
         """Handle the callback from AceDataCloud OAuth 2.0 after user consent.
 
         This is called as a Starlette route handler, not part of the SDK interface.
@@ -118,15 +110,11 @@ class AceDataCloudOAuthProvider:
         adc_code = request.query_params.get("code")
 
         if not mcp_state or not adc_code:
-            return JSONResponse(
-                {"error": "Missing state or code parameter"}, status_code=400
-            )
+            return JSONResponse({"error": "Missing state or code parameter"}, status_code=400)
 
         pending = self._pending_auth.pop(mcp_state, None)
         if not pending:
-            return JSONResponse(
-                {"error": "Invalid or expired state"}, status_code=400
-            )
+            return JSONResponse({"error": "Invalid or expired state"}, status_code=400)
 
         try:
             # Exchange AceDataCloud OAuth 2.0 code for JWT (with PKCE)
@@ -158,9 +146,7 @@ class AceDataCloudOAuthProvider:
                 client_id=pending["client_id"],
                 code_challenge=pending["code_challenge"],
                 redirect_uri=pending["redirect_uri"],
-                redirect_uri_provided_explicitly=pending[
-                    "redirect_uri_provided_explicitly"
-                ],
+                redirect_uri_provided_explicitly=pending["redirect_uri_provided_explicitly"],
                 resource=pending.get("resource"),
             )
             self._auth_codes[auth_code_str] = (auth_code, api_token)
@@ -173,16 +159,12 @@ class AceDataCloudOAuthProvider:
 
             separator = "&" if "?" in redirect_uri else "?"
             redirect_url = f"{redirect_uri}{separator}{urlencode(params)}"
-            logger.info(
-                "OAuth callback: issuing auth code, redirecting to client"
-            )
+            logger.info("OAuth callback: issuing auth code, redirecting to client")
             return RedirectResponse(url=redirect_url, status_code=302)
 
         except Exception:
             logger.exception("OAuth callback error")
-            return JSONResponse(
-                {"error": "Internal server error"}, status_code=500
-            )
+            return JSONResponse({"error": "Internal server error"}, status_code=500)
 
     async def load_authorization_code(
         self,
@@ -226,9 +208,7 @@ class AceDataCloudOAuthProvider:
             scopes=authorization_code.scopes,
         )
 
-        logger.info(
-            f"OAuth token exchange: issued access token for client {client_id}"
-        )
+        logger.info(f"OAuth token exchange: issued access token for client {client_id}")
         return OAuthToken(
             access_token=api_token,
             token_type="Bearer",
@@ -301,9 +281,7 @@ class AceDataCloudOAuthProvider:
 
     # --- Internal helpers ---
 
-    async def _exchange_code_for_jwt(
-        self, code: str, code_verifier: str
-    ) -> str | None:
+    async def _exchange_code_for_jwt(self, code: str, code_verifier: str) -> str | None:
         """Exchange AceDataCloud OAuth 2.0 authorization code for JWT."""
         callback_url = f"{settings.server_url}/oauth/callback"
         try:
@@ -322,10 +300,7 @@ class AceDataCloudOAuthProvider:
                     data = response.json()
                     access_token: str | None = data.get("access_token")
                     return access_token
-                logger.error(
-                    f"OAuth token exchange failed: "
-                    f"{response.status_code} {response.text}"
-                )
+                logger.error(f"OAuth token exchange failed: {response.status_code} {response.text}")
         except Exception:
             logger.exception("OAuth token exchange error")
         return None
@@ -349,25 +324,16 @@ class AceDataCloudOAuthProvider:
                 )
                 if response.status_code == 200:
                     data = response.json()
-                    results = (
-                        data.get("results", data)
-                        if isinstance(data, dict)
-                        else data
-                    )
+                    results = data.get("results", data) if isinstance(data, dict) else data
                     if isinstance(results, list):
                         for cred in results:
                             cred_token: str | None = cred.get("token")
                             if cred_token:
-                                logger.info(
-                                    "Found existing user credential token"
-                                )
+                                logger.info("Found existing user credential token")
                                 return cred_token
 
                 # Step 2: No credentials found — auto-provision
-                logger.info(
-                    "No credentials found, auto-provisioning "
-                    "Application + Credential"
-                )
+                logger.info("No credentials found, auto-provisioning Application + Credential")
 
                 # Step 2a: Find or create a Global Usage application
                 app_resp = await client.get(
@@ -383,25 +349,16 @@ class AceDataCloudOAuthProvider:
                 application_id: str | None = None
                 if app_resp.status_code == 200:
                     app_data = app_resp.json()
-                    items = app_data.get(
-                        "items", app_data.get("results", [])
-                    )
+                    items = app_data.get("items", app_data.get("results", []))
                     if isinstance(items, list) and items:
                         app = items[0]
                         application_id = app.get("id")
                         # Check if the app already has a credential
                         app_creds = app.get("credentials", [])
                         if isinstance(app_creds, list) and app_creds:
-                            existing_token: str | None = app_creds[0].get(
-                                "token"
-                            )
-                            if (
-                                isinstance(existing_token, str)
-                                and existing_token
-                            ):
-                                logger.info(
-                                    "Found credential in existing application"
-                                )
+                            existing_token: str | None = app_creds[0].get("token")
+                            if isinstance(existing_token, str) and existing_token:
+                                logger.info("Found credential in existing application")
                                 return existing_token
 
                 if not application_id:
@@ -417,9 +374,7 @@ class AceDataCloudOAuthProvider:
                     if create_app_resp.status_code in (200, 201):
                         new_app = create_app_resp.json()
                         application_id = new_app.get("id")
-                        logger.info(
-                            f"Created Global Application: {application_id}"
-                        )
+                        logger.info(f"Created Global Application: {application_id}")
                     else:
                         logger.error(
                             f"Failed to create application: "
@@ -440,20 +395,15 @@ class AceDataCloudOAuthProvider:
                 if cred_resp.status_code in (200, 201):
                     cred_data = cred_resp.json()
                     new_token: str | None = (
-                        cred_data.get("token")
-                        if isinstance(cred_data, dict)
-                        else None
+                        cred_data.get("token") if isinstance(cred_data, dict) else None
                     )
                     if isinstance(new_token, str) and new_token:
                         logger.info("Auto-provisioned new credential token")
                         return new_token
-                    logger.error(
-                        "Credential created but no token in response"
-                    )
+                    logger.error("Credential created but no token in response")
                 else:
                     logger.error(
-                        f"Failed to create credential: "
-                        f"{cred_resp.status_code} {cred_resp.text}"
+                        f"Failed to create credential: {cred_resp.status_code} {cred_resp.text}"
                     )
         except Exception:
             logger.exception("Credential fetch/provision error")

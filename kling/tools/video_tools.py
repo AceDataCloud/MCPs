@@ -47,9 +47,7 @@ async def kling_generate_video(
     ] = DEFAULT_ASPECT_RATIO,
     duration: Annotated[
         Duration,
-        Field(
-            description="Video duration in seconds. Options: 5 (default) or 10."
-        ),
+        Field(description="Video duration in seconds. Options: 5 (default) or 10."),
     ] = DEFAULT_DURATION,
     negative_prompt: Annotated[
         str | None,
@@ -66,14 +64,12 @@ async def kling_generate_video(
     camera_control: Annotated[
         str | None,
         Field(
-            description="Camera control as JSON string. Example: '{\"type\": \"simple\", \"config\": {\"horizontal\": 5, \"vertical\": 0, \"pan\": 0, \"tilt\": 0, \"roll\": 0, \"zoom\": 0}}'. Types: 'simple', 'down_back', 'forward_up', 'left_turn_forward', 'right_turn_forward'."
+            description='Camera control as JSON string. Example: \'{"type": "simple", "config": {"horizontal": 5, "vertical": 0, "pan": 0, "tilt": 0, "roll": 0, "zoom": 0}}\'. Types: \'simple\', \'down_back\', \'forward_up\', \'left_turn_forward\', \'right_turn_forward\'.'
         ),
     ] = None,
     timeout: Annotated[
         int | None,
-        Field(
-            description="Timeout in seconds for the API to return data. Default is 300."
-        ),
+        Field(description="Timeout in seconds for the API to return data. Default is 300."),
     ] = None,
     callback_url: Annotated[
         str | None,
@@ -141,33 +137,23 @@ async def kling_generate_video_from_image(
     ] = "",
     model: Annotated[
         KlingModel,
-        Field(
-            description="Kling model to use. Default: 'kling-v2-master'."
-        ),
+        Field(description="Kling model to use. Default: 'kling-v2-master'."),
     ] = DEFAULT_MODEL,
     mode: Annotated[
         Mode,
-        Field(
-            description="Generation mode. 'std' (standard, default) or 'pro' (higher quality)."
-        ),
+        Field(description="Generation mode. 'std' (standard, default) or 'pro' (higher quality)."),
     ] = DEFAULT_MODE,
     aspect_ratio: Annotated[
         AspectRatio,
-        Field(
-            description="Video aspect ratio. Usually should match your input image ratio."
-        ),
+        Field(description="Video aspect ratio. Usually should match your input image ratio."),
     ] = DEFAULT_ASPECT_RATIO,
     duration: Annotated[
         Duration,
-        Field(
-            description="Video duration in seconds. Options: 5 (default) or 10."
-        ),
+        Field(description="Video duration in seconds. Options: 5 (default) or 10."),
     ] = DEFAULT_DURATION,
     negative_prompt: Annotated[
         str | None,
-        Field(
-            description="Things to avoid in the video."
-        ),
+        Field(description="Things to avoid in the video."),
     ] = None,
     cfg_scale: Annotated[
         float | None,
@@ -177,21 +163,15 @@ async def kling_generate_video_from_image(
     ] = None,
     camera_control: Annotated[
         str | None,
-        Field(
-            description="Camera control as JSON string."
-        ),
+        Field(description="Camera control as JSON string."),
     ] = None,
     timeout: Annotated[
         int | None,
-        Field(
-            description="Timeout in seconds for the API to return data. Default is 300."
-        ),
+        Field(description="Timeout in seconds for the API to return data. Default is 300."),
     ] = None,
     callback_url: Annotated[
         str | None,
-        Field(
-            description="Webhook callback URL for asynchronous notifications."
-        ),
+        Field(description="Webhook callback URL for asynchronous notifications."),
     ] = None,
 ) -> str:
     """Generate AI video using reference images as start and/or end frames.
@@ -210,10 +190,7 @@ async def kling_generate_video_from_image(
         Task ID and generated video information including URLs and state.
     """
     if not start_image_url and not end_image_url:
-        return (
-            "Error: At least one of start_image_url or "
-            "end_image_url must be provided."
-        )
+        return "Error: At least one of start_image_url or end_image_url must be provided."
 
     payload: dict = {
         "action": "image2video",
@@ -257,27 +234,19 @@ async def kling_extend_video(
     ],
     model: Annotated[
         KlingModel,
-        Field(
-            description="Kling model to use. Default: 'kling-v2-master'."
-        ),
+        Field(description="Kling model to use. Default: 'kling-v2-master'."),
     ] = DEFAULT_MODEL,
     mode: Annotated[
         Mode,
-        Field(
-            description="Generation mode. 'std' (standard, default) or 'pro' (higher quality)."
-        ),
+        Field(description="Generation mode. 'std' (standard, default) or 'pro' (higher quality)."),
     ] = DEFAULT_MODE,
     negative_prompt: Annotated[
         str | None,
-        Field(
-            description="Things to avoid in the extended video."
-        ),
+        Field(description="Things to avoid in the extended video."),
     ] = None,
     cfg_scale: Annotated[
         float | None,
-        Field(
-            description="Classifier-free guidance scale."
-        ),
+        Field(description="Classifier-free guidance scale."),
     ] = None,
 ) -> str:
     """Extend an existing video with additional content.

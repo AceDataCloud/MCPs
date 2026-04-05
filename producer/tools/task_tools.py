@@ -47,9 +47,7 @@ async def producer_get_task(
 async def producer_get_tasks_batch(
     task_ids: Annotated[
         list[str],
-        Field(
-            description="List of task IDs to query. Maximum recommended batch size is 50 tasks."
-        ),
+        Field(description="List of task IDs to query. Maximum recommended batch size is 50 tasks."),
     ],
 ) -> str:
     """Query multiple music generation tasks at once.
@@ -72,10 +70,7 @@ async def producer_get_tasks_batch(
 
     if "error" in result:
         error = result.get("error", {})
-        return (
-            f"Error: {error.get('code', 'unknown')} - "
-            f"{error.get('message', 'Unknown error')}"
-        )
+        return f"Error: {error.get('code', 'unknown')} - {error.get('message', 'Unknown error')}"
 
     lines = [f"Total Tasks: {result.get('count', 0)}", ""]
 
@@ -90,10 +85,7 @@ async def producer_get_tasks_batch(
         )
 
         for audio in response_info.get("data", []):
-            lines.append(
-                f"  - {audio.get('title', 'Untitled')}: "
-                f"{audio.get('audio_url', 'N/A')}"
-            )
+            lines.append(f"  - {audio.get('title', 'Untitled')}: {audio.get('audio_url', 'N/A')}")
 
         lines.append("")
 

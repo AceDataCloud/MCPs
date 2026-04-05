@@ -17,13 +17,9 @@ class Settings:
 
     # API Configuration
     api_base_url: str = field(
-        default_factory=lambda: os.getenv(
-            "ACEDATACLOUD_API_BASE_URL", "https://api.acedata.cloud"
-        )
+        default_factory=lambda: os.getenv("ACEDATACLOUD_API_BASE_URL", "https://api.acedata.cloud")
     )
-    api_token: str = field(
-        default_factory=lambda: os.getenv("ACEDATACLOUD_API_TOKEN", "")
-    )
+    api_token: str = field(default_factory=lambda: os.getenv("ACEDATACLOUD_API_TOKEN", ""))
 
     # Default Model
     default_model: str = field(
@@ -36,20 +32,12 @@ class Settings:
     )
 
     # Server Configuration
-    server_name: str = field(
-        default_factory=lambda: os.getenv("MCP_SERVER_NAME", "producer")
-    )
-    transport: str = field(
-        default_factory=lambda: os.getenv("MCP_TRANSPORT", "stdio")
-    )
-    log_level: str = field(
-        default_factory=lambda: os.getenv("LOG_LEVEL", "INFO")
-    )
+    server_name: str = field(default_factory=lambda: os.getenv("MCP_SERVER_NAME", "producer"))
+    transport: str = field(default_factory=lambda: os.getenv("MCP_TRANSPORT", "stdio"))
+    log_level: str = field(default_factory=lambda: os.getenv("LOG_LEVEL", "INFO"))
 
     # OAuth / Remote Auth Configuration
-    server_url: str = field(
-        default_factory=lambda: os.getenv("MCP_SERVER_URL", "")
-    )
+    server_url: str = field(default_factory=lambda: os.getenv("MCP_SERVER_URL", ""))
     auth_base_url: str = field(
         default_factory=lambda: os.getenv(
             "ACEDATACLOUD_AUTH_BASE_URL", "https://auth.acedata.cloud"

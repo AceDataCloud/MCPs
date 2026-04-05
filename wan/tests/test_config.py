@@ -13,9 +13,10 @@ def test_settings_default_values():
 
         settings = Settings()
         assert settings.api_base_url == "https://api.acedata.cloud"
-        assert settings.default_model == "FUZZ-2.0"
+        assert settings.default_model == "wan2.6-t2v"
+        assert settings.default_resolution == "720P"
         assert settings.request_timeout == 1800.0
-        assert settings.server_name == "producer"
+        assert settings.server_name == "wan"
         assert settings.transport == "stdio"
 
 
@@ -24,9 +25,10 @@ def test_settings_from_environment():
     env_vars = {
         "ACEDATACLOUD_API_TOKEN": "my-token",
         "ACEDATACLOUD_API_BASE_URL": "https://custom.api.com",
-        "PRODUCER_DEFAULT_MODEL": "FUZZ-2.0 Pro",
-        "PRODUCER_REQUEST_TIMEOUT": "300",
-        "MCP_SERVER_NAME": "my-producer",
+        "WAN_DEFAULT_MODEL": "wan2.6-i2v",
+        "WAN_DEFAULT_RESOLUTION": "1080P",
+        "WAN_REQUEST_TIMEOUT": "300",
+        "MCP_SERVER_NAME": "my-wan",
         "LOG_LEVEL": "DEBUG",
     }
 
@@ -36,9 +38,10 @@ def test_settings_from_environment():
         settings = Settings()
         assert settings.api_token == "my-token"
         assert settings.api_base_url == "https://custom.api.com"
-        assert settings.default_model == "FUZZ-2.0 Pro"
+        assert settings.default_model == "wan2.6-i2v"
+        assert settings.default_resolution == "1080P"
         assert settings.request_timeout == 300.0
-        assert settings.server_name == "my-producer"
+        assert settings.server_name == "my-wan"
         assert settings.log_level == "DEBUG"
 
 
@@ -50,11 +53,7 @@ def test_settings_is_configured():
         settings = Settings()
         assert not settings.is_configured
 
-    with patch.dict(
-        os.environ,
-        {"ACEDATACLOUD_API_TOKEN": "valid-token"},
-        clear=False,
-    ):
+    with patch.dict(os.environ, {"ACEDATACLOUD_API_TOKEN": "valid-token"}, clear=False):
         settings = Settings()
         assert settings.is_configured
 

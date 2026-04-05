@@ -279,9 +279,7 @@ Environment Variables:
             routes: list[Route | Mount] = [
                 Route("/health", health),
                 Route("/favicon.ico", favicon),
-                Route(
-                    "/.well-known/mcp/server-card.json", server_card
-                ),
+                Route("/.well-known/mcp/server-card.json", server_card),
             ]
 
             # Add OAuth callback route if OAuth is enabled

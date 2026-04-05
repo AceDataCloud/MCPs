@@ -183,7 +183,10 @@ Environment Variables:
                                 "description": "Transfer motion to character",
                             },
                             {"name": "kling_get_task", "description": "Query task status"},
-                            {"name": "kling_get_tasks_batch", "description": "Query multiple tasks"},
+                            {
+                                "name": "kling_get_tasks_batch",
+                                "description": "Query multiple tasks",
+                            },
                             {"name": "kling_list_models", "description": "List available models"},
                             {"name": "kling_list_actions", "description": "List available actions"},
                         ],

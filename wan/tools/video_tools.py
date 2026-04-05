@@ -20,9 +20,7 @@ async def wan_generate_video(
     ],
     negative_prompt: Annotated[
         str,
-        Field(
-            description="Content to exclude from the video. Maximum 500 characters."
-        ),
+        Field(description="Content to exclude from the video. Maximum 500 characters."),
     ] = "",
     duration: Annotated[
         Duration | None,
@@ -32,9 +30,7 @@ async def wan_generate_video(
     ] = None,
     resolution: Annotated[
         Resolution,
-        Field(
-            description="Video resolution. Options: '480P', '720P' (default), '1080P'."
-        ),
+        Field(description="Video resolution. Options: '480P', '720P' (default), '1080P'."),
     ] = DEFAULT_RESOLUTION,
     audio: Annotated[
         bool,
@@ -117,21 +113,15 @@ async def wan_generate_video_from_image(
     ] = "wan2.6-i2v",
     negative_prompt: Annotated[
         str,
-        Field(
-            description="Content to exclude from the video. Maximum 500 characters."
-        ),
+        Field(description="Content to exclude from the video. Maximum 500 characters."),
     ] = "",
     duration: Annotated[
         Duration | None,
-        Field(
-            description="Video duration in seconds. Options: 5, 10, or 15."
-        ),
+        Field(description="Video duration in seconds. Options: 5, 10, or 15."),
     ] = None,
     resolution: Annotated[
         Resolution,
-        Field(
-            description="Video resolution. Options: '480P', '720P' (default), '1080P'."
-        ),
+        Field(description="Video resolution. Options: '480P', '720P' (default), '1080P'."),
     ] = DEFAULT_RESOLUTION,
     reference_video_urls: Annotated[
         str | None,
@@ -191,9 +181,7 @@ async def wan_generate_video_from_image(
     if duration is not None:
         payload["duration"] = duration
     if reference_video_urls:
-        payload["reference_video_urls"] = [
-            url.strip() for url in reference_video_urls.split(",")
-        ]
+        payload["reference_video_urls"] = [url.strip() for url in reference_video_urls.split(",")]
     if shot_type is not None:
         payload["shot_type"] = shot_type
     if audio_url:

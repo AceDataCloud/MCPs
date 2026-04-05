@@ -60,9 +60,7 @@ def format_audio_result(data: dict[str, Any]) -> str:
         JSON string representation of the result
     """
     return json.dumps(
-        _with_submission_guidance(
-            data, "producer_get_task", "producer_get_tasks_batch"
-        ),
+        _with_submission_guidance(data, "producer_get_task", "producer_get_tasks_batch"),
         ensure_ascii=False,
         indent=2,
     )
@@ -78,9 +76,7 @@ def format_lyrics_result(data: dict[str, Any]) -> str:
         JSON string representation of the result
     """
     return json.dumps(
-        _with_submission_guidance(
-            data, "producer_get_task", "producer_get_tasks_batch"
-        ),
+        _with_submission_guidance(data, "producer_get_task", "producer_get_tasks_batch"),
         ensure_ascii=False,
         indent=2,
     )
@@ -96,9 +92,7 @@ def format_upload_result(data: dict[str, Any]) -> str:
         JSON string representation of the result
     """
     return json.dumps(
-        _with_submission_guidance(
-            data, "producer_get_task", "producer_get_tasks_batch"
-        ),
+        _with_submission_guidance(data, "producer_get_task", "producer_get_tasks_batch"),
         ensure_ascii=False,
         indent=2,
     )
@@ -114,9 +108,7 @@ def format_video_result(data: dict[str, Any]) -> str:
         JSON string representation of the result
     """
     return json.dumps(
-        _with_submission_guidance(
-            data, "producer_get_task", "producer_get_tasks_batch"
-        ),
+        _with_submission_guidance(data, "producer_get_task", "producer_get_tasks_batch"),
         ensure_ascii=False,
         indent=2,
     )
@@ -132,9 +124,7 @@ def format_wav_result(data: dict[str, Any]) -> str:
         JSON string representation of the result
     """
     return json.dumps(
-        _with_submission_guidance(
-            data, "producer_get_task", "producer_get_tasks_batch"
-        ),
+        _with_submission_guidance(data, "producer_get_task", "producer_get_tasks_batch"),
         ensure_ascii=False,
         indent=2,
     )
@@ -162,9 +152,7 @@ def format_task_result(data: dict[str, Any]) -> str:
         JSON string representation of the result
     """
     return json.dumps(
-        _with_task_guidance(
-            data, "producer_get_task", "producer_get_tasks_batch"
-        ),
+        _with_task_guidance(data, "producer_get_task", "producer_get_tasks_batch"),
         ensure_ascii=False,
         indent=2,
     )

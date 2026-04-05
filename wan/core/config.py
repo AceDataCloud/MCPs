@@ -22,9 +22,7 @@ class Settings:
     api_token: str = field(default_factory=lambda: os.getenv("ACEDATACLOUD_API_TOKEN", ""))
 
     # Default Model
-    default_model: str = field(
-        default_factory=lambda: os.getenv("WAN_DEFAULT_MODEL", "wan2.6-t2v")
-    )
+    default_model: str = field(default_factory=lambda: os.getenv("WAN_DEFAULT_MODEL", "wan2.6-t2v"))
 
     # Default Resolution
     default_resolution: str = field(

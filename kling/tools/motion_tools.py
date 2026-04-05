@@ -50,9 +50,7 @@ async def kling_generate_motion(
     ] = None,
     callback_url: Annotated[
         str | None,
-        Field(
-            description="Webhook callback URL for asynchronous notifications."
-        ),
+        Field(description="Webhook callback URL for asynchronous notifications."),
     ] = None,
 ) -> str:
     """Transfer motion from a reference video to a character image.

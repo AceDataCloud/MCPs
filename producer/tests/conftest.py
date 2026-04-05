@@ -24,9 +24,7 @@ def api_token():
     """Get API token from environment for integration tests."""
     token = os.environ.get("ACEDATACLOUD_API_TOKEN", "")
     if not token:
-        pytest.skip(
-            "ACEDATACLOUD_API_TOKEN not configured for integration tests"
-        )
+        pytest.skip("ACEDATACLOUD_API_TOKEN not configured for integration tests")
     return token
 
 
@@ -48,10 +46,7 @@ def mock_audio_response():
                 "audio_url": "https://cdn.example.com/test-audio.mp3",
                 "video_url": "https://cdn.example.com/test-video.mp4",
                 "image_url": "https://cdn.example.com/test-image.jpeg",
-                "lyric": (
-                    "[Verse]\nTest lyrics here\n"
-                    "[Chorus]\nTest chorus here"
-                ),
+                "lyric": ("[Verse]\nTest lyrics here\n[Chorus]\nTest chorus here"),
                 "created_at": "2026-04-05T00:00:00.000Z",
             }
         ],
@@ -66,10 +61,7 @@ def mock_lyrics_response():
         "task_id": "lyrics-task-123",
         "data": {
             "title": "Test Song Title",
-            "text": (
-                "[Verse]\nGenerated lyrics here\n"
-                "[Chorus]\nCatchy chorus"
-            ),
+            "text": ("[Verse]\nGenerated lyrics here\n[Chorus]\nCatchy chorus"),
             "status": "complete",
         },
     }

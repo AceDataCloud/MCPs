@@ -13,9 +13,9 @@ def test_settings_default_values():
 
         settings = Settings()
         assert settings.api_base_url == "https://api.acedata.cloud"
-        assert settings.default_model == "FUZZ-2.0"
+        assert settings.default_model == "minimax-t2v"
         assert settings.request_timeout == 1800.0
-        assert settings.server_name == "producer"
+        assert settings.server_name == "hailuo"
         assert settings.transport == "stdio"
 
 
@@ -24,9 +24,9 @@ def test_settings_from_environment():
     env_vars = {
         "ACEDATACLOUD_API_TOKEN": "my-token",
         "ACEDATACLOUD_API_BASE_URL": "https://custom.api.com",
-        "PRODUCER_DEFAULT_MODEL": "FUZZ-2.0 Pro",
-        "PRODUCER_REQUEST_TIMEOUT": "300",
-        "MCP_SERVER_NAME": "my-producer",
+        "HAILUO_DEFAULT_MODEL": "minimax-i2v",
+        "HAILUO_REQUEST_TIMEOUT": "300",
+        "MCP_SERVER_NAME": "my-hailuo",
         "LOG_LEVEL": "DEBUG",
     }
 
@@ -36,9 +36,9 @@ def test_settings_from_environment():
         settings = Settings()
         assert settings.api_token == "my-token"
         assert settings.api_base_url == "https://custom.api.com"
-        assert settings.default_model == "FUZZ-2.0 Pro"
+        assert settings.default_model == "minimax-i2v"
         assert settings.request_timeout == 300.0
-        assert settings.server_name == "my-producer"
+        assert settings.server_name == "my-hailuo"
         assert settings.log_level == "DEBUG"
 
 
@@ -50,11 +50,7 @@ def test_settings_is_configured():
         settings = Settings()
         assert not settings.is_configured
 
-    with patch.dict(
-        os.environ,
-        {"ACEDATACLOUD_API_TOKEN": "valid-token"},
-        clear=False,
-    ):
+    with patch.dict(os.environ, {"ACEDATACLOUD_API_TOKEN": "valid-token"}, clear=False):
         settings = Settings()
         assert settings.is_configured
 

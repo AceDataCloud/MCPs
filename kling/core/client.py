@@ -35,9 +35,7 @@ def get_request_api_token() -> str | None:
 class KlingClient:
     """Async HTTP client for AceDataCloud Kling API."""
 
-    def __init__(
-        self, api_token: str | None = None, base_url: str | None = None
-    ):
+    def __init__(self, api_token: str | None = None, base_url: str | None = None):
         """Initialize the Kling API client.
 
         Args:
@@ -49,9 +47,7 @@ class KlingClient:
         self.timeout = settings.request_timeout
 
         logger.info(f"KlingClient initialized with base_url: {self.base_url}")
-        logger.debug(
-            f"API token configured: {'Yes' if self.api_token else 'No'}"
-        )
+        logger.debug(f"API token configured: {'Yes' if self.api_token else 'No'}")
         logger.debug(f"Request timeout: {self.timeout}s")
 
     def _get_headers(self) -> dict[str, str]:
@@ -99,9 +95,7 @@ class KlingClient:
         request_timeout = timeout or self.timeout
 
         logger.info(f"POST {url}")
-        logger.debug(
-            f"Request payload: {json.dumps(payload, ensure_ascii=False, indent=2)}"
-        )
+        logger.debug(f"Request payload: {json.dumps(payload, ensure_ascii=False, indent=2)}")
         logger.debug(f"Timeout: {request_timeout}s")
 
         async with httpx.AsyncClient() as client:
@@ -121,16 +115,12 @@ class KlingClient:
 
                 if response.status_code == 403:
                     logger.error("Access denied: Check API permissions")
-                    raise KlingAuthError(
-                        "Access denied. Check your API permissions."
-                    )
+                    raise KlingAuthError("Access denied. Check your API permissions.")
 
                 response.raise_for_status()
 
                 result = response.json()
-                logger.success(
-                    f"Request successful! Task ID: {result.get('task_id', 'N/A')}"
-                )
+                logger.success(f"Request successful! Task ID: {result.get('task_id', 'N/A')}")
 
                 # Log summary of response
                 if result.get("success"):
@@ -138,16 +128,12 @@ class KlingClient:
                     if result.get("video_url"):
                         logger.info(f"Video URL: {result.get('video_url')}")
                 else:
-                    logger.warning(
-                        f"API returned success=false: {result.get('error', {})}"
-                    )
+                    logger.warning(f"API returned success=false: {result.get('error', {})}")
 
                 return result  # type: ignore[no-any-return]
 
             except httpx.TimeoutException as e:
-                logger.error(
-                    f"Request timeout after {request_timeout}s: {e}"
-                )
+                logger.error(f"Request timeout after {request_timeout}s: {e}")
                 raise KlingTimeoutError(
                     f"Request to {endpoint} timed out after {request_timeout}s"
                 ) from e
@@ -156,9 +142,7 @@ class KlingClient:
                 raise
 
             except httpx.HTTPStatusError as e:
-                logger.error(
-                    f"HTTP error {e.response.status_code}: {e.response.text}"
-                )
+                logger.error(f"HTTP error {e.response.status_code}: {e.response.text}")
                 raise KlingAPIError(
                     message=e.response.text,
                     code=f"http_{e.response.status_code}",
@@ -172,19 +156,13 @@ class KlingClient:
     # Convenience methods for specific endpoints
     async def generate_video(self, **kwargs: Any) -> dict[str, Any]:
         """Generate video using the videos endpoint."""
-        logger.info(
-            f"Generating video with action: {kwargs.get('action', 'text2video')}"
-        )
-        return await self.request(
-            "/kling/videos", self._with_async_callback(kwargs)
-        )
+        logger.info(f"Generating video with action: {kwargs.get('action', 'text2video')}")
+        return await self.request("/kling/videos", self._with_async_callback(kwargs))
 
     async def generate_motion(self, **kwargs: Any) -> dict[str, Any]:
         """Generate motion transfer using the motion endpoint."""
         logger.info("Generating motion transfer")
-        return await self.request(
-            "/kling/motion", self._with_async_callback(kwargs)
-        )
+        return await self.request("/kling/motion", self._with_async_callback(kwargs))
 
     async def query_task(self, **kwargs: Any) -> dict[str, Any]:
         """Query task status using the tasks endpoint."""
