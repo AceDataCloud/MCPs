@@ -48,6 +48,10 @@ async def wan_generate_video(
             description="Enable LLM-based prompt rewriting for better results. Default is false."
         ),
     ] = False,
+    size: Annotated[
+        str | None,
+        Field(description="The size of the generated video (e.g., '1280x720')."),
+    ] = None,
     timeout: Annotated[
         int | None,
         Field(description="Timeout in seconds for the API to return data. Default is 1800."),
@@ -82,6 +86,8 @@ async def wan_generate_video(
         payload["duration"] = duration
     if audio_url:
         payload["audio_url"] = audio_url
+    if size:
+        payload["size"] = size
     if timeout is not None:
         payload["timeout"] = timeout
     if callback_url:
@@ -147,6 +153,10 @@ async def wan_generate_video_from_image(
         bool,
         Field(description="Enable LLM-based prompt rewriting. Default is false."),
     ] = False,
+    size: Annotated[
+        str | None,
+        Field(description="The size of the generated video (e.g., '1280x720')."),
+    ] = None,
     timeout: Annotated[
         int | None,
         Field(description="Timeout in seconds. Default is 1800."),
@@ -186,6 +196,8 @@ async def wan_generate_video_from_image(
         payload["shot_type"] = shot_type
     if audio_url:
         payload["audio_url"] = audio_url
+    if size:
+        payload["size"] = size
     if timeout is not None:
         payload["timeout"] = timeout
     if callback_url:
