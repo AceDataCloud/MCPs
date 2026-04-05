@@ -1,0 +1,48 @@
+{
+  "name": "mcp-hailuo",
+  "displayName": "Hailuo MCP",
+  "description": "AI Video Generation with Hailuo (MiniMax) - Generate videos from text and images via Ace Data Cloud API",
+  "version": "0.1.0",
+  "publisher": "acedatacloud",
+  "icon": "icon.png",
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.99.0"
+  },
+  "categories": [
+    "AI",
+    "Chat"
+  ],
+  "keywords": [
+    "mcp",
+    "model context protocol",
+    "ai",
+    "copilot",
+    "ace data cloud",
+    "hailuo",
+    "minimax",
+    "video generation",
+    "ai video"
+  ],
+  "homepage": "https://github.com/AceDataCloud/HailuoMCP",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AceDataCloud/HailuoMCP"
+  },
+  "bugs": {
+    "url": "https://github.com/AceDataCloud/HailuoMCP/issues"
+  },
+  "contributes": {
+    "mcpServers": {
+      "hailuo": {
+        "command": "uvx",
+        "args": [
+          "mcp-hailuo"
+        ],
+        "env": {
+          "ACEDATACLOUD_API_TOKEN": ""
+        }
+      }
+    }
+  }
+}

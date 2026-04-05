@@ -21,6 +21,21 @@ Generate AI videos directly from Claude, VS Code, or any MCP-compatible client.
 - **Multiple Orientations** - Landscape and portrait videos
 - **Task Tracking** - Monitor generation progress and retrieve results
 
+## Tool Reference
+
+| Tool | Description |
+|------|-------------|
+| `sora_generate_video` | Generate an AI video from a text prompt using Sora. |
+| `sora_generate_video_from_image` | Generate an AI video from reference images using Sora (Image-to-Video). |
+| `sora_generate_video_with_character` | Generate an AI video featuring a character from a reference video. |
+| `sora_generate_video_async` | Generate an AI video asynchronously with callback notification. |
+| `sora_generate_video_v2` | Generate an AI video using Sora Version 2 (partner channel). |
+| `sora_generate_video_v2_async` | Generate an AI video asynchronously using Sora Version 2 with callback. |
+| `sora_get_task` | Query the status and result of a video generation task. |
+| `sora_get_tasks_batch` | Query multiple video generation tasks at once. |
+| `sora_list_models` | List all available Sora models and their capabilities. |
+| `sora_list_actions` | List all available Sora API actions and corresponding tools. |
+
 ## Quick Start
 
 ### 1. Get Your API Token

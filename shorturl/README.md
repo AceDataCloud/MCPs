@@ -21,6 +21,15 @@ Create short, shareable URLs directly from Claude, VS Code, or any MCP-compatibl
 - **surl.id Domain** - Short URLs use the clean `surl.id` domain
 - **Bearer Auth** - Secure API access with token authentication
 
+## Tool Reference
+
+| Tool | Description |
+|------|-------------|
+| `shorturl_create` | Create a short URL from a long URL. |
+| `shorturl_batch_create` | Create short URLs for multiple long URLs in a single batch. |
+| `shorturl_get_usage_guide` | Get a comprehensive guide for using the ShortURL tools. |
+| `shorturl_get_api_info` | Get information about the ShortURL API service. |
+
 ## Quick Start
 
 ### 1. Get Your API Token

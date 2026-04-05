@@ -1,0 +1,36 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.AceDataCloud/mcp-producer",
+  "description": "MCP server for Producer/Riffusion AI music generation",
+  "version": "2026.4.5.0",
+  "repository": {
+    "url": "https://github.com/AceDataCloud/ProducerMCP",
+    "source": "github"
+  },
+  "packages": [
+    {
+      "identifier": "mcp-producer",
+      "version": "2026.4.5.0",
+      "transport": {
+        "type": "stdio"
+      },
+      "registryType": "pypi",
+      "runtimeHint": "uvx",
+      "environmentVariables": [
+        {
+          "name": "ACEDATACLOUD_API_TOKEN",
+          "description": "API token from Ace Data Cloud (https://platform.acedata.cloud)",
+          "isRequired": true,
+          "isSecret": true
+        }
+      ]
+    }
+  ],
+  "websiteUrl": "https://platform.acedata.cloud",
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://producer.mcp.acedata.cloud/mcp"
+    }
+  ]
+}

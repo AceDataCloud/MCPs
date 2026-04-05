@@ -14,6 +14,7 @@ async def sora_list_models() -> str:
     Returns:
         Table of all models with their version, limits, and features.
     """
+    # Last updated: 2026-04-05
     return """Available Sora Models:
 
 | Model        | Max Duration (v1) | Max Duration (v2) | Quality | Features                          |
@@ -75,6 +76,7 @@ async def sora_list_actions() -> str:
     Returns:
         Categorized list of all actions and their corresponding tools.
     """
+    # Last updated: 2026-04-05
     return """Available Sora Actions and Tools:
 
 Video Generation (Version 1 - classic):

@@ -1,0 +1,48 @@
+{
+  "name": "mcp-producer",
+  "displayName": "Producer MCP",
+  "description": "AI Music Generation with Producer/Riffusion - Generate, extend, cover, and remix music via Ace Data Cloud API",
+  "version": "0.1.0",
+  "publisher": "acedatacloud",
+  "icon": "icon.png",
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.99.0"
+  },
+  "categories": [
+    "AI",
+    "Chat"
+  ],
+  "keywords": [
+    "mcp",
+    "model context protocol",
+    "ai",
+    "copilot",
+    "ace data cloud",
+    "producer",
+    "riffusion",
+    "music generation",
+    "ai music"
+  ],
+  "homepage": "https://github.com/AceDataCloud/ProducerMCP",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AceDataCloud/ProducerMCP"
+  },
+  "bugs": {
+    "url": "https://github.com/AceDataCloud/ProducerMCP/issues"
+  },
+  "contributes": {
+    "mcpServers": {
+      "producer": {
+        "command": "uvx",
+        "args": [
+          "mcp-producer"
+        ],
+        "env": {
+          "ACEDATACLOUD_API_TOKEN": ""
+        }
+      }
+    }
+  }
+}

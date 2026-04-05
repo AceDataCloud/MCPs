@@ -1,0 +1,48 @@
+{
+  "name": "mcp-kling",
+  "displayName": "Kling MCP",
+  "description": "AI Video Generation with Kling - Generate, extend, and animate videos via Ace Data Cloud API",
+  "version": "0.1.0",
+  "publisher": "acedatacloud",
+  "icon": "icon.png",
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.99.0"
+  },
+  "categories": [
+    "AI",
+    "Chat"
+  ],
+  "keywords": [
+    "mcp",
+    "model context protocol",
+    "ai",
+    "copilot",
+    "ace data cloud",
+    "kling",
+    "video generation",
+    "motion transfer",
+    "ai video"
+  ],
+  "homepage": "https://github.com/AceDataCloud/KlingMCP",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AceDataCloud/KlingMCP"
+  },
+  "bugs": {
+    "url": "https://github.com/AceDataCloud/KlingMCP/issues"
+  },
+  "contributes": {
+    "mcpServers": {
+      "kling": {
+        "command": "uvx",
+        "args": [
+          "mcp-kling"
+        ],
+        "env": {
+          "ACEDATACLOUD_API_TOKEN": ""
+        }
+      }
+    }
+  }
+}
