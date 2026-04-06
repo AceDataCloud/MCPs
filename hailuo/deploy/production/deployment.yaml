@@ -32,7 +32,7 @@ spec:
             - name: MCP_SERVER_URL
               value: "https://hailuo.mcp.acedata.cloud"
             - name: ACEDATACLOUD_OAUTH_CLIENT_ID
-              value: "C8QpZFf6TeEpY4XvYtqdKOqcowS7ge7EXIaEY0dJ-w0"
+              value: "vi-IVFtUuAnRVLUTDzlfnoJ-WN7ae2VlNR4VOcoD35g"
           resources:
             limits:
               cpu: 500m

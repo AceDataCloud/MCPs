@@ -32,7 +32,7 @@ spec:
             - name: MCP_SERVER_URL
               value: "https://wan.mcp.acedata.cloud"
             - name: ACEDATACLOUD_OAUTH_CLIENT_ID
-              value: "PLACEHOLDER_OAUTH_CLIENT_ID"
+              value: "LSXdtjWPnaQ_4-lxQhQqs06VkIWi4TP0obhgPxJn6JM"
           resources:
             limits:
               cpu: 500m
