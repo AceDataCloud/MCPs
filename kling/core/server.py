@@ -46,7 +46,7 @@ if settings.server_url:
 # Initialize FastMCP server
 mcp = FastMCP(
     settings.server_name,
-    icons=[Icon(src="", type="image/png")],
+    icons=[Icon(src="", mimeType="image/png")],
     **mcp_kwargs,
 )
 

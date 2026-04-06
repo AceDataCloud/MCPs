@@ -109,7 +109,7 @@ Add to your VS Code MCP config (`.vscode/mcp.json`):
 }
 ```
 
-Or install the [Ace Data Cloud MCP extension](https://marketplace.visualstudio.com/items?itemName=acedatacloud.acedatacloud-mcp) for VS Code, which bundles all 11 MCP servers with one-click setup.
+Or install the [Ace Data Cloud MCP extension](https://marketplace.visualstudio.com/items?itemName=acedatacloud.acedatacloud-mcp) for VS Code, which bundles all 15 MCP servers with one-click setup.
 
 #### JetBrains IDEs
 
@@ -486,7 +486,7 @@ NanoBanana/
 This server wraps the [AceDataCloud NanoBanana API](https://platform.acedata.cloud/documents/23985a11-d713-41d1-ad84-24b021805b3d):
 
 - [NanoBanana Images API](https://platform.acedata.cloud/documents/23985a11-d713-41d1-ad84-24b021805b3d) - Image generation and editing
-- [NanoBanana Tasks API](https://platform.acedata.cloud/documents/63e01dc3-eb21-499e-8049-3025c460058f) - Task queries
+- [NanoBanana Tasks API](https://platform.acedata.cloud/documents/617810f5-081f-4866-a21a-cededecb0ccd) - Task queries
 
 ## Use Cases
 
