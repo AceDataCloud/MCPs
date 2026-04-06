@@ -74,8 +74,9 @@ When the user wants to generate music, choose the appropriate tool based on thei
 ## Important Notes:
 1. Music generation is async in MCP - generation tools should return quickly with a task_id
 2. After any generate/extend/cover/variation/stems/media call, use `producer_get_task` to poll for the final result
-3. Default model is FUZZ-2.0 (good balance of quality and speed)
-4. For best quality, use FUZZ-2.0 Pro
+3. **CRITICAL POLLING RULE:** You MUST check the `state` field in the response — only `state: "complete"` with `success: true` means the task is done. During the `pending` state, the API may return intermediate `audio_url` values (streaming preview URLs). These are NOT final results. Do NOT stop polling just because `audio_url` is non-empty — always check `state` first.
+4. Default model is FUZZ-2.0 (good balance of quality and speed)
+5. For best quality, use FUZZ-2.0 Pro
 """
 
 
@@ -88,13 +89,13 @@ def producer_workflow_examples() -> str:
 1. User: "Make me a rock song about freedom"
 2. Call `producer_generate_music(prompt="Rock song about freedom, electric guitars, powerful drums, anthemic")`
 3. Return the task_id from the submission response
-4. Poll with `producer_get_task(task_id)` until the task finishes and audio URLs appear
+4. Poll with `producer_get_task(task_id)` — check the `state` field. Only stop when `state` is `"complete"` and `success` is `true`. Ignore any intermediate `audio_url` during `pending` state.
 
 ## Workflow 2: Custom Song with User's Lyrics
 1. User provides lyrics
 2. Ask for title and style preferences if not provided
 3. Call `producer_generate_custom_music(lyric=user_lyrics, title="...", style="...")`
-4. Poll with `producer_get_task(task_id)` for the completed audio
+4. Poll with `producer_get_task(task_id)` until `state` is `"complete"` (not just until `audio_url` appears)
 
 ## Workflow 3: Creating a Long Song
 1. Generate initial song with `producer_generate_music`
@@ -106,7 +107,7 @@ def producer_workflow_examples() -> str:
 1. User has a song_id they want to remix
 2. User describes the new style
 3. Call `producer_cover_music(audio_id, prompt="jazz version", style="smooth jazz, saxophone")`
-4. Poll with `producer_get_task(task_id)` for the completed cover
+4. Poll with `producer_get_task(task_id)` until `state` is `"complete"`
 
 ## Workflow 5: Vocal Mashup
 1. Generate or identify two songs
