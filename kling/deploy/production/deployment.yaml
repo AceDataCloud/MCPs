@@ -32,7 +32,7 @@ spec:
             - name: MCP_SERVER_URL
               value: "https://kling.mcp.acedata.cloud"
             - name: ACEDATACLOUD_OAUTH_CLIENT_ID
-              value: "C8QpZFf6TeEpY4XvYtqdKOqcowS7ge7EXIaEY0dJ-w0"
+              value: "enhLSAm09CMRiWqvet_pK1zeUQWrbag4CF6wOzEjS9Y"
           resources:
             limits:
               cpu: 500m

@@ -32,7 +32,7 @@ spec:
             - name: MCP_SERVER_URL
               value: "https://producer.mcp.acedata.cloud"
             - name: ACEDATACLOUD_OAUTH_CLIENT_ID
-              value: ""
+              value: "_ETAAUon2v_jX2wUCHlvUUPYAFpMCmhyP6-Jq51vr0o"
           resources:
             limits:
               cpu: 500m
