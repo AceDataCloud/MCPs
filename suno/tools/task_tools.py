@@ -100,11 +100,15 @@ async def suno_get_tasks_batch(
 
         if state == "complete" and success:
             for audio in response_info.get("data", []):
-                lines.append(f"  - {audio.get('title', 'Untitled')}: {audio.get('audio_url', 'N/A')}")
+                lines.append(
+                    f"  - {audio.get('title', 'Untitled')}: {audio.get('audio_url', 'N/A')}"
+                )
         elif state == "failed":
             lines.append(f"  Error: {response_info.get('error', 'Unknown error')}")
         else:
-            lines.append(f"  ⏳ Still {state} — keep polling. Any audio_url values are intermediate previews.")
+            lines.append(
+                f"  ⏳ Still {state} — keep polling. Any audio_url values are intermediate previews."
+            )
 
         lines.append("")
 

@@ -51,7 +51,7 @@ def _with_task_guidance(
             "state": state,
             "is_complete": False,
             "next_step": f'Task is NOT complete yet (state: "{state}"). '
-            f"IMPORTANT: Only state=\"complete\" with success=true means the task is finished. "
+            f'IMPORTANT: Only state="complete" with success=true means the task is finished. '
             f"Ignore any intermediate audio_url values (e.g. audiopipe.suno.ai URLs) — "
             f"these are streaming previews, NOT final results. "
             f'Call {poll_tool}(task_id="{task_id}") again after a few seconds.',
