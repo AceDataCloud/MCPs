@@ -8,7 +8,7 @@ import httpx
 from loguru import logger
 
 from core.config import settings
-from core.exceptions import SerpAPIError, SerpAuthError, SerpTimeoutError
+from core.exceptions import SerpAPIError, SerpAuthError, SerpError, SerpTimeoutError
 
 # Context variable for per-request API token (used in HTTP/remote mode)
 _request_api_token: contextvars.ContextVar[str | None] = contextvars.ContextVar(
@@ -57,6 +57,30 @@ class SerpClient:
             "content-type": "application/json",
         }
 
+    def _handle_error_response(self, response: httpx.Response) -> None:
+        """Parse API error response and raise the appropriate exception.
+
+        The AceDataCloud API returns errors in the format:
+            {"error": {"code": "...", "message": "..."}}
+        """
+        status = response.status_code
+        try:
+            body = response.json()
+        except Exception:
+            body = {}
+
+        error_obj = body.get("error", {})
+        code = error_obj.get("code", f"http_{status}")
+        message = (
+            error_obj.get("message") or body.get("detail") or response.text or f"HTTP {status}"
+        )
+
+        logger.error(f"API error {status} [{code}]: {message}")
+
+        if status in (401, 403):
+            raise SerpAuthError(message)
+        raise SerpAPIError(message=message, code=code, status_code=status)
+
     async def request(
         self,
         endpoint: str,
@@ -96,15 +120,8 @@ class SerpClient:
 
                 logger.info(f"Response status: {response.status_code}")
 
-                if response.status_code == 401:
-                    logger.error("Authentication failed: Invalid API token")
-                    raise SerpAuthError("Invalid API token")
-
-                if response.status_code == 403:
-                    logger.error("Access denied: Check API permissions")
-                    raise SerpAuthError("Access denied. Check your API permissions.")
-
-                response.raise_for_status()
+                if response.status_code >= 400:
+                    self._handle_error_response(response)
 
                 result = response.json()
                 logger.success("Request successful!")
@@ -123,16 +140,8 @@ class SerpClient:
                     f"Request to {endpoint} timed out after {request_timeout}s"
                 ) from e
 
-            except SerpAuthError:
+            except SerpError:
                 raise
-
-            except httpx.HTTPStatusError as e:
-                logger.error(f"HTTP error {e.response.status_code}: {e.response.text}")
-                raise SerpAPIError(
-                    message=e.response.text,
-                    code=f"http_{e.response.status_code}",
-                    status_code=e.response.status_code,
-                ) from e
 
             except Exception as e:
                 logger.error(f"Request error: {e}")

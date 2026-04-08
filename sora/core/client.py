@@ -8,7 +8,7 @@ import httpx
 from loguru import logger
 
 from core.config import settings
-from core.exceptions import SoraAPIError, SoraAuthError, SoraTimeoutError
+from core.exceptions import SoraAPIError, SoraAuthError, SoraError, SoraTimeoutError
 
 # Dummy callback URL used to force the upstream API into async mode.
 # When present, the API returns immediately with a task_id instead of blocking
@@ -70,6 +70,30 @@ class SoraClient:
             request_payload["callback_url"] = _ASYNC_CALLBACK_URL
         return request_payload
 
+    def _handle_error_response(self, response: httpx.Response) -> None:
+        """Parse API error response and raise the appropriate exception.
+
+        The AceDataCloud API returns errors in the format:
+            {"error": {"code": "...", "message": "..."}}
+        """
+        status = response.status_code
+        try:
+            body = response.json()
+        except Exception:
+            body = {}
+
+        error_obj = body.get("error", {})
+        code = error_obj.get("code", f"http_{status}")
+        message = (
+            error_obj.get("message") or body.get("detail") or response.text or f"HTTP {status}"
+        )
+
+        logger.error(f"API error {status} [{code}]: {message}")
+
+        if status in (401, 403):
+            raise SoraAuthError(message)
+        raise SoraAPIError(message=message, code=code, status_code=status)
+
     async def request(
         self,
         endpoint: str,
@@ -109,15 +133,8 @@ class SoraClient:
 
                 logger.info(f"📥 Response status: {response.status_code}")
 
-                if response.status_code == 401:
-                    logger.error("❌ Authentication failed: Invalid API token")
-                    raise SoraAuthError("Invalid API token")
-
-                if response.status_code == 403:
-                    logger.error("❌ Access denied: Check API permissions")
-                    raise SoraAuthError("Access denied. Check your API permissions.")
-
-                response.raise_for_status()
+                if response.status_code >= 400:
+                    self._handle_error_response(response)
 
                 result = response.json()
                 logger.success(f"✅ Request successful! Task ID: {result.get('task_id', 'N/A')}")
@@ -143,16 +160,8 @@ class SoraClient:
                     f"Request to {endpoint} timed out after {request_timeout}s"
                 ) from e
 
-            except SoraAuthError:
+            except SoraError:
                 raise
-
-            except httpx.HTTPStatusError as e:
-                logger.error(f"❌ HTTP error {e.response.status_code}: {e.response.text}")
-                raise SoraAPIError(
-                    message=e.response.text,
-                    code=f"http_{e.response.status_code}",
-                    status_code=e.response.status_code,
-                ) from e
 
             except Exception as e:
                 logger.error(f"❌ Request error: {e}")
