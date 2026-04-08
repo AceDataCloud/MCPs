@@ -114,8 +114,20 @@ class KlingClient:
                     raise KlingAuthError("Invalid API token")
 
                 if response.status_code == 403:
-                    logger.error("Access denied: Check API permissions")
-                    raise KlingAuthError("Access denied. Check your API permissions.")
+                    detail = "Access denied. Check your API permissions."
+                    try:
+                        body = response.json()
+                        if isinstance(body, dict):
+                            if "detail" in body:
+                                detail = str(body["detail"])
+                            elif isinstance(body.get("error"), dict):
+                                detail = str(body["error"].get("message", body["error"]))
+                            elif "message" in body:
+                                detail = str(body["message"])
+                    except Exception:
+                        pass
+                    logger.error(f"Access denied: {detail}")
+                    raise KlingAuthError(detail)
 
                 response.raise_for_status()
 
