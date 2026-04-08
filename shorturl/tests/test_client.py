@@ -59,9 +59,11 @@ class TestShortURLClient:
         """Test 401 response raises auth error."""
         mock_response = MagicMock()
         mock_response.status_code = 401
-        mock_response.raise_for_status.side_effect = httpx.HTTPStatusError(
-            "Unauthorized", request=MagicMock(), response=mock_response
-        )
+        mock_response.json.return_value = {
+            "error": {"code": "unauthorized", "message": "Invalid API token"}
+        }
+        mock_response.headers = {"content-type": "application/json"}
+        mock_response.text = "Invalid API token"
 
         with patch("httpx.AsyncClient") as mock_client:
             mock_instance = AsyncMock()
@@ -76,9 +78,11 @@ class TestShortURLClient:
         """Test 403 response raises auth error."""
         mock_response = MagicMock()
         mock_response.status_code = 403
-        mock_response.raise_for_status.side_effect = httpx.HTTPStatusError(
-            "Forbidden", request=MagicMock(), response=mock_response
-        )
+        mock_response.json.return_value = {
+            "error": {"code": "forbidden", "message": "Access denied"}
+        }
+        mock_response.headers = {"content-type": "application/json"}
+        mock_response.text = "Access denied"
 
         with patch("httpx.AsyncClient") as mock_client:
             mock_instance = AsyncMock()
@@ -104,17 +108,18 @@ class TestShortURLClient:
         """Test HTTP error raises API error."""
         mock_response = MagicMock()
         mock_response.status_code = 500
+        mock_response.json.return_value = {
+            "error": {"code": "internal_error", "message": "Internal Server Error"}
+        }
+        mock_response.headers = {"content-type": "application/json"}
         mock_response.text = "Internal Server Error"
-        mock_response.raise_for_status.side_effect = httpx.HTTPStatusError(
-            "Error", request=MagicMock(), response=mock_response
-        )
 
         with patch("httpx.AsyncClient") as mock_client:
             mock_instance = AsyncMock()
             mock_instance.post.return_value = mock_response
             mock_client.return_value.__aenter__.return_value = mock_instance
 
-            with pytest.raises(ShortURLAPIError) as exc_info:
+            with pytest.raises(ShortURLAPIError, match="Internal Server Error") as exc_info:
                 await client.request("/shorturl", {})
 
             assert exc_info.value.status_code == 500
