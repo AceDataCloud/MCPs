@@ -3,6 +3,13 @@ name: Sync to Sub-Repos
 on:
   push:
     branches: [main]
+  workflow_dispatch:
+    inputs:
+      sync_all:
+        description: 'Sync all directories (bypass change detection)'
+        required: false
+        default: 'true'
+        type: boolean
 
 jobs:
   detect-changes:
@@ -18,8 +25,7 @@ jobs:
       - name: Detect changed subdirectories
         id: changes
         run: |
-          # Get list of changed files
-          CHANGED=$(git diff --name-only HEAD~1 HEAD 2>/dev/null || git diff --name-only HEAD)
+          SYNC_ALL="${{ github.event.inputs.sync_all }}"
 
           # Read sync.yaml to get mapping keys
           DIRS=$(grep -E '^\s+\w+:$' sync.yaml | sed 's/://;s/^\s*//' | grep -v '^repo$\|^exclude$\|^mappings$')
@@ -27,16 +33,28 @@ jobs:
           MATRIX="[]"
           HAS_CHANGES="false"
 
-          for dir in $DIRS; do
-            if echo "$CHANGED" | grep -q "^${dir}/"; then
-              # Extract repo from sync.yaml
+          if [ "$SYNC_ALL" = "true" ]; then
+            # Manual trigger: sync all directories
+            for dir in $DIRS; do
               REPO=$(awk "/^  ${dir}:/{found=1} found && /repo:/{print \$2; exit}" sync.yaml)
               if [ -n "$REPO" ]; then
                 MATRIX=$(echo "$MATRIX" | jq -c --arg d "$dir" --arg r "$REPO" '. + [{"dir": $d, "repo": $r}]')
                 HAS_CHANGES="true"
               fi
-            fi
-          done
+            done
+          else
+            # Push trigger: only sync changed directories
+            CHANGED=$(git diff --name-only HEAD~1 HEAD 2>/dev/null || git diff --name-only HEAD)
+            for dir in $DIRS; do
+              if echo "$CHANGED" | grep -q "^${dir}/"; then
+                REPO=$(awk "/^  ${dir}:/{found=1} found && /repo:/{print \$2; exit}" sync.yaml)
+                if [ -n "$REPO" ]; then
+                  MATRIX=$(echo "$MATRIX" | jq -c --arg d "$dir" --arg r "$REPO" '. + [{"dir": $d, "repo": $r}]')
+                  HAS_CHANGES="true"
+                fi
+              fi
+            done
+          fi
 
           echo "matrix={\"include\":$MATRIX}" >> $GITHUB_OUTPUT
           echo "has_changes=$HAS_CHANGES" >> $GITHUB_OUTPUT
