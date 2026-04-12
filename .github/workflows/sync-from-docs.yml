@@ -21,7 +21,7 @@ jobs:
         with:
           repository: AceDataCloud/Docs
           path: _docs
-          token: ${{ secrets.BOT_TOKEN }}
+          token: ${{ secrets.BOT_GITHUB_TOKEN }}
           fetch-depth: 5
 
       - name: Get Docs changes
@@ -45,7 +45,7 @@ jobs:
 
       - name: Close existing sync issues
         env:
-          GH_TOKEN: ${{ secrets.BOT_TOKEN }}
+          GH_TOKEN: ${{ secrets.BOT_GITHUB_TOKEN }}
         run: |
           gh issue list --repo "${{ github.repository }}" --label "auto-sync" --state open --json number --jq '.[].number' | while read -r num; do
             gh issue close "$num" --repo "${{ github.repository }}" --comment "Superseded by new sync trigger." 2>/dev/null || true
@@ -54,7 +54,7 @@ jobs:
       - name: Create issue for Copilot
         id: create-issue
         env:
-          GH_TOKEN: ${{ secrets.BOT_TOKEN }}
+          GH_TOKEN: ${{ secrets.BOT_GITHUB_TOKEN }}
           COMMIT_INFO: ${{ steps.docs.outputs.commit_info }}
           RECENT_CHANGES: ${{ steps.docs.outputs.recent_changes }}
           CHANGED_SERVICES: ${{ steps.docs.outputs.changed_services }}
@@ -96,7 +96,7 @@ jobs:
     steps:
       - name: Wait for Copilot PR and merge
         env:
-          GH_TOKEN: ${{ secrets.BOT_TOKEN }}
+          GH_TOKEN: ${{ secrets.BOT_GITHUB_TOKEN }}
           ISSUE_NUMBER: ${{ needs.create-task.outputs.issue_number }}
         run: |
           echo "Waiting for Copilot to process issue #$ISSUE_NUMBER..."
