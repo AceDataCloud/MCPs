@@ -59,7 +59,7 @@ class Settings:
         """Validate required settings."""
         if not self.api_token:
             raise ValueError(
-                "ACEDATACLOUD_API_TOKEN environment variable is required."
+                "ACEDATACLOUD_API_TOKEN environment variable is required. "
                 "Get your token from https://platform.acedata.cloud"
             )
 
