@@ -63,8 +63,7 @@ jobs:
             --repo "$REPO" \
             --title "sync: update from Docs ($COMMIT_INFO)" \
             --label "auto-sync" \
-            --assignee "copilot-swe-agent[bot]" \
-            --body "The upstream Docs have been updated. Ensure the affected MCP servers in this monorepo are in sync.
+                      --body "The upstream Docs have been updated. Ensure the affected MCP servers in this monorepo are in sync.
 
           ## Changed Services
 
