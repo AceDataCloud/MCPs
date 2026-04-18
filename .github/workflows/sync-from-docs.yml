@@ -36,7 +36,6 @@ jobs:
           echo "$recent_changes" >> "$GITHUB_OUTPUT"
           echo "EOF" >> "$GITHUB_OUTPUT"
 
-          # Extract changed services from dispatch payload or recent commits
           changed_services="${{ github.event.client_payload.changed_services }}"
           if [ -z "$changed_services" ]; then
             changed_services="all"
@@ -60,34 +59,43 @@ jobs:
           CHANGED_SERVICES: ${{ steps.docs.outputs.changed_services }}
           REPO: ${{ github.repository }}
         run: |
-          body=$(jq -n \
-            --arg changes "$RECENT_CHANGES" \
-            --arg services "$CHANGED_SERVICES" \
-            '"The upstream Docs have been updated. Ensure the affected MCP servers in this monorepo are in sync.\n\n## Changed Services\n\n`" + $services + "`\n\n## Recent Docs Changes\n\n```\n" + $changes + "\n```\n\n## Instructions\n\nThis is a monorepo with MCP servers in subdirectories (luma/, suno/, midjourney/, etc.).\n\nCheck the AceDataCloud/Docs repo OpenAPI specs at `openapi/<service>.json` for each changed service.\n\nCompare models, endpoints, and parameters against the corresponding subdirectory'\''s code (`core/types.py`, `tools/`). Fix any differences.\n\nOnly modify subdirectories matching the changed services. If everything is already in sync, close this issue."')
+          ISSUE_NUM=$(gh issue create \
+            --repo "$REPO" \
+            --title "sync: update from Docs ($COMMIT_INFO)" \
+            --label "auto-sync" \
+            --assignee "copilot-swe-agent[bot]" \
+            --body "The upstream Docs have been updated. Ensure the affected MCP servers in this monorepo are in sync.
 
-          ISSUE_URL=$(jq -n \
-            --arg title "sync: update from Docs ($COMMIT_INFO)" \
-            --argjson body "$body" \
-            --arg repo "$REPO" \
-            '{
-              title: $title,
-              body: $body,
-              labels: ["auto-sync"],
-              assignees: ["copilot-swe-agent[bot]"],
-              agent_assignment: {
-                target_repo: $repo,
-                base_branch: "main",
-                custom_instructions: "Check out the AceDataCloud/Docs repo and read the openapi/ specs. This is a monorepo — each subdirectory (luma/, suno/, etc.) is an MCP server. Compare the model enums and endpoints in each affected subdirectory against the Docs specs. Fix any differences. If everything is already in sync, close this issue with a comment saying so."
-              }
-            }' | gh api \
-            --method POST \
-            -H "Accept: application/vnd.github+json" \
-            -H "X-GitHub-Api-Version: 2022-11-28" \
-            /repos/"$REPO"/issues \
-            --input - --jq '.number')
+          ## Changed Services
 
-          echo "Created issue #$ISSUE_URL"
-          echo "issue_number=$ISSUE_URL" >> "$GITHUB_OUTPUT"
+          \`$CHANGED_SERVICES\`
+
+          ## Recent Docs Changes
+
+          \`\`\`
+          $RECENT_CHANGES
+          \`\`\`
+
+          ## Instructions
+
+          See \`.github/copilot-instructions.md\` for sync rules.
+
+This is a monorepo with MCP servers in subdirectories (luma/, suno/, midjourney/, etc.).
+
+Check the AceDataCloud/Docs repo OpenAPI specs at \`openapi/<service>.json\` for each changed service.
+
+Compare models, endpoints, and parameters against the corresponding subdirectory's code. Fix any differences.
+
+Only modify subdirectories matching the changed services. If everything is already in sync, close this issue." \
+            --json number --jq '.number' 2>&1 || echo "")
+
+          if [ -z "$ISSUE_NUM" ]; then
+            echo "Failed to create issue"
+            exit 1
+          fi
+
+          echo "Created issue #$ISSUE_NUM"
+          echo "issue_number=$ISSUE_NUM" >> "$GITHUB_OUTPUT"
 
   wait-and-merge:
     needs: create-task
