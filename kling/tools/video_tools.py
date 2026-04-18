@@ -30,7 +30,7 @@ async def kling_generate_video(
     model: Annotated[
         KlingModel,
         Field(
-            description="Kling model to use. Options: 'kling-v1', 'kling-v1-6', 'kling-v2-master' (default), 'kling-v2-1-master', 'kling-v2-5-turbo', 'kling-video-o1'."
+            description="Kling model to use. Options: 'kling-v1', 'kling-v1-6', 'kling-v2-master' (default), 'kling-v2-1-master', 'kling-v2-5-turbo', 'kling-v2-6', 'kling-v3', 'kling-v3-omni', 'kling-video-o1'."
         ),
     ] = DEFAULT_MODEL,
     mode: Annotated[
@@ -47,8 +47,16 @@ async def kling_generate_video(
     ] = DEFAULT_ASPECT_RATIO,
     duration: Annotated[
         Duration,
-        Field(description="Video duration in seconds. Options: 5 (default) or 10."),
+        Field(
+            description="Video duration in seconds. For kling-v3/kling-v3-omni: 3-15 (integer). Other models: 5 or 10."
+        ),
     ] = DEFAULT_DURATION,
+    generate_audio: Annotated[
+        bool,
+        Field(
+            description="Whether to generate audio synchronously. Supported by kling-v3, kling-v3-omni, and kling-v2-6 (pro mode only). Default is false."
+        ),
+    ] = False,
     negative_prompt: Annotated[
         str | None,
         Field(
@@ -104,6 +112,8 @@ async def kling_generate_video(
         "callback_url": callback_url,
     }
 
+    if generate_audio:
+        payload["generate_audio"] = True
     if negative_prompt:
         payload["negative_prompt"] = negative_prompt
     if cfg_scale is not None:
@@ -149,8 +159,16 @@ async def kling_generate_video_from_image(
     ] = DEFAULT_ASPECT_RATIO,
     duration: Annotated[
         Duration,
-        Field(description="Video duration in seconds. Options: 5 (default) or 10."),
+        Field(
+            description="Video duration in seconds. For kling-v3/kling-v3-omni: 3-15 (integer). Other models: 5 or 10."
+        ),
     ] = DEFAULT_DURATION,
+    generate_audio: Annotated[
+        bool,
+        Field(
+            description="Whether to generate audio synchronously. Supported by kling-v3, kling-v3-omni, and kling-v2-6 (pro mode only)."
+        ),
+    ] = False,
     negative_prompt: Annotated[
         str | None,
         Field(description="Things to avoid in the video."),
@@ -207,6 +225,8 @@ async def kling_generate_video_from_image(
         payload["start_image_url"] = start_image_url
     if end_image_url:
         payload["end_image_url"] = end_image_url
+    if generate_audio:
+        payload["generate_audio"] = True
     if negative_prompt:
         payload["negative_prompt"] = negative_prompt
     if cfg_scale is not None:
