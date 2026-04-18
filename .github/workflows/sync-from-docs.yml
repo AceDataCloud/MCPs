@@ -16,12 +16,21 @@ jobs:
     outputs:
       issue_number: ${{ steps.create-issue.outputs.issue_number }}
     steps:
+      - name: Validate sync token
+        env:
+          SYNC_GH_TOKEN: ${{ secrets.ADMIN_GITHUB_TOKEN || secrets.BOT_GITHUB_TOKEN }}
+        run: |
+          if [ -z "$SYNC_GH_TOKEN" ]; then
+            echo "::error::Missing GitHub token. Set ADMIN_GITHUB_TOKEN or BOT_GITHUB_TOKEN."
+            exit 1
+          fi
+
       - name: Checkout Docs
         uses: actions/checkout@v6
         with:
           repository: AceDataCloud/Docs
           path: _docs
-          token: ${{ secrets.BOT_GITHUB_TOKEN }}
+          token: ${{ secrets.ADMIN_GITHUB_TOKEN || secrets.BOT_GITHUB_TOKEN }}
           fetch-depth: 5
 
       - name: Get Docs changes
@@ -44,7 +53,7 @@ jobs:
 
       - name: Close existing sync issues
         env:
-          GH_TOKEN: ${{ secrets.BOT_GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.ADMIN_GITHUB_TOKEN || secrets.BOT_GITHUB_TOKEN }}
         run: |
           gh issue list --repo "${{ github.repository }}" --label "auto-sync" --state open --json number --jq '.[].number' | while read -r num; do
             gh issue close "$num" --repo "${{ github.repository }}" --comment "Superseded by new sync trigger." 2>/dev/null || true
@@ -53,45 +62,37 @@ jobs:
       - name: Create issue for Copilot
         id: create-issue
         env:
-          GH_TOKEN: ${{ secrets.ADMIN_GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.ADMIN_GITHUB_TOKEN || secrets.BOT_GITHUB_TOKEN }}
           COMMIT_INFO: ${{ steps.docs.outputs.commit_info }}
           RECENT_CHANGES: ${{ steps.docs.outputs.recent_changes }}
           CHANGED_SERVICES: ${{ steps.docs.outputs.changed_services }}
           REPO: ${{ github.repository }}
         run: |
-          ISSUE_NUM=$(gh issue create \
-            --repo "$REPO" \
-            --title "sync: update from Docs ($COMMIT_INFO)" \
-            --label "auto-sync" \
-                      --body "The upstream Docs have been updated. Ensure the affected MCP servers in this monorepo are in sync.
+          body=$(jq -n \
+            --arg changes "$RECENT_CHANGES" \
+            --arg services "$CHANGED_SERVICES" \
+            '"The upstream Docs have been updated. Ensure the affected MCP servers in this monorepo are in sync.\n\n## Changed Services\n\n`" + $services + "`\n\n## Recent Docs Changes\n\n```\n" + $changes + "\n```\n\n## Instructions\n\nSee `.github/copilot-instructions.md` for sync rules.\n\nThis is a monorepo with MCP servers in subdirectories (luma/, suno/, midjourney/, etc.).\n\nCheck the AceDataCloud/Docs repo OpenAPI specs at `openapi/<service>.json` for each changed service.\n\nCompare models, endpoints, and parameters against the corresponding subdirectory'\''s code. Fix any differences.\n\nOnly modify subdirectories matching the changed services. If everything is already in sync, close this issue."')
 
-          ## Changed Services
-
-          \`$CHANGED_SERVICES\`
-
-          ## Recent Docs Changes
-
-          \`\`\`
-          $RECENT_CHANGES
-          \`\`\`
-
-          ## Instructions
-
-          See \`.github/copilot-instructions.md\` for sync rules.
-
-This is a monorepo with MCP servers in subdirectories (luma/, suno/, midjourney/, etc.).
-
-Check the AceDataCloud/Docs repo OpenAPI specs at \`openapi/<service>.json\` for each changed service.
-
-Compare models, endpoints, and parameters against the corresponding subdirectory's code. Fix any differences.
-
-Only modify subdirectories matching the changed services. If everything is already in sync, close this issue." \
-            2>&1 || echo "")
-
-          if [ -z "$ISSUE_NUM" ]; then
-            echo "Failed to create issue"
-            exit 1
-          fi
+          ISSUE_NUM=$(jq -n \
+            --arg title "sync: update from Docs ($COMMIT_INFO)" \
+            --argjson body "$body" \
+            --arg repo "$REPO" \
+            '{
+              title: $title,
+              body: $body,
+              labels: ["auto-sync"],
+              assignees: ["copilot-swe-agent[bot]"],
+              agent_assignment: {
+                target_repo: $repo,
+                base_branch: "main",
+                custom_instructions: "Check out the AceDataCloud/Docs repo and read the openapi/ specs. This is a monorepo — each subdirectory (luma/, suno/, etc.) is an MCP server. Compare the model enums and endpoints in each affected subdirectory against the Docs specs. Fix any differences. If everything is already in sync, close this issue with a comment saying so."
+              }
+            }' | gh api \
+            --method POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            /repos/"$REPO"/issues \
+            --input - --jq '.number')
 
           echo "Created issue #$ISSUE_NUM"
           echo "issue_number=$ISSUE_NUM" >> "$GITHUB_OUTPUT"
@@ -101,9 +102,18 @@ Only modify subdirectories matching the changed services. If everything is alrea
     runs-on: ubuntu-latest
     timeout-minutes: 35
     steps:
+      - name: Validate sync token
+        env:
+          SYNC_GH_TOKEN: ${{ secrets.ADMIN_GITHUB_TOKEN || secrets.BOT_GITHUB_TOKEN }}
+        run: |
+          if [ -z "$SYNC_GH_TOKEN" ]; then
+            echo "::error::Missing GitHub token. Set ADMIN_GITHUB_TOKEN or BOT_GITHUB_TOKEN."
+            exit 1
+          fi
+
       - name: Wait for Copilot PR and merge
         env:
-          GH_TOKEN: ${{ secrets.BOT_GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.ADMIN_GITHUB_TOKEN || secrets.BOT_GITHUB_TOKEN }}
           ISSUE_NUMBER: ${{ needs.create-task.outputs.issue_number }}
         run: |
           echo "Waiting for Copilot to process issue #$ISSUE_NUMBER..."
@@ -127,10 +137,18 @@ Only modify subdirectories matching the changed services. If everything is alrea
               HEAD_BRANCH=$(echo "$PR_JSON" | jq -r '.headRefName')
               echo "Found PR #$PR_NUMBER: $PR_TITLE (branch=$HEAD_BRANCH)"
 
-              AGENT_STATUS=$(gh api "/repos/${{ github.repository }}/actions/runs?branch=$HEAD_BRANCH&event=dynamic" \
-                --jq '[.workflow_runs[] | select(.name == "Running Copilot coding agent")] | .[0].conclusion // "pending"' 2>/dev/null || echo "pending")
+              AGENT_RUN=$(gh api "/repos/${{ github.repository }}/actions/runs?branch=$HEAD_BRANCH&event=dynamic" \
+                --jq '[.workflow_runs[] | {name: .name, status: .status, conclusion: (.conclusion // ""), created_at: .created_at}] | sort_by(.created_at) | reverse | .[0] // empty' 2>/dev/null || echo "")
 
-              echo "Copilot agent status: $AGENT_STATUS"
+              if [ -n "$AGENT_RUN" ]; then
+                AGENT_NAME=$(echo "$AGENT_RUN" | jq -r '.name')
+                AGENT_PHASE=$(echo "$AGENT_RUN" | jq -r '.status')
+                AGENT_STATUS=$(echo "$AGENT_RUN" | jq -r 'if .status == "completed" then (.conclusion // "failure") else "pending" end')
+                echo "Latest dynamic run: $AGENT_NAME (phase=$AGENT_PHASE, conclusion=$AGENT_STATUS)"
+              else
+                AGENT_STATUS="pending"
+                echo "No dynamic workflow run found yet for branch $HEAD_BRANCH"
+              fi
 
               if [ "$AGENT_STATUS" = "success" ]; then
                 echo "Copilot agent completed. Merging PR #$PR_NUMBER..."
