@@ -9,6 +9,9 @@ KlingModel = Literal[
     "kling-v2-master",
     "kling-v2-1-master",
     "kling-v2-5-turbo",
+    "kling-v2-6",
+    "kling-v3",
+    "kling-v3-omni",
     "kling-video-o1",
 ]
 
@@ -24,8 +27,8 @@ Mode = Literal["std", "pro"]
 # Kling video aspect ratios
 AspectRatio = Literal["16:9", "9:16", "1:1"]
 
-# Kling video durations
-Duration = Literal[5, 10]
+# Kling video durations (V3/V3-Omni support 3-15s, others support 5 or 10)
+Duration = int
 
 # Kling camera control types
 CameraControlType = Literal[
