@@ -87,7 +87,7 @@ Check the AceDataCloud/Docs repo OpenAPI specs at \`openapi/<service>.json\` for
 Compare models, endpoints, and parameters against the corresponding subdirectory's code. Fix any differences.
 
 Only modify subdirectories matching the changed services. If everything is already in sync, close this issue." \
-            --json number --jq '.number' 2>&1 || echo "")
+            2>&1 || echo "")
 
           if [ -z "$ISSUE_NUM" ]; then
             echo "Failed to create issue"
