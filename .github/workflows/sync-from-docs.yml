@@ -53,7 +53,7 @@ jobs:
       - name: Create issue for Copilot
         id: create-issue
         env:
-          GH_TOKEN: ${{ secrets.BOT_GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.ADMIN_GITHUB_TOKEN }}
           COMMIT_INFO: ${{ steps.docs.outputs.commit_info }}
           RECENT_CHANGES: ${{ steps.docs.outputs.recent_changes }}
           CHANGED_SERVICES: ${{ steps.docs.outputs.changed_services }}
