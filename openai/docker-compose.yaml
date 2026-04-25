@@ -1,0 +1,9 @@
+version: "3"
+services:
+  mcp-openai:
+    platform: linux/amd64
+    container_name: "mcp-openai"
+    build: ./
+    image: "ghcr.io/acedatacloud/mcp-openai:${BUILD_NUMBER}"
+    ports:
+      - "8000:8000"

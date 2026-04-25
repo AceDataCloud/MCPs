@@ -1,0 +1,48 @@
+{
+  "name": "mcp-openai",
+  "displayName": "OpenAI MCP",
+  "description": "OpenAI API - Chat Completions, Embeddings, Image Generation, Responses, and Image Editing via Ace Data Cloud API",
+  "version": "0.1.0",
+  "publisher": "acedatacloud",
+  "icon": "icon.png",
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.99.0"
+  },
+  "categories": [
+    "AI",
+    "Chat"
+  ],
+  "keywords": [
+    "mcp",
+    "model context protocol",
+    "ai",
+    "copilot",
+    "ace data cloud",
+    "openai",
+    "chat completion",
+    "embeddings",
+    "images"
+  ],
+  "homepage": "https://platform.acedata.cloud",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AceDataCloud/MCPs"
+  },
+  "bugs": {
+    "url": "https://github.com/AceDataCloud/MCPs/issues"
+  },
+  "contributes": {
+    "mcpServers": {
+      "openai": {
+        "command": "uvx",
+        "args": [
+          "mcp-openai"
+        ],
+        "env": {
+          "ACEDATACLOUD_API_TOKEN": ""
+        }
+      }
+    }
+  }
+}

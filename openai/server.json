@@ -1,0 +1,36 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.AceDataCloud/mcp-openai",
+  "description": "MCP server for OpenAI API via AceDataCloud",
+  "version": "2026.1.25.1",
+  "repository": {
+    "url": "https://github.com/AceDataCloud/MCPs",
+    "source": "github"
+  },
+  "packages": [
+    {
+      "identifier": "mcp-openai",
+      "version": "2026.1.25.1",
+      "transport": {
+        "type": "stdio"
+      },
+      "registryType": "pypi",
+      "runtimeHint": "uvx",
+      "environmentVariables": [
+        {
+          "name": "ACEDATACLOUD_API_TOKEN",
+          "description": "API token from Ace Data Cloud (https://platform.acedata.cloud)",
+          "isRequired": true,
+          "isSecret": true
+        }
+      ]
+    }
+  ],
+  "websiteUrl": "https://openai.mcp.acedata.cloud",
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://openai.mcp.acedata.cloud/mcp"
+    }
+  ]
+}

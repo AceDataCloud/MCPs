@@ -1,0 +1,51 @@
+"""Informational tools for OpenAI API."""
+
+from core.server import mcp
+
+
+@mcp.tool()
+async def openai_list_models() -> str:
+    """List all available OpenAI models by category.
+
+    Shows all available models grouped by their use case.
+    Use this to understand which model to use for your task.
+
+    Returns:
+        Formatted list of all available models by category.
+    """
+    # Last updated: 2026-01-25
+    return """Available OpenAI Models:
+
+## Chat Completion Models
+gpt-5.5, gpt-5.5-pro, gpt-5.2, gpt-5.1, gpt-5.1-all, gpt-5, gpt-5-mini, gpt-5-nano,
+gpt-4, gpt-4.1, gpt-4.1-mini, gpt-4.1-nano, gpt-4o, gpt-4o-2024-05-13, gpt-4o-all,
+gpt-4o-image, gpt-4o-mini, gpt-35-turbo-16k, o1, o1-mini, o1-pro, o3, o3-mini, o3-pro,
+o4-mini
+
+## Embedding Models
+text-embedding-3-small, text-embedding-3-large, text-embedding-ada-002
+
+## Image Generation Models
+dall-e-3, gpt-image-1, gpt-image-1.5, gpt-image-2, nano-banana, nano-banana-2,
+nano-banana-pro
+
+## Responses Models
+gpt-5.5, gpt-5.5-pro, gpt-5.1, gpt-5.1-all, gpt-5, gpt-5-mini, gpt-5-nano,
+gpt-4, gpt-4-all, gpt-4-turbo, gpt-4-turbo-preview, gpt-4-vision-preview,
+gpt-4.1, gpt-4.1-2025-04-14, gpt-4.1-mini, gpt-4.1-mini-2025-04-14,
+gpt-4.1-nano, gpt-4.1-nano-2025-04-14, gpt-4.5-preview, gpt-4.5-preview-2025-02-27,
+gpt-4o, gpt-4o-2024-05-13, gpt-4o-2024-08-06, gpt-4o-2024-11-20, gpt-4o-all,
+gpt-4o-image, gpt-4o-mini, gpt-4o-mini-2024-07-18, gpt-4o-mini-search-preview,
+gpt-4o-mini-search-preview-2025-03-11, gpt-4o-search-preview,
+gpt-4o-search-preview-2025-03-11, gpt-35-turbo-16k,
+o1, o1-2024-12-17, o1-all, o1-mini, o1-mini-2024-09-12, o1-mini-all,
+o1-preview, o1-preview-2024-09-12, o1-preview-all, o1-pro, o1-pro-2025-03-19, o1-pro-all,
+o3, o3-2025-04-16, o3-all, o3-mini, o3-mini-2025-01-31, o3-mini-2025-01-31-high,
+o3-mini-2025-01-31-low, o3-mini-2025-01-31-medium, o3-mini-all, o3-mini-high,
+o3-mini-high-all, o3-mini-low, o3-mini-medium, o3-pro, o3-pro-2025-06-10,
+o4-mini, o4-mini-2025-04-16, o4-mini-all, o4-mini-high-all
+
+## Image Edit Models
+dall-e-3, gpt-image-1, gpt-image-1.5, gpt-image-2, nano-banana, nano-banana-2,
+nano-banana-pro
+"""
