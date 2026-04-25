@@ -1,0 +1,9 @@
+version: "3"
+services:
+  mcp-aichat:
+    platform: linux/amd64
+    container_name: "mcp-aichat"
+    build: ./
+    image: "ghcr.io/acedatacloud/mcp-aichat:${BUILD_NUMBER}"
+    ports:
+      - "8000:8000"
