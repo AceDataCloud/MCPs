@@ -73,28 +73,37 @@ jobs:
             --arg services "$CHANGED_SERVICES" \
             '"The upstream Docs have been updated. Ensure the affected MCP servers in this monorepo are in sync.\n\n## Changed Services\n\n`" + $services + "`\n\n## Recent Docs Changes\n\n```\n" + $changes + "\n```\n\n## Instructions\n\nSee `.github/copilot-instructions.md` for sync rules.\n\nThis is a monorepo with MCP servers in subdirectories (luma/, suno/, midjourney/, etc.).\n\nCheck the AceDataCloud/Docs repo OpenAPI specs at `openapi/<service>.json` for each changed service.\n\nCompare models, endpoints, and parameters against the corresponding subdirectory'\''s code. Fix any differences.\n\nOnly modify subdirectories matching the changed services. If everything is already in sync, close this issue."')
 
-          ISSUE_NUM=$(jq -n \
+          ISSUE_JSON=$(jq -n \
             --arg title "sync: update from Docs ($COMMIT_INFO)" \
             --argjson body "$body" \
-            --arg repo "$REPO" \
-            '{
-              title: $title,
-              body: $body,
-              labels: ["auto-sync"],
-              assignees: ["copilot-swe-agent[bot]"],
-              agent_assignment: {
-                target_repo: $repo,
-                base_branch: "main",
-                custom_instructions: "Check out the AceDataCloud/Docs repo and read the openapi/ specs. This is a monorepo — each subdirectory (luma/, suno/, etc.) is an MCP server. Compare the model enums and endpoints in each affected subdirectory against the Docs specs. Fix any differences. If everything is already in sync, close this issue with a comment saying so."
-              }
-            }' | gh api \
-            --method POST \
-            -H "Accept: application/vnd.github+json" \
-            -H "X-GitHub-Api-Version: 2022-11-28" \
-            /repos/"$REPO"/issues \
-            --input - --jq '.number')
+            '{title: $title, body: $body, labels: ["auto-sync"]}' \
+            | gh api \
+              --method POST \
+              -H "Accept: application/vnd.github+json" \
+              -H "X-GitHub-Api-Version: 2022-11-28" \
+              /repos/"$REPO"/issues \
+              --input -)
+          ISSUE_NUM=$(echo "$ISSUE_JSON" | jq -r '.number')
+          ISSUE_NODE=$(echo "$ISSUE_JSON" | jq -r '.node_id')
+          echo "Created issue #$ISSUE_NUM (node=$ISSUE_NODE)"
 
-          echo "Created issue #$ISSUE_NUM"
+          OWNER="${REPO%/*}"
+          NAME="${REPO#*/}"
+          COPILOT_ID=$(gh api graphql \
+            -f query='query($owner:String!,$name:String!){ repository(owner:$owner,name:$name){ suggestedActors(capabilities:[CAN_BE_ASSIGNED], first:50){ nodes { __typename ... on Bot { login id } ... on User { login id } } } } }' \
+            -f owner="$OWNER" -f name="$NAME" \
+            --jq '[.data.repository.suggestedActors.nodes[] | select(.login=="copilot-swe-agent" or .login=="Copilot")] | .[0].id // empty')
+
+          if [ -z "$COPILOT_ID" ]; then
+            echo "::error::Copilot not found in suggestedActors. ADMIN_GITHUB_TOKEN must belong to a user with a Copilot seat in this org."
+            gh issue comment "$ISSUE_NUM" --repo "$REPO" --body "Auto-assignment failed: Copilot not visible to ADMIN_GITHUB_TOKEN. Please assign Copilot manually." || true
+            exit 1
+          fi
+
+          gh api graphql \
+            -f query='mutation($a:ID!,$b:[ID!]!){ replaceActorsForAssignable(input:{assignableId:$a, actorIds:$b}){ assignable { ... on Issue { number assignees(first:5){ nodes { login } } } } } }' \
+            -f a="$ISSUE_NODE" -f b="$COPILOT_ID"
+
           echo "issue_number=$ISSUE_NUM" >> "$GITHUB_OUTPUT"
 
   wait-and-merge:
