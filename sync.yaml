@@ -63,3 +63,7 @@ mappings:
     repo: AceDataCloud/OpenAIMCP
     exclude:
       - .gitbooks
+  aichat:
+    repo: AceDataCloud/AIChatMCP
+    exclude:
+      - .gitbooks

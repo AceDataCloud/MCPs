@@ -1,0 +1,36 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.AceDataCloud/mcp-aichat",
+  "description": "MCP server for AI Dialogue via AceDataCloud AIChat API",
+  "version": "2026.1.0.1",
+  "repository": {
+    "url": "https://github.com/AceDataCloud/AIChatMCP",
+    "source": "github"
+  },
+  "packages": [
+    {
+      "identifier": "mcp-aichat",
+      "version": "2026.1.0.1",
+      "transport": {
+        "type": "stdio"
+      },
+      "registryType": "pypi",
+      "runtimeHint": "uvx",
+      "environmentVariables": [
+        {
+          "name": "ACEDATACLOUD_API_TOKEN",
+          "description": "API token from Ace Data Cloud (https://platform.acedata.cloud)",
+          "isRequired": true,
+          "isSecret": true
+        }
+      ]
+    }
+  ],
+  "websiteUrl": "https://aichat.mcp.acedata.cloud",
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://aichat.mcp.acedata.cloud/mcp"
+    }
+  ]
+}
