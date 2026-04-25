@@ -59,3 +59,7 @@ mappings:
     repo: AceDataCloud/ProducerMCP
     exclude:
       - .gitbooks
+  openai:
+    repo: AceDataCloud/OpenAIMCP
+    exclude:
+      - .gitbooks
