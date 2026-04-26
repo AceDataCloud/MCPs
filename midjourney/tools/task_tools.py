@@ -13,11 +13,17 @@ from core.utils import format_task_result
 @mcp.tool()
 async def midjourney_get_task(
     task_id: Annotated[
-        str,
+        str | None,
         Field(
             description="The task ID returned from a generation request. This is the 'task_id' field from any midjourney_imagine, midjourney_describe, midjourney_edit, or midjourney_generate_video tool response."
         ),
-    ],
+    ] = None,
+    trace_id: Annotated[
+        str | None,
+        Field(
+            description="The trace ID to retrieve. Used as an alternative to task_id for identifying a task."
+        ),
+    ] = None,
 ) -> str:
     """Query the status and result of a Midjourney generation task.
 
@@ -33,10 +39,12 @@ async def midjourney_get_task(
     Returns:
         Task status and generation result including URLs, dimensions, and available actions.
     """
-    result = await client.query_task(
-        id=task_id,
-        action="retrieve",
-    )
+    kwargs: dict = {"action": "retrieve"}
+    if task_id is not None:
+        kwargs["id"] = task_id
+    if trace_id is not None:
+        kwargs["trace_id"] = trace_id
+    result = await client.query_task(**kwargs)
     # Throttle polling: sleep 5s for incomplete tasks so LLM clients
     # don't burn through poll attempts in seconds.
     response = result.get("response", {})
@@ -49,9 +57,23 @@ async def midjourney_get_task(
 @mcp.tool()
 async def midjourney_get_tasks_batch(
     task_ids: Annotated[
-        list[str],
+        list[str] | None,
         Field(description="List of task IDs to query. Maximum recommended batch size is 50 tasks."),
-    ],
+    ] = None,
+    trace_ids: Annotated[
+        list[str] | None,
+        Field(description="List of trace IDs to query. Used as an alternative to task_ids."),
+    ] = None,
+    offset: Annotated[
+        int,
+        Field(description="Offset for pagination when retrieving a batch of tasks. Default is 0."),
+    ] = 0,
+    limit: Annotated[
+        int,
+        Field(
+            description="Maximum number of tasks to return in a batch. Default is 12."
+        ),
+    ] = 12,
 ) -> str:
     """Query multiple Midjourney generation tasks at once.
 
@@ -66,10 +88,12 @@ async def midjourney_get_tasks_batch(
     Returns:
         Status and result information for all queried tasks.
     """
-    result = await client.query_task(
-        ids=task_ids,
-        action="retrieve_batch",
-    )
+    kwargs: dict = {"action": "retrieve_batch", "offset": offset, "limit": limit}
+    if task_ids is not None:
+        kwargs["ids"] = task_ids
+    if trace_ids is not None:
+        kwargs["trace_ids"] = trace_ids
+    result = await client.query_task(**kwargs)
 
     if "error" in result:
         error = result.get("error", {})
