@@ -6,6 +6,7 @@ from typing import Annotated
 from pydantic import Field
 
 from core.client import client
+from core.exceptions import MidjourneyValidationError
 from core.server import mcp
 from core.utils import format_task_result
 
@@ -39,6 +40,8 @@ async def midjourney_get_task(
     Returns:
         Task status and generation result including URLs, dimensions, and available actions.
     """
+    if task_id is None and trace_id is None:
+        raise MidjourneyValidationError("Either task_id or trace_id must be provided.")
     kwargs: dict = {"action": "retrieve"}
     if task_id is not None:
         kwargs["id"] = task_id
@@ -84,6 +87,7 @@ async def midjourney_get_tasks_batch(
     - You have multiple pending generations to check
     - You want to get status of several images/videos at once
     - You're tracking a batch of generations
+    - You want to list recent tasks with pagination (omit task_ids and trace_ids)
 
     Returns:
         Status and result information for all queried tasks.
