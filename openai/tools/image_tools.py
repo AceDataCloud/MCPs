@@ -123,6 +123,15 @@ async def openai_generate_image(
             )
         ),
     ] = None,
+    partial_images: Annotated[
+        int | None,
+        Field(
+            description=(
+                "Number of partial images to emit during streaming (0-3). "
+                "0 returns the final image in one event."
+            )
+        ),
+    ] = None,
     callback_url: Annotated[
         str | None,
         Field(
@@ -166,6 +175,8 @@ async def openai_generate_image(
             payload["moderation"] = moderation
         if output_compression is not None:
             payload["output_compression"] = output_compression
+        if partial_images is not None:
+            payload["partial_images"] = partial_images
         if callback_url is not None:
             payload["callback_url"] = callback_url
 
