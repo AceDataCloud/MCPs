@@ -60,7 +60,7 @@ mcp-openai
 - **Reasoning**: o4-mini, o3, o3-mini, o3-pro, o1, o1-mini, o1-pro
 
 ### Image Models
-- gpt-image-1, gpt-image-1.5, gpt-image-2, dall-e-3, nano-banana, nano-banana-2, nano-banana-pro
+- gpt-image-1, gpt-image-1.5, gpt-image-2, dall-e-3, dall-e-2, nano-banana, nano-banana-2, nano-banana-pro
 
 ### Embedding Models
 - text-embedding-3-small, text-embedding-3-large, text-embedding-ada-002
