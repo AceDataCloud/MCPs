@@ -121,6 +121,8 @@ Environment Variables:
     safe_print("    - openai_generate_image")
     safe_print("    - openai_edit_image")
     safe_print("    - openai_create_embedding")
+    safe_print("    - openai_get_task")
+    safe_print("    - openai_list_tasks")
     safe_print("    - openai_list_chat_models")
     safe_print("    - openai_list_image_models")
     safe_print("    - openai_list_embedding_models")
@@ -176,6 +178,14 @@ Environment Variables:
                             {
                                 "name": "openai_create_embedding",
                                 "description": "Create text embeddings",
+                            },
+                            {
+                                "name": "openai_get_task",
+                                "description": "Retrieve a single async image task by task ID or trace ID",
+                            },
+                            {
+                                "name": "openai_list_tasks",
+                                "description": "List async image tasks using batch query filters",
                             },
                             {
                                 "name": "openai_list_chat_models",

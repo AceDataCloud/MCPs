@@ -185,6 +185,21 @@ async def openai_get_usage_guide() -> str:
 - model: Embedding model (default: text-embedding-3-small)
 - dimensions: Custom output dimensions (optional)
 
+### Task Retrieval
+**openai_get_task** - Retrieve a single async image task
+- id: Task ID returned by the original image request
+- trace_id: Custom trace ID supplied on the original request
+- At least one of 'id' or 'trace_id' must be provided
+
+**openai_list_tasks** - List async image tasks (batch)
+- ids: List of task IDs
+- trace_ids: List of custom trace IDs
+- application_id: List all tasks for an application
+- user_id: List all tasks for an end user
+- type: Filter by type (e.g. 'images_generations', 'images_edits')
+- offset / limit: Pagination (default: 0 / 12)
+- created_at_min / created_at_max: Unix timestamp range filter
+
 ### Information Tools
 - **openai_list_chat_models** - List chat/completion models
 - **openai_list_image_models** - List image generation models
@@ -235,6 +250,19 @@ openai_create_embedding(
     input="The quick brown fox jumps over the lazy dog",
     model="text-embedding-3-small"
 )
+```
+
+### Retrieve Async Task
+```
+# Generate an image with a callback URL and a custom trace_id
+openai_generate_image(
+    prompt="A watercolor cat on a desk",
+    model="gpt-image-1",
+    callback_url="https://webhook.site/your-uuid",
+    trace_id="my-custom-trace-001"
+)
+# The task is persisted server-side; poll for the result later
+openai_get_task(trace_id="my-custom-trace-001")
 ```
 
 ## Best Practices
