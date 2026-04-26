@@ -75,6 +75,7 @@ async def openai_list_image_models() -> str:
 | gpt-image-1.5    | GPT Image 1.5 - improved quality                  |
 | gpt-image-2      | GPT Image 2 - latest GPT image model              |
 | dall-e-3         | DALL-E 3 - high quality artistic generation       |
+| dall-e-2         | DALL-E 2 - legacy image generation                |
 | nano-banana      | Nano Banana - fast, efficient generation          |
 | nano-banana-2    | Nano Banana 2 - improved version                  |
 | nano-banana-pro  | Nano Banana Pro - highest quality                 |
