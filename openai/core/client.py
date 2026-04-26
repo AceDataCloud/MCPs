@@ -166,6 +166,11 @@ class OpenAIClient:
         logger.info(f"Responses API with model: {kwargs.get('model', 'unknown')}")
         return await self.request("/openai/responses", kwargs)
 
+    async def tasks(self, **kwargs: Any) -> dict[str, Any]:
+        """Query async image tasks."""
+        logger.info(f"Tasks API action: {kwargs.get('action', 'unknown')}")
+        return await self.request("/openai/tasks", kwargs)
+
 
 # Global client instance
 client = OpenAIClient()
