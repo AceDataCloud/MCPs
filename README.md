@@ -6,8 +6,13 @@ Monorepo for all AceDataCloud MCP (Model Context Protocol) servers.
 
 | Directory | Standalone Repo | PyPI Package | Category |
 |---|---|---|---|
+| `claude/` | — | [mcp-claude](https://pypi.org/project/mcp-claude/) | AI Chat |
+| `deepseek/` | — | [mcp-deepseek](https://pypi.org/project/mcp-deepseek/) | AI Chat |
 | `flux/` | [FluxMCP](https://github.com/AceDataCloud/FluxMCP) | [mcp-flux-pro](https://pypi.org/project/mcp-flux-pro/) | Image |
+| `gemini/` | — | [mcp-gemini](https://pypi.org/project/mcp-gemini/) | AI Chat |
+| `grok/` | — | [mcp-grok](https://pypi.org/project/mcp-grok/) | AI Chat |
 | `hailuo/` | [HailuoMCP](https://github.com/AceDataCloud/HailuoMCP) | [mcp-hailuo](https://pypi.org/project/mcp-hailuo/) | Video |
+| `kimi/` | — | [mcp-kimi](https://pypi.org/project/mcp-kimi/) | AI Chat |
 | `kling/` | [KlingMCP](https://github.com/AceDataCloud/KlingMCP) | [mcp-kling](https://pypi.org/project/mcp-kling/) | Video |
 | `luma/` | [LumaMCP](https://github.com/AceDataCloud/LumaMCP) | [mcp-luma](https://pypi.org/project/mcp-luma/) | Video |
 | `midjourney/` | [MidjourneyMCP](https://github.com/AceDataCloud/MidjourneyMCP) | [mcp-midjourney](https://pypi.org/project/mcp-midjourney/) | Image |
