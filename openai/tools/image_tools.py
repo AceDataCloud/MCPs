@@ -45,7 +45,7 @@ async def openai_generate_image(
         Field(
             description=(
                 "The image model to use. Options: 'gpt-image-1' (default, versatile), "
-                "'gpt-image-1.5', 'gpt-image-2', 'dall-e-3', 'nano-banana', "
+                "'gpt-image-1.5', 'gpt-image-2', 'dall-e-3', 'dall-e-2', 'nano-banana', "
                 "'nano-banana-2', 'nano-banana-pro'."
             )
         ),
