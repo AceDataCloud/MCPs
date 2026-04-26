@@ -1,0 +1,9 @@
+version: "3"
+services:
+  mcp-claude:
+    platform: linux/amd64
+    container_name: "mcp-claude"
+    build: ./
+    image: "ghcr.io/acedatacloud/mcp-claude:${BUILD_NUMBER}"
+    ports:
+      - "8000:8000"

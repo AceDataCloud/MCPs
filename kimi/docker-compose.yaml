@@ -1,0 +1,9 @@
+version: "3"
+services:
+  mcp-kimi:
+    platform: linux/amd64
+    container_name: "mcp-kimi"
+    build: ./
+    image: "ghcr.io/acedatacloud/mcp-kimi:${BUILD_NUMBER}"
+    ports:
+      - "8000:8000"

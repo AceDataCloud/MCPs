@@ -1,0 +1,9 @@
+version: "3"
+services:
+  mcp-grok:
+    platform: linux/amd64
+    container_name: "mcp-grok"
+    build: ./
+    image: "ghcr.io/acedatacloud/mcp-grok:${BUILD_NUMBER}"
+    ports:
+      - "8000:8000"
