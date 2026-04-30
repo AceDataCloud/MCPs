@@ -193,6 +193,12 @@ ImageModeration = Literal["low", "auto"]
 # Image input fidelity options
 ImageInputFidelity = Literal["high", "low"]
 
+# Chat reasoning effort options
+ReasoningEffort = Literal["minimal", "low", "medium", "high"]
+
+# Chat service tier options
+ServiceTier = Literal["auto", "default", "flex", "scale", "priority"]
+
 # === Default values ===
 
 DEFAULT_CHAT_MODEL: ChatModel = "gpt-4.1"

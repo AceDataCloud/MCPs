@@ -11,6 +11,8 @@ from core.server import mcp
 from core.types import (
     DEFAULT_CHAT_MODEL,
     ChatModel,
+    ReasoningEffort,
+    ServiceTier,
 )
 
 
@@ -59,6 +61,24 @@ async def openai_chat_completion(
             description="How many chat completion choices to generate for each input. Default is 1."
         ),
     ] = None,
+    reasoning_effort: Annotated[
+        ReasoningEffort | None,
+        Field(
+            description=(
+                "Constrains effort on reasoning for reasoning models. Options: 'minimal', "
+                "'low', 'medium', 'high'. Default is 'medium'."
+            )
+        ),
+    ] = None,
+    service_tier: Annotated[
+        ServiceTier | None,
+        Field(
+            description=(
+                "Specifies the processing tier. Options: 'auto' (default), 'default', "
+                "'flex', 'scale', 'priority'."
+            )
+        ),
+    ] = None,
 ) -> str:
     """Create a chat completion using OpenAI models via AceDataCloud.
 
@@ -85,6 +105,10 @@ async def openai_chat_completion(
             payload["temperature"] = temperature
         if n is not None:
             payload["n"] = n
+        if reasoning_effort is not None:
+            payload["reasoning_effort"] = reasoning_effort
+        if service_tier is not None:
+            payload["service_tier"] = service_tier
 
         result = await client.chat_completions(**payload)
 
