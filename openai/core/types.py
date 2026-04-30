@@ -125,49 +125,16 @@ ImageModel = Literal[
     "nano-banana-pro",
 ]
 
-# Image size options
-ImageSize = Literal[
-    "1024x1024",
-    "1536x1024",
-    "1024x1536",
-    "1792x1024",
-    "1024x1792",
-    "2048x2048",
-    "2048x1536",
-    "1536x2048",
-    "2048x1152",
-    "1152x2048",
-    "2880x2880",
-    "3264x2448",
-    "2448x3264",
-    "3840x2160",
-    "2160x3840",
-    "256x256",
-    "512x512",
-    "auto",
-]
+# Image size options — free-form string matching pattern ^(auto|\d+x\d+)$
+# Common presets: 1024x1024, 1536x1024, 1024x1536, 1792x1024, 1024x1792,
+# 2048x2048, 2048x1536, 1536x2048, 2048x1152, 1152x2048,
+# 2880x2880, 3264x2448, 2448x3264, 3840x2160, 2160x3840,
+# 256x256, 512x512, auto
+# gpt-image-2 also accepts any custom WIDTHxHEIGHT dimensions.
+ImageSize = str
 
-# Image edit size options
-ImageEditSize = Literal[
-    "1024x1024",
-    "1536x1024",
-    "1024x1536",
-    "1792x1024",
-    "1024x1792",
-    "2048x2048",
-    "2048x1536",
-    "1536x2048",
-    "2048x1152",
-    "1152x2048",
-    "2880x2880",
-    "3264x2448",
-    "2448x3264",
-    "3840x2160",
-    "2160x3840",
-    "256x256",
-    "512x512",
-    "auto",
-]
+# Image edit size options — same free-form string as ImageSize
+ImageEditSize = str
 
 # Image quality options
 ImageQuality = Literal["auto", "high", "medium", "low", "hd", "standard"]
@@ -205,7 +172,7 @@ DEFAULT_CHAT_MODEL: ChatModel = "gpt-4.1"
 DEFAULT_RESPONSES_MODEL: ResponsesModel = "gpt-4.1"
 DEFAULT_EMBEDDING_MODEL: EmbeddingModel = "text-embedding-3-small"
 DEFAULT_IMAGE_MODEL: ImageModel = "gpt-image-1"
-DEFAULT_IMAGE_SIZE: ImageSize = "1024x1024"
+DEFAULT_IMAGE_SIZE: ImageSize = "auto"
 DEFAULT_IMAGE_QUALITY: ImageQuality = "auto"
 DEFAULT_IMAGE_OUTPUT_FORMAT: ImageOutputFormat = "png"
 DEFAULT_IMAGE_RESPONSE_FORMAT: ImageResponseFormat = "url"

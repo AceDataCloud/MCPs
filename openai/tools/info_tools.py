@@ -81,9 +81,14 @@ async def openai_list_image_models() -> str:
 | nano-banana-pro  | Nano Banana Pro - highest quality                 |
 
 ## Supported Sizes
+Any `WIDTHxHEIGHT` string (e.g. `1024x1024`, `1920x1080`) is accepted for **gpt-image-2** —
+dimensions must be multiples of 16, longer side ≤ 3840, total pixels ≤ 8,294,400.
+Common presets are shown below; pass `auto` to let the model choose.
+
 | Size        | Aspect Ratio    | Notes                        |
 |-------------|-----------------|------------------------------|
-| 1024x1024   | 1:1 (Square)    | Default, works with all      |
+| auto        | Varies          | Default — model chooses      |
+| 1024x1024   | 1:1 (Square)    | Works with all models        |
 | 1792x1024   | ~16:9 (Wide)    | Landscape                    |
 | 1024x1792   | ~9:16 (Tall)    | Portrait                     |
 | 1536x1024   | 3:2             | Wide format                  |
@@ -98,9 +103,8 @@ async def openai_list_image_models() -> str:
 | 2448x3264   | 3:4             | 4K Tall                      |
 | 3840x2160   | 16:9            | 4K Landscape                 |
 | 2160x3840   | 9:16            | 4K Portrait                  |
-| 256x256     | 1:1             | Small, legacy                |
-| 512x512     | 1:1             | Medium, legacy               |
-| auto        | Varies          | Model chooses                |
+| 256x256     | 1:1             | Small, legacy (dall-e-2)     |
+| 512x512     | 1:1             | Medium, legacy (dall-e-2)    |
 
 ## Quality Options
 | Quality   | Description                                    |
@@ -178,7 +182,7 @@ async def openai_get_usage_guide() -> str:
 **openai_generate_image** - Create images from text descriptions
 - prompt: Image description (required)
 - model: Image model (default: gpt-image-1)
-- size: Image dimensions (default: 1024x1024)
+- size: Image dimensions (default: auto)
 - quality: Output quality (default: auto)
 - n: Number of images (1-10)
 - style: vivid or natural (dall-e-3)

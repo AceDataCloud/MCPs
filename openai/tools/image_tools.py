@@ -54,11 +54,13 @@ async def openai_generate_image(
         ImageSize,
         Field(
             description=(
-                "Image dimensions. Options: '1024x1024' (square, default), "
-                "'1792x1024' (landscape), '1024x1792' (portrait), "
-                "'1536x1024', '1024x1536', '2048x2048', '2048x1536', '1536x2048', "
-                "'2048x1152', '1152x2048', '2880x2880', '3264x2448', '2448x3264', "
-                "'3840x2160', '2160x3840', '256x256', '512x512', 'auto'."
+                "Image dimensions. Format: 'WIDTHxHEIGHT' (e.g. '1024x1024') or 'auto' "
+                "(default, lets the model choose). Common presets: '1024x1024' (square), "
+                "'1792x1024' (landscape), '1024x1792' (portrait), '2048x2048' (2K square). "
+                "gpt-image-2 accepts any custom WIDTHxHEIGHT matching multiples of 16, "
+                "longer side ≤ 3840, total pixels ≤ 8,294,400. "
+                "dall-e-2: '256x256', '512x512', '1024x1024'. "
+                "dall-e-3: '1024x1024', '1792x1024', '1024x1792'."
             )
         ),
     ] = DEFAULT_IMAGE_SIZE,
@@ -230,11 +232,13 @@ async def openai_edit_image(
         ImageEditSize,
         Field(
             description=(
-                "Output image dimensions. Options: '1024x1024' (default), "
-                "'1536x1024', '1024x1536', '1792x1024', '1024x1792', "
-                "'2048x2048', '2048x1536', '1536x2048', '2048x1152', '1152x2048', "
-                "'2880x2880', '3264x2448', '2448x3264', '3840x2160', '2160x3840', "
-                "'256x256', '512x512', 'auto'."
+                "Output image dimensions. Format: 'WIDTHxHEIGHT' or 'auto'. "
+                "Default: '1024x1024'. Common presets: '1024x1024', '1536x1024', '1024x1536', "
+                "'1792x1024', '1024x1792', '2048x2048', '2048x1536', '1536x2048', "
+                "'2048x1152', '1152x2048', '2880x2880', '3264x2448', '2448x3264', "
+                "'3840x2160', '2160x3840', '256x256', '512x512'. "
+                "gpt-image-2 also accepts any custom WIDTHxHEIGHT dimensions. "
+                "dall-e-2: '256x256', '512x512', '1024x1024'."
             )
         ),
     ] = "1024x1024",
