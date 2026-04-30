@@ -88,6 +88,16 @@ async def openai_list_image_models() -> str:
 | 1024x1792   | ~9:16 (Tall)    | Portrait                     |
 | 1536x1024   | 3:2             | Wide format                  |
 | 1024x1536   | 2:3             | Tall format                  |
+| 2048x2048   | 1:1             | 2K Square                    |
+| 2048x1536   | 4:3             | 2K Wide                      |
+| 1536x2048   | 3:4             | 2K Tall                      |
+| 2048x1152   | 16:9            | 2K Landscape                 |
+| 1152x2048   | 9:16            | 2K Portrait                  |
+| 2880x2880   | 1:1             | 4K Square                    |
+| 3264x2448   | 4:3             | 4K Wide                      |
+| 2448x3264   | 3:4             | 4K Tall                      |
+| 3840x2160   | 16:9            | 4K Landscape                 |
+| 2160x3840   | 9:16            | 4K Portrait                  |
 | 256x256     | 1:1             | Small, legacy                |
 | 512x512     | 1:1             | Medium, legacy               |
 | auto        | Varies          | Model chooses                |
