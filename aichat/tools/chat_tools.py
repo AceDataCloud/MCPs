@@ -15,11 +15,7 @@ from core.types import DEFAULT_MODEL, AiChatModel
 async def aichat_create_conversation(
     question: Annotated[
         str,
-        Field(
-            description=(
-                "The prompt or question to be answered by the AI model. Required."
-            )
-        ),
+        Field(description=("The prompt or question to be answered by the AI model. Required.")),
     ],
     model: Annotated[
         AiChatModel,
@@ -44,9 +40,7 @@ async def aichat_create_conversation(
     preset: Annotated[
         str | None,
         Field(
-            description=(
-                "An optional preset model configuration to apply for this conversation."
-            )
+            description=("An optional preset model configuration to apply for this conversation.")
         ),
     ] = None,
     stateful: Annotated[

@@ -81,9 +81,7 @@ async def openai_generate_image(
     ] = None,
     output_format: Annotated[
         ImageOutputFormat,
-        Field(
-            description="Output file format. Options: 'png' (default), 'jpeg', 'webp'."
-        ),
+        Field(description="Output file format. Options: 'png' (default), 'jpeg', 'webp'."),
     ] = DEFAULT_IMAGE_OUTPUT_FORMAT,
     response_format: Annotated[
         ImageResponseFormat,
@@ -124,9 +122,7 @@ async def openai_generate_image(
     output_compression: Annotated[
         int | None,
         Field(
-            description=(
-                "Compression level (0-100%) for jpeg/webp output formats. Default is 100."
-            )
+            description=("Compression level (0-100%) for jpeg/webp output formats. Default is 100.")
         ),
     ] = None,
     partial_images: Annotated[
@@ -276,9 +272,7 @@ async def openai_edit_image(
     ] = None,
     output_format: Annotated[
         ImageOutputFormat,
-        Field(
-            description="Output file format. Options: 'png' (default), 'jpeg', 'webp'."
-        ),
+        Field(description="Output file format. Options: 'png' (default), 'jpeg', 'webp'."),
     ] = DEFAULT_IMAGE_OUTPUT_FORMAT,
     response_format: Annotated[
         ImageResponseFormat,
@@ -291,9 +285,7 @@ async def openai_edit_image(
     ] = DEFAULT_IMAGE_RESPONSE_FORMAT,
     output_compression: Annotated[
         int | None,
-        Field(
-            description="Compression level (0-100%) for jpeg/webp output. Default is 100."
-        ),
+        Field(description="Compression level (0-100%) for jpeg/webp output. Default is 100."),
     ] = None,
     callback_url: Annotated[
         str | None,
