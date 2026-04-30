@@ -54,11 +54,15 @@ async def openai_generate_image(
         ImageSize,
         Field(
             description=(
-                "Image dimensions. Options: '1024x1024' (square, default), "
-                "'1792x1024' (landscape), '1024x1792' (portrait), "
-                "'1536x1024', '1024x1536', '2048x2048', '2048x1536', '1536x2048', "
-                "'2048x1152', '1152x2048', '2880x2880', '3264x2448', '2448x3264', "
-                "'3840x2160', '2160x3840', '256x256', '512x512', 'auto'."
+                "Image dimensions as 'WIDTHxHEIGHT' or 'auto' (default). "
+                "gpt-image-2 accepts any custom dimensions matching the format "
+                "(multiples of 16, longer side ≤ 3840, total pixels ≤ 8,294,400). "
+                "Common presets — 1K: '1024x1024', '1536x1024', '1024x1536', "
+                "'1792x1024', '1024x1792'; 2K (1.5× rate): '2048x2048', '2048x1536', "
+                "'1536x2048', '2048x1152', '1152x2048'; 4K (1.5× rate): '2880x2880', "
+                "'3264x2448', '2448x3264', '3840x2160', '2160x3840'. "
+                "dall-e-2: '256x256', '512x512', '1024x1024'. "
+                "dall-e-3: '1024x1024', '1792x1024', '1024x1792'."
             )
         ),
     ] = DEFAULT_IMAGE_SIZE,
@@ -230,11 +234,13 @@ async def openai_edit_image(
         ImageEditSize,
         Field(
             description=(
-                "Output image dimensions. Options: '1024x1024' (default), "
-                "'1536x1024', '1024x1536', '1792x1024', '1024x1792', "
-                "'2048x2048', '2048x1536', '1536x2048', '2048x1152', '1152x2048', "
-                "'2880x2880', '3264x2448', '2448x3264', '3840x2160', '2160x3840', "
-                "'256x256', '512x512', 'auto'."
+                "Output image dimensions as 'WIDTHxHEIGHT' or 'auto'. Default is '1024x1024'. "
+                "gpt-image-2 accepts any custom dimensions (multiples of 16, longer side ≤ 3840, "
+                "total pixels ≤ 8,294,400). Common presets — 1K: '1024x1024', '1536x1024', "
+                "'1024x1536', '1792x1024', '1024x1792'; 2K (1.5× rate): '2048x2048', "
+                "'2048x1536', '1536x2048', '2048x1152', '1152x2048'; 4K (1.5× rate): "
+                "'2880x2880', '3264x2448', '2448x3264', '3840x2160', '2160x3840'. "
+                "dall-e-2: '256x256', '512x512', '1024x1024'."
             )
         ),
     ] = "1024x1024",
