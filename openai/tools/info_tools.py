@@ -83,24 +83,27 @@ async def openai_list_image_models() -> str:
 ## Supported Sizes
 | Size        | Aspect Ratio    | Notes                        |
 |-------------|-----------------|------------------------------|
-| 1024x1024   | 1:1 (Square)    | Default, works with all      |
-| 1792x1024   | ~16:9 (Wide)    | Landscape                    |
-| 1024x1792   | ~9:16 (Tall)    | Portrait                     |
-| 1536x1024   | 3:2             | Wide format                  |
-| 1024x1536   | 2:3             | Tall format                  |
-| 2048x2048   | 1:1             | 2K Square                    |
-| 2048x1536   | 4:3             | 2K Wide                      |
-| 1536x2048   | 3:4             | 2K Tall                      |
-| 2048x1152   | 16:9            | 2K Landscape                 |
-| 1152x2048   | 9:16            | 2K Portrait                  |
-| 2880x2880   | 1:1             | 4K Square                    |
-| 3264x2448   | 4:3             | 4K Wide                      |
-| 2448x3264   | 3:4             | 4K Tall                      |
-| 3840x2160   | 16:9            | 4K Landscape                 |
-| 2160x3840   | 9:16            | 4K Portrait                  |
-| 256x256     | 1:1             | Small, legacy                |
-| 512x512     | 1:1             | Medium, legacy               |
+| 1024x1024   | 1:1 (Square)    | Default, 1K tier             |
+| 1792x1024   | ~16:9 (Wide)    | Landscape, 1K tier           |
+| 1024x1792   | ~9:16 (Tall)    | Portrait, 1K tier            |
+| 1536x1024   | 3:2             | Wide format, 1K tier         |
+| 1024x1536   | 2:3             | Tall format, 1K tier         |
+| 2048x2048   | 1:1             | 2K Square, 1.5× rate         |
+| 2048x1536   | 4:3             | 2K Wide, 1.5× rate           |
+| 1536x2048   | 3:4             | 2K Tall, 1.5× rate           |
+| 2048x1152   | 16:9            | 2K Landscape, 1.5× rate      |
+| 1152x2048   | 9:16            | 2K Portrait, 1.5× rate       |
+| 2880x2880   | 1:1             | 4K Square, 1.5× rate         |
+| 3264x2448   | 4:3             | 4K Wide, 1.5× rate           |
+| 2448x3264   | 3:4             | 4K Tall, 1.5× rate           |
+| 3840x2160   | 16:9            | 4K Landscape, 1.5× rate      |
+| 2160x3840   | 9:16            | 4K Portrait, 1.5× rate       |
+| 256x256     | 1:1             | Small, legacy (dall-e-2)     |
+| 512x512     | 1:1             | Medium, legacy (dall-e-2)    |
 | auto        | Varies          | Model chooses                |
+| WIDTHxHEIGHT | Custom         | gpt-image-2: any valid dims  |
+
+**gpt-image-2 custom dimensions**: multiples of 16, longer side ≤ 3840, total pixels ≤ 8,294,400.
 
 ## Quality Options
 | Quality   | Description                                    |
