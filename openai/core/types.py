@@ -1,6 +1,8 @@
 """Type definitions for OpenAI MCP server."""
 
-from typing import Literal
+from typing import Annotated, Literal
+
+from pydantic import Field
 
 # Chat completion model options
 ChatModel = Literal[
@@ -131,10 +133,10 @@ ImageModel = Literal[
 # 2880x2880, 3264x2448, 2448x3264, 3840x2160, 2160x3840,
 # 256x256, 512x512, auto
 # gpt-image-2 also accepts any custom WIDTHxHEIGHT dimensions.
-ImageSize = str
+ImageSize = Annotated[str, Field(pattern=r"^(auto|\d+x\d+)$")]
 
 # Image edit size options — same free-form string as ImageSize
-ImageEditSize = str
+ImageEditSize = Annotated[str, Field(pattern=r"^(auto|\d+x\d+)$")]
 
 # Image quality options
 ImageQuality = Literal["auto", "high", "medium", "low", "hd", "standard"]
