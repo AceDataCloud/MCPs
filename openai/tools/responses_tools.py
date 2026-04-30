@@ -55,9 +55,7 @@ async def openai_create_response(
     ] = None,
     n: Annotated[
         int | None,
-        Field(
-            description="Number of response choices to generate. Default is 1."
-        ),
+        Field(description="Number of response choices to generate. Default is 1."),
     ] = None,
     background: Annotated[
         bool | None,
