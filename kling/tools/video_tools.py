@@ -36,7 +36,7 @@ async def kling_generate_video(
     mode: Annotated[
         Mode,
         Field(
-            description="Generation mode. 'std' (standard, default) for faster generation, 'pro' for higher quality."
+            description="Generation mode. 'std' (standard, default) for faster generation, 'pro' for higher quality, '4k' for native 4K (only supported by kling-v3 and kling-v3-omni; not compatible with motion control)."
         ),
     ] = DEFAULT_MODE,
     aspect_ratio: Annotated[

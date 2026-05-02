@@ -22,7 +22,7 @@ KlingAction = Literal["text2video", "image2video", "extend"]
 CharacterOrientation = Literal["image", "video"]
 
 # Kling video modes
-Mode = Literal["std", "pro"]
+Mode = Literal["std", "pro", "4k"]
 
 # Kling video aspect ratios
 AspectRatio = Literal["16:9", "9:16", "1:1"]
