@@ -174,11 +174,58 @@ class VeoClient:
         return await self.request("/veo/videos", self._with_async_callback(kwargs))
 
     async def get_1080p(self, video_id: str) -> dict[str, Any]:
-        """Get 1080p version of a video."""
+        """Get 1080p version of a video.
+
+        Kept for backward compatibility with existing MCP clients. Internally
+        forwards to the /veo/videos endpoint with action=get1080p, which the
+        platform aliases to /veo/upsample with action=1080p.
+        """
         logger.info(f"📺 Getting 1080p video for: {video_id}")
         return await self.request(
             "/veo/videos", self._with_async_callback({"action": "get1080p", "video_id": video_id})
         )
+
+    async def upsample_video(self, video_id: str, action: str) -> dict[str, Any]:
+        """Upsample a video to 1080p / 4k or render a GIF preview."""
+        logger.info(f"📺 Upsampling video {video_id} to {action}")
+        return await self.request(
+            "/veo/upsample",
+            self._with_async_callback({"video_id": video_id, "action": action}),
+        )
+
+    async def extend_video(
+        self, video_id: str, model: str, prompt: str | None = None
+    ) -> dict[str, Any]:
+        """Extend the duration of a previously generated video (veo31 only)."""
+        logger.info(f"⏩ Extending video {video_id} with model {model}")
+        payload: dict[str, Any] = {"video_id": video_id, "model": model}
+        if prompt:
+            payload["prompt"] = prompt
+        return await self.request("/veo/extend", self._with_async_callback(payload))
+
+    async def reshoot_video(self, video_id: str, motion_type: str) -> dict[str, Any]:
+        """Re-render a video with a different camera motion."""
+        logger.info(f"🎥 Reshooting video {video_id} with motion {motion_type}")
+        return await self.request(
+            "/veo/reshoot",
+            self._with_async_callback({"video_id": video_id, "motion_type": motion_type}),
+        )
+
+    async def manipulate_object(
+        self,
+        video_id: str,
+        action: str,
+        prompt: str | None = None,
+        image_mask: str | None = None,
+    ) -> dict[str, Any]:
+        """Insert or remove an object in a previously generated video."""
+        logger.info(f"✂️ {action.title()}ing object in video {video_id}")
+        payload: dict[str, Any] = {"video_id": video_id, "action": action}
+        if prompt:
+            payload["prompt"] = prompt
+        if image_mask:
+            payload["image_mask"] = image_mask
+        return await self.request("/veo/objects", self._with_async_callback(payload))
 
     async def query_task(self, **kwargs: Any) -> dict[str, Any]:
         """Query task status using the tasks endpoint."""

@@ -68,13 +68,21 @@ async def veo_list_actions() -> str:
     Returns:
         Categorized list of all actions and their corresponding tools.
     """
-    # Last updated: 2026-04-05
+    # Last updated: 2026-05-04
     return """Available Veo Actions and Tools:
 
 Video Generation:
 - veo_text_to_video: Create video from a text prompt only
-- veo_image_to_video: Create video from reference image(s) + prompt
-- veo_get_1080p: Get high-resolution 1080p version of a video
+- veo_image_to_video: Create video from reference image(s) + prompt (1-3 images, first/last frame mode)
+- veo_ingredients_to_video: Fuse 1-3 reference images into a new scene (veo31-fast-ingredients model)
+
+Video Post-Processing (operate on a previously generated video_id):
+- veo_upsample: Upscale to 1080p / 4K, or render an animated GIF preview
+- veo_extend: Extend the video's duration (veo31 series only). Output may be extended further but not reshot/edited.
+- veo_reshoot: Re-render with a different camera motion (15 motion types: STATIONARY*, UP/DOWN, LEFT_TO_RIGHT, FORWARD/BACKWARD, DOLLY_IN/OUT_ZOOM_OUT/IN, ...). Not supported on extend outputs.
+- veo_object_insert: Add an object/effect to the video (with optional mask for placement). Not supported on extend outputs.
+- veo_object_remove: Erase an object via white-pixel mask. Not supported on extend outputs.
+- veo_get_1080p: [legacy] Equivalent to veo_upsample with action='1080p'. Kept for backward compatibility.
 
 Task Management:
 - veo_get_task: Check status of a single video generation
@@ -86,10 +94,19 @@ Information:
 - veo_get_prompt_guide: Get tips for writing effective video prompts
 
 Workflow Examples:
-1. Quick video: veo_text_to_video → veo_get_task → (optional) veo_get_1080p
-2. Image animation: veo_image_to_video → veo_get_task
-3. Image transition: veo_image_to_video (with 2-3 images) → veo_get_task
-4. Multi-image fusion: veo_image_to_video (model=veo31-fast-ingredients) → veo_get_task
+1. Quick video: veo_text_to_video → veo_get_task → (optional) veo_upsample(action='1080p')
+2. 4K production: veo_text_to_video → veo_get_task → veo_upsample(action='4k')
+3. Image animation: veo_image_to_video → veo_get_task
+4. Image transition: veo_image_to_video (with 2-3 images) → veo_get_task
+5. Multi-image fusion: veo_ingredients_to_video → veo_get_task
+6. Try a different camera move: veo_text_to_video → veo_reshoot(motion_type='LEFT_TO_RIGHT') → veo_get_task
+7. Make it longer: veo_text_to_video (model=veo31-fast) → veo_extend(prompt='...') → veo_get_task
+8. Remove an unwanted element: veo_text_to_video → veo_object_remove(image_mask='https://.../mask.jpg') → veo_get_task
+9. Add a flourish: veo_text_to_video → veo_object_insert(prompt='add fireworks') → veo_get_task
+
+Constraint to remember:
+  Outputs of veo_extend can be extended further, but cannot be passed to
+  veo_reshoot / veo_object_insert / veo_object_remove (upstream limit).
 
 API Response States:
 - processing: Video is being generated
@@ -99,7 +116,7 @@ API Response States:
 Tips:
 - Generation typically takes 1-2 minutes
 - Use callback_url for async notifications
-- Request 1080p after initial generation succeeds
+- Request 1080p / 4K after initial generation succeeds
 """
 
 
