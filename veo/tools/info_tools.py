@@ -20,28 +20,28 @@ async def veo_list_models() -> str:
     Returns:
         Table of all models with their capabilities and image rules.
     """
-    # Last updated: 2026-04-05
+    # Last updated: 2026-05-03
     return """Available Veo Models:
 
-| Model                  | Text2Video | Image2Video | Image Input Rules           |
-|------------------------|------------|-------------|------------------------------|
-| veo2                   | ✅         | ✅          | 1 image (first frame)        |
-| veo2-fast              | ✅         | ✅          | 1 image (first frame)        |
-| veo3                   | ✅         | ✅          | 1-3 images (first/last)      |
-| veo3-fast              | ✅         | ✅          | 1-3 images (first/last)      |
-| veo31                  | ✅         | ✅          | 1-3 images (first/last)      |
-| veo31-fast             | ✅         | ✅          | 1-3 images (first/last)      |
-| veo31-fast-ingredients  | ❌         | ✅          | 1-3 images (multi-fusion)    |
+| Model                  | Text2Video | Image2Video | Ingredients2Video | Image Input Rules           |
+|------------------------|------------|-------------|-------------------|------------------------------|
+| veo2                   | ✅         | ✅          | ❌                | 1 image (first frame)        |
+| veo2-fast              | ✅         | ✅          | ❌                | 1 image (first frame)        |
+| veo3                   | ✅         | ✅          | ❌                | 1-3 images (first/last)      |
+| veo3-fast              | ✅         | ✅          | ❌                | 1-3 images (first/last)      |
+| veo31                  | ✅         | ✅          | ❌                | 1-3 images (first/last)      |
+| veo31-fast             | ✅         | ✅          | ❌                | 1-3 images (first/last)      |
+| veo31-fast-ingredients  | ❌         | ✅          | ✅ (auto-selected) | 1-3 images (multi-fusion)    |
 
 Image Input Modes:
 - First Frame Mode (1 image): Video starts from your image
 - First/Last Frame Mode (2-3 images): Video interpolates between images
-- Multi-Fusion Mode (veo31-fast-ingredients only): Blends elements from all images
+- Multi-Fusion Mode (veo31-fast-ingredients, via ingredients2video): Blends elements from all images
 
 Recommendations:
 - For quick generation: Use '-fast' suffix models
 - For best quality: Use veo31 or veo3 (non-fast)
-- For image fusion: Use veo31-fast-ingredients
+- For image fusion: Use veo_ingredients_to_video (model auto-set to veo31-fast-ingredients)
 - For text-only: Any model except veo31-fast-ingredients
 
 Aspect Ratios:
@@ -68,12 +68,13 @@ async def veo_list_actions() -> str:
     Returns:
         Categorized list of all actions and their corresponding tools.
     """
-    # Last updated: 2026-04-05
+    # Last updated: 2026-05-03
     return """Available Veo Actions and Tools:
 
 Video Generation:
 - veo_text_to_video: Create video from a text prompt only
-- veo_image_to_video: Create video from reference image(s) + prompt
+- veo_image_to_video: Create video from reference image(s) + prompt (first/last frame modes)
+- veo_ingredients_to_video: Create video by fusing elements from 1-3 images (ingredients2video action, model auto-set to veo31-fast-ingredients)
 - veo_get_1080p: Get high-resolution 1080p version of a video
 
 Task Management:
@@ -89,7 +90,7 @@ Workflow Examples:
 1. Quick video: veo_text_to_video → veo_get_task → (optional) veo_get_1080p
 2. Image animation: veo_image_to_video → veo_get_task
 3. Image transition: veo_image_to_video (with 2-3 images) → veo_get_task
-4. Multi-image fusion: veo_image_to_video (model=veo31-fast-ingredients) → veo_get_task
+4. Multi-image fusion: veo_ingredients_to_video → veo_get_task
 
 API Response States:
 - processing: Video is being generated

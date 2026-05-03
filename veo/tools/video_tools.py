@@ -99,7 +99,7 @@ async def veo_image_to_video(
     model: Annotated[
         VeoModel,
         Field(
-            description="Veo model version. Note: 'veo31-fast-ingredients' is for multi-image fusion mode only. Other models support 1 image (first frame) or 2-3 images (first/last frame)."
+            description="Veo model version. Supports 1 image (first frame) or 2-3 images (first/last frame) depending on the model. For multi-image fusion, use veo_ingredients_to_video instead."
         ),
     ] = DEFAULT_MODEL,
     aspect_ratio: Annotated[
@@ -133,13 +133,13 @@ async def veo_image_to_video(
     Image modes:
     - 1 image: First-frame mode - the video starts from your image
     - 2-3 images: First-last frame mode - video interpolates between images
-    - veo31-fast-ingredients model: Multi-image fusion - blends elements from all images
 
     Use this when:
     - You have a specific image you want to animate
     - You want consistent visual style from a reference
     - You need to create a video transition between two images
 
+    For multi-image fusion (blending elements from multiple images), use veo_ingredients_to_video instead.
     For video generation from text only, use veo_text_to_video instead.
 
     Returns:
@@ -151,6 +151,72 @@ async def veo_image_to_video(
         "image_urls": image_urls,
         "model": model,
         "aspect_ratio": aspect_ratio,
+    }
+
+    if translation:
+        payload["translation"] = translation
+    if resolution:
+        payload["resolution"] = resolution
+    if callback_url:
+        payload["callback_url"] = callback_url
+
+    result = await client.generate_video(**payload)
+    return format_video_result(result)
+
+
+@mcp.tool()
+async def veo_ingredients_to_video(
+    prompt: Annotated[
+        str,
+        Field(
+            description="Description of the video to generate. Describe what should happen with the ingredient images. The model will blend visual elements from all provided images."
+        ),
+    ],
+    image_urls: Annotated[
+        list[str],
+        Field(
+            description="List of 1-3 image URLs to use as ingredient references. The model fuses visual elements from all images to generate the video."
+        ),
+    ],
+    translation: Annotated[
+        bool,
+        Field(
+            description="If true, automatically translate the prompt to English for better generation quality."
+        ),
+    ] = False,
+    resolution: Annotated[
+        VideoResolution | None,
+        Field(
+            description="Video resolution. Options: '4k' for highest quality, '1080p' for standard HD, 'gif' for animated GIF format."
+        ),
+    ] = None,
+    callback_url: Annotated[
+        str,
+        Field(description="Optional URL to receive a POST callback when generation completes."),
+    ] = "",
+) -> str:
+    """Generate AI video by fusing elements from multiple reference images using Veo.
+
+    Uses the `ingredients2video` action with the `veo31-fast-ingredients` model
+    (the model is forced internally and does not need to be specified).
+
+    Provide 1-3 reference images whose visual elements will be blended together
+    into a cohesive video based on the prompt.
+
+    Use this when:
+    - You want to combine visual elements from multiple images into one video
+    - You need multi-image fusion rather than simple first/last frame interpolation
+    - You have a set of "ingredient" images to blend creatively
+
+    For standard image animation (first frame or first/last frame), use veo_image_to_video instead.
+
+    Returns:
+        Task ID and generated video information including URLs and state.
+    """
+    payload: dict = {
+        "action": "ingredients2video",
+        "prompt": prompt,
+        "image_urls": image_urls,
     }
 
     if translation:

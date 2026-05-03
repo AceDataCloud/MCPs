@@ -170,6 +170,10 @@ Environment Variables:
                                 "name": "veo_image_to_video",
                                 "description": "Generate video from image",
                             },
+                            {
+                                "name": "veo_ingredients_to_video",
+                                "description": "Generate video by fusing elements from multiple images",
+                            },
                             {"name": "veo_get_1080p", "description": "Get 1080p version"},
                             {"name": "veo_get_task", "description": "Query task status"},
                             {"name": "veo_get_tasks_batch", "description": "Query multiple tasks"},
