@@ -367,13 +367,13 @@ async def veo_video_objects(
     prompt: Annotated[
         str,
         Field(
-            description="For 'insert': describes what to add (required). For 'remove': optionally describes what to remove."
+            description="For 'insert': describes what object to add (strongly recommended). For 'remove': describes what to remove (optional). If omitted for insert, the API may reject the request."
         ),
     ] = "",
     image_mask: Annotated[
         str,
         Field(
-            description="Mask image URL where white pixels indicate the region to operate on. Accepts a URL string."
+            description="Optional mask image URL where white pixels indicate the region to operate on. Providing a mask improves precision for both insert and remove operations."
         ),
     ] = "",
     callback_url: Annotated[
