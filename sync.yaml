@@ -67,3 +67,11 @@ mappings:
     repo: AceDataCloud/AiChatMCP
     exclude:
       - .gitbooks
+  glm:
+    repo: AceDataCloud/GlmMCP
+    exclude:
+      - .gitbooks
+  webextrator:
+    repo: AceDataCloud/WebExtraterMCP
+    exclude:
+      - .gitbooks
