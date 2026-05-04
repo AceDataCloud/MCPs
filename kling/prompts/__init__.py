@@ -67,7 +67,7 @@ When the user wants to generate video, choose the appropriate tool based on thei
 4. Default model is kling-v2-master
 5. Default aspect ratio is 16:9 (landscape)
 6. Use 9:16 for mobile/vertical content
-7. Use mode='pro' for higher quality
+7. Use mode='pro' for higher quality; mode='4k' for native 4K (kling-v3/kling-v3-omni only)
 8. Use negative_prompt to avoid unwanted content
 9. Duration options are 5 or 10 seconds
 """
@@ -113,6 +113,11 @@ def kling_workflow_examples() -> str:
 ## Workflow 7: High Quality with Pro Mode
 1. User wants the best quality possible
 2. Call `kling_generate_video(prompt="...", mode="pro", model="kling-v2-master")`
+3. Return task_id
+
+## Workflow 8: Native 4K Video
+1. User wants native 4K resolution
+2. Call `kling_generate_video(prompt="...", mode="4k", model="kling-v3")`
 3. Return task_id
 
 ## Tips:
@@ -189,6 +194,6 @@ Kling supports camera control with JSON config:
 3. Mention lighting conditions for mood
 4. Keep prompts focused - one main action per video
 5. Use aspect ratio appropriate for content (16:9 landscape, 9:16 vertical)
-6. Use mode='pro' for important/final content
+6. Use mode='pro' for important/final content; mode='4k' for native 4K (kling-v3/kling-v3-omni only)
 7. Use negative_prompt to refine output quality
 """

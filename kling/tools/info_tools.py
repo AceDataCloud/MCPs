@@ -70,6 +70,7 @@ Tips:
 - Specify style: "cinematic", "realistic", "artistic"
 - Use negative_prompt to avoid unwanted content
 - Use mode='pro' for higher quality at the cost of speed
+- Use mode='4k' for native 4K resolution (kling-v3 and kling-v3-omni only, not compatible with motion control)
 - Video generation takes 1-2 minutes typically
 - Use callback_url for async processing in production
 """
