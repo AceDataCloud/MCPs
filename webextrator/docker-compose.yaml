@@ -1,0 +1,9 @@
+version: "3"
+services:
+  mcp-webextrator:
+    platform: linux/amd64
+    container_name: "mcp-webextrator"
+    build: ./
+    image: "ghcr.io/acedatacloud/mcp-webextrator:${BUILD_NUMBER}"
+    ports:
+      - "8000:8000"
