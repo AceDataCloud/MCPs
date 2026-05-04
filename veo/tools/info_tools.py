@@ -68,13 +68,19 @@ async def veo_list_actions() -> str:
     Returns:
         Categorized list of all actions and their corresponding tools.
     """
-    # Last updated: 2026-04-05
+    # Last updated: 2026-05-04
     return """Available Veo Actions and Tools:
 
 Video Generation:
 - veo_text_to_video: Create video from a text prompt only
 - veo_image_to_video: Create video from reference image(s) + prompt
-- veo_get_1080p: Get high-resolution 1080p version of a video
+- veo_get_1080p: Get high-resolution 1080p version of a video (legacy)
+
+Video Enhancement:
+- veo_upsample: Upsample a video to 1080p, 4K, or convert to GIF
+- veo_extend_video: Extend a video by adding more content at the end (veo31 models only)
+- veo_reshoot_video: Re-render a video with a different camera motion
+- veo_manipulate_objects: Insert or remove objects in a video
 
 Task Management:
 - veo_get_task: Check status of a single video generation
@@ -86,10 +92,14 @@ Information:
 - veo_get_prompt_guide: Get tips for writing effective video prompts
 
 Workflow Examples:
-1. Quick video: veo_text_to_video → veo_get_task → (optional) veo_get_1080p
+1. Quick video: veo_text_to_video → veo_get_task → (optional) veo_upsample
 2. Image animation: veo_image_to_video → veo_get_task
 3. Image transition: veo_image_to_video (with 2-3 images) → veo_get_task
 4. Multi-image fusion: veo_image_to_video (model=veo31-fast-ingredients) → veo_get_task
+5. 4K video: veo_text_to_video → veo_get_task → veo_upsample(action='4k')
+6. Extend video: veo_text_to_video → veo_get_task → veo_extend_video
+7. Add camera motion: veo_text_to_video → veo_get_task → veo_reshoot_video
+8. Object insertion: veo_text_to_video → veo_get_task → veo_manipulate_objects(action='insert')
 
 API Response States:
 - processing: Video is being generated
@@ -99,7 +109,7 @@ API Response States:
 Tips:
 - Generation typically takes 1-2 minutes
 - Use callback_url for async notifications
-- Request 1080p after initial generation succeeds
+- Request 1080p or 4k after initial generation succeeds
 """
 
 
