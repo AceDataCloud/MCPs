@@ -75,6 +75,18 @@ async def kling_generate_video(
             description='Camera control as JSON string. Example: \'{"type": "simple", "config": {"horizontal": 5, "vertical": 0, "pan": 0, "tilt": 0, "roll": 0, "zoom": 0}}\'. Types: \'simple\', \'down_back\', \'forward_up\', \'left_turn_forward\', \'right_turn_forward\'.'
         ),
     ] = None,
+    element_list: Annotated[
+        list | None,
+        Field(
+            description="List of reference subjects from the subject library. Each item should contain an 'element_id'. If a reference video is present, reference subjects + reference images must be ≤ 4; otherwise ≤ 7."
+        ),
+    ] = None,
+    video_list: Annotated[
+        list | None,
+        Field(
+            description="List of reference videos. Each item should contain a 'video_url' (MP4/MOV, 3-10s, 720-2160px, 24-60fps, ≤200MB, max 1 video) and optionally 'refer_type' ('feature' or 'base', default 'base') and 'keep_original_sound' ('yes' or 'no')."
+        ),
+    ] = None,
     timeout: Annotated[
         int | None,
         Field(description="Timeout in seconds for the API to return data. Default is 300."),
@@ -120,6 +132,10 @@ async def kling_generate_video(
         payload["cfg_scale"] = cfg_scale
     if camera_control:
         payload["camera_control"] = camera_control
+    if element_list is not None:
+        payload["element_list"] = element_list
+    if video_list is not None:
+        payload["video_list"] = video_list
 
     result = await client.generate_video(**payload)
     return format_video_result(result)
@@ -183,6 +199,18 @@ async def kling_generate_video_from_image(
         str | None,
         Field(description="Camera control as JSON string."),
     ] = None,
+    element_list: Annotated[
+        list | None,
+        Field(
+            description="List of reference subjects from the subject library. Each item should contain an 'element_id'. If a reference video is present, reference subjects + reference images must be ≤ 4; otherwise ≤ 7."
+        ),
+    ] = None,
+    video_list: Annotated[
+        list | None,
+        Field(
+            description="List of reference videos. Each item should contain a 'video_url' (MP4/MOV, 3-10s, 720-2160px, 24-60fps, ≤200MB, max 1 video) and optionally 'refer_type' ('feature' or 'base', default 'base') and 'keep_original_sound' ('yes' or 'no')."
+        ),
+    ] = None,
     timeout: Annotated[
         int | None,
         Field(description="Timeout in seconds for the API to return data. Default is 300."),
@@ -233,6 +261,10 @@ async def kling_generate_video_from_image(
         payload["cfg_scale"] = cfg_scale
     if camera_control:
         payload["camera_control"] = camera_control
+    if element_list is not None:
+        payload["element_list"] = element_list
+    if video_list is not None:
+        payload["video_list"] = video_list
 
     result = await client.generate_video(**payload)
     return format_video_result(result)
