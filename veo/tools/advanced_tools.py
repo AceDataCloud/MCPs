@@ -1,6 +1,6 @@
 """Advanced video manipulation tools for Veo API."""
 
-from typing import Annotated
+from typing import Annotated, Any
 
 from pydantic import Field
 
@@ -46,7 +46,7 @@ async def veo_upsample(
     Returns:
         Task ID and upsampled video information including the new video URL.
     """
-    payload: dict = {
+    payload: dict[str, Any] = {
         "action": action,
         "video_id": video_id,
     }
@@ -98,7 +98,7 @@ async def veo_extend_video(
     Returns:
         Task ID and extended video information including the new video URL.
     """
-    payload: dict = {
+    payload: dict[str, Any] = {
         "video_id": video_id,
         "model": model,
     }
@@ -155,7 +155,7 @@ async def veo_reshoot_video(
     Returns:
         Task ID and reshooted video information including the new video URL.
     """
-    payload: dict = {
+    payload: dict[str, Any] = {
         "video_id": video_id,
         "motion_type": motion_type,
     }
@@ -213,7 +213,7 @@ async def veo_manipulate_objects(
     Returns:
         Task ID and modified video information including the new video URL.
     """
-    payload: dict = {
+    payload: dict[str, Any] = {
         "action": action,
         "video_id": video_id,
     }
