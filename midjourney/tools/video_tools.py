@@ -15,7 +15,7 @@ async def midjourney_generate_video(
     image_url: Annotated[
         str,
         Field(
-            description="URL of the first frame reference image. This image will be used as the starting point for the video."
+            description="URL of the first-frame reference image. Required for video generation (Midjourney video generation is image-to-video only and does not support pure text-to-video)."
         ),
     ],
     prompt: Annotated[
