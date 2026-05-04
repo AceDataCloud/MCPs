@@ -1,0 +1,36 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.AceDataCloud/mcp-glm",
+  "description": "MCP server for GLM chat completions using Zhipu AI models via AceDataCloud",
+  "version": "2026.4.25.0",
+  "repository": {
+    "url": "https://github.com/AceDataCloud/GlmMCP",
+    "source": "github"
+  },
+  "packages": [
+    {
+      "identifier": "mcp-glm",
+      "version": "2026.4.25.0",
+      "transport": {
+        "type": "stdio"
+      },
+      "registryType": "pypi",
+      "runtimeHint": "uvx",
+      "environmentVariables": [
+        {
+          "name": "ACEDATACLOUD_API_TOKEN",
+          "description": "API token from Ace Data Cloud (https://platform.acedata.cloud)",
+          "isRequired": true,
+          "isSecret": true
+        }
+      ]
+    }
+  ],
+  "websiteUrl": "https://glm.mcp.acedata.cloud",
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://glm.mcp.acedata.cloud/mcp"
+    }
+  ]
+}
