@@ -13,7 +13,7 @@ async def kling_list_models() -> str:
     Returns:
         Table of all models with their descriptions and use cases.
     """
-    # Last updated: 2026-04-05
+    # Last updated: 2026-05-04
     return """Available Kling Models:
 
 | Model              | Description          | Use Case                              |
@@ -23,6 +23,9 @@ async def kling_list_models() -> str:
 | kling-v2-master    | V2 master (default)  | High-quality, balanced performance    |
 | kling-v2-1-master  | V2.1 master          | Enhanced quality and consistency      |
 | kling-v2-5-turbo   | V2.5 turbo           | Faster generation, good quality       |
+| kling-v2-6         | V2.6                 | Latest V2 generation improvements     |
+| kling-v3           | V3                   | Next-gen quality, supports 4K mode    |
+| kling-v3-omni      | V3 Omni              | V3 with expanded capabilities, 4K     |
 | kling-video-o1     | Video O1             | Advanced reasoning-based generation   |
 
 Recommended: kling-v2-master for most video content, kling-v2-5-turbo for faster results.
@@ -39,7 +42,7 @@ async def kling_list_actions() -> str:
     Returns:
         Categorized list of all actions and their corresponding tools.
     """
-    # Last updated: 2026-04-05
+    # Last updated: 2026-05-04
     return """Available Kling Actions and Tools:
 
 Video Generation:
@@ -70,6 +73,7 @@ Tips:
 - Specify style: "cinematic", "realistic", "artistic"
 - Use negative_prompt to avoid unwanted content
 - Use mode='pro' for higher quality at the cost of speed
+- Use mode='4k' for native 4K output (kling-v3 and kling-v3-omni only; not compatible with motion control)
 - Video generation takes 1-2 minutes typically
 - Use callback_url for async processing in production
 """
