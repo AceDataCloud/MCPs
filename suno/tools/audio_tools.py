@@ -75,16 +75,22 @@ async def suno_generate_music(
 
 @mcp.tool()
 async def suno_generate_custom_music(
-    lyric: Annotated[
-        str,
-        Field(
-            description="Song lyrics with section markers. Use [Verse], [Chorus], [Pre-Chorus], [Bridge], [Outro], [Intro] to structure the song. Example:\n[Verse 1]\nWalking down the empty street\nRain is falling at my feet\n\n[Chorus]\nBut I keep moving on\nUntil the break of dawn"
-        ),
-    ],
     title: Annotated[
         str,
         Field(description="Title of the song. Keep it concise and memorable."),
     ],
+    lyric: Annotated[
+        str,
+        Field(
+            description="Song lyrics with section markers. Use [Verse], [Chorus], [Pre-Chorus], [Bridge], [Outro], [Intro] to structure the song. Leave empty if using lyric_prompt for auto-generation. Example:\n[Verse 1]\nWalking down the empty street\nRain is falling at my feet\n\n[Chorus]\nBut I keep moving on\nUntil the break of dawn"
+        ),
+    ] = "",
+    lyric_prompt: Annotated[
+        dict | None,
+        Field(
+            description="Prompt object for auto-generating lyrics in custom mode. Only effective when 'lyric' is not provided. The API will auto-generate lyrics based on this prompt. Example: {'prompt': 'A happy song about summer vacation'}."
+        ),
+    ] = None,
     style: Annotated[
         str,
         Field(
@@ -124,13 +130,19 @@ async def suno_generate_custom_music(
     weirdness: Annotated[
         float | None,
         Field(
-            description="Advanced parameter for custom mode. Controls how unusual/experimental the generation is."
+            description="Advanced parameter for custom mode. Controls how unusual/experimental the generation is. Range 0-1."
         ),
     ] = None,
     style_influence: Annotated[
         float | None,
         Field(
-            description="Advanced parameter for custom mode. Controls how strongly the style prompt influences the generation."
+            description="Advanced parameter for custom mode. Controls how strongly the style prompt influences the generation. Range 0-1."
+        ),
+    ] = None,
+    audio_weight: Annotated[
+        float | None,
+        Field(
+            description="Advanced parameter for custom mode. Controls the proportion of the reference audio influence. Range 0-1, the larger the value the more it relies on the reference audio."
         ),
     ] = None,
     callback_url: Annotated[
@@ -150,13 +162,14 @@ async def suno_generate_custom_music(
     - You want precise control over the music style
     - You need a specific song title
     - You want to specify vocal gender (v4.5+ models)
+    - You want auto-generated lyrics based on a prompt (use lyric_prompt without lyric)
 
     For quick generation without writing lyrics, use suno_generate_music instead.
 
     Returns:
         Task ID and generated audio information including URLs, title, lyrics, and duration.
     """
-    payload = {
+    payload: dict = {
         "action": "generate",
         "custom": True,
         "lyric": lyric,
@@ -166,6 +179,8 @@ async def suno_generate_custom_music(
         "callback_url": callback_url,
     }
 
+    if lyric_prompt is not None:
+        payload["lyric_prompt"] = lyric_prompt
     if style:
         payload["style"] = style
     if style_negative:
@@ -178,6 +193,8 @@ async def suno_generate_custom_music(
         payload["weirdness"] = weirdness
     if style_influence is not None:
         payload["style_influence"] = style_influence
+    if audio_weight is not None:
+        payload["audio_weight"] = audio_weight
 
     result = await client.generate_audio(**payload)
     return format_audio_result(result)
@@ -276,6 +293,12 @@ async def suno_cover_music(
         SunoModel,
         Field(description="Model version to use for the cover."),
     ] = DEFAULT_MODEL,
+    audio_weight: Annotated[
+        float | None,
+        Field(
+            description="The proportion of the reference audio influence. Range 0-1, the larger the value the more it relies on the reference audio."
+        ),
+    ] = None,
     callback_url: Annotated[
         str | None,
         Field(
@@ -296,7 +319,7 @@ async def suno_cover_music(
     Returns:
         Task ID and the cover audio information.
     """
-    payload = {
+    payload: dict = {
         "action": "cover",
         "audio_id": audio_id,
         "model": model,
@@ -307,6 +330,8 @@ async def suno_cover_music(
         payload["prompt"] = prompt
     if style:
         payload["style"] = style
+    if audio_weight is not None:
+        payload["audio_weight"] = audio_weight
 
     result = await client.generate_audio(**payload)
     return format_audio_result(result)
@@ -615,6 +640,12 @@ async def suno_upload_cover(
         SunoModel,
         Field(description="Model version to use."),
     ] = DEFAULT_MODEL,
+    audio_weight: Annotated[
+        float | None,
+        Field(
+            description="The proportion of the reference audio influence. Range 0-1, the larger the value the more it relies on the reference audio."
+        ),
+    ] = None,
     callback_url: Annotated[
         str | None,
         Field(description="Webhook callback URL for asynchronous notifications."),
@@ -641,6 +672,8 @@ async def suno_upload_cover(
 
     if style:
         payload["style"] = style
+    if audio_weight is not None:
+        payload["audio_weight"] = audio_weight
 
     result = await client.generate_audio(**payload)
     return format_audio_result(result)
