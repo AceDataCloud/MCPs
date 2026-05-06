@@ -133,6 +133,12 @@ async def suno_generate_custom_music(
             description="Advanced parameter for custom mode. Controls how strongly the style prompt influences the generation."
         ),
     ] = None,
+    lyric_prompt: Annotated[
+        dict | None,
+        Field(
+            description="Prompt object for auto-generating lyrics. Only used when custom is true and lyric is empty. Allows Suno to automatically create lyrics based on the provided prompt parameters."
+        ),
+    ] = None,
     callback_url: Annotated[
         str | None,
         Field(
@@ -150,6 +156,7 @@ async def suno_generate_custom_music(
     - You want precise control over the music style
     - You need a specific song title
     - You want to specify vocal gender (v4.5+ models)
+    - You want auto-generated lyrics via lyric_prompt (leave lyric empty)
 
     For quick generation without writing lyrics, use suno_generate_music instead.
 
@@ -178,6 +185,8 @@ async def suno_generate_custom_music(
         payload["weirdness"] = weirdness
     if style_influence is not None:
         payload["style_influence"] = style_influence
+    if lyric_prompt is not None:
+        payload["lyric_prompt"] = lyric_prompt
 
     result = await client.generate_audio(**payload)
     return format_audio_result(result)
@@ -276,6 +285,12 @@ async def suno_cover_music(
         SunoModel,
         Field(description="Model version to use for the cover."),
     ] = DEFAULT_MODEL,
+    audio_weight: Annotated[
+        float | None,
+        Field(
+            description="Advanced parameter controlling how strongly the original audio influences the cover. Higher values stay closer to the original."
+        ),
+    ] = None,
     callback_url: Annotated[
         str | None,
         Field(
@@ -307,6 +322,8 @@ async def suno_cover_music(
         payload["prompt"] = prompt
     if style:
         payload["style"] = style
+    if audio_weight is not None:
+        payload["audio_weight"] = audio_weight
 
     result = await client.generate_audio(**payload)
     return format_audio_result(result)
@@ -615,6 +632,12 @@ async def suno_upload_cover(
         SunoModel,
         Field(description="Model version to use."),
     ] = DEFAULT_MODEL,
+    audio_weight: Annotated[
+        float | None,
+        Field(
+            description="Advanced parameter controlling how strongly the original audio influences the cover. Higher values stay closer to the original."
+        ),
+    ] = None,
     callback_url: Annotated[
         str | None,
         Field(description="Webhook callback URL for asynchronous notifications."),
@@ -641,6 +664,8 @@ async def suno_upload_cover(
 
     if style:
         payload["style"] = style
+    if audio_weight is not None:
+        payload["audio_weight"] = audio_weight
 
     result = await client.generate_audio(**payload)
     return format_audio_result(result)
