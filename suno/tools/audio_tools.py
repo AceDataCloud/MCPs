@@ -276,6 +276,12 @@ async def suno_cover_music(
         SunoModel,
         Field(description="Model version to use for the cover."),
     ] = DEFAULT_MODEL,
+    audio_weight: Annotated[
+        float | None,
+        Field(
+            description="Advanced parameter controlling how strongly the original audio influences the cover. Higher values stay closer to the original; lower values allow more creative deviation."
+        ),
+    ] = None,
     callback_url: Annotated[
         str | None,
         Field(
@@ -307,6 +313,8 @@ async def suno_cover_music(
         payload["prompt"] = prompt
     if style:
         payload["style"] = style
+    if audio_weight is not None:
+        payload["audio_weight"] = audio_weight
 
     result = await client.generate_audio(**payload)
     return format_audio_result(result)
@@ -615,6 +623,12 @@ async def suno_upload_cover(
         SunoModel,
         Field(description="Model version to use."),
     ] = DEFAULT_MODEL,
+    audio_weight: Annotated[
+        float | None,
+        Field(
+            description="Advanced parameter controlling how strongly the original audio influences the cover. Higher values stay closer to the original; lower values allow more creative deviation."
+        ),
+    ] = None,
     callback_url: Annotated[
         str | None,
         Field(description="Webhook callback URL for asynchronous notifications."),
@@ -641,6 +655,8 @@ async def suno_upload_cover(
 
     if style:
         payload["style"] = style
+    if audio_weight is not None:
+        payload["audio_weight"] = audio_weight
 
     result = await client.generate_audio(**payload)
     return format_audio_result(result)
