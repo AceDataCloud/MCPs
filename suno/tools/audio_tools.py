@@ -511,8 +511,17 @@ async def suno_replace_section(
 ) -> str:
     """Replace a specific time range in a song with new generated content.
 
-    Re-generates a portion of a song between the specified start and end times,
-    keeping the rest of the song unchanged. Great for fixing sections you don't like.
+    Re-generates a portion of a song between the specified start and end times.
+
+    IMPORTANT: This tool returns only the newly generated replacement segment
+    (roughly the duration of the replaced range, plus a small overlap for
+    smooth transitions). It does NOT return the complete merged song.
+    To obtain the full song with the replacement spliced in, call
+    suno_concat_music with the returned segment ID after this task succeeds.
+
+    Typical two-step workflow:
+    1. suno_replace_section → get replacement segment ID
+    2. suno_concat_music(audio_id=<segment_id>) → get the complete merged song
 
     Use this when:
     - A specific section of a song needs improvement
@@ -520,7 +529,7 @@ async def suno_replace_section(
     - You want to replace a verse or chorus with something different
 
     Returns:
-        Task ID and the updated audio information.
+        Task ID and the replacement segment audio information (not the full song).
     """
     payload: dict = {
         "action": "replace_section",

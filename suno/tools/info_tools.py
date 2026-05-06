@@ -118,7 +118,7 @@ Workflow Examples:
 8. Add vocals: suno_upload_audio → suno_overpainting
 9. Full stems: suno_all_stems_music → use stems for further production
 10. Remix: suno_stems_music → use stems for further production
-11. Fix section: suno_replace_section → suno_get_task
+11. Fix section: suno_replace_section → suno_concat_music → suno_get_task
 """
 
 
