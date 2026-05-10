@@ -65,7 +65,7 @@ class FishClient:
 
     def _merge_headers(self, extra_headers: dict[str, str] | None = None) -> dict[str, str]:
         """Merge standard authentication headers with optional request-specific headers."""
-        headers = self._get_headers()
+        headers = {k: v for k, v in self._get_headers().items() if v is not None}
         if extra_headers:
             headers.update({k: v for k, v in extra_headers.items() if v is not None})
         return headers

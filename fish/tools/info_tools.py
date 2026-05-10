@@ -178,9 +178,6 @@ async def fish_get_model(
     ],
 ) -> str:
     """Get a single Fish voice model by model id."""
-    if not model_id:
-        return json.dumps({"error": "Validation Error", "message": "model_id is required"})
-
     try:
         result = await client.get_model(model_id)
         if not result:

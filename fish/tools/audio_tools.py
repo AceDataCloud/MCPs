@@ -132,7 +132,7 @@ async def fish_generate_audio(
     """
     resolved_text = text or prompt
     if not resolved_text:
-        return json.dumps({"error": "Validation Error", "message": "text is required"})
+        return json.dumps({"error": "Validation Error", "message": "text (or prompt) is required"})
 
     resolved_reference_id = reference_id or voice_id
 
