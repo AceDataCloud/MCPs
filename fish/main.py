@@ -3,7 +3,7 @@
 MCP Fish Server - Fish TTS (Text-to-Speech) via AceDataCloud API.
 
 A Model Context Protocol (MCP) server that provides tools for generating
-speech and cloning voices using the Fish Audio TTS API through AceDataCloud.
+speech and querying Fish voice models through AceDataCloud.
 """
 
 import argparse
@@ -60,7 +60,7 @@ Examples:
 
 Environment Variables:
   ACEDATACLOUD_API_TOKEN      API token from AceDataCloud (required)
-  FISH_DEFAULT_MODEL          Default model (default: fish-tts)
+  FISH_DEFAULT_MODEL          Default model (default: s2-pro)
   FISH_REQUEST_TIMEOUT        Request timeout in seconds (default: 1800)
   LOG_LEVEL                   Logging level (default: INFO)
         """,
@@ -117,11 +117,11 @@ Environment Variables:
     safe_print("")
     safe_print("  Available tools:")
     safe_print("    - fish_generate_audio")
-    safe_print("    - fish_create_voice")
     safe_print("    - fish_get_task")
     safe_print("    - fish_get_tasks_batch")
     safe_print("    - fish_get_usage_guide")
     safe_print("    - fish_list_models")
+    safe_print("    - fish_get_model")
     safe_print("")
     safe_print("  Available prompts:")
     safe_print("    - fish_guide")
@@ -162,11 +162,7 @@ Environment Variables:
                         "tools": [
                             {
                                 "name": "fish_generate_audio",
-                                "description": "Generate speech audio from text using voice cloning",
-                            },
-                            {
-                                "name": "fish_create_voice",
-                                "description": "Clone a voice from an audio sample URL",
+                                "description": "Generate speech audio from text",
                             },
                             {
                                 "name": "fish_get_task",
@@ -182,7 +178,11 @@ Environment Variables:
                             },
                             {
                                 "name": "fish_list_models",
-                                "description": "List available Fish TTS models",
+                                "description": "List available Fish voice models",
+                            },
+                            {
+                                "name": "fish_get_model",
+                                "description": "Get details for a Fish voice model by ID",
                             },
                         ],
                         "prompts": [

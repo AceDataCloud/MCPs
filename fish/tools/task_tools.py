@@ -16,16 +16,15 @@ async def fish_get_task(
         str,
         Field(
             description=(
-                "The task ID returned from a fish_generate_audio or fish_create_voice request. "
+                "The task ID returned from a fish_generate_audio request. "
                 "This is the 'task_id' field in the response."
             )
         ),
     ],
 ) -> str:
-    """Query the status and result of a Fish audio generation or voice cloning task.
+    """Query the status and result of a Fish audio generation task.
 
-    Use this to check if a task is complete and retrieve the resulting audio URL
-    or voice ID.
+    Use this to check if a task is complete and retrieve the resulting audio URL.
 
     Task states:
     - 'pending': Task is queued — keep polling
@@ -34,7 +33,7 @@ async def fish_get_task(
     - 'failed': Task failed (check error message)
 
     Returns:
-        Task status and result data including audio URL or voice ID.
+        Task status and result data including audio URL.
     """
     if not task_id:
         return json.dumps({"error": "Validation Error", "message": "task_id is required"})
@@ -64,8 +63,8 @@ async def fish_get_tasks_batch(
 ) -> str:
     """Query the status of multiple Fish tasks at once.
 
-    Efficiently checks the status of multiple audio generation or voice cloning
-    tasks in a single request.
+    Efficiently checks the status of multiple audio generation tasks in a
+    single request.
 
     Returns:
         Status and result data for all queried tasks.

@@ -8,35 +8,105 @@ from pydantic import Field
 from core.client import client
 from core.exceptions import FishAPIError, FishAuthError
 from core.server import mcp
-from core.types import DEFAULT_MODEL, DEFAULT_VOICE_ID, FishAudioAction, FishModel
+from core.types import (
+    DEFAULT_MODEL,
+    DEFAULT_VOICE_ID,
+    FishAudioAction,
+    FishAudioFormat,
+    FishLatency,
+    FishModel,
+)
 
 
 @mcp.tool()
 async def fish_generate_audio(
-    prompt: Annotated[
-        str,
+    text: Annotated[
+        str | None,
         Field(
-            description="The input text to convert to speech. Required."
+            description="The text to synthesize. Required."
         ),
-    ],
-    voice_id: Annotated[
-        str,
+    ] = None,
+    reference_id: Annotated[
+        str | None,
         Field(
             description=(
-                f"The voice ID to use for speech synthesis. "
-                f"Use fish_create_voice to clone your own voice and get a voice_id. "
-                f"Default example voice: {DEFAULT_VOICE_ID}. Required."
+                "Voice model id (single speaker). "
+                f"Default example voice model ID: {DEFAULT_VOICE_ID}."
             )
         ),
-    ],
+    ] = None,
+    prompt: Annotated[
+        str | None,
+        Field(description="Deprecated alias for `text`."),
+    ] = None,
+    voice_id: Annotated[
+        str | None,
+        Field(description="Deprecated alias for `reference_id`."),
+    ] = None,
     action: Annotated[
         FishAudioAction,
         Field(description="The audio generation action. Currently only 'speech' is supported."),
     ] = "speech",
     model: Annotated[
         FishModel,
-        Field(description="The TTS model to use. Currently only 'fish-tts' is supported."),
+        Field(description="The TTS model to use. Supported values: 's1', 's2-pro'."),
     ] = DEFAULT_MODEL,
+    format: Annotated[
+        FishAudioFormat,
+        Field(description="Output audio format. Defaults to 'mp3'."),
+    ] = "mp3",
+    sample_rate: Annotated[
+        int | None,
+        Field(description="Sampling rate of the output audio (e.g. 16000, 22050, 44100)."),
+    ] = None,
+    mp3_bitrate: Annotated[
+        int | None,
+        Field(description="MP3 bit rate when format='mp3'. Supported values: 64, 128, 192."),
+    ] = None,
+    opus_bitrate: Annotated[
+        int | None,
+        Field(description="Opus bit rate when format='opus'."),
+    ] = None,
+    latency: Annotated[
+        FishLatency | None,
+        Field(description="Latency mode. Supported values: 'normal', 'balanced'."),
+    ] = None,
+    chunk_length: Annotated[
+        int | None,
+        Field(description="Chunk length passed through to the upstream synthesiser."),
+    ] = None,
+    min_chunk_length: Annotated[
+        int | None,
+        Field(description="Minimum chunk length."),
+    ] = None,
+    temperature: Annotated[
+        float | None,
+        Field(description="Sampling temperature (0.0-1.0)."),
+    ] = None,
+    top_p: Annotated[
+        float | None,
+        Field(description="Top-p nucleus sampling parameter."),
+    ] = None,
+    repetition_penalty: Annotated[
+        float | None,
+        Field(description="Repetition penalty applied during generation."),
+    ] = None,
+    max_new_tokens: Annotated[
+        int | None,
+        Field(description="Maximum number of new tokens to generate."),
+    ] = None,
+    normalize: Annotated[
+        bool | None,
+        Field(description="Whether the upstream should apply text normalization."),
+    ] = None,
+    prosody: Annotated[
+        dict | None,
+        Field(description="Prosody overrides forwarded to the upstream."),
+    ] = None,
+    references: Annotated[
+        list[dict] | None,
+        Field(description="Inline reference samples forwarded to the upstream."),
+    ] = None,
     callback_url: Annotated[
         str | None,
         Field(
@@ -47,14 +117,10 @@ async def fish_generate_audio(
         ),
     ] = None,
 ) -> str:
-    """Generate speech audio from text using Fish TTS voice cloning.
-
-    Converts text to speech using a specified voice ID. The voice can be one
-    of Fish's built-in voices or a custom voice cloned via fish_create_voice.
+    """Generate speech audio from text using Fish TTS.
 
     Use this when:
     - You want to convert text to speech
-    - You want to clone a voice for TTS
     - You need AI-generated audio narration
 
     Returns:
@@ -62,24 +128,40 @@ async def fish_generate_audio(
 
     Example:
         fish_generate_audio(
-            prompt="Hello, welcome to our service!",
-            voice_id="d7900c21663f485ab63ebdb7e5905036"
+            text="Hello, welcome to our service!",
+            reference_id="d7900c21663f485ab63ebdb7e5905036"
         )
     """
-    if not prompt:
-        return json.dumps({"error": "Validation Error", "message": "prompt is required"})
+    request_text = text or prompt
+    request_reference_id = reference_id or voice_id
+    if not request_text:
+        return json.dumps({"error": "Validation Error", "message": "text is required"})
 
-    if not voice_id:
-        return json.dumps({"error": "Validation Error", "message": "voice_id is required"})
-
-    payload: dict = {
-        "action": action,
-        "prompt": prompt,
-        "voice_id": voice_id,
-        "model": model,
+    payload: dict = {"text": request_text, "format": format, "model": model}
+    if request_reference_id:
+        payload["reference_id"] = request_reference_id
+    optional_payload = {
+        "sample_rate": sample_rate,
+        "mp3_bitrate": mp3_bitrate,
+        "opus_bitrate": opus_bitrate,
+        "latency": latency,
+        "chunk_length": chunk_length,
+        "min_chunk_length": min_chunk_length,
+        "temperature": temperature,
+        "top_p": top_p,
+        "repetition_penalty": repetition_penalty,
+        "max_new_tokens": max_new_tokens,
+        "normalize": normalize,
+        "prosody": prosody,
+        "references": references,
     }
+    for key, value in optional_payload.items():
+        if value is not None:
+            payload[key] = value
     if callback_url:
         payload["callback_url"] = callback_url
+    if action != "speech":
+        payload["action"] = action
 
     try:
         result = await client.generate_audio(**payload)
