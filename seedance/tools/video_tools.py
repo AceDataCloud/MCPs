@@ -43,7 +43,9 @@ async def seedance_generate_video(
                 "'doubao-seedance-1-0-pro-250528' (standard, default), "
                 "'doubao-seedance-1-0-pro-fast-251015' (fast, cost-optimized), "
                 "'doubao-seedance-1-0-lite-t2v-250428' (lightweight text-to-video), "
-                "'doubao-seedance-1-0-lite-i2v-250428' (lightweight image-to-video)."
+                "'doubao-seedance-1-0-lite-i2v-250428' (lightweight image-to-video), "
+                "'doubao-seedance-2-0-260128' (next-gen flagship), "
+                "'doubao-seedance-2-0-fast-260128' (next-gen fast)."
             )
         ),
     ] = DEFAULT_MODEL,
@@ -80,6 +82,8 @@ async def seedance_generate_video(
                 "Must satisfy 25+4n (e.g. 29, 33, 37, ..., 289). "
                 "Mutually exclusive with 'duration'."
             ),
+            ge=29,
+            le=289,
         ),
     ] = None,
     generate_audio: Annotated[
@@ -144,6 +148,8 @@ async def seedance_generate_video(
         int,
         Field(
             description=("Task timeout threshold in seconds. Default is 172800 (48 hours)."),
+            ge=3600,
+            le=259200,
         ),
     ] = 172800,
 ) -> str:
@@ -275,6 +281,8 @@ async def seedance_generate_video_from_image(
                 "Must satisfy 25+4n (e.g. 29, 33, 37, ..., 289). "
                 "Mutually exclusive with 'duration'."
             ),
+            ge=29,
+            le=289,
         ),
     ] = None,
     generate_audio: Annotated[
@@ -313,6 +321,8 @@ async def seedance_generate_video_from_image(
         int,
         Field(
             description=("Task timeout threshold in seconds. Default is 172800 (48 hours)."),
+            ge=3600,
+            le=259200,
         ),
     ] = 172800,
 ) -> str:

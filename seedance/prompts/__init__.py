@@ -41,6 +41,8 @@ When the user wants to generate video, choose the appropriate tool based on thei
 - **Fastest/cheapest:** `doubao-seedance-1-0-pro-fast-251015`
 - **Lightweight T2V:** `doubao-seedance-1-0-lite-t2v-250428`
 - **Lightweight I2V:** `doubao-seedance-1-0-lite-i2v-250428`
+- **New generation:** `doubao-seedance-2-0-260128`
+- **New generation (fast):** `doubao-seedance-2-0-fast-260128`
 
 ## Checking Status
 **Tool:** `seedance_get_task`

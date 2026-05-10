@@ -70,6 +70,8 @@ class TestInfoTools:
         assert "doubao-seedance-1-5-pro-251215" in result
         assert "doubao-seedance-1-0-pro-250528" in result
         assert "doubao-seedance-1-0-pro-fast-251015" in result
+        assert "doubao-seedance-2-0-260128" in result
+        assert "doubao-seedance-2-0-fast-260128" in result
 
     @pytest.mark.asyncio
     async def test_list_resolutions(self) -> None:

@@ -369,6 +369,8 @@ Claude: I'll generate a video with synchronized audio.
 | `doubao-seedance-1-0-pro-fast-251015` | 1.0 Pro Fast      | Faster generation          |
 | `doubao-seedance-1-0-lite-t2v-250428` | 1.0 Lite T2V      | Lightweight text-to-video  |
 | `doubao-seedance-1-0-lite-i2v-250428` | 1.0 Lite I2V      | Lightweight image-to-video |
+| `doubao-seedance-2-0-260128`          | 2.0               | Next-generation model      |
+| `doubao-seedance-2-0-fast-260128`     | 2.0 Fast          | Next-generation fast model |
 
 ## Available Aspect Ratios
 

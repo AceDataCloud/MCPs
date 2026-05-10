@@ -13,7 +13,7 @@ async def seedance_list_models() -> str:
     Returns:
         Table of all models with descriptions, capabilities, and pricing.
     """
-    # Last updated: 2026-04-05
+    # Last updated: 2026-05-10
     return """Available Seedance Models:
 
 | Model | Type | Strengths | Audio | Cost (720p/sec) |
@@ -23,8 +23,12 @@ async def seedance_list_models() -> str:
 | doubao-seedance-1-0-pro-fast-251015 | Fast | Cost-optimized, faster generation | No | ~$0.014 |
 | doubao-seedance-1-0-lite-t2v-250428 | Lite T2V | Lightweight text-to-video | No | ~$0.033 |
 | doubao-seedance-1-0-lite-i2v-250428 | Lite I2V | Lightweight image-to-video | No | ~$0.033 |
+| doubao-seedance-2-0-260128 | 2.0 | Next-generation model | - | - |
+| doubao-seedance-2-0-fast-260128 | 2.0 Fast | Next-generation fast model | - | - |
 
 Model Selection Guide:
+- New generation: doubao-seedance-2-0-260128
+- New generation (fast): doubao-seedance-2-0-fast-260128
 - Best quality: doubao-seedance-1-5-pro-251215 (newest flagship)
 - Best value: doubao-seedance-1-0-pro-250528 (standard, default)
 - Fastest/cheapest: doubao-seedance-1-0-pro-fast-251015
