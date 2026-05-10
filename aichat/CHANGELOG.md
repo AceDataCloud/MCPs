@@ -1,5 +1,13 @@
 # Changelog
 
+## [2026.5.10.0] - 2026-05-10
+
+### Added
+- `aichat_create_conversation_v2` tool for AI dialogue via the v2 API endpoint (`/aichat2/conversations`)
+- `AiChatV2Model` type with 83 models including Claude, Gemini, Grok-4, Kimi, and more
+- v2 model listing in `aichat_list_models` and `aichat_get_usage_guide`
+- Updated prompts to guide model selection between v1 and v2
+
 ## [2026.4.25.0] - 2026-04-25
 
 ### Added

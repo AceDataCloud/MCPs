@@ -8,15 +8,17 @@ async def aichat_list_models() -> str:
     """List all available AI models for the AiChat API.
 
     Returns a comprehensive list of supported models grouped by provider,
-    including GPT-4/5, o-series, DeepSeek, Grok, and GLM models.
+    including GPT-4/5, o-series, DeepSeek, Grok, GLM, Claude, Gemini, and Kimi models.
 
     Returns:
         Formatted list of available models with descriptions.
     """
-    # Last updated: 2026-04-25
+    # Last updated: 2026-05-10
     return """# Available AiChat Models
 
-## OpenAI GPT-5 Series
+## v1 Models (/aichat/conversations)
+
+### OpenAI GPT-5 Series
 - gpt-5.5
 - gpt-5.5-pro
 - gpt-5.4
@@ -29,7 +31,7 @@ async def aichat_list_models() -> str:
 - gpt-5-nano
 - gpt-5-all
 
-## OpenAI GPT-4.1 Series
+### OpenAI GPT-4.1 Series
 - gpt-4.1 (recommended default)
 - gpt-4.1-2025-04-14
 - gpt-4.1-mini
@@ -37,11 +39,11 @@ async def aichat_list_models() -> str:
 - gpt-4.1-nano
 - gpt-4.1-nano-2025-04-14
 
-## OpenAI GPT-4.5 Series
+### OpenAI GPT-4.5 Series
 - gpt-4.5-preview
 - gpt-4.5-preview-2025-02-27
 
-## OpenAI GPT-4o Series
+### OpenAI GPT-4o Series
 - gpt-4o
 - gpt-4o-2024-05-13
 - gpt-4o-2024-08-06
@@ -55,14 +57,14 @@ async def aichat_list_models() -> str:
 - gpt-4o-search-preview
 - gpt-4o-search-preview-2025-03-11
 
-## OpenAI GPT-4 Series
+### OpenAI GPT-4 Series
 - gpt-4
 - gpt-4-all
 - gpt-4-turbo
 - gpt-4-turbo-preview
 - gpt-4-vision-preview
 
-## OpenAI o-Series (Reasoning)
+### OpenAI o-Series (Reasoning)
 - o1
 - o1-2024-12-17
 - o1-all
@@ -95,22 +97,123 @@ async def aichat_list_models() -> str:
 - o4-mini-all
 - o4-mini-high-all
 
-## DeepSeek
+### DeepSeek
 - deepseek-r1
 - deepseek-r1-0528
 - deepseek-v3
 - deepseek-v3-250324
 - deepseek-v4-flash
 
-## xAI Grok
+### xAI Grok
 - grok-3
 
-## Zhipu GLM
+### Zhipu GLM
 - glm-5.1
 - glm-4.7
 - glm-4.6
 - glm-4.5-air
 - glm-3-turbo
+
+## v2 Models (/aichat2/conversations — use aichat_create_conversation_v2)
+
+### OpenAI
+- gpt-4
+- gpt-4.1 (recommended default)
+- gpt-4.1-mini
+- gpt-4.1-nano
+- gpt-4o
+- gpt-4o-2024-05-13
+- gpt-4o-all
+- gpt-4o-image
+- gpt-4o-mini
+- gpt-5-all
+- gpt-5.1-all
+- gpt-5.2-pro
+- gpt-5.4-mini
+- gpt-5.4-nano
+- gpt-image-1
+
+### Anthropic Claude
+- claude-3-5-haiku-20241022
+- claude-3-5-sonnet-20240620
+- claude-3-5-sonnet-20241022
+- claude-3-7-sonnet-20250219
+- claude-3-haiku-20240307
+- claude-3-opus-20240229
+- claude-3-sonnet-20240229
+- claude-haiku-4-5-20251001
+- claude-opus-4-1-20250805
+- claude-opus-4-20250514
+- claude-opus-4-5-20251101
+- claude-opus-4-6
+- claude-opus-4-7
+- claude-sonnet-4-20250514
+- claude-sonnet-4-5-20250929
+- claude-sonnet-4-6
+
+### Google Gemini
+- gemini-2.0-flash-lite
+- gemini-2.5-flash-lite
+- gemini-3-pro-preview
+- gemini-3.1-flash-image-preview
+- gemini-3.1-flash-lite-preview
+- gemini-3.1-pro
+- gemini-3.1-pro-preview
+
+### xAI Grok
+- grok-2-vision
+- grok-2-vision-1212
+- grok-3
+- grok-3-fast
+- grok-3-mini
+- grok-3-mini-fast
+- grok-4
+- grok-4-0709
+- grok-4-1-fast
+- grok-4-1-fast-non-reasoning
+- grok-4-1-fast-reasoning
+
+### DeepSeek
+- deepseek-chat
+- deepseek-r1
+- deepseek-r1-0528
+- deepseek-reasoner
+- deepseek-v3
+- deepseek-v3-250324
+- deepseek-v3.2-exp
+- deepseek-v4-flash
+
+### Kimi (Moonshot)
+- kimi-k2-0711-preview
+- kimi-k2-0905-preview
+- kimi-k2-instruct-0905
+- kimi-k2-thinking
+- kimi-k2-thinking-turbo
+- kimi-k2-turbo-preview
+- kimi-k2.5
+
+### Zhipu GLM
+- glm-3-turbo
+- glm-4-air
+- glm-4-flash
+- glm-4-plus
+- glm-4.5
+- glm-4.5-air
+- glm-4.5v
+- glm-4.6
+- glm-4.7
+- glm-5
+- glm-5-turbo
+- glm-5.1
+
+### OpenAI o-Series (Reasoning)
+- o1
+- o1-mini
+- o1-pro
+- o3
+- o3-mini
+- o3-pro
+- o4-mini
 """
 
 
@@ -124,13 +227,13 @@ async def aichat_get_usage_guide() -> str:
     Returns:
         Complete usage guide for AiChat tools.
     """
-    # Last updated: 2026-04-25
+    # Last updated: 2026-05-10
     return """# AiChat Tools Usage Guide
 
 ## Available Tools
 
 ### aichat_create_conversation
-Create an AI conversation with any supported model.
+Create an AI conversation with v1 models (OpenAI, DeepSeek, Grok, GLM).
 
 **Parameters:**
 - `question` (required): The prompt or question to ask the AI model.
@@ -140,15 +243,26 @@ Create an AI conversation with any supported model.
 - `stateful` (optional): Enable stateful conversation mode (boolean).
 - `references` (optional): List of reference sources for context.
 
+### aichat_create_conversation_v2
+Create an AI conversation with v2 models (Claude, Gemini, Grok-4, Kimi, and more).
+
+**Parameters:**
+- `question` (required): The prompt or question to ask the AI model.
+- `model` (optional): The AI model to use. Default: `gpt-4.1`
+- `conversation_id` (optional): Continue an existing conversation by providing its ID.
+- `preset` (optional): Preset model configuration name.
+- `stateful` (optional): Whether to persist the conversation (default True in v2).
+- `references` (optional): List of reference URLs for context.
+
 ### aichat_list_models
-List all available AI models grouped by provider.
+List all available AI models grouped by provider and API version.
 
 ### aichat_get_usage_guide
 Show this usage guide.
 
 ## Example Usage
 
-### Simple Question
+### Simple Question (v1)
 ```
 aichat_create_conversation(
     question="What is the capital of France?",
@@ -164,7 +278,23 @@ aichat_create_conversation(
 }
 ```
 
-### Continue a Conversation
+### Use Claude (v2)
+```
+aichat_create_conversation_v2(
+    question="Explain quantum entanglement.",
+    model="claude-opus-4-7"
+)
+```
+
+### Use Grok-4 (v2)
+```
+aichat_create_conversation_v2(
+    question="What are the latest developments in AI?",
+    model="grok-4"
+)
+```
+
+### Continue a Conversation (v1)
 ```
 aichat_create_conversation(
     question="Tell me more about it.",
@@ -201,6 +331,8 @@ aichat_create_conversation(
 - **trace_id**: Request trace ID for debugging
 
 ## Notes
+- Use `aichat_create_conversation` for v1 models (GPT, DeepSeek, Grok, GLM)
+- Use `aichat_create_conversation_v2` for v2 models (Claude, Gemini, Grok-4, Kimi, and more)
 - The `conversation_id` from the response can be used to continue the conversation
 - Use reasoning models (o1, o3, o4-mini) for complex math or logic problems
 - Use DeepSeek models for tasks requiring deep reasoning

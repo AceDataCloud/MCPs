@@ -156,6 +156,81 @@ class AiChatClient:
                 logger.error(f"Request error: {e}")
                 raise AiChatAPIError(message=str(e)) from e
 
+    async def create_conversation_v2(
+        self,
+        model: str,
+        question: str | None = None,
+        conversation_id: str | None = None,
+        preset: str | None = None,
+        stateful: bool | None = None,
+        references: list[str] | None = None,
+    ) -> dict[str, Any]:
+        """Create an AI conversation using the v2 API endpoint.
+
+        Args:
+            model: The model to use for generating the answer.
+            question: The prompt or question to be answered.
+            conversation_id: Optional conversation ID for continuing a conversation.
+            preset: Optional preset model configuration.
+            stateful: Whether to use stateful conversation mode (defaults to True in v2).
+            references: Optional list of reference sources.
+
+        Returns:
+            API response dictionary containing the answer and conversation ID.
+        """
+        payload: dict[str, Any] = {"model": model}
+        if question is not None:
+            payload["question"] = question
+        if conversation_id is not None:
+            payload["id"] = conversation_id
+        if preset is not None:
+            payload["preset"] = preset
+        if stateful is not None:
+            payload["stateful"] = stateful
+        if references is not None:
+            payload["references"] = references
+
+        logger.info(f"Creating v2 conversation with model: {model}")
+        if question:
+            logger.debug(f"Question: {question[:100]}...")
+
+        url = f"{self.base_url}/aichat2/conversations"
+
+        logger.info(f"POST {url}")
+        logger.debug(f"Request payload: {json.dumps(payload, ensure_ascii=False, indent=2)}")
+
+        async with httpx.AsyncClient() as http_client:
+            try:
+                response = await http_client.post(
+                    url,
+                    json=payload,
+                    headers=self._get_headers(),
+                    timeout=self.timeout,
+                )
+
+                logger.info(f"Response status: {response.status_code}")
+
+                if response.status_code >= 400:
+                    self._handle_error_response(response)
+
+                result = response.json()
+                logger.success("V2 conversation created successfully!")
+
+                return result  # type: ignore[no-any-return]
+
+            except httpx.TimeoutException as e:
+                logger.error(f"Request timeout after {self.timeout}s: {e}")
+                raise AiChatTimeoutError(
+                    f"Request to /aichat2/conversations timed out after {self.timeout}s"
+                ) from e
+
+            except AiChatError:
+                raise
+
+            except Exception as e:
+                logger.error(f"Request error: {e}")
+                raise AiChatAPIError(message=str(e)) from e
+
 
 # Global client instance
 client = AiChatClient()

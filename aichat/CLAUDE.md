@@ -9,10 +9,10 @@ core/
   config.py     — Settings dataclass (API token, base URL)
   server.py     — FastMCP server singleton
   client.py     — httpx async HTTP client
-  types.py      — Literal types for model enum
+  types.py      — Literal types for model enum (AiChatModel, AiChatV2Model)
   exceptions.py — Error classes (AuthError, APIError, TimeoutError)
 tools/
-  chat_tools.py  — aichat_create_conversation
+  chat_tools.py  — aichat_create_conversation, aichat_create_conversation_v2
   info_tools.py  — aichat_list_models, aichat_get_usage_guide
 prompts/           — LLM guidance prompts
 tests/             — pytest-asyncio + respx tests
