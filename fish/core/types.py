@@ -5,9 +5,6 @@ from typing import Literal
 # Fish TTS model
 FishModel = Literal["s1", "s2-pro"]
 
-# Fish audio action
-FishAudioAction = Literal["speech"]
-
 # Fish output format
 FishAudioFormat = Literal["mp3", "wav", "pcm", "opus"]
 

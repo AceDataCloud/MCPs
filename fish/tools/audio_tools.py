@@ -11,7 +11,6 @@ from core.server import mcp
 from core.types import (
     DEFAULT_MODEL,
     DEFAULT_VOICE_ID,
-    FishAudioAction,
     FishAudioFormat,
     FishLatency,
     FishModel,
@@ -43,10 +42,6 @@ async def fish_generate_audio(
         str | None,
         Field(description="Deprecated alias for `reference_id`."),
     ] = None,
-    action: Annotated[
-        FishAudioAction,
-        Field(description="The audio generation action. Currently only 'speech' is supported."),
-    ] = "speech",
     model: Annotated[
         FishModel,
         Field(description="The TTS model to use. Supported values: 's1', 's2-pro'."),
@@ -174,8 +169,6 @@ async def fish_generate_audio(
             payload[key] = value
     if callback_url:
         payload["callback_url"] = callback_url
-    if action != "speech":
-        payload["action"] = action
 
     try:
         result = await client.generate_audio(**payload)
