@@ -75,3 +75,7 @@ mappings:
     repo: AceDataCloud/WebExtraterMCP
     exclude:
       - .gitbooks
+  fish:
+    repo: AceDataCloud/FishMCP
+    exclude:
+      - .gitbooks
