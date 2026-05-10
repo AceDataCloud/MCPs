@@ -79,7 +79,7 @@ async def seedance_generate_video(
         Field(
             description=(
                 "Frame count for the generated video. "
-                "Must satisfy 25+4n (e.g. 29, 33, 37, ..., 289). "
+                "Range: 29-289. Must satisfy 25+4n (e.g. 29, 33, 37, ..., 289). "
                 "Mutually exclusive with 'duration'."
             ),
             ge=29,
@@ -278,7 +278,7 @@ async def seedance_generate_video_from_image(
         Field(
             description=(
                 "Frame count for the generated video. "
-                "Must satisfy 25+4n (e.g. 29, 33, 37, ..., 289). "
+                "Range: 29-289. Must satisfy 25+4n (e.g. 29, 33, 37, ..., 289). "
                 "Mutually exclusive with 'duration'."
             ),
             ge=29,
