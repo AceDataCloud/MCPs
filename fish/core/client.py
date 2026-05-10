@@ -67,7 +67,13 @@ class FishClient:
         """Merge standard authentication headers with optional request-specific headers."""
         headers = {k: v for k, v in self._get_headers().items() if v is not None}
         if extra_headers:
-            headers.update({k: v for k, v in extra_headers.items() if v is not None})
+            protected_keys = {"authorization", "content-type", "accept"}
+            for key, value in extra_headers.items():
+                if value is None:
+                    continue
+                if key.lower() in protected_keys:
+                    continue
+                headers[key] = value
         return headers
 
     def _with_async_callback(self, payload: dict[str, Any]) -> dict[str, Any]:
