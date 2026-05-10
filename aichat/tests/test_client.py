@@ -55,6 +55,7 @@ class TestAiChatClient:
             )
             assert result == mock_conversation_response
             assert result["answer"] == "I am a highly intelligent question answering AI."
+            assert mock_instance.post.call_args[0][0] == "https://api.test.com/aichat2/conversations"
 
     @pytest.mark.asyncio
     async def test_create_conversation_with_id(self, client, mock_conversation_response):
@@ -158,3 +159,49 @@ class TestAiChatClient:
             assert payload["references"] == ["https://example.com"]
             assert "id" not in payload
             assert "preset" not in payload
+
+    @pytest.mark.asyncio
+    async def test_create_conversation_with_extended_v2_fields(
+        self, client, mock_conversation_response
+    ):
+        """Test that v2 request fields are sent to the API."""
+        mock_response = MagicMock()
+        mock_response.status_code = 200
+        mock_response.json.return_value = mock_conversation_response
+
+        with patch("httpx.AsyncClient") as mock_http_client:
+            mock_instance = AsyncMock()
+            mock_instance.post.return_value = mock_response
+            mock_http_client.return_value.__aenter__.return_value = mock_instance
+
+            await client.create_conversation(
+                model="claude-sonnet-4-6",
+                action="retrieve_batch",
+                message="ignored by API for retrieve_batch",
+                max_turns=3,
+                tool_results=[{"tool_use_id": "tool-1", "output": "approved"}],
+                messages=[{"role": "user", "content": "hello"}],
+                title="Conversation title",
+                user_id="user-123",
+                application_id="app-456",
+                model_group="claude",
+                offset=10,
+                limit=20,
+            )
+
+            call_args = mock_instance.post.call_args
+            payload = call_args[1]["json"]
+            assert payload["model"] == "claude-sonnet-4-6"
+            assert payload["action"] == "retrieve_batch"
+            assert payload["message"] == "ignored by API for retrieve_batch"
+            assert payload["max_turns"] == 3
+            assert payload["tool_results"] == [{"tool_use_id": "tool-1", "output": "approved"}]
+            assert payload["messages"] == [{"role": "user", "content": "hello"}]
+            assert payload["title"] == "Conversation title"
+            assert payload["user_id"] == "user-123"
+            assert payload["application_id"] == "app-456"
+            assert payload["model_group"] == "claude"
+            assert payload["offset"] == 10
+            assert payload["limit"] == 20
+            assert call_args[0][0] == "https://api.test.com/aichat2/conversations"
+            assert "question" not in payload

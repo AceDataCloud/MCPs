@@ -1,29 +1,33 @@
 """Chat conversation tools for AiChat API."""
 
 import json
-from typing import Annotated
+from typing import Annotated, Any
 
 from pydantic import Field
 
 from core.client import client
 from core.exceptions import AiChatAPIError, AiChatAuthError
 from core.server import mcp
-from core.types import DEFAULT_MODEL, AiChatModel
+from core.types import DEFAULT_MODEL, AiChatAction, AiChatModel, AiChatModelGroup
 
 
 @mcp.tool()
 async def aichat_create_conversation(
     question: Annotated[
-        str,
-        Field(description=("The prompt or question to be answered by the AI model. Required.")),
-    ],
+        str | None,
+        Field(
+            description=(
+                "Optional legacy plain-text prompt for chat requests. Ignored when `message` "
+                "is provided. Leave empty for retrieve, retrieve_batch, update, or delete actions."
+            )
+        ),
+    ] = None,
     model: Annotated[
         AiChatModel,
         Field(
             description=(
-                "The model to use for generating the answer. Options include gpt-4.1, gpt-4o, "
-                "gpt-5, o1, o3, o4-mini, deepseek-r1, deepseek-v3, grok-3, glm-4.7, and many "
-                "more. Default is gpt-4.1."
+                "The model to use for the request. Supports GPT, Claude, Gemini, Grok, "
+                "DeepSeek, Kimi, GLM, and reasoning-model variants. Default is gpt-4.1."
             )
         ),
     ] = DEFAULT_MODEL,
@@ -31,9 +35,8 @@ async def aichat_create_conversation(
         str | None,
         Field(
             description=(
-                "The unique identifier of an existing conversation to continue. "
-                "If provided, the AI will respond in the context of the prior conversation. "
-                "Leave empty to start a new conversation."
+                "Conversation identifier. Use this to continue a stateful chat or to target "
+                "retrieve, update, or delete actions."
             )
         ),
     ] = None,
@@ -47,8 +50,8 @@ async def aichat_create_conversation(
         bool | None,
         Field(
             description=(
-                "Whether to use stateful conversation mode. When True, the server tracks "
-                "conversation history. Default is False (stateless)."
+                "Whether to persist the conversation. When omitted, the API uses its default "
+                "stateful behavior."
             )
         ),
     ] = None,
@@ -61,23 +64,91 @@ async def aichat_create_conversation(
             )
         ),
     ] = None,
+    action: Annotated[
+        AiChatAction | None,
+        Field(
+            description=(
+                "Optional conversation action. Use `chat` (default) to generate a response, "
+                "`retrieve` to load one conversation, `retrieve_batch` to list conversations, "
+                "`update` to patch a conversation, or `delete` to remove one."
+            )
+        ),
+    ] = None,
+    message: Annotated[
+        str | list[dict[str, Any]] | None,
+        Field(
+            description=(
+                "Optional multimodal user message for chat requests. Provide either a plain "
+                "string or an array of content blocks such as "
+                "[{'type': 'text', 'text': 'Describe this image'}, "
+                "{'type': 'image_url', 'image_url': {'url': 'https://example.com/image.png'}}]."
+            )
+        ),
+    ] = None,
+    max_turns: Annotated[
+        int | None,
+        Field(
+            description=(
+                "Optional cap on agentic-loop iterations for this request."
+            ),
+            ge=1,
+        ),
+    ] = None,
+    tool_results: Annotated[
+        list[dict[str, Any]] | None,
+        Field(
+            description=(
+                "Optional resume payload for a conversation paused on ask_user_question. "
+                "Provide entries with `tool_use_id`, `output`, and optional `is_error`."
+            )
+        ),
+    ] = None,
+    messages: Annotated[
+        list[dict[str, Any]] | None,
+        Field(
+            description=(
+                "Optional replacement conversation history. Only used for `update` actions."
+            )
+        ),
+    ] = None,
+    title: Annotated[
+        str | None,
+        Field(description="Optional conversation title for `update` actions."),
+    ] = None,
+    user_id: Annotated[
+        str | None,
+        Field(description="Optional user filter for `retrieve_batch` actions."),
+    ] = None,
+    application_id: Annotated[
+        str | None,
+        Field(description="Optional application filter for `retrieve_batch` actions."),
+    ] = None,
+    model_group: Annotated[
+        AiChatModelGroup | None,
+        Field(description="Optional provider bucket filter for `retrieve_batch` actions."),
+    ] = None,
+    offset: Annotated[
+        int | None,
+        Field(description="Optional pagination offset for `retrieve_batch` actions.", ge=0),
+    ] = None,
+    limit: Annotated[
+        int | None,
+        Field(description="Optional pagination limit for `retrieve_batch` actions.", ge=1, le=100),
+    ] = None,
 ) -> str:
     """Create an AI conversation using the AiChat API.
 
-    Sends a question to the specified AI model and returns the generated answer.
-    Supports a wide range of models including GPT-4, GPT-5, o-series, DeepSeek, Grok, and GLM.
+    Sends a chat request or conversation-management action to the AiChat API.
+    Supports legacy question-based chat, multimodal message input, and CRUD-style actions.
 
     Use this when:
     - You need to ask a question to an AI model
-    - You want to continue an existing conversation (provide conversation_id)
-    - You need answers from specific AI models like DeepSeek, Grok, or GLM
+    - You want to send multimodal message content
+    - You want to continue, retrieve, list, update, or delete conversations
 
     Returns:
-        JSON response containing the conversation ID and the generated answer.
+        JSON response containing the API result.
     """
-    if not question:
-        return json.dumps({"error": "Validation Error", "message": "question is required"})
-
     try:
         result = await client.create_conversation(
             question=question,
@@ -86,6 +157,17 @@ async def aichat_create_conversation(
             preset=preset,
             stateful=stateful,
             references=references,
+            action=action,
+            message=message,
+            max_turns=max_turns,
+            tool_results=tool_results,
+            messages=messages,
+            title=title,
+            user_id=user_id,
+            application_id=application_id,
+            model_group=model_group,
+            offset=offset,
+            limit=limit,
         )
 
         if not result:

@@ -9,6 +9,7 @@ from loguru import logger
 
 from core.config import settings
 from core.exceptions import AiChatAPIError, AiChatAuthError, AiChatError, AiChatTimeoutError
+from core.types import DEFAULT_MODEL
 
 # Context variable for per-request API token (used in HTTP/remote mode)
 _request_api_token: contextvars.ContextVar[str | None] = contextvars.ContextVar(
@@ -83,43 +84,77 @@ class AiChatClient:
 
     async def create_conversation(
         self,
-        question: str,
-        model: str,
+        question: str | None = None,
+        model: str = DEFAULT_MODEL,
         conversation_id: str | None = None,
         preset: str | None = None,
         stateful: bool | None = None,
         references: list[str] | None = None,
+        action: str | None = None,
+        message: str | list[dict[str, Any]] | None = None,
+        max_turns: int | None = None,
+        tool_results: list[dict[str, Any]] | None = None,
+        messages: list[dict[str, Any]] | None = None,
+        title: str | None = None,
+        user_id: str | None = None,
+        application_id: str | None = None,
+        model_group: str | None = None,
+        offset: int | None = None,
+        limit: int | None = None,
     ) -> dict[str, Any]:
         """Create an AI conversation.
 
         Args:
-            question: The prompt or question to be answered.
+            question: Optional legacy plain-text prompt or question to be answered.
             model: The model to use for generating the answer.
             conversation_id: Optional conversation ID for continuing a conversation.
             preset: Optional preset model configuration.
             stateful: Whether to use stateful conversation mode.
             references: Optional list of reference sources.
+            action: Optional conversation action (chat, retrieve, retrieve_batch, update, delete).
+            message: Optional multimodal message content.
+            max_turns: Optional cap on agentic-loop iterations.
+            tool_results: Optional resume payload for ask_user_question flows.
+            messages: Optional replacement message history for update actions.
+            title: Optional conversation title for update actions.
+            user_id: Optional user filter for retrieve_batch actions.
+            application_id: Optional application filter for retrieve_batch actions.
+            model_group: Optional provider bucket filter for retrieve_batch actions.
+            offset: Optional pagination offset for retrieve_batch actions.
+            limit: Optional pagination limit for retrieve_batch actions.
 
         Returns:
             API response dictionary containing the answer and conversation ID.
         """
-        payload: dict[str, Any] = {
-            "question": question,
-            "model": model,
-        }
+        payload: dict[str, Any] = {"model": model}
         if conversation_id is not None:
             payload["id"] = conversation_id
-        if preset is not None:
-            payload["preset"] = preset
-        if stateful is not None:
-            payload["stateful"] = stateful
-        if references is not None:
-            payload["references"] = references
+        optional_fields = {
+            "action": action,
+            "question": question,
+            "message": message,
+            "preset": preset,
+            "stateful": stateful,
+            "references": references,
+            "max_turns": max_turns,
+            "tool_results": tool_results,
+            "messages": messages,
+            "title": title,
+            "user_id": user_id,
+            "application_id": application_id,
+            "model_group": model_group,
+            "offset": offset,
+            "limit": limit,
+        }
+        for key, value in optional_fields.items():
+            if value is not None:
+                payload[key] = value
 
         logger.info(f"Creating conversation with model: {model}")
-        logger.debug(f"Question: {question[:100]}...")
+        if question:
+            logger.debug(f"Question: {question[:100]}...")
 
-        url = f"{self.base_url}/aichat/conversations"
+        url = f"{self.base_url}/aichat2/conversations"
 
         logger.info(f"POST {url}")
         logger.debug(f"Request payload: {json.dumps(payload, ensure_ascii=False, indent=2)}")
@@ -146,7 +181,7 @@ class AiChatClient:
             except httpx.TimeoutException as e:
                 logger.error(f"Request timeout after {self.timeout}s: {e}")
                 raise AiChatTimeoutError(
-                    f"Request to /aichat/conversations timed out after {self.timeout}s"
+                    f"Request to /aichat2/conversations timed out after {self.timeout}s"
                 ) from e
 
             except AiChatError:
