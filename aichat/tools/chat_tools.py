@@ -8,7 +8,7 @@ from pydantic import Field
 from core.client import client
 from core.exceptions import AiChatAPIError, AiChatAuthError
 from core.server import mcp
-from core.types import DEFAULT_MODEL, AiChatModel
+from core.types import DEFAULT_MODEL, DEFAULT_V2_MODEL, AiChatModel, AiChatV2Model
 
 
 @mcp.tool()
@@ -82,6 +82,99 @@ async def aichat_create_conversation(
         result = await client.create_conversation(
             question=question,
             model=model,
+            conversation_id=conversation_id,
+            preset=preset,
+            stateful=stateful,
+            references=references,
+        )
+
+        if not result:
+            return json.dumps({"error": "No response received from the API."})
+
+        return json.dumps(result, ensure_ascii=False, indent=2)
+
+    except AiChatAuthError as e:
+        return json.dumps({"error": "Authentication Error", "message": e.message})
+    except AiChatAPIError as e:
+        return json.dumps({"error": "API Error", "message": e.message})
+    except Exception as e:
+        return json.dumps({"error": "Error creating conversation", "message": str(e)})
+
+
+@mcp.tool()
+async def aichat_create_conversation_v2(
+    model: Annotated[
+        AiChatV2Model,
+        Field(
+            description=(
+                "The model to use for generating the answer. Supports a wider range of providers "
+                "including Claude (claude-opus-4-7, claude-sonnet-4-6), Gemini (gemini-3.1-pro), "
+                "Grok-4 (grok-4, grok-4-1-fast), Kimi (kimi-k2.5), DeepSeek, GLM, and GPT-4/4o. "
+                "Default is gpt-4.1."
+            )
+        ),
+    ] = DEFAULT_V2_MODEL,
+    question: Annotated[
+        str | None,
+        Field(
+            description=(
+                "The prompt or question to be answered by the AI model. "
+                "Use this for plain-text queries."
+            )
+        ),
+    ] = None,
+    conversation_id: Annotated[
+        str | None,
+        Field(
+            description=(
+                "The unique identifier of an existing conversation to continue. "
+                "If provided, the AI will respond in the context of the prior conversation. "
+                "Leave empty to start a new conversation."
+            )
+        ),
+    ] = None,
+    preset: Annotated[
+        str | None,
+        Field(
+            description=("An optional preset model configuration to apply for this conversation.")
+        ),
+    ] = None,
+    stateful: Annotated[
+        bool | None,
+        Field(
+            description=(
+                "Whether to use stateful conversation mode. When True (default), the server "
+                "tracks conversation history."
+            )
+        ),
+    ] = None,
+    references: Annotated[
+        list[str] | None,
+        Field(
+            description=(
+                "Optional list of reference sources or context to include when generating "
+                "the answer."
+            )
+        ),
+    ] = None,
+) -> str:
+    """Create an AI conversation using the AiChat v2 API (/aichat2/conversations).
+
+    Supports a wider range of models than v1, including Claude, Gemini, Grok-4, and Kimi,
+    in addition to GPT-4/4o, DeepSeek, and GLM.
+
+    Use this when:
+    - You need Claude, Gemini, Grok-4, or Kimi models
+    - You want access to newer or less common model variants
+    - You need to ask a question to a multi-provider AI model
+
+    Returns:
+        JSON response containing the conversation ID and the generated answer.
+    """
+    try:
+        result = await client.create_conversation_v2(
+            model=model,
+            question=question,
             conversation_id=conversation_id,
             preset=preset,
             stateful=stateful,

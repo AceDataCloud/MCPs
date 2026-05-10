@@ -44,27 +44,53 @@ mcp-aichat --transport http --port 8000
 
 | Tool | Description |
 |------|-------------|
-| `aichat_create_conversation` | Create an AI conversation with any supported model |
+| `aichat_create_conversation` | Create an AI conversation with v1 models (GPT-4/5, o-series, DeepSeek, Grok, GLM) |
+| `aichat_create_conversation_v2` | Create an AI conversation with v2 models (Claude, Gemini, Grok-4, Kimi, and more) |
 | `aichat_list_models` | List all available AI models |
 | `aichat_get_usage_guide` | Get API usage guide |
 
 ## Supported Models
 
-### OpenAI
+### v1 Endpoint (`aichat_create_conversation`)
+
+#### OpenAI
 - GPT-5 series: gpt-5.5, gpt-5.4, gpt-5.2, gpt-5.1, gpt-5, gpt-5-mini, gpt-5-nano
 - GPT-4.1 series: gpt-4.1, gpt-4.1-mini, gpt-4.1-nano
 - GPT-4o series: gpt-4o, gpt-4o-mini, gpt-4o-all, gpt-4o-image
 - GPT-4 series: gpt-4, gpt-4-turbo, gpt-4-vision-preview
 - o-series: o1, o1-mini, o1-pro, o3, o3-mini, o3-pro, o4-mini
 
-### DeepSeek
+#### DeepSeek
 - deepseek-r1, deepseek-r1-0528, deepseek-v3, deepseek-v3-250324
 
-### xAI
+#### xAI
 - grok-3
 
-### Zhipu AI
+#### Zhipu AI
 - glm-5.1, glm-4.7, glm-4.6, glm-4.5-air, glm-3-turbo
+
+### v2 Endpoint (`aichat_create_conversation_v2`)
+
+#### OpenAI
+- GPT-4/4o/5: gpt-4, gpt-4.1, gpt-4o, gpt-4o-mini, gpt-5-all, gpt-5.2-pro, gpt-image-1
+
+#### Anthropic
+- claude-opus-4-7, claude-opus-4-6, claude-sonnet-4-6, claude-sonnet-4-5-20250929, and more
+
+#### Google
+- gemini-3.1-pro, gemini-3.1-pro-preview, gemini-2.5-flash-lite, and more
+
+#### xAI
+- grok-4, grok-4-0709, grok-4-1-fast, grok-3, grok-3-fast, grok-3-mini, and more
+
+#### Kimi (Moonshot)
+- kimi-k2.5, kimi-k2-thinking, kimi-k2-turbo-preview, and more
+
+#### DeepSeek
+- deepseek-chat, deepseek-r1, deepseek-v3, deepseek-v3.2-exp, deepseek-reasoner, and more
+
+#### Zhipu AI
+- glm-5.1, glm-5, glm-4.7, glm-4.6, glm-4.5, glm-4.5-air, glm-3-turbo, and more
 
 ## License
 
