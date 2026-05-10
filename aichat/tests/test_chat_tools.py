@@ -12,6 +12,18 @@ class TestAiChatCreateConversation:
     """Tests for aichat_create_conversation tool."""
 
     @pytest.mark.asyncio
+    async def test_chat_requires_question_message_or_tool_results(self) -> None:
+        """Test that chat requests still require some user input."""
+        result = await aichat_create_conversation(
+            question=None,
+            model="gpt-4.1",
+        )
+
+        payload = json.loads(result)
+        assert payload["error"] == "Validation Error"
+        assert "require question, message, or tool_results" in payload["message"]
+
+    @pytest.mark.asyncio
     async def test_accepts_multimodal_message_without_question(self) -> None:
         """Test that multimodal chat requests do not require the legacy question field."""
         expected = {"id": "conversation-1", "answer": "Done"}

@@ -149,6 +149,14 @@ async def aichat_create_conversation(
     Returns:
         JSON response containing the API result.
     """
+    if action in (None, "chat") and question is None and message is None and tool_results is None:
+        return json.dumps(
+            {
+                "error": "Validation Error",
+                "message": "chat requests require question, message, or tool_results",
+            }
+        )
+
     try:
         result = await client.create_conversation(
             question=question,
