@@ -173,6 +173,7 @@ class FishClient:
     async def generate_audio(self, **kwargs: Any) -> dict[str, Any]:
         """Generate audio (TTS) using the /fish/tts endpoint."""
         model = kwargs.pop("model", None)
+        # Docs OpenAPI defines `model` as an optional request header for /fish/tts.
         logger.info(f"🎙️ Generating audio with reference_id: {kwargs.get('reference_id', '')}")
         request_headers = {"model": model} if model else None
         return await self.request(

@@ -132,6 +132,20 @@ async def fish_generate_audio(
             reference_id="d7900c21663f485ab63ebdb7e5905036"
         )
     """
+    if text is not None and prompt is not None and text != prompt:
+        return json.dumps(
+            {
+                "error": "Validation Error",
+                "message": "Provide either text or prompt (deprecated), not both.",
+            }
+        )
+    if reference_id is not None and voice_id is not None and reference_id != voice_id:
+        return json.dumps(
+            {
+                "error": "Validation Error",
+                "message": "Provide either reference_id or voice_id (deprecated), not both.",
+            }
+        )
     request_text = text or prompt
     request_reference_id = reference_id or voice_id
     if not request_text:
