@@ -1,7 +1,7 @@
 """Chat conversation tools for AiChat API."""
 
 import json
-from typing import Annotated
+from typing import Annotated, Any
 
 from pydantic import Field
 
@@ -14,9 +14,9 @@ from core.types import DEFAULT_MODEL, AiChatModel
 @mcp.tool()
 async def aichat_create_conversation(
     question: Annotated[
-        str,
+        str | None,
         Field(description=("The prompt or question to be answered by the AI model. Required.")),
-    ],
+    ] = None,
     model: Annotated[
         AiChatModel,
         Field(
@@ -27,6 +27,15 @@ async def aichat_create_conversation(
             )
         ),
     ] = DEFAULT_MODEL,
+    action: Annotated[
+        str | None,
+        Field(
+            description=(
+                "Operation to perform: chat, retrieve, retrieve_batch, update, or delete. "
+                "Defaults to chat."
+            )
+        ),
+    ] = None,
     conversation_id: Annotated[
         str | None,
         Field(
@@ -34,6 +43,14 @@ async def aichat_create_conversation(
                 "The unique identifier of an existing conversation to continue. "
                 "If provided, the AI will respond in the context of the prior conversation. "
                 "Leave empty to start a new conversation."
+            )
+        ),
+    ] = None,
+    message: Annotated[
+        str | list[dict[str, Any]] | None,
+        Field(
+            description=(
+                "Optional multimodal user content for this turn, as a string or content blocks."
             )
         ),
     ] = None,
@@ -61,6 +78,42 @@ async def aichat_create_conversation(
             )
         ),
     ] = None,
+    max_turns: Annotated[
+        int | None,
+        Field(description="Optional max number of turns for agentic mode."),
+    ] = None,
+    tool_results: Annotated[
+        list[dict[str, Any]] | None,
+        Field(description="Optional prior tool outputs to inject into this turn."),
+    ] = None,
+    messages: Annotated[
+        list[dict[str, Any]] | None,
+        Field(description="Optional full message list for update operations."),
+    ] = None,
+    title: Annotated[
+        str | None,
+        Field(description="Optional conversation title (mainly for update)."),
+    ] = None,
+    user_id: Annotated[
+        str | None,
+        Field(description="Optional user ID for list/retrieve_batch filtering."),
+    ] = None,
+    application_id: Annotated[
+        str | None,
+        Field(description="Optional application ID for retrieve_batch filtering."),
+    ] = None,
+    model_group: Annotated[
+        str | None,
+        Field(description="Optional model group filter for retrieve_batch."),
+    ] = None,
+    offset: Annotated[
+        int | None,
+        Field(description="Optional pagination offset for retrieve_batch."),
+    ] = None,
+    limit: Annotated[
+        int | None,
+        Field(description="Optional pagination limit for retrieve_batch."),
+    ] = None,
 ) -> str:
     """Create an AI conversation using the AiChat API.
 
@@ -75,17 +128,30 @@ async def aichat_create_conversation(
     Returns:
         JSON response containing the conversation ID and the generated answer.
     """
-    if not question:
-        return json.dumps({"error": "Validation Error", "message": "question is required"})
+    if action in (None, "chat") and not question and not message:
+        return json.dumps(
+            {"error": "Validation Error", "message": "question or message is required for chat"}
+        )
 
     try:
         result = await client.create_conversation(
             question=question,
             model=model,
+            action=action,
             conversation_id=conversation_id,
+            message=message,
             preset=preset,
             stateful=stateful,
             references=references,
+            max_turns=max_turns,
+            tool_results=tool_results,
+            messages=messages,
+            title=title,
+            user_id=user_id,
+            application_id=application_id,
+            model_group=model_group,
+            offset=offset,
+            limit=limit,
         )
 
         if not result:

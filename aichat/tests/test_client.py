@@ -151,6 +151,7 @@ class TestAiChatClient:
             )
 
             call_args = mock_instance.post.call_args
+            assert call_args[0][0] == "https://api.test.com/aichat2/conversations"
             payload = call_args[1]["json"]
             assert payload["question"] == "What is AI?"
             assert payload["model"] == "gpt-4o"
@@ -158,3 +159,45 @@ class TestAiChatClient:
             assert payload["references"] == ["https://example.com"]
             assert "id" not in payload
             assert "preset" not in payload
+
+    @pytest.mark.asyncio
+    async def test_create_conversation_v2_optional_fields(self, client, mock_conversation_response):
+        """Test new v2 fields are included when provided."""
+        mock_response = MagicMock()
+        mock_response.status_code = 200
+        mock_response.json.return_value = mock_conversation_response
+
+        with patch("httpx.AsyncClient") as mock_http_client:
+            mock_instance = AsyncMock()
+            mock_instance.post.return_value = mock_response
+            mock_http_client.return_value.__aenter__.return_value = mock_instance
+
+            await client.create_conversation(
+                question=None,
+                model="gpt-4.1",
+                action="retrieve_batch",
+                message="hello",
+                max_turns=8,
+                tool_results=[{"name": "search"}],
+                messages=[{"role": "user", "content": "hi"}],
+                title="title",
+                user_id="user-1",
+                application_id="app-1",
+                model_group="gpt",
+                offset=10,
+                limit=20,
+            )
+
+            payload = mock_instance.post.call_args[1]["json"]
+            assert payload["action"] == "retrieve_batch"
+            assert payload["message"] == "hello"
+            assert payload["max_turns"] == 8
+            assert payload["tool_results"] == [{"name": "search"}]
+            assert payload["messages"] == [{"role": "user", "content": "hi"}]
+            assert payload["title"] == "title"
+            assert payload["user_id"] == "user-1"
+            assert payload["application_id"] == "app-1"
+            assert payload["model_group"] == "gpt"
+            assert payload["offset"] == 10
+            assert payload["limit"] == 20
+            assert "question" not in payload

@@ -83,12 +83,23 @@ class AiChatClient:
 
     async def create_conversation(
         self,
-        question: str,
+        question: str | None,
         model: str,
+        action: str | None = None,
         conversation_id: str | None = None,
+        message: str | list[dict[str, Any]] | None = None,
         preset: str | None = None,
         stateful: bool | None = None,
         references: list[str] | None = None,
+        max_turns: int | None = None,
+        tool_results: list[dict[str, Any]] | None = None,
+        messages: list[dict[str, Any]] | None = None,
+        title: str | None = None,
+        user_id: str | None = None,
+        application_id: str | None = None,
+        model_group: str | None = None,
+        offset: int | None = None,
+        limit: int | None = None,
     ) -> dict[str, Any]:
         """Create an AI conversation.
 
@@ -103,23 +114,45 @@ class AiChatClient:
         Returns:
             API response dictionary containing the answer and conversation ID.
         """
-        payload: dict[str, Any] = {
-            "question": question,
-            "model": model,
-        }
+        payload: dict[str, Any] = {"model": model}
+        if question is not None:
+            payload["question"] = question
+        if action is not None:
+            payload["action"] = action
         if conversation_id is not None:
             payload["id"] = conversation_id
+        if message is not None:
+            payload["message"] = message
         if preset is not None:
             payload["preset"] = preset
         if stateful is not None:
             payload["stateful"] = stateful
         if references is not None:
             payload["references"] = references
+        if max_turns is not None:
+            payload["max_turns"] = max_turns
+        if tool_results is not None:
+            payload["tool_results"] = tool_results
+        if messages is not None:
+            payload["messages"] = messages
+        if title is not None:
+            payload["title"] = title
+        if user_id is not None:
+            payload["user_id"] = user_id
+        if application_id is not None:
+            payload["application_id"] = application_id
+        if model_group is not None:
+            payload["model_group"] = model_group
+        if offset is not None:
+            payload["offset"] = offset
+        if limit is not None:
+            payload["limit"] = limit
 
         logger.info(f"Creating conversation with model: {model}")
-        logger.debug(f"Question: {question[:100]}...")
+        if question:
+            logger.debug(f"Question: {question[:100]}...")
 
-        url = f"{self.base_url}/aichat/conversations"
+        url = f"{self.base_url}/aichat2/conversations"
 
         logger.info(f"POST {url}")
         logger.debug(f"Request payload: {json.dumps(payload, ensure_ascii=False, indent=2)}")
@@ -146,7 +179,7 @@ class AiChatClient:
             except httpx.TimeoutException as e:
                 logger.error(f"Request timeout after {self.timeout}s: {e}")
                 raise AiChatTimeoutError(
-                    f"Request to /aichat/conversations timed out after {self.timeout}s"
+                    f"Request to /aichat2/conversations timed out after {self.timeout}s"
                 ) from e
 
             except AiChatError:

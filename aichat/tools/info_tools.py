@@ -1,6 +1,9 @@
 """Informational tools for AiChat API."""
 
+from typing import get_args
+
 from core.server import mcp
+from core.types import AiChatModel
 
 
 @mcp.tool()
@@ -13,105 +16,8 @@ async def aichat_list_models() -> str:
     Returns:
         Formatted list of available models with descriptions.
     """
-    # Last updated: 2026-04-25
-    return """# Available AiChat Models
-
-## OpenAI GPT-5 Series
-- gpt-5.5
-- gpt-5.5-pro
-- gpt-5.4
-- gpt-5.4-pro
-- gpt-5.2
-- gpt-5.1
-- gpt-5.1-all
-- gpt-5
-- gpt-5-mini
-- gpt-5-nano
-- gpt-5-all
-
-## OpenAI GPT-4.1 Series
-- gpt-4.1 (recommended default)
-- gpt-4.1-2025-04-14
-- gpt-4.1-mini
-- gpt-4.1-mini-2025-04-14
-- gpt-4.1-nano
-- gpt-4.1-nano-2025-04-14
-
-## OpenAI GPT-4.5 Series
-- gpt-4.5-preview
-- gpt-4.5-preview-2025-02-27
-
-## OpenAI GPT-4o Series
-- gpt-4o
-- gpt-4o-2024-05-13
-- gpt-4o-2024-08-06
-- gpt-4o-2024-11-20
-- gpt-4o-all
-- gpt-4o-image
-- gpt-4o-mini
-- gpt-4o-mini-2024-07-18
-- gpt-4o-mini-search-preview
-- gpt-4o-mini-search-preview-2025-03-11
-- gpt-4o-search-preview
-- gpt-4o-search-preview-2025-03-11
-
-## OpenAI GPT-4 Series
-- gpt-4
-- gpt-4-all
-- gpt-4-turbo
-- gpt-4-turbo-preview
-- gpt-4-vision-preview
-
-## OpenAI o-Series (Reasoning)
-- o1
-- o1-2024-12-17
-- o1-all
-- o1-mini
-- o1-mini-2024-09-12
-- o1-mini-all
-- o1-preview
-- o1-preview-2024-09-12
-- o1-preview-all
-- o1-pro
-- o1-pro-2025-03-19
-- o1-pro-all
-- o3
-- o3-2025-04-16
-- o3-all
-- o3-mini
-- o3-mini-2025-01-31
-- o3-mini-2025-01-31-high
-- o3-mini-2025-01-31-low
-- o3-mini-2025-01-31-medium
-- o3-mini-all
-- o3-mini-high
-- o3-mini-high-all
-- o3-mini-low
-- o3-mini-medium
-- o3-pro
-- o3-pro-2025-06-10
-- o4-mini
-- o4-mini-2025-04-16
-- o4-mini-all
-- o4-mini-high-all
-
-## DeepSeek
-- deepseek-r1
-- deepseek-r1-0528
-- deepseek-v3
-- deepseek-v3-250324
-- deepseek-v4-flash
-
-## xAI Grok
-- grok-3
-
-## Zhipu GLM
-- glm-5.1
-- glm-4.7
-- glm-4.6
-- glm-4.5-air
-- glm-3-turbo
-"""
+    model_lines = "\n".join(f"- {model}" for model in get_args(AiChatModel))
+    return f"# Available AiChat Models\n\n{model_lines}"
 
 
 @mcp.tool()
@@ -124,7 +30,6 @@ async def aichat_get_usage_guide() -> str:
     Returns:
         Complete usage guide for AiChat tools.
     """
-    # Last updated: 2026-04-25
     return """# AiChat Tools Usage Guide
 
 ## Available Tools
@@ -134,11 +39,14 @@ Create an AI conversation with any supported model.
 
 **Parameters:**
 - `question` (required): The prompt or question to ask the AI model.
+- `message` (optional): Multi-modal message content for chat turns.
 - `model` (optional): The AI model to use. Default: `gpt-4.1`
+- `action` (optional): One of `chat`, `retrieve`, `retrieve_batch`, `update`, `delete`.
 - `conversation_id` (optional): Continue an existing conversation by providing its ID.
 - `preset` (optional): Preset model configuration name.
 - `stateful` (optional): Enable stateful conversation mode (boolean).
 - `references` (optional): List of reference sources for context.
+- `max_turns`, `tool_results`, `messages`, `title`, `user_id`, `application_id`, `model_group`, `offset`, `limit` (optional): Advanced fields for v2 endpoint behavior.
 
 ### aichat_list_models
 List all available AI models grouped by provider.
