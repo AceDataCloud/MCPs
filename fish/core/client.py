@@ -181,11 +181,12 @@ class FishClient:
 
     async def generate_audio(self, **kwargs: Any) -> dict[str, Any]:
         """Generate audio (TTS) using the /fish/tts endpoint."""
-        model = kwargs.pop("model", settings.default_model)
+        model = kwargs.get("model", settings.default_model)
+        request_payload = {k: v for k, v in kwargs.items() if k != "model"}
         logger.info("🎙️ Generating audio via /fish/tts")
         return await self.request(
             "/fish/tts",
-            self._with_async_callback(kwargs),
+            self._with_async_callback(request_payload),
             extra_headers={"model": model},
         )
 

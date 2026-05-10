@@ -173,7 +173,7 @@ async def fish_generate_audio(
         payload["callback_url"] = callback_url
 
     try:
-        # `client.generate_audio` extracts `model` from kwargs and sends it as a request header.
+        # Pass `model` separately so client.generate_audio can map it to the request header.
         result = await client.generate_audio(model=model, **payload)
 
         if not result:
