@@ -173,6 +173,7 @@ async def fish_generate_audio(
         payload["callback_url"] = callback_url
 
     try:
+        # OpenAPI defines `model` as a request header, not a JSON body field.
         result = await client.generate_audio(model=model, **payload)
 
         if not result:

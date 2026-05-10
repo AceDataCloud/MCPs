@@ -175,12 +175,12 @@ class FishClient:
 
     async def generate_audio(self, **kwargs: Any) -> dict[str, Any]:
         """Generate audio (TTS) using the /fish/tts endpoint."""
-        model = kwargs.pop("model", None)
+        model = kwargs.pop("model", settings.default_model)
         logger.info("🎙️ Generating audio via /fish/tts")
         return await self.request(
             "/fish/tts",
             self._with_async_callback(kwargs),
-            extra_headers={"model": model} if model else None,
+            extra_headers={"model": model},
         )
 
     async def create_voice(self, **kwargs: Any) -> dict[str, Any]:
