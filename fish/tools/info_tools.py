@@ -1,5 +1,12 @@
 """Informational tools for Fish API."""
 
+import json
+from typing import Annotated
+
+from pydantic import Field
+
+from core.client import client
+from core.exceptions import FishAPIError, FishAuthError
 from core.server import mcp
 
 
@@ -20,19 +27,20 @@ async def fish_get_usage_guide() -> str:
 
 ### Audio Generation
 **fish_generate_audio** - Convert text to speech using a voice
-- prompt: The text to convert to speech (required)
-- voice_id: The voice ID to use (required)
-- action: "speech" (required, default)
-- model: "fish-tts" (optional, default)
+- text: The text to synthesize (required)
+- reference_id: Voice model ID (optional)
+- model: `s1` or `s2-pro` (optional, default `s2-pro`)
+- format: `mp3`, `wav`, `pcm`, `opus` (optional)
 - callback_url: Async callback URL (optional)
 
-### Voice Cloning
-**fish_create_voice** - Clone a voice from an audio sample
-- voice_url: Public URL of an audio sample (required)
-- title: Name for the voice (optional)
-- description: Description of the voice (optional)
-- image_url: Cover image URL for the voice (optional)
-- callback_url: Async callback URL (optional)
+### Voice Models
+**fish_list_models** - Query available voice models
+- page_size: Number of items per page (optional, default 10)
+- page_number: Page number (optional, default 1)
+- title/tag/language/...: Optional query filters
+
+**fish_get_model** - Query a single voice model detail by model ID
+- model_id: Voice model ID (required)
 
 ### Task Status
 **fish_get_task** - Check status of a single task
@@ -46,17 +54,14 @@ async def fish_get_usage_guide() -> str:
 ### Generate Speech
 ```
 fish_generate_audio(
-    prompt="Hello, welcome to our service!",
-    voice_id="d7900c21663f485ab63ebdb7e5905036"
+    text="Hello, welcome to our service!",
+    reference_id="d7900c21663f485ab63ebdb7e5905036"
 )
 ```
 
-### Clone a Voice
+### Query Models
 ```
-fish_create_voice(
-    voice_url="https://example.com/my-voice-sample.mp3",
-    title="My Custom Voice"
-)
+fish_list_models(page_size=10, page_number=1)
 ```
 
 ### Check Task Status
@@ -88,25 +93,102 @@ Poll fish_get_task until the state is 'complete':
 
 
 @mcp.tool()
-async def fish_list_models() -> str:
-    """List available Fish TTS models.
+async def fish_list_models(
+    page_size: Annotated[
+        int | None,
+        Field(description="Number of items per page. Default is 10."),
+    ] = None,
+    page_number: Annotated[
+        int | None,
+        Field(description="Page number. Default is 1."),
+    ] = None,
+    title: Annotated[
+        str | None,
+        Field(description="Filter by model title."),
+    ] = None,
+    tag: Annotated[
+        str | None,
+        Field(description="Filter by tag."),
+    ] = None,
+    self_only: Annotated[
+        bool | None,
+        Field(
+            description=(
+                "Filter to current user's models only. "
+                "Maps to OpenAPI query parameter `self`."
+            )
+        ),
+    ] = None,
+    author_id: Annotated[
+        str | None,
+        Field(description="Filter by author id."),
+    ] = None,
+    language: Annotated[
+        str | None,
+        Field(description="Filter by language."),
+    ] = None,
+    title_language: Annotated[
+        str | None,
+        Field(description="Filter by title language."),
+    ] = None,
+    sort_by: Annotated[
+        str | None,
+        Field(description="Sort strategy."),
+    ] = None,
+) -> str:
+    """List available Fish voice models from /fish/model."""
+    params: dict = {}
+    if page_size is not None:
+        params["page_size"] = page_size
+    if page_number is not None:
+        params["page_number"] = page_number
+    if title is not None:
+        params["title"] = title
+    if tag is not None:
+        params["tag"] = tag
+    if self_only is not None:
+        params["self"] = self_only
+    if author_id is not None:
+        params["author_id"] = author_id
+    if language is not None:
+        params["language"] = language
+    if title_language is not None:
+        params["title_language"] = title_language
+    if sort_by is not None:
+        params["sort_by"] = sort_by
 
-    Returns information about the supported models for Fish TTS.
+    try:
+        result = await client.list_models(**params)
+        if not result:
+            return json.dumps({"error": "No response received from the API."})
+        return json.dumps(result, ensure_ascii=False, indent=2)
+    except FishAuthError as e:
+        return json.dumps({"error": "Authentication Error", "message": e.message})
+    except FishAPIError as e:
+        return json.dumps({"error": "API Error", "message": e.message})
+    except Exception as e:
+        return json.dumps({"error": "Error listing models", "message": str(e)})
 
-    Returns:
-        List of available Fish TTS models with descriptions.
-    """
-    # Last updated: 2026-05-10
-    return """# Available Fish TTS Models
 
-## Models
+@mcp.tool()
+async def fish_get_model(
+    model_id: Annotated[
+        str,
+        Field(description="Model ID to retrieve, from /fish/model/{id}."),
+    ],
+) -> str:
+    """Get a single Fish voice model by model id."""
+    if not model_id:
+        return json.dumps({"error": "Validation Error", "message": "model_id is required"})
 
-| Model     | Description                                      | Default |
-|-----------|--------------------------------------------------|---------|
-| fish-tts  | Fish Audio TTS model with voice cloning support  | ✓       |
-
-## Notes
-- Currently only `fish-tts` is supported
-- The model supports voice cloning via voice_id
-- Use fish_create_voice to create custom voice IDs
-"""
+    try:
+        result = await client.get_model(model_id)
+        if not result:
+            return json.dumps({"error": "No response received from the API."})
+        return json.dumps(result, ensure_ascii=False, indent=2)
+    except FishAuthError as e:
+        return json.dumps({"error": "Authentication Error", "message": e.message})
+    except FishAPIError as e:
+        return json.dumps({"error": "API Error", "message": e.message})
+    except Exception as e:
+        return json.dumps({"error": "Error getting model", "message": str(e)})

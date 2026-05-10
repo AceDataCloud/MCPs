@@ -23,7 +23,7 @@ class Settings:
 
     # Default Model
     default_model: str = field(
-        default_factory=lambda: os.getenv("FISH_DEFAULT_MODEL", "fish-tts")
+        default_factory=lambda: os.getenv("FISH_DEFAULT_MODEL", "s2-pro")
     )
 
     # Request Configuration

@@ -63,6 +63,13 @@ class FishClient:
             "content-type": "application/json",
         }
 
+    def _merge_headers(self, extra_headers: dict[str, str] | None = None) -> dict[str, str]:
+        """Merge standard authentication headers with optional request-specific headers."""
+        headers = self._get_headers()
+        if extra_headers:
+            headers.update({k: v for k, v in extra_headers.items() if v is not None})
+        return headers
+
     def _with_async_callback(self, payload: dict[str, Any]) -> dict[str, Any]:
         """Ensure long-running operations are submitted asynchronously."""
         request_payload = dict(payload)
@@ -97,15 +104,21 @@ class FishClient:
     async def request(
         self,
         endpoint: str,
-        payload: dict[str, Any],
+        payload: dict[str, Any] | None = None,
         timeout: float | None = None,
+        method: str = "POST",
+        params: dict[str, Any] | None = None,
+        extra_headers: dict[str, str] | None = None,
     ) -> dict[str, Any]:
-        """Make a POST request to the Fish API.
+        """Make an HTTP request to the Fish API.
 
         Args:
-            endpoint: API endpoint path (e.g., "/fish/audios")
-            payload: Request body as dictionary
+            endpoint: API endpoint path (e.g., "/fish/tts")
+            payload: Request body as dictionary (for POST requests)
             timeout: Optional timeout override
+            method: HTTP method (POST or GET)
+            params: Query parameters (for GET requests)
+            extra_headers: Optional per-request headers
 
         Returns:
             API response as dictionary
@@ -116,18 +129,24 @@ class FishClient:
             FishTimeoutError: If the request times out
         """
         url = f"{self.base_url}{endpoint}"
+        request_method = method.upper()
         request_timeout = timeout or self.timeout
 
-        logger.info(f"🚀 POST {url}")
-        logger.debug(f"Request payload: {json.dumps(payload, ensure_ascii=False, indent=2)}")
+        logger.info(f"🚀 {request_method} {url}")
+        if payload is not None:
+            logger.debug(f"Request payload: {json.dumps(payload, ensure_ascii=False, indent=2)}")
+        if params is not None:
+            logger.debug(f"Request params: {json.dumps(params, ensure_ascii=False, indent=2)}")
         logger.debug(f"Timeout: {request_timeout}s")
 
         async with httpx.AsyncClient() as http_client:
             try:
-                response = await http_client.post(
+                response = await http_client.request(
+                    request_method,
                     url,
                     json=payload,
-                    headers=self._get_headers(),
+                    params=params,
+                    headers=self._merge_headers(extra_headers),
                     timeout=request_timeout,
                 )
 
@@ -155,9 +174,14 @@ class FishClient:
                 raise FishAPIError(message=str(e)) from e
 
     async def generate_audio(self, **kwargs: Any) -> dict[str, Any]:
-        """Generate audio (TTS) using the audios endpoint."""
-        logger.info(f"🎙️ Generating audio with voice_id: {kwargs.get('voice_id', '')}")
-        return await self.request("/fish/audios", self._with_async_callback(kwargs))
+        """Generate audio (TTS) using the /fish/tts endpoint."""
+        model = kwargs.pop("model", None)
+        logger.info("🎙️ Generating audio via /fish/tts")
+        return await self.request(
+            "/fish/tts",
+            self._with_async_callback(kwargs),
+            extra_headers={"model": model} if model else None,
+        )
 
     async def create_voice(self, **kwargs: Any) -> dict[str, Any]:
         """Create/clone a voice using the voices endpoint."""
@@ -169,6 +193,16 @@ class FishClient:
         task_id = kwargs.get("id") or kwargs.get("ids", [])
         logger.info(f"🔍 Querying task(s): {task_id}")
         return await self.request("/fish/tasks", kwargs)
+
+    async def list_models(self, **kwargs: Any) -> dict[str, Any]:
+        """List available voice models from /fish/model."""
+        logger.info("📚 Listing voice models")
+        return await self.request("/fish/model", method="GET", params=kwargs)
+
+    async def get_model(self, model_id: str) -> dict[str, Any]:
+        """Get a single voice model detail by id from /fish/model/{id}."""
+        logger.info(f"🔎 Getting model detail: {model_id}")
+        return await self.request(f"/fish/model/{model_id}", method="GET")
 
 
 # Global client instance
