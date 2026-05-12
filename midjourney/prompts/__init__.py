@@ -77,8 +77,8 @@ When the user wants to generate images, choose the appropriate tool based on the
 
 ## Midjourney V8/V8.1 Features:
 - **V8.1 is the latest model** - use `version='8.1'` for the newest capabilities
-- **HD Mode** (`hd=True`): Generates 2K resolution images. V8 only. Costs 4x credits.
-- **Quality 4** (`quality='4'`): Ultra-detail mode. V8 only. Costs 4x credits.
+- **HD Mode** (`hd=True`): Generates 2K resolution images. V8/V8.1 only. Costs 4x credits.
+- **Quality 4** (`quality='4'`): Ultra-detail mode. V8/V8.1 only. Costs 4x credits.
 - **HD + Q4 combined**: Maximum quality. Costs 16x credits.
 - **Style Reference** (`style_reference=True`): When prompt uses --sref. V8 premium feature, costs 4x.
 - **Moodboard** (`moodboard=True`): Blending multiple reference images. V8 premium feature, costs 4x.
