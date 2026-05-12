@@ -13,7 +13,7 @@ async def midjourney_list_actions() -> str:
     Returns:
         Categorized list of all actions and their corresponding tools.
     """
-    # Last updated: 2026-04-05
+    # Last updated: 2026-05-12
     return """Available Midjourney Actions and Tools:
 
 Image Generation:
@@ -33,6 +33,9 @@ Video Generation:
 Translation:
 - midjourney_translate: Translate Chinese text to English for prompts
 
+Prompt Utilities:
+- midjourney_shorten: Analyze and shorten a prompt into up to 5 concise candidates
+
 Task Management:
 - midjourney_get_task: Check status of a single generation
 - midjourney_get_tasks_batch: Check status of multiple generations
@@ -47,6 +50,7 @@ Workflow Examples:
 3. Image fusion: midjourney_blend with multiple image URLs
 4. Style transfer: midjourney_with_reference with style prompt
 5. Video creation: midjourney_generate_video → midjourney_extend_video
+6. Prompt refinement: midjourney_shorten → pick best candidate → midjourney_imagine
 """
 
 

@@ -69,6 +69,25 @@ class TestTranslateTools:
         assert len(result) > 0
 
 
+class TestShortenTools:
+    """Integration tests for prompt shortening tools."""
+
+    @requires_api_token
+    @pytest.mark.asyncio
+    async def test_shorten(self) -> None:
+        """Test prompt shortening with real API."""
+        from tools.shorten_tools import midjourney_shorten
+
+        result = await midjourney_shorten(
+            prompt="A breathtaking photograph of a serene mountain lake at sunrise with golden mist rising from the crystal clear water reflecting the snow capped peaks above, shot with a wide angle lens, high dynamic range, 8k resolution, cinematic composition"
+        )
+
+        print("\n=== Shorten Result ===")
+        print(result)
+
+        assert len(result) > 0
+
+
 class TestInfoTools:
     """Integration tests for informational tools."""
 

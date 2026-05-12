@@ -6,6 +6,7 @@ from core.utils import (
     format_describe_result,
     format_edit_result,
     format_imagine_result,
+    format_shorten_result,
     format_task_result,
     format_translate_result,
     format_video_result,
@@ -124,3 +125,22 @@ class TestFormatEditResult:
         result = format_edit_result(mock_error_response)
         data = json.loads(result)
         assert data["success"] is False
+
+
+class TestFormatShortenResult:
+    """Tests for format_shorten_result function."""
+
+    def test_format_success(self, mock_shorten_response):
+        """Test formatting successful shorten response."""
+        result = format_shorten_result(mock_shorten_response)
+        data = json.loads(result)
+        assert "prompts" in data
+        assert len(data["prompts"]) == 5
+        assert "mountain lake" in data["prompts"][0]
+
+    def test_format_empty(self):
+        """Test formatting empty shorten response."""
+        response = {"prompts": []}
+        result = format_shorten_result(response)
+        data = json.loads(result)
+        assert data["prompts"] == []
