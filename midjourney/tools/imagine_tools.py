@@ -49,13 +49,13 @@ async def midjourney_imagine(
     version: Annotated[
         MidjourneyVersion | None,
         Field(
-            description="Midjourney model version to use. '8' is the latest V8 Alpha with HD and ultra quality support. Leave unset to use Midjourney's default."
+            description="Midjourney model version to use. '8.1' is the latest version (HD default, ~3x cheaper than V8). '8' is the prior V8 Alpha with HD/Q4 support. Leave unset to use Midjourney's default."
         ),
     ] = None,
     hd: Annotated[
         bool,
         Field(
-            description="Enable HD mode (V8 only). Generates higher resolution images at 4x cost. Requires version='8'."
+            description="Enable HD mode (V8/V8.1 only). Generates higher resolution images. V8 costs 4x; V8.1 HD is default and ~3x cheaper than V8 HD. Requires version='8' or '8.1'."
         ),
     ] = False,
     quality: Annotated[

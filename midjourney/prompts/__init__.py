@@ -75,14 +75,15 @@ When the user wants to generate images, choose the appropriate tool based on the
 3. Use 'turbo' for faster results (more credits)
 4. Use 'relax' for slower, cheaper generation
 
-## Midjourney V8 (Alpha) Features:
-- **V8 is the latest model** - use `version='8'` for the newest capabilities
-- **HD Mode** (`hd=True`): Generates 2K resolution images. V8 only. Costs 4x credits.
-- **Quality 4** (`quality='4'`): Ultra-detail mode. V8 only. Costs 4x credits.
-- **HD + Q4 combined**: Maximum quality. Costs 16x credits.
-- **Style Reference** (`style_reference=True`): When prompt uses --sref. V8 premium feature, costs 4x.
-- **Moodboard** (`moodboard=True`): Blending multiple reference images. V8 premium feature, costs 4x.
-- V8 does NOT support --iw (image weight) parameter.
+## Midjourney V8.1 / V8 Features:
+- **V8.1 is the latest model** - use `version='8.1'` for the newest capabilities. HD is the default in V8.1.
+- **V8** (`version='8'`) is the prior Alpha; still available but more expensive than V8.1.
+- **HD Mode** (`hd=True`): Generates 2K resolution images. V8/V8.1 only. On V8 costs 4x credits; on V8.1 HD is ~3x cheaper and faster than V8 HD.
+- **Quality 4** (`quality='4'`): Ultra-detail mode. V8/V8.1 only. Costs 4x credits on V8 (cheaper on V8.1).
+- **HD + Q4 combined**: Maximum quality. Costs 16x credits on V8; ~3x cheaper on V8.1.
+- **Style Reference** (`style_reference=True`): When prompt uses --sref. V8 4x; V8.1 significantly cheaper & more stable.
+- **Moodboard** (`moodboard=True`): Blending multiple reference images. V8 4x; V8.1 super stable & cheaper.
+- V8/V8.1 do NOT support --iw (image weight) parameter on V8; image weights are restored on V8.1.
 """
 
 
@@ -130,8 +131,9 @@ def midjourney_workflow_examples() -> str:
 - Use aspect ratio parameter (--ar) for specific dimensions
 - Use --no parameter to exclude unwanted elements
 - For Chinese speakers, offer translation with `midjourney_translate`
-- For V8: use `version='8'` and consider `hd=True` for 2K, `quality='4'` for ultra detail
-- V8 premium features (sref, moodboard, HD, Q4) cost 4x credits each; HD+Q4 together cost 16x
+- For V8.1 (default for new requests): use `version='8.1'`; HD is default and ~3x cheaper than V8 HD. Consider `quality='4'` for ultra detail.
+- For V8 (legacy alpha): use `version='8'` and consider `hd=True` for 2K, `quality='4'` for ultra detail
+- V8 premium features (sref, moodboard, HD, Q4) cost 4x credits each; HD+Q4 together cost 16x. V8.1 is roughly 3x cheaper across these.
 """
 
 
