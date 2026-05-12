@@ -38,6 +38,7 @@ Generate AI images, videos, and manage creative projects directly from Claude, V
 | `midjourney_generate_video` | Generate a video from text prompt and reference image using Midjourney. |
 | `midjourney_extend_video` | Extend an existing Midjourney video to make it longer. |
 | `midjourney_translate` | Translate Chinese text to English for use as Midjourney prompts. |
+| `midjourney_shorten` | Shorten long Midjourney prompts into concise alternatives. |
 | `midjourney_get_seed` | Get the seed value of a previously generated Midjourney image. |
 | `midjourney_get_task` | Query the status and result of a Midjourney generation task. |
 | `midjourney_get_tasks_batch` | Query multiple Midjourney generation tasks at once. |
@@ -347,6 +348,7 @@ Clients connect with their own Bearer token — the server extracts the token fr
 | Tool                   | Description                                   |
 | ---------------------- | --------------------------------------------- |
 | `midjourney_translate` | Translate Chinese text to English for prompts |
+| `midjourney_shorten`   | Shorten long Midjourney prompts               |
 | `midjourney_get_seed`  | Get the seed value of a generated image       |
 
 ### Tasks

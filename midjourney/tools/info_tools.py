@@ -32,6 +32,8 @@ Video Generation:
 
 Translation:
 - midjourney_translate: Translate Chinese text to English for prompts
+- midjourney_shorten: Shorten long prompts into concise alternatives
+- midjourney_get_seed: Get seed values for previously generated images
 
 Task Management:
 - midjourney_get_task: Check status of a single generation

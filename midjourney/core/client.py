@@ -202,6 +202,11 @@ class MidjourneyClient:
         logger.info(f"🌐 Translating content: {kwargs.get('content', '')[:50]}...")
         return await self.request("/midjourney/translate", kwargs)
 
+    async def shorten(self, **kwargs: Any) -> dict[str, Any]:
+        """Shorten long prompts into compact alternatives."""
+        logger.info(f"✂️ Shortening prompt: {kwargs.get('prompt', '')[:50]}...")
+        return await self.request("/midjourney/shorten", kwargs)
+
     async def get_seed(self, **kwargs: Any) -> dict[str, Any]:
         """Get seed value for a generated image."""
         logger.info(f"🌱 Getting seed for image: {kwargs.get('image_id', '')}")

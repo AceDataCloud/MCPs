@@ -128,6 +128,8 @@ Environment Variables:
     safe_print("    - midjourney_generate_video")
     safe_print("    - midjourney_extend_video")
     safe_print("    - midjourney_translate")
+    safe_print("    - midjourney_shorten")
+    safe_print("    - midjourney_get_seed")
     safe_print("    - midjourney_get_task")
     safe_print("    - midjourney_get_tasks_batch")
     safe_print("    - midjourney_list_actions")
@@ -209,6 +211,14 @@ Environment Variables:
                             },
                             {"name": "midjourney_extend_video", "description": "Extend a video"},
                             {"name": "midjourney_translate", "description": "Translate prompts"},
+                            {
+                                "name": "midjourney_shorten",
+                                "description": "Shorten long Midjourney prompts",
+                            },
+                            {
+                                "name": "midjourney_get_seed",
+                                "description": "Get seed from generated image",
+                            },
                             {"name": "midjourney_get_task", "description": "Query task status"},
                             {
                                 "name": "midjourney_get_tasks_batch",
