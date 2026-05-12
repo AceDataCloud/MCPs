@@ -125,6 +125,7 @@ Environment Variables:
     safe_print("    - midjourney_with_reference")
     safe_print("    - midjourney_describe")
     safe_print("    - midjourney_edit")
+    safe_print("    - midjourney_shorten")
     safe_print("    - midjourney_generate_video")
     safe_print("    - midjourney_extend_video")
     safe_print("    - midjourney_translate")
