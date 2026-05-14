@@ -21,9 +21,7 @@ from core.types import (
 async def fish_generate_audio(
     text: Annotated[
         str | None,
-        Field(
-            description="The text to synthesize. Required."
-        ),
+        Field(description="The text to synthesize. Required."),
     ] = None,
     reference_id: Annotated[
         str | None,

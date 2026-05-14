@@ -1,7 +1,7 @@
 """Extract and render tools for WebExtrator API."""
 
 import json
-from typing import Annotated
+from typing import Annotated, cast
 
 from pydantic import Field
 
@@ -108,7 +108,7 @@ async def webextrator_extract(
             timeout=timeout,
             delay=delay,
             wait_for_selector=wait_for_selector,
-            block_resources=block_resources,
+            block_resources=cast(list[str] | None, block_resources),
             headers=headers,
             user_agent=user_agent,
             callback_url=callback_url,
@@ -204,7 +204,7 @@ async def webextrator_render(
             timeout=timeout,
             delay=delay,
             wait_for_selector=wait_for_selector,
-            block_resources=block_resources,
+            block_resources=cast(list[str] | None, block_resources),
             headers=headers,
             user_agent=user_agent,
             callback_url=callback_url,

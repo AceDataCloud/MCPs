@@ -22,9 +22,7 @@ class Settings:
     api_token: str = field(default_factory=lambda: os.getenv("ACEDATACLOUD_API_TOKEN", ""))
 
     # Default Model
-    default_model: str = field(
-        default_factory=lambda: os.getenv("FISH_DEFAULT_MODEL", "s2-pro")
-    )
+    default_model: str = field(default_factory=lambda: os.getenv("FISH_DEFAULT_MODEL", "s2-pro"))
 
     # Request Configuration
     request_timeout: float = field(
