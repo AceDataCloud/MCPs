@@ -167,7 +167,9 @@ async def kling_generate_video_from_image(
     ] = DEFAULT_MODEL,
     mode: Annotated[
         Mode,
-        Field(description="Generation mode. 'std' (standard, default), 'pro' (higher quality), or '4k' (native 4K, only for kling-v3 and kling-v3-omni)."),
+        Field(
+            description="Generation mode. 'std' (standard, default), 'pro' (higher quality), or '4k' (native 4K, only for kling-v3 and kling-v3-omni)."
+        ),
     ] = DEFAULT_MODE,
     aspect_ratio: Annotated[
         AspectRatio,
@@ -290,7 +292,9 @@ async def kling_extend_video(
     ] = DEFAULT_MODEL,
     mode: Annotated[
         Mode,
-        Field(description="Generation mode. 'std' (standard, default), 'pro' (higher quality), or '4k' (native 4K, only for kling-v3 and kling-v3-omni)."),
+        Field(
+            description="Generation mode. 'std' (standard, default), 'pro' (higher quality), or '4k' (native 4K, only for kling-v3 and kling-v3-omni)."
+        ),
     ] = DEFAULT_MODE,
     negative_prompt: Annotated[
         str | None,

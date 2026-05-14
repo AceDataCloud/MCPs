@@ -79,23 +79,15 @@ async def glm_chat_completions(
     ] = None,
     response_format: Annotated[
         dict[str, Any] | None,
-        Field(description="Response format specification (e.g. {\"type\": \"json_object\"})."),
+        Field(description='Response format specification (e.g. {"type": "json_object"}).'),
     ] = None,
     reasoning_effort: Annotated[
         ReasoningEffort | None,
-        Field(
-            description=(
-                "Reasoning effort level: minimal, low, medium, high. Default medium."
-            )
-        ),
+        Field(description=("Reasoning effort level: minimal, low, medium, high. Default medium.")),
     ] = None,
     service_tier: Annotated[
         ServiceTier | None,
-        Field(
-            description=(
-                "Service tier: auto, default, flex, scale, priority. Default auto."
-            )
-        ),
+        Field(description=("Service tier: auto, default, flex, scale, priority. Default auto.")),
     ] = None,
     user: Annotated[
         str | None,
