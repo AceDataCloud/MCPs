@@ -210,7 +210,7 @@ async def openai_get_usage_guide() -> str:
 - trace_ids: List of custom trace IDs
 - application_id: List all tasks for an application
 - user_id: List all tasks for an end user
-- type: Filter by type (e.g. 'images_generations', 'images_edits')
+- type: Filter by type ('images', 'images_generations', 'images_edits')
 - offset / limit: Pagination (default: 0 / 12)
 - created_at_min / created_at_max: Unix timestamp range filter
 

@@ -1,7 +1,7 @@
 """Tasks API tools for OpenAI."""
 
 import json
-from typing import Annotated, Any
+from typing import Annotated, Any, Literal
 
 from pydantic import Field
 
@@ -96,11 +96,11 @@ async def openai_list_tasks(
         Field(description="List all tasks belonging to the specified end user."),
     ] = None,
     type: Annotated[
-        str | None,
+        Literal["images", "images_generations", "images_edits"] | None,
         Field(
             description=(
-                "Filter by upstream type, e.g. 'images_generations', "
-                "'images_edits', 'chat_completions_image'."
+                "Filter by upstream type. Options: 'images', "
+                "'images_generations', 'images_edits'."
             )
         ),
     ] = None,
