@@ -45,6 +45,7 @@ mcp-aichat --transport http --port 8000
 | Tool | Description |
 |------|-------------|
 | `aichat_create_conversation` | Create an AI conversation with any supported model |
+| `aichat_create_conversation_v2` | Create/manage conversations via `/aichat2/conversations` |
 | `aichat_list_models` | List all available AI models |
 | `aichat_get_usage_guide` | Get API usage guide |
 
