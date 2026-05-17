@@ -140,6 +140,16 @@ Create an AI conversation with any supported model.
 - `stateful` (optional): Enable stateful conversation mode (boolean).
 - `references` (optional): List of reference sources for context.
 
+### aichat_create_conversation_v2
+Create/manage conversations via `/aichat2/conversations`.
+
+**Common parameters:**
+- `model` (required): Model to use.
+- `action` (optional): `chat` (default), `retrieve`, `retrieve_batch`, `update`, `delete`.
+- `id` (optional): Conversation ID for retrieve/update/delete.
+- `question` (optional): Prompt for chat action.
+- `messages` (optional): Messages payload for update/action workflows.
+
 ### aichat_list_models
 List all available AI models grouped by provider.
 

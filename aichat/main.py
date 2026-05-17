@@ -117,6 +117,7 @@ Environment Variables:
     safe_print("")
     safe_print("  Available tools:")
     safe_print("    - aichat_create_conversation")
+    safe_print("    - aichat_create_conversation_v2")
     safe_print("    - aichat_list_models")
     safe_print("    - aichat_get_usage_guide")
     safe_print("")
@@ -160,6 +161,10 @@ Environment Variables:
                             {
                                 "name": "aichat_create_conversation",
                                 "description": "Create an AI conversation with any supported model",
+                            },
+                            {
+                                "name": "aichat_create_conversation_v2",
+                                "description": "Create/manage conversations with the aichat2 endpoint",
                             },
                             {
                                 "name": "aichat_list_models",

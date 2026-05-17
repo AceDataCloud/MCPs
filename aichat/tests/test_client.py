@@ -158,3 +158,40 @@ class TestAiChatClient:
             assert payload["references"] == ["https://example.com"]
             assert "id" not in payload
             assert "preset" not in payload
+
+    @pytest.mark.asyncio
+    async def test_create_conversation_v2_success(self, client, mock_conversation_response):
+        """Test successful aichat2 conversation request."""
+        mock_response = MagicMock()
+        mock_response.status_code = 200
+        mock_response.json.return_value = mock_conversation_response
+
+        with patch("httpx.AsyncClient") as mock_http_client:
+            mock_instance = AsyncMock()
+            mock_instance.post.return_value = mock_response
+            mock_http_client.return_value.__aenter__.return_value = mock_instance
+
+            result = await client.create_conversation_v2(
+                model="gpt-4.1",
+                action="chat",
+                question="Hello",
+                offset=0,
+                limit=100,
+            )
+            assert result == mock_conversation_response
+
+            call_args = mock_instance.post.call_args
+            assert call_args[1]["json"]["model"] == "gpt-4.1"
+            assert call_args[1]["json"]["action"] == "chat"
+            assert call_args[1]["json"]["question"] == "Hello"
+
+    @pytest.mark.asyncio
+    async def test_create_conversation_v2_timeout(self, client):
+        """Test aichat2 timeout handling."""
+        with patch("httpx.AsyncClient") as mock_http_client:
+            mock_instance = AsyncMock()
+            mock_instance.post.side_effect = httpx.TimeoutException("Timeout")
+            mock_http_client.return_value.__aenter__.return_value = mock_instance
+
+            with pytest.raises(AiChatTimeoutError, match="/aichat2/conversations"):
+                await client.create_conversation_v2(model="gpt-4.1")
