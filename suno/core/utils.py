@@ -17,6 +17,9 @@ def _with_submission_guidance(
         "task_id": task_id,
         "poll_tool": poll_tool,
         "batch_poll_tool": batch_poll_tool,
+        "recommended_action": "poll",
+        "should_poll": True,
+        "terminal_state_reached": False,
         "polling_interval_seconds": 15,
         "max_poll_attempts": 100,
         "expected_wait_seconds": 600,
@@ -50,15 +53,24 @@ def _with_task_guidance(
             "task_id": task_id,
             "state": state,
             "is_complete": True,
+            "is_failed": False,
+            "should_poll": False,
+            "terminal_state_reached": True,
+            "recommended_action": "stop",
             "note": "Task is complete. The audio URLs are final and ready to present to the user.",
         }
     else:
+        is_failed = str(state).lower() in {"failed", "error", "cancelled", "canceled"}
         payload["mcp_task_polling"] = {
             "task_id": task_id,
             "poll_tool": poll_tool,
             "batch_poll_tool": batch_poll_tool,
             "state": state,
             "is_complete": False,
+            "is_failed": is_failed,
+            "should_poll": not is_failed,
+            "terminal_state_reached": is_failed,
+            "recommended_action": "stop" if is_failed else "poll",
             "polling_interval_seconds": 15,
             "max_poll_attempts": 100,
             "next_step": (
