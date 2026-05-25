@@ -65,7 +65,7 @@ def _with_task_guidance(
         "polling_interval_seconds": 15,
         "max_poll_attempts": 100,
         "next_step": (
-            (
+
                 "Task is complete. Stop polling and present final media URLs to the user."
                 if is_complete
                 else (
@@ -79,7 +79,7 @@ def _with_task_guidance(
                         f"You should poll at least 100 times before considering the task stuck."
                     )
                 )
-            )
+
         ),
     }
     return payload
