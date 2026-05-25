@@ -44,9 +44,15 @@ def _with_task_guidance(
     state = str(payload.get("state", "")).lower()
     response = payload.get("response", {})
     response_success = response.get("success", False) if isinstance(response, dict) else False
-    top_level_success = payload.get("success", False) if isinstance(payload.get("success", False), bool) else False
+    top_level_success = (
+        payload.get("success", False) if isinstance(payload.get("success", False), bool) else False
+    )
 
-    is_complete = state in {"complete", "completed", "succeeded", "success"} or response_success or top_level_success
+    is_complete = (
+        state in {"complete", "completed", "succeeded", "success"}
+        or response_success
+        or top_level_success
+    )
     is_failed = state in {"failed", "error", "cancelled", "canceled"}
     should_poll = not (is_complete or is_failed)
 
@@ -63,21 +69,19 @@ def _with_task_guidance(
         "polling_interval_seconds": 15,
         "max_poll_attempts": 100,
         "next_step": (
-
-                "Task is complete. Stop polling and present final media URLs to the user."
-                if is_complete
+            "Task is complete. Stop polling and present final media URLs to the user."
+            if is_complete
+            else (
+                "Task reached a terminal failure/cancelled state. Stop polling and report the failure details to the user."
+                if is_failed
                 else (
-                    "Task reached a terminal failure/cancelled state. Stop polling and report the failure details to the user."
-                    if is_failed
-                    else (
-                        f"The task is still pending or processing. "
-                        f'Wait 15 seconds, then call {poll_tool}(task_id="{task_id}") again. '
-                        f"IMPORTANT: Media generation typically takes 1-5 minutes. "
-                        f"Keep polling — do NOT give up or tell the user it failed. "
-                        f"You should poll at least 100 times before considering the task stuck."
-                    )
+                    f"The task is still pending or processing. "
+                    f'Wait 15 seconds, then call {poll_tool}(task_id="{task_id}") again. '
+                    f"IMPORTANT: Media generation typically takes 1-5 minutes. "
+                    f"Keep polling — do NOT give up or tell the user it failed. "
+                    f"You should poll at least 100 times before considering the task stuck."
                 )
-
+            )
         ),
     }
     return payload
