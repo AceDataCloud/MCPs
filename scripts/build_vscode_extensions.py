@@ -45,6 +45,7 @@ class Service:
     pricing_note: str
     domain: str
     pypi_pkg: str
+    ext_name: str
     publisher: str
     signup_url: str
     docs_url: str
@@ -94,6 +95,10 @@ def load_services() -> list[Service]:
             with pyproject.open("rb") as fh:
                 pkg_data = tomllib.load(fh)
             pypi_pkg = pkg_data["project"]["name"]
+        # VS Code extension id namespace is independent of PyPI. Default to
+        # `mcp-<alias>` to match the marketplace IDs we already own; allow an
+        # explicit override for future services whose alias diverges.
+        ext_name = cfg.get("ext_name") or f"mcp-{alias}"
         services.append(
             Service(
                 alias=alias,
@@ -107,6 +112,7 @@ def load_services() -> list[Service]:
                 pricing_note=cfg.get("pricing_note", "").strip(),
                 domain=cfg.get("domain", "general"),
                 pypi_pkg=pypi_pkg,
+                ext_name=ext_name,
                 publisher=defaults["publisher"],
                 signup_url=defaults["signup_url"],
                 docs_url=defaults["docs_url"],
@@ -143,7 +149,7 @@ def extract_tools(main_readme: Path) -> list[tuple[str, str]]:
 
 def render_package_json(svc: Service) -> str:
     pkg: dict[str, object] = {
-        "name": svc.pypi_pkg,
+        "name": svc.ext_name,
         "displayName": svc.display_name,
         "description": svc.tagline,
         "version": "0.2.0",
