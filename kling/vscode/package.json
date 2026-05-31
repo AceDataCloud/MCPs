@@ -2,12 +2,12 @@
   "name": "mcp-kling",
   "displayName": "Kling MCP",
   "description": "Kuaishou Kling video generation — text-to-video, image-to-video, extend, motion.",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "publisher": "acedatacloud",
   "icon": "icon.png",
   "license": "MIT",
   "engines": {
-    "vscode": "^1.99.0"
+    "vscode": "^1.101.0"
   },
   "categories": [
     "AI",
@@ -36,22 +36,25 @@
   "bugs": {
     "url": "https://github.com/AceDataCloud/KlingMCP/issues"
   },
+  "activationEvents": [],
+  "main": "./extension.js",
   "contributes": {
-    "mcpServers": {
-      "kling": {
-        "type": "http",
-        "url": "https://kling.mcp.acedata.cloud/mcp",
-        "headers": {
-          "Authorization": "Bearer ${input:acedatacloud_api_token}"
-        }
-      }
-    },
-    "inputs": [
+    "mcpServerDefinitionProviders": [
       {
-        "type": "promptString",
-        "id": "acedatacloud_api_token",
-        "description": "Ace Data Cloud API token. Sign in at https://platform.acedata.cloud and create a token in 'API Keys'. Stored securely by VS Code.",
-        "password": true
+        "id": "acedatacloud.kling",
+        "label": "Kling MCP"
+      }
+    ],
+    "commands": [
+      {
+        "command": "acedatacloud.kling.setApiToken",
+        "title": "Kling MCP: Set Ace Data Cloud API Token",
+        "category": "MCP"
+      },
+      {
+        "command": "acedatacloud.kling.clearApiToken",
+        "title": "Kling MCP: Clear Ace Data Cloud API Token",
+        "category": "MCP"
       }
     ]
   }
