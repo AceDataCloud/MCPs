@@ -1,0 +1,9 @@
+version: "3"
+services:
+  mcp-fish:
+    platform: linux/amd64
+    container_name: "mcp-fish"
+    build: ./
+    image: "ghcr.io/acedatacloud/mcp-fish:${BUILD_NUMBER}"
+    ports:
+      - "8000:8000"

@@ -1,0 +1,49 @@
+{
+  "name": "mcp-face-transform",
+  "displayName": "Face Transform MCP",
+  "description": "Face analysis & transformation (keypoints, beautify, age/gender, swap, cartoon, liveness) via Ace Data Cloud API",
+  "version": "0.1.0",
+  "publisher": "acedatacloud",
+  "icon": "icon.png",
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.99.0"
+  },
+  "categories": [
+    "AI",
+    "Chat"
+  ],
+  "keywords": [
+    "mcp",
+    "model context protocol",
+    "ai",
+    "copilot",
+    "ace data cloud",
+    "face",
+    "face swap",
+    "face transform",
+    "liveness detection",
+    "beautify"
+  ],
+  "homepage": "https://github.com/AceDataCloud/FaceTransformMCP",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AceDataCloud/FaceTransformMCP"
+  },
+  "bugs": {
+    "url": "https://github.com/AceDataCloud/FaceTransformMCP/issues"
+  },
+  "contributes": {
+    "mcpServers": {
+      "face": {
+        "command": "uvx",
+        "args": [
+          "mcp-face-transform"
+        ],
+        "env": {
+          "ACEDATACLOUD_API_TOKEN": ""
+        }
+      }
+    }
+  }
+}

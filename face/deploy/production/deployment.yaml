@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: mcp-face-transform
+  name: mcp-face-transform
+  namespace: acedatacloud
+spec:
+  replicas: 1
+  revisionHistoryLimit: 5
+  selector:
+    matchLabels:
+      app: mcp-face-transform
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: mcp-face-transform
+    spec:
+      containers:
+        - name: mcp-face-transform
+          image: ghcr.io/acedatacloud/mcp-face-transform:${TAG}
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8000
+              protocol: TCP
+          env:
+            - name: MCP_SERVER_URL
+              value: "https://face.mcp.acedata.cloud"
+            # TODO: replace with the OAuth client ID created for face.mcp.acedata.cloud
+            # in AuthBackend (Application → Application list).
+            - name: ACEDATACLOUD_OAUTH_CLIENT_ID
+              value: "REPLACE_WITH_FACE_OAUTH_CLIENT_ID"
+          resources:
+            limits:
+              cpu: 500m
+              memory: 256Mi
+            requests:
+              cpu: 30m
+              memory: 128Mi
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 10
+            periodSeconds: 30
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+      dnsPolicy: ClusterFirst
+      imagePullSecrets:
+        - name: docker-registry
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30

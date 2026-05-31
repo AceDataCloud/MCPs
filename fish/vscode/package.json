@@ -1,0 +1,51 @@
+{
+  "name": "mcp-fish",
+  "displayName": "Fish Audio MCP",
+  "description": "Text-to-speech with Fish Audio voice models via the Ace Data Cloud API",
+  "version": "0.1.0",
+  "publisher": "acedatacloud",
+  "icon": "icon.png",
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.99.0"
+  },
+  "categories": [
+    "AI",
+    "Chat"
+  ],
+  "keywords": [
+    "mcp",
+    "model context protocol",
+    "ai",
+    "copilot",
+    "ace data cloud",
+    "fish",
+    "fish audio",
+    "tts",
+    "text-to-speech",
+    "voice",
+    "audio",
+    "speech synthesis"
+  ],
+  "homepage": "https://github.com/AceDataCloud/FishMCP",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AceDataCloud/FishMCP"
+  },
+  "bugs": {
+    "url": "https://github.com/AceDataCloud/FishMCP/issues"
+  },
+  "contributes": {
+    "mcpServers": {
+      "fish": {
+        "command": "uvx",
+        "args": [
+          "mcp-fish"
+        ],
+        "env": {
+          "ACEDATACLOUD_API_TOKEN": ""
+        }
+      }
+    }
+  }
+}

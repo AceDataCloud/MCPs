@@ -1,0 +1,9 @@
+version: "3"
+services:
+  mcp-face-transform:
+    platform: linux/amd64
+    container_name: "mcp-face-transform"
+    build: ./
+    image: "ghcr.io/acedatacloud/mcp-face-transform:${BUILD_NUMBER}"
+    ports:
+      - "8000:8000"
