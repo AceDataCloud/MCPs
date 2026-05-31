@@ -79,3 +79,7 @@ mappings:
     repo: AceDataCloud/FishMCP
     exclude:
       - .gitbooks
+  face:
+    repo: AceDataCloud/FaceTransformMCP
+    exclude:
+      - .gitbooks
