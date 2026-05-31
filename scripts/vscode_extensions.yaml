@@ -1,0 +1,252 @@
+# Per-service config for the vscode/ extension codegen.
+#
+# Used by scripts/build_vscode_extensions.py to regenerate each
+# <service>/vscode/{package.json, README.md, .vscodeignore}.
+#
+# Defaults (resolved per service):
+#   hosted_url   = https://<alias>.mcp.acedata.cloud/mcp
+#   github_repo  = https://github.com/AceDataCloud/<RepoName>
+#   pypi_pkg     = <pkg-name from pyproject.toml>
+#
+# Per-service overrides go below. `display_name`, `tagline`, `description`,
+# `categories`, `keywords`, `examples`, `pricing_note`, and `extras` are
+# all hand-curated for quality.
+
+defaults:
+  publisher: acedatacloud
+  signup_url: https://platform.acedata.cloud
+  docs_url: https://docs.acedata.cloud
+  vscode_engine: "^1.99.0"
+  common_categories: ["AI", "Chat"]
+  common_keywords:
+    - mcp
+    - model context protocol
+    - ai
+    - copilot
+    - ace data cloud
+
+services:
+  suno:
+    display_name: Suno MCP
+    repo: SunoMCP
+    domain: music
+    tagline: "AI music generation with Suno — songs, lyrics, covers, stems, and more."
+    description: >
+      Connect VS Code's AI agents to Suno through Ace Data Cloud. Generate songs from
+      text prompts, write custom lyrics with full musical control, extend tracks,
+      remix or cover, separate stems, export MP4/WAV/MIDI — all from chat.
+    keywords: [suno, music, ai music, song generation, lyrics, audio]
+    examples:
+      - 'Generate a lofi hip-hop track about late-night coding. Use suno.'
+      - 'Write lyrics for a punk song about deadline pressure, then turn them into a song.'
+      - 'Cover the song with task id <id> in a jazz piano style.'
+    models: ["v3.5", "v4", "v4.5", "v5"]
+    pricing_note: "From $0.05 per song. New users get free trial credit at sign-up."
+
+  midjourney:
+    display_name: Midjourney MCP
+    repo: MidjourneyMCP
+    domain: image
+    tagline: "AI image generation with Midjourney — imagine, edit, blend, upscale, describe."
+    description: >
+      Bring Midjourney into VS Code chat. Generate 2x2 grids from prompts,
+      upscale or vary a tile, blend multiple references, describe an image
+      back into a prompt, and animate stills into short video.
+    keywords: [midjourney, image generation, ai art, text to image, image editing]
+    examples:
+      - 'Generate an isometric pixel-art illustration of a cozy cafe. Use midjourney.'
+      - 'Upscale tile 3 of task <id>.'
+      - 'Describe https://example.com/photo.jpg and give me a Midjourney prompt.'
+    models: ["5.2", "6", "6.1", "7", "8"]
+    pricing_note: "From $0.04 per /imagine job. Free trial credit on sign-up."
+
+  flux:
+    display_name: Flux MCP
+    repo: FluxMCP
+    domain: image
+    tagline: "Flux image generation by Black Forest Labs — dev, pro, ultra, and kontext editing."
+    description: >
+      Generate high-fidelity images with Flux from VS Code chat, or edit existing
+      images via natural-language instructions using Flux Kontext.
+    keywords: [flux, black forest labs, image generation, image editing, kontext]
+    examples:
+      - 'Generate a hyperreal product shot of a matte-black ceramic mug, top-down. Use flux pro ultra.'
+      - 'Take https://example.com/cup.jpg and replace the background with a sunlit kitchen.'
+    models: ["flux-dev", "flux-pro", "flux-pro-1.1", "flux-pro-1.1-ultra", "flux-kontext-pro", "flux-kontext-max"]
+    pricing_note: "From $0.025 per image. Free trial credit on sign-up."
+
+  seedream:
+    display_name: Seedream MCP
+    repo: SeedreamMCP
+    pypi_override: mcp-seedream-pro
+    domain: image
+    tagline: "Seedream by ByteDance — text-to-image and SeedEdit instruction-based editing."
+    description: >
+      High-resolution image generation and edit-by-instruction with ByteDance
+      Seedream (3.0 / 4.0 / 4.5 / 5.0) and SeedEdit 3.0.
+    keywords: [seedream, bytedance, image generation, seededit, image editing]
+    examples:
+      - 'Generate a 2K cinematic poster of a samurai in neon Tokyo rain. Use seedream 5.0.'
+      - 'Edit https://example.com/cat.jpg — make the cat wear sunglasses.'
+    models: ["seedream-3.0", "seedream-4.0", "seedream-4.5", "seedream-5.0", "seededit-3.0"]
+    pricing_note: "From $0.02 per image. Free trial credit on sign-up."
+
+  nanobanana:
+    display_name: NanoBanana MCP
+    repo: NanoBananaMCP
+    pypi_override: mcp-nanobanana-pro
+    domain: image
+    tagline: "Gemini-powered NanoBanana — generate and edit images via natural language."
+    description: >
+      Image generation and edit-by-instruction using NanoBanana, NanoBanana 2,
+      and NanoBanana Pro (built on Gemini).
+    keywords: [nanobanana, nano banana, gemini, image generation, image editing]
+    examples:
+      - 'Generate a watercolor postcard of Kyoto in cherry-blossom season. Use nanobanana pro.'
+      - 'Edit https://example.com/desk.jpg — clear the desk and add a single houseplant.'
+    models: ["nano-banana", "nano-banana-2", "nano-banana-pro"]
+    pricing_note: "From $0.015 per image. Free trial credit on sign-up."
+
+  luma:
+    display_name: Luma MCP
+    repo: LumaMCP
+    domain: video
+    tagline: "AI video generation with Luma Dream Machine — text-to-video, image-to-video, extend."
+    description: >
+      Generate short cinematic videos from text or stills with Luma Dream Machine,
+      or extend an existing clip — directly from chat.
+    keywords: [luma, dream machine, video generation, text to video, image to video]
+    examples:
+      - 'Generate a 5-second video of a paper airplane drifting through neon clouds. Use luma.'
+      - 'Animate https://example.com/cat.jpg into a 5-second video of the cat yawning.'
+    pricing_note: "From $0.35 per 5s clip. Free trial credit on sign-up."
+
+  sora:
+    display_name: Sora MCP
+    repo: SoraMCP
+    domain: video
+    tagline: "OpenAI Sora video generation — text-to-video, image-to-video, character references."
+    description: >
+      Generate short Sora videos from text prompts, animate stills, or carry a
+      character reference across clips. Sora 1 and Sora 2 models supported.
+    keywords: [sora, openai, video generation, text to video]
+    examples:
+      - 'Generate a Sora video: time-lapse of a coffee being poured in slow motion. Use sora 2 portrait.'
+      - 'Animate https://example.com/dog.jpg into a Sora clip of the dog walking through a meadow.'
+    models: ["sora-1", "sora-2"]
+    pricing_note: "From $0.50 per clip. Free trial credit on sign-up."
+
+  veo:
+    display_name: Veo MCP
+    repo: VeoMCP
+    domain: video
+    tagline: "Google Veo video generation — Veo 2, Veo 3, Veo 3.1 (incl. fast variants and upscale)."
+    description: >
+      Generate AI video with Google Veo from text or images, including high-quality
+      Veo 3.1 and the fast variants. Supports 1080p upscale.
+    keywords: [veo, google veo, video generation, text to video]
+    examples:
+      - 'Generate a Veo 3.1 video of a vintage train pulling into a snowy station at dusk.'
+      - 'Animate https://example.com/portrait.jpg into a Veo Fast clip with subtle head turn.'
+    models: ["veo-2", "veo-2-fast", "veo-3", "veo-3-fast", "veo-3.1", "veo-3.1-fast"]
+    pricing_note: "From $0.30 per clip. Free trial credit on sign-up."
+
+  kling:
+    display_name: Kling MCP
+    repo: KlingMCP
+    domain: video
+    tagline: "Kuaishou Kling video generation — text-to-video, image-to-video, extend, motion."
+    description: >
+      Generate Kling AI video from prompts or stills, extend existing clips, or
+      apply motion control. Multiple model versions and quality modes.
+    keywords: [kling, kuaishou, video generation, motion control]
+    examples:
+      - 'Generate a Kling video of a panda doing parkour through a bamboo forest.'
+      - 'Extend Kling video task <id> with the panda landing and bowing.'
+    pricing_note: "From $0.20 per 5s clip. Free trial credit on sign-up."
+
+  hailuo:
+    display_name: Hailuo MCP
+    repo: HailuoMCP
+    domain: video
+    tagline: "Hailuo (MiniMax) AI video — text-to-video and image-to-video with director mode."
+    description: >
+      Generate AI video using MiniMax Hailuo. Includes director-mode camera control
+      for precise framing.
+    keywords: [hailuo, minimax, video generation, director mode]
+    examples:
+      - 'Generate a Hailuo video: a chef tossing a pizza in slow motion, dolly-in shot.'
+      - 'Animate https://example.com/sketch.jpg into a 6-second Hailuo clip, pan-right.'
+    pricing_note: "From $0.20 per clip. Free trial credit on sign-up."
+
+  wan:
+    display_name: Wan MCP
+    repo: WanMCP
+    domain: video
+    tagline: "Alibaba Wan video generation — text-to-video, image-to-video, reference video transfer."
+    description: >
+      Generate AI video with Alibaba Wan in 480P/720P/1080P, with optional audio
+      and reference-video transfer.
+    keywords: [wan, alibaba, video generation, reference video, audio]
+    examples:
+      - 'Generate a Wan 1080P video of waves crashing on a black-sand beach, with ambient audio.'
+      - 'Transfer the motion of reference video <id> onto https://example.com/character.png.'
+    pricing_note: "From $0.18 per clip. Free trial credit on sign-up."
+
+  seedance:
+    display_name: Seedance MCP
+    repo: SeedanceMCP
+    domain: video
+    tagline: "ByteDance Seedance — dance and motion video generation from text or image."
+    description: >
+      Generate Seedance AI dance/motion videos. Configurable resolution, aspect
+      ratio, duration, and optional audio.
+    keywords: [seedance, bytedance, video generation, dance, motion]
+    examples:
+      - 'Generate a Seedance video of a stylized robot dancing breakdance on a rooftop.'
+      - 'Animate https://example.com/character.png into a Seedance clip, vertical 9:16, 8 seconds.'
+    pricing_note: "From $0.15 per clip. Free trial credit on sign-up."
+
+  producer:
+    display_name: Producer MCP
+    repo: ProducerMCP
+    domain: music
+    tagline: "AI music with Producer (FUZZ) — songs, lyrics, covers, vocal/instrument swap, section replace."
+    description: >
+      Music generation, lyric writing, song extension, covers, vocal/instrumental
+      swap, section replace, and reference audio upload — using the Producer (FUZZ) models.
+    keywords: [producer, fuzz, music, ai music, lyrics, riffusion]
+    examples:
+      - 'Generate a Producer track: dreamy synthwave instrumental, 90 BPM, A minor.'
+      - 'Replace seconds 30–45 of song <id> with a guitar solo.'
+    models: ["fuzz-1.0", "fuzz-1.1", "fuzz-1.5", "fuzz-2.0", "fuzz-2.5", "fuzz-3.0", "fuzz-3.5", "fuzz-4.0"]
+    pricing_note: "From $0.05 per song. Free trial credit on sign-up."
+
+  serp:
+    display_name: Serp MCP
+    repo: SerpMCP
+    domain: search
+    tagline: "Google Search via Ace Data Cloud — web, images, news, maps, local, video."
+    description: >
+      Give Copilot live Google search results — web pages, images, news, maps,
+      local places, and videos — with localization and time filters.
+    keywords: [serp, google, search, web search, news, images]
+    examples:
+      - 'Search Google for the most recent news on the EU AI Act and summarize it.'
+      - 'Find image results for "mid-century modern living room", give me 10 URLs.'
+      - 'Search Google Maps for coffee shops near "1 Infinite Loop, Cupertino".'
+    pricing_note: "From $0.003 per query. Free trial credit on sign-up."
+
+  shorturl:
+    display_name: Short URL MCP
+    repo: ShortURLMCP
+    domain: utility
+    tagline: "Create short URLs (surl.id) — single or batch, with custom slugs and expiration."
+    description: >
+      Shorten long URLs into surl.id links, optionally with a custom slug or
+      expiration. Supports batch creation.
+    keywords: [shorturl, url shortener, surl, link]
+    examples:
+      - 'Shorten this URL: https://platform.acedata.cloud/documents/... with slug "ace-docs".'
+      - 'Batch-shorten these 5 URLs (paste the list) and give me a markdown table.'
+    pricing_note: "Free tier available. Higher quotas with paid plans."

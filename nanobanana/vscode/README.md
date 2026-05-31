@@ -1,49 +1,118 @@
 # NanoBanana MCP
 
-AI Image Generation with NanoBanana (Gemini-based) - Generate and edit images via Ace Data Cloud API
+Gemini-powered NanoBanana — generate and edit images via natural language.
 
-This extension provides a [Model Context Protocol (MCP)](https://modelcontextprotocol.io/) server for VS Code, enabling AI assistants like GitHub Copilot to interact with NanoBanana (Gemini) directly.
+[![VS Code Marketplace](https://img.shields.io/visual-studio-marketplace/v/acedatacloud.mcp-nanobanana-pro?label=VS%20Code)](https://marketplace.visualstudio.com/items?itemName=acedatacloud.mcp-nanobanana-pro) [![PyPI](https://img.shields.io/pypi/v/mcp-nanobanana-pro.svg?label=PyPI)](https://pypi.org/project/mcp-nanobanana-pro/) [![Hosted MCP](https://img.shields.io/badge/hosted-mcp-blue)](https://nanobanana.mcp.acedata.cloud/mcp)
 
-## Features
+Image generation and edit-by-instruction using NanoBanana, NanoBanana 2, and NanoBanana Pro (built on Gemini).
 
-- **4 tools** available for AI assistants
-- Zero-install: Uses `uvx` for automatic package management
-- Works with GitHub Copilot, Claude, and other MCP-compatible AI assistants
+This extension registers the **nanobanana** MCP server with VS Code so GitHub
+Copilot and any other agent that speaks the [Model Context Protocol](https://modelcontextprotocol.io/)
+can call it directly from chat.
 
-## Prerequisites
+---
 
-1. **Python 3.10+** with `uvx` (from [uv](https://github.com/astral-sh/uv)) installed
-2. **Ace Data Cloud API Token** — Get one at [platform.acedata.cloud](https://platform.acedata.cloud)
+## Quick Start
 
-## Setup
+1. **Install this extension.** VS Code registers the `nanobanana` MCP server automatically.
+2. **Get an API token** from [Ace Data Cloud](https://platform.acedata.cloud) → *API Keys*. New accounts include free trial credit.
+3. **Open Copilot Chat** in agent mode and ask for a image task — VS Code will prompt for the token the first time and store it securely.
 
-1. Install this extension from the VS Code Marketplace
-2. When prompted, enter your Ace Data Cloud API token
-3. The MCP server will be available to AI assistants automatically
+> The default config talks to the **hosted streamable-HTTP endpoint** at
+> `https://nanobanana.mcp.acedata.cloud/mcp` — no Python, no `uvx`, no local install needed.
 
-You can also manually configure the token in your VS Code settings (`.vscode/mcp.json`):
+### Example prompts
 
-```json
+- "Generate a watercolor postcard of Kyoto in cherry-blossom season. Use nanobanana pro."
+- "Edit https://example.com/desk.jpg — clear the desk and add a single houseplant."
+
+---
+
+## Tool Reference
+
+**4 tools** available via this server.
+
+| Tool | Description |
+| --- | --- |
+| `nanobanana_generate_image` | Generate an AI image from a text prompt using Google's Nano Banana model. |
+| `nanobanana_edit_image` | Edit or combine images using AI based on a text prompt. |
+| `nanobanana_get_task` | Query the status and result of an image generation or edit task. |
+| `nanobanana_get_tasks_batch` | Query multiple image generation/edit tasks at once. |
+
+## Supported Models
+
+`nano-banana`, `nano-banana-2`, `nano-banana-pro`
+
+## Pricing
+
+From $0.015 per image. Free trial credit on sign-up. See full pricing at [https://docs.acedata.cloud](https://docs.acedata.cloud).
+
+---
+
+## Configuration
+
+This extension contributes the following entry to your VS Code MCP config:
+
+```jsonc
 {
   "servers": {
     "nanobanana": {
+      "type": "http",
+      "url": "https://nanobanana.mcp.acedata.cloud/mcp",
+      "headers": { "Authorization": "Bearer ${input:acedatacloud_api_token}" }
+    }
+  },
+  "inputs": [
+    {
+      "type": "promptString",
+      "id": "acedatacloud_api_token",
+      "description": "Ace Data Cloud API token",
+      "password": true
+    }
+  ]
+}
+```
+
+VS Code will prompt for the token on first use and persist it in the OS
+secret store (Keychain / Credential Manager / libsecret).
+
+### Alternative: local stdio (no network roundtrip)
+
+If you prefer running the server locally — for offline dev, air-gapped
+environments, or to pin to a specific PyPI version — install
+[`uv`](https://docs.astral.sh/uv/) and replace your `mcp.json` entry with:
+
+```jsonc
+{
+  "servers": {
+    "nanobanana": {
+      "type": "stdio",
       "command": "uvx",
       "args": ["mcp-nanobanana-pro"],
-      "env": {
-        "ACEDATACLOUD_API_TOKEN": "your-token-here"
-      }
+      "env": { "ACEDATACLOUD_API_TOKEN": "${input:acedatacloud_api_token}" }
     }
   }
 }
 ```
 
+`uvx` will download and run the latest [`mcp-nanobanana-pro`](https://pypi.org/project/mcp-nanobanana-pro/) on demand.
+
+### Alternative: OAuth via Dynamic Client Registration
+
+The hosted endpoint also accepts OAuth 2.1 with [DCR](https://datatracker.ietf.org/doc/html/rfc7591).
+Drop the `headers` and `inputs` blocks and VS Code will run the auth flow on
+first use (redirect URL `http://127.0.0.1:33418` or `https://vscode.dev/redirect`).
+
+---
+
 ## Links
 
-- [PyPI Package](https://pypi.org/project/mcp-nanobanana-pro/)
-- [Source Code](https://github.com/AceDataCloud/NanoBananaMCP)
-- [Ace Data Cloud Platform](https://platform.acedata.cloud)
-- [API Documentation](https://docs.acedata.cloud)
+- **Hosted endpoint:** https://nanobanana.mcp.acedata.cloud/mcp
+- **PyPI package:** [`mcp-nanobanana-pro`](https://pypi.org/project/mcp-nanobanana-pro/)
+- **Source repository:** https://github.com/AceDataCloud/NanoBananaMCP
+- **Ace Data Cloud platform:** https://platform.acedata.cloud
+- **MCP documentation:** https://docs.acedata.cloud
 
 ## License
 
-MIT
+MIT — see [LICENSE](LICENSE).

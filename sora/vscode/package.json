@@ -1,8 +1,8 @@
 {
   "name": "mcp-sora",
   "displayName": "Sora MCP",
-  "description": "AI Video Generation with OpenAI Sora - Generate videos from text and images via Ace Data Cloud API",
-  "version": "0.1.0",
+  "description": "OpenAI Sora video generation — text-to-video, image-to-video, character references.",
+  "version": "0.2.0",
   "publisher": "acedatacloud",
   "icon": "icon.png",
   "license": "MIT",
@@ -20,10 +20,14 @@
     "copilot",
     "ace data cloud",
     "sora",
+    "openai",
     "video generation",
-    "openai sora",
-    "ai video"
+    "text to video"
   ],
+  "galleryBanner": {
+    "color": "#0E1117",
+    "theme": "dark"
+  },
   "homepage": "https://github.com/AceDataCloud/SoraMCP",
   "repository": {
     "type": "git",
@@ -35,14 +39,20 @@
   "contributes": {
     "mcpServers": {
       "sora": {
-        "command": "uvx",
-        "args": [
-          "mcp-sora"
-        ],
-        "env": {
-          "ACEDATACLOUD_API_TOKEN": ""
+        "type": "http",
+        "url": "https://sora.mcp.acedata.cloud/mcp",
+        "headers": {
+          "Authorization": "Bearer ${input:acedatacloud_api_token}"
         }
       }
-    }
+    },
+    "inputs": [
+      {
+        "type": "promptString",
+        "id": "acedatacloud_api_token",
+        "description": "Ace Data Cloud API token. Sign in at https://platform.acedata.cloud and create a token in 'API Keys'. Stored securely by VS Code.",
+        "password": true
+      }
+    ]
   }
 }

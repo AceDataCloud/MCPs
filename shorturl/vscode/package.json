@@ -1,8 +1,8 @@
 {
   "name": "mcp-shorturl",
-  "displayName": "ShortURL MCP",
-  "description": "URL Shortening - Create and manage short URLs via Ace Data Cloud API",
-  "version": "0.1.0",
+  "displayName": "Short URL MCP",
+  "description": "Create short URLs (surl.id) — single or batch, with custom slugs and expiration.",
+  "version": "0.2.0",
   "publisher": "acedatacloud",
   "icon": "icon.png",
   "license": "MIT",
@@ -21,8 +21,13 @@
     "ace data cloud",
     "shorturl",
     "url shortener",
-    "short link"
+    "surl",
+    "link"
   ],
+  "galleryBanner": {
+    "color": "#0E1117",
+    "theme": "dark"
+  },
   "homepage": "https://github.com/AceDataCloud/ShortURLMCP",
   "repository": {
     "type": "git",
@@ -34,14 +39,20 @@
   "contributes": {
     "mcpServers": {
       "shorturl": {
-        "command": "uvx",
-        "args": [
-          "mcp-shorturl"
-        ],
-        "env": {
-          "ACEDATACLOUD_API_TOKEN": ""
+        "type": "http",
+        "url": "https://shorturl.mcp.acedata.cloud/mcp",
+        "headers": {
+          "Authorization": "Bearer ${input:acedatacloud_api_token}"
         }
       }
-    }
+    },
+    "inputs": [
+      {
+        "type": "promptString",
+        "id": "acedatacloud_api_token",
+        "description": "Ace Data Cloud API token. Sign in at https://platform.acedata.cloud and create a token in 'API Keys'. Stored securely by VS Code.",
+        "password": true
+      }
+    ]
   }
 }
