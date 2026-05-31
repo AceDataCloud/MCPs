@@ -250,3 +250,39 @@ services:
       - 'Shorten this URL: https://platform.acedata.cloud/documents/... with slug "ace-docs".'
       - 'Batch-shorten these 5 URLs (paste the list) and give me a markdown table.'
     pricing_note: "Free tier available. Higher quotas with paid plans."
+
+  face:
+    display_name: Face Transform MCP
+    repo: FaceTransformMCP
+    domain: image
+    # `mcp-face` is taken on PyPI and `acedatacloud.mcp-face-transform` is the
+    # marketplace id we already own — pin both to the existing names.
+    pypi_override: mcp-face-transform
+    ext_name: mcp-face-transform
+    tagline: "Face analysis and transforms — keypoints, beautify, age/gender, swap, cartoon, liveness. (Alpha)"
+    description: >
+      Bring AceDataCloud's Face Transform APIs into Copilot Chat. Detect 90+
+      keypoints per face, beautify portraits, age or de-age, swap perceived
+      gender, face-swap between photos, cartoonize, and detect liveness.
+    keywords: [face, face detection, keypoints, face swap, beautify, cartoon, liveness, portrait, age, gender, transform]
+    examples:
+      - 'Detect every face in https://example.com/group.jpg and return their keypoints.'
+      - 'Beautify https://example.com/me.jpg with smoothing 15 and whitening 25.'
+      - 'Swap the face from https://example.com/headshot.jpg onto https://example.com/scene.jpg.'
+    pricing_note: "All Face APIs are currently in Alpha. Free trial credit on sign-up."
+
+  fish:
+    display_name: Fish Audio MCP
+    repo: FishMCP
+    domain: audio
+    tagline: "Fish Audio TTS — generate natural speech and browse the Fish voice library."
+    description: >
+      Generate natural-sounding speech from text using Fish Audio voices via
+      Ace Data Cloud. Browse and search the voice library, fetch model metadata,
+      submit asynchronous generation tasks, and poll single or batched results.
+    keywords: [fish, fish audio, tts, text to speech, voice synthesis, audio, speech]
+    examples:
+      - 'Generate audio for "Welcome to Ace Data Cloud" with a Fish voice and give me the URL.'
+      - 'List 10 Fish voice models and show their language, gender, and any tags.'
+      - 'Check the status of Fish task <id>.'
+    pricing_note: "Per-character billing. Free trial credit on sign-up."

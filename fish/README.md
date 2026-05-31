@@ -40,7 +40,7 @@ mcp-fish
 mcp-fish --transport http --port 8000
 ```
 
-## Available Tools
+## Tool Reference
 
 | Tool | Description |
 |------|-------------|

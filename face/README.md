@@ -47,18 +47,18 @@ mcp-face-transform
 mcp-face-transform --transport http --port 8000
 ```
 
-## Available Tools
+## Tool Reference
 
-| Tool | Endpoint | Purpose |
-|------|----------|---------|
-| `face_detect_keypoints` | `POST /face/analyze` | Detect 90+ keypoints per face |
-| `face_beautify` | `POST /face/beautify` | Smoothing / whitening / slimming / eye enlarging |
-| `face_change_age` | `POST /face/change-age` | Age or de-age a portrait |
-| `face_change_gender` | `POST /face/change-gender` | Swap perceived facial gender characteristics |
-| `face_swap` | `POST /face/swap` | Move source face onto target image |
-| `face_cartoonize` | `POST /face/cartoon` | Convert portrait to cartoon style |
-| `face_detect_liveness` | `POST /face/detect-live` | Detect live vs printed/screen face |
-| `face_get_usage_guide` | _client-side_ | Concise tool usage reference |
+| Tool | Description |
+|------|-------------|
+| `face_detect_keypoints` | Detect 90+ keypoints per face (multi-face supported). |
+| `face_beautify` | Smoothing, whitening, face slimming, and eye enlarging. |
+| `face_change_age` | Age or de-age a portrait. |
+| `face_change_gender` | Swap perceived facial gender characteristics. |
+| `face_swap` | Move a source face onto a target image (with optional async webhook). |
+| `face_cartoonize` | Render a portrait in cartoon / animated style. |
+| `face_detect_liveness` | Distinguish a live capture from a printed / screen photo. |
+| `face_get_usage_guide` | Concise client-side tool usage reference. |
 
 ## Example
 
