@@ -1,0 +1,83 @@
+<idea-plugin>
+    <id>com.acedatacloud.mcp.openai</id>
+    <name>OpenAI MCP</name>
+    <vendor email="dev@acedata.cloud" url="https://acedata.cloud">Ace Data Cloud</vendor>
+
+    <description><![CDATA[
+<p><b>OpenAI models</b> via <a href="https://platform.acedata.cloud">Ace Data Cloud</a> — chat completions, embeddings, image generation and editing, Responses API, and async tasks, all over <a href="https://modelcontextprotocol.io">MCP</a>.</p>
+
+<p>Once configured, AI Assistant can run OpenAI chat completions, generate embeddings, create or edit images, and orchestrate the Responses API — all routed through Ace Data Cloud.</p>
+
+<h3>Features</h3>
+<ul>
+    <li><b>11 AI Tools</b> — Chat completion, Embeddings, Image generation, Image editing, Responses API and more</li>
+    <li><b>Easy Setup</b> — One-click copy MCP configuration for AI Assistant</li>
+    <li><b>Dual Mode</b> — STDIO (local) and HTTP (remote) server support</li>
+    <li><b>Token Management</b> — Store API token securely in IDE settings</li>
+</ul>
+
+<h3>Available Tools</h3>
+<ul>
+    <li><b>Chat completion</b> — Run chat with GPT-4, GPT-5, and more</li>
+    <li><b>Embeddings</b> — Generate text embeddings</li>
+    <li><b>Image generation</b> — Create images with gpt-image and DALL·E</li>
+    <li><b>Image editing</b> — Edit existing images with text prompts</li>
+    <li><b>Responses API</b> — Stateful agentic responses</li>
+    <li><b>Async tasks</b> — Submit and poll long-running jobs</li>
+</ul>
+
+<h3>Quick Start</h3>
+<ol>
+    <li>Install this plugin</li>
+    <li>Open <b>Settings → Tools → OpenAI MCP</b></li>
+    <li>Enter your <a href="https://platform.acedata.cloud">Ace Data Cloud</a> API token</li>
+    <li>Click <b>Copy Config</b> and paste into <b>Settings → Tools → AI Assistant → MCP</b></li>
+</ol>
+
+<p>Requires <a href="https://github.com/astral-sh/uv">uv</a> (Python package runner) for STDIO mode,
+or use HTTP mode for zero-install remote access.</p>
+]]></description>
+
+    <depends>com.intellij.modules.platform</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <applicationService
+            serviceImplementation="com.acedatacloud.mcp.openai.McpSettings"/>
+
+        <applicationConfigurable
+            id="com.acedatacloud.mcp.openai.settings"
+            displayName="OpenAI MCP"
+            parentId="tools"
+            instance="com.acedatacloud.mcp.openai.McpSettingsConfigurable"/>
+
+        <postStartupActivity
+            implementation="com.acedatacloud.mcp.openai.McpStartupActivity"/>
+
+        <notificationGroup id="OpenAI MCP" displayType="BALLOON"/>
+    </extensions>
+
+    <actions>
+        <group id="com.acedatacloud.mcp.openai.Actions" text="OpenAI MCP" popup="true">
+            <action id="com.acedatacloud.mcp.openai.CopyStdioConfig"
+                class="com.acedatacloud.mcp.openai.CopyStdioConfigAction"
+                text="Copy STDIO Config"
+                description="Copy STDIO MCP configuration for AI Assistant"/>
+            <action id="com.acedatacloud.mcp.openai.CopyHttpConfig"
+                class="com.acedatacloud.mcp.openai.CopyHttpConfigAction"
+                text="Copy HTTP Config"
+                description="Copy HTTP MCP configuration for AI Assistant"/>
+            <add-to-group group-id="ToolsMenu" anchor="last"/>
+        </group>
+    </actions>
+
+    <change-notes><![CDATA[
+<h3>0.1.0</h3>
+<ul>
+    <li>Initial release</li>
+    <li>MCP server integration with JetBrains AI Assistant</li>
+    <li>STDIO and HTTP transport modes</li>
+    <li>Settings UI for API token management</li>
+    <li>One-click MCP config copy</li>
+</ul>
+]]></change-notes>
+</idea-plugin>
