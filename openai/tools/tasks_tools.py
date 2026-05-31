@@ -99,8 +99,7 @@ async def openai_list_tasks(
         Literal["images", "images_generations", "images_edits"] | None,
         Field(
             description=(
-                "Filter by upstream type. Options: 'images', "
-                "'images_generations', 'images_edits'."
+                "Filter by upstream type. Options: 'images', 'images_generations', 'images_edits'."
             )
         ),
     ] = None,
