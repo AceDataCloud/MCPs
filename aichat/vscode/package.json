@@ -1,0 +1,61 @@
+{
+  "name": "mcp-aichat",
+  "displayName": "AiChat MCP",
+  "description": "Unified OpenAI-compatible LLM gateway \u2014 chat with GPT, Claude, Gemini, Grok, DeepSeek, Kimi and more via a single endpoint.",
+  "version": "0.1.0",
+  "publisher": "acedatacloud",
+  "icon": "icon.png",
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.99.0"
+  },
+  "categories": [
+    "AI",
+    "Chat"
+  ],
+  "keywords": [
+    "mcp",
+    "model context protocol",
+    "ai",
+    "copilot",
+    "ace data cloud",
+    "llm",
+    "openai",
+    "claude",
+    "gemini",
+    "grok",
+    "deepseek",
+    "chat completion"
+  ],
+  "galleryBanner": {
+    "color": "#0E1117",
+    "theme": "dark"
+  },
+  "homepage": "https://github.com/AceDataCloud/AiChatMCP",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AceDataCloud/AiChatMCP"
+  },
+  "bugs": {
+    "url": "https://github.com/AceDataCloud/AiChatMCP/issues"
+  },
+  "contributes": {
+    "mcpServers": {
+      "aichat": {
+        "type": "http",
+        "url": "https://aichat.mcp.acedata.cloud/mcp",
+        "headers": {
+          "Authorization": "Bearer ${input:acedatacloud_api_token}"
+        }
+      }
+    },
+    "inputs": [
+      {
+        "type": "promptString",
+        "id": "acedatacloud_api_token",
+        "description": "Ace Data Cloud API token. Sign in at https://platform.acedata.cloud and create a token in 'API Keys'. Stored securely by VS Code.",
+        "password": true
+      }
+    ]
+  }
+}
