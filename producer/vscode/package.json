@@ -1,8 +1,8 @@
 {
   "name": "mcp-producer",
   "displayName": "Producer MCP",
-  "description": "AI Music Generation with Producer/Riffusion - Generate, extend, cover, and remix music via Ace Data Cloud API",
-  "version": "0.1.0",
+  "description": "AI music with Producer (FUZZ) — songs, lyrics, covers, vocal/instrument swap, section replace.",
+  "version": "0.2.0",
   "publisher": "acedatacloud",
   "icon": "icon.png",
   "license": "MIT",
@@ -20,10 +20,16 @@
     "copilot",
     "ace data cloud",
     "producer",
-    "riffusion",
-    "music generation",
-    "ai music"
+    "fuzz",
+    "music",
+    "ai music",
+    "lyrics",
+    "riffusion"
   ],
+  "galleryBanner": {
+    "color": "#0E1117",
+    "theme": "dark"
+  },
   "homepage": "https://github.com/AceDataCloud/ProducerMCP",
   "repository": {
     "type": "git",
@@ -35,14 +41,20 @@
   "contributes": {
     "mcpServers": {
       "producer": {
-        "command": "uvx",
-        "args": [
-          "mcp-producer"
-        ],
-        "env": {
-          "ACEDATACLOUD_API_TOKEN": ""
+        "type": "http",
+        "url": "https://producer.mcp.acedata.cloud/mcp",
+        "headers": {
+          "Authorization": "Bearer ${input:acedatacloud_api_token}"
         }
       }
-    }
+    },
+    "inputs": [
+      {
+        "type": "promptString",
+        "id": "acedatacloud_api_token",
+        "description": "Ace Data Cloud API token. Sign in at https://platform.acedata.cloud and create a token in 'API Keys'. Stored securely by VS Code.",
+        "password": true
+      }
+    ]
   }
 }

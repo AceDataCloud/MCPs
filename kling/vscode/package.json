@@ -1,8 +1,8 @@
 {
   "name": "mcp-kling",
   "displayName": "Kling MCP",
-  "description": "AI Video Generation with Kling - Generate, extend, and animate videos via Ace Data Cloud API",
-  "version": "0.1.0",
+  "description": "Kuaishou Kling video generation — text-to-video, image-to-video, extend, motion.",
+  "version": "0.2.0",
   "publisher": "acedatacloud",
   "icon": "icon.png",
   "license": "MIT",
@@ -20,10 +20,14 @@
     "copilot",
     "ace data cloud",
     "kling",
+    "kuaishou",
     "video generation",
-    "motion transfer",
-    "ai video"
+    "motion control"
   ],
+  "galleryBanner": {
+    "color": "#0E1117",
+    "theme": "dark"
+  },
   "homepage": "https://github.com/AceDataCloud/KlingMCP",
   "repository": {
     "type": "git",
@@ -35,14 +39,20 @@
   "contributes": {
     "mcpServers": {
       "kling": {
-        "command": "uvx",
-        "args": [
-          "mcp-kling"
-        ],
-        "env": {
-          "ACEDATACLOUD_API_TOKEN": ""
+        "type": "http",
+        "url": "https://kling.mcp.acedata.cloud/mcp",
+        "headers": {
+          "Authorization": "Bearer ${input:acedatacloud_api_token}"
         }
       }
-    }
+    },
+    "inputs": [
+      {
+        "type": "promptString",
+        "id": "acedatacloud_api_token",
+        "description": "Ace Data Cloud API token. Sign in at https://platform.acedata.cloud and create a token in 'API Keys'. Stored securely by VS Code.",
+        "password": true
+      }
+    ]
   }
 }

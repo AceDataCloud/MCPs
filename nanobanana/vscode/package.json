@@ -1,8 +1,8 @@
 {
-  "name": "mcp-nanobanana",
+  "name": "mcp-nanobanana-pro",
   "displayName": "NanoBanana MCP",
-  "description": "AI Image Generation with NanoBanana (Gemini-based) - Generate and edit images via Ace Data Cloud API",
-  "version": "0.1.0",
+  "description": "Gemini-powered NanoBanana — generate and edit images via natural language.",
+  "version": "0.2.0",
   "publisher": "acedatacloud",
   "icon": "icon.png",
   "license": "MIT",
@@ -20,10 +20,15 @@
     "copilot",
     "ace data cloud",
     "nanobanana",
-    "image generation",
+    "nano banana",
     "gemini",
-    "ai art"
+    "image generation",
+    "image editing"
   ],
+  "galleryBanner": {
+    "color": "#0E1117",
+    "theme": "dark"
+  },
   "homepage": "https://github.com/AceDataCloud/NanoBananaMCP",
   "repository": {
     "type": "git",
@@ -35,14 +40,20 @@
   "contributes": {
     "mcpServers": {
       "nanobanana": {
-        "command": "uvx",
-        "args": [
-          "mcp-nanobanana-pro"
-        ],
-        "env": {
-          "ACEDATACLOUD_API_TOKEN": ""
+        "type": "http",
+        "url": "https://nanobanana.mcp.acedata.cloud/mcp",
+        "headers": {
+          "Authorization": "Bearer ${input:acedatacloud_api_token}"
         }
       }
-    }
+    },
+    "inputs": [
+      {
+        "type": "promptString",
+        "id": "acedatacloud_api_token",
+        "description": "Ace Data Cloud API token. Sign in at https://platform.acedata.cloud and create a token in 'API Keys'. Stored securely by VS Code.",
+        "password": true
+      }
+    ]
   }
 }
