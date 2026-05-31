@@ -31,10 +31,8 @@ spec:
           env:
             - name: MCP_SERVER_URL
               value: "https://face.mcp.acedata.cloud"
-            # TODO: replace with the OAuth client ID created for face.mcp.acedata.cloud
-            # in AuthBackend (Application → Application list).
             - name: ACEDATACLOUD_OAUTH_CLIENT_ID
-              value: "REPLACE_WITH_FACE_OAUTH_CLIENT_ID"
+              value: "1orvKZ2eLxRZDugAFqeDSJcs5Qukfp6BP1rg2X0lVBo"
           resources:
             limits:
               cpu: 500m

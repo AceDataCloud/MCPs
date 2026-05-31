@@ -31,10 +31,8 @@ spec:
           env:
             - name: MCP_SERVER_URL
               value: "https://fish.mcp.acedata.cloud"
-            # TODO: replace with the OAuth client ID created for fish.mcp.acedata.cloud
-            # in AuthBackend (Application → Application list).
             - name: ACEDATACLOUD_OAUTH_CLIENT_ID
-              value: "REPLACE_WITH_FISH_OAUTH_CLIENT_ID"
+              value: "_y6Yaa_8HvvMQwEfGl6U1p-DfjnDnhz8P8BAZUX73Gs"
           resources:
             limits:
               cpu: 500m
