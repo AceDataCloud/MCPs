@@ -49,12 +49,12 @@
     "commands": [
       {
         "command": "acedatacloud.luma.setApiToken",
-        "title": "Luma MCP: Set Ace Data Cloud API Token",
+        "title": "Luma MCP: Set Ace Data Cloud API Key",
         "category": "MCP"
       },
       {
         "command": "acedatacloud.luma.clearApiToken",
-        "title": "Luma MCP: Clear Ace Data Cloud API Token",
+        "title": "Luma MCP: Clear Ace Data Cloud API Key",
         "category": "MCP"
       }
     ]

@@ -2,12 +2,12 @@
 //
 // Registers the hosted Ace Data Cloud "seedream" MCP server with VS Code
 // via the stable `vscode.lm.registerMcpServerDefinitionProvider` API. The
-// Bearer token is read from (in order):
+// Bearer API key is read from (in order):
 //   1. process.env.ACEDATACLOUD_API_TOKEN
 //   2. VS Code SecretStorage (key "seedream.apiToken")
 //   3. An interactive showInputBox prompt on first use
 //
-// Two commands are exposed for managing the token from the command palette:
+// Two commands are exposed for managing the API key from the command palette:
 //   - acedatacloud.seedream.setApiToken
 //   - acedatacloud.seedream.clearApiToken
 
@@ -19,7 +19,7 @@ const SERVER_URL = "https://seedream.mcp.acedata.cloud/mcp";
 const SET_TOKEN_CMD = "acedatacloud.seedream.setApiToken";
 const CLEAR_TOKEN_CMD = "acedatacloud.seedream.clearApiToken";
 // Per-extension SecretStorage namespace; we keep one key per service so
-// rotating one token doesn't affect siblings.
+// rotating one API key doesn't affect siblings.
 const SECRET_KEY = "seedream.apiToken";
 const SIGNUP_URL = "https://platform.acedata.cloud";
 
@@ -32,9 +32,9 @@ async function readToken(context) {
 
 async function promptForToken(context) {
   const token = await vscode.window.showInputBox({
-    title: `${SERVER_LABEL} — Ace Data Cloud API token`,
-    prompt: `Paste an API token from ${SIGNUP_URL} → "API Keys". Stored in the OS keychain.`,
-    placeHolder: "sk-...",
+    title: `${SERVER_LABEL} — Ace Data Cloud API key`,
+        prompt: `Paste an API key from ${SIGNUP_URL}/console/applications (Applications -> API Key). Stored in the OS keychain.`,
+        placeHolder: "API key from /console/applications",
     password: true,
     ignoreFocusOut: true,
   });
@@ -53,13 +53,13 @@ function activate(context) {
     vscode.commands.registerCommand(SET_TOKEN_CMD, async () => {
       const t = await promptForToken(context);
       if (t) {
-        vscode.window.showInformationMessage(`${SERVER_LABEL}: API token saved.`);
+        vscode.window.showInformationMessage(`${SERVER_LABEL}: API key saved.`);
         onDidChange.fire();
       }
     }),
     vscode.commands.registerCommand(CLEAR_TOKEN_CMD, async () => {
       await context.secrets.delete(SECRET_KEY);
-      vscode.window.showInformationMessage(`${SERVER_LABEL}: API token cleared.`);
+    vscode.window.showInformationMessage(`${SERVER_LABEL}: API key cleared.`);
       onDidChange.fire();
     }),
     context.secrets.onDidChange((e) => {
@@ -75,8 +75,8 @@ function activate(context) {
         if (!token) token = await promptForToken(context);
         if (!token) {
           throw new Error(
-            `${SERVER_LABEL} needs an Ace Data Cloud API token. ` +
-              `Run "${SERVER_LABEL}: Set Ace Data Cloud API Token" from the command palette.`
+                        `${SERVER_LABEL} needs an Ace Data Cloud API key. ` +
+                            `Run "${SERVER_LABEL}: Set Ace Data Cloud API Key" from the command palette.`
           );
         }
         return new vscode.McpHttpServerDefinition(server.label, server.uri, {

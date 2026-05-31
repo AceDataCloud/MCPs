@@ -15,13 +15,13 @@ can call it directly from chat.
 ## Quick Start
 
 1. **Install this extension.** VS Code registers the `hailuo` MCP server automatically.
-2. **Get an API token** from [Ace Data Cloud](https://platform.acedata.cloud) → *API Keys*. New accounts include free trial credit.
-3. **Open Copilot Chat** in agent mode and ask for a video task — the extension prompts for the token the first time and stores it in the OS keychain via VS Code's `SecretStorage`.
+2. **Get an API key** from [Ace Data Cloud](https://platform.acedata.cloud/console/applications) (Applications → API Key). New accounts include free trial credit.
+3. **Open Copilot Chat** in agent mode and ask for a video task — the extension prompts for the API key the first time and stores it in the OS keychain via VS Code's `SecretStorage`.
 
-You can rotate or remove the token any time from the command palette:
+You can rotate or remove the API key any time from the command palette:
 
-- **Hailuo MCP: Set Ace Data Cloud API Token**
-- **Hailuo MCP: Clear Ace Data Cloud API Token**
+- **Hailuo MCP: Set Ace Data Cloud API Key**
+- **Hailuo MCP: Clear Ace Data Cloud API Key**
 
 > The default config talks to the **hosted streamable-HTTP endpoint** at
 > `https://hailuo.mcp.acedata.cloud/mcp` — no Python, no `uvx`, no local install needed.
@@ -62,7 +62,7 @@ Provider id : acedatacloud.hailuo
 Server label: Hailuo MCP
 Server URL  : https://hailuo.mcp.acedata.cloud/mcp
 Transport   : Streamable HTTP
-Auth        : Bearer token from VS Code SecretStorage (or $ACEDATACLOUD_API_TOKEN)
+Auth        : Bearer API key from VS Code SecretStorage (or $ACEDATACLOUD_API_TOKEN)
 ```
 
 You don't need to edit `mcp.json` — the extension handles registration and
@@ -85,7 +85,7 @@ this extension.
     {
       "type": "promptString",
       "id": "acedatacloud_api_token",
-      "description": "Ace Data Cloud API token",
+    "description": "Ace Data Cloud API key",
       "password": true
     }
   ]

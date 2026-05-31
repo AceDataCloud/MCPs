@@ -49,12 +49,12 @@
     "commands": [
       {
         "command": "acedatacloud.wan.setApiToken",
-        "title": "Wan MCP: Set Ace Data Cloud API Token",
+        "title": "Wan MCP: Set Ace Data Cloud API Key",
         "category": "MCP"
       },
       {
         "command": "acedatacloud.wan.clearApiToken",
-        "title": "Wan MCP: Clear Ace Data Cloud API Token",
+        "title": "Wan MCP: Clear Ace Data Cloud API Key",
         "category": "MCP"
       }
     ]

@@ -48,12 +48,12 @@
     "commands": [
       {
         "command": "acedatacloud.hailuo.setApiToken",
-        "title": "Hailuo MCP: Set Ace Data Cloud API Token",
+        "title": "Hailuo MCP: Set Ace Data Cloud API Key",
         "category": "MCP"
       },
       {
         "command": "acedatacloud.hailuo.clearApiToken",
-        "title": "Hailuo MCP: Clear Ace Data Cloud API Token",
+        "title": "Hailuo MCP: Clear Ace Data Cloud API Key",
         "category": "MCP"
       }
     ]

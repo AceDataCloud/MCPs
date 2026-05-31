@@ -50,12 +50,12 @@
     "commands": [
       {
         "command": "acedatacloud.serp.setApiToken",
-        "title": "Serp MCP: Set Ace Data Cloud API Token",
+        "title": "Serp MCP: Set Ace Data Cloud API Key",
         "category": "MCP"
       },
       {
         "command": "acedatacloud.serp.clearApiToken",
-        "title": "Serp MCP: Clear Ace Data Cloud API Token",
+        "title": "Serp MCP: Clear Ace Data Cloud API Key",
         "category": "MCP"
       }
     ]

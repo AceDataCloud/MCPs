@@ -6,9 +6,9 @@ for every MCP listed in `scripts/vscode_extensions.yaml`.
 The extension registers an HTTP MCP server via the proper VS Code API
 (`contributes.mcpServerDefinitionProviders` + `vscode.lm.registerMcp\
 ServerDefinitionProvider`). On first use it prompts for an Ace Data Cloud
-API token via `vscode.window.showInputBox` and persists it through
-`SecretStorage`. Two commands (`<svc>: Set/Clear API Token`) let users
-rotate or remove the token from the command palette.
+API key via `vscode.window.showInputBox` and persists it through
+`SecretStorage`. Two commands (`<svc>: Set/Clear API Key`) let users
+rotate or remove the key from the command palette.
 
 Usage:
   python3 scripts/build_vscode_extensions.py                 # all services
@@ -190,12 +190,12 @@ def render_package_json(svc: Service) -> str:
             "commands": [
                 {
                     "command": svc.set_token_cmd,
-                    "title": f"{svc.display_name}: Set Ace Data Cloud API Token",
+                    "title": f"{svc.display_name}: Set Ace Data Cloud API Key",
                     "category": "MCP",
                 },
                 {
                     "command": svc.clear_token_cmd,
-                    "title": f"{svc.display_name}: Clear Ace Data Cloud API Token",
+                    "title": f"{svc.display_name}: Clear Ace Data Cloud API Key",
                     "category": "MCP",
                 },
             ],
@@ -210,12 +210,12 @@ def render_extension_js(svc: Service) -> str:
 //
 // Registers the hosted Ace Data Cloud "{svc.alias}" MCP server with VS Code
 // via the stable `vscode.lm.registerMcpServerDefinitionProvider` API. The
-// Bearer token is read from (in order):
+// Bearer API key is read from (in order):
 //   1. process.env.ACEDATACLOUD_API_TOKEN
 //   2. VS Code SecretStorage (key "{svc.alias}.apiToken")
 //   3. An interactive showInputBox prompt on first use
 //
-// Two commands are exposed for managing the token from the command palette:
+// Two commands are exposed for managing the API key from the command palette:
 //   - {svc.set_token_cmd}
 //   - {svc.clear_token_cmd}
 
@@ -227,7 +227,7 @@ const SERVER_URL = "{svc.hosted_url}";
 const SET_TOKEN_CMD = "{svc.set_token_cmd}";
 const CLEAR_TOKEN_CMD = "{svc.clear_token_cmd}";
 // Per-extension SecretStorage namespace; we keep one key per service so
-// rotating one token doesn't affect siblings.
+// rotating one API key doesn't affect siblings.
 const SECRET_KEY = "{svc.alias}.apiToken";
 const SIGNUP_URL = "{svc.signup_url}";
 
@@ -240,9 +240,9 @@ async function readToken(context) {{
 
 async function promptForToken(context) {{
   const token = await vscode.window.showInputBox({{
-    title: `${{SERVER_LABEL}} — Ace Data Cloud API token`,
-    prompt: `Paste an API token from ${{SIGNUP_URL}} → "API Keys". Stored in the OS keychain.`,
-    placeHolder: "sk-...",
+    title: `${{SERVER_LABEL}} — Ace Data Cloud API key`,
+        prompt: `Paste an API key from ${{SIGNUP_URL}}/console/applications (Applications -> API Key). Stored in the OS keychain.`,
+        placeHolder: "API key from /console/applications",
     password: true,
     ignoreFocusOut: true,
   }});
@@ -261,13 +261,13 @@ function activate(context) {{
     vscode.commands.registerCommand(SET_TOKEN_CMD, async () => {{
       const t = await promptForToken(context);
       if (t) {{
-        vscode.window.showInformationMessage(`${{SERVER_LABEL}}: API token saved.`);
+        vscode.window.showInformationMessage(`${{SERVER_LABEL}}: API key saved.`);
         onDidChange.fire();
       }}
     }}),
     vscode.commands.registerCommand(CLEAR_TOKEN_CMD, async () => {{
       await context.secrets.delete(SECRET_KEY);
-      vscode.window.showInformationMessage(`${{SERVER_LABEL}}: API token cleared.`);
+    vscode.window.showInformationMessage(`${{SERVER_LABEL}}: API key cleared.`);
       onDidChange.fire();
     }}),
     context.secrets.onDidChange((e) => {{
@@ -283,8 +283,8 @@ function activate(context) {{
         if (!token) token = await promptForToken(context);
         if (!token) {{
           throw new Error(
-            `${{SERVER_LABEL}} needs an Ace Data Cloud API token. ` +
-              `Run "${{SERVER_LABEL}}: Set Ace Data Cloud API Token" from the command palette.`
+                        `${{SERVER_LABEL}} needs an Ace Data Cloud API key. ` +
+                            `Run "${{SERVER_LABEL}}: Set Ace Data Cloud API Key" from the command palette.`
           );
         }}
         return new vscode.McpHttpServerDefinition(server.label, server.uri, {{
@@ -351,13 +351,13 @@ can call it directly from chat.
 ## Quick Start
 
 1. **Install this extension.** VS Code registers the `{svc.alias}` MCP server automatically.
-2. **Get an API token** from [Ace Data Cloud]({svc.signup_url}) → *API Keys*. New accounts include free trial credit.
-3. **Open Copilot Chat** in agent mode and ask for a {svc.domain} task — the extension prompts for the token the first time and stores it in the OS keychain via VS Code's `SecretStorage`.
+2. **Get an API key** from [Ace Data Cloud]({svc.signup_url}/console/applications) (Applications → API Key). New accounts include free trial credit.
+3. **Open Copilot Chat** in agent mode and ask for a {svc.domain} task — the extension prompts for the API key the first time and stores it in the OS keychain via VS Code's `SecretStorage`.
 
-You can rotate or remove the token any time from the command palette:
+You can rotate or remove the API key any time from the command palette:
 
-- **{svc.display_name}: Set Ace Data Cloud API Token**
-- **{svc.display_name}: Clear Ace Data Cloud API Token**
+- **{svc.display_name}: Set Ace Data Cloud API Key**
+- **{svc.display_name}: Clear Ace Data Cloud API Key**
 
 > The default config talks to the **hosted streamable-HTTP endpoint** at
 > `{svc.hosted_url}` — no Python, no `uvx`, no local install needed.
@@ -390,7 +390,7 @@ Provider id : {svc.provider_id}
 Server label: {svc.display_name}
 Server URL  : {svc.hosted_url}
 Transport   : Streamable HTTP
-Auth        : Bearer token from VS Code SecretStorage (or $ACEDATACLOUD_API_TOKEN)
+Auth        : Bearer API key from VS Code SecretStorage (or $ACEDATACLOUD_API_TOKEN)
 ```
 
 You don't need to edit `mcp.json` — the extension handles registration and
@@ -413,7 +413,7 @@ this extension.
     {{
       "type": "promptString",
       "id": "acedatacloud_api_token",
-      "description": "Ace Data Cloud API token",
+    "description": "Ace Data Cloud API key",
       "password": true
     }}
   ]

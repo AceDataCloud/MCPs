@@ -49,12 +49,12 @@
     "commands": [
       {
         "command": "acedatacloud.midjourney.setApiToken",
-        "title": "Midjourney MCP: Set Ace Data Cloud API Token",
+        "title": "Midjourney MCP: Set Ace Data Cloud API Key",
         "category": "MCP"
       },
       {
         "command": "acedatacloud.midjourney.clearApiToken",
-        "title": "Midjourney MCP: Clear Ace Data Cloud API Token",
+        "title": "Midjourney MCP: Clear Ace Data Cloud API Key",
         "category": "MCP"
       }
     ]

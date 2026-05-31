@@ -49,12 +49,12 @@
     "commands": [
       {
         "command": "acedatacloud.seedream.setApiToken",
-        "title": "Seedream MCP: Set Ace Data Cloud API Token",
+        "title": "Seedream MCP: Set Ace Data Cloud API Key",
         "category": "MCP"
       },
       {
         "command": "acedatacloud.seedream.clearApiToken",
-        "title": "Seedream MCP: Clear Ace Data Cloud API Token",
+        "title": "Seedream MCP: Clear Ace Data Cloud API Key",
         "category": "MCP"
       }
     ]

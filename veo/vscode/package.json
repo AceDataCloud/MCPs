@@ -48,12 +48,12 @@
     "commands": [
       {
         "command": "acedatacloud.veo.setApiToken",
-        "title": "Veo MCP: Set Ace Data Cloud API Token",
+        "title": "Veo MCP: Set Ace Data Cloud API Key",
         "category": "MCP"
       },
       {
         "command": "acedatacloud.veo.clearApiToken",
-        "title": "Veo MCP: Clear Ace Data Cloud API Token",
+        "title": "Veo MCP: Clear Ace Data Cloud API Key",
         "category": "MCP"
       }
     ]

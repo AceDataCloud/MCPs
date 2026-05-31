@@ -48,12 +48,12 @@
     "commands": [
       {
         "command": "acedatacloud.shorturl.setApiToken",
-        "title": "Short URL MCP: Set Ace Data Cloud API Token",
+        "title": "Short URL MCP: Set Ace Data Cloud API Key",
         "category": "MCP"
       },
       {
         "command": "acedatacloud.shorturl.clearApiToken",
-        "title": "Short URL MCP: Clear Ace Data Cloud API Token",
+        "title": "Short URL MCP: Clear Ace Data Cloud API Key",
         "category": "MCP"
       }
     ]

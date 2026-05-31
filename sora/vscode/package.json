@@ -48,12 +48,12 @@
     "commands": [
       {
         "command": "acedatacloud.sora.setApiToken",
-        "title": "Sora MCP: Set Ace Data Cloud API Token",
+        "title": "Sora MCP: Set Ace Data Cloud API Key",
         "category": "MCP"
       },
       {
         "command": "acedatacloud.sora.clearApiToken",
-        "title": "Sora MCP: Clear Ace Data Cloud API Token",
+        "title": "Sora MCP: Clear Ace Data Cloud API Key",
         "category": "MCP"
       }
     ]

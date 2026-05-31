@@ -50,12 +50,12 @@
     "commands": [
       {
         "command": "acedatacloud.suno.setApiToken",
-        "title": "Suno MCP: Set Ace Data Cloud API Token",
+        "title": "Suno MCP: Set Ace Data Cloud API Key",
         "category": "MCP"
       },
       {
         "command": "acedatacloud.suno.clearApiToken",
-        "title": "Suno MCP: Clear Ace Data Cloud API Token",
+        "title": "Suno MCP: Clear Ace Data Cloud API Key",
         "category": "MCP"
       }
     ]

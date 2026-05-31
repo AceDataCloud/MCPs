@@ -50,12 +50,12 @@
     "commands": [
       {
         "command": "acedatacloud.producer.setApiToken",
-        "title": "Producer MCP: Set Ace Data Cloud API Token",
+        "title": "Producer MCP: Set Ace Data Cloud API Key",
         "category": "MCP"
       },
       {
         "command": "acedatacloud.producer.clearApiToken",
-        "title": "Producer MCP: Clear Ace Data Cloud API Token",
+        "title": "Producer MCP: Clear Ace Data Cloud API Key",
         "category": "MCP"
       }
     ]
