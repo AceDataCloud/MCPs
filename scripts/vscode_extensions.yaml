@@ -16,7 +16,9 @@ defaults:
   publisher: acedatacloud
   signup_url: https://platform.acedata.cloud
   docs_url: https://docs.acedata.cloud
-  vscode_engine: "^1.99.0"
+  # 1.101.0 is the first stable release with vscode.lm.registerMcpServerDefinitionProvider
+  # + McpHttpServerDefinition (matches Context7 + microsoft/vscode d.ts).
+  vscode_engine: "^1.101.0"
   common_categories: ["AI", "Chat"]
   common_keywords:
     - mcp
