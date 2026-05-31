@@ -1,8 +1,8 @@
 {
   "name": "mcp-fish",
   "displayName": "Fish Audio MCP",
-  "description": "Text-to-speech with Fish Audio voice models via the Ace Data Cloud API",
-  "version": "0.1.0",
+  "description": "Fish Audio TTS — generate natural speech and browse the Fish voice library.",
+  "version": "0.2.0",
   "publisher": "acedatacloud",
   "icon": "icon.png",
   "license": "MIT",
@@ -22,11 +22,15 @@
     "fish",
     "fish audio",
     "tts",
-    "text-to-speech",
-    "voice",
+    "text to speech",
+    "voice synthesis",
     "audio",
-    "speech synthesis"
+    "speech"
   ],
+  "galleryBanner": {
+    "color": "#0E1117",
+    "theme": "dark"
+  },
   "homepage": "https://github.com/AceDataCloud/FishMCP",
   "repository": {
     "type": "git",
@@ -38,14 +42,20 @@
   "contributes": {
     "mcpServers": {
       "fish": {
-        "command": "uvx",
-        "args": [
-          "mcp-fish"
-        ],
-        "env": {
-          "ACEDATACLOUD_API_TOKEN": ""
+        "type": "http",
+        "url": "https://fish.mcp.acedata.cloud/mcp",
+        "headers": {
+          "Authorization": "Bearer ${input:acedatacloud_api_token}"
         }
       }
-    }
+    },
+    "inputs": [
+      {
+        "type": "promptString",
+        "id": "acedatacloud_api_token",
+        "description": "Ace Data Cloud API token. Sign in at https://platform.acedata.cloud and create a token in 'API Keys'. Stored securely by VS Code.",
+        "password": true
+      }
+    ]
   }
 }

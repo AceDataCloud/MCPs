@@ -1,8 +1,8 @@
 {
   "name": "mcp-face-transform",
   "displayName": "Face Transform MCP",
-  "description": "Face analysis & transformation (keypoints, beautify, age/gender, swap, cartoon, liveness) via Ace Data Cloud API",
-  "version": "0.1.0",
+  "description": "Face analysis and transforms — keypoints, beautify, age/gender, swap, cartoon, liveness. (Alpha)",
+  "version": "0.2.0",
   "publisher": "acedatacloud",
   "icon": "icon.png",
   "license": "MIT",
@@ -20,11 +20,21 @@
     "copilot",
     "ace data cloud",
     "face",
+    "face detection",
+    "keypoints",
     "face swap",
-    "face transform",
-    "liveness detection",
-    "beautify"
+    "beautify",
+    "cartoon",
+    "liveness",
+    "portrait",
+    "age",
+    "gender",
+    "transform"
   ],
+  "galleryBanner": {
+    "color": "#0E1117",
+    "theme": "dark"
+  },
   "homepage": "https://github.com/AceDataCloud/FaceTransformMCP",
   "repository": {
     "type": "git",
@@ -36,14 +46,20 @@
   "contributes": {
     "mcpServers": {
       "face": {
-        "command": "uvx",
-        "args": [
-          "mcp-face-transform"
-        ],
-        "env": {
-          "ACEDATACLOUD_API_TOKEN": ""
+        "type": "http",
+        "url": "https://face.mcp.acedata.cloud/mcp",
+        "headers": {
+          "Authorization": "Bearer ${input:acedatacloud_api_token}"
         }
       }
-    }
+    },
+    "inputs": [
+      {
+        "type": "promptString",
+        "id": "acedatacloud_api_token",
+        "description": "Ace Data Cloud API token. Sign in at https://platform.acedata.cloud and create a token in 'API Keys'. Stored securely by VS Code.",
+        "password": true
+      }
+    ]
   }
 }
