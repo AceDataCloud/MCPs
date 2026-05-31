@@ -1,7 +1,8 @@
 """Face analysis and transformation tools."""
 
 import json
-from typing import Annotated
+from collections.abc import Awaitable, Callable
+from typing import Annotated, Any
 
 from pydantic import Field
 
@@ -21,7 +22,10 @@ def _json_error(error: str, message: str) -> str:
     return json.dumps({"error": error, "message": message})
 
 
-async def _call(method, **payload):  # type: ignore[no-untyped-def]
+async def _call(
+    method: Callable[..., Awaitable[dict[str, Any] | None]],
+    **payload: Any,
+) -> str:
     """Wrap a FaceClient call, returning a JSON string and mapping errors."""
     try:
         result = await method(**payload)
