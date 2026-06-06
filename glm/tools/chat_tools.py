@@ -26,7 +26,7 @@ async def glm_chat_completions(
         GlmModel,
         Field(
             description=(
-                "The GLM model to use. Options: glm-5.1, glm-4.7, glm-4.6, glm-4.5-air, "
+                "The GLM model to use. Options: glm-5.1, glm-4.7, glm-4.6, "
                 "glm-3-turbo. Default is glm-4.7."
             )
         ),
@@ -153,7 +153,7 @@ async def glm_chat_completions(
     """Create a GLM chat completion using the AceDataCloud GLM API.
 
     Sends messages to the specified GLM model and returns the generated response.
-    Supports all GLM models: glm-5.1, glm-4.7, glm-4.6, glm-4.5-air, glm-3-turbo.
+    Supports all GLM models: glm-5.1, glm-4.7, glm-4.6, glm-3-turbo.
 
     Use this when:
     - You need to chat with a Zhipu GLM model

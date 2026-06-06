@@ -36,7 +36,7 @@ Use `glm-4.7` — strong general-purpose model
 Use `glm-4.6` — good balance of speed and quality
 
 ### For speed-sensitive tasks
-Use `glm-4.5-air` — lightweight and fast
+Use `glm-3-turbo` — efficient and fast
 
 ### For quick, simple tasks
 Use `glm-3-turbo` — efficient previous-generation model

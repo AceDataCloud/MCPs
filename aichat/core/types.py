@@ -80,7 +80,6 @@ AiChatModel = Literal[
     "glm-5.1",
     "glm-4.7",
     "glm-4.6",
-    "glm-4.5-air",
     "glm-3-turbo",
 ]
 
@@ -118,6 +117,7 @@ AiChatV2Model = Literal[
     "claude-opus-4-20250514",
     "claude-opus-4-5-20251101",
     "claude-opus-4-6",
+    "claude-opus-4-8",
     "claude-opus-4-7",
     "claude-sonnet-4-20250514",
     "claude-sonnet-4-5-20250929",
@@ -156,11 +156,7 @@ AiChatV2Model = Literal[
     "kimi-k2-turbo-preview",
     "kimi-k2.5",
     "glm-3-turbo",
-    "glm-4-air",
-    "glm-4-flash",
-    "glm-4-plus",
     "glm-4.5",
-    "glm-4.5-air",
     "glm-4.5v",
     "glm-4.6",
     "glm-4.7",
