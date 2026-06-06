@@ -6,7 +6,7 @@ metadata:
   name: mcp-sora
   namespace: acedatacloud
 spec:
-  replicas: 1
+  replicas: 0
   revisionHistoryLimit: 5
   selector:
     matchLabels:
