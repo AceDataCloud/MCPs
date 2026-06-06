@@ -26,6 +26,13 @@ You can rotate or remove the API key any time from the command palette:
 > The default config talks to the **hosted streamable-HTTP endpoint** at
 > `https://suno.mcp.acedata.cloud/mcp` — no Python, no `uvx`, no local install needed.
 
+## VS Code Setup Guide
+
+For screenshots, token setup, project-level and user-level `mcp.json`, and Copilot Agent Mode examples, see:
+
+- [Suno MCP VS Code guide](https://platform.acedata.cloud/documents/promotion_article_mcp_suno_vscode)
+- [All Ace Data Cloud MCP servers in VS Code](https://platform.acedata.cloud/documents/promotion_article_mcp_all_vscode)
+
 ### Example prompts
 
 - "Generate a lofi hip-hop track about late-night coding. Use suno."
@@ -36,7 +43,7 @@ You can rotate or remove the API key any time from the command palette:
 
 ## Tool Reference
 
-**27 tools** available via this server.
+**35 tools** available via this server.
 
 | Tool | Description |
 | --- | --- |
@@ -46,8 +53,10 @@ You can rotate or remove the API key any time from the command palette:
 | `suno_cover_music` | Create a cover or remix version of an existing song in a different style. |
 | `suno_concat_music` | Concatenate extended song segments into a single complete audio file. |
 | `suno_generate_with_persona` | Generate music using a saved artist persona for consistent vocal style. |
+| `suno_generate_with_persona_vox` | Generate music with stronger vocal consistency from a saved persona. |
 | `suno_remaster_music` | Remaster an existing song to improve audio quality. |
 | `suno_stems_music` | Separate a song into individual stems (vocals and instruments). |
+| `suno_all_stems_music` | Separate a song into vocals, bass, drums, and other instrument stems. |
 | `suno_replace_section` | Replace a specific time range in a song with new generated content. |
 | `suno_upload_extend` | Extend an uploaded audio (your own music) with new AI-generated content. |
 | `suno_upload_cover` | Create an AI cover of an uploaded audio (your own music). |
@@ -59,9 +68,15 @@ You can rotate or remove the API key any time from the command palette:
 | `suno_get_wav` | Get the lossless WAV format of a generated song. |
 | `suno_get_midi` | Get MIDI data extracted from a generated song. |
 | `suno_create_persona` | Create a new artist persona from an existing audio's vocal style. |
+| `suno_create_voice` | Create a custom voice persona from an external audio URL. |
+| `suno_list_personas` | List saved artist personas and voice IDs. |
+| `suno_delete_persona` | Delete a saved artist persona. |
 | `suno_optimize_style` | Optimize a music style description for better generation results. |
 | `suno_mashup_lyrics` | Generate mashup lyrics by combining two sets of lyrics. |
 | `suno_upload_audio` | Upload an external audio file to Suno for use in subsequent operations. |
+| `suno_underpainting` | Add AI-generated accompaniment under uploaded vocals. |
+| `suno_overpainting` | Add AI-generated vocals over uploaded instrumental audio. |
+| `suno_samples_music` | Add AI-generated samples to uploaded audio. |
 | `suno_get_task` | Query the status and result of a music generation task. |
 | `suno_get_tasks_batch` | Query multiple music generation tasks at once. |
 | `suno_list_models` | List all available Suno models and their capabilities. |
@@ -111,7 +126,7 @@ this extension.
     {
       "type": "promptString",
       "id": "acedatacloud_api_token",
-    "description": "Ace Data Cloud API key",
+      "description": "Ace Data Cloud API key",
       "password": true
     }
   ]

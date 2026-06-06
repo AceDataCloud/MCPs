@@ -2,7 +2,7 @@
 
 Gemini-powered NanoBanana — generate and edit images via natural language.
 
-[![VS Code Marketplace](https://img.shields.io/visual-studio-marketplace/v/acedatacloud.mcp-nanobanana-pro?label=VS%20Code)](https://marketplace.visualstudio.com/items?itemName=acedatacloud.mcp-nanobanana-pro) [![PyPI](https://img.shields.io/pypi/v/mcp-nanobanana-pro.svg?label=PyPI)](https://pypi.org/project/mcp-nanobanana-pro/) [![Hosted MCP](https://img.shields.io/badge/hosted-mcp-blue)](https://nanobanana.mcp.acedata.cloud/mcp)
+[![VS Code Marketplace](https://img.shields.io/visual-studio-marketplace/v/acedatacloud.mcp-nanobanana?label=VS%20Code)](https://marketplace.visualstudio.com/items?itemName=acedatacloud.mcp-nanobanana) [![PyPI](https://img.shields.io/pypi/v/mcp-nanobanana-pro.svg?label=PyPI)](https://pypi.org/project/mcp-nanobanana-pro/) [![Hosted MCP](https://img.shields.io/badge/hosted-mcp-blue)](https://nanobanana.mcp.acedata.cloud/mcp)
 
 Image generation and edit-by-instruction using NanoBanana, NanoBanana 2, and NanoBanana Pro (built on Gemini).
 
@@ -25,6 +25,13 @@ You can rotate or remove the API key any time from the command palette:
 
 > The default config talks to the **hosted streamable-HTTP endpoint** at
 > `https://nanobanana.mcp.acedata.cloud/mcp` — no Python, no `uvx`, no local install needed.
+
+## VS Code Setup Guide
+
+For screenshots, token setup, project-level and user-level `mcp.json`, and Copilot Agent Mode examples, see:
+
+- [NanoBanana MCP VS Code guide](https://platform.acedata.cloud/documents/promotion_article_mcp_nanobanana_vscode)
+- [All Ace Data Cloud MCP servers in VS Code](https://platform.acedata.cloud/documents/promotion_article_mcp_all_vscode)
 
 ### Example prompts
 
@@ -87,7 +94,7 @@ this extension.
     {
       "type": "promptString",
       "id": "acedatacloud_api_token",
-    "description": "Ace Data Cloud API key",
+      "description": "Ace Data Cloud API key",
       "password": true
     }
   ]

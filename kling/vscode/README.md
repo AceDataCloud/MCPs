@@ -26,6 +26,10 @@ You can rotate or remove the API key any time from the command palette:
 > The default config talks to the **hosted streamable-HTTP endpoint** at
 > `https://kling.mcp.acedata.cloud/mcp` — no Python, no `uvx`, no local install needed.
 
+## VS Code Setup Guide
+
+For the full VS Code walkthrough, see [All Ace Data Cloud MCP servers in VS Code](https://platform.acedata.cloud/documents/promotion_article_mcp_all_vscode). It covers token setup, project-level and user-level `mcp.json`, Copilot Agent Mode, and using one Ace Data Cloud token across hosted MCP servers.
+
 ### Example prompts
 
 - "Generate a Kling video of a panda doing parkour through a bamboo forest."
@@ -87,7 +91,7 @@ this extension.
     {
       "type": "promptString",
       "id": "acedatacloud_api_token",
-    "description": "Ace Data Cloud API key",
+      "description": "Ace Data Cloud API key",
       "password": true
     }
   ]

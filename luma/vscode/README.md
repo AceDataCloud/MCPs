@@ -26,6 +26,13 @@ You can rotate or remove the API key any time from the command palette:
 > The default config talks to the **hosted streamable-HTTP endpoint** at
 > `https://luma.mcp.acedata.cloud/mcp` — no Python, no `uvx`, no local install needed.
 
+## VS Code Setup Guide
+
+For screenshots, token setup, project-level and user-level `mcp.json`, and Copilot Agent Mode examples, see:
+
+- [Luma MCP VS Code guide](https://platform.acedata.cloud/documents/promotion_article_mcp_luma_vscode)
+- [All Ace Data Cloud MCP servers in VS Code](https://platform.acedata.cloud/documents/promotion_article_mcp_all_vscode)
+
 ### Example prompts
 
 - "Generate a 5-second video of a paper airplane drifting through neon clouds. Use luma."
@@ -87,7 +94,7 @@ this extension.
     {
       "type": "promptString",
       "id": "acedatacloud_api_token",
-    "description": "Ace Data Cloud API key",
+      "description": "Ace Data Cloud API key",
       "password": true
     }
   ]
