@@ -26,6 +26,13 @@ You can rotate or remove the API key any time from the command palette:
 > The default config talks to the **hosted streamable-HTTP endpoint** at
 > `https://shorturl.mcp.acedata.cloud/mcp` — no Python, no `uvx`, no local install needed.
 
+## VS Code Setup Guide
+
+For screenshots, token setup, project-level and user-level `mcp.json`, and Copilot Agent Mode examples, see:
+
+- [ShortURL MCP VS Code guide](https://platform.acedata.cloud/documents/promotion_article_mcp_shorturl_vscode)
+- [All Ace Data Cloud MCP servers in VS Code](https://platform.acedata.cloud/documents/promotion_article_mcp_all_vscode)
+
 ### Example prompts
 
 - "Shorten this URL: https://platform.acedata.cloud/documents/... with slug "ace-docs"."
@@ -83,7 +90,7 @@ this extension.
     {
       "type": "promptString",
       "id": "acedatacloud_api_token",
-    "description": "Ace Data Cloud API key",
+      "description": "Ace Data Cloud API key",
       "password": true
     }
   ]

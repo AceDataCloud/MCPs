@@ -21,6 +21,10 @@ can call it directly from chat.
 > The default config talks to the **hosted streamable-HTTP endpoint** at
 > `https://aichat.mcp.acedata.cloud/mcp` — no Python, no `uvx`, no local install needed.
 
+## VS Code Setup Guide
+
+For the full VS Code walkthrough, see [All Ace Data Cloud MCP servers in VS Code](https://platform.acedata.cloud/documents/promotion_article_mcp_all_vscode). It covers token setup, project-level and user-level `mcp.json`, Copilot Agent Mode, and using one Ace Data Cloud token across hosted MCP servers.
+
 ---
 
 ## Tool Reference
