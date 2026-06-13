@@ -18,7 +18,6 @@ async def glm_list_models() -> str:
 - glm-5.1 — Latest GLM model with enhanced capabilities
 - glm-4.7 — Recommended default, strong general-purpose model
 - glm-4.6 — Balanced performance and speed
-- glm-4.5-air — Lightweight and fast GLM model
 - glm-3-turbo — Previous generation, fast and efficient
 """
 
@@ -122,6 +121,6 @@ glm_chat_completions(
 ## Notes
 - GLM models excel at Chinese language tasks
 - Use glm-5.1 for the most advanced capabilities
-- Use glm-4.5-air for faster, lighter tasks
+- Use glm-3-turbo for faster, lighter tasks
 - Bearer token authentication is required
 """
