@@ -59,7 +59,9 @@ async def grok_chat_completions(
     ] = None,
     presence_penalty: Annotated[
         float | None,
-        Field(description="Presence penalty between -2.0 and 2.0. Positive increases topic variety."),
+        Field(
+            description="Presence penalty between -2.0 and 2.0. Positive increases topic variety."
+        ),
     ] = None,
     seed: Annotated[
         int | None,
