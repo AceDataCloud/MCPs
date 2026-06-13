@@ -27,8 +27,9 @@ async def grok_chat_completions(
         GrokChatModel,
         Field(
             description=(
-                "The Grok chat model. Options: grok-4 (flagship), grok-4-1-fast (default, fast), "
-                "grok-4-1-fast-non-reasoning, grok-3, grok-3-mini, grok-2-vision (image input)."
+                "The Grok chat model. grok-4 (default, flagship) and grok-3 are the broadly "
+                "available models. Also: grok-4-1-fast, grok-4-1-fast-non-reasoning, grok-3-mini, "
+                "grok-2-vision (image input) — availability depends on upstream provisioning."
             )
         ),
     ] = DEFAULT_CHAT_MODEL,

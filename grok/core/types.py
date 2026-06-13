@@ -39,5 +39,5 @@ GrokChatModel = Literal[
 # Reasoning effort options (reasoning-capable chat models)
 ReasoningEffort = Literal["low", "high"]
 
-# Default chat model
-DEFAULT_CHAT_MODEL: GrokChatModel = "grok-4-1-fast"
+# Default chat model (grok-4 / grok-3 are the broadly-available models)
+DEFAULT_CHAT_MODEL: GrokChatModel = "grok-4"

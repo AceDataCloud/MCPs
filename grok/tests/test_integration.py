@@ -66,7 +66,7 @@ class TestChatTools:
 
         result = await grok_chat_completions(
             messages=[{"role": "user", "content": "Say 'pong' and nothing else."}],
-            model="grok-4-1-fast",
+            model="grok-4",
         )
 
         print("\n=== Chat Completion Result ===")
