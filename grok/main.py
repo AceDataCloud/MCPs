@@ -117,6 +117,7 @@ Environment Variables:
     safe_print("  [OK] Tools and prompts loaded")
     safe_print("")
     safe_print("  Available tools:")
+    safe_print("    - grok_chat_completions")
     safe_print("    - grok_text_to_video")
     safe_print("    - grok_image_to_video")
     safe_print("    - grok_get_task")
@@ -161,6 +162,10 @@ Environment Variables:
                         "serverInfo": {"name": "MCP Grok"},
                         "authentication": {"required": True, "schemes": ["bearer"]},
                         "tools": [
+                            {
+                                "name": "grok_chat_completions",
+                                "description": "Chat completion with Grok models",
+                            },
                             {
                                 "name": "grok_text_to_video",
                                 "description": "Generate video from text",

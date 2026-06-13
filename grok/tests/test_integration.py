@@ -55,6 +55,27 @@ class TestVideoTools:
         assert "task_id" in result
 
 
+class TestChatTools:
+    """Integration tests for chat completion tools."""
+
+    @requires_api_token
+    @pytest.mark.asyncio
+    async def test_chat_completion_basic(self) -> None:
+        """Test a basic Grok chat completion with the real API."""
+        from tools.chat_tools import grok_chat_completions
+
+        result = await grok_chat_completions(
+            messages=[{"role": "user", "content": "Say 'pong' and nothing else."}],
+            model="grok-4-1-fast",
+        )
+
+        print("\n=== Chat Completion Result ===")
+        print(result)
+
+        data = json.loads(result)
+        assert "error" not in data or data.get("choices")
+
+
 class TestInfoTools:
     """Integration tests for informational tools."""
 
@@ -81,6 +102,7 @@ class TestInfoTools:
         print("\n=== List Actions Result ===")
         print(result)
 
+        assert "grok_chat_completions" in result
         assert "grok_text_to_video" in result
         assert "grok_image_to_video" in result
         assert "grok_get_task" in result

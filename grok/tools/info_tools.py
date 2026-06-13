@@ -5,16 +5,27 @@ from core.server import mcp
 
 @mcp.tool()
 async def grok_list_models() -> str:
-    """List all available Grok Imagine video models and their capabilities.
+    """List all available Grok models (chat + video) and their capabilities.
 
-    Shows all available models with their features and input rules. Use this
-    to understand which model to choose for your video generation.
+    Shows the chat models and the Grok Imagine video models with their features
+    and input rules. Use this to understand which model to choose.
 
     Returns:
-        Table of all models with their capabilities and input rules.
+        Tables of all models with their capabilities.
     """
     # Last updated: 2026-06-13
-    return """Available Grok Imagine Video Models:
+    return """Available Grok Chat Models (grok_chat_completions):
+
+| Model                          | Notes                                            |
+|--------------------------------|--------------------------------------------------|
+| grok-4                         | Flagship reasoning model.                        |
+| grok-4-1-fast                  | Default. Fast, capable.                          |
+| grok-4-1-fast-non-reasoning    | Fast, no reasoning trace.                        |
+| grok-3                         | Previous-gen flagship.                           |
+| grok-3-mini                    | Smaller/cheaper; supports reasoning_effort.      |
+| grok-2-vision                  | Vision-capable (image understanding) chat model. |
+
+Available Grok Imagine Video Models:
 
 | Model                            | Text2Video | Image2Video | Notes                              |
 |----------------------------------|------------|-------------|------------------------------------|
@@ -22,8 +33,9 @@ async def grok_list_models() -> str:
 | grok-imagine-video-1.5-preview   | ❌         | ✅          | Image-to-video ONLY (image_url required). |
 
 Usage:
+- grok_chat_completions: chat/reason/vision/tool-calling with the chat models
 - grok_text_to_video: use 'grok-imagine-video' (only model that supports text-to-video)
-- grok_image_to_video: either model; '-1.5-preview' requires an input image
+- grok_image_to_video: either video model; '-1.5-preview' requires an input image
 
 Aspect Ratios:
 - 16:9: Landscape/widescreen (default)
@@ -50,7 +62,10 @@ async def grok_list_actions() -> str:
         Categorized list of all tools and example workflows.
     """
     # Last updated: 2026-06-13
-    return """Available Grok Imagine Tools:
+    return """Available Grok Tools:
+
+Chat:
+- grok_chat_completions: Chat / reasoning / vision / tool-calling with Grok chat models
 
 Video Generation:
 - grok_text_to_video: Create video from a text prompt (grok-imagine-video only)

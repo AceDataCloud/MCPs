@@ -25,3 +25,19 @@ DEFAULT_RESOLUTION: VideoResolution = "480p"
 
 # Default video duration (seconds); valid range 1-15
 DEFAULT_DURATION: int = 8
+
+# Grok chat completion models
+GrokChatModel = Literal[
+    "grok-4",
+    "grok-4-1-fast",
+    "grok-4-1-fast-non-reasoning",
+    "grok-3",
+    "grok-3-mini",
+    "grok-2-vision",
+]
+
+# Reasoning effort options (reasoning-capable chat models)
+ReasoningEffort = Literal["low", "high"]
+
+# Default chat model
+DEFAULT_CHAT_MODEL: GrokChatModel = "grok-4-1-fast"

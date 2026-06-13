@@ -4,12 +4,13 @@
 [![Python](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-A [Model Context Protocol (MCP)](https://modelcontextprotocol.io) server for **Grok Imagine** AI video generation, powered by the [AceDataCloud](https://platform.acedata.cloud) API.
+A [Model Context Protocol (MCP)](https://modelcontextprotocol.io) server for **Grok** (xAI) — chat/reasoning/vision **and** Grok Imagine video generation, powered by the [AceDataCloud](https://platform.acedata.cloud) API.
 
-Generate short AI videos from a text prompt or animate a still image — directly from any MCP-compatible client (Claude Desktop, Claude Code, Cursor, etc.).
+Chat with Grok models, or generate short AI videos from a text prompt or a still image — directly from any MCP-compatible client (Claude Desktop, Claude Code, Cursor, etc.).
 
 ## Features
 
+- **Chat / Reasoning / Vision** — Talk to Grok 4 / Grok 3 family models, including vision (`grok-2-vision`) and tool calling
 - **Text to Video** — Generate a video clip from a text description
 - **Image to Video** — Animate a reference image into a video
 - **Async task tracking** — Submit a job, poll for the result, single or batch
@@ -19,6 +20,7 @@ Generate short AI videos from a text prompt or animate a still image — directl
 
 | Tool | Description |
 | --- | --- |
+| `grok_chat_completions` | Chat completion (reasoning / vision / tool calling) with Grok chat models. |
 | `grok_text_to_video` | Generate a video from a text prompt (model `grok-imagine-video`). |
 | `grok_image_to_video` | Generate a video from an input image (+ optional motion prompt). |
 | `grok_get_task` | Query the status/result of a single generation task. |
@@ -28,6 +30,19 @@ Generate short AI videos from a text prompt or animate a still image — directl
 | `grok_get_prompt_guide` | Tips for writing effective video prompts. |
 
 ## Models
+
+### Chat (`grok_chat_completions`)
+
+| Model | Notes |
+| --- | --- |
+| `grok-4` | Flagship reasoning model |
+| `grok-4-1-fast` | Default — fast, capable |
+| `grok-4-1-fast-non-reasoning` | Fast, no reasoning trace |
+| `grok-3` | Previous-gen flagship |
+| `grok-3-mini` | Smaller/cheaper; supports `reasoning_effort` |
+| `grok-2-vision` | Vision-capable (image understanding) |
+
+### Video
 
 | Model | Text→Video | Image→Video | Notes |
 | --- | --- | --- | --- |

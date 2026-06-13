@@ -179,6 +179,27 @@ class GrokClient:
         logger.info(f"🔍 Querying task(s): {task_id}")
         return await self.request("/grok/tasks", kwargs)
 
+    async def chat_completions(
+        self, messages: list[dict[str, Any]], model: str, **kwargs: Any
+    ) -> dict[str, Any]:
+        """Create a Grok chat completion (OpenAI-compatible).
+
+        Args:
+            messages: Conversation messages (required).
+            model: The Grok chat model to use (required).
+            **kwargs: Optional OpenAI-compatible params; None values are dropped.
+
+        Returns:
+            API response dictionary (OpenAI chat completion shape).
+        """
+        payload: dict[str, Any] = {"messages": messages, "model": model}
+        for key, value in kwargs.items():
+            if value is not None:
+                payload[key] = value
+
+        logger.info(f"💬 Grok chat completion with model: {model} ({len(messages)} message(s))")
+        return await self.request("/grok/chat/completions", payload)
+
 
 # Global client instance
 client = GrokClient()
