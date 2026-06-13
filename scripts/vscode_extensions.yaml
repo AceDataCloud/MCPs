@@ -153,6 +153,22 @@ services:
     models: ["veo-2", "veo-2-fast", "veo-3", "veo-3-fast", "veo-3.1", "veo-3.1-fast"]
     pricing_note: "From $0.30 per clip. Free trial credit on sign-up."
 
+  grok:
+    display_name: Grok MCP
+    repo: GrokMCP
+    domain: video
+    tagline: "Grok Imagine video generation — text-to-video and image-to-video."
+    description: >
+      Generate short AI videos with Grok Imagine from a text prompt or by
+      animating a still image, directly from chat. 480p/720p output, configurable
+      aspect ratio and duration.
+    keywords: [grok, grok imagine, xai, video generation, text to video, image to video]
+    examples:
+      - 'Generate a Grok video of a kitten chasing a butterfly in a sunlit garden.'
+      - 'Animate https://example.com/portrait.jpg into a Grok clip with a subtle smile, 9:16.'
+    models: ["grok-imagine-video", "grok-imagine-video-1.5-preview"]
+    pricing_note: "From ~$0.11 per second of output. Free trial credit on sign-up."
+
   kling:
     display_name: Kling MCP
     repo: KlingMCP

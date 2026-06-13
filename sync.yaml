@@ -23,6 +23,10 @@ mappings:
     repo: AceDataCloud/VeoMCP
     exclude:
       - .gitbooks
+  grok:
+    repo: AceDataCloud/GrokMCP
+    exclude:
+      - .gitbooks
   serp:
     repo: AceDataCloud/SerpMCP
     exclude:
