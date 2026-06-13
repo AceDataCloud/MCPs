@@ -1,0 +1,61 @@
+{
+  "name": "mcp-grok",
+  "displayName": "Grok MCP",
+  "description": "Google Grok video generation — Grok 2, Grok 3, Grok 3.1 (incl. fast variants and upscale).",
+  "version": "0.3.0",
+  "publisher": "acedatacloud",
+  "icon": "icon.png",
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.101.0"
+  },
+  "categories": [
+    "AI",
+    "Chat"
+  ],
+  "keywords": [
+    "mcp",
+    "model context protocol",
+    "ai",
+    "copilot",
+    "ace data cloud",
+    "grok",
+    "google grok",
+    "video generation",
+    "text to video"
+  ],
+  "galleryBanner": {
+    "color": "#0E1117",
+    "theme": "dark"
+  },
+  "homepage": "https://github.com/AceDataCloud/GrokMCP",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AceDataCloud/GrokMCP"
+  },
+  "bugs": {
+    "url": "https://github.com/AceDataCloud/GrokMCP/issues"
+  },
+  "activationEvents": [],
+  "main": "./extension.js",
+  "contributes": {
+    "mcpServerDefinitionProviders": [
+      {
+        "id": "acedatacloud.grok",
+        "label": "Grok MCP"
+      }
+    ],
+    "commands": [
+      {
+        "command": "acedatacloud.grok.setApiToken",
+        "title": "Grok MCP: Set Ace Data Cloud API Key",
+        "category": "MCP"
+      },
+      {
+        "command": "acedatacloud.grok.clearApiToken",
+        "title": "Grok MCP: Clear Ace Data Cloud API Key",
+        "category": "MCP"
+      }
+    ]
+  }
+}
