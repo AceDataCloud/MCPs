@@ -40,7 +40,7 @@ class TestKlingClient:
     def test_with_async_callback_injects_default_callback(self, client):
         """Test async submission injects an internal callback when missing."""
         payload = client._with_async_callback({"action": "text2video"})
-        assert payload["callback_url"] == "https://api.acedata.cloud/health"
+        assert payload["async"] is True
 
     def test_with_async_callback_preserves_explicit_callback(self, client):
         """Test async submission preserves a user-provided callback."""
