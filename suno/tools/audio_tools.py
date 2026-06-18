@@ -956,3 +956,76 @@ async def suno_samples_music(
 
     result = await client.generate_audio(**payload)
     return format_audio_result(result)
+
+
+@mcp.tool()
+async def suno_generate_inspo(
+    audio_urls: Annotated[
+        list[str],
+        Field(
+            description="1 to 4 publicly accessible reference audio URLs used as inspiration. Suno extracts stylistic ideas from these tracks (rather than copying them) to create a brand-new song. Tip: avoid well-known catalog recordings, which may be rejected by Suno's copyright check."
+        ),
+    ],
+    prompt: Annotated[
+        str,
+        Field(
+            description="Optional lyrics or creative brief for the new song. Leave empty to let Suno write its own lyrics."
+        ),
+    ] = "",
+    title: Annotated[
+        str,
+        Field(description="Optional title of the song."),
+    ] = "",
+    style: Annotated[
+        str,
+        Field(
+            description="Optional music style tags. Examples: 'acoustic, folk, warm', 'lo-fi, chill, instrumental'"
+        ),
+    ] = "",
+    model: Annotated[
+        SunoModel,
+        Field(description="Suno model version to use for the inspired generation."),
+    ] = DEFAULT_MODEL,
+    audio_weight: Annotated[
+        float | None,
+        Field(
+            description="How strongly the reference audios influence the result, 0 to 1. Higher means closer to the references' vibe."
+        ),
+    ] = None,
+    callback_url: Annotated[
+        str | None,
+        Field(
+            description="Webhook callback URL for asynchronous notifications. When provided, the API will call this URL when generation completes."
+        ),
+    ] = None,
+) -> str:
+    """Generate brand-new music inspired by 1 to 4 reference audios (Suno Inspo / 灵感创作).
+
+    Unlike a cover, inspo does not reproduce the source tracks - it draws stylistic
+    inspiration from them and composes a fresh song guided by your prompt and style tags.
+
+    Use this when:
+    - You have reference tracks whose vibe you want to riff on
+    - You want a new song "in the style of" some audio you provide
+
+    Returns:
+        Task ID and generated audio information including URLs, title, lyrics, and duration.
+    """
+    payload: dict = {
+        "action": "inspo",
+        "audio_urls": audio_urls,
+        "model": model,
+        "callback_url": callback_url,
+    }
+
+    if prompt:
+        payload["prompt"] = prompt
+    if title:
+        payload["title"] = title
+    if style:
+        payload["style"] = style
+    if audio_weight is not None:
+        payload["audio_weight"] = audio_weight
+
+    result = await client.generate_audio(**payload)
+    return format_audio_result(result)
