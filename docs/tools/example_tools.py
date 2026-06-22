@@ -49,7 +49,7 @@ def _snippets(method: str, url: str, body: dict) -> dict[str, str]:
         f'url = "{url}"\n'
         'headers = {"Authorization": "Bearer YOUR_API_TOKEN", "Content-Type": "application/json"}\n'
         f"payload = {body_json}\n"
-        f'resp = requests.{method.lower()}(url, headers=headers, json=payload)\n'
+        f"resp = requests.{method.lower()}(url, headers=headers, json=payload)\n"
         "print(resp.json())"
     )
     js = (

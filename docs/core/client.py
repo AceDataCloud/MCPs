@@ -1,7 +1,7 @@
 """HTTP client for AceDataCloud public read endpoints.
 
-Public + read-only: every call is an unauthenticated GET against
-api.acedata.cloud. No API token, no per-request auth context.
+Public + read-only: every call is an unauthenticated GET against the platform
+backend (platform.acedata.cloud). No API token, no per-request auth context.
 """
 
 from typing import Any
@@ -48,9 +48,7 @@ class DocsClient:
         logger.info(f"GET {url} params={params}")
         try:
             async with httpx.AsyncClient() as client:
-                resp = await client.get(
-                    url, params=params, headers=headers, timeout=self.timeout
-                )
+                resp = await client.get(url, params=params, headers=headers, timeout=self.timeout)
         except httpx.TimeoutException as e:
             raise DocsTimeoutError(f"Request to {path} timed out after {self.timeout}s") from e
         except Exception as e:  # noqa: BLE001 - surface as a typed error
@@ -74,9 +72,7 @@ class DocsClient:
 
     # --- documentation -----------------------------------------------------
     async def search_docs(self, query: str, lang: str = "zh-cn", limit: int = 10) -> Any:
-        return await self.get(
-            "/api/v1/search/", params={"q": query, "lang": lang, "limit": limit}
-        )
+        return await self.get("/api/v1/search/", params={"q": query, "lang": lang, "limit": limit})
 
     async def list_documents(
         self, limit: int = 20, offset: int = 0, doc_type: str | None = None

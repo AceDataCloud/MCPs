@@ -15,7 +15,9 @@ def test_doc_ref_strips_url_to_alias():
     assert _doc_ref("https://platform.acedata.cloud/documents/suno-api") == "suno-api"
     assert _doc_ref("https://platform.acedata.cloud/documents/suno-api?x=1") == "suno-api"
     assert _doc_ref("  suno-api  ") == "suno-api"
-    assert _doc_ref("6f4872e5-d43a-4f3b-b645-86456830de49") == "6f4872e5-d43a-4f3b-b645-86456830de49"
+    assert (
+        _doc_ref("6f4872e5-d43a-4f3b-b645-86456830de49") == "6f4872e5-d43a-4f3b-b645-86456830de49"
+    )
 
 
 def test_doc_ref_rejects_traversal_and_query():

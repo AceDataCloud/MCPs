@@ -71,9 +71,7 @@ async def acedata_list_docs(limit: int = 20, offset: int = 0, doc_type: str = ""
     limit = max(1, min(limit, 50))
     offset = max(0, offset)
     try:
-        docs = await client.list_documents(
-            limit=limit, offset=offset, doc_type=doc_type or None
-        )
+        docs = await client.list_documents(limit=limit, offset=offset, doc_type=doc_type or None)
         if not isinstance(docs, list):
             return "Unexpected response from the documents endpoint."
         items = [
@@ -101,7 +99,9 @@ async def acedata_fetch_doc(ref: str, lang: str = "zh-cn") -> str:
     """
     safe_ref = _doc_ref(ref)
     if not safe_ref:
-        return f'Invalid document reference "{ref}". Use an alias, UUID, or a documents/<alias> URL.'
+        return (
+            f'Invalid document reference "{ref}". Use an alias, UUID, or a documents/<alias> URL.'
+        )
     try:
         doc = await client.get_document(safe_ref, lang=lang)
         if not isinstance(doc, dict):
