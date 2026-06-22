@@ -15,16 +15,19 @@ def _dump(data: object) -> str:
 
 async def _resolve_service_id(service: str) -> str | None:
     """Map a Service alias (or id) to its id, client-side, so service filtering
-    is correct even if the backend ignores the `service` query param."""
+    is correct even if the backend ignores the `service` query param.
+
+    Returns ``None`` if the service can't be resolved (e.g. beyond the fetched
+    page) — the caller then trusts the backend `service` filter rather than
+    over-filtering every result to empty.
+    """
     if not service:
         return None
     services = await client.list_services()
     for s in services:
         if isinstance(s, dict) and (s.get("alias") == service or str(s.get("id")) == service):
             return str(s.get("id"))
-    # Unknown alias → no match; treat the raw value as an id so we don't silently
-    # widen the result to every service.
-    return service
+    return None
 
 
 def _filter_public(apis: list, service_id: str | None = None) -> list:
