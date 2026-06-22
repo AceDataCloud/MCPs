@@ -19,30 +19,42 @@ def _models_list(data: object) -> list:
     return data if isinstance(data, list) else []
 
 
+def _catalog_items(data: object) -> list:
+    if isinstance(data, dict) and isinstance(data.get("items"), list):
+        return [m for m in data["items"] if isinstance(m, dict)]
+    return []
+
+
 @mcp.tool()
 async def acedata_list_models(modality: str = "", with_pricing: bool = True) -> str:
-    """List the LLM / image / video / music / embedding models AceData Cloud offers.
+    """List the LLM / image / video / music / search / embedding models AceData Cloud offers.
+
+    Sourced from the full catalog (all modalities), with credit pricing and the
+    credit→USD conversion rate.
 
     Args:
         modality: Optional filter — chat, image, video, music, search, embedding.
-        with_pricing: Include USD pricing computed from billing rules (default True).
+        with_pricing: Include pricing on each model (default True).
     """
     try:
-        data = await client.list_models(with_pricing=with_pricing)
-        models = [m for m in _models_list(data) if isinstance(m, dict)]
+        data = await client.get_catalog()
+        models = _catalog_items(data)
         if modality:
-            models = [m for m in models if modality in (m.get("type"), m.get("modality"))]
-        slim = [
-            {
+            models = [m for m in models if m.get("modality") == modality]
+        slim = []
+        for m in models:
+            entry = {
                 "id": m.get("id"),
-                "type": m.get("type") or m.get("modality"),
-                "owned_by": m.get("owned_by"),
-                "pricing": m.get("pricing"),
+                "name": m.get("name"),
+                "modality": m.get("modality"),
+                "provider": m.get("provider"),
+                "unit": m.get("unit"),
             }
-            for m in models
-            if isinstance(m, dict)
-        ]
-        return _dump(slim)
+            if with_pricing:
+                entry["pricing"] = m.get("pricing")
+            slim.append(entry)
+        rates = data.get("rates") if isinstance(data, dict) else None
+        return _dump({"count": len(slim), "rates": rates, "models": slim})
     except DocsError as e:
         return f"Failed to list models: {e.message}"
 
@@ -55,8 +67,15 @@ async def acedata_get_model(model_id: str) -> str:
         model_id: The model id, e.g. "gpt-5.1", "claude-opus-4-8", "doubao-seedream-5-0-260128".
     """
     try:
-        data = await client.list_models(with_pricing=True)
-        for m in _models_list(data):
+        # Catalog covers all modalities; the chat /models/ endpoint adds USD detail.
+        data = await client.get_catalog()
+        item = next((m for m in _catalog_items(data) if m.get("id") == model_id), None)
+        if item is not None:
+            out = dict(item)
+            out["rates"] = data.get("rates") if isinstance(data, dict) else None
+            return _dump(out)
+        chat = await client.list_models(with_pricing=True)
+        for m in _models_list(chat):
             if isinstance(m, dict) and m.get("id") == model_id:
                 return _dump(m)
         return f'Model "{model_id}" not found. Use acedata_list_models to see available ids.'

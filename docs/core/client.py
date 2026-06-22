@@ -86,8 +86,10 @@ class DocsClient:
         return await self.get(f"/api/v1/documents/{ref}", lang=lang)
 
     # --- catalog -----------------------------------------------------------
-    async def list_services(self, service_type: str | None = None) -> Any:
-        params: dict[str, Any] = {"private": "false"}
+    async def list_services(self, service_type: str | None = None, limit: int = 200) -> Any:
+        # limit=200 pulls all services in one page (the list paginates at 10),
+        # so alias→id resolution and the services tool see the full set.
+        params: dict[str, Any] = {"private": "false", "limit": limit}
         if service_type:
             params["type"] = service_type
         return _unwrap(await self.get("/api/v1/services/", params=params))
@@ -109,8 +111,14 @@ class DocsClient:
 
     # --- models ------------------------------------------------------------
     async def list_models(self, with_pricing: bool = True) -> Any:
+        # /api/v1/models/ is chat-only (OpenAI-compatible) with USD pricing.
         params = {"with_pricing": "1"} if with_pricing else {}
         return await self.get("/api/v1/models/", params=params)
+
+    async def get_catalog(self) -> Any:
+        # The full model directory across ALL modalities (chat/image/video/music/
+        # search/embedding) with credit pricing + conversion rates.
+        return await self.get("/api/v1/models/catalog/")
 
 
 client = DocsClient()
