@@ -46,7 +46,7 @@ def _filter_public(apis: list, service_id: str | None = None) -> list:
 
 
 @mcp.tool()
-async def acedata_list_services(service_type: str = "") -> str:
+async def acedatacloud_list_services(service_type: str = "") -> str:
     """List AceData Cloud services (logical API groupings).
 
     Args:
@@ -70,7 +70,7 @@ async def acedata_list_services(service_type: str = "") -> str:
 
 
 @mcp.tool()
-async def acedata_list_apis(service: str = "") -> str:
+async def acedatacloud_list_apis(service: str = "") -> str:
     """List public API endpoints (Beta/Production), optionally for one service.
 
     Args:
@@ -95,7 +95,7 @@ async def acedata_list_apis(service: str = "") -> str:
 
 
 @mcp.tool()
-async def acedata_get_spec(api_path: str = "", service: str = "") -> str:
+async def acedatacloud_get_spec(api_path: str = "", service: str = "") -> str:
     """Get the OpenAPI specification for an API.
 
     You MUST provide `api_path` or `service` — the full spec is never returned

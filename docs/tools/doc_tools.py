@@ -32,7 +32,7 @@ def _doc_ref(ref: str) -> str:
 
 
 @mcp.tool()
-async def acedata_search_docs(query: str, lang: str = "zh-cn", limit: int = 10) -> str:
+async def acedatacloud_search_docs(query: str, lang: str = "zh-cn", limit: int = 10) -> str:
     """Search the AceData Cloud documentation for a topic, API, or keyword.
 
     Use this first when you don't know the exact API or doc page. Returns
@@ -48,19 +48,19 @@ async def acedata_search_docs(query: str, lang: str = "zh-cn", limit: int = 10) 
         data = await client.search_docs(query=query, lang=lang, limit=limit)
         results = data.get("results", []) if isinstance(data, dict) else data
         if not results:
-            return f'No documentation found for "{query}". Try acedata_list_docs to browse.'
+            return f'No documentation found for "{query}". Try acedatacloud_list_docs to browse.'
         return _dump(results)
     except DocsNotFoundError:
         return (
             "The documentation search index is not available yet. "
-            "Use acedata_list_docs to browse pages, or acedata_fetch_doc with a known alias."
+            "Use acedatacloud_list_docs to browse pages, or acedatacloud_fetch_doc with a known alias."
         )
     except DocsError as e:
         return f"Search failed: {e.message}"
 
 
 @mcp.tool()
-async def acedata_list_docs(limit: int = 20, offset: int = 0, doc_type: str = "") -> str:
+async def acedatacloud_list_docs(limit: int = 20, offset: int = 0, doc_type: str = "") -> str:
     """List available documentation pages (paginated).
 
     Args:
@@ -90,7 +90,7 @@ async def acedata_list_docs(limit: int = 20, offset: int = 0, doc_type: str = ""
 
 
 @mcp.tool()
-async def acedata_fetch_doc(ref: str, lang: str = "zh-cn") -> str:
+async def acedatacloud_fetch_doc(ref: str, lang: str = "zh-cn") -> str:
     """Fetch the full content of a documentation page.
 
     Args:
@@ -116,6 +116,6 @@ async def acedata_fetch_doc(ref: str, lang: str = "zh-cn") -> str:
             }
         )
     except DocsNotFoundError:
-        return f'Document "{ref}" not found. Try acedata_search_docs to locate it.'
+        return f'Document "{ref}" not found. Try acedatacloud_search_docs to locate it.'
     except DocsError as e:
         return f"Failed to fetch doc: {e.message}"

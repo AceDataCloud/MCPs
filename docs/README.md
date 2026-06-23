@@ -1,4 +1,4 @@
-# AceData Docs MCP
+# AceDataCloud Docs MCP
 
 A **public, zero-install** [Model Context Protocol](https://modelcontextprotocol.io) server that
 exposes the entire [AceData Cloud](https://platform.acedata.cloud) catalog — documentation, API
@@ -13,7 +13,7 @@ Add one URL to your MCP client:
 ```json
 {
   "mcpServers": {
-    "acedata-docs": {
+    "acedatacloud-docs": {
       "url": "https://docs.mcp.acedata.cloud/mcp"
     }
   }
@@ -23,7 +23,7 @@ Add one URL to your MCP client:
 Claude Code:
 
 ```bash
-claude mcp add --transport http acedata-docs https://docs.mcp.acedata.cloud/mcp
+claude mcp add --transport http acedatacloud-docs https://docs.mcp.acedata.cloud/mcp
 ```
 
 ## Use it (local — stdio via PyPI)
@@ -36,15 +36,15 @@ uvx mcp-docs            # or: pip install mcp-docs && mcp-docs
 
 | Tool | What it does |
 |---|---|
-| `acedata_search_docs` | Search the docs by keyword/question → snippets + URLs |
-| `acedata_list_docs` / `acedata_fetch_doc` | Browse and read full documentation pages |
-| `acedata_list_services` | List services (logical API groupings) |
-| `acedata_list_apis` | List public API endpoints (optionally per service) |
-| `acedata_get_spec` | Get the OpenAPI spec for an API (filtered by path/service) |
-| `acedata_list_models` / `acedata_get_model` | Model catalog + USD pricing |
-| `acedata_get_pricing` | Display pricing for a service |
-| `acedata_get_code_example` | A runnable curl / python / javascript snippet |
-| `acedata_list_mcp_servers` | AceData Cloud's other MCP servers + how to connect |
+| `acedatacloud_search_docs` | Search the docs by keyword/question → snippets + URLs |
+| `acedatacloud_list_docs` / `acedatacloud_fetch_doc` | Browse and read full documentation pages |
+| `acedatacloud_list_services` | List services (logical API groupings) |
+| `acedatacloud_list_apis` | List public API endpoints (optionally per service) |
+| `acedatacloud_get_spec` | Get the OpenAPI spec for an API (filtered by path/service) |
+| `acedatacloud_list_models` / `acedatacloud_get_model` | Model catalog + USD pricing |
+| `acedatacloud_get_pricing` | Display pricing for a service |
+| `acedatacloud_get_code_example` | A runnable curl / python / javascript snippet |
+| `acedatacloud_list_mcp_servers` | AceData Cloud's other MCP servers + how to connect |
 
 ## Development
 
@@ -55,7 +55,7 @@ python main.py --transport http # remote (port 8000)
 pytest
 ```
 
-`acedata_list_mcp_servers` is backed by `core/data/mcp_servers.json`, generated from the sibling
+`acedatacloud_list_mcp_servers` is backed by `core/data/mcp_servers.json`, generated from the sibling
 `MCPs/*/server.json` files via `python scripts/gen_mcp_servers.py`.
 
 ## License

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""AceData Docs MCP Server.
+"""AceDataCloud Docs MCP Server.
 
 A public, zero-install MCP server that exposes the AceData Cloud documentation,
 API catalog, OpenAPI specs, model list, pricing, and runnable code examples as
@@ -33,7 +33,7 @@ def get_version() -> str:
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="AceData Docs MCP Server")
+    parser = argparse.ArgumentParser(description="AceDataCloud Docs MCP Server")
     parser.add_argument("--version", action="version", version=f"mcp-docs {get_version()}")
     parser.add_argument(
         "--transport", choices=["stdio", "http"], default="stdio", help="Transport (default stdio)"
@@ -41,7 +41,9 @@ def main() -> None:
     parser.add_argument("--port", type=int, default=8000, help="Port for HTTP transport")
     args = parser.parse_args()
 
-    logger.info(f"AceData Docs MCP {get_version()} — transport={args.transport} (public, no-auth)")
+    logger.info(
+        f"AceDataCloud Docs MCP {get_version()} — transport={args.transport} (public, no-auth)"
+    )
 
     # Register tools + prompts.
     import prompts  # noqa: F401
@@ -66,7 +68,7 @@ def main() -> None:
             async def server_card(_request: Request) -> JSONResponse:
                 return JSONResponse(
                     {
-                        "serverInfo": {"name": "AceData Docs"},
+                        "serverInfo": {"name": "AceDataCloud Docs"},
                         "authentication": {"required": False},
                         "resources": [],
                     }

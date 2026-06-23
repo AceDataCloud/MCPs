@@ -1,6 +1,6 @@
 [project]
 name = "mcp-docs"
-version = "2026.6.23.1"
+version = "2026.6.23.4"
 description = "Public MCP server for AceData Cloud documentation, API specs, models, pricing & code examples"
 readme = "README.md"
 license = { text = "MIT" }

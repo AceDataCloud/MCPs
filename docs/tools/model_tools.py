@@ -26,7 +26,7 @@ def _catalog_items(data: object) -> list:
 
 
 @mcp.tool()
-async def acedata_list_models(modality: str = "", with_pricing: bool = True) -> str:
+async def acedatacloud_list_models(modality: str = "", with_pricing: bool = True) -> str:
     """List the LLM / image / video / music / search / embedding models AceData Cloud offers.
 
     Sourced from the full catalog (all modalities), with credit pricing and the
@@ -60,7 +60,7 @@ async def acedata_list_models(modality: str = "", with_pricing: bool = True) -> 
 
 
 @mcp.tool()
-async def acedata_get_model(model_id: str) -> str:
+async def acedatacloud_get_model(model_id: str) -> str:
     """Get full details (and pricing) for one model by id.
 
     Args:
@@ -78,13 +78,13 @@ async def acedata_get_model(model_id: str) -> str:
         for m in _models_list(chat):
             if isinstance(m, dict) and m.get("id") == model_id:
                 return _dump(m)
-        return f'Model "{model_id}" not found. Use acedata_list_models to see available ids.'
+        return f'Model "{model_id}" not found. Use acedatacloud_list_models to see available ids.'
     except DocsError as e:
         return f"Failed to get model: {e.message}"
 
 
 @mcp.tool()
-async def acedata_get_pricing(service: str = "") -> str:
+async def acedatacloud_get_pricing(service: str = "") -> str:
     """Get display pricing for a service (or all services).
 
     Args:
@@ -108,7 +108,7 @@ async def acedata_get_pricing(service: str = "") -> str:
                 }
             )
         if service and not items:
-            return f'Service "{service}" not found. Use acedata_list_services to see aliases.'
+            return f'Service "{service}" not found. Use acedatacloud_list_services to see aliases.'
         return _dump(items)
     except DocsError as e:
         return f"Failed to get pricing: {e.message}"
