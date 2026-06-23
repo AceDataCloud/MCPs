@@ -1,4 +1,4 @@
-"""Custom exceptions for the AceData Docs MCP server."""
+"""Custom exceptions for the AceDataCloud Docs MCP server."""
 
 
 class DocsError(Exception):

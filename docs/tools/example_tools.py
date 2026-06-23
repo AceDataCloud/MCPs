@@ -63,7 +63,7 @@ def _snippets(method: str, url: str, body: dict) -> dict[str, str]:
 
 
 @mcp.tool()
-async def acedata_get_code_example(api_path: str, lang: str = "all") -> str:
+async def acedatacloud_get_code_example(api_path: str, lang: str = "all") -> str:
     """Generate a runnable code snippet for calling an AceData Cloud API.
 
     Args:

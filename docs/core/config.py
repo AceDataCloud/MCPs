@@ -1,4 +1,4 @@
-"""Configuration management for the AceData Docs MCP server."""
+"""Configuration management for the AceDataCloud Docs MCP server."""
 
 import os
 from dataclasses import dataclass, field
@@ -30,7 +30,9 @@ class Settings:
         default_factory=lambda: float(os.getenv("DOCS_REQUEST_TIMEOUT", "30"))
     )
 
-    server_name: str = field(default_factory=lambda: os.getenv("MCP_SERVER_NAME", "AceData Docs"))
+    server_name: str = field(
+        default_factory=lambda: os.getenv("MCP_SERVER_NAME", "AceDataCloud Docs")
+    )
     transport: str = field(default_factory=lambda: os.getenv("MCP_TRANSPORT", "stdio"))
     log_level: str = field(default_factory=lambda: os.getenv("LOG_LEVEL", "INFO"))
 

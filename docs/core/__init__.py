@@ -1,4 +1,4 @@
-"""Core module for the AceData Docs MCP server."""
+"""Core module for the AceDataCloud Docs MCP server."""
 
 from core.client import DocsClient
 from core.config import settings

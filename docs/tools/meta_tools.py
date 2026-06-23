@@ -20,7 +20,7 @@ def _servers() -> dict:
 
 
 @mcp.tool()
-async def acedata_list_mcp_servers() -> str:
+async def acedatacloud_list_mcp_servers() -> str:
     """List AceData Cloud's other MCP servers and how to connect to them.
 
     Each entry includes the remote streamable-http URL (zero-install) and the

@@ -2,7 +2,7 @@
 """Regenerate core/data/mcp_servers.json from the sibling MCPs/*/server.json files.
 
 Run from the MCPs monorepo root:  python docs/scripts/gen_mcp_servers.py
-Keeps `acedata_list_mcp_servers` accurate without hand-maintaining a list.
+Keeps `acedatacloud_list_mcp_servers` accurate without hand-maintaining a list.
 """
 
 import glob
