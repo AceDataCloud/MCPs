@@ -71,7 +71,7 @@ jobs:
           body=$(jq -n \
             --arg changes "$RECENT_CHANGES" \
             --arg services "$CHANGED_SERVICES" \
-            '"The upstream Docs have been updated. Ensure the affected MCP servers in this monorepo are in sync.\n\n## Changed Services\n\n`" + $services + "`\n\n## Recent Docs Changes\n\n```\n" + $changes + "\n```\n\n## Instructions\n\nSee `.github/copilot-instructions.md` for sync rules.\n\nThis is a monorepo with MCP servers in subdirectories (luma/, suno/, midjourney/, etc.).\n\nCheck the AceDataCloud/Docs repo OpenAPI specs at `openapi/<service>.json` for each changed service.\n\nCompare models, endpoints, and parameters against the corresponding subdirectory'\''s code. Fix any differences.\n\nOnly modify subdirectories matching the changed services. If everything is already in sync, close this issue."')
+            '"The upstream Docs have been updated. Ensure the affected MCP servers in this monorepo are in sync.\n\n## Changed Services\n\n`" + $services + "`\n\n## Recent Docs Changes\n\n```\n" + $changes + "\n```\n\n## Instructions\n\nSee `.github/copilot-instructions.md` for sync rules.\n\nThis is a monorepo with MCP servers in subdirectories (luma/, suno/, flux/, etc.).\n\nCheck the AceDataCloud/Docs repo OpenAPI specs at `openapi/<service>.json` for each changed service.\n\nCompare models, endpoints, and parameters against the corresponding subdirectory'\''s code. Fix any differences.\n\nOnly modify subdirectories matching the changed services. If everything is already in sync, close this issue."')
 
           ISSUE_JSON=$(jq -n \
             --arg title "sync: update from Docs ($COMMIT_INFO)" \
