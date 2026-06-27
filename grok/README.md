@@ -46,8 +46,8 @@ Chat with Grok models, or generate short AI videos from a text prompt or a still
 
 | Model | Text→Video | Image→Video | Notes |
 | --- | --- | --- | --- |
-| `grok-imagine-video` | ✅ | ✅ | Default. Lower price. |
-| `grok-imagine-video-1.5-preview` | ❌ | ✅ | Image-to-video only (requires `image_url`). |
+| `grok-imagine-video` | ✅ | ✅ | Default. Lower price. Up to 30s, duration-banded billing. |
+| `grok-imagine-video-1.5-preview` | ❌ | ✅ | Image-to-video only (requires `image_url`). Up to 15s, billed per second. |
 
 ## Parameters
 
@@ -57,8 +57,8 @@ Chat with Grok models, or generate short AI videos from a text prompt or a still
 | `image_url` | image-to-video | Input image URL (required for `-1.5-preview`) |
 | `reference_image_urls` | image-to-video | Optional list of style/content reference images |
 | `aspect_ratio` | both | `1:1`, `16:9` (default), `9:16`, `4:3`, `3:4`, `3:2`, `2:3` |
-| `resolution` | both | `480p` (default), `720p` |
-| `duration` | both | `1`–`15` seconds (default `8`); billed per output second |
+| `resolution` | both | `480p` (default), `720p`, `1080p` |
+| `duration` | both | `grok-imagine-video`: `1`–`30`s; `grok-imagine-video-1.5-preview`: `1`–`15`s (default `8`) |
 | `callback_url` | both | Optional async webhook |
 
 ## Installation

@@ -41,15 +41,15 @@ async def grok_text_to_video(
     resolution: Annotated[
         VideoResolution,
         Field(
-            description="Output resolution. '480p' (default, cheaper) or '720p' (higher quality, costs more credits per second)."
+            description="Output resolution. '480p' (default, cheaper), '720p', or '1080p' (higher quality, costs more credits per second for grok-imagine-video-1.5-preview)."
         ),
     ] = DEFAULT_RESOLUTION,
     duration: Annotated[
         int,
         Field(
             ge=1,
-            le=15,
-            description="Video duration in seconds (1-15, default 8). Billing is per output second, so shorter clips cost less.",
+            le=30,
+            description="Video duration in seconds (default 8). grok-imagine-video supports 1-30; grok-imagine-video-1.5-preview supports 1-15.",
         ),
     ] = DEFAULT_DURATION,
     callback_url: Annotated[
@@ -125,15 +125,15 @@ async def grok_image_to_video(
     resolution: Annotated[
         VideoResolution,
         Field(
-            description="Output resolution. '480p' (default, cheaper) or '720p' (higher quality, costs more credits per second)."
+            description="Output resolution. '480p' (default, cheaper), '720p', or '1080p' (higher quality, costs more credits per second for grok-imagine-video-1.5-preview)."
         ),
     ] = DEFAULT_RESOLUTION,
     duration: Annotated[
         int,
         Field(
             ge=1,
-            le=15,
-            description="Video duration in seconds (1-15, default 8). Billing is per output second.",
+            le=30,
+            description="Video duration in seconds (default 8). grok-imagine-video supports 1-30; grok-imagine-video-1.5-preview supports 1-15.",
         ),
     ] = DEFAULT_DURATION,
     callback_url: Annotated[
