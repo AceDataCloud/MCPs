@@ -66,13 +66,6 @@
       "website": "https://luma.mcp.acedata.cloud"
     },
     {
-      "name": "mcp-midjourney",
-      "description": "MCP server for Midjourney AI image generation and editing",
-      "remote_url": "https://midjourney.mcp.acedata.cloud/mcp",
-      "pypi_package": "mcp-midjourney",
-      "website": "https://midjourney.mcp.acedata.cloud"
-    },
-    {
       "name": "mcp-nanobanana-pro",
       "description": "MCP server for NanoBanana AI image generation and editing",
       "remote_url": "https://nanobanana.mcp.acedata.cloud/mcp",

@@ -12,7 +12,6 @@ Monorepo for all AceDataCloud MCP (Model Context Protocol) servers.
 | `hailuo/` | [HailuoMCP](https://github.com/AceDataCloud/HailuoMCP) | [mcp-hailuo](https://pypi.org/project/mcp-hailuo/) | Video |
 | `kling/` | [KlingMCP](https://github.com/AceDataCloud/KlingMCP) | [mcp-kling](https://pypi.org/project/mcp-kling/) | Video |
 | `luma/` | [LumaMCP](https://github.com/AceDataCloud/LumaMCP) | [mcp-luma](https://pypi.org/project/mcp-luma/) | Video |
-| `midjourney/` | [MidjourneyMCP](https://github.com/AceDataCloud/MidjourneyMCP) | [mcp-midjourney](https://pypi.org/project/mcp-midjourney/) | Image |
 | `nanobanana/` | [NanoBananaMCP](https://github.com/AceDataCloud/NanoBananaMCP) | [mcp-nanobanana-pro](https://pypi.org/project/mcp-nanobanana-pro/) | Image |
 | `producer/` | [ProducerMCP](https://github.com/AceDataCloud/ProducerMCP) | [mcp-producer](https://pypi.org/project/mcp-producer/) | Music |
 | `seedance/` | [SeedanceMCP](https://github.com/AceDataCloud/SeedanceMCP) | [mcp-seedance](https://pypi.org/project/mcp-seedance/) | Video |
@@ -30,11 +29,11 @@ Each MCP is published to multiple channels automatically on every push to `main`
 
 | Channel | Status |
 |---|---|
-| [PyPI](https://pypi.org/) | All 17 servers published |
-| [VS Code Marketplace](https://marketplace.visualstudio.com/) | All 17 extensions published |
-| [JetBrains Marketplace](https://plugins.jetbrains.com/) | All 17 plugins published |
-| [Smithery](https://smithery.ai/) | All 17 servers published |
-| [MCP Registry](https://registry.modelcontextprotocol.io/) | All 17 servers published |
+| [PyPI](https://pypi.org/) | Active servers published |
+| [VS Code Marketplace](https://marketplace.visualstudio.com/) | Active extensions published |
+| [JetBrains Marketplace](https://plugins.jetbrains.com/) | Active plugins published |
+| [Smithery](https://smithery.ai/) | Active servers published |
+| [MCP Registry](https://registry.modelcontextprotocol.io/) | Active servers published |
 
 Versioning uses **CalVer** (`YYYY.M.D.BUILD`), auto-generated at publish time.
 
@@ -50,9 +49,11 @@ dispatch-on-push.yml ──► docs-updated event
      │
      ▼
 MCPs/sync-from-docs.yml ──► creates issue for Copilot
+MCPs/sync-from-docs.yml ──► creates issue for Copilot
      │                       Copilot compares specs, opens PR
      ▼                       PR auto-merged
-MCPs/sync-to-repos.yml ──► pushes to 17 standalone repos
+MCPs/sync-to-repos.yml ──► pushes to standalone repos
+     This is a monorepo with MCP servers in subdirectories (luma/, suno/, flux/, etc.).
      │
      ▼
 <Repo>/publish.yml ──► PyPI, VS Code, JetBrains, Smithery, MCP Registry
