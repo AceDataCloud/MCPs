@@ -31,8 +31,8 @@ Available Grok Imagine Video Models:
 
 | Model                            | Text2Video | Image2Video | Notes                              |
 |----------------------------------|------------|-------------|------------------------------------|
-| grok-imagine-video               | ✅         | ✅          | Default. Lower price.              |
-| grok-imagine-video-1.5-preview   | ❌         | ✅          | Image-to-video ONLY (image_url required). |
+| grok-imagine-video               | ✅         | ✅          | Default. Lower price. Up to 30s, duration-banded billing. |
+| grok-imagine-video-1.5-preview   | ❌         | ✅          | Image-to-video ONLY (image_url required). Up to 15s, billed per second. |
 
 Usage:
 - grok_chat_completions: chat/reason/vision/tool-calling with the chat models
@@ -47,10 +47,13 @@ Aspect Ratios:
 
 Resolution Options:
 - 480p: Default, cheaper
-- 720p: Higher quality, costs more credits per second
+- 720p: Higher quality
+- 1080p: Highest quality (grok-imagine-video-1.5-preview costs more per second)
 
 Duration:
-- 1-15 seconds (default 8). Billing is per output second.
+- grok-imagine-video: 1-30 seconds, billed in duration bands (1-10 / 11-20 / 21-30)
+- grok-imagine-video-1.5-preview: 1-15 seconds, billed per output second
+- Default 8 seconds
 """
 
 
