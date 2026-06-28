@@ -4,7 +4,7 @@ from core.server import mcp
 
 
 @mcp.tool()
-async def platform_get_usage_guide() -> str:
+async def acedatacloud_get_usage_guide() -> str:
     """Get a guide for using the AceDataCloud platform management tools.
 
     Explains the available tools, the write-confirmation model, and the
@@ -19,25 +19,25 @@ ACEDATACLOUD_PLATFORM_TOKEN — NOT the api.acedata.cloud service token.
 Create one at https://platform.acedata.cloud/console/platform-tokens
 
 ## Read tools (safe)
-- platform_get_balance — remaining credits per subscription (+ total)
-- platform_list_applications — your subscriptions and balances
-- platform_list_services — list/search available services
-- platform_list_usage — recent API call records
-- platform_usage_summary — spend aggregated by API over N days
-- platform_list_credentials — your API keys (tokens masked)
-- platform_list_orders — recharge orders
-- platform_list_platform_tokens — platform tokens (masked)
-- platform_list_models — available chat models
-- platform_list_announcements — published announcements
+- acedatacloud_get_balance — remaining credits per subscription (+ total)
+- acedatacloud_list_applications — your subscriptions and balances
+- acedatacloud_list_services — list/search available services
+- acedatacloud_list_usage — recent API call records
+- acedatacloud_usage_summary — spend aggregated by API over N days
+- acedatacloud_list_credentials — your API keys (tokens masked)
+- acedatacloud_list_orders — recharge orders
+- acedatacloud_list_platform_tokens — platform tokens (masked)
+- acedatacloud_list_models — available chat models
+- acedatacloud_list_announcements — published announcements
 
 ## Write tools — require confirm=true
 Calling them without confirm returns a dry-run preview and does nothing.
-- platform_create_credential / platform_delete_credential
-- platform_create_order then platform_pay_order (returns pay_url)
-- platform_create_platform_token / platform_delete_platform_token
+- acedatacloud_create_credential / acedatacloud_delete_credential
+- acedatacloud_create_order then acedatacloud_pay_order (returns pay_url)
+- acedatacloud_create_platform_token / acedatacloud_delete_platform_token
 
 ## Admin tools — superuser token + confirm=true
-- platform_create_announcement
+- acedatacloud_create_announcement
 
 ## Notes
 - Amounts (remaining_amount, used_amount, total) are in Credits, not USD.
