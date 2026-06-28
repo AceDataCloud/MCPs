@@ -72,7 +72,7 @@ mappings:
     exclude:
       - .gitbooks
   webextrator:
-    repo: AceDataCloud/WebExtraterMCP
+    repo: AceDataCloud/WebExtratorMCP
     exclude:
       - .gitbooks
   fish:
