@@ -1,0 +1,36 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.AceDataCloud/mcp-acedatacloud",
+  "description": "MCP server for managing your AceData Cloud account — services, pricing, APIs, docs, models, balance, usage, API keys, orders & announcements",
+  "version": "2026.6.28.0",
+  "repository": {
+    "url": "https://github.com/AceDataCloud/AceDataCloudMCP",
+    "source": "github"
+  },
+  "packages": [
+    {
+      "identifier": "mcp-acedatacloud",
+      "version": "2026.6.28.0",
+      "transport": {
+        "type": "stdio"
+      },
+      "registryType": "pypi",
+      "runtimeHint": "uvx",
+      "environmentVariables": [
+        {
+          "name": "ACEDATACLOUD_PLATFORM_TOKEN",
+          "description": "Platform token from Ace Data Cloud (https://platform.acedata.cloud/console/platform-tokens)",
+          "isRequired": true,
+          "isSecret": true
+        }
+      ]
+    }
+  ],
+  "websiteUrl": "https://mcp.acedata.cloud",
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://mcp.acedata.cloud/mcp"
+    }
+  ]
+}

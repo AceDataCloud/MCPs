@@ -1,0 +1,23 @@
+# Smithery configuration file: https://smithery.ai/docs/build/publish
+# Defines how this MCP server is built and configured on Smithery
+
+startCommand:
+  type: stdio
+  configSchema:
+    type: object
+    properties:
+      ACEDATACLOUD_PLATFORM_TOKEN:
+        type: string
+        description: "Platform token from Ace Data Cloud (https://platform.acedata.cloud/console/platform-tokens)"
+    required:
+      - ACEDATACLOUD_PLATFORM_TOKEN
+  commandFunction:
+    # Installs from PyPI and runs via uvx
+    - |-
+      (config) => ({
+        command: 'uvx',
+        args: ['mcp-acedatacloud'],
+        env: {
+          ACEDATACLOUD_PLATFORM_TOKEN: config.ACEDATACLOUD_PLATFORM_TOKEN
+        }
+      })
