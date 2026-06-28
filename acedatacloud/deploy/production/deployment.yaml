@@ -25,6 +25,14 @@ spec:
         - name: mcp-acedatacloud
           image: ghcr.io/acedatacloud/mcp-acedatacloud:${TAG}
           imagePullPolicy: IfNotPresent
+          env:
+            # Enables OAuth 2.1 (DCR) — delegates login to auth.acedata.cloud and
+            # issues the user's 15-day JWT as the access token (accepted by the
+            # management API). No per-user platform token needs to be configured.
+            - name: MCP_SERVER_URL
+              value: "https://mcp.acedata.cloud"
+            - name: ACEDATACLOUD_OAUTH_CLIENT_ID
+              value: "jzgkKj3lhBNXLb73kw9M-2ZuDuRYoUf73CUcY_P4QII"
           ports:
             - containerPort: 8000
               protocol: TCP
