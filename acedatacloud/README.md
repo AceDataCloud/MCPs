@@ -96,7 +96,7 @@ pip install mcp-acedatacloud
 {
   "mcpServers": {
     "acedatacloud": {
-      "url": "https://acedatacloud.mcp.acedata.cloud/mcp",
+      "url": "https://mcp.acedata.cloud/mcp",
       "headers": { "Authorization": "Bearer platform-v1-xxxxxxxx" }
     }
   }
