@@ -1,4 +1,4 @@
-"""Read-only tools for the AceDataCloud platform management API."""
+"""Authenticated account-management read tools (require a platform token)."""
 
 import datetime as dt
 from typing import Annotated
@@ -26,43 +26,7 @@ def _wrap(result: object, reveal: bool = False) -> str:
 
 
 @mcp.tool()
-async def platform_list_services(
-    search: Annotated[
-        str | None,
-        Field(
-            description="Optional case-insensitive substring to match against service alias or title."
-        ),
-    ] = None,
-    limit: Annotated[
-        int, Field(description="Max services to return when not searching.", ge=1, le=300)
-    ] = 100,
-) -> str:
-    """List the services available on the AceDataCloud platform.
-
-    A *service* is a product (e.g. ``suno``, ``midjourney``) you can subscribe to.
-    Use ``search`` to find one by alias/title. Returns count + items.
-    """
-    try:
-        if search:
-            result = await client.get("/services/", {"limit": 300})
-            items = result.get("items", []) if isinstance(result, dict) else []
-            s = search.lower()
-            items = [
-                it
-                for it in items
-                if s in (it.get("alias") or "").lower() or s in (it.get("title") or "").lower()
-            ]
-            return dumps({"count": len(items), "items": items})
-        result = await client.get("/services/", {"limit": limit})
-        return _wrap(result)
-    except PlatformAuthError as e:
-        return error_json("Authentication Error", e.message)
-    except PlatformAPIError as e:
-        return error_json("API Error", e.message)
-
-
-@mcp.tool()
-async def platform_list_applications(
+async def acedatacloud_list_applications(
     service_id: Annotated[str | None, Field(description="Filter by service UUID.")] = None,
     scope: Annotated[
         str | None, Field(description="Filter by scope: 'Individual' or 'Global'.")
@@ -84,7 +48,7 @@ async def platform_list_applications(
 
 
 @mcp.tool()
-async def platform_get_balance(
+async def acedatacloud_get_balance(
     service_id: Annotated[
         str | None, Field(description="Optional service UUID to filter by.")
     ] = None,
@@ -116,7 +80,7 @@ async def platform_get_balance(
 
 
 @mcp.tool()
-async def platform_list_usage(
+async def acedatacloud_list_usage(
     api_id: Annotated[str | None, Field(description="Filter by API UUID.")] = None,
     status_code: Annotated[
         int | None, Field(description="Filter by HTTP status code, e.g. 200.")
@@ -145,7 +109,7 @@ async def platform_list_usage(
 
 
 @mcp.tool()
-async def platform_usage_summary(
+async def acedatacloud_usage_summary(
     days: Annotated[
         int, Field(description="Aggregate spend over the last N days.", ge=1, le=365)
     ] = 30,
@@ -177,7 +141,7 @@ async def platform_usage_summary(
 
 
 @mcp.tool()
-async def platform_list_credentials(
+async def acedatacloud_list_credentials(
     application_id: Annotated[str | None, Field(description="Filter by application UUID.")] = None,
     limit: Annotated[int, Field(description="Max credentials to return.", ge=1, le=100)] = 50,
 ) -> str:
@@ -194,7 +158,7 @@ async def platform_list_credentials(
 
 
 @mcp.tool()
-async def platform_list_orders(
+async def acedatacloud_list_orders(
     state: Annotated[
         str | None,
         Field(description="Filter by state: Pending/Paid/Finished/Expired/Failed/Refunded."),
@@ -216,7 +180,7 @@ async def platform_list_orders(
 
 
 @mcp.tool()
-async def platform_list_platform_tokens(
+async def acedatacloud_list_platform_tokens(
     limit: Annotated[int, Field(description="Max tokens to return.", ge=1, le=100)] = 50,
 ) -> str:
     """List your platform tokens (the credentials used to call this management API). Masked."""
@@ -230,11 +194,24 @@ async def platform_list_platform_tokens(
 
 
 @mcp.tool()
-async def platform_list_models() -> str:
-    """List the chat-completion models available on the platform (OpenAI-style)."""
+async def acedatacloud_list_distributions(
+    limit: Annotated[int, Field(description="Max commission events to return.", ge=1, le=100)] = 20,
+) -> str:
+    """Show your referral / affiliate status and recent commission events.
+
+    Returns the distribution status summary (total referred spend, reward, level)
+    plus recent ``distribution-histories`` commission records.
+    """
     try:
-        result = await client.get("/models/")
-        return _wrap(result)
+        status = await client.get("/distribution-statuses/", {"limit": 1})
+        histories = await client.get("/distribution-histories/", {"limit": limit})
+        status_items = status.get("items", []) if isinstance(status, dict) else []
+        return dumps(
+            {
+                "status": status_items[0] if status_items else None,
+                "histories": histories.get("items") if isinstance(histories, dict) else histories,
+            }
+        )
     except PlatformAuthError as e:
         return error_json("Authentication Error", e.message)
     except PlatformAPIError as e:
@@ -242,7 +219,7 @@ async def platform_list_models() -> str:
 
 
 @mcp.tool()
-async def platform_list_announcements(
+async def acedatacloud_list_announcements(
     limit: Annotated[int, Field(description="Max announcements to return.", ge=1, le=100)] = 20,
 ) -> str:
     """List published platform announcements (newest first)."""

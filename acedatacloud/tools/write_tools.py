@@ -15,7 +15,7 @@ from core.utils import confirmation_required, dumps, error_json
 
 
 @mcp.tool()
-async def platform_create_credential(
+async def acedatacloud_create_credential(
     application_id: Annotated[
         str,
         Field(description="UUID of the application (subscription) to attach the key to. Required."),
@@ -56,7 +56,7 @@ async def platform_create_credential(
 
 
 @mcp.tool()
-async def platform_delete_credential(
+async def acedatacloud_delete_credential(
     credential_id: Annotated[str, Field(description="UUID of the credential to delete. Required.")],
     confirm: Annotated[bool, Field(description="Must be true to actually delete the key.")] = False,
 ) -> str:
@@ -76,7 +76,7 @@ async def platform_delete_credential(
 
 
 @mcp.tool()
-async def platform_create_order(
+async def acedatacloud_create_order(
     application_id: Annotated[
         str, Field(description="UUID of the application to recharge. Required.")
     ],
@@ -89,7 +89,7 @@ async def platform_create_order(
 ) -> str:
     """Create a recharge order for an application. Requires ``confirm=true``.
 
-    Returns the order (with its ``id``); call ``platform_pay_order`` next to get a
+    Returns the order (with its ``id``); call ``acedatacloud_pay_order`` next to get a
     payment link.
     """
     body = {"application_id": application_id, "package_id": package_id}
@@ -105,7 +105,7 @@ async def platform_create_order(
 
 
 @mcp.tool()
-async def platform_pay_order(
+async def acedatacloud_pay_order(
     order_id: Annotated[str, Field(description="UUID of the order to pay. Required.")],
     pay_way: Annotated[
         str, Field(description="Payment method: WechatPay/AliPay/Stripe/X402/PayPal/Reward.")
@@ -133,7 +133,7 @@ async def platform_pay_order(
 
 
 @mcp.tool()
-async def platform_create_platform_token(
+async def acedatacloud_create_platform_token(
     confirm: Annotated[
         bool, Field(description="Must be true to actually create the token.")
     ] = False,
@@ -154,7 +154,7 @@ async def platform_create_platform_token(
 
 
 @mcp.tool()
-async def platform_delete_platform_token(
+async def acedatacloud_delete_platform_token(
     token_id: Annotated[str, Field(description="UUID of the platform token to delete. Required.")],
     confirm: Annotated[
         bool, Field(description="Must be true to actually delete the token.")

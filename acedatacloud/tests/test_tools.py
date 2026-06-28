@@ -1,4 +1,4 @@
-"""Unit tests for the MCP tools (read, write-confirm gate, masking)."""
+"""Unit tests for the MCP tools (public catalog, read, write-confirm gate, masking)."""
 
 import json
 
@@ -6,9 +6,10 @@ import httpx
 import pytest
 import respx
 
-from tools.admin_tools import platform_create_announcement
-from tools.read_tools import platform_get_balance, platform_list_services
-from tools.write_tools import platform_create_credential, platform_delete_credential
+from tools.admin_tools import acedatacloud_create_announcement
+from tools.catalog_tools import acedatacloud_get_pricing, acedatacloud_list_services
+from tools.read_tools import acedatacloud_get_balance
+from tools.write_tools import acedatacloud_create_credential, acedatacloud_delete_credential
 
 API = "https://platform.acedata.cloud/api/v1"
 
@@ -17,9 +18,22 @@ API = "https://platform.acedata.cloud/api/v1"
 @pytest.mark.asyncio
 async def test_list_services_filters_by_search(mock_services_page):
     respx.get(f"{API}/services/").mock(return_value=httpx.Response(200, json=mock_services_page))
-    out = json.loads(await platform_list_services(search="suno"))
+    out = json.loads(await acedatacloud_list_services(search="suno"))
     assert out["count"] == 1
     assert out["items"][0]["alias"] == "suno"
+
+
+@respx.mock
+@pytest.mark.asyncio
+async def test_pricing_public_no_auth_header(mock_services_page):
+    # Public catalog tool: must work and send NO Authorization header even when a
+    # token is configured is irrelevant — verify it returns the service cost.
+    route = respx.get(f"{API}/services/").mock(
+        return_value=httpx.Response(200, json=mock_services_page)
+    )
+    out = json.loads(await acedatacloud_get_pricing(service="suno"))
+    assert out[0]["alias"] == "suno"
+    assert route.called
 
 
 @respx.mock
@@ -28,7 +42,7 @@ async def test_get_balance_summarizes(mock_applications_page):
     respx.get(f"{API}/applications/").mock(
         return_value=httpx.Response(200, json=mock_applications_page)
     )
-    out = json.loads(await platform_get_balance())
+    out = json.loads(await acedatacloud_get_balance())
     assert out["total_remaining"] == 100.5
     assert out["unit"] == "Credit"
     assert out["applications"][0]["service_id"] == "svc-1"
@@ -42,7 +56,7 @@ async def test_create_credential_confirm_gate_no_http():
     route = respx.post(f"{API}/credentials/").mock(
         return_value=httpx.Response(201, json={"id": "x"})
     )
-    out = json.loads(await platform_create_credential(application_id="app-1", name="ci"))
+    out = json.loads(await acedatacloud_create_credential(application_id="app-1", name="ci"))
     assert out["status"] == "confirmation_required"
     assert out["action"] == "POST /credentials/"
     assert out["target"]["application_id"] == "app-1"
@@ -54,20 +68,20 @@ async def test_create_credential_confirm_gate_no_http():
 @pytest.mark.asyncio
 async def test_create_credential_confirmed_reveals_token(mock_credential):
     respx.post(f"{API}/credentials/").mock(return_value=httpx.Response(201, json=mock_credential))
-    out = json.loads(await platform_create_credential(application_id="app-1", confirm=True))
+    out = json.loads(await acedatacloud_create_credential(application_id="app-1", confirm=True))
     # Freshly minted token must be returned in full so the caller can store it.
     assert out["token"] == mock_credential["token"]
 
 
 @pytest.mark.asyncio
 async def test_delete_credential_confirm_gate():
-    out = json.loads(await platform_delete_credential(credential_id="cred-1"))
+    out = json.loads(await acedatacloud_delete_credential(credential_id="cred-1"))
     assert out["status"] == "confirmation_required"
     assert out["target"]["id"] == "cred-1"
 
 
 @pytest.mark.asyncio
 async def test_create_announcement_confirm_gate():
-    out = json.loads(await platform_create_announcement(title="T", content="C"))
+    out = json.loads(await acedatacloud_create_announcement(title="T", content="C"))
     assert out["status"] == "confirmation_required"
     assert "superuser" in out["action"]

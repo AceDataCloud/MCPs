@@ -36,6 +36,18 @@ def error_json(error: str, message: str) -> str:
     return json.dumps({"error": error, "message": message}, ensure_ascii=False)
 
 
+def unwrap(data: Any) -> Any:
+    """Return the list payload whether the endpoint paginates or not.
+
+    PlatformBackend paginators use ``items``; DRF defaults use ``results``.
+    """
+    if isinstance(data, dict):
+        for key in ("items", "results"):
+            if isinstance(data.get(key), list):
+                return data[key]
+    return data
+
+
 def confirmation_required(action: str, target: dict[str, Any]) -> str:
     """Build the dry-run preview returned when a write tool is called without confirm."""
     return json.dumps(

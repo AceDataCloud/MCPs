@@ -1,7 +1,7 @@
 [project]
 name = "mcp-acedatacloud"
 version = "2026.6.28.0"
-description = "MCP Server for managing your AceDataCloud account (balances, usage, API keys, orders, announcements)"
+description = "MCP server for the AceDataCloud platform: public catalog & docs (services, APIs, specs, pricing, models) + account management (balance, usage, keys, orders)"
 readme = "README.md"
 license = { text = "MIT" }
 requires-python = ">=3.10"
@@ -17,6 +17,9 @@ keywords = [
     "acedata",
     "acedatacloud",
     "platform",
+    "docs",
+    "openapi",
+    "catalog",
     "billing",
     "api",
     "llm",

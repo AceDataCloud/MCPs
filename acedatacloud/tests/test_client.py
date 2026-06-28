@@ -33,6 +33,15 @@ def test_get_headers_no_token_raises():
         c._get_headers()
 
 
+def test_get_headers_public_no_token_ok():
+    # Public catalog/docs tools call with auth_required=False — no token, no auth
+    # header, no raise. A lang sets Accept-Language.
+    c = PlatformClient(api_token="", base_url=BASE)
+    headers = c._get_headers(auth_required=False, lang="zh-cn")
+    assert "authorization" not in headers
+    assert headers["accept-language"] == "zh-cn"
+
+
 @respx.mock
 @pytest.mark.asyncio
 async def test_get_success(client):

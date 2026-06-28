@@ -95,17 +95,16 @@ Environment Variables:
     safe_print(f"  Log Level: {settings.log_level}")
     safe_print("")
 
-    # Validate configuration
-    if not settings.is_configured and args.transport != "http":
-        safe_print("  [ERROR] ACEDATACLOUD_PLATFORM_TOKEN not configured!")
-        safe_print("  Create one at https://platform.acedata.cloud/console/platform-tokens")
-        safe_print("")
-        sys.exit(1)
-
+    # Token is OPTIONAL: the public catalog/docs tools work without it; the
+    # account-management tools require it and return a clear error if missing.
     if args.transport == "http":
         safe_print("  [OK] HTTP mode - tokens from request headers")
+    elif settings.is_configured:
+        safe_print("  [OK] Platform token configured (account management enabled)")
     else:
-        safe_print("  [OK] Platform token configured")
+        safe_print("  [i] No platform token - public catalog/docs tools only")
+        safe_print("      Account management needs ACEDATACLOUD_PLATFORM_TOKEN")
+        safe_print("      Create one at https://platform.acedata.cloud/console/platform-tokens")
     safe_print("")
 
     # Import tools and prompts to register them

@@ -7,55 +7,67 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![MCP](https://img.shields.io/badge/MCP-Compatible-green.svg)](https://modelcontextprotocol.io)
 
-A [Model Context Protocol (MCP)](https://modelcontextprotocol.io) server for
-**managing your [AceDataCloud](https://platform.acedata.cloud) account** through
-the [platform management API](https://platform.acedata.cloud/documents/platform-token).
+A [Model Context Protocol (MCP)](https://modelcontextprotocol.io) server for the
+whole **[AceDataCloud](https://platform.acedata.cloud) platform**: browse the
+public **catalog & docs** (services, APIs, OpenAPI specs, pricing, models,
+documentation — no token), and **manage your account** (balance, usage, API keys,
+orders, referral earnings — with a platform token).
 
-Check your balance, look up usage and spend, manage API keys, list services,
-create and pay recharge orders, manage platform tokens, list models, and (for
-admins) publish announcements — directly from Claude, VS Code, or any
-MCP-compatible client.
+Two tiers in one server:
 
-> This is the **management / console** API (`platform.acedata.cloud`) — different
-> from the data-generation MCP servers (Suno, Midjourney, …) that call
+- **Public (no token):** search docs, browse services/APIs/specs, check pricing and models.
+- **Account (platform token):** balance, usage/spend, API keys, orders, platform tokens, distributions, announcements.
+
+> Consolidates the former public **docs** MCP (`docs.mcp.acedata.cloud`) into this
+> single server. It is the **management / console** side (`platform.acedata.cloud`)
+> — different from the data-generation MCP servers (Suno, Midjourney, …) that call
 > `api.acedata.cloud`.
 
 ## Tool Reference
 
-### Read (always safe)
+### Catalog & docs — public, no token required
 
 | Tool | Description |
 |------|-------------|
-| `platform_get_balance` | Remaining credits per subscription, plus a total. |
-| `platform_list_applications` | Your subscriptions with balance/spend. |
-| `platform_list_services` | List or search available services. |
-| `platform_list_usage` | Recent API call records (status, latency, credits). |
-| `platform_usage_summary` | Spend aggregated by API over N days. |
-| `platform_list_credentials` | Your API keys (token values masked). |
-| `platform_list_orders` | Recharge orders. |
-| `platform_list_platform_tokens` | Platform tokens (masked). |
-| `platform_list_models` | Available chat models. |
-| `platform_list_announcements` | Published announcements. |
+| `acedatacloud_list_services` | List / search the service catalog. |
+| `acedatacloud_get_service` | One service's detail: its APIs + pricing packages. |
+| `acedatacloud_list_apis` | Public API endpoints, optionally per service. |
+| `acedatacloud_get_api_spec` | OpenAPI spec for an API (by path or service). |
+| `acedatacloud_get_pricing` | Display pricing (unit, free quota, cost rules). |
+| `acedatacloud_search_docs` | Search the documentation by keyword/question. |
+| `acedatacloud_list_docs` | Browse documentation pages. |
+| `acedatacloud_get_doc` | Read a full documentation page. |
+| `acedatacloud_list_models` | Model catalog (all modalities) + credit pricing. |
+| `acedatacloud_get_model` | One model's detail + pricing. |
+| `acedatacloud_list_datasets` / `acedatacloud_list_integrations` | Catalog extras. |
 
-### Write (require `confirm=true`)
-
-| Tool | Description |
-|------|-------------|
-| `platform_create_credential` | Create an API key on an application. |
-| `platform_delete_credential` | Revoke an API key. |
-| `platform_create_order` | Create a recharge order. |
-| `platform_pay_order` | Create a payment session and return `pay_url`. |
-| `platform_create_platform_token` | Create a new platform token. |
-| `platform_delete_platform_token` | Revoke a platform token. |
-
-### Admin (superuser token)
+### Account — read (needs a platform token)
 
 | Tool | Description |
 |------|-------------|
-| `platform_create_announcement` | Publish a platform announcement (`confirm=true`). |
+| `acedatacloud_get_balance` | Remaining credits per subscription, plus a total. |
+| `acedatacloud_list_applications` | Your subscriptions with balance/spend. |
+| `acedatacloud_list_usage` | Recent API call records (status, latency, credits). |
+| `acedatacloud_usage_summary` | Spend aggregated by API over N days. |
+| `acedatacloud_list_credentials` | Your API keys (token values masked). |
+| `acedatacloud_list_orders` | Recharge orders. |
+| `acedatacloud_list_platform_tokens` | Platform tokens (masked). |
+| `acedatacloud_list_distributions` | Referral / affiliate status + commissions. |
+| `acedatacloud_list_announcements` | Published announcements. |
+
+### Account — write (require `confirm=true`)
+
+| Tool | Description |
+|------|-------------|
+| `acedatacloud_create_credential` / `acedatacloud_delete_credential` | Create / revoke an API key. |
+| `acedatacloud_create_order` | Create a recharge order. |
+| `acedatacloud_pay_order` | Create a payment session and return `pay_url`. |
+| `acedatacloud_create_platform_token` / `acedatacloud_delete_platform_token` | Create / revoke a platform token. |
+| `acedatacloud_create_announcement` | Publish an announcement (superuser). |
 
 Calling a write/admin tool **without** `confirm=true` returns a dry-run preview
-and changes nothing.
+and changes nothing. The catalog & docs tools work **without any token**; account
+tools need `ACEDATACLOUD_PLATFORM_TOKEN`.
 
 ## Quick Start
 

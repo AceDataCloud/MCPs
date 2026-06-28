@@ -1,46 +1,47 @@
-"""Informational tools for the Platform MCP server."""
+"""Informational tool for the AceDataCloud MCP server."""
 
 from core.server import mcp
 
 
 @mcp.tool()
-async def platform_get_usage_guide() -> str:
-    """Get a guide for using the AceDataCloud platform management tools.
-
-    Explains the available tools, the write-confirmation model, and the
-    authentication requirements.
-    """
+async def acedatacloud_get_usage_guide() -> str:
+    """Get a guide to the AceDataCloud tools: catalog/docs (public) + account management."""
     # Last updated: 2026-06-28
-    return """# AceDataCloud Platform Management — Tool Guide
+    return """# AceDataCloud MCP — Tool Guide
 
-These tools manage your AceDataCloud account via the console API
-(platform.acedata.cloud). Authentication uses a **platform token** set as
-ACEDATACLOUD_PLATFORM_TOKEN — NOT the api.acedata.cloud service token.
-Create one at https://platform.acedata.cloud/console/platform-tokens
+One server for the whole AceDataCloud platform: browse the public catalog & docs
+(no token), and manage your account (with a platform token).
 
-## Read tools (safe)
-- platform_get_balance — remaining credits per subscription (+ total)
-- platform_list_applications — your subscriptions and balances
-- platform_list_services — list/search available services
-- platform_list_usage — recent API call records
-- platform_usage_summary — spend aggregated by API over N days
-- platform_list_credentials — your API keys (tokens masked)
-- platform_list_orders — recharge orders
-- platform_list_platform_tokens — platform tokens (masked)
-- platform_list_models — available chat models
-- platform_list_announcements — published announcements
+## Public — no token required
+- acedatacloud_list_services / acedatacloud_get_service — the service catalog + detail
+- acedatacloud_list_apis / acedatacloud_get_api_spec — API endpoints + OpenAPI specs
+- acedatacloud_get_pricing — display pricing (unit, free quota, cost rules)
+- acedatacloud_search_docs / acedatacloud_list_docs / acedatacloud_get_doc — documentation
+- acedatacloud_list_models / acedatacloud_get_model — model catalog (all modalities) + pricing
+- acedatacloud_list_datasets / acedatacloud_list_integrations — catalog extras
 
-## Write tools — require confirm=true
-Calling them without confirm returns a dry-run preview and does nothing.
-- platform_create_credential / platform_delete_credential
-- platform_create_order then platform_pay_order (returns pay_url)
-- platform_create_platform_token / platform_delete_platform_token
+## Account management — needs ACEDATACLOUD_PLATFORM_TOKEN
+Create one at https://platform.acedata.cloud/console/platform-tokens (NOT the
+api.acedata.cloud service token).
+- acedatacloud_get_balance — remaining credits per subscription (+ total)
+- acedatacloud_list_applications — subscriptions and balances
+- acedatacloud_list_usage / acedatacloud_usage_summary — call records + spend
+- acedatacloud_list_credentials — your API keys (masked)
+- acedatacloud_list_orders — recharge orders
+- acedatacloud_list_platform_tokens — platform tokens (masked)
+- acedatacloud_list_distributions — referral / affiliate status + commissions
+- acedatacloud_list_announcements — announcements
 
-## Admin tools — superuser token + confirm=true
-- platform_create_announcement
+## Write — need confirm=true (dry-run preview otherwise)
+- acedatacloud_create_credential / acedatacloud_delete_credential
+- acedatacloud_create_order then acedatacloud_pay_order (returns pay_url)
+- acedatacloud_create_platform_token / acedatacloud_delete_platform_token
+
+## Admin — superuser token + confirm=true
+- acedatacloud_create_announcement
 
 ## Notes
-- Amounts (remaining_amount, used_amount, total) are in Credits, not USD.
+- Amounts (remaining_amount, used_amount, totals) are in Credits, not USD.
 - Newly created credential/platform tokens are shown in full only once — store them.
 - Credential rotation = delete + recreate (no in-place rotate endpoint).
 """
