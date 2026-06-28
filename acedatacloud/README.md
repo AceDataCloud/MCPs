@@ -26,33 +26,33 @@ MCP-compatible client.
 
 | Tool | Description |
 |------|-------------|
-| `platform_get_balance` | Remaining credits per subscription, plus a total. |
-| `platform_list_applications` | Your subscriptions with balance/spend. |
-| `platform_list_services` | List or search available services. |
-| `platform_list_usage` | Recent API call records (status, latency, credits). |
-| `platform_usage_summary` | Spend aggregated by API over N days. |
-| `platform_list_credentials` | Your API keys (token values masked). |
-| `platform_list_orders` | Recharge orders. |
-| `platform_list_platform_tokens` | Platform tokens (masked). |
-| `platform_list_models` | Available chat models. |
-| `platform_list_announcements` | Published announcements. |
+| `acedatacloud_get_balance` | Remaining credits per subscription, plus a total. |
+| `acedatacloud_list_applications` | Your subscriptions with balance/spend. |
+| `acedatacloud_list_services` | List or search available services. |
+| `acedatacloud_list_usage` | Recent API call records (status, latency, credits). |
+| `acedatacloud_usage_summary` | Spend aggregated by API over N days. |
+| `acedatacloud_list_credentials` | Your API keys (token values masked). |
+| `acedatacloud_list_orders` | Recharge orders. |
+| `acedatacloud_list_platform_tokens` | Platform tokens (masked). |
+| `acedatacloud_list_models` | Available chat models. |
+| `acedatacloud_list_announcements` | Published announcements. |
 
 ### Write (require `confirm=true`)
 
 | Tool | Description |
 |------|-------------|
-| `platform_create_credential` | Create an API key on an application. |
-| `platform_delete_credential` | Revoke an API key. |
-| `platform_create_order` | Create a recharge order. |
-| `platform_pay_order` | Create a payment session and return `pay_url`. |
-| `platform_create_platform_token` | Create a new platform token. |
-| `platform_delete_platform_token` | Revoke a platform token. |
+| `acedatacloud_create_credential` | Create an API key on an application. |
+| `acedatacloud_delete_credential` | Revoke an API key. |
+| `acedatacloud_create_order` | Create a recharge order. |
+| `acedatacloud_pay_order` | Create a payment session and return `pay_url`. |
+| `acedatacloud_create_platform_token` | Create a new platform token. |
+| `acedatacloud_delete_platform_token` | Revoke a platform token. |
 
 ### Admin (superuser token)
 
 | Tool | Description |
 |------|-------------|
-| `platform_create_announcement` | Publish a platform announcement (`confirm=true`). |
+| `acedatacloud_create_announcement` | Publish a platform announcement (`confirm=true`). |
 
 Calling a write/admin tool **without** `confirm=true` returns a dry-run preview
 and changes nothing.

@@ -15,7 +15,7 @@ from core.utils import confirmation_required, dumps, error_json
 
 
 @mcp.tool()
-async def platform_create_announcement(
+async def acedatacloud_create_announcement(
     title: Annotated[str, Field(description="Announcement title. Required.")],
     content: Annotated[str, Field(description="Announcement body in Markdown. Required.")],
     rank: Annotated[
