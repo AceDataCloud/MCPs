@@ -29,7 +29,7 @@ class Settings:
     )
 
     # Server configuration
-    server_name: str = field(default_factory=lambda: os.getenv("MCP_SERVER_NAME", "platform"))
+    server_name: str = field(default_factory=lambda: os.getenv("MCP_SERVER_NAME", "acedatacloud"))
     transport: str = field(default_factory=lambda: os.getenv("MCP_TRANSPORT", "stdio"))
     log_level: str = field(default_factory=lambda: os.getenv("LOG_LEVEL", "INFO"))
 

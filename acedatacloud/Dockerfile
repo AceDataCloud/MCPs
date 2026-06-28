@@ -6,4 +6,4 @@ COPY . .
 
 RUN pip install --no-cache-dir ".[http]"
 
-CMD ["mcp-acedata-platform", "--transport", "http", "--port", "8000"]
+CMD ["mcp-acedatacloud", "--transport", "http", "--port", "8000"]

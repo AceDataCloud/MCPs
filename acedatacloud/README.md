@@ -1,8 +1,8 @@
-# PlatformMCP
+# AceDataCloudMCP
 
-<!-- mcp-name: io.github.AceDataCloud/mcp-acedata-platform -->
+<!-- mcp-name: io.github.AceDataCloud/mcp-acedatacloud -->
 
-[![PyPI version](https://img.shields.io/pypi/v/mcp-acedata-platform.svg)](https://pypi.org/project/mcp-acedata-platform/)
+[![PyPI version](https://img.shields.io/pypi/v/mcp-acedatacloud.svg)](https://pypi.org/project/mcp-acedatacloud/)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![MCP](https://img.shields.io/badge/MCP-Compatible-green.svg)](https://modelcontextprotocol.io)
@@ -70,7 +70,7 @@ It starts with `platform-` and never expires.
 ### 2. Install
 
 ```bash
-pip install mcp-acedata-platform
+pip install mcp-acedatacloud
 ```
 
 ### 3. Configure your client
@@ -80,8 +80,8 @@ pip install mcp-acedata-platform
 ```json
 {
   "mcpServers": {
-    "acedata-platform": {
-      "command": "mcp-acedata-platform",
+    "acedatacloud": {
+      "command": "mcp-acedatacloud",
       "env": {
         "ACEDATACLOUD_PLATFORM_TOKEN": "platform-v1-xxxxxxxx"
       }
@@ -95,8 +95,8 @@ pip install mcp-acedata-platform
 ```json
 {
   "mcpServers": {
-    "acedata-platform": {
-      "url": "https://platform.mcp.acedata.cloud/mcp",
+    "acedatacloud": {
+      "url": "https://acedatacloud.mcp.acedata.cloud/mcp",
       "headers": { "Authorization": "Bearer platform-v1-xxxxxxxx" }
     }
   }
@@ -127,7 +127,7 @@ pip install -e ".[dev,test,http]"
 pytest -m "not integration"      # unit tests
 ruff check .                      # lint
 mypy core tools                   # type-check
-mcp-acedata-platform --transport http --port 8000
+mcp-acedatacloud --transport http --port 8000
 ```
 
 ## Notes

@@ -6,7 +6,7 @@ from core.config import Settings
 def test_defaults():
     s = Settings()
     assert s.api_base_url == "https://platform.acedata.cloud"
-    assert s.server_name == "platform"
+    assert s.server_name == "acedatacloud"
     assert s.request_timeout == 30.0
 
 

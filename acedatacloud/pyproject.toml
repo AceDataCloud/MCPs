@@ -1,5 +1,5 @@
 [project]
-name = "mcp-acedata-platform"
+name = "mcp-acedatacloud"
 version = "2026.6.28.0"
 description = "MCP Server for managing your AceDataCloud account (balances, usage, API keys, orders, announcements)"
 readme = "README.md"
@@ -63,18 +63,18 @@ release = [
     "twine>=5.0.0",
 ]
 all = [
-    "mcp-acedata-platform[dev,test,http,release]",
+    "mcp-acedatacloud[dev,test,http,release]",
 ]
 
 [project.scripts]
-mcp-acedata-platform = "main:main"
+mcp-acedatacloud = "main:main"
 
 [project.urls]
-Homepage = "https://github.com/AceDataCloud/PlatformMCP"
+Homepage = "https://github.com/AceDataCloud/AceDataCloudMCP"
 Documentation = "https://platform.acedata.cloud/documents/platform-token"
-Repository = "https://github.com/AceDataCloud/PlatformMCP"
-Issues = "https://github.com/AceDataCloud/PlatformMCP/issues"
-Changelog = "https://github.com/AceDataCloud/PlatformMCP/blob/main/CHANGELOG.md"
+Repository = "https://github.com/AceDataCloud/AceDataCloudMCP"
+Issues = "https://github.com/AceDataCloud/AceDataCloudMCP/issues"
+Changelog = "https://github.com/AceDataCloud/AceDataCloudMCP/blob/main/CHANGELOG.md"
 
 [build-system]
 requires = ["hatchling>=1.21.0,<1.30.0"]

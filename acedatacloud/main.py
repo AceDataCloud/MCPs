@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-MCP Platform Server — manage your AceDataCloud account via the console API.
+AceDataCloud MCP Server — manage your AceDataCloud account via the console API.
 
 A Model Context Protocol (MCP) server exposing the AceDataCloud platform
 management API (balances, usage, API keys, services, orders, platform tokens,
@@ -31,7 +31,7 @@ logger = logging.getLogger(__name__)
 def safe_print(text: str) -> None:
     """Print to stderr safely, handling encoding issues."""
     if not sys.stderr.isatty():
-        logger.debug(f"[MCP Platform] {text}")
+        logger.debug(f"[MCP AceDataCloud] {text}")
         return
     try:
         print(text, file=sys.stderr)
@@ -42,21 +42,21 @@ def safe_print(text: str) -> None:
 def get_version() -> str:
     """Get the package version."""
     try:
-        return metadata.version("mcp-acedata-platform")
+        return metadata.version("mcp-acedatacloud")
     except metadata.PackageNotFoundError:
         return "dev"
 
 
 def main() -> None:
-    """Run the MCP Platform server."""
+    """Run the AceDataCloud MCP server."""
     parser = argparse.ArgumentParser(
-        description="MCP Platform Server — AceDataCloud account management",
+        description="AceDataCloud MCP Server — account management",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
-  mcp-acedata-platform                  # Run with stdio transport (default)
-  mcp-acedata-platform --transport http # Run with HTTP transport
-  mcp-acedata-platform --version        # Show version
+  mcp-acedatacloud                  # Run with stdio transport (default)
+  mcp-acedatacloud --transport http # Run with HTTP transport
+  mcp-acedatacloud --version        # Show version
 
 Environment Variables:
   ACEDATACLOUD_PLATFORM_TOKEN     Platform token (required)
@@ -68,7 +68,7 @@ Environment Variables:
     parser.add_argument(
         "--version",
         action="version",
-        version=f"mcp-acedata-platform {get_version()}",
+        version=f"mcp-acedatacloud {get_version()}",
     )
     parser.add_argument(
         "--transport",
@@ -87,7 +87,7 @@ Environment Variables:
     # Print startup banner
     safe_print("")
     safe_print("=" * 50)
-    safe_print("  MCP Platform Server — Account Management")
+    safe_print("  AceDataCloud MCP Server — Account Management")
     safe_print("=" * 50)
     safe_print("")
     safe_print(f"  Version:   {get_version()}")
