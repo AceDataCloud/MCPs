@@ -83,3 +83,7 @@ mappings:
     repo: AceDataCloud/FaceTransformMCP
     exclude:
       - .gitbooks
+  platform:
+    repo: AceDataCloud/PlatformMCP
+    exclude:
+      - .gitbooks
