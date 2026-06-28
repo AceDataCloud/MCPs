@@ -32,6 +32,30 @@ def get_request_api_token() -> str | None:
     return _request_api_token.get()
 
 
+def get_request_user_id() -> str | None:
+    """Best-effort caller user id, decoded from the current bearer token.
+
+    Account endpoints are NOT scoped to the caller server-side (a superuser would
+    see the whole table → huge response, a regular user 403s on the first
+    non-owned row), so the tools must pass ``user_id``. When the access token is
+    an AceDataCloud JWT it carries ``user_id``; opaque tokens return None.
+    """
+    token = get_request_api_token()
+    if not token or token.count(".") != 2:
+        return None
+    try:
+        import base64
+        import json
+
+        payload = token.split(".")[1]
+        payload += "=" * (-len(payload) % 4)
+        claims = json.loads(base64.urlsafe_b64decode(payload))
+        uid = claims.get("user_id")
+        return str(uid) if uid else None
+    except Exception:
+        return None
+
+
 class PlatformClient:
     """Async HTTP client for the AceDataCloud platform management API.
 

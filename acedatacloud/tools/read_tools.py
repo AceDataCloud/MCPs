@@ -5,7 +5,7 @@ from typing import Annotated
 
 from pydantic import Field
 
-from core.client import client
+from core.client import client, get_request_user_id
 from core.exceptions import PlatformAPIError, PlatformAuthError
 from core.server import mcp
 from core.utils import dumps, error_json
@@ -74,7 +74,13 @@ async def acedatacloud_list_applications(
     """
     try:
         result = await client.get(
-            "/applications/", {"limit": limit, "service_id": service_id, "scope": scope}
+            "/applications/",
+            {
+                "limit": limit,
+                "service_id": service_id,
+                "scope": scope,
+                "user_id": get_request_user_id(),
+            },
         )
         return _wrap(result)
     except PlatformAuthError as e:
@@ -95,7 +101,10 @@ async def acedatacloud_get_balance(
     plus the total remaining. Amounts are in Credits, not USD.
     """
     try:
-        result = await client.get("/applications/", {"limit": 200, "service_id": service_id})
+        result = await client.get(
+            "/applications/",
+            {"limit": 200, "service_id": service_id, "user_id": get_request_user_id()},
+        )
         items = result.get("items", []) if isinstance(result, dict) else []
         summary = [
             {
@@ -135,6 +144,7 @@ async def acedatacloud_list_usage(
                 "api_id": api_id,
                 "status_code": status_code,
                 "created_at_from": _since(days),
+                "user_id": get_request_user_id(),
             },
         )
         return _wrap(result)
@@ -154,7 +164,8 @@ async def acedatacloud_usage_summary(
     """Aggregate API spend over a time window: total Credits plus a per-API breakdown."""
     try:
         result = await client.get(
-            "/usage/apis/aggregate/", {"created_at_from": _since(days), "api_id": api_id}
+            "/usage/apis/aggregate/",
+            {"created_at_from": _since(days), "api_id": api_id, "user_id": get_request_user_id()},
         )
         apis = result.get("apis", {}) if isinstance(result, dict) else {}
         by_api: dict[str, float] = {}
@@ -184,7 +195,8 @@ async def acedatacloud_list_credentials(
     """List your API keys (credentials). Token values are masked."""
     try:
         result = await client.get(
-            "/credentials/", {"limit": limit, "application_id": application_id}
+            "/credentials/",
+            {"limit": limit, "application_id": application_id, "user_id": get_request_user_id()},
         )
         return _wrap(result)
     except PlatformAuthError as e:
@@ -207,7 +219,10 @@ async def acedatacloud_list_orders(
 ) -> str:
     """List recharge orders with their state and payment method."""
     try:
-        result = await client.get("/orders/", {"limit": limit, "state": state, "pay_way": pay_way})
+        result = await client.get(
+            "/orders/",
+            {"limit": limit, "state": state, "pay_way": pay_way, "user_id": get_request_user_id()},
+        )
         return _wrap(result)
     except PlatformAuthError as e:
         return error_json("Authentication Error", e.message)
@@ -221,7 +236,9 @@ async def acedatacloud_list_platform_tokens(
 ) -> str:
     """List your platform tokens (the credentials used to call this management API). Masked."""
     try:
-        result = await client.get("/platform-tokens/", {"limit": limit})
+        result = await client.get(
+            "/platform-tokens/", {"limit": limit, "user_id": get_request_user_id()}
+        )
         return _wrap(result)
     except PlatformAuthError as e:
         return error_json("Authentication Error", e.message)
@@ -265,8 +282,12 @@ async def acedatacloud_list_distributions(
     total reward) plus recent commission events. Amounts are in Credits.
     """
     try:
-        status = await client.get("/distribution-statuses/", {"limit": 1})
-        history = await client.get("/distribution-histories/", {"limit": limit})
+        status = await client.get(
+            "/distribution-statuses/", {"limit": 1, "user_id": get_request_user_id()}
+        )
+        history = await client.get(
+            "/distribution-histories/", {"limit": limit, "user_id": get_request_user_id()}
+        )
         status_items = status.get("items", []) if isinstance(status, dict) else []
         return dumps(
             {
