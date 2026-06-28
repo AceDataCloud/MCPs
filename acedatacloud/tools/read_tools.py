@@ -253,3 +253,29 @@ async def acedatacloud_list_announcements(
         return error_json("Authentication Error", e.message)
     except PlatformAPIError as e:
         return error_json("API Error", e.message)
+
+
+@mcp.tool()
+async def acedatacloud_list_distributions(
+    limit: Annotated[
+        int, Field(description="Max commission history records to return.", ge=1, le=100)
+    ] = 20,
+) -> str:
+    """Show your referral/affiliate earnings: current status (level, total price,
+    total reward) plus recent commission events. Amounts are in Credits.
+    """
+    try:
+        status = await client.get("/distribution-statuses/", {"limit": 1})
+        history = await client.get("/distribution-histories/", {"limit": limit})
+        status_items = status.get("items", []) if isinstance(status, dict) else []
+        return dumps(
+            {
+                "status": status_items[0] if status_items else None,
+                "history_count": history.get("count") if isinstance(history, dict) else None,
+                "history": history.get("items", []) if isinstance(history, dict) else [],
+            }
+        )
+    except PlatformAuthError as e:
+        return error_json("Authentication Error", e.message)
+    except PlatformAPIError as e:
+        return error_json("API Error", e.message)

@@ -36,6 +36,23 @@ MCP-compatible client.
 | `acedatacloud_list_platform_tokens` | Platform tokens (masked). |
 | `acedatacloud_list_models` | Available chat models. |
 | `acedatacloud_list_announcements` | Published announcements. |
+| `acedatacloud_list_distributions` | Your referral/affiliate status + commission history. |
+
+### Catalog & Docs (public — no token needed)
+
+| Tool | Description |
+|------|-------------|
+| `acedatacloud_get_service` | One service's detail (type, unit, free_amount, cost), by alias or id. |
+| `acedatacloud_get_pricing` | A service's billing unit, free_amount and display pricing. |
+| `acedatacloud_list_apis` | API endpoints, optionally scoped to one service (path, method, cost). |
+| `acedatacloud_get_api_spec` | One API's OpenAPI `definition` + cost, by path. |
+| `acedatacloud_list_datasets` | Downloadable datasets (price, download/preview URLs). |
+| `acedatacloud_list_integrations` | Third-party integrations. |
+| `acedatacloud_search_docs` | Full-text search the documentation (alias/title/snippet/url). |
+| `acedatacloud_list_docs` | Browse documentation pages. |
+| `acedatacloud_get_doc` | Fetch one doc's full content by UUID. |
+| `acedatacloud_list_model_catalog` | Rich model catalog (provider, modality, credit pricing). |
+| `acedatacloud_get_model` | Look up a model's pricing & capabilities by id/name. |
 
 ### Write (require `confirm=true`)
 
