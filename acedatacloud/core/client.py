@@ -45,16 +45,18 @@ class PlatformClient:
         logger.info(f"PlatformClient initialized with base_url: {self.base_url}")
         logger.debug(f"Platform token configured: {'Yes' if self.api_token else 'No'}")
 
-    def _get_headers(self) -> dict[str, str]:
-        token = get_request_api_token() or self.api_token
-        if not token:
-            logger.error("Platform token not configured!")
-            raise PlatformAuthError("Platform token not configured")
-        return {
+    def _get_headers(self, auth_required: bool = True) -> dict[str, str]:
+        headers = {
             "accept": "application/json",
-            "authorization": f"Bearer {token}",
             "content-type": "application/json",
         }
+        token = get_request_api_token() or self.api_token
+        if token:
+            headers["authorization"] = f"Bearer {token}"
+        elif auth_required:
+            logger.error("Platform token not configured!")
+            raise PlatformAuthError("Platform token not configured")
+        return headers
 
     def _handle_error_response(self, response: httpx.Response) -> None:
         """Parse an API error response and raise the appropriate exception."""
@@ -89,6 +91,7 @@ class PlatformClient:
         params: dict[str, Any] | None = None,
         json_body: dict[str, Any] | None = None,
         timeout: float | None = None,
+        auth_required: bool = True,
     ) -> Any:
         """Make a request to ``/api/v1{endpoint}`` and return parsed JSON.
 
@@ -109,7 +112,7 @@ class PlatformClient:
                     url,
                     params=clean_params or None,
                     json=json_body,
-                    headers=self._get_headers(),
+                    headers=self._get_headers(auth_required),
                     timeout=request_timeout,
                 )
                 logger.info(f"Response status: {response.status_code}")
@@ -132,6 +135,11 @@ class PlatformClient:
 
     async def get(self, endpoint: str, params: dict[str, Any] | None = None) -> Any:
         return await self.request("GET", endpoint, params=params)
+
+    async def get_public(self, endpoint: str, params: dict[str, Any] | None = None) -> Any:
+        """GET a public endpoint (catalog/docs/models/search). Sends the token if
+        configured but does not require one."""
+        return await self.request("GET", endpoint, params=params, auth_required=False)
 
     async def post(self, endpoint: str, json_body: dict[str, Any] | None = None) -> Any:
         return await self.request("POST", endpoint, json_body=json_body or {})

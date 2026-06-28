@@ -5,6 +5,26 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.0] - 2026-06-28
+
+### Added
+
+- Public **catalog** tools (no token needed): `acedatacloud_get_service`,
+  `acedatacloud_get_pricing`, `acedatacloud_list_apis`, `acedatacloud_get_api_spec`,
+  `acedatacloud_list_datasets`, `acedatacloud_list_integrations`.
+- Public **docs** tools: `acedatacloud_search_docs`, `acedatacloud_list_docs`,
+  `acedatacloud_get_doc`.
+- Public **model catalog** tools: `acedatacloud_list_model_catalog`, `acedatacloud_get_model`.
+- Account tool: `acedatacloud_list_distributions` (referral status + commission history).
+- Client now supports a public (no-token) request path via `get_public`; catalog/docs/model
+  tools work with or without a platform token.
+
+### Notes
+
+- Catalog/docs lookups use list+filter (`services/?id=`, `apis/?path=`, `documents/?id=`)
+  because the platform's detail routes are unreliable; `apis`/`services` collection filters
+  that are ignored server-side are applied client-side.
+
 ## [0.1.0] - 2026-06-28
 
 ### Added
