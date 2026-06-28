@@ -131,12 +131,13 @@ Environment Variables:
             from starlette.routing import BaseRoute, Mount, Route
 
             from core.client import set_request_api_token
+            from core.server import oauth_provider
 
             class BearerTokenMiddleware:
-                """Pure-ASGI middleware: lift the request's bearer token into the
-                per-request context so each caller authenticates with their own
-                platform token (hosted multi-tenant mode). Pure ASGI (not
-                BaseHTTPMiddleware) so the contextvar reaches the tool coroutine.
+                """Pure-ASGI fallback (used only when OAuth is disabled): lift the
+                request's bearer token into the per-request context so a caller
+                can authenticate with a platform token directly. When OAuth is
+                enabled, the provider's load_access_token does this instead.
                 """
 
                 def __init__(self, app):  # type: ignore[no-untyped-def]
@@ -162,12 +163,17 @@ Environment Variables:
             mcp.settings.json_response = True
             mcp.settings.streamable_http_path = "/mcp"
 
-            routes: list[BaseRoute] = [
-                Route("/health", health),
-                Mount("/", app=mcp.streamable_http_app()),
-            ]
+            routes: list[BaseRoute] = [Route("/health", health)]
+            # When OAuth is enabled, FastMCP serves the discovery + DCR + token
+            # endpoints automatically; we only add the consent callback route.
+            if oauth_provider is not None:
+                routes.append(Route("/oauth/callback", oauth_provider.handle_callback))
+            routes.append(Mount("/", app=mcp.streamable_http_app()))
+
             app = Starlette(routes=routes, lifespan=lifespan)
-            app.add_middleware(BearerTokenMiddleware)
+            if oauth_provider is None:
+                # BYOC fallback only — OAuth path sets the token via the provider.
+                app.add_middleware(BearerTokenMiddleware)
             uvicorn.run(app, host="0.0.0.0", port=args.port)
         else:
             mcp.run(transport="stdio")

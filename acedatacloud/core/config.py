@@ -33,6 +33,20 @@ class Settings:
     transport: str = field(default_factory=lambda: os.getenv("MCP_TRANSPORT", "stdio"))
     log_level: str = field(default_factory=lambda: os.getenv("LOG_LEVEL", "INFO"))
 
+    # OAuth / remote-auth configuration. When MCP_SERVER_URL is set, the HTTP
+    # transport enables OAuth 2.1 (DCR) and delegates user login to
+    # auth.acedata.cloud, issuing the resulting 15-day JWT as the access token
+    # (the management API at platform.acedata.cloud accepts that JWT directly).
+    server_url: str = field(default_factory=lambda: os.getenv("MCP_SERVER_URL", ""))
+    auth_base_url: str = field(
+        default_factory=lambda: os.getenv(
+            "ACEDATACLOUD_AUTH_BASE_URL", "https://auth.acedata.cloud"
+        )
+    )
+    oauth_client_id: str = field(
+        default_factory=lambda: os.getenv("ACEDATACLOUD_OAUTH_CLIENT_ID", "")
+    )
+
     def validate(self) -> None:
         """Validate required settings."""
         if not self.api_token:

@@ -5,6 +5,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.0] - 2026-06-29
+
+### Added
+
+- **OAuth 2.1 / Dynamic Client Registration (DCR)** for the hosted HTTP server.
+  When `MCP_SERVER_URL` is set, the server returns the standard `401` +
+  `WWW-Authenticate` challenge, serves the discovery + `/register` + `/authorize`
+  + `/token` endpoints, and delegates login to `auth.acedata.cloud`. The user's
+  15-day JWT (accepted by the management API) is issued as the access token, so
+  **no manual platform token is needed** — connect via the `oauth_dcr` connector.
+- Config: `MCP_SERVER_URL`, `ACEDATACLOUD_AUTH_BASE_URL`, `ACEDATACLOUD_OAUTH_CLIENT_ID`.
+
+### Notes
+
+- Direct platform-token (BYOC) usage still works (pasted bearer tokens are accepted),
+  so stdio / `pip install` users are unaffected.
+
 ## [0.2.0] - 2026-06-28
 
 ### Added
