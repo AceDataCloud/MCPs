@@ -42,7 +42,7 @@ class TestVideoTools:
 
         result = await seedance_generate_video(
             prompt="A simple test video, blue sky with clouds",
-            model="doubao-seedance-1-0-pro-fast-251015",
+            model="doubao-seedance-2-0-fast-260128",
             resolution="480p",
             duration=2,
         )
@@ -67,9 +67,9 @@ class TestInfoTools:
         print("\n=== List Models Result ===")
         print(result)
 
-        assert "doubao-seedance-1-5-pro-251215" in result
-        assert "doubao-seedance-1-0-pro-250528" in result
-        assert "doubao-seedance-1-0-pro-fast-251015" in result
+        assert "doubao-seedance-2-0-260128" in result
+        assert "doubao-seedance-2-0-fast-260128" in result
+        assert "doubao-seedance-2-0-mini-260615" in result
 
     @pytest.mark.asyncio
     async def test_list_resolutions(self) -> None:
@@ -115,7 +115,7 @@ class TestTaskTools:
         # Generate a video first
         gen_result = await seedance_generate_video(
             prompt="A simple test video",
-            model="doubao-seedance-1-0-pro-fast-251015",
+            model="doubao-seedance-2-0-fast-260128",
             resolution="480p",
             duration=2,
         )
