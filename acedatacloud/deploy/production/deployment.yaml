@@ -32,7 +32,7 @@ spec:
             - name: MCP_SERVER_URL
               value: "https://mcp.acedata.cloud"
             - name: ACEDATACLOUD_OAUTH_CLIENT_ID
-              value: "jzgkKj3lhBNXLb73kw9M-2ZuDuRYoUf73CUcY_P4QII"
+              value: "Y5qDUmu_HD37s7frf79kLa1cTTbKbDUY9Pb5LpQH0w0"
           ports:
             - containerPort: 8000
               protocol: TCP
