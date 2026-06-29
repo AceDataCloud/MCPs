@@ -28,6 +28,26 @@ defaults:
     - ace data cloud
 
 services:
+  acedatacloud:
+    display_name: Ace Data Cloud MCP
+    repo: AceDataCloudMCP
+    domain: account
+    # Umbrella management server is hosted at the bare apex, not <alias>.mcp...
+    hosted_url: https://mcp.acedata.cloud/mcp
+    # Console/management API uses a PLATFORM token, not a per-service data token.
+    token_env: ACEDATACLOUD_PLATFORM_TOKEN
+    tagline: "Manage your Ace Data Cloud account — balance, usage, API keys, orders, and tokens."
+    description: >
+      Connect VS Code's AI agents to the Ace Data Cloud platform console. Check your
+      balance, look up usage and spend, manage API keys and platform tokens, list
+      services and models, and create or pay recharge orders — all from chat.
+    keywords: [acedatacloud, ace data cloud, account, billing, usage, api keys, platform]
+    examples:
+      - 'What is my Ace Data Cloud balance and usage this month?'
+      - 'List my Ace Data Cloud API keys and create a new one for testing.'
+      - 'Show recent orders and how much I have spent.'
+    pricing_note: "Free — management API calls are not billed. Recharges use your existing balance."
+
   suno:
     display_name: Suno MCP
     repo: SunoMCP

@@ -1,0 +1,63 @@
+{
+  "name": "mcp-acedatacloud",
+  "displayName": "Ace Data Cloud MCP",
+  "description": "Manage your Ace Data Cloud account — balance, usage, API keys, orders, and tokens.",
+  "version": "0.3.0",
+  "publisher": "acedatacloud",
+  "icon": "icon.png",
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.101.0"
+  },
+  "categories": [
+    "AI",
+    "Chat"
+  ],
+  "keywords": [
+    "mcp",
+    "model context protocol",
+    "ai",
+    "copilot",
+    "ace data cloud",
+    "acedatacloud",
+    "account",
+    "billing",
+    "usage",
+    "api keys",
+    "platform"
+  ],
+  "galleryBanner": {
+    "color": "#0E1117",
+    "theme": "dark"
+  },
+  "homepage": "https://github.com/AceDataCloud/AceDataCloudMCP",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AceDataCloud/AceDataCloudMCP"
+  },
+  "bugs": {
+    "url": "https://github.com/AceDataCloud/AceDataCloudMCP/issues"
+  },
+  "activationEvents": [],
+  "main": "./extension.js",
+  "contributes": {
+    "mcpServerDefinitionProviders": [
+      {
+        "id": "acedatacloud.acedatacloud",
+        "label": "Ace Data Cloud MCP"
+      }
+    ],
+    "commands": [
+      {
+        "command": "acedatacloud.acedatacloud.setApiToken",
+        "title": "Ace Data Cloud MCP: Set Ace Data Cloud API Key",
+        "category": "MCP"
+      },
+      {
+        "command": "acedatacloud.acedatacloud.clearApiToken",
+        "title": "Ace Data Cloud MCP: Clear Ace Data Cloud API Key",
+        "category": "MCP"
+      }
+    ]
+  }
+}

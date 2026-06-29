@@ -6,6 +6,7 @@ Monorepo for all AceDataCloud MCP (Model Context Protocol) servers.
 
 | Directory | Standalone Repo | PyPI Package | Category |
 |---|---|---|---|
+| `acedatacloud/` | [AceDataCloudMCP](https://github.com/AceDataCloud/AceDataCloudMCP) | [mcp-acedatacloud](https://pypi.org/project/mcp-acedatacloud/) | Account |
 | `face/` | [FaceTransformMCP](https://github.com/AceDataCloud/FaceTransformMCP) | [mcp-face-transform](https://pypi.org/project/mcp-face-transform/) | Vision |
 | `fish/` | [FishMCP](https://github.com/AceDataCloud/FishMCP) | [mcp-fish](https://pypi.org/project/mcp-fish/) | Audio |
 | `flux/` | [FluxMCP](https://github.com/AceDataCloud/FluxMCP) | [mcp-flux-pro](https://pypi.org/project/mcp-flux-pro/) | Image |
