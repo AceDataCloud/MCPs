@@ -1,0 +1,87 @@
+<idea-plugin>
+    <id>com.acedatacloud.mcp.acedatacloud</id>
+    <name>Ace Data Cloud MCP</name>
+    <vendor email="dev@acedata.cloud" url="https://acedata.cloud">Ace Data Cloud</vendor>
+
+    <description><![CDATA[
+<p><b>Manage your Ace Data Cloud account</b> via
+<a href="https://modelcontextprotocol.io">Model Context Protocol (MCP)</a>.</p>
+
+<p>This plugin helps you set up the Ace Data Cloud platform MCP server with JetBrains AI Assistant.
+Once configured, AI Assistant can check your balance, look up usage and spend, manage API keys
+and orders, and list services and models — all powered by
+<a href="https://platform.acedata.cloud">Ace Data Cloud</a>.</p>
+
+<h3>Features</h3>
+<ul>
+    <li><b>Account Management Tools</b> — Balance, usage, API keys, orders, tokens, services</li>
+    <li><b>Easy Setup</b> — One-click copy MCP configuration for AI Assistant</li>
+    <li><b>Dual Mode</b> — STDIO (local) and HTTP (remote) server support</li>
+    <li><b>Token Management</b> — Store API token securely in IDE settings</li>
+</ul>
+
+<h3>Available Tools</h3>
+<ul>
+    <li><b>Balance</b> — Check your current credit balance</li>
+    <li><b>Usage</b> — Look up usage and spend per service</li>
+    <li><b>API Keys</b> — List, create, and manage application API keys</li>
+    <li><b>Tokens</b> — Manage platform tokens</li>
+    <li><b>Orders</b> — Create and pay recharge orders</li>
+    <li><b>Services & Models</b> — List available services and models</li>
+</ul>
+
+<h3>Quick Start</h3>
+<ol>
+    <li>Install this plugin</li>
+    <li>Open <b>Settings → Tools → Ace Data Cloud MCP</b></li>
+    <li>Enter your <a href="https://platform.acedata.cloud">Ace Data Cloud</a> platform token</li>
+    <li>Click <b>Copy Config</b> and paste into <b>Settings → Tools → AI Assistant → MCP</b></li>
+</ol>
+
+<p>Requires <a href="https://github.com/astral-sh/uv">uv</a> (Python package runner) for STDIO mode,
+or use HTTP mode for zero-install remote access.</p>
+]]></description>
+
+    <depends>com.intellij.modules.platform</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <applicationService
+            serviceImplementation="com.acedatacloud.mcp.acedatacloud.McpAcedatacloudSettings"/>
+
+        <applicationConfigurable
+            id="com.acedatacloud.mcp.acedatacloud.settings"
+            displayName="Ace Data Cloud MCP"
+            parentId="tools"
+            instance="com.acedatacloud.mcp.acedatacloud.McpAcedatacloudSettingsConfigurable"/>
+
+        <postStartupActivity
+            implementation="com.acedatacloud.mcp.acedatacloud.McpAcedatacloudStartupActivity"/>
+
+        <notificationGroup id="Ace Data Cloud MCP" displayType="BALLOON"/>
+    </extensions>
+
+    <actions>
+        <group id="McpAcedatacloud.Actions" text="Ace Data Cloud MCP" popup="true">
+            <action id="McpAcedatacloud.CopyStdioConfig"
+                class="com.acedatacloud.mcp.acedatacloud.CopyStdioConfigAction"
+                text="Copy STDIO Config"
+                description="Copy STDIO MCP configuration for AI Assistant"/>
+            <action id="McpAcedatacloud.CopyHttpConfig"
+                class="com.acedatacloud.mcp.acedatacloud.CopyHttpConfigAction"
+                text="Copy HTTP Config"
+                description="Copy HTTP MCP configuration for AI Assistant"/>
+            <add-to-group group-id="ToolsMenu" anchor="last"/>
+        </group>
+    </actions>
+
+    <change-notes><![CDATA[
+<h3>0.1.0</h3>
+<ul>
+    <li>Initial release</li>
+    <li>MCP server integration with JetBrains AI Assistant</li>
+    <li>STDIO and HTTP transport modes</li>
+    <li>Settings UI for API token management</li>
+    <li>One-click MCP config copy</li>
+</ul>
+]]></change-notes>
+</idea-plugin>

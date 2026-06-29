@@ -53,10 +53,12 @@ class Service:
     vscode_engine: str
     common_categories: list[str]
     common_keywords: list[str]
+    hosted_url_override: str | None
+    token_env: str
 
     @property
     def hosted_url(self) -> str:
-        return f"https://{self.alias}.mcp.acedata.cloud/mcp"
+        return self.hosted_url_override or f"https://{self.alias}.mcp.acedata.cloud/mcp"
 
     @property
     def provider_id(self) -> str:
@@ -134,6 +136,8 @@ def load_services() -> list[Service]:
                 vscode_engine=defaults["vscode_engine"],
                 common_categories=list(defaults["common_categories"]),
                 common_keywords=list(defaults["common_keywords"]),
+                hosted_url_override=cfg.get("hosted_url"),
+                token_env=cfg.get("token_env") or "ACEDATACLOUD_API_TOKEN",
             )
         )
     return services
@@ -211,7 +215,7 @@ def render_extension_js(svc: Service) -> str:
 // Registers the hosted Ace Data Cloud "{svc.alias}" MCP server with VS Code
 // via the stable `vscode.lm.registerMcpServerDefinitionProvider` API. The
 // Bearer API key is read from (in order):
-//   1. process.env.ACEDATACLOUD_API_TOKEN
+//   1. process.env.{svc.token_env}
 //   2. VS Code SecretStorage (key "{svc.alias}.apiToken")
 //   3. An interactive showInputBox prompt on first use
 //
@@ -232,7 +236,7 @@ const SECRET_KEY = "{svc.alias}.apiToken";
 const SIGNUP_URL = "{svc.signup_url}";
 
 async function readToken(context) {{
-  const env = process.env.ACEDATACLOUD_API_TOKEN;
+  const env = process.env.{svc.token_env};
   if (env && env.trim()) return env.trim();
   const stored = await context.secrets.get(SECRET_KEY);
   return stored ? stored.trim() : undefined;
@@ -312,7 +316,9 @@ def render_readme(svc: Service, tools: list[tuple[str, str]]) -> str:
         f"[![Hosted MCP](https://img.shields.io/badge/hosted-mcp-blue)]({svc.hosted_url})"
     )
 
-    examples_md = "\n".join(f'- "{ex}"' for ex in svc.examples) or "_(see Tool Reference below)_"
+    examples_md = (
+        "\n".join(f'- "{ex}"' for ex in svc.examples) or "_(see Tool Reference below)_"
+    )
 
     if tools:
         tool_table = ["| Tool | Description |", "| --- | --- |"]
@@ -327,9 +333,7 @@ def render_readme(svc: Service, tools: list[tuple[str, str]]) -> str:
     models_section = ""
     if svc.models:
         models_section = (
-            "## Supported Models\n\n"
-            + ", ".join(f"`{m}`" for m in svc.models)
-            + "\n\n"
+            "## Supported Models\n\n" + ", ".join(f"`{m}`" for m in svc.models) + "\n\n"
         )
 
     pricing = svc.pricing_note or "See Ace Data Cloud pricing for details."
@@ -390,7 +394,7 @@ Provider id : {svc.provider_id}
 Server label: {svc.display_name}
 Server URL  : {svc.hosted_url}
 Transport   : Streamable HTTP
-Auth        : Bearer API key from VS Code SecretStorage (or $ACEDATACLOUD_API_TOKEN)
+Auth        : Bearer API key from VS Code SecretStorage (or ${svc.token_env})
 ```
 
 You don't need to edit `mcp.json` — the extension handles registration and
@@ -432,7 +436,7 @@ version, install [`uv`](https://docs.astral.sh/uv/) and use:
       "type": "stdio",
       "command": "uvx",
       "args": ["{svc.pypi_pkg}"],
-      "env": {{ "ACEDATACLOUD_API_TOKEN": "${{input:acedatacloud_api_token}}" }}
+      "env": {{ "{svc.token_env}": "${{input:acedatacloud_api_token}}" }}
     }}
   }}
 }}
@@ -503,7 +507,9 @@ def process(svc: Service, *, dry_run: bool) -> list[str]:
 def main(argv: Iterable[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--only", help="Comma-separated service aliases to regenerate.")
-    parser.add_argument("--dry-run", action="store_true", help="Don't write; just list changes.")
+    parser.add_argument(
+        "--dry-run", action="store_true", help="Don't write; just list changes."
+    )
     args = parser.parse_args(list(argv) if argv is not None else None)
 
     selected: set[str] | None = None
@@ -518,7 +524,9 @@ def main(argv: Iterable[str] | None = None) -> int:
         changes = process(svc, dry_run=args.dry_run)
         if changes:
             total_changes += len(changes)
-            print(f"[{svc.alias}] {len(changes)} file(s) {'would change' if args.dry_run else 'updated'}:")
+            print(
+                f"[{svc.alias}] {len(changes)} file(s) {'would change' if args.dry_run else 'updated'}:"
+            )
             for c in changes:
                 print(c)
         else:
@@ -526,7 +534,9 @@ def main(argv: Iterable[str] | None = None) -> int:
 
     print()
     verb = "would change" if args.dry_run else "changed"
-    print(f"{total_changes} file(s) {verb} across {len(services) if selected is None else len(selected)} service(s).")
+    print(
+        f"{total_changes} file(s) {verb} across {len(services) if selected is None else len(selected)} service(s)."
+    )
     return 0
 
 
