@@ -3,6 +3,9 @@ name: Sync to Sub-Repos
 on:
   push:
     branches: [main]
+  schedule:
+    # Weekly full re-sync (Monday 03:00 UTC) → refresh every package's CalVer
+    - cron: '0 3 * * 1'
   workflow_dispatch:
     inputs:
       sync_all:
@@ -26,6 +29,11 @@ jobs:
         id: changes
         run: |
           SYNC_ALL="${{ github.event.inputs.sync_all }}"
+
+          # Scheduled runs always do a full re-sync (no code change to detect).
+          if [ "${{ github.event_name }}" = "schedule" ]; then
+            SYNC_ALL="true"
+          fi
 
           # Read sync.yaml to get mapping keys
           DIRS=$(grep -E '^\s+\w+:$' sync.yaml | sed 's/://;s/^\s*//' | grep -v '^repo$\|^exclude$\|^mappings$')
