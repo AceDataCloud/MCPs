@@ -39,11 +39,6 @@ When the user wants to generate video, choose the appropriate tool based on thei
 - **Latest generation quality:** `doubao-seedance-2-0-260128`
 - **Latest generation fast:** `doubao-seedance-2-0-fast-260128`
 - **Latest generation lightweight / cheapest within 2.0:** `doubao-seedance-2-0-mini-260615`
-- **1.5 flagship + audio:** `doubao-seedance-1-5-pro-251215`
-- **1.0 standard:** `doubao-seedance-1-0-pro-250528`
-- **Fastest/cheapest 1.0:** `doubao-seedance-1-0-pro-fast-251015`
-- **Lightweight T2V:** `doubao-seedance-1-0-lite-t2v-250428`
-- **Lightweight I2V:** `doubao-seedance-1-0-lite-i2v-250428`
 
 ## Checking Status
 **Tool:** `seedance_get_task`
@@ -93,12 +88,10 @@ def seedance_workflow_examples() -> str:
 
 ## Workflow 5: High Quality with Audio
 1. User wants premium video with sound
-2. Call `seedance_generate_video(prompt="...", model="doubao-seedance-1-5-pro-251215", generate_audio=true, resolution="1080p")`
 3. Return task_id and video URL
 
 ## Workflow 6: Budget-Friendly Generation
 1. User wants cheap/fast results
-2. Call `seedance_generate_video(prompt="...", model="doubao-seedance-1-0-pro-fast-251015", service_tier="flex", resolution="480p")`
 3. Return task_id and video URL
 
 ## Workflow 7: Mobile-First Content

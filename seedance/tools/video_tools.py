@@ -39,16 +39,11 @@ async def seedance_generate_video(
         Field(
             description=(
                 "Model version to use. Options: "
-                "'doubao-seedance-2-0-260128' (latest generation, highest quality, "
-                "supports 4k and multimodal reference, default), "
-                "'doubao-seedance-2-0-fast-260128' (latest generation, faster, up to 720p), "
-                "'doubao-seedance-2-0-mini-260615' (latest generation, lightweight, "
-                "cheapest within the 2.0 series, up to 720p), "
-                "'doubao-seedance-1-5-pro-251215' (1.5 flagship, supports audio), "
-                "'doubao-seedance-1-0-pro-250528' (1.0 standard), "
-                "'doubao-seedance-1-0-pro-fast-251015' (1.0 fast, cost-optimized), "
-                "'doubao-seedance-1-0-lite-t2v-250428' (lightweight text-to-video), "
-                "'doubao-seedance-1-0-lite-i2v-250428' (lightweight image-to-video)."
+                "'doubao-seedance-2-0-260128' (highest quality, supports 4k and "
+                "multimodal reference, default), "
+                "'doubao-seedance-2-0-fast-260128' (faster, up to 720p), "
+                "'doubao-seedance-2-0-mini-260615' (lightweight, cheapest within 2.0, "
+                "up to 720p)."
             )
         ),
     ] = DEFAULT_MODEL,
@@ -98,8 +93,7 @@ async def seedance_generate_video(
         Field(
             description=(
                 "If true, generate audio along with the video. "
-                "Supported by 'doubao-seedance-1-5-pro-251215' and the "
-                "'doubao-seedance-2-0' series; other models ignore it. "
+                "Supported by the 'doubao-seedance-2-0' series; other models ignore it. "
                 "Approximately doubles the cost. Default is false."
             )
         ),
@@ -277,8 +271,7 @@ async def seedance_generate_video_from_image(
                 "Model version to use. "
                 "Use 'doubao-seedance-2-0-260128' (default) for latest-generation quality "
                 "and multimodal reference, 'doubao-seedance-2-0-fast-260128' or "
-                "'doubao-seedance-2-0-mini-260615' for faster/cheaper 2.0, or a 1.x model "
-                "such as 'doubao-seedance-1-0-lite-i2v-250428' for lightweight I2V."
+                "'doubao-seedance-2-0-mini-260615' for faster/cheaper 2.0."
             )
         ),
     ] = DEFAULT_MODEL,
@@ -321,8 +314,7 @@ async def seedance_generate_video_from_image(
         bool,
         Field(
             description=(
-                "If true, generate audio. Supported by 'doubao-seedance-1-5-pro-251215' "
-                "and the 'doubao-seedance-2-0' series. Default is false."
+                "If true, generate audio. Supported by the 'doubao-seedance-2-0' series. Default is false."
             )
         ),
     ] = False,
