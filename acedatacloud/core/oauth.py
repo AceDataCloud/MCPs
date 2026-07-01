@@ -60,7 +60,22 @@ class AceDataCloudOAuthProvider:
         self._pending_auth: dict[str, dict] = {}  # mcp_state → {client_id, params}
 
     async def get_client(self, client_id: str) -> OAuthClientInformationFull | None:
-        return self._clients.get(client_id)
+        client = self._clients.get(client_id)
+        if client:
+            return client
+        # After pod restart, registered clients are forgotten. Accept any
+        # client_id so token/refresh calls don't get a hard 401 — the real
+        # auth gate is load_access_token's Bearer validation on /mcp.
+        synthetic = OAuthClientInformationFull(
+            client_id=client_id,
+            redirect_uris=["https://auth.acedata.cloud/user/connections"],
+            token_endpoint_auth_method="none",
+            grant_types=["authorization_code", "refresh_token"],
+            response_types=["code"],
+        )
+        self._clients[client_id] = synthetic
+        logger.debug(f"Synthesized client record for {client_id} (post-restart)")
+        return synthetic
 
     async def register_client(self, client_info: OAuthClientInformationFull) -> None:
         client_id = client_info.client_id
@@ -228,28 +243,35 @@ class AceDataCloudOAuthProvider:
             expires_at=None,  # API credential tokens don't expire by time
         )
 
-        # Generate refresh token
-        refresh_token_str = secrets.token_urlsafe(48)
-        self._refresh_tokens[refresh_token_str] = RefreshToken(
-            token=refresh_token_str,
-            client_id=client_id,
-            scopes=_normalize_scopes(authorization_code.scopes),
-        )
-
         logger.info(f"OAuth token exchange: issued access token for client {client_id}")
+        # No refresh_token: the access_token is a long-lived API credential
+        # (~15 days). Issuing a refresh_token causes clients to attempt token
+        # refresh after pod restarts, which fails because in-memory state is
+        # lost — leading to cascading 401s. Without a refresh_token, clients
+        # simply reuse the Bearer token (accepted by load_access_token's
+        # direct fallback) until it naturally expires.
         return OAuthToken(
             access_token=api_token,
             token_type="Bearer",
             scope=" ".join(_normalize_scopes(authorization_code.scopes)),
-            refresh_token=refresh_token_str,
         )
 
     async def load_refresh_token(
         self,
-        client: OAuthClientInformationFull,  # noqa: ARG002
+        client: OAuthClientInformationFull,
         refresh_token: str,
     ) -> RefreshToken | None:
-        return self._refresh_tokens.get(refresh_token)
+        stored = self._refresh_tokens.get(refresh_token)
+        if stored:
+            return stored
+        # After pod restart, refresh tokens are forgotten. Synthesize one so
+        # exchange_refresh_token can proceed (it will re-issue the existing
+        # access token via direct fallback).
+        return RefreshToken(
+            token=refresh_token,
+            client_id=client.client_id or "",
+            scopes=[MCP_ACCESS_SCOPE],
+        )
 
     async def exchange_refresh_token(
         self,
@@ -258,30 +280,28 @@ class AceDataCloudOAuthProvider:
         scopes: list[str],
     ) -> OAuthToken:
         # For refresh, we reuse the same API credential token
-        # Find the associated access token
         self._refresh_tokens.pop(refresh_token.token, None)
 
-        # The original access_token (API credential) is still valid
-        # Just issue a new refresh token
         client_id = client.client_id or ""
-        new_refresh = secrets.token_urlsafe(48)
-        self._refresh_tokens[new_refresh] = RefreshToken(
-            token=new_refresh,
-            client_id=client_id,
-            scopes=_normalize_scopes(scopes or refresh_token.scopes),
-        )
 
         # Find the access token for this client
         for token, at in self._access_tokens.items():
-            if at.client_id == client.client_id:
+            if at.client_id == client_id:
                 return OAuthToken(
                     access_token=token,
                     token_type="Bearer",
                     scope=" ".join(_normalize_scopes(scopes or refresh_token.scopes)),
-                    refresh_token=new_refresh,
                 )
 
-        raise ValueError("No access token found for refresh")
+        # Post-restart: no access_tokens in memory. The token handler will
+        # return invalid_grant; the client will fall back to using its stored
+        # Bearer token directly (which load_access_token accepts).
+        from mcp.server.auth.provider import TokenError
+
+        raise TokenError(
+            error="invalid_grant",
+            error_description="Session expired, please use your existing access token directly",
+        )
 
     async def load_access_token(self, token: str) -> AccessToken | None:
         """Validate an access token.
