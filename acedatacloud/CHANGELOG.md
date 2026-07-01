@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+- Expose backend-supported filters that the tools previously dropped, closing
+  the gap between the MCP surface and the platform API:
+  - `acedatacloud_search_docs`: new `limit` (server caps at 30).
+  - `acedatacloud_list_docs`: new `tag`, `private` and `offset` filters.
+  - `acedatacloud_list_apis`: now uses the server-side `service` (alias or UUID)
+    filter plus a new `stage` filter, instead of paging the whole API catalog
+    client-side.
+  - `acedatacloud_list_services`: new `service_type`, `tag` and `private`
+    filters, applied server-side.
+
 ## [0.3.0] - 2026-06-29
 
 ### Added

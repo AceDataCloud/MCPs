@@ -15,6 +15,7 @@ from tools.catalog_tools import (
 )
 from tools.docs_tools import (
     acedatacloud_get_doc,
+    acedatacloud_list_docs,
     acedatacloud_search_docs,
 )
 from tools.model_tools import acedatacloud_get_model, acedatacloud_list_model_catalog
@@ -81,17 +82,12 @@ async def test_get_pricing_returns_cost():
 
 @respx.mock
 @pytest.mark.asyncio
-async def test_list_apis_trims_definition():
-    respx.get(f"{API}/services/").mock(
-        return_value=httpx.Response(
-            200, json={"count": 1, "items": [{"id": UUID, "alias": "suno"}]}
-        )
-    )
-    respx.get(f"{API}/apis/").mock(
+async def test_list_apis_uses_server_side_service_filter():
+    route = respx.get(f"{API}/apis/").mock(
         return_value=httpx.Response(
             200,
             json={
-                "count": 2,
+                "count": 1,
                 "items": [
                     {
                         "id": "api-1",
@@ -100,21 +96,18 @@ async def test_list_apis_trims_definition():
                         "definition": {"big": "blob"},
                         "cost": [],
                     },
-                    {
-                        "id": "api-2",
-                        "service_id": "other",
-                        "path": "/flux/images",
-                        "definition": {},
-                        "cost": [],
-                    },
                 ],
             },
         )
     )
-    out = json.loads(await acedatacloud_list_apis(service=UUID))
+    out = json.loads(await acedatacloud_list_apis(service=UUID, stage="Production"))
     assert out["count"] == 1
     assert out["items"][0]["path"] == "/suno/audios"
     assert "definition" not in out["items"][0]
+    # The service+stage filters are pushed to the server, not paged client-side.
+    params = route.calls[0].request.url.params
+    assert params["service"] == UUID
+    assert params["stage"] == "Production"
 
 
 @respx.mock
@@ -150,9 +143,31 @@ async def test_search_docs_uses_query_param():
             200, json={"query": "suno", "lang": "en", "results": [{"alias": "x"}]}
         )
     )
-    out = json.loads(await acedatacloud_search_docs(query="suno", lang="en"))
+    out = json.loads(await acedatacloud_search_docs(query="suno", lang="en", limit=5))
     assert out["results"][0]["alias"] == "x"
-    assert route.calls[0].request.url.params["query"] == "suno"
+    params = route.calls[0].request.url.params
+    assert params["query"] == "suno"
+    assert params["limit"] == "5"
+
+
+@respx.mock
+@pytest.mark.asyncio
+async def test_list_docs_passes_tag_and_private_filters():
+    route = respx.get(f"{API}/documents/").mock(
+        return_value=httpx.Response(
+            200,
+            json={"count": 1, "items": [{"id": UUID, "alias": "app-doc", "content": "x" * 500}]},
+        )
+    )
+    out = json.loads(await acedatacloud_list_docs(tag="application", private=False, offset=10))
+    assert out["count"] == 1
+    # Long content is trimmed to a preview in the browse view.
+    assert "content" not in out["items"][0]
+    assert len(out["items"][0]["content_preview"]) == 200
+    params = route.calls[0].request.url.params
+    assert params["tag"] == "application"
+    assert params["private"] == "false"
+    assert params["offset"] == "10"
 
 
 @pytest.mark.asyncio

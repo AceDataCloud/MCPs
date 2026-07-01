@@ -28,12 +28,21 @@ async def acedatacloud_search_docs(
         str | None,
         Field(description="Optional language code, e.g. 'en', 'zh-cn', 'ja'."),
     ] = None,
+    limit: Annotated[
+        int, Field(description="Max results to return (server caps at 30).", ge=1, le=30)
+    ] = 10,
 ) -> str:
     """Full-text search the AceDataCloud documentation. Returns matching docs with
     alias, title, snippet and url. No token required.
+
+    This is content-relevance search over *public* docs only; it does not accept
+    structural filters. To filter by tag / type / privacy, use
+    ``acedatacloud_list_docs`` (e.g. ``tag='application'``, ``private=False``).
     """
     try:
-        result = await client.get_public("/search/", {"query": query, "lang": lang})
+        result = await client.get_public(
+            "/search/", {"query": query, "lang": lang, "limit": limit}
+        )
         if not isinstance(result, dict):
             return error_json("No Response", "The API returned an empty response.")
         return dumps(result)
@@ -49,13 +58,32 @@ async def acedatacloud_list_docs(
         str | None,
         Field(description="Optional document type filter, e.g. 'Text'."),
     ] = None,
+    tag: Annotated[
+        str | None,
+        Field(description="Optional tag filter, e.g. 'application'. Matches docs carrying this tag."),
+    ] = None,
+    private: Annotated[
+        bool | None,
+        Field(description="Filter by privacy: False = public only, True = private only, unset = all."),
+    ] = None,
+    offset: Annotated[int, Field(description="Pagination offset.", ge=0)] = 0,
     limit: Annotated[int, Field(description="Max documents to return.", ge=1, le=100)] = 30,
 ) -> str:
-    """Browse documentation pages (newest/ranked). For finding a specific topic,
-    prefer ``acedatacloud_search_docs``. No token required.
+    """Browse documentation pages (newest/ranked), optionally filtered by ``doc_type``,
+    ``tag`` and ``private``. For content-relevance search prefer
+    ``acedatacloud_search_docs``. No token required.
     """
     try:
-        result = await client.get_public("/documents/", {"limit": limit, "type": doc_type})
+        result = await client.get_public(
+            "/documents/",
+            {
+                "limit": limit,
+                "offset": offset,
+                "type": doc_type,
+                "tag": tag,
+                "private": None if private is None else str(private).lower(),
+            },
+        )
         if not isinstance(result, dict):
             return error_json("No Response", "The API returned an empty response.")
         # Trim long content in the browse view; use get_doc for full content.
