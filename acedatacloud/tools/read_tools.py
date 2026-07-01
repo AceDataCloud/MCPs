@@ -40,7 +40,9 @@ async def acedatacloud_list_services(
     tag: Annotated[str | None, Field(description="Filter by tag, e.g. 'application'.")] = None,
     private: Annotated[
         bool | None,
-        Field(description="Filter by privacy: False = public only, True = private only, unset = all."),
+        Field(
+            description="Filter by privacy: False = public only, True = private only, unset = all."
+        ),
     ] = None,
     limit: Annotated[
         int, Field(description="Max services to return when not searching.", ge=1, le=300)

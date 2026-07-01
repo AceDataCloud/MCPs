@@ -40,9 +40,7 @@ async def acedatacloud_search_docs(
     ``acedatacloud_list_docs`` (e.g. ``tag='application'``, ``private=False``).
     """
     try:
-        result = await client.get_public(
-            "/search/", {"query": query, "lang": lang, "limit": limit}
-        )
+        result = await client.get_public("/search/", {"query": query, "lang": lang, "limit": limit})
         if not isinstance(result, dict):
             return error_json("No Response", "The API returned an empty response.")
         return dumps(result)
@@ -60,11 +58,15 @@ async def acedatacloud_list_docs(
     ] = None,
     tag: Annotated[
         str | None,
-        Field(description="Optional tag filter, e.g. 'application'. Matches docs carrying this tag."),
+        Field(
+            description="Optional tag filter, e.g. 'application'. Matches docs carrying this tag."
+        ),
     ] = None,
     private: Annotated[
         bool | None,
-        Field(description="Filter by privacy: False = public only, True = private only, unset = all."),
+        Field(
+            description="Filter by privacy: False = public only, True = private only, unset = all."
+        ),
     ] = None,
     offset: Annotated[int, Field(description="Pagination offset.", ge=0)] = 0,
     limit: Annotated[int, Field(description="Max documents to return.", ge=1, le=100)] = 30,
