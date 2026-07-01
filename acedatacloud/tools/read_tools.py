@@ -33,6 +33,17 @@ async def acedatacloud_list_services(
             description="Optional case-insensitive substring to match against service alias or title."
         ),
     ] = None,
+    service_type: Annotated[
+        str | None,
+        Field(description="Filter by type: Api/Proxy/Integration/Dataset/Introduction/Agent."),
+    ] = None,
+    tag: Annotated[str | None, Field(description="Filter by tag, e.g. 'application'.")] = None,
+    private: Annotated[
+        bool | None,
+        Field(
+            description="Filter by privacy: False = public only, True = private only, unset = all."
+        ),
+    ] = None,
     limit: Annotated[
         int, Field(description="Max services to return when not searching.", ge=1, le=300)
     ] = 100,
@@ -40,11 +51,17 @@ async def acedatacloud_list_services(
     """List the services available on the AceDataCloud platform.
 
     A *service* is a product (e.g. ``suno``, ``midjourney``) you can subscribe to.
-    Use ``search`` to find one by alias/title. Returns count + items.
+    ``search`` finds one by alias/title (client-side); ``service_type``, ``tag`` and
+    ``private`` are applied server-side. Returns count + items.
     """
     try:
+        server_filters = {
+            "type": service_type,
+            "tag": tag,
+            "private": None if private is None else str(private).lower(),
+        }
         if search:
-            result = await client.get("/services/", {"limit": 300})
+            result = await client.get("/services/", {"limit": 300, **server_filters})
             items = result.get("items", []) if isinstance(result, dict) else []
             s = search.lower()
             items = [
@@ -53,7 +70,7 @@ async def acedatacloud_list_services(
                 if s in (it.get("alias") or "").lower() or s in (it.get("title") or "").lower()
             ]
             return dumps({"count": len(items), "items": items})
-        result = await client.get("/services/", {"limit": limit})
+        result = await client.get("/services/", {"limit": limit, **server_filters})
         return _wrap(result)
     except PlatformAuthError as e:
         return error_json("Authentication Error", e.message)

@@ -101,39 +101,21 @@ async def acedatacloud_list_apis(
         str | None,
         Field(description="Optional service UUID or alias to filter the APIs by."),
     ] = None,
+    stage: Annotated[
+        str | None,
+        Field(description="Optional publication stage filter: Alpha/Beta/Production."),
+    ] = None,
     limit: Annotated[int, Field(description="Max APIs to return.", ge=1, le=100)] = 50,
 ) -> str:
-    """List API endpoints, optionally scoped to one service. Each item carries the
-    path, method, stage and billing ``cost``. No token required.
+    """List API endpoints, optionally scoped to one ``service`` and/or ``stage``.
+    Each item carries the path, method, stage and billing ``cost``. No token required.
     """
     try:
-        if service:
-            svc = await _resolve_service(service)
-            if not svc:
-                return error_json("Not Found", f"No service matched '{service}'.")
-            sid = svc.get("id")
-            # The /apis/?service_id= filter is not honored server-side, so collect
-            # and filter client-side by paging through the catalog.
-            collected: list[dict[str, Any]] = []
-            offset = 0
-            while offset < 2000 and len(collected) < limit:
-                result = await client.get_public("/apis/", {"limit": 50, "offset": offset})
-                page: list[dict[str, Any]] = (
-                    result.get("items", []) if isinstance(result, dict) else []
-                )
-                if not page:
-                    break
-                for it in page:
-                    if it.get("service_id") == sid:
-                        collected.append({k: v for k, v in it.items() if k != "definition"})
-                        if len(collected) >= limit:
-                            break
-                count = result.get("count", 0) if isinstance(result, dict) else 0
-                offset += 50
-                if offset >= count:
-                    break
-            return dumps({"count": len(collected), "items": collected})
-        result = await client.get_public("/apis/", {"limit": limit})
+        # The backend `/apis/` list honors `service` (alias or UUID) and `stage`
+        # server-side, so filter there instead of paging the whole catalog.
+        result = await client.get_public(
+            "/apis/", {"limit": limit, "service": service, "stage": stage}
+        )
         if not isinstance(result, dict):
             return error_json("No Response", "The API returned an empty response.")
         # Trim the OpenAPI blob from list view to keep output compact.
