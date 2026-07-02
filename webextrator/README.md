@@ -1,5 +1,7 @@
 # MCP WebExtrator Server
 
+<!-- mcp-name: io.github.AceDataCloud/mcp-webextrator -->
+
 A Model Context Protocol (MCP) server for web rendering and structured content extraction
 via the AceDataCloud WebExtrator platform.
 

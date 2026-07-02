@@ -1,5 +1,7 @@
 # MCP AiChat Server
 
+<!-- mcp-name: io.github.AceDataCloud/mcp-aichat -->
+
 A Model Context Protocol (MCP) server for AI dialogue via the AceDataCloud platform.
 Supports a wide range of models including GPT-4/5, o-series, DeepSeek, Grok, and GLM.
 
