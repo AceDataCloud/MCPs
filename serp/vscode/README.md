@@ -2,7 +2,7 @@
 
 Google Search via Ace Data Cloud — web, images, news, maps, local, video.
 
-[![VS Code Marketplace](https://img.shields.io/visual-studio-marketplace/v/acedatacloud.mcp-serp?label=VS%20Code)](https://marketplace.visualstudio.com/items?itemName=acedatacloud.mcp-serp) [![PyPI](https://img.shields.io/pypi/v/mcp-serp.svg?label=PyPI)](https://pypi.org/project/mcp-serp/) [![Hosted MCP](https://img.shields.io/badge/hosted-mcp-blue)](https://serp.mcp.acedata.cloud/mcp)
+[![VS Code Marketplace](https://img.shields.io/badge/VS%20Code-Marketplace-blue?logo=visualstudiocode&logoColor=white)](https://marketplace.visualstudio.com/items?itemName=acedatacloud.mcp-serp) [![PyPI](https://img.shields.io/pypi/v/mcp-serp.svg?label=PyPI)](https://pypi.org/project/mcp-serp/) [![Hosted MCP](https://img.shields.io/badge/hosted-mcp-blue)](https://serp.mcp.acedata.cloud/mcp)
 
 Give Copilot live Google search results — web pages, images, news, maps, local places, and videos — with localization and time filters.
 

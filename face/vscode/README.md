@@ -2,7 +2,7 @@
 
 Face analysis and transforms — keypoints, beautify, age/gender, swap, cartoon, liveness. (Alpha)
 
-[![VS Code Marketplace](https://img.shields.io/visual-studio-marketplace/v/acedatacloud.mcp-face-transform?label=VS%20Code)](https://marketplace.visualstudio.com/items?itemName=acedatacloud.mcp-face-transform) [![PyPI](https://img.shields.io/pypi/v/mcp-face-transform.svg?label=PyPI)](https://pypi.org/project/mcp-face-transform/) [![Hosted MCP](https://img.shields.io/badge/hosted-mcp-blue)](https://face.mcp.acedata.cloud/mcp)
+[![VS Code Marketplace](https://img.shields.io/badge/VS%20Code-Marketplace-blue?logo=visualstudiocode&logoColor=white)](https://marketplace.visualstudio.com/items?itemName=acedatacloud.mcp-face-transform) [![PyPI](https://img.shields.io/pypi/v/mcp-face-transform.svg?label=PyPI)](https://pypi.org/project/mcp-face-transform/) [![Hosted MCP](https://img.shields.io/badge/hosted-mcp-blue)](https://face.mcp.acedata.cloud/mcp)
 
 Bring AceDataCloud's Face Transform APIs into Copilot Chat. Detect 90+ keypoints per face, beautify portraits, age or de-age, swap perceived gender, face-swap between photos, cartoonize, and detect liveness.
 

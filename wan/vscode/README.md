@@ -2,7 +2,7 @@
 
 Alibaba Wan video generation — text-to-video, image-to-video, reference video transfer.
 
-[![VS Code Marketplace](https://img.shields.io/visual-studio-marketplace/v/acedatacloud.mcp-wan?label=VS%20Code)](https://marketplace.visualstudio.com/items?itemName=acedatacloud.mcp-wan) [![PyPI](https://img.shields.io/pypi/v/mcp-wan.svg?label=PyPI)](https://pypi.org/project/mcp-wan/) [![Hosted MCP](https://img.shields.io/badge/hosted-mcp-blue)](https://wan.mcp.acedata.cloud/mcp)
+[![VS Code Marketplace](https://img.shields.io/badge/VS%20Code-Marketplace-blue?logo=visualstudiocode&logoColor=white)](https://marketplace.visualstudio.com/items?itemName=acedatacloud.mcp-wan) [![PyPI](https://img.shields.io/pypi/v/mcp-wan.svg?label=PyPI)](https://pypi.org/project/mcp-wan/) [![Hosted MCP](https://img.shields.io/badge/hosted-mcp-blue)](https://wan.mcp.acedata.cloud/mcp)
 
 Generate AI video with Alibaba Wan in 480P/720P/1080P, with optional audio and reference-video transfer.
 

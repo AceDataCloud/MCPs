@@ -2,7 +2,7 @@
 
 OpenAI Sora video generation — text-to-video, image-to-video, character references.
 
-[![VS Code Marketplace](https://img.shields.io/visual-studio-marketplace/v/acedatacloud.mcp-sora?label=VS%20Code)](https://marketplace.visualstudio.com/items?itemName=acedatacloud.mcp-sora) [![PyPI](https://img.shields.io/pypi/v/mcp-sora.svg?label=PyPI)](https://pypi.org/project/mcp-sora/) [![Hosted MCP](https://img.shields.io/badge/hosted-mcp-blue)](https://sora.mcp.acedata.cloud/mcp)
+[![VS Code Marketplace](https://img.shields.io/badge/VS%20Code-Marketplace-blue?logo=visualstudiocode&logoColor=white)](https://marketplace.visualstudio.com/items?itemName=acedatacloud.mcp-sora) [![PyPI](https://img.shields.io/pypi/v/mcp-sora.svg?label=PyPI)](https://pypi.org/project/mcp-sora/) [![Hosted MCP](https://img.shields.io/badge/hosted-mcp-blue)](https://sora.mcp.acedata.cloud/mcp)
 
 Generate short Sora videos from text prompts, animate stills, or carry a character reference across clips. Sora 1 and Sora 2 models supported.
 

@@ -2,7 +2,7 @@
 
 Google Grok video generation — Grok 2, Grok 3, Grok 3.1 (incl. fast variants and upscale).
 
-[![VS Code Marketplace](https://img.shields.io/visual-studio-marketplace/v/acedatacloud.mcp-grok?label=VS%20Code)](https://marketplace.visualstudio.com/items?itemName=acedatacloud.mcp-grok) [![PyPI](https://img.shields.io/pypi/v/mcp-grok.svg?label=PyPI)](https://pypi.org/project/mcp-grok/) [![Hosted MCP](https://img.shields.io/badge/hosted-mcp-blue)](https://grok.mcp.acedata.cloud/mcp)
+[![VS Code Marketplace](https://img.shields.io/badge/VS%20Code-Marketplace-blue?logo=visualstudiocode&logoColor=white)](https://marketplace.visualstudio.com/items?itemName=acedatacloud.mcp-grok) [![PyPI](https://img.shields.io/pypi/v/mcp-grok.svg?label=PyPI)](https://pypi.org/project/mcp-grok/) [![Hosted MCP](https://img.shields.io/badge/hosted-mcp-blue)](https://grok.mcp.acedata.cloud/mcp)
 
 Generate AI video with Google Grok from text or images, including high-quality Grok 3.1 and the fast variants. Supports 1080p upscale.
 

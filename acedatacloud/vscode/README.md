@@ -2,7 +2,7 @@
 
 Manage your Ace Data Cloud account — balance, usage, API keys, orders, and tokens.
 
-[![VS Code Marketplace](https://img.shields.io/visual-studio-marketplace/v/acedatacloud.mcp-acedatacloud?label=VS%20Code)](https://marketplace.visualstudio.com/items?itemName=acedatacloud.mcp-acedatacloud) [![PyPI](https://img.shields.io/pypi/v/mcp-acedatacloud.svg?label=PyPI)](https://pypi.org/project/mcp-acedatacloud/) [![Hosted MCP](https://img.shields.io/badge/hosted-mcp-blue)](https://mcp.acedata.cloud/mcp)
+[![VS Code Marketplace](https://img.shields.io/badge/VS%20Code-Marketplace-blue?logo=visualstudiocode&logoColor=white)](https://marketplace.visualstudio.com/items?itemName=acedatacloud.mcp-acedatacloud) [![PyPI](https://img.shields.io/pypi/v/mcp-acedatacloud.svg?label=PyPI)](https://pypi.org/project/mcp-acedatacloud/) [![Hosted MCP](https://img.shields.io/badge/hosted-mcp-blue)](https://mcp.acedata.cloud/mcp)
 
 Connect VS Code's AI agents to the Ace Data Cloud platform console. Check your balance, look up usage and spend, manage API keys and platform tokens, list services and models, and create or pay recharge orders — all from chat.
 

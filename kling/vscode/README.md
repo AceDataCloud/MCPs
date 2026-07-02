@@ -2,7 +2,7 @@
 
 Kuaishou Kling video generation — text-to-video, image-to-video, extend, motion.
 
-[![VS Code Marketplace](https://img.shields.io/visual-studio-marketplace/v/acedatacloud.mcp-kling?label=VS%20Code)](https://marketplace.visualstudio.com/items?itemName=acedatacloud.mcp-kling) [![PyPI](https://img.shields.io/pypi/v/mcp-kling.svg?label=PyPI)](https://pypi.org/project/mcp-kling/) [![Hosted MCP](https://img.shields.io/badge/hosted-mcp-blue)](https://kling.mcp.acedata.cloud/mcp)
+[![VS Code Marketplace](https://img.shields.io/badge/VS%20Code-Marketplace-blue?logo=visualstudiocode&logoColor=white)](https://marketplace.visualstudio.com/items?itemName=acedatacloud.mcp-kling) [![PyPI](https://img.shields.io/pypi/v/mcp-kling.svg?label=PyPI)](https://pypi.org/project/mcp-kling/) [![Hosted MCP](https://img.shields.io/badge/hosted-mcp-blue)](https://kling.mcp.acedata.cloud/mcp)
 
 Generate Kling AI video from prompts or stills, extend existing clips, or apply motion control. Multiple model versions and quality modes.
 

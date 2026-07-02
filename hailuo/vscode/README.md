@@ -2,7 +2,7 @@
 
 Hailuo (MiniMax) AI video — text-to-video and image-to-video with director mode.
 
-[![VS Code Marketplace](https://img.shields.io/visual-studio-marketplace/v/acedatacloud.mcp-hailuo?label=VS%20Code)](https://marketplace.visualstudio.com/items?itemName=acedatacloud.mcp-hailuo) [![PyPI](https://img.shields.io/pypi/v/mcp-hailuo.svg?label=PyPI)](https://pypi.org/project/mcp-hailuo/) [![Hosted MCP](https://img.shields.io/badge/hosted-mcp-blue)](https://hailuo.mcp.acedata.cloud/mcp)
+[![VS Code Marketplace](https://img.shields.io/badge/VS%20Code-Marketplace-blue?logo=visualstudiocode&logoColor=white)](https://marketplace.visualstudio.com/items?itemName=acedatacloud.mcp-hailuo) [![PyPI](https://img.shields.io/pypi/v/mcp-hailuo.svg?label=PyPI)](https://pypi.org/project/mcp-hailuo/) [![Hosted MCP](https://img.shields.io/badge/hosted-mcp-blue)](https://hailuo.mcp.acedata.cloud/mcp)
 
 Generate AI video using MiniMax Hailuo. Includes director-mode camera control for precise framing.
 
