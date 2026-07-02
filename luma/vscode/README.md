@@ -2,7 +2,7 @@
 
 AI video generation with Luma Dream Machine — text-to-video, image-to-video, extend.
 
-[![VS Code Marketplace](https://img.shields.io/visual-studio-marketplace/v/acedatacloud.mcp-luma?label=VS%20Code)](https://marketplace.visualstudio.com/items?itemName=acedatacloud.mcp-luma) [![PyPI](https://img.shields.io/pypi/v/mcp-luma.svg?label=PyPI)](https://pypi.org/project/mcp-luma/) [![Hosted MCP](https://img.shields.io/badge/hosted-mcp-blue)](https://luma.mcp.acedata.cloud/mcp)
+[![VS Code Marketplace](https://img.shields.io/badge/VS%20Code-Marketplace-blue?logo=visualstudiocode&logoColor=white)](https://marketplace.visualstudio.com/items?itemName=acedatacloud.mcp-luma) [![PyPI](https://img.shields.io/pypi/v/mcp-luma.svg?label=PyPI)](https://pypi.org/project/mcp-luma/) [![Hosted MCP](https://img.shields.io/badge/hosted-mcp-blue)](https://luma.mcp.acedata.cloud/mcp)
 
 Generate short cinematic videos from text or stills with Luma Dream Machine, or extend an existing clip — directly from chat.
 

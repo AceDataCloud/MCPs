@@ -2,7 +2,7 @@
 
 Create short URLs (surl.id) — single or batch, with custom slugs and expiration.
 
-[![VS Code Marketplace](https://img.shields.io/visual-studio-marketplace/v/acedatacloud.mcp-shorturl?label=VS%20Code)](https://marketplace.visualstudio.com/items?itemName=acedatacloud.mcp-shorturl) [![PyPI](https://img.shields.io/pypi/v/mcp-shorturl.svg?label=PyPI)](https://pypi.org/project/mcp-shorturl/) [![Hosted MCP](https://img.shields.io/badge/hosted-mcp-blue)](https://shorturl.mcp.acedata.cloud/mcp)
+[![VS Code Marketplace](https://img.shields.io/badge/VS%20Code-Marketplace-blue?logo=visualstudiocode&logoColor=white)](https://marketplace.visualstudio.com/items?itemName=acedatacloud.mcp-shorturl) [![PyPI](https://img.shields.io/pypi/v/mcp-shorturl.svg?label=PyPI)](https://pypi.org/project/mcp-shorturl/) [![Hosted MCP](https://img.shields.io/badge/hosted-mcp-blue)](https://shorturl.mcp.acedata.cloud/mcp)
 
 Shorten long URLs into surl.id links, optionally with a custom slug or expiration. Supports batch creation.
 

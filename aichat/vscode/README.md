@@ -2,7 +2,7 @@
 
 Unified OpenAI-compatible LLM gateway — chat with GPT, Claude, Gemini, Grok, DeepSeek, Kimi and more via a single endpoint.
 
-[![VS Code Marketplace](https://img.shields.io/visual-studio-marketplace/v/acedatacloud.mcp-aichat?label=VS%20Code)](https://marketplace.visualstudio.com/items?itemName=acedatacloud.mcp-aichat) [![PyPI](https://img.shields.io/pypi/v/mcp-aichat.svg?label=PyPI)](https://pypi.org/project/mcp-aichat/) [![Hosted MCP](https://img.shields.io/badge/hosted-mcp-blue)](https://aichat.mcp.acedata.cloud/mcp)
+[![VS Code Marketplace](https://img.shields.io/badge/VS%20Code-Marketplace-blue?logo=visualstudiocode&logoColor=white)](https://marketplace.visualstudio.com/items?itemName=acedatacloud.mcp-aichat) [![PyPI](https://img.shields.io/pypi/v/mcp-aichat.svg?label=PyPI)](https://pypi.org/project/mcp-aichat/) [![Hosted MCP](https://img.shields.io/badge/hosted-mcp-blue)](https://aichat.mcp.acedata.cloud/mcp)
 
 Connect VS Code's AI agents to the **Unified LLM gateway via Ace Data Cloud** service. Once configured, AI Assistant can chat with 50+ LLM models — GPT, Claude, Gemini, Grok, DeepSeek and more — through a single endpoint.
 

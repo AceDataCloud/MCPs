@@ -2,7 +2,7 @@
 
 OpenAI models via Ace Data Cloud — chat completions, embeddings, image generation and editing, Responses API, async tasks.
 
-[![VS Code Marketplace](https://img.shields.io/visual-studio-marketplace/v/acedatacloud.mcp-openai?label=VS%20Code)](https://marketplace.visualstudio.com/items?itemName=acedatacloud.mcp-openai) [![PyPI](https://img.shields.io/pypi/v/mcp-openai.svg?label=PyPI)](https://pypi.org/project/mcp-openai/) [![Hosted MCP](https://img.shields.io/badge/hosted-mcp-blue)](https://openai.mcp.acedata.cloud/mcp)
+[![VS Code Marketplace](https://img.shields.io/badge/VS%20Code-Marketplace-blue?logo=visualstudiocode&logoColor=white)](https://marketplace.visualstudio.com/items?itemName=acedatacloud.mcp-openai) [![PyPI](https://img.shields.io/pypi/v/mcp-openai.svg?label=PyPI)](https://pypi.org/project/mcp-openai/) [![Hosted MCP](https://img.shields.io/badge/hosted-mcp-blue)](https://openai.mcp.acedata.cloud/mcp)
 
 Connect VS Code's AI agents to the **OpenAI models via Ace Data Cloud** service. Once configured, AI Assistant can run OpenAI chat completions, generate embeddings, create or edit images, and orchestrate the Responses API — all routed through Ace Data Cloud.
 

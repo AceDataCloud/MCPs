@@ -2,7 +2,7 @@
 
 AI music with Producer (FUZZ) — songs, lyrics, covers, vocal/instrument swap, section replace.
 
-[![VS Code Marketplace](https://img.shields.io/visual-studio-marketplace/v/acedatacloud.mcp-producer?label=VS%20Code)](https://marketplace.visualstudio.com/items?itemName=acedatacloud.mcp-producer) [![PyPI](https://img.shields.io/pypi/v/mcp-producer.svg?label=PyPI)](https://pypi.org/project/mcp-producer/) [![Hosted MCP](https://img.shields.io/badge/hosted-mcp-blue)](https://producer.mcp.acedata.cloud/mcp)
+[![VS Code Marketplace](https://img.shields.io/badge/VS%20Code-Marketplace-blue?logo=visualstudiocode&logoColor=white)](https://marketplace.visualstudio.com/items?itemName=acedatacloud.mcp-producer) [![PyPI](https://img.shields.io/pypi/v/mcp-producer.svg?label=PyPI)](https://pypi.org/project/mcp-producer/) [![Hosted MCP](https://img.shields.io/badge/hosted-mcp-blue)](https://producer.mcp.acedata.cloud/mcp)
 
 Music generation, lyric writing, song extension, covers, vocal/instrumental swap, section replace, and reference audio upload — using the Producer (FUZZ) models.
 
