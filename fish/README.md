@@ -1,5 +1,7 @@
 # MCP Fish Server
 
+<!-- mcp-name: io.github.AceDataCloud/mcp-fish -->
+
 A Model Context Protocol (MCP) server for Fish Audio TTS (Text-to-Speech) via the AceDataCloud platform.
 Generate natural-sounding speech and explore the Fish voice model library.
 

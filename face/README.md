@@ -1,5 +1,7 @@
 # MCP Face Transform Server
 
+<!-- mcp-name: io.github.AceDataCloud/mcp-face-transform -->
+
 A [Model Context Protocol](https://modelcontextprotocol.io) (MCP) server that
 exposes the AceDataCloud Face Transform API — face keypoint detection,
 beautification, age/gender transform, face swap, cartoonization, and liveness

@@ -1,5 +1,7 @@
 # MCP GLM Server
 
+<!-- mcp-name: io.github.AceDataCloud/mcp-glm -->
+
 A Model Context Protocol (MCP) server for Zhipu GLM chat completions via the AceDataCloud platform.
 
 ## Features
