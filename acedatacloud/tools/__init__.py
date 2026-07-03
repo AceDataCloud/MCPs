@@ -6,6 +6,7 @@ from tools import (
     catalog_tools,
     docs_tools,
     info_tools,
+    materials_tools,
     model_tools,
     read_tools,
     write_tools,
@@ -18,5 +19,6 @@ __all__ = [
     "info_tools",
     "catalog_tools",
     "docs_tools",
+    "materials_tools",
     "model_tools",
 ]
