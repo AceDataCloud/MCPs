@@ -57,6 +57,27 @@ async def test_get_service_by_alias_paginates():
 
 @respx.mock
 @pytest.mark.asyncio
+async def test_get_service_fuzzy_fallback_when_no_exact_alias():
+    # No alias equals the phrase, so resolution falls back to a keyword fan-out
+    # over the scanned services and returns the best match.
+    respx.get(f"{API}/services/").mock(
+        return_value=httpx.Response(
+            200,
+            json={
+                "count": 2,
+                "items": [
+                    {"id": "svc-1", "alias": "midjourney", "title": "Midjourney Imagine"},
+                    {"id": "svc-2", "alias": "flux", "title": "Flux Image"},
+                ],
+            },
+        )
+    )
+    out = json.loads(await acedatacloud_get_service(service="midjourney imagine"))
+    assert out["id"] == "svc-1"
+
+
+@respx.mock
+@pytest.mark.asyncio
 async def test_get_pricing_returns_cost():
     respx.get(f"{API}/services/").mock(
         return_value=httpx.Response(

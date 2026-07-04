@@ -9,6 +9,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Keyword **fan-out search** for services (mirrors the docs search): the query is
+  split on whitespace and each keyword is matched and ranked across service
+  `alias`, `title`, `description` and `tags`, best-first — so `music generation`
+  now finds "Suno Music Generation" instead of returning nothing.
+  - `acedatacloud_list_services`: `search` upgraded from a single alias/title
+    substring match to the ranked fan-out.
+  - `acedatacloud_get_service` / `acedatacloud_get_pricing`: when a reference
+    isn't a UUID or exact alias, fall back to a ranked alias/title match so a
+    fuzzy phrase (e.g. `midjourney imagine`) still resolves to the best service.
 - Expose backend-supported filters that the tools previously dropped, closing
   the gap between the MCP surface and the platform API:
   - `acedatacloud_search_docs`: new `limit` (server caps at 30).

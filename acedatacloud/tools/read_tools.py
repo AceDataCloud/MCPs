@@ -7,6 +7,7 @@ from pydantic import Field
 
 from core.client import client, get_request_user_id
 from core.exceptions import PlatformAPIError, PlatformAuthError
+from core.search import rank_items
 from core.server import mcp
 from core.utils import dumps, error_json
 
@@ -30,7 +31,8 @@ async def acedatacloud_list_services(
     search: Annotated[
         str | None,
         Field(
-            description="Optional case-insensitive substring to match against service alias or title."
+            description="Optional keyword search (fan-out): split on spaces and ranked "
+            "across service alias, title, description and tags."
         ),
     ] = None,
     service_type: Annotated[
@@ -51,8 +53,9 @@ async def acedatacloud_list_services(
     """List the services available on the AceDataCloud platform.
 
     A *service* is a product (e.g. ``suno``, ``midjourney``) you can subscribe to.
-    ``search`` finds one by alias/title (client-side); ``service_type``, ``tag`` and
-    ``private`` are applied server-side. Returns count + items.
+    ``search`` finds one by keyword (fan-out across alias/title/description/tags,
+    ranked best-first); ``service_type``, ``tag`` and ``private`` are applied
+    server-side. Returns count + items.
     """
     try:
         server_filters = {
@@ -63,13 +66,10 @@ async def acedatacloud_list_services(
         if search:
             result = await client.get("/services/", {"limit": 300, **server_filters})
             items = result.get("items", []) if isinstance(result, dict) else []
-            s = search.lower()
-            items = [
-                it
-                for it in items
-                if s in (it.get("alias") or "").lower() or s in (it.get("title") or "").lower()
-            ]
-            return dumps({"count": len(items), "items": items})
+            ranked = rank_items(
+                items, search, {"alias": 3, "title": 3, "tags": 2, "description": 1}
+            )
+            return dumps({"count": len(ranked), "items": ranked})
         result = await client.get("/services/", {"limit": limit, **server_filters})
         return _wrap(result)
     except PlatformAuthError as e:

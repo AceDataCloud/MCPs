@@ -24,6 +24,18 @@ async def test_list_services_filters_by_search(mock_services_page):
 
 @respx.mock
 @pytest.mark.asyncio
+async def test_list_services_multiword_search_ranks(mock_services_page):
+    # "音乐生成" is split as "音乐 生成"; the old substring match ("音乐 生成" in
+    # title) would find nothing, but the fan-out matches both keywords and ranks
+    # Suno (both hit) above Flux (only "生成" hits).
+    respx.get(f"{API}/services/").mock(return_value=httpx.Response(200, json=mock_services_page))
+    out = json.loads(await acedatacloud_list_services(search="音乐 生成"))
+    assert out["items"][0]["alias"] == "suno"
+    assert {it["alias"] for it in out["items"]} == {"suno", "flux"}
+
+
+@respx.mock
+@pytest.mark.asyncio
 async def test_get_balance_summarizes(mock_applications_page):
     respx.get(f"{API}/applications/").mock(
         return_value=httpx.Response(200, json=mock_applications_page)

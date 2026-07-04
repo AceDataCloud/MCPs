@@ -13,6 +13,7 @@ from pydantic import Field
 
 from core.client import client
 from core.exceptions import PlatformAPIError, PlatformAuthError
+from core.search import rank_items
 from core.server import mcp
 from core.utils import dumps, error_json
 
@@ -20,13 +21,16 @@ _UUID = re.compile(r"^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4
 
 
 async def _resolve_service(ref: str) -> dict[str, Any] | None:
-    """Resolve a service by UUID (``services/?id=``) or by alias (paginated match)."""
+    """Resolve a service by UUID (``services/?id=``), then exact alias, then a
+    keyword fan-out fallback (alias/title/description/tags) so a fuzzy phrase like
+    ``midjourney imagine`` still resolves to the best-matching service."""
     ref = ref.strip()
     if _UUID.match(ref):
         result = await client.get_public("/services/", {"id": ref})
         items: list[dict[str, Any]] = result.get("items", []) if isinstance(result, dict) else []
         return items[0] if items else None
     target = ref.lower()
+    seen: list[dict[str, Any]] = []
     offset = 0
     while offset < 600:
         result = await client.get_public("/services/", {"limit": 50, "offset": offset})
@@ -36,11 +40,16 @@ async def _resolve_service(ref: str) -> dict[str, Any] | None:
         for it in page:
             if (it.get("alias") or "").lower() == target:
                 return it
+        seen.extend(page)
         count = result.get("count", 0) if isinstance(result, dict) else 0
         offset += 50
         if offset >= count:
             break
-    return None
+    # No exact alias — fall back to a ranked keyword match. Restrict scoring to
+    # the identity fields (alias/title) so a stray word in a long description
+    # can't resolve a precise lookup to an unrelated service.
+    ranked = rank_items(seen, ref, {"alias": 3, "title": 3}, limit=1)
+    return ranked[0] if ranked else None
 
 
 @mcp.tool()
