@@ -417,7 +417,7 @@ this extension.
     {{
       "type": "promptString",
       "id": "acedatacloud_api_token",
-    "description": "Ace Data Cloud API key",
+            "description": "Ace Data Cloud API key",
       "password": true
     }}
   ]

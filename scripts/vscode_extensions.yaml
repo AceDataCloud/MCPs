@@ -65,6 +65,23 @@ services:
     models: ["v3.5", "v4", "v4.5", "v5"]
     pricing_note: "From $0.05 per song. New users get free trial credit at sign-up."
 
+  midjourney:
+    display_name: Midjourney MCP
+    repo: MidjourneyMCP
+    domain: image
+    tagline: "AI image generation with Midjourney — imagine, edit, blend, upscale, describe."
+    description: >
+      Bring Midjourney into VS Code chat. Generate 2x2 grids from prompts,
+      upscale or vary a tile, blend multiple references, describe an image
+      back into a prompt, and animate stills into short video.
+    keywords: [midjourney, image generation, ai art, text to image, image editing]
+    examples:
+      - 'Generate an isometric pixel-art illustration of a cozy cafe. Use midjourney.'
+      - 'Upscale tile 3 of task <id>.'
+      - 'Describe https://example.com/photo.jpg and give me a Midjourney prompt.'
+    models: ["5.2", "6", "6.1", "7", "8"]
+    pricing_note: "From $0.04 per /imagine job. Free trial credit on sign-up."
+
   flux:
     display_name: Flux MCP
     repo: FluxMCP
