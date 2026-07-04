@@ -1,14 +1,14 @@
 """Extract and render tools for WebExtrator API."""
 
 import json
-from typing import Annotated, cast
+from typing import Annotated, Any, cast
 
 from pydantic import Field
 
 from core.client import client
 from core.exceptions import WebExtraterAPIError, WebExtraterAuthError
 from core.server import mcp
-from core.types import BlockResource, ExpectedType, WaitUntil
+from core.types import BlockResource, ExpectedType, TaskMode, WaitUntil
 
 
 @mcp.tool()
@@ -82,6 +82,43 @@ async def webextrator_extract(
             )
         ),
     ] = None,
+    cookies: Annotated[
+        list[dict[str, Any]] | None,
+        Field(
+            description=(
+                "Cookies to install before navigation. Each cookie is an object with at least "
+                "'name' and 'value', plus optional 'domain', 'path', 'expires', 'httpOnly', "
+                "'secure', 'sameSite'. Useful for authenticated pages."
+            )
+        ),
+    ] = None,
+    bypass_cache: Annotated[
+        bool | None,
+        Field(
+            description=(
+                "Skip the Redis result cache for this request (still writes the fresh result "
+                "back). Default is false."
+            )
+        ),
+    ] = None,
+    cache_ttl_seconds: Annotated[
+        float | None,
+        Field(
+            description=(
+                "Override the global cache TTL (seconds) for this entry. 0 means do not cache "
+                "this response. Default is 3600."
+            )
+        ),
+    ] = None,
+    mode: Annotated[
+        TaskMode | None,
+        Field(
+            description=(
+                "Processing mode. 'sync' (default) waits for the result; 'async' returns "
+                "immediately with a task_id to poll via the Tasks API."
+            )
+        ),
+    ] = None,
 ) -> str:
     """Extract structured content from a web page using the WebExtrator API.
 
@@ -112,6 +149,10 @@ async def webextrator_extract(
             headers=headers,
             user_agent=user_agent,
             callback_url=callback_url,
+            cookies=cookies,
+            bypass_cache=bypass_cache,
+            cache_ttl_seconds=cache_ttl_seconds,
+            mode=mode,
         )
 
         if not result:
@@ -180,6 +221,43 @@ async def webextrator_render(
             )
         ),
     ] = None,
+    cookies: Annotated[
+        list[dict[str, Any]] | None,
+        Field(
+            description=(
+                "Cookies to install before navigation. Each cookie is an object with at least "
+                "'name' and 'value', plus optional 'domain', 'path', 'expires', 'httpOnly', "
+                "'secure', 'sameSite'. Useful for authenticated pages."
+            )
+        ),
+    ] = None,
+    bypass_cache: Annotated[
+        bool | None,
+        Field(
+            description=(
+                "Skip the Redis result cache for this request (still writes the fresh result "
+                "back). Default is false."
+            )
+        ),
+    ] = None,
+    cache_ttl_seconds: Annotated[
+        float | None,
+        Field(
+            description=(
+                "Override the global cache TTL (seconds) for this entry. 0 means do not cache "
+                "this response. Default is 3600."
+            )
+        ),
+    ] = None,
+    mode: Annotated[
+        TaskMode | None,
+        Field(
+            description=(
+                "Processing mode. 'sync' (default) waits for the result; 'async' returns "
+                "immediately with a task_id to poll via the Tasks API."
+            )
+        ),
+    ] = None,
 ) -> str:
     """Render a web page and return the fully rendered HTML.
 
@@ -208,6 +286,10 @@ async def webextrator_render(
             headers=headers,
             user_agent=user_agent,
             callback_url=callback_url,
+            cookies=cookies,
+            bypass_cache=bypass_cache,
+            cache_ttl_seconds=cache_ttl_seconds,
+            mode=mode,
         )
 
         if not result:

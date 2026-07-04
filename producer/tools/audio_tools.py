@@ -30,6 +30,36 @@ async def producer_generate_music(
             description="If true, generate instrumental music without vocals. Default is false (with vocals)."
         ),
     ] = False,
+    lyrics_strength: Annotated[
+        float | None,
+        Field(
+            description="Creative control for how strongly the lyrics drive the generation. Range 0-1.",
+            ge=0.0,
+            le=1.0,
+        ),
+    ] = None,
+    sound_strength: Annotated[
+        float | None,
+        Field(
+            description="Creative control for how strongly the sound/style drives the generation. Range 0-1.",
+            ge=0.0,
+            le=1.0,
+        ),
+    ] = None,
+    weirdness: Annotated[
+        float | None,
+        Field(
+            description="Creative control for how experimental/unusual the generation is. Range 0-1.",
+            ge=0.0,
+            le=1.0,
+        ),
+    ] = None,
+    seed: Annotated[
+        int | None,
+        Field(
+            description="Seed for reproducible generation. Reuse the same seed to reproduce a result."
+        ),
+    ] = None,
     callback_url: Annotated[
         str | None,
         Field(
@@ -53,13 +83,23 @@ async def producer_generate_music(
     Returns:
         Task ID and generated audio information including URLs, title, lyrics, and duration.
     """
-    result = await client.generate_audio(
-        action="generate",
-        prompt=prompt,
-        model=model,
-        instrumental=instrumental,
-        callback_url=callback_url,
-    )
+    payload: dict = {
+        "action": "generate",
+        "prompt": prompt,
+        "model": model,
+        "instrumental": instrumental,
+        "callback_url": callback_url,
+    }
+    if lyrics_strength is not None:
+        payload["lyrics_strength"] = lyrics_strength
+    if sound_strength is not None:
+        payload["sound_strength"] = sound_strength
+    if weirdness is not None:
+        payload["weirdness"] = weirdness
+    if seed is not None:
+        payload["seed"] = seed
+
+    result = await client.generate_audio(**payload)
     return format_audio_result(result)
 
 
@@ -93,6 +133,36 @@ async def producer_generate_custom_music(
             description="If true, generate instrumental version (lyrics will be ignored). Default is false."
         ),
     ] = False,
+    lyrics_strength: Annotated[
+        float | None,
+        Field(
+            description="Creative control for how strongly the lyrics drive the generation. Range 0-1.",
+            ge=0.0,
+            le=1.0,
+        ),
+    ] = None,
+    sound_strength: Annotated[
+        float | None,
+        Field(
+            description="Creative control for how strongly the sound/style drives the generation. Range 0-1.",
+            ge=0.0,
+            le=1.0,
+        ),
+    ] = None,
+    weirdness: Annotated[
+        float | None,
+        Field(
+            description="Creative control for how experimental/unusual the generation is. Range 0-1.",
+            ge=0.0,
+            le=1.0,
+        ),
+    ] = None,
+    seed: Annotated[
+        int | None,
+        Field(
+            description="Seed for reproducible generation. Reuse the same seed to reproduce a result."
+        ),
+    ] = None,
     callback_url: Annotated[
         str | None,
         Field(description="Webhook callback URL for asynchronous notifications."),
@@ -125,6 +195,14 @@ async def producer_generate_custom_music(
 
     if style:
         payload["style"] = style
+    if lyrics_strength is not None:
+        payload["lyrics_strength"] = lyrics_strength
+    if sound_strength is not None:
+        payload["sound_strength"] = sound_strength
+    if weirdness is not None:
+        payload["weirdness"] = weirdness
+    if seed is not None:
+        payload["seed"] = seed
 
     result = await client.generate_audio(**payload)
     return format_audio_result(result)

@@ -91,6 +91,18 @@ async def nanobanana_edit_image(
             description="Model to use for editing. 'nano-banana' (default, alias of gemini-2.5-flash-image) is faster. 'nano-banana-2' (alias of gemini-3.1-flash-image) offers pro-level quality at flash speed. 'nano-banana-pro' (alias of gemini-3-pro-image) offers highest quality."
         ),
     ] = "nano-banana",
+    aspect_ratio: Annotated[
+        AspectRatio | None,
+        Field(
+            description="Aspect ratio of the edited image. Options: '1:1', '3:2', '2:3', '16:9', '9:16', '4:3', '3:4'. If omitted, the model infers it from the input images."
+        ),
+    ] = None,
+    resolution: Annotated[
+        Resolution | None,
+        Field(
+            description="Resolution of the edited image. Options: '1K', '2K', '4K'. Only works with 'nano-banana-pro' model."
+        ),
+    ] = None,
 ) -> str:
     """Edit or combine images using AI based on a text prompt.
 
@@ -121,6 +133,11 @@ async def nanobanana_edit_image(
         "image_urls": image_urls,
         "model": model,
     }
+
+    if aspect_ratio:
+        payload["aspect_ratio"] = aspect_ratio
+    if resolution:
+        payload["resolution"] = resolution
 
     result = await client.edit_image_async(**payload)
     return format_image_result(result)

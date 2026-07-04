@@ -34,8 +34,8 @@ async def wan_generate_video(
     ] = DEFAULT_RESOLUTION,
     audio: Annotated[
         bool,
-        Field(description="Whether the generated video should include audio. Default is false."),
-    ] = False,
+        Field(description="Whether the generated video should include audio. Default is true."),
+    ] = True,
     audio_url: Annotated[
         str | None,
         Field(
@@ -44,10 +44,8 @@ async def wan_generate_video(
     ] = None,
     prompt_extend: Annotated[
         bool,
-        Field(
-            description="Enable LLM-based prompt rewriting for better results. Default is false."
-        ),
-    ] = False,
+        Field(description="Enable LLM-based prompt rewriting for better results. Default is true."),
+    ] = True,
     size: Annotated[
         str | None,
         Field(description="The size of the generated video (e.g., '1280x720')."),
@@ -143,16 +141,16 @@ async def wan_generate_video_from_image(
     ] = None,
     audio: Annotated[
         bool,
-        Field(description="Whether the generated video should include audio. Default is false."),
-    ] = False,
+        Field(description="Whether the generated video should include audio. Default is true."),
+    ] = True,
     audio_url: Annotated[
         str | None,
         Field(description="URL of reference audio to use in the video."),
     ] = None,
     prompt_extend: Annotated[
         bool,
-        Field(description="Enable LLM-based prompt rewriting. Default is false."),
-    ] = False,
+        Field(description="Enable LLM-based prompt rewriting. Default is true."),
+    ] = True,
     size: Annotated[
         str | None,
         Field(description="The size of the generated video (e.g., '1280x720')."),
