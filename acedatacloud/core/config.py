@@ -35,8 +35,9 @@ class Settings:
 
     # OAuth / remote-auth configuration. When MCP_SERVER_URL is set, the HTTP
     # transport enables OAuth 2.1 (DCR) and delegates user login to
-    # auth.acedata.cloud, issuing the resulting 15-day JWT as the access token
-    # (the management API at platform.acedata.cloud accepts that JWT directly).
+    # auth.acedata.cloud, then mints a durable, non-expiring platform-* token
+    # (via platform.acedata.cloud) and issues it as the access token — so
+    # redeploys/restarts never force re-authorization.
     server_url: str = field(default_factory=lambda: os.getenv("MCP_SERVER_URL", ""))
     auth_base_url: str = field(
         default_factory=lambda: os.getenv(
