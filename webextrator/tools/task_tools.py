@@ -81,7 +81,7 @@ async def webextrator_get_tasks_batch(
     ] = None,
     limit: Annotated[
         int | None,
-        Field(description="Pagination limit for batch retrieval. Default is 12."),
+        Field(description="Pagination limit for batch retrieval, 1-100. Default is 50."),
     ] = None,
 ) -> str:
     """Retrieve the results of multiple previously created extract or render tasks.

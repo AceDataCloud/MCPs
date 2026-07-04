@@ -296,6 +296,10 @@ async def kling_extend_video(
             description="Generation mode. 'std' (standard, default), 'pro' (higher quality), or '4k' (native 4K, only for kling-v3 and kling-v3-omni)."
         ),
     ] = DEFAULT_MODE,
+    duration: Annotated[
+        Duration,
+        Field(description="Duration of the extended segment in seconds. Supports 5 or 10."),
+    ] = DEFAULT_DURATION,
     negative_prompt: Annotated[
         str | None,
         Field(description="Things to avoid in the extended video."),
@@ -324,6 +328,7 @@ async def kling_extend_video(
         "prompt": prompt,
         "model": model,
         "mode": mode,
+        "duration": duration,
     }
 
     if negative_prompt:
