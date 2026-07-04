@@ -31,6 +31,8 @@ spec:
           env:
             - name: MCP_SERVER_URL
               value: "https://webextrator.mcp.acedata.cloud"
+            - name: ACEDATACLOUD_OAUTH_CLIENT_ID
+              value: "HV9Sj5_5C30-56jI72WHcFrWk62RKRNdcIiW14hMvGA"
           resources:
             limits:
               cpu: 500m
