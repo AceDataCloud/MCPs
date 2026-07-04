@@ -7,6 +7,10 @@ mappings:
     repo: AceDataCloud/SunoMCP
     exclude:
       - .gitbooks
+  midjourney:
+    repo: AceDataCloud/MidjourneyMCP
+    exclude:
+      - .gitbooks
   flux:
     repo: AceDataCloud/FluxMCP
     exclude:
