@@ -200,11 +200,14 @@ async def openai_generate_image(
 @mcp.tool()
 async def openai_edit_image(
     image: Annotated[
-        str,
+        str | Annotated[list[str], Field(min_length=1, max_length=16)],
         Field(
             description=(
-                "Reference image URL(s). Accepts a single URL string or an array of URLs "
-                "for multi-image editing. The image(s) to use as the starting point for edits."
+                "Reference image URL(s). Pass one URL as a string, or multiple URLs as a real "
+                "JSON array of strings (maximum 16) in the intended reference order. For example: "
+                '["https://example.com/base.png", "https://example.com/logo.png"]. Never join '
+                "multiple URLs with commas and never JSON-stringify the array. The first image "
+                "should normally be the base image; describe the role of later references in prompt."
             )
         ),
     ],

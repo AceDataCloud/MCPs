@@ -1,6 +1,8 @@
 """Type definitions for OpenAI MCP server."""
 
-from typing import Literal
+from typing import Annotated, Literal
+
+from pydantic import Field
 
 # Chat completion model options
 ChatModel = Literal[
@@ -112,6 +114,18 @@ EmbeddingModel = Literal[
 
 # Embedding encoding format options
 EmbeddingEncodingFormat = Literal["float", "base64"]
+
+# Embedding inputs accepted by the OpenAI API: one text, a text batch,
+# one token sequence, or a batch of token sequences.
+EmbeddingText = Annotated[str, Field(min_length=1)]
+EmbeddingToken = Annotated[int, Field(ge=0)]
+EmbeddingTokenSequence = Annotated[list[EmbeddingToken], Field(min_length=1)]
+EmbeddingInput = (
+    EmbeddingText
+    | Annotated[list[EmbeddingText], Field(min_length=1, max_length=2048)]
+    | EmbeddingTokenSequence
+    | Annotated[list[EmbeddingTokenSequence], Field(min_length=1, max_length=2048)]
+)
 
 # Image generation/edit model options
 ImageModel = Literal[

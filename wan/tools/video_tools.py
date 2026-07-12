@@ -1,13 +1,29 @@
 """Video generation tools for Wan API."""
 
+import re
 from typing import Annotated
 
-from pydantic import Field
+from pydantic import BeforeValidator, Field
 
 from core.client import client
 from core.server import mcp
 from core.types import DEFAULT_RESOLUTION, Duration, Resolution, ShotType
 from core.utils import format_video_result
+
+_LEGACY_REFERENCE_SEPARATOR = re.compile(r",\s*(?=https?://)", re.IGNORECASE)
+
+
+def _normalize_reference_video_urls(value: list[str] | str) -> list[str]:
+    if isinstance(value, str):
+        value = _LEGACY_REFERENCE_SEPARATOR.split(value)
+    return [url.strip() for url in value if url.strip()]
+
+
+ReferenceVideoURLs = Annotated[
+    list[str],
+    BeforeValidator(_normalize_reference_video_urls),
+    Field(min_length=1),
+]
 
 
 @mcp.tool()
@@ -128,9 +144,14 @@ async def wan_generate_video_from_image(
         Field(description="Video resolution. Options: '480P', '720P' (default), '1080P'."),
     ] = DEFAULT_RESOLUTION,
     reference_video_urls: Annotated[
-        str | None,
+        ReferenceVideoURLs | None,
         Field(
-            description="Comma-separated URLs of reference videos for character/timbre extraction. Used with wan2.6-r2v model."
+            description=(
+                "JSON array of reference video URLs for character/timbre extraction. Used with "
+                "the wan2.6-r2v model. Pass each URL as a separate array item; never join URLs "
+                "with commas and never JSON-stringify the array. Legacy comma-separated strings "
+                "are still accepted for backward compatibility."
+            )
         ),
     ] = None,
     shot_type: Annotated[
@@ -189,7 +210,7 @@ async def wan_generate_video_from_image(
     if duration is not None:
         payload["duration"] = duration
     if reference_video_urls:
-        payload["reference_video_urls"] = [url.strip() for url in reference_video_urls.split(",")]
+        payload["reference_video_urls"] = _normalize_reference_video_urls(reference_video_urls)
     if shot_type is not None:
         payload["shot_type"] = shot_type
     if audio_url:
