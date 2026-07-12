@@ -91,7 +91,7 @@ def wan_workflow_examples() -> str:
 
 ## Workflow 6: Character Transfer
 1. User has a reference video with a character they want to transfer
-2. Call `wan_generate_video_from_image(prompt="...", image_url=url, model="wan2.6-r2v", reference_video_urls="video1_url,video2_url")`
+2. Call `wan_generate_video_from_image(prompt="...", image_url=url, model="wan2.6-r2v", reference_video_urls=["video1_url", "video2_url"])`
 3. Return task_id
 
 ## Tips:

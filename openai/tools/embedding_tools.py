@@ -12,6 +12,7 @@ from core.types import (
     DEFAULT_EMBEDDING_ENCODING_FORMAT,
     DEFAULT_EMBEDDING_MODEL,
     EmbeddingEncodingFormat,
+    EmbeddingInput,
     EmbeddingModel,
 )
 
@@ -19,11 +20,12 @@ from core.types import (
 @mcp.tool()
 async def openai_create_embedding(
     input: Annotated[
-        str,
+        EmbeddingInput,
         Field(
             description=(
-                "Input text to embed. Can be a single string, an array of strings, "
-                "or token arrays. The text to embed into a numerical vector representation."
+                "Input to embed. Pass one text as a string, multiple texts as a real JSON array "
+                "of strings, one token sequence as an integer array, or multiple token sequences "
+                "as an array of integer arrays. Never JSON-stringify an array."
             )
         ),
     ],
