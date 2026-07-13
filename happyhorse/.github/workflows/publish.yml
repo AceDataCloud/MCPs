@@ -1,0 +1,82 @@
+name: Publish
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Generate CalVer
+        id: version
+        run: |
+          DATE_PREFIX=$(date +'%Y.%-m.%-d')
+          pip install requests -q
+          BUILD=$(python -c "import requests; p='${DATE_PREFIX}'; r=requests.get('https://pypi.org/pypi/mcp-happyhorse/json',timeout=10); vs=r.json().get('releases',{}) if r.ok else {}; xs=[int(v.split('.')[-1]) for v in vs if v.startswith(p+'.') and len(v.split('.'))==4]; print(max(xs)+1 if xs else 0)" 2>/dev/null || echo 0)
+          echo "version=${DATE_PREFIX}.${BUILD}" >> "$GITHUB_OUTPUT"
+      - name: Update package version
+        run: |
+          python -c "from pathlib import Path; import re; p=Path('pyproject.toml'); p.write_text(re.sub(r'version = \"[^\"]+\"', 'version = \"${{ steps.version.outputs.version }}\"', p.read_text(), count=1))"
+      - run: pip install build
+      - run: python -m build
+      - uses: actions/upload-artifact@v7
+        with:
+          name: distributions
+          path: dist/
+
+  publish-pypi:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: pypi
+      url: https://pypi.org/project/mcp-happyhorse/${{ needs.build.outputs.version }}
+    steps:
+      - uses: actions/download-artifact@v8
+        with:
+          name: distributions
+          path: dist/
+      - name: Publish to PyPI
+        env:
+          TWINE_USERNAME: __token__
+          TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN }}
+        run: pip install "twine>=5.0,<6.1" && twine check dist/* && twine upload dist/*
+
+  create-release:
+    if: github.event_name == 'push'
+    needs: [build, publish-pypi]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v8
+        with:
+          name: distributions
+          path: dist/
+      - name: Create release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release create "v${{ needs.build.outputs.version }}" dist/* --repo "${{ github.repository }}" --generate-notes
+
+  publish-registry:
+    needs: [build, publish-pypi]
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v6
+      - name: Update registry version
+        run: |
+          python -c "import json; p='server.json'; d=json.load(open(p)); d['version']='${{ needs.build.outputs.version }}'; [x.update(version=d['version']) for x in d.get('packages',[])]; open(p,'w').write(json.dumps(d,indent=2)+'\n')"
+      - name: Install publisher
+        run: curl -L "https://github.com/modelcontextprotocol/registry/releases/latest/download/mcp-publisher_$(uname -s | tr '[:upper:]' '[:lower:]')_$(uname -m | sed 's/x86_64/amd64/;s/aarch64/arm64/').tar.gz" | tar xz mcp-publisher
+      - run: ./mcp-publisher login github-oidc
+      - run: ./mcp-publisher publish

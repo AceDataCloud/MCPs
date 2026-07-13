@@ -1,0 +1,34 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.AceDataCloud/mcp-happyhorse",
+  "description": "Generate and edit Happy Horse AI videos through Ace Data Cloud",
+  "version": "0.1.0",
+  "repository": {
+    "url": "https://github.com/AceDataCloud/HappyHorseMCP",
+    "source": "github"
+  },
+  "packages": [
+    {
+      "identifier": "mcp-happyhorse",
+      "version": "0.1.0",
+      "transport": { "type": "stdio" },
+      "registryType": "pypi",
+      "runtimeHint": "uvx",
+      "environmentVariables": [
+        {
+          "name": "ACEDATACLOUD_API_TOKEN",
+          "description": "API token from Ace Data Cloud (https://platform.acedata.cloud)",
+          "isRequired": true,
+          "isSecret": true
+        }
+      ]
+    }
+  ],
+  "websiteUrl": "https://happyhorse.mcp.acedata.cloud",
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://happyhorse.mcp.acedata.cloud/mcp"
+    }
+  ]
+}

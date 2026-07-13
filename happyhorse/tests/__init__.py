@@ -1,0 +1,1 @@
+"""Happy Horse MCP tests."""

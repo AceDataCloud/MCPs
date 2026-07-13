@@ -11,6 +11,7 @@ Monorepo for all AceDataCloud MCP (Model Context Protocol) servers.
 | `fish/` | [FishMCP](https://github.com/AceDataCloud/FishMCP) | [mcp-fish](https://pypi.org/project/mcp-fish/) | Audio |
 | `flux/` | [FluxMCP](https://github.com/AceDataCloud/FluxMCP) | [mcp-flux-pro](https://pypi.org/project/mcp-flux-pro/) | Image |
 | `hailuo/` | [HailuoMCP](https://github.com/AceDataCloud/HailuoMCP) | [mcp-hailuo](https://pypi.org/project/mcp-hailuo/) | Video |
+| `happyhorse/` | [HappyHorseMCP](https://github.com/AceDataCloud/HappyHorseMCP) | [mcp-happyhorse](https://pypi.org/project/mcp-happyhorse/) | Video |
 | `kling/` | [KlingMCP](https://github.com/AceDataCloud/KlingMCP) | [mcp-kling](https://pypi.org/project/mcp-kling/) | Video |
 | `luma/` | [LumaMCP](https://github.com/AceDataCloud/LumaMCP) | [mcp-luma](https://pypi.org/project/mcp-luma/) | Video |
 | `maestro/` | [MaestroMCP](https://github.com/AceDataCloud/MaestroMCP) | [mcp-maestro](https://pypi.org/project/mcp-maestro/) | Video Production |
