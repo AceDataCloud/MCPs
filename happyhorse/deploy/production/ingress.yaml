@@ -1,0 +1,29 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: mcp-happyhorse
+  namespace: acedatacloud
+  labels:
+    app: mcp-happyhorse
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
+    nginx.ingress.kubernetes.io/proxy-http-version: "1.1"
+spec:
+  ingressClassName: nginx-router
+  tls:
+    - hosts:
+        - happyhorse.mcp.acedata.cloud
+      secretName: tls-wildcard-acedata-cloud
+  rules:
+    - host: happyhorse.mcp.acedata.cloud
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: mcp-happyhorse
+                port:
+                  number: 8000

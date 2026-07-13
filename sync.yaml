@@ -59,6 +59,10 @@ mappings:
     repo: AceDataCloud/HailuoMCP
     exclude:
       - .gitbooks
+  happyhorse:
+    repo: AceDataCloud/HappyHorseMCP
+    exclude:
+      - .gitbooks
   wan:
     repo: AceDataCloud/WanMCP
     exclude:

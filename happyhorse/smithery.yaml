@@ -1,0 +1,17 @@
+startCommand:
+  type: stdio
+  configSchema:
+    type: object
+    properties:
+      ACEDATACLOUD_API_TOKEN:
+        type: string
+        description: API token from Ace Data Cloud (https://platform.acedata.cloud)
+    required:
+      - ACEDATACLOUD_API_TOKEN
+  commandFunction:
+    - |-
+      (config) => ({
+        command: 'uvx',
+        args: ['mcp-happyhorse'],
+        env: { ACEDATACLOUD_API_TOKEN: config.ACEDATACLOUD_API_TOKEN }
+      })

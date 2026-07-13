@@ -1,0 +1,8 @@
+services:
+  mcp-happyhorse:
+    platform: linux/amd64
+    container_name: mcp-happyhorse
+    build: ./
+    image: ghcr.io/acedatacloud/mcp-happyhorse:${BUILD_NUMBER}
+    ports:
+      - "8000:8000"
