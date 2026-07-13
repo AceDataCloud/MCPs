@@ -1,0 +1,8 @@
+services:
+  mcp-maestro:
+    platform: linux/amd64
+    container_name: mcp-maestro
+    build: ./
+    image: ghcr.io/acedatacloud/mcp-maestro:${BUILD_NUMBER}
+    ports:
+      - "8000:8000"

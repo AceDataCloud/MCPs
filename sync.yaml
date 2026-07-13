@@ -11,6 +11,10 @@ mappings:
     repo: AceDataCloud/MidjourneyMCP
     exclude:
       - .gitbooks
+  maestro:
+    repo: AceDataCloud/MaestroMCP
+    exclude:
+      - .gitbooks
   flux:
     repo: AceDataCloud/FluxMCP
     exclude:

@@ -13,6 +13,7 @@ Monorepo for all AceDataCloud MCP (Model Context Protocol) servers.
 | `hailuo/` | [HailuoMCP](https://github.com/AceDataCloud/HailuoMCP) | [mcp-hailuo](https://pypi.org/project/mcp-hailuo/) | Video |
 | `kling/` | [KlingMCP](https://github.com/AceDataCloud/KlingMCP) | [mcp-kling](https://pypi.org/project/mcp-kling/) | Video |
 | `luma/` | [LumaMCP](https://github.com/AceDataCloud/LumaMCP) | [mcp-luma](https://pypi.org/project/mcp-luma/) | Video |
+| `maestro/` | [MaestroMCP](https://github.com/AceDataCloud/MaestroMCP) | [mcp-maestro](https://pypi.org/project/mcp-maestro/) | Video Production |
 | `midjourney/` | [MidjourneyMCP](https://github.com/AceDataCloud/MidjourneyMCP) | [mcp-midjourney](https://pypi.org/project/mcp-midjourney/) | Image |
 | `nanobanana/` | [NanoBananaMCP](https://github.com/AceDataCloud/NanoBananaMCP) | [mcp-nanobanana-pro](https://pypi.org/project/mcp-nanobanana-pro/) | Image |
 | `producer/` | [ProducerMCP](https://github.com/AceDataCloud/ProducerMCP) | [mcp-producer](https://pypi.org/project/mcp-producer/) | Music |
