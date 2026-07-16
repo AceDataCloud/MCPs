@@ -1,8 +1,9 @@
 """Video generation tools for Kling API."""
 
+from collections.abc import Sequence
 from typing import Annotated
 
-from pydantic import Field
+from pydantic import BaseModel, Field
 
 from core.client import client
 from core.server import mcp
@@ -13,10 +14,86 @@ from core.types import (
     DEFAULT_MODEL,
     AspectRatio,
     Duration,
+    KlingCameraControl,
     KlingModel,
+    KlingReferenceImage,
+    KlingReferenceVideo,
     Mode,
 )
 from core.utils import format_video_result
+
+
+def _dump_models(items: Sequence[BaseModel] | None) -> list[dict] | None:
+    if items is None:
+        return None
+    return [item.model_dump(mode="json", exclude_none=True) for item in items]
+
+
+def _validate_video_request(
+    *,
+    model: KlingModel,
+    mode: Mode,
+    duration: Duration,
+    generate_audio: bool,
+    negative_prompt: str | None,
+    cfg_scale: float | None,
+    camera_control: KlingCameraControl | None,
+    image_list: list[KlingReferenceImage] | None,
+    video_list: list[KlingReferenceVideo] | None,
+    start_image_url: str | None = None,
+    end_image_url: str | None = None,
+) -> str | None:
+    has_references = bool(image_list or video_list)
+    uses_omni = model == "kling-o1" or has_references
+
+    if model == "kling-o1":
+        if duration != 5:
+            return "Error: kling-o1 supports duration=5 only."
+        if mode not in ("std", "pro"):
+            return "Error: kling-o1 supports std and pro modes only."
+        if generate_audio:
+            return "Error: generate_audio is not supported by kling-o1."
+    elif model in ("kling-v3", "kling-v3-omni"):
+        if not 3 <= duration <= 15:
+            return f"Error: {model} duration must be an integer from 3 to 15."
+    elif duration not in (5, 10):
+        return f"Error: {model} duration must be 5 or 10."
+
+    if has_references and model not in ("kling-o1", "kling-v3-omni"):
+        return f"Error: image_list and video_list are not supported by {model}."
+    if uses_omni and any(
+        value is not None for value in (negative_prompt, cfg_scale, camera_control)
+    ):
+        return "Error: negative_prompt, cfg_scale, and camera_control are not supported by Omni generation."
+    if has_references and mode == "4k":
+        return "Error: mode=4k is not supported with image_list or video_list."
+
+    frame_count = int(bool(start_image_url)) + int(bool(end_image_url))
+    reference_image_count = frame_count + len(image_list or [])
+    max_images = 4 if video_list else 7
+    if reference_image_count > max_images:
+        return f"Error: this request supports at most {max_images} reference images including first/end frames."
+
+    first_frame_count = int(bool(start_image_url)) + sum(
+        item.type == "first_frame" for item in image_list or []
+    )
+    end_frame_count = int(bool(end_image_url)) + sum(
+        item.type == "end_frame" for item in image_list or []
+    )
+    if first_frame_count > 1 or end_frame_count > 1:
+        return "Error: provide at most one first frame and one end frame."
+    if end_frame_count and not first_frame_count:
+        return "Error: a first frame is required when an end frame is provided."
+
+    if video_list:
+        if len(video_list) != 1:
+            return "Error: video_list must contain exactly one reference video."
+        if generate_audio:
+            return "Error: generate_audio cannot be used with video_list."
+        if video_list[0].refer_type == "base" and (first_frame_count or end_frame_count):
+            return "Error: an editable base video cannot be combined with first or end frames."
+
+    return None
 
 
 @mcp.tool()
@@ -30,7 +107,7 @@ async def kling_generate_video(
     model: Annotated[
         KlingModel,
         Field(
-            description="Kling model to use. Options: 'kling-v1', 'kling-v1-6', 'kling-v2-master' (default), 'kling-v2-1-master', 'kling-v2-5-turbo', 'kling-v2-6', 'kling-v3', 'kling-v3-omni', 'kling-video-o1'."
+            description="Kling model to use. Options: 'kling-v1', 'kling-v1-6', 'kling-v2-master' (default), 'kling-v2-1-master', 'kling-v2-5-turbo', 'kling-v2-6', 'kling-v3', 'kling-v3-omni', 'kling-o1'."
         ),
     ] = DEFAULT_MODEL,
     mode: Annotated[
@@ -48,7 +125,7 @@ async def kling_generate_video(
     duration: Annotated[
         Duration,
         Field(
-            description="Video duration in seconds. For kling-v3/kling-v3-omni: 3-15 (integer). Other models: 5 or 10."
+            description="Video duration in seconds. kling-v3/kling-v3-omni: 3-15; kling-o1: 5 only; other models: 5 or 10."
         ),
     ] = DEFAULT_DURATION,
     generate_audio: Annotated[
@@ -66,25 +143,25 @@ async def kling_generate_video(
     cfg_scale: Annotated[
         float | None,
         Field(
-            description="Classifier-free guidance scale. Higher values follow the prompt more strictly. Typical range: 0.0-1.0."
+            ge=0,
+            le=1,
+            description="Classifier-free guidance scale from 0 to 1. Not supported by Omni generation.",
         ),
     ] = None,
     camera_control: Annotated[
-        str | None,
-        Field(
-            description='Camera control as JSON string. Example: \'{"type": "simple", "config": {"horizontal": 5, "vertical": 0, "pan": 0, "tilt": 0, "roll": 0, "zoom": 0}}\'. Types: \'simple\', \'down_back\', \'forward_up\', \'left_turn_forward\', \'right_turn_forward\'.'
-        ),
+        KlingCameraControl | None,
+        Field(description="Structured camera control. Not supported by Omni generation."),
     ] = None,
-    element_list: Annotated[
-        list | None,
+    image_list: Annotated[
+        list[KlingReferenceImage] | None,
         Field(
-            description="List of reference subjects from the subject library. Each item should contain an 'element_id'. If a reference video is present, reference subjects + reference images must be ≤ 4; otherwise ≤ 7."
+            description="Omni reference images for kling-o1 or kling-v3-omni. Cite them as <<<image_1>>>, <<<image_2>>>, and so on."
         ),
     ] = None,
     video_list: Annotated[
-        list | None,
+        list[KlingReferenceVideo] | None,
         Field(
-            description="List of reference videos. Each item should contain a 'video_url' (MP4/MOV, 3-10s, 720-2160px, 24-60fps, ≤200MB, max 1 video) and optionally 'refer_type' ('feature' or 'base', default 'base') and 'keep_original_sound' ('yes' or 'no')."
+            description="One Omni reference video for kling-o1 or kling-v3-omni. Cite it as <<<video_1>>>. Use refer_type='feature' to reference it or 'base' to edit it."
         ),
     ] = None,
     timeout: Annotated[
@@ -113,6 +190,20 @@ async def kling_generate_video(
     Returns:
         Task ID and generated video information including URLs and state.
     """
+    validation_error = _validate_video_request(
+        model=model,
+        mode=mode,
+        duration=duration,
+        generate_audio=generate_audio,
+        negative_prompt=negative_prompt,
+        cfg_scale=cfg_scale,
+        camera_control=camera_control,
+        image_list=image_list,
+        video_list=video_list,
+    )
+    if validation_error:
+        return validation_error
+
     payload: dict = {
         "action": "text2video",
         "model": model,
@@ -131,11 +222,13 @@ async def kling_generate_video(
     if cfg_scale is not None:
         payload["cfg_scale"] = cfg_scale
     if camera_control:
-        payload["camera_control"] = camera_control
-    if element_list is not None:
-        payload["element_list"] = element_list
-    if video_list is not None:
-        payload["video_list"] = video_list
+        payload["camera_control"] = camera_control.model_dump(exclude_none=True)
+    dumped_images = _dump_models(image_list)
+    if dumped_images is not None:
+        payload["image_list"] = dumped_images
+    dumped_videos = _dump_models(video_list)
+    if dumped_videos is not None:
+        payload["video_list"] = dumped_videos
 
     result = await client.generate_video(**payload)
     return format_video_result(result)
@@ -151,9 +244,7 @@ async def kling_generate_video_from_image(
     ],
     start_image_url: Annotated[
         str,
-        Field(
-            description="URL of the image to use as the first frame of the video. The video will animate from this image."
-        ),
+        Field(description="Required URL of the image to use as the first frame of the video."),
     ] = "",
     end_image_url: Annotated[
         str,
@@ -178,7 +269,7 @@ async def kling_generate_video_from_image(
     duration: Annotated[
         Duration,
         Field(
-            description="Video duration in seconds. For kling-v3/kling-v3-omni: 3-15 (integer). Other models: 5 or 10."
+            description="Video duration in seconds. kling-v3/kling-v3-omni: 3-15; kling-o1: 5 only; other models: 5 or 10."
         ),
     ] = DEFAULT_DURATION,
     generate_audio: Annotated[
@@ -194,24 +285,24 @@ async def kling_generate_video_from_image(
     cfg_scale: Annotated[
         float | None,
         Field(
-            description="Classifier-free guidance scale. Higher values follow the prompt more strictly."
+            ge=0,
+            le=1,
+            description="Classifier-free guidance scale from 0 to 1. Not supported by Omni generation.",
         ),
     ] = None,
     camera_control: Annotated[
-        str | None,
-        Field(description="Camera control as JSON string."),
+        KlingCameraControl | None,
+        Field(description="Structured camera control. Not supported by Omni generation."),
     ] = None,
-    element_list: Annotated[
-        list | None,
+    image_list: Annotated[
+        list[KlingReferenceImage] | None,
         Field(
-            description="List of reference subjects from the subject library. Each item should contain an 'element_id'. If a reference video is present, reference subjects + reference images must be ≤ 4; otherwise ≤ 7."
+            description="Additional Omni reference images for kling-o1 or kling-v3-omni. Do not set type='first_frame' or 'end_frame' when the same frame is already supplied through start_image_url or end_image_url."
         ),
     ] = None,
     video_list: Annotated[
-        list | None,
-        Field(
-            description="List of reference videos. Each item should contain a 'video_url' (MP4/MOV, 3-10s, 720-2160px, 24-60fps, ≤200MB, max 1 video) and optionally 'refer_type' ('feature' or 'base', default 'base') and 'keep_original_sound' ('yes' or 'no')."
-        ),
+        list[KlingReferenceVideo] | None,
+        Field(description="One Omni reference video for kling-o1 or kling-v3-omni."),
     ] = None,
     timeout: Annotated[
         int | None,
@@ -232,13 +323,29 @@ async def kling_generate_video_from_image(
     - You want to create a video transition between two images
     - You need precise control over the video's visual content
 
-    At least one of start_image_url or end_image_url must be provided.
+    start_image_url is required. end_image_url is optional.
 
     Returns:
         Task ID and generated video information including URLs and state.
     """
-    if not start_image_url and not end_image_url:
-        return "Error: At least one of start_image_url or end_image_url must be provided."
+    if not start_image_url:
+        return "Error: start_image_url is required for image-to-video generation."
+
+    validation_error = _validate_video_request(
+        model=model,
+        mode=mode,
+        duration=duration,
+        generate_audio=generate_audio,
+        negative_prompt=negative_prompt,
+        cfg_scale=cfg_scale,
+        camera_control=camera_control,
+        image_list=image_list,
+        video_list=video_list,
+        start_image_url=start_image_url,
+        end_image_url=end_image_url or None,
+    )
+    if validation_error:
+        return validation_error
 
     payload: dict = {
         "action": "image2video",
@@ -262,11 +369,13 @@ async def kling_generate_video_from_image(
     if cfg_scale is not None:
         payload["cfg_scale"] = cfg_scale
     if camera_control:
-        payload["camera_control"] = camera_control
-    if element_list is not None:
-        payload["element_list"] = element_list
-    if video_list is not None:
-        payload["video_list"] = video_list
+        payload["camera_control"] = camera_control.model_dump(exclude_none=True)
+    dumped_images = _dump_models(image_list)
+    if dumped_images is not None:
+        payload["image_list"] = dumped_images
+    dumped_videos = _dump_models(video_list)
+    if dumped_videos is not None:
+        payload["video_list"] = dumped_videos
 
     result = await client.generate_video(**payload)
     return format_video_result(result)
@@ -322,6 +431,16 @@ async def kling_extend_video(
     Returns:
         Task ID and the extended video information.
     """
+    if model == "kling-o1":
+        return "Error: action=extend is not supported by kling-o1."
+    if model in ("kling-v3", "kling-v3-omni"):
+        if not 3 <= duration <= 15:
+            return f"Error: {model} duration must be an integer from 3 to 15."
+    elif duration not in (5, 10):
+        return f"Error: {model} duration must be 5 or 10."
+    if mode == "4k" and model not in ("kling-v3", "kling-v3-omni"):
+        return f"Error: mode=4k is not supported by {model}."
+
     payload: dict = {
         "action": "extend",
         "video_id": video_id,

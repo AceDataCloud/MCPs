@@ -18,7 +18,7 @@ Generate AI videos, extend clips, and transfer motion directly from Claude, VS C
 - **Image to Video** - Generate videos using reference start/end images
 - **Video Extension** - Extend existing videos with additional content
 - **Motion Transfer** - Transfer motion from a reference video to a character image
-- **Multiple Models** - Support for 6 Kling models (v1, v1-6, v2-master, v2-1-master, v2-5-turbo, video-o1)
+- **Multiple Models** - Support for 9 Kling models, including V3, V3 Omni, and canonical Kling O1
 - **Camera Control** - Fine-grained camera movement control
 - **Task Tracking** - Monitor generation progress and retrieve results
 
@@ -315,7 +315,7 @@ Clients connect with their own Bearer token — the server extracts the token fr
 | `kling-v2-master`  | V2 master (default)  | High-quality, balanced performance  |
 | `kling-v2-1-master`| V2.1 master          | Enhanced quality and consistency    |
 | `kling-v2-5-turbo` | V2.5 turbo           | Faster generation, good quality     |
-| `kling-video-o1`   | Video O1             | Advanced reasoning-based generation |
+| `kling-o1`         | Kling O1             | Omni image/video reference generation |
 
 ## Configuration
 

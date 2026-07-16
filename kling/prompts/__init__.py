@@ -180,7 +180,7 @@ Kling supports camera control with JSON config:
 - **kling-v2-master** (default): Best balance of quality and speed
 - **kling-v2-5-turbo**: Fastest generation
 - **kling-v2-1-master**: Enhanced quality
-- **kling-video-o1**: Advanced reasoning-based generation
+- **kling-o1**: Omni image/video reference generation (5 seconds)
 
 ## Tips for Better Results
 
