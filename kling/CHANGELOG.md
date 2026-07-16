@@ -24,7 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Information tools:
   - `kling_list_models` - List available models
   - `kling_list_actions` - List available actions
-- Support for 6 models (kling-v1 through kling-video-o1)
+- Support for 9 models, including canonical `kling-o1`
 - Standard and Pro generation modes
 - Camera control support
 - stdio and HTTP transport modes

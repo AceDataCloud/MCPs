@@ -26,7 +26,7 @@ async def kling_list_models() -> str:
 | kling-v2-6         | V2.6                 | Latest V2 generation improvements     |
 | kling-v3           | V3                   | Next-gen quality, supports 4K mode    |
 | kling-v3-omni      | V3 Omni              | V3 with expanded capabilities, 4K     |
-| kling-video-o1     | Video O1             | Advanced reasoning-based generation   |
+| kling-o1           | Kling O1             | Omni image/video reference generation |
 
 Recommended: kling-v2-master for most video content, kling-v2-5-turbo for faster results.
 """
