@@ -141,6 +141,8 @@ AiChatV2Model = Literal[
     "deepseek-v3-250324",
     "deepseek-v3.2-exp",
     "deepseek-v4-flash",
+    "kimi-k3",
+    "kimi-k2.6",
     "kimi-k2-0711-preview",
     "kimi-k2-0905-preview",
     "kimi-k2-instruct-0905",
