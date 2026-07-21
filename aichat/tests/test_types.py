@@ -12,7 +12,7 @@ def test_kimi_k3_models_are_available_in_aichat_v2() -> None:
     assert "kimi-k2.6" in models
 
 
-def test_claude_fable_5_is_available_in_aichat_v2() -> None:
+def test_claude_fable_5_is_not_available_in_aichat_v2() -> None:
     models = set(get_args(AiChatV2Model))
 
-    assert "claude-fable-5" in models
+    assert "claude-fable-5" not in models
