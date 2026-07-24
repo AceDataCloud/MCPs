@@ -48,7 +48,7 @@ class TestFormatTaskResult:
         result = format_task_result(mock_task_response)
         data = json.loads(result)
         assert data["id"] == "task-123"
-        assert data["request"]["model"] == "grok-imagine-video"
+        assert data["request"]["model"] == "grok-imagine-video-1.5-fast:reverse"
         assert data["response"]["success"] is True
         assert data["response"]["data"][0]["id"] == "video-id-1"
         assert data["mcp_task_polling"]["poll_tool"] == "grok_get_task"

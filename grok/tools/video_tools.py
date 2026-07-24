@@ -23,13 +23,13 @@ async def grok_text_to_video(
     prompt: Annotated[
         str,
         Field(
-            description="Description of the video to generate. Be descriptive about scene, subject, action, camera movement, lighting, and style. Examples: 'A cinematic shot of a kitten chasing a butterfly in a sunlit garden', 'Drone shot flying over a neon-lit cyberpunk city at night'. Required for text-to-video with the 'grok-imagine-video' model."
+            description="Description of the video to generate. Be descriptive about scene, subject, action, camera movement, lighting, and style. Examples: 'A cinematic shot of a kitten chasing a butterfly in a sunlit garden', 'Drone shot flying over a neon-lit cyberpunk city at night'. Required for text-to-video."
         ),
     ],
     model: Annotated[
         GrokVideoModel,
         Field(
-            description="Grok Imagine model. 'grok-imagine-video' (default) supports both text-to-video and image-to-video at a lower price. 'grok-imagine-video-1.5-preview' supports image-to-video ONLY and requires an image_url — do not use it here for text-to-video."
+            description="Grok Imagine model. Text-to-video is supported by 'grok-imagine-video-1.5-fast:reverse' (default, fast 6-30s), 'grok-imagine-video:reverse' (standard 1-15s), and 'grok-imagine-video:official' (official, higher fidelity). Do NOT use 'grok-imagine-video-1.5:official' here — it is image-to-video only."
         ),
     ] = DEFAULT_MODEL,
     aspect_ratio: Annotated[
@@ -41,7 +41,7 @@ async def grok_text_to_video(
     resolution: Annotated[
         VideoResolution,
         Field(
-            description="Output resolution. '480p' (default, cheaper), '720p', or '1080p' (higher quality, costs more credits per second for grok-imagine-video-1.5-preview)."
+            description="Output resolution. '480p' (default, cheaper), '720p', or '1080p'. Higher resolution costs more per second on the per-second-priced models."
         ),
     ] = DEFAULT_RESOLUTION,
     duration: Annotated[
@@ -49,7 +49,7 @@ async def grok_text_to_video(
         Field(
             ge=1,
             le=30,
-            description="Video duration in seconds (default 8). grok-imagine-video supports 1-30; grok-imagine-video-1.5-preview supports 1-15.",
+            description="Video duration in seconds (default 6). 'grok-imagine-video-1.5-fast:reverse' supports 6-30; every other model supports 1-15.",
         ),
     ] = DEFAULT_DURATION,
     callback_url: Annotated[
@@ -69,7 +69,8 @@ async def grok_text_to_video(
     - You don't have a reference image to use
     - You want maximum creative freedom
 
-    Only the 'grok-imagine-video' model supports text-to-video. For generating
+    Only the 'grok-imagine-video-1.5-fast:reverse', 'grok-imagine-video:reverse',
+    and 'grok-imagine-video:official' models support text-to-video. For generating
     a video from a reference image, use grok_image_to_video instead.
 
     Returns:
@@ -107,7 +108,7 @@ async def grok_image_to_video(
     model: Annotated[
         GrokVideoModel,
         Field(
-            description="Grok Imagine model. 'grok-imagine-video' (default) supports image-to-video at a lower price. 'grok-imagine-video-1.5-preview' is image-to-video only and may offer higher fidelity."
+            description="Grok Imagine model. All models support image-to-video. 'grok-imagine-video-1.5-fast:reverse' (default) is fastest and cheapest; 'grok-imagine-video-1.5:official' offers the highest fidelity (up to 1080p) and is image-to-video only."
         ),
     ] = DEFAULT_MODEL,
     reference_image_urls: Annotated[
@@ -125,7 +126,7 @@ async def grok_image_to_video(
     resolution: Annotated[
         VideoResolution,
         Field(
-            description="Output resolution. '480p' (default, cheaper), '720p', or '1080p' (higher quality, costs more credits per second for grok-imagine-video-1.5-preview)."
+            description="Output resolution. '480p' (default, cheaper), '720p', or '1080p'. Higher resolution costs more per second on the per-second-priced models."
         ),
     ] = DEFAULT_RESOLUTION,
     duration: Annotated[
@@ -133,7 +134,7 @@ async def grok_image_to_video(
         Field(
             ge=1,
             le=30,
-            description="Video duration in seconds (default 8). grok-imagine-video supports 1-30; grok-imagine-video-1.5-preview supports 1-15.",
+            description="Video duration in seconds (default 6). 'grok-imagine-video-1.5-fast:reverse' supports 6-30; every other model supports 1-15.",
         ),
     ] = DEFAULT_DURATION,
     callback_url: Annotated[

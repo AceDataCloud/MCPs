@@ -23,7 +23,7 @@ Chat with Grok models, or generate short AI videos from a text prompt or a still
 | Tool | Description |
 | --- | --- |
 | `grok_chat_completions` | Chat completion (reasoning / vision / tool calling) with Grok chat models. |
-| `grok_text_to_video` | Generate a video from a text prompt (model `grok-imagine-video`). |
+| `grok_text_to_video` | Generate a video from a text prompt (any model except `grok-imagine-video-1.5:official`). |
 | `grok_image_to_video` | Generate a video from an input image (+ optional motion prompt). |
 | `grok_get_task` | Query the status/result of a single generation task. |
 | `grok_get_tasks_batch` | Query the status/result of multiple tasks at once. |
@@ -48,8 +48,10 @@ Chat with Grok models, or generate short AI videos from a text prompt or a still
 
 | Model | Text→Video | Image→Video | Notes |
 | --- | --- | --- | --- |
-| `grok-imagine-video` | ✅ | ✅ | Default. Lower price. Up to 30s, duration-banded billing. |
-| `grok-imagine-video-1.5-preview` | ❌ | ✅ | Image-to-video only (requires `image_url`). Up to 15s, billed per second. |
+| `grok-imagine-video-1.5-fast:reverse` | ✅ | ✅ | Default. Fastest & cheapest. 6-30s, duration-banded billing. |
+| `grok-imagine-video:reverse` | ✅ | ✅ | Standard. 1-15s, billed per output second. |
+| `grok-imagine-video:official` | ✅ | ✅ | Official endpoint, higher fidelity. 1-15s, per second. |
+| `grok-imagine-video-1.5:official` | ❌ | ✅ | Official image-to-video only (requires `image_url`). Up to 1080p, per second. |
 
 ## Parameters
 
@@ -60,7 +62,7 @@ Chat with Grok models, or generate short AI videos from a text prompt or a still
 | `reference_image_urls` | image-to-video | Optional list of style/content reference images |
 | `aspect_ratio` | both | `1:1`, `16:9` (default), `9:16`, `4:3`, `3:4`, `3:2`, `2:3` |
 | `resolution` | both | `480p` (default), `720p`, `1080p` |
-| `duration` | both | `grok-imagine-video`: `1`–`30`s; `grok-imagine-video-1.5-preview`: `1`–`15`s (default `8`) |
+| `duration` | both | `grok-imagine-video-1.5-fast:reverse`: `6`–`30`s; other models: `1`–`15`s (default `6`) |
 | `callback_url` | both | Optional async webhook |
 
 ## Installation
@@ -118,7 +120,7 @@ https://grok.mcp.acedata.cloud/mcp
 | --- | --- | --- |
 | `ACEDATACLOUD_API_TOKEN` | API token (required) | — |
 | `ACEDATACLOUD_API_BASE_URL` | API base URL | `https://api.acedata.cloud` |
-| `GROK_DEFAULT_MODEL` | Default model | `grok-imagine-video` |
+| `GROK_DEFAULT_MODEL` | Default model | `grok-imagine-video-1.5-fast:reverse` |
 | `GROK_REQUEST_TIMEOUT` | Request timeout (seconds) | `180` |
 | `MCP_SERVER_NAME` | MCP server name | `grok` |
 | `MCP_TRANSPORT` | Transport mode (`stdio`/`http`) | `stdio` |

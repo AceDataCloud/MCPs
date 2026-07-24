@@ -29,15 +29,17 @@ async def grok_list_models() -> str:
 
 Available Grok Imagine Video Models:
 
-| Model                            | Text2Video | Image2Video | Notes                              |
-|----------------------------------|------------|-------------|------------------------------------|
-| grok-imagine-video               | ✅         | ✅          | Default. Lower price. Up to 30s, duration-banded billing. |
-| grok-imagine-video-1.5-preview   | ❌         | ✅          | Image-to-video ONLY (image_url required). Up to 15s, billed per second. |
+| Model                                | Text2Video | Image2Video | Notes                              |
+|--------------------------------------|------------|-------------|------------------------------------|
+| grok-imagine-video-1.5-fast:reverse  | ✅         | ✅          | Default. Fastest & cheapest. 6-30s, duration-banded billing. |
+| grok-imagine-video:reverse           | ✅         | ✅          | Standard. 1-15s, billed per output second. |
+| grok-imagine-video:official          | ✅         | ✅          | Official endpoint, higher fidelity. 1-15s, per second. |
+| grok-imagine-video-1.5:official      | ❌         | ✅          | Official image-to-video ONLY (image_url required). Up to 1080p, per second. |
 
 Usage:
 - grok_chat_completions: chat/reason/vision/tool-calling with the chat models
-- grok_text_to_video: use 'grok-imagine-video' (only model that supports text-to-video)
-- grok_image_to_video: either video model; '-1.5-preview' requires an input image
+- grok_text_to_video: any model EXCEPT grok-imagine-video-1.5:official (that one is image-only)
+- grok_image_to_video: any video model; grok-imagine-video-1.5:official requires an input image
 
 Aspect Ratios:
 - 16:9: Landscape/widescreen (default)
@@ -48,12 +50,12 @@ Aspect Ratios:
 Resolution Options:
 - 480p: Default, cheaper
 - 720p: Higher quality
-- 1080p: Highest quality (grok-imagine-video-1.5-preview costs more per second)
+- 1080p: Highest quality (per-second-priced models cost more)
 
 Duration:
-- grok-imagine-video: 1-30 seconds, billed in duration bands (1-10 / 11-20 / 21-30)
-- grok-imagine-video-1.5-preview: 1-15 seconds, billed per output second
-- Default 8 seconds
+- grok-imagine-video-1.5-fast:reverse: 6-30 seconds, billed in bands (6-10 / 11-20 / 21-30)
+- all other models: 1-15 seconds, billed per output second
+- Default 6 seconds
 """
 
 
@@ -73,7 +75,7 @@ Chat:
 - grok_chat_completions: Chat / reasoning / vision / tool-calling with Grok chat models
 
 Video Generation:
-- grok_text_to_video: Create video from a text prompt (grok-imagine-video only)
+- grok_text_to_video: Create video from a text prompt (any model except grok-imagine-video-1.5:official)
 - grok_image_to_video: Create video from an input image (+ optional prompt)
 
 Task Management:

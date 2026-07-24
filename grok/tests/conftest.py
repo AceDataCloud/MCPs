@@ -53,7 +53,7 @@ def mock_task_response():
         "id": "task-123",
         "created_at": 1705788000.0,
         "request": {
-            "model": "grok-imagine-video",
+            "model": "grok-imagine-video-1.5-fast:reverse",
             "prompt": "A test video",
         },
         "response": {
