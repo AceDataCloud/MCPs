@@ -23,7 +23,9 @@ class Settings:
 
     # Default Model
     default_model: str = field(
-        default_factory=lambda: os.getenv("GROK_DEFAULT_MODEL", "grok-imagine-video")
+        default_factory=lambda: os.getenv(
+            "GROK_DEFAULT_MODEL", "grok-imagine-video-1.5-fast:reverse"
+        )
     )
 
     # Request Configuration

@@ -43,7 +43,7 @@ class TestVideoTools:
 
         result = await grok_text_to_video(
             prompt="A simple blue sky with white clouds drifting slowly",
-            model="grok-imagine-video",
+            model="grok-imagine-video-1.5-fast:reverse",
             aspect_ratio="16:9",
             resolution="480p",
             duration=3,
@@ -89,8 +89,8 @@ class TestInfoTools:
         print("\n=== List Models Result ===")
         print(result)
 
-        assert "grok-imagine-video" in result
-        assert "grok-imagine-video-1.5-preview" in result
+        assert "grok-imagine-video-1.5-fast:reverse" in result
+        assert "grok-imagine-video-1.5:official" in result
 
     @pytest.mark.asyncio
     async def test_list_actions(self) -> None:
@@ -133,7 +133,7 @@ class TestTaskTools:
         # Generate a video first
         gen_result = await grok_text_to_video(
             prompt="A simple test scene with blue sky",
-            model="grok-imagine-video",
+            model="grok-imagine-video-1.5-fast:reverse",
             aspect_ratio="16:9",
             resolution="480p",
             duration=3,

@@ -13,7 +13,7 @@ def test_settings_default_values():
 
         settings = Settings()
         assert settings.api_base_url == "https://api.acedata.cloud"
-        assert settings.default_model == "grok-imagine-video"
+        assert settings.default_model == "grok-imagine-video-1.5-fast:reverse"
         assert settings.request_timeout == 180.0
         assert settings.server_name == "grok"
         assert settings.transport == "stdio"
@@ -24,7 +24,7 @@ def test_settings_from_environment():
     env_vars = {
         "ACEDATACLOUD_API_TOKEN": "my-token",
         "ACEDATACLOUD_API_BASE_URL": "https://custom.api.com",
-        "GROK_DEFAULT_MODEL": "grok-imagine-video-1.5-preview",
+        "GROK_DEFAULT_MODEL": "grok-imagine-video:official",
         "GROK_REQUEST_TIMEOUT": "300",
         "MCP_SERVER_NAME": "my-grok",
         "LOG_LEVEL": "DEBUG",
@@ -36,7 +36,7 @@ def test_settings_from_environment():
         settings = Settings()
         assert settings.api_token == "my-token"
         assert settings.api_base_url == "https://custom.api.com"
-        assert settings.default_model == "grok-imagine-video-1.5-preview"
+        assert settings.default_model == "grok-imagine-video:official"
         assert settings.request_timeout == 300.0
         assert settings.server_name == "my-grok"
         assert settings.log_level == "DEBUG"

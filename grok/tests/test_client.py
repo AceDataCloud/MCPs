@@ -34,7 +34,7 @@ async def test_chat_completions_builds_payload_and_drops_none(monkeypatch) -> No
 def test_with_async_callback_injects_default_callback() -> None:
     """Long-running Grok operations should default to async submission."""
     client = GrokClient(api_token="test-token", base_url="https://api.test.com")
-    payload = client._with_async_callback({"model": "grok-imagine-video"})
+    payload = client._with_async_callback({"model": "grok-imagine-video-1.5-fast:reverse"})
     assert payload["async"] is True
 
 
