@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Removed
+
+- **BREAKING:** `acedatacloud_list_channels` and `acedatacloud_search_materials`
+  (the `PublishMaterial` catalog tools). The publish center they read from has
+  been retired platform-wide — `/publish-materials/` and `/publish-channels/`
+  now return 404. Content distribution runs on Connector + Skills; connect
+  platform accounts at <https://auth.acedata.cloud/user/connections>.
+
 ### Added
 
 - Expose backend-supported filters that the tools previously dropped, closing
