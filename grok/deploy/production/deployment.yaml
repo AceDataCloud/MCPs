@@ -32,7 +32,7 @@ spec:
             - name: MCP_SERVER_URL
               value: "https://grok.mcp.acedata.cloud"
             - name: ACEDATACLOUD_OAUTH_CLIENT_ID
-              value: "svtJ6eNjQAUuUrKMdWo7uKCGq_NEpiKQQfn4JsMBXmQ"
+              value: "Dq3GuZVxsZv3qLc9qM3_60EmiDZbHGKFamR2D-H8Yok"
           resources:
             limits:
               cpu: 500m
