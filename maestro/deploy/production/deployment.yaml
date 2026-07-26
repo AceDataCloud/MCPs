@@ -26,7 +26,7 @@ spec:
             - name: MCP_SERVER_URL
               value: "https://maestro.mcp.acedata.cloud"
             - name: ACEDATACLOUD_OAUTH_CLIENT_ID
-              value: "ebTMgx6xsrzzmRDjSgTdkwsA0mVqV8Grn0x3yvjq7o4"
+              value: "pP8NMWtKF1-Q4V-1osHUk_PgYYVh5RB_il2FvgahW38"
           resources:
             limits:
               cpu: 500m
