@@ -1,5 +1,6 @@
 """Maestro task query tools."""
 
+import asyncio
 from typing import Annotated
 
 from pydantic import Field
@@ -7,6 +8,11 @@ from pydantic import Field
 from core.client import client
 from core.server import mcp
 from core.utils import format_result
+
+# States that mean "still working". Anything else (succeeded, failed, dead, or
+# a status we don't know yet) returns immediately — an unknown state must not
+# strand the caller in a sleep loop.
+_IN_FLIGHT_STATES = {"queued", "pending", "planning", "producing", "running", "processing"}
 
 
 @mcp.tool()
@@ -17,7 +23,12 @@ async def maestro_get_task(
     ],
 ) -> str:
     """Get live progress and final outputs for one Maestro video task."""
-    return format_result(await client.get_task(task_id))
+    data = await client.get_task(task_id)
+    # Throttle polling: sleep 5s while the task is still running so LLM clients
+    # don't burn through poll attempts in seconds.
+    if str(data.get("status", "")).lower() in _IN_FLIGHT_STATES:
+        await asyncio.sleep(5)
+    return format_result(data)
 
 
 @mcp.tool()

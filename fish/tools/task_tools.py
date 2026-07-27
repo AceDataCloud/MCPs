@@ -1,5 +1,6 @@
 """Task query tools for Fish API."""
 
+import asyncio
 import json
 from typing import Annotated
 
@@ -42,7 +43,18 @@ async def fish_get_task(
         result = await client.query_task(id=task_id, action="retrieve")
 
         if not result:
-            return json.dumps({"error": "No response received from the API."})
+            return json.dumps(
+                {
+                    "error": "Task not found",
+                    "message": "No task matches that id. Check the task_id returned by the original request.",
+                }
+            )
+
+        # Throttle polling: sleep 5s while the task is still running so LLM
+        # clients don't burn through poll attempts in seconds. The worker only
+        # stamps `finished_at` once the job settles.
+        if result.get("finished_at") is None:
+            await asyncio.sleep(5)
 
         return json.dumps(result, ensure_ascii=False, indent=2)
 

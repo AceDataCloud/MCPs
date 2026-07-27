@@ -49,6 +49,12 @@ def _task_state(data: dict[str, Any]) -> tuple[str, bool, bool]:
     return state or ("succeeded" if complete else "pending"), complete, False
 
 
+def is_task_settled(data: dict[str, Any]) -> bool:
+    """True once the task reached a terminal state (finished or failed)."""
+    _, complete, failed = _task_state(data)
+    return complete or failed
+
+
 def _with_task_guidance(data: dict[str, Any]) -> dict[str, Any]:
     payload = dict(data)
     task_id = payload.get("id") or payload.get("task_id")
