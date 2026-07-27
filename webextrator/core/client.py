@@ -31,6 +31,24 @@ def get_request_api_token() -> str | None:
     return _request_api_token.get()
 
 
+def _apply_submission_mode(payload: dict[str, Any], mode: str | None) -> None:
+    """Decide sync vs async submission on the payload.
+
+    Rendering a page routinely outruns a blocking request, so async is the
+    default: the API answers with a task_id and the result is polled. A caller
+    that explicitly asks for `sync` still gets the inline result.
+
+    Note the wire field is `async` — an earlier `mode` field was never part of
+    the platform schema and got silently stripped, which is why every call used
+    to block regardless of what the caller asked for.
+    """
+    if payload.get("callback_url"):
+        return
+    if mode == "sync":
+        return
+    payload["async"] = True
+
+
 class WebExtraterClient:
     """Async HTTP client for AceDataCloud WebExtrator API."""
 
@@ -149,8 +167,7 @@ class WebExtraterClient:
             payload["bypass_cache"] = bypass_cache
         if cache_ttl_seconds is not None:
             payload["cache_ttl_seconds"] = cache_ttl_seconds
-        if mode is not None:
-            payload["mode"] = mode
+        _apply_submission_mode(payload, mode)
 
         logger.info(f"Extracting content from: {url}")
         endpoint = f"{self.base_url}/webextrator/extract"
@@ -243,8 +260,7 @@ class WebExtraterClient:
             payload["bypass_cache"] = bypass_cache
         if cache_ttl_seconds is not None:
             payload["cache_ttl_seconds"] = cache_ttl_seconds
-        if mode is not None:
-            payload["mode"] = mode
+        _apply_submission_mode(payload, mode)
 
         logger.info(f"Rendering page: {url}")
         endpoint = f"{self.base_url}/webextrator/render"

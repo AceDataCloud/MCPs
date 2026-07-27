@@ -114,8 +114,9 @@ async def webextrator_extract(
         TaskMode | None,
         Field(
             description=(
-                "Processing mode. 'sync' (default) waits for the result; 'async' returns "
-                "immediately with a task_id to poll via the Tasks API."
+                "Processing mode. Defaults to 'async': returns immediately with a "
+                "task_id to poll via webextrator_get_task. Pass 'sync' to wait for "
+                "the result inline (may time out on slow pages)."
             )
         ),
     ] = None,
@@ -131,7 +132,10 @@ async def webextrator_extract(
     - You need LLM-enhanced semantic normalization of extracted content
 
     Returns:
-        JSON response containing the extracted structured content.
+        By default (async) a JSON envelope with a `task_id` — poll
+        `webextrator_get_task` until it reports `finished_at`, then read the
+        extracted content from its `response`. With mode="sync", the extracted
+        structured content inline.
     """
     if not url:
         return json.dumps({"error": "Validation Error", "message": "url is required"})
@@ -253,8 +257,9 @@ async def webextrator_render(
         TaskMode | None,
         Field(
             description=(
-                "Processing mode. 'sync' (default) waits for the result; 'async' returns "
-                "immediately with a task_id to poll via the Tasks API."
+                "Processing mode. Defaults to 'async': returns immediately with a "
+                "task_id to poll via webextrator_get_task. Pass 'sync' to wait for "
+                "the result inline (may time out on slow pages)."
             )
         ),
     ] = None,
@@ -270,7 +275,10 @@ async def webextrator_render(
     - You need to capture single-page application (SPA) content
 
     Returns:
-        JSON response containing the rendered HTML content.
+        By default (async) a JSON envelope with a `task_id` — poll
+        `webextrator_get_task` until it reports `finished_at`, then read the
+        rendered HTML from its `response`. With mode="sync", the rendered HTML
+        content inline.
     """
     if not url:
         return json.dumps({"error": "Validation Error", "message": "url is required"})

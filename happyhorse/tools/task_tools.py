@@ -1,12 +1,13 @@
 """Task query tools for Happy Horse."""
 
+import asyncio
 from typing import Annotated
 
 from pydantic import Field
 
 from core.client import client
 from core.server import mcp
-from core.utils import format_batch_task_result, format_task_result
+from core.utils import format_batch_task_result, format_task_result, is_task_settled
 
 
 @mcp.tool()
@@ -17,7 +18,12 @@ async def happyhorse_get_task(
     ],
 ) -> str:
     """Get the status and final video URL for one Happy Horse task."""
-    return format_task_result(await client.get_task(task_id))
+    data = await client.get_task(task_id)
+    # Throttle polling: sleep 5s while the task is still running so LLM clients
+    # don't burn through poll attempts in seconds. Terminal states return now.
+    if not is_task_settled(data):
+        await asyncio.sleep(5)
+    return format_task_result(data)
 
 
 @mcp.tool()

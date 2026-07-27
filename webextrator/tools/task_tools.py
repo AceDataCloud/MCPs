@@ -1,5 +1,6 @@
 """Task query tools for WebExtrator API."""
 
+import asyncio
 import json
 from typing import Annotated
 
@@ -34,7 +35,7 @@ async def webextrator_get_task(
     """Retrieve the result of a single previously created extract or render task.
 
     Use this when:
-    - You submitted an async extract or render request with a callback_url
+    - You submitted an extract or render request and got back a task_id
     - You want to poll for the result of a specific task by its ID
 
     Returns:
@@ -53,7 +54,18 @@ async def webextrator_get_task(
         )
 
         if not result:
-            return json.dumps({"error": "No response received from the API."})
+            return json.dumps(
+                {
+                    "error": "Task not found",
+                    "message": "No task matches that task_id or trace_id. Check the id returned by the original request.",
+                }
+            )
+
+        # Throttle polling: sleep 5s while the task is still running so LLM
+        # clients don't burn through poll attempts in seconds. The worker only
+        # stamps `finished_at` once the job settles.
+        if result.get("finished_at") is None:
+            await asyncio.sleep(5)
 
         return json.dumps(result, ensure_ascii=False, indent=2)
 

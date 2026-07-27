@@ -23,7 +23,7 @@ class Settings:
 
     # Request Configuration
     request_timeout: float = field(
-        default_factory=lambda: float(os.getenv("WEBEXTRATOR_REQUEST_TIMEOUT", "60"))
+        default_factory=lambda: float(os.getenv("WEBEXTRATOR_REQUEST_TIMEOUT", "180"))
     )
 
     # Server Configuration
