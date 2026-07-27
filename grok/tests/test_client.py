@@ -20,13 +20,13 @@ async def test_chat_completions_builds_payload_and_drops_none(monkeypatch) -> No
 
     await client.chat_completions(
         messages=[{"role": "user", "content": "hi"}],
-        model="grok-4-1-fast",
+        model="grok-4.5",
         temperature=0.7,
         max_tokens=None,
     )
 
     assert captured["endpoint"] == "/grok/chat/completions"
-    assert captured["payload"]["model"] == "grok-4-1-fast"
+    assert captured["payload"]["model"] == "grok-4.5"
     assert captured["payload"]["temperature"] == 0.7
     assert "max_tokens" not in captured["payload"]  # None dropped
 

@@ -18,8 +18,8 @@ async def grok_chat_completions(
         Field(
             description=(
                 "Conversation messages. Each message is a dict with 'role' "
-                "('system'/'user'/'assistant'/'tool') and 'content' keys. For vision with "
-                "grok-2-vision, content may be a list of text/image_url parts. Required."
+                "('system'/'user'/'assistant'/'tool') and 'content' keys. Content may be a "
+                "list of text/image_url parts for image input. Required."
             )
         ),
     ],
@@ -27,9 +27,7 @@ async def grok_chat_completions(
         GrokChatModel,
         Field(
             description=(
-                "The Grok chat model. grok-4 (default, flagship) and grok-3 are the broadly "
-                "available models. Also: grok-4-1-fast, grok-4-1-fast-non-reasoning, grok-3-mini, "
-                "grok-2-vision (image input) — availability depends on upstream provisioning."
+                "The Grok chat model: grok-4.5 (default, latest flagship), grok-4 or grok-3."
             )
         ),
     ] = DEFAULT_CHAT_MODEL,
@@ -75,8 +73,8 @@ async def grok_chat_completions(
         ReasoningEffort | None,
         Field(
             description=(
-                "Reasoning effort: 'low' or 'high'. Only applies to reasoning-capable models "
-                "(e.g. grok-3-mini). Ignored by non-reasoning models."
+                "Reasoning effort. Only applies to reasoning-capable models; "
+                "ignored by non-reasoning models."
             )
         ),
     ] = None,
@@ -100,7 +98,7 @@ async def grok_chat_completions(
 
     Use this when:
     - You want to chat/reason with a Grok model (grok-4 / grok-3 family)
-    - You need vision/image understanding (use grok-2-vision)
+    - You need vision/image understanding
     - You need tool/function calling with Grok
 
     For generating videos, use grok_text_to_video / grok_image_to_video instead.

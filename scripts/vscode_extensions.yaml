@@ -170,7 +170,7 @@ services:
     examples:
       - 'Generate a Veo 3.1 video of a vintage train pulling into a snowy station at dusk.'
       - 'Animate https://example.com/portrait.jpg into a Veo Fast clip with subtle head turn.'
-    models: ["veo-2", "veo-2-fast", "veo-3", "veo-3-fast", "veo-3.1", "veo-3.1-fast"]
+    models: ["veo-3", "veo-3-fast", "veo-3.1", "veo-3.1-fast"]
     pricing_note: "From $0.30 per clip. Free trial credit on sign-up."
 
   grok:

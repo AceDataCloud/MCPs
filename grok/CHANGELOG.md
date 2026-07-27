@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- `grok-4.5` chat model
+
+### Removed
+
+- `grok-4-1-fast`, `grok-4-1-fast-non-reasoning`, `grok-3-mini` and `grok-2-vision` — all return `400 is not supported`
+
+### Changed
+
+- `reasoning_effort` now accepts `minimal` and `medium` in addition to `low` / `high`
+
 ## [2026.6.13.0] - 2026-06-13
 
 ### Added

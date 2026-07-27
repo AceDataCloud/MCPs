@@ -4,6 +4,9 @@ from typing import Literal
 
 # GLM model options
 GlmModel = Literal[
+    "glm-5.2",
+    "glm-5",
+    "glm-5-turbo",
     "glm-5.1",
     "glm-4.7",
     "glm-4.6",
@@ -17,4 +20,4 @@ ReasoningEffort = Literal["minimal", "low", "medium", "high"]
 ServiceTier = Literal["auto", "default", "flex", "scale", "priority"]
 
 # Default values
-DEFAULT_MODEL: GlmModel = "glm-4.7"
+DEFAULT_MODEL: GlmModel = "glm-5.2"

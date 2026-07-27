@@ -15,8 +15,10 @@ async def glm_list_models() -> str:
     return """# Available GLM Models
 
 ## Zhipu GLM Models
-- glm-5.1 — Latest GLM model with enhanced capabilities
-- glm-4.7 — Recommended default, strong general-purpose model
+- glm-5.2 — Recommended default, latest flagship model
+- glm-5 / glm-5-turbo — GLM-5 family; turbo trades some quality for speed
+- glm-5.1 — Previous GLM-5 revision
+- glm-4.7 — Strong general-purpose model
 - glm-4.6 — Balanced performance and speed
 - glm-3-turbo — Previous generation, fast and efficient
 """
@@ -41,7 +43,7 @@ Create a chat completion with any supported GLM model.
 
 **Parameters:**
 - `messages` (required): List of conversation messages. Each message is a dict with 'role' and 'content'.
-- `model` (optional): The GLM model to use. Default: `glm-4.7`
+- `model` (optional): The GLM model to use. Default: `glm-5.2`
 - `temperature` (optional): Sampling temperature between 0 and 2. Default: 1
 - `max_tokens` (optional): Maximum tokens to generate.
 - `top_p` (optional): Nucleus sampling probability mass. Default: 1
@@ -69,7 +71,7 @@ Show this usage guide.
 ```
 glm_chat_completions(
     messages=[{"role": "user", "content": "What is the capital of France?"}],
-    model="glm-4.7"
+    model="glm-5.2"
 )
 ```
 
@@ -86,7 +88,7 @@ glm_chat_completions(
       "finish_reason": "stop"
     }
   ],
-  "model": "glm-4.7"
+  "model": "glm-5.2"
 }
 ```
 
@@ -98,7 +100,7 @@ glm_chat_completions(
         {"role": "assistant", "content": "Paris is the capital of France..."},
         {"role": "user", "content": "What is its population?"}
     ],
-    model="glm-4.7"
+    model="glm-5.2"
 )
 ```
 
@@ -106,7 +108,7 @@ glm_chat_completions(
 ```
 glm_chat_completions(
     messages=[{"role": "user", "content": "Explain quantum computing."}],
-    model="glm-5.1"
+    model="glm-5.1"  # any model from the list above
 )
 ```
 
@@ -114,13 +116,13 @@ glm_chat_completions(
 ```
 glm_chat_completions(
     messages=[{"role": "user", "content": "请用中文解释机器学习的基本概念。"}],
-    model="glm-4.7"
+    model="glm-5.2"
 )
 ```
 
 ## Notes
 - GLM models excel at Chinese language tasks
-- Use glm-5.1 for the most advanced capabilities
+- Use glm-5.2 for the most advanced capabilities
 - Use glm-3-turbo for faster, lighter tasks
 - Bearer token authentication is required
 """

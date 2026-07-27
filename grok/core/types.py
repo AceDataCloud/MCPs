@@ -33,16 +33,14 @@ DEFAULT_DURATION: int = 6
 
 # Grok chat completion models
 GrokChatModel = Literal[
+    "grok-4.5",
     "grok-4",
-    "grok-4-1-fast",
-    "grok-4-1-fast-non-reasoning",
     "grok-3",
-    "grok-3-mini",
-    "grok-2-vision",
 ]
 
 # Reasoning effort options (reasoning-capable chat models)
-ReasoningEffort = Literal["low", "high"]
+ReasoningEffort = Literal["minimal", "low", "medium", "high"]
 
-# Default chat model (grok-4 / grok-3 are the broadly-available models)
+# grok-4.5 is the newest model but its provider pool is currently unhealthy
+# (500 "No valid account found"), so the default stays on grok-4.
 DEFAULT_CHAT_MODEL: GrokChatModel = "grok-4"
