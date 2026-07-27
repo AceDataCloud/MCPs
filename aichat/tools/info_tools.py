@@ -13,13 +13,20 @@ async def aichat_list_models() -> str:
     Returns:
         Formatted list of available models with descriptions.
     """
-    # Last updated: 2026-04-25
+    # Last updated: 2026-07-27
     return """# Available AiChat Models
+
+## OpenAI GPT-5.6 Series (latest)
+- gpt-5.6-luna
+- gpt-5.6-terra
+- gpt-5.6-sol
 
 ## OpenAI GPT-5 Series
 - gpt-5.5
 - gpt-5.5-pro
 - gpt-5.4
+- gpt-5.4-mini
+- gpt-5.4-nano
 - gpt-5.4-pro
 - gpt-5.2
 - gpt-5.1
@@ -104,8 +111,12 @@ async def aichat_list_models() -> str:
 
 ## xAI Grok
 - grok-3
+- grok-4.5
 
 ## Zhipu GLM
+- glm-5.2
+- glm-5
+- glm-5-turbo
 - glm-5.1
 - glm-4.7
 - glm-4.6

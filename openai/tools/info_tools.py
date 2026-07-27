@@ -13,15 +13,24 @@ async def openai_list_chat_models() -> str:
     Returns:
         Table of all chat models with descriptions.
     """
-    # Last updated: 2026-04-25
+    # Last updated: 2026-07-27
     return """Available OpenAI Chat Completion Models:
+
+## GPT-5.6 Series (latest)
+| Model           | Description                              |
+|-----------------|------------------------------------------|
+| gpt-5.6-luna    | GPT-5.6 Luna variant                     |
+| gpt-5.6-terra   | GPT-5.6 Terra variant                    |
+| gpt-5.6-sol     | GPT-5.6 Sol variant                      |
 
 ## GPT-5 Series
 | Model         | Description                              |
 |---------------|------------------------------------------|
-| gpt-5.5       | Latest GPT-5.5 model                     |
+| gpt-5.5       | GPT-5.5 model                            |
 | gpt-5.5-pro   | GPT-5.5 Pro variant                      |
 | gpt-5.4       | GPT-5.4 model                            |
+| gpt-5.4-mini  | GPT-5.4 Mini - cost efficient            |
+| gpt-5.4-nano  | GPT-5.4 Nano - ultra cost efficient      |
 | gpt-5.4-pro   | GPT-5.4 Pro variant                      |
 | gpt-5.2       | GPT-5.2 model                            |
 | gpt-5.1       | GPT-5.1 model                            |
@@ -29,6 +38,16 @@ async def openai_list_chat_models() -> str:
 | gpt-5         | GPT-5 standard                           |
 | gpt-5-mini    | GPT-5 Mini - cost efficient              |
 | gpt-5-nano    | GPT-5 Nano - ultra cost efficient        |
+
+## Free Tier
+| Model            | Description                              |
+|------------------|------------------------------------------|
+| gpt-oss:free     | Open-source model, free tier             |
+| gpt-5.5:free     | GPT-5.5 free tier                        |
+| gpt-5:free       | GPT-5 free tier                          |
+| gpt-4.1:free     | GPT-4.1 free tier                        |
+| gpt-4o:free      | GPT-4o free tier                         |
+| gpt-4o-mini:free | GPT-4o Mini free tier                    |
 
 ## GPT-4 Series
 | Model              | Description                         |
@@ -66,19 +85,22 @@ async def openai_list_image_models() -> str:
     Returns:
         Table of all image models with descriptions.
     """
-    # Last updated: 2026-04-25
+    # Last updated: 2026-07-27
     return """Available OpenAI Image Models:
 
-| Model            | Description                                        |
-|------------------|----------------------------------------------------|
-| gpt-image-1      | GPT Image 1 - versatile image generation (default)|
-| gpt-image-1.5    | GPT Image 1.5 - improved quality                  |
-| gpt-image-2      | GPT Image 2 - latest GPT image model              |
-| dall-e-3         | DALL-E 3 - high quality artistic generation       |
-| dall-e-2         | DALL-E 2 - legacy image generation                |
-| nano-banana      | Nano Banana - fast, efficient generation          |
-| nano-banana-2    | Nano Banana 2 - improved version                  |
-| nano-banana-pro  | Nano Banana Pro - highest quality                 |
+| Model                | Description                                        |
+|----------------------|----------------------------------------------------|
+| gpt-image-1          | GPT Image 1 - versatile image generation (default)|
+| gpt-image-1.5        | GPT Image 1.5 - improved quality                  |
+| gpt-image-2          | GPT Image 2 - latest GPT image model              |
+| gpt-image-2:reverse  | GPT Image 2 reverse mode                          |
+| gpt-image-2:official | GPT Image 2 official mode                         |
+| dall-e-3             | DALL-E 3 - high quality artistic generation       |
+| dall-e-2             | DALL-E 2 - legacy image generation                |
+| nano-banana          | Nano Banana - fast, efficient generation          |
+| nano-banana-2-lite   | Nano Banana 2 Lite - lightweight version          |
+| nano-banana-2        | Nano Banana 2 - improved version                  |
+| nano-banana-pro      | Nano Banana Pro - highest quality                 |
 
 ## Supported Sizes
 | Size        | Aspect Ratio    | Notes                        |
