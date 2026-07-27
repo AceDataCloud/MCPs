@@ -1,5 +1,6 @@
 """Tasks API tools for OpenAI."""
 
+import asyncio
 import json
 from typing import Annotated, Any, Literal
 
@@ -10,6 +11,11 @@ from core.exceptions import OpenAIAPIError, OpenAIAuthError
 from core.server import mcp
 
 
+def _is_task_finished(result: dict[str, Any]) -> bool:
+    """A task is done once the worker has stamped `finished_at` on it."""
+    return result.get("finished_at") is not None
+
+
 @mcp.tool()
 async def openai_get_task(
     id: Annotated[
@@ -17,7 +23,7 @@ async def openai_get_task(
         Field(
             description=(
                 "Task ID returned by the original image request (e.g. from "
-                "openai_generate_image or openai_edit_image when callback_url was set). "
+                "openai_generate_image or openai_edit_image). "
                 "At least one of 'id' or 'trace_id' must be provided."
             )
         ),
@@ -35,17 +41,16 @@ async def openai_get_task(
 ) -> str:
     """Retrieve a single async image task by its task ID or custom trace ID.
 
-    Image generation and editing requests submitted with a callback_url are
-    processed asynchronously and produce a persistent task record. Use this
-    tool to check whether the task has finished and to retrieve the final
-    result.
+    Image generation and editing requests are submitted asynchronously and
+    return a task_id immediately. Use this tool to poll until the task
+    finishes and to retrieve the final image URLs.
 
-    Note: tasks are only created when the original request included a
-    callback_url. Synchronous (non-callback) calls are not stored.
+    A task is complete once it carries a `finished_at` timestamp. While it is
+    still running this tool waits ~5s before returning, so repeated calls
+    poll at a sane rate.
 
     Use this when:
-    - You previously called openai_generate_image or openai_edit_image with a
-      callback_url and want to retrieve the result
+    - You called openai_generate_image or openai_edit_image and got a task_id
     - You want to check the status of an async image task
 
     Returns:
@@ -64,8 +69,21 @@ async def openai_get_task(
 
         result = await client.tasks(**payload)
 
+        # The worker answers `{}` for an unknown id — say so plainly instead of
+        # reporting it as a transport failure the model would retry forever.
         if not result:
-            return json.dumps({"error": "No response received."})
+            return json.dumps(
+                {
+                    "error": "Task not found",
+                    "message": "No task matches that id or trace_id. Check the id returned by the original image request.",
+                }
+            )
+
+        # Throttle polling: sleep 5s while the task is still running so LLM
+        # clients don't burn through poll attempts in seconds. The worker only
+        # writes `finished_at` once the upstream call returns.
+        if not _is_task_finished(result):
+            await asyncio.sleep(5)
 
         return json.dumps(result, ensure_ascii=False, indent=2)
 
@@ -126,8 +144,8 @@ async def openai_list_tasks(
     least one filter: ids, trace_ids, application_id, user_id, or a
     created_at_min / created_at_max time window.
 
-    Note: tasks are only created when the original request included a
-    callback_url. Synchronous (non-callback) calls are not stored.
+    Every image generation and edit produces a task record, so this lists
+    recent image work regardless of whether a callback_url was used.
 
     Use this when:
     - You want to list multiple tasks at once

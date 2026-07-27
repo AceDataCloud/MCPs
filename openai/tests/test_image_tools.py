@@ -49,3 +49,40 @@ async def test_openai_edit_image_forwards_image_array(monkeypatch):
 
     assert captured_payload["image"] == images
     assert json.loads(response) == {"data": [{"url": "https://example.com/edited.png"}]}
+
+
+@pytest.mark.asyncio
+async def test_openai_generate_image_submits_async(monkeypatch):
+    """Generation must be submitted asynchronously so slow models don't time out."""
+    captured_payload: dict[str, object] = {}
+
+    async def mock_images_generations(**kwargs):
+        captured_payload.update(kwargs)
+        return {"task_id": "t-1"}
+
+    monkeypatch.setattr(image_tools.client, "images_generations", mock_images_generations)
+
+    await image_tools.openai_generate_image(prompt="a panda", model="gpt-image-1")
+
+    assert captured_payload["async"] is True
+
+
+@pytest.mark.asyncio
+async def test_openai_generate_image_defers_to_explicit_callback_url(monkeypatch):
+    """An explicit callback_url already implies async upstream — don't double-flag it."""
+    captured_payload: dict[str, object] = {}
+
+    async def mock_images_generations(**kwargs):
+        captured_payload.update(kwargs)
+        return {"task_id": "t-2"}
+
+    monkeypatch.setattr(image_tools.client, "images_generations", mock_images_generations)
+
+    await image_tools.openai_generate_image(
+        prompt="a panda",
+        model="gpt-image-1",
+        callback_url="https://example.com/hook",
+    )
+
+    assert "async" not in captured_payload
+    assert captured_payload["callback_url"] == "https://example.com/hook"

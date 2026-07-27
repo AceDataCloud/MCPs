@@ -161,6 +161,21 @@ class OpenAIClient:
         logger.info(f"Image edit with model: {kwargs.get('model', 'unknown')}")
         return await self.request("/openai/images/edits", kwargs)
 
+    def _with_async_callback(self, payload: dict[str, Any]) -> dict[str, Any]:
+        """Ensure long-running image operations are submitted asynchronously."""
+        request_payload = dict(payload)
+        if not request_payload.get("callback_url"):
+            request_payload["async"] = True
+        return request_payload
+
+    async def images_generations_async(self, **kwargs: Any) -> dict[str, Any]:
+        """Generate images in async mode and return the submission response immediately."""
+        return await self.images_generations(**self._with_async_callback(kwargs))
+
+    async def images_edits_async(self, **kwargs: Any) -> dict[str, Any]:
+        """Edit images in async mode and return the submission response immediately."""
+        return await self.images_edits(**self._with_async_callback(kwargs))
+
     async def responses(self, **kwargs: Any) -> dict[str, Any]:
         """Create a response using the Responses API."""
         logger.info(f"Responses API with model: {kwargs.get('model', 'unknown')}")
