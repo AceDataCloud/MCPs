@@ -155,7 +155,10 @@ async def openai_generate_image(
     - You want to generate product mockups or visual concepts
 
     Returns:
-        JSON response containing image URLs or base64 data.
+        JSON with a `task_id`. Generation runs asynchronously — poll
+        `openai_get_task` with that id until it reports `finished_at`, then
+        read the image URLs from its `response`. When `callback_url` is set the
+        result is POSTed there instead.
     """
     try:
         payload: dict[str, Any] = {
@@ -182,7 +185,7 @@ async def openai_generate_image(
         if callback_url is not None:
             payload["callback_url"] = callback_url
 
-        result = await client.images_generations(**payload)
+        result = await client.images_generations_async(**payload)
 
         if not result:
             return json.dumps({"error": "No response received."})
@@ -311,7 +314,10 @@ async def openai_edit_image(
     - You want to apply a specific style or transformation to an image
 
     Returns:
-        JSON response containing the edited image URL(s) or base64 data.
+        JSON with a `task_id`. Editing runs asynchronously — poll
+        `openai_get_task` with that id until it reports `finished_at`, then
+        read the image URLs from its `response`. When `callback_url` is set the
+        result is POSTed there instead.
     """
     try:
         payload: dict[str, Any] = {
@@ -335,7 +341,7 @@ async def openai_edit_image(
         if callback_url is not None:
             payload["callback_url"] = callback_url
 
-        result = await client.images_edits(**payload)
+        result = await client.images_edits_async(**payload)
 
         if not result:
             return json.dumps({"error": "No response received."})

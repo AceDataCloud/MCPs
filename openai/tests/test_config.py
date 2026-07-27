@@ -17,7 +17,7 @@ class TestSettings:
             settings = Settings()
             assert settings.api_base_url == "https://api.acedata.cloud"
             assert settings.api_token == ""
-            assert settings.request_timeout == 60.0
+            assert settings.request_timeout == 180.0
             assert settings.server_name == "openai"
             assert settings.log_level == "INFO"
 

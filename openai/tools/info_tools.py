@@ -178,7 +178,7 @@ async def openai_get_usage_guide() -> str:
 - background: Run in background mode
 
 ### Image Generation
-**openai_generate_image** - Create images from text descriptions
+**openai_generate_image** - Create images from text descriptions (async: returns a task_id, poll openai_get_task)
 - prompt: Image description (required)
 - model: Image model (default: gpt-image-1)
 - size: Image dimensions (default: 1024x1024)
@@ -187,7 +187,7 @@ async def openai_get_usage_guide() -> str:
 - style: vivid or natural (dall-e-3)
 
 ### Image Editing
-**openai_edit_image** - Modify existing images
+**openai_edit_image** - Modify existing images (async: returns a task_id, poll openai_get_task)
 - image: Reference image URL (required)
 - prompt: Edit description (required)
 - model: Image model (default: gpt-image-1)
@@ -242,20 +242,24 @@ openai_chat_completion(
 
 ### Generate Image
 ```
-openai_generate_image(
+# Image work is asynchronous: this returns a task_id, not the image itself.
+result = openai_generate_image(
     prompt="A futuristic city with flying cars at sunset, photorealistic",
     model="gpt-image-1",
     size="1792x1024"
 )
+# Poll until the task reports finished_at, then read response.data[].url
+openai_get_task(id=result["task_id"])
 ```
 
 ### Edit Image
 ```
-openai_edit_image(
+result = openai_edit_image(
     image="https://example.com/photo.jpg",
     prompt="Add a rainbow in the sky",
     model="gpt-image-1"
 )
+openai_get_task(id=result["task_id"])
 ```
 
 ### Create Embeddings
@@ -268,14 +272,21 @@ openai_create_embedding(
 
 ### Retrieve Async Task
 ```
-# Generate an image with a callback URL and a custom trace_id
+# Every image call is async. Poll by the returned task_id...
+result = openai_generate_image(
+    prompt="A watercolor cat on a desk",
+    model="gpt-image-1"
+)
+openai_get_task(id=result["task_id"])
+
+# ...or tag it with your own trace_id and poll by that instead.
+# Supplying callback_url additionally POSTs the result to your webhook.
 openai_generate_image(
     prompt="A watercolor cat on a desk",
     model="gpt-image-1",
     callback_url="https://webhook.site/your-uuid",
     trace_id="my-custom-trace-001"
 )
-# The task is persisted server-side; poll for the result later
 openai_get_task(trace_id="my-custom-trace-001")
 ```
 
