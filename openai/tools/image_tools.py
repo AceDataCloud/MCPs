@@ -26,6 +26,7 @@ from core.types import (
     ImageSize,
     ImageStyle,
 )
+from core.utils import format_submission_result
 
 
 @mcp.tool()
@@ -190,7 +191,7 @@ async def openai_generate_image(
         if not result:
             return json.dumps({"error": "No response received."})
 
-        return json.dumps(result, ensure_ascii=False, indent=2)
+        return format_submission_result(result)
 
     except OpenAIAuthError as e:
         return json.dumps({"error": "Authentication Error", "message": e.message})
@@ -346,7 +347,7 @@ async def openai_edit_image(
         if not result:
             return json.dumps({"error": "No response received."})
 
-        return json.dumps(result, ensure_ascii=False, indent=2)
+        return format_submission_result(result)
 
     except OpenAIAuthError as e:
         return json.dumps({"error": "Authentication Error", "message": e.message})

@@ -9,11 +9,17 @@ from pydantic import Field
 from core.client import client
 from core.exceptions import OpenAIAPIError, OpenAIAuthError
 from core.server import mcp
+from core.utils import _task_outcome, format_task_result
 
 
 def _is_task_finished(result: dict[str, Any]) -> bool:
-    """A task is done once the worker has stamped `finished_at` on it."""
-    return result.get("finished_at") is not None
+    """A task is done once the worker has stamped `finished_at` on it.
+
+    Shares `_task_outcome` with the guidance block so the throttle and the
+    advertised `should_poll` can never disagree.
+    """
+    is_complete, is_failed = _task_outcome(result)
+    return is_complete or is_failed
 
 
 @mcp.tool()
@@ -85,7 +91,7 @@ async def openai_get_task(
         if not _is_task_finished(result):
             await asyncio.sleep(5)
 
-        return json.dumps(result, ensure_ascii=False, indent=2)
+        return format_task_result(result)
 
     except OpenAIAuthError as e:
         return json.dumps({"error": "Authentication Error", "message": e.message})

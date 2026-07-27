@@ -9,6 +9,7 @@ from core.client import client
 from core.exceptions import WebExtraterAPIError, WebExtraterAuthError
 from core.server import mcp
 from core.types import BlockResource, ExpectedType, TaskMode, WaitUntil
+from core.utils import format_submission_result
 
 
 @mcp.tool()
@@ -162,7 +163,7 @@ async def webextrator_extract(
         if not result:
             return json.dumps({"error": "No response received from the API."})
 
-        return json.dumps(result, ensure_ascii=False, indent=2)
+        return format_submission_result(result)
 
     except WebExtraterAuthError as e:
         return json.dumps({"error": "Authentication Error", "message": e.message})
@@ -303,7 +304,7 @@ async def webextrator_render(
         if not result:
             return json.dumps({"error": "No response received from the API."})
 
-        return json.dumps(result, ensure_ascii=False, indent=2)
+        return format_submission_result(result)
 
     except WebExtraterAuthError as e:
         return json.dumps({"error": "Authentication Error", "message": e.message})
