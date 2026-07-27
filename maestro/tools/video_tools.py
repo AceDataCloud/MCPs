@@ -13,7 +13,7 @@ from core.types import (
     MaestroScenario,
     MaestroVoice,
 )
-from core.utils import format_result
+from core.utils import format_submission_result
 
 
 @mcp.tool()
@@ -149,4 +149,4 @@ async def maestro_create_video(
     if callback_url:
         payload["callback_url"] = callback_url
 
-    return format_result(await client.create_video(payload))
+    return format_submission_result(await client.create_video(payload))

@@ -9,6 +9,7 @@ from pydantic import Field
 from core.client import client
 from core.exceptions import WebExtraterAPIError, WebExtraterAuthError
 from core.server import mcp
+from core.utils import _task_outcome, format_task_result
 
 
 @mcp.tool()
@@ -64,10 +65,11 @@ async def webextrator_get_task(
         # Throttle polling: sleep 5s while the task is still running so LLM
         # clients don't burn through poll attempts in seconds. The worker only
         # stamps `finished_at` once the job settles.
-        if result.get("finished_at") is None:
+        is_complete, is_failed = _task_outcome(result)
+        if not (is_complete or is_failed):
             await asyncio.sleep(5)
 
-        return json.dumps(result, ensure_ascii=False, indent=2)
+        return format_task_result(result)
 
     except WebExtraterAuthError as e:
         return json.dumps({"error": "Authentication Error", "message": e.message})

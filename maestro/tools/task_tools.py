@@ -7,12 +7,7 @@ from pydantic import Field
 
 from core.client import client
 from core.server import mcp
-from core.utils import format_result
-
-# States that mean "still working". Anything else (succeeded, failed, dead, or
-# a status we don't know yet) returns immediately — an unknown state must not
-# strand the caller in a sleep loop.
-_IN_FLIGHT_STATES = {"queued", "pending", "planning", "producing", "running", "processing"}
+from core.utils import IN_FLIGHT_STATES, format_result, format_task_result
 
 
 @mcp.tool()
@@ -26,9 +21,9 @@ async def maestro_get_task(
     data = await client.get_task(task_id)
     # Throttle polling: sleep 5s while the task is still running so LLM clients
     # don't burn through poll attempts in seconds.
-    if str(data.get("status", "")).lower() in _IN_FLIGHT_STATES:
+    if str(data.get("status", "")).lower() in IN_FLIGHT_STATES:
         await asyncio.sleep(5)
-    return format_result(data)
+    return format_task_result(data)
 
 
 @mcp.tool()
