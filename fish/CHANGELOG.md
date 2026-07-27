@@ -7,6 +7,10 @@ and this project adheres to [Calendar Versioning](https://calver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- `s2.1-pro` TTS model
+
 ## [2026.4.5.0] - 2026-04-05
 
 ### Added

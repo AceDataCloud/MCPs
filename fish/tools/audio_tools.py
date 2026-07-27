@@ -42,7 +42,7 @@ async def fish_generate_audio(
     ] = None,
     model: Annotated[
         FishModel,
-        Field(description="The TTS model to use. Supported values: 's1', 's2-pro'."),
+        Field(description="The TTS model to use. Supported values: 's1', 's2-pro', 's2.1-pro'."),
     ] = DEFAULT_MODEL,
     format: Annotated[
         FishAudioFormat,

@@ -18,14 +18,9 @@ async def grok_list_models() -> str:
 
 | Model                          | Notes                                            |
 |--------------------------------|--------------------------------------------------|
-| grok-4                         | Default. Flagship reasoning model.               |
-| grok-3                         | Previous-gen flagship.                           |
-| grok-4-1-fast                  | Fast (subject to upstream availability).         |
-| grok-4-1-fast-non-reasoning    | Fast, no reasoning trace (upstream-dependent).   |
-| grok-3-mini                    | Smaller/cheaper; reasoning_effort (upstream-dep).|
-| grok-2-vision                  | Vision-capable image understanding (upstream-dep).|
-
-(grok-4 and grok-3 are the broadly-available chat models.)
+| grok-4.5                       | Default. Latest flagship reasoning model.        |
+| grok-4                         | Previous flagship reasoning model.               |
+| grok-3                         | Earlier-generation model.                        |
 
 Available Grok Imagine Video Models:
 

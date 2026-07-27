@@ -12,7 +12,7 @@ Chat with Grok models, or generate short AI videos from a text prompt or a still
 
 ## Features
 
-- **Chat / Reasoning / Vision** — Talk to Grok 4 / Grok 3 family models, including vision (`grok-2-vision`) and tool calling
+- **Chat / Reasoning / Vision** — Talk to Grok 4.5 / Grok 4 / Grok 3 models, with image input and tool calling
 - **Text to Video** — Generate a video clip from a text description
 - **Image to Video** — Animate a reference image into a video
 - **Async task tracking** — Submit a job, poll for the result, single or batch
@@ -37,12 +37,9 @@ Chat with Grok models, or generate short AI videos from a text prompt or a still
 
 | Model | Notes |
 | --- | --- |
-| `grok-4` | Flagship reasoning model |
-| `grok-4-1-fast` | Default — fast, capable |
-| `grok-4-1-fast-non-reasoning` | Fast, no reasoning trace |
-| `grok-3` | Previous-gen flagship |
-| `grok-3-mini` | Smaller/cheaper; supports `reasoning_effort` |
-| `grok-2-vision` | Vision-capable (image understanding) |
+| `grok-4.5` | Default — latest flagship reasoning model |
+| `grok-4` | Previous flagship reasoning model |
+| `grok-3` | Earlier-generation model |
 
 ### Video
 
