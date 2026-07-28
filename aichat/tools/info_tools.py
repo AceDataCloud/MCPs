@@ -159,6 +159,10 @@ Create/manage conversations via `/aichat2/conversations`.
 - `id` (optional): Conversation ID for retrieve/update/delete.
 - `question` (optional): Prompt for chat action.
 - `messages` (optional): Messages payload for update/action workflows.
+- `async` (optional): Process the request asynchronously.
+- `callback_url` (optional): Webhook URL for async completion callbacks.
+- `allowed_skills` / `allowed_mcp_servers` (optional): Restrict agent capabilities for async runs.
+- `unattended_policy` (optional): Policy object controlling unattended execution.
 
 ### aichat_list_models
 List all available AI models grouped by provider.

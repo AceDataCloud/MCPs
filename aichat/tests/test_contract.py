@@ -1,4 +1,4 @@
-"""Guards the AiChat model catalogs against the API contract.
+"""Guards the AiChat MCP contract against the API spec.
 
 The spec enum can lag behind what the gateway actually accepts, so the v2
 check is one-directional: everything in the spec must be offered, but the
@@ -8,7 +8,9 @@ added here).
 
 from typing import get_args
 
+from core.server import mcp
 from core.types import AiChatModel, AiChatV2Model
+from tools import chat_tools
 
 # Models the /aichat/conversations spec enum requires us to offer.
 V1_REQUIRED = {
@@ -44,3 +46,15 @@ def test_v2_offers_claude_sonnet_5():
 def test_v2_keeps_models_the_spec_has_not_caught_up_with():
     missing = V2_AHEAD_OF_SPEC - set(get_args(AiChatV2Model))
     assert not missing, f"AiChatV2Model dropped live models {sorted(missing)}"
+
+
+def test_v2_exposes_async_request_controls():
+    assert hasattr(chat_tools, "aichat_create_conversation_v2")
+    schema = mcp._tool_manager._tools["aichat_create_conversation_v2"].parameters
+    properties = schema["properties"]
+
+    assert {"type": "boolean"} in properties["async"]["anyOf"]
+    assert "callback_url" in properties
+    assert "allowed_skills" in properties
+    assert "allowed_mcp_servers" in properties
+    assert "unattended_policy" in properties

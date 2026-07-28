@@ -148,6 +148,26 @@ async def aichat_create_conversation_v2(
         int | None,
         Field(description="Maximum number of turns for conversation history."),
     ] = None,
+    async_: Annotated[
+        bool | None,
+        Field(alias="async", description="Whether to process the request asynchronously."),
+    ] = None,
+    callback_url: Annotated[
+        str | None,
+        Field(description="Webhook URL to receive async completion callbacks."),
+    ] = None,
+    allowed_skills: Annotated[
+        list[str] | None,
+        Field(description="Optional list of skills the agent may use."),
+    ] = None,
+    allowed_mcp_servers: Annotated[
+        list[str] | None,
+        Field(description="Optional list of MCP servers the agent may use."),
+    ] = None,
+    unattended_policy: Annotated[
+        dict[str, Any] | None,
+        Field(description="Optional unattended-execution policy configuration."),
+    ] = None,
     tool_results: Annotated[
         list[dict[str, Any]] | None,
         Field(description="Tool call results for follow-up turns."),
@@ -194,6 +214,11 @@ async def aichat_create_conversation_v2(
         "references": references,
         "preset": preset,
         "max_turns": max_turns,
+        "async": async_,
+        "callback_url": callback_url,
+        "allowed_skills": allowed_skills,
+        "allowed_mcp_servers": allowed_mcp_servers,
+        "unattended_policy": unattended_policy,
         "tool_results": tool_results,
         "messages": messages,
         "title": title,
