@@ -129,8 +129,8 @@ async def aichat_create_conversation_v2(
         Field(description="Question text for chat action."),
     ] = None,
     message: Annotated[
-        dict[str, Any] | None,
-        Field(description="Single message object to include in the request."),
+        str | list[dict[str, Any]] | None,
+        Field(description="Message payload as a string or structured content array."),
     ] = None,
     stateful: Annotated[
         bool | None,
@@ -146,7 +146,7 @@ async def aichat_create_conversation_v2(
     ] = None,
     max_turns: Annotated[
         int | None,
-        Field(description="Maximum number of turns for conversation history."),
+        Field(ge=1, description="Maximum number of turns for conversation history."),
     ] = None,
     async_: Annotated[
         bool | None,
@@ -194,11 +194,11 @@ async def aichat_create_conversation_v2(
     ] = None,
     offset: Annotated[
         int | None,
-        Field(description="Pagination offset for retrieve_batch."),
+        Field(ge=0, description="Pagination offset for retrieve_batch."),
     ] = 0,
     limit: Annotated[
         int | None,
-        Field(description="Pagination limit for retrieve_batch."),
+        Field(ge=1, description="Pagination limit for retrieve_batch."),
     ] = 100,
 ) -> str:
     """Create/manage conversations via AiChat v2 endpoint."""
