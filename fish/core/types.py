@@ -6,7 +6,7 @@ from typing import Literal
 FishModel = Literal["s1", "s2-pro", "s2.1-pro"]
 
 # Fish output format
-FishAudioFormat = Literal["mp3", "wav", "pcm", "opus"]
+FishAudioFormat = Literal["mp3", "wav", "pcm"]
 
 # Fish latency mode
 FishLatency = Literal["normal", "balanced"]
