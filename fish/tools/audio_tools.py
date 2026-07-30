@@ -57,10 +57,6 @@ async def fish_generate_audio(
         int | None,
         Field(description="MP3 bit rate when format='mp3'. Supported values: 64, 128, 192."),
     ] = None,
-    opus_bitrate: Annotated[
-        int | None,
-        Field(description="Opus bit rate when format='opus'."),
-    ] = None,
     latency: Annotated[
         FishLatency | None,
         Field(description="Latency mode. Supported values: 'normal', 'balanced'."),
@@ -151,7 +147,6 @@ async def fish_generate_audio(
     optional_payload = {
         "sample_rate": sample_rate,
         "mp3_bitrate": mp3_bitrate,
-        "opus_bitrate": opus_bitrate,
         "latency": latency,
         "chunk_length": chunk_length,
         "min_chunk_length": min_chunk_length,
