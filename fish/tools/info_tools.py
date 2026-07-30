@@ -30,7 +30,7 @@ async def fish_get_usage_guide() -> str:
 - text: The text to convert to speech (required)
 - reference_id: Voice model ID to condition speech (optional)
 - model: "s1", "s2-pro" or "s2.1-pro" (optional, default: s2-pro)
-- format: "mp3" | "wav" | "pcm" | "opus" (optional, default: mp3)
+- format: "mp3" | "wav" | "pcm" (optional, default: mp3)
 - callback_url: Async callback URL (optional)
 
 ### Model Discovery

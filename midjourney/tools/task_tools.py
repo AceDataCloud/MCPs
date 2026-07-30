@@ -8,7 +8,7 @@ from pydantic import Field
 from core.client import client
 from core.exceptions import MidjourneyValidationError
 from core.server import mcp
-from core.utils import format_task_result
+from core.utils import format_batch_task_result, format_task_result
 
 
 @mcp.tool()
@@ -96,29 +96,4 @@ async def midjourney_get_tasks_batch(
     if trace_ids is not None:
         kwargs["trace_ids"] = trace_ids
     result = await client.query_task(**kwargs)
-
-    if "error" in result:
-        error = result.get("error", {})
-        return f"Error: {error.get('code', 'unknown')} - {error.get('message', 'Unknown error')}"
-
-    lines = [f"Total Tasks: {result.get('count', 0)}", ""]
-
-    for item in result.get("items", []):
-        response_info = item.get("response", {})
-        lines.extend(
-            [
-                f"=== Task: {item.get('id', 'N/A')} ===",
-                f"Type: {item.get('type', 'N/A')}",
-                f"Created At: {item.get('created_at', 'N/A')}",
-                f"Success: {response_info.get('success', False)}",
-            ]
-        )
-
-        if "image_url" in response_info:
-            lines.append(f"  Image: {response_info.get('image_url', 'N/A')}")
-        elif "descriptions" in response_info:
-            lines.append(f"  Descriptions: {len(response_info.get('descriptions', []))} options")
-
-        lines.append("")
-
-    return "\n".join(lines)
+    return format_batch_task_result(result)
