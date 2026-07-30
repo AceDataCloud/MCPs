@@ -61,7 +61,7 @@ async def openai_get_task(
 
     Returns:
         JSON object with task details (id, trace_id, type, request, response,
-        created_at, finished_at, duration) or an empty object if not found.
+        created_at, started_at, finished_at, elapsed) or an empty object if not found.
     """
     if id is None and trace_id is None:
         return json.dumps({"error": "At least one of 'id' or 'trace_id' must be provided."})

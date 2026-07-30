@@ -5,7 +5,13 @@ import json
 from core.utils import format_task_result
 
 _RUNNING = {"id": "t-1", "finished_at": None, "response": None}
-_DONE = {"id": "t-1", "finished_at": 1785136982.29, "response": {"success": True}}
+_DONE = {
+    "id": "t-1",
+    "started_at": "2026-07-30T09:00:00Z",
+    "finished_at": 1785136982.29,
+    "elapsed": 12.34,
+    "response": {"success": True},
+}
 _FAILED = {
     "id": "t-1",
     "finished_at": 1785137086.22,
@@ -24,9 +30,12 @@ def test_running_task_keeps_polling():
 
 
 def test_completed_task_stops():
-    block = _guidance(_DONE)
+    payload = json.loads(format_task_result(_DONE))
+    block = payload["mcp_task_polling"]
     assert block["should_poll"] is False
     assert block["is_complete"] is True
+    assert payload["started_at"] == "2026-07-30T09:00:00Z"
+    assert payload["elapsed"] == 12.34
 
 
 def test_failed_task_stops_instead_of_polling_forever():

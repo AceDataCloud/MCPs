@@ -41,7 +41,7 @@ async def producer_get_task(
     success is true. Do NOT stop polling just because audio_url is non-empty.
 
     Returns:
-        Task status and generated audio information including URLs, title, lyrics, and duration.
+        Task status and generated audio information including URLs, title, lyrics, and task timing metadata.
     """
     result = await client.query_task(
         id=task_id,
