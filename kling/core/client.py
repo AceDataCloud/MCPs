@@ -167,6 +167,16 @@ class KlingClient:
         logger.info("Generating motion transfer")
         return await self.request("/kling/motion", self._with_async_callback(kwargs))
 
+    async def lip_sync(self, **kwargs: Any) -> dict[str, Any]:
+        """Create a lip-sync video using the lip-sync endpoint."""
+        logger.info(f"Creating lip-sync video with mode: {kwargs.get('mode', 'audio2video')}")
+        return await self.request("/kling/lip-sync", self._with_async_callback(kwargs))
+
+    async def talking_photo(self, **kwargs: Any) -> dict[str, Any]:
+        """Create a talking-photo video using the talking-photo endpoint."""
+        logger.info("Creating talking-photo video")
+        return await self.request("/kling/talking-photo", self._with_async_callback(kwargs))
+
     async def query_task(self, **kwargs: Any) -> dict[str, Any]:
         """Query task status using the tasks endpoint."""
         task_id = kwargs.get("id") or kwargs.get("ids", [])

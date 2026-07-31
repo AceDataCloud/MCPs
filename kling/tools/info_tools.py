@@ -42,7 +42,7 @@ async def kling_list_actions() -> str:
     Returns:
         Categorized list of all actions and their corresponding tools.
     """
-    # Last updated: 2026-05-04
+    # Last updated: 2026-07-31
     return """Available Kling Actions and Tools:
 
 Video Generation:
@@ -52,6 +52,10 @@ Video Generation:
 
 Motion Transfer:
 - kling_generate_motion: Transfer motion from a reference video to a character image
+
+Lip-sync & Talking-Photo:
+- kling_lip_sync: Synchronize lip movements to match audio or TTS text
+- kling_talking_photo: Animate a portrait photo to match an audio track
 
 Task Management:
 - kling_get_task: Check status of a single generation
@@ -66,6 +70,8 @@ Workflow Examples:
 2. Image to video: kling_generate_video_from_image -> kling_get_task
 3. Long video: kling_generate_video -> kling_extend_video (repeat) -> kling_get_task
 4. Motion transfer: kling_generate_motion -> kling_get_task
+5. Lip-sync dubbing: kling_lip_sync(mode='audio2video') -> kling_get_task
+6. Talking avatar: kling_talking_photo -> kling_get_task
 
 Tips:
 - Use descriptive prompts for better results
