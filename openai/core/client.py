@@ -248,6 +248,100 @@ class OpenAIClient:
         logger.info(f"Audio speech with model: {kwargs.get('model', 'unknown')}")
         return await self.request_binary("/v1/audio/speech", kwargs)
 
+    async def request_multipart(
+        self,
+        endpoint: str,
+        fields: dict[str, Any],
+        timeout: float | None = None,
+    ) -> dict[str, Any]:
+        """Make a multipart/form-data POST request to the OpenAI API.
+
+        Args:
+            endpoint: API endpoint path (e.g., "/v1/audio/transcriptions")
+            fields: Form fields; any value that is bytes is sent as a file part
+                    with filename "audio" and the detected content-type, while
+                    plain strings/numbers are sent as form text fields.
+            timeout: Optional timeout override
+
+        Returns:
+            API response as dictionary (or plain text wrapped in {"text": …})
+
+        Raises:
+            OpenAIAuthError: If authentication fails
+            OpenAIAPIError: If the API request fails
+            OpenAITimeoutError: If the request times out
+        """
+        url = f"{self.base_url}{endpoint}"
+        request_timeout = timeout or self.timeout
+
+        logger.info(f"POST {url} (multipart/form-data)")
+        logger.debug(f"Timeout: {request_timeout}s")
+
+        # Build httpx multipart files / data dicts
+        files: list[tuple[str, Any]] = []
+        data: dict[str, str] = {}
+        for key, value in fields.items():
+            if isinstance(value, bytes):
+                files.append((key, ("audio", value, "application/octet-stream")))
+            elif isinstance(value, list):
+                # Array fields use bracket notation (e.g. timestamp_granularities[])
+                for item in value:
+                    data[f"{key}[]"] = str(item)
+            else:
+                data[key] = str(value)
+
+        # The auth header must NOT include content-type — httpx sets it for multipart
+        token = get_request_api_token() or self.api_token
+        if not token:
+            raise OpenAIAuthError("API token not configured")
+        headers = {
+            "accept": "application/json",
+            "authorization": f"Bearer {token}",
+        }
+
+        async with httpx.AsyncClient() as http_client:
+            try:
+                response = await http_client.post(
+                    url,
+                    files=files if files else None,
+                    data=data,
+                    headers=headers,
+                    timeout=request_timeout,
+                )
+
+                logger.info(f"Response status: {response.status_code}")
+
+                if response.status_code >= 400:
+                    self._handle_error_response(response)
+
+                content_type = response.headers.get("content-type", "")
+                if "application/json" in content_type:
+                    result = response.json()
+                else:
+                    result = {"text": response.text}
+
+                logger.success("Multipart request successful!")
+                return result  # type: ignore[no-any-return]
+
+            except httpx.TimeoutException as e:
+                logger.error(f"Request timeout after {request_timeout}s: {e}")
+                raise OpenAITimeoutError(
+                    f"Request to {endpoint} timed out after {request_timeout}s"
+                ) from e
+
+            except OpenAIError:
+                raise
+
+            except Exception as e:
+                logger.error(f"Request error: {e}")
+                raise OpenAIAPIError(message=str(e)) from e
+
+    async def audio_transcriptions(self, audio_bytes: bytes, **kwargs: Any) -> dict[str, Any]:
+        """Transcribe audio to text using the Whisper model."""
+        logger.info(f"Audio transcription with model: {kwargs.get('model', 'whisper-1')}")
+        fields: dict[str, Any] = {"file": audio_bytes, **kwargs}
+        return await self.request_multipart("/v1/audio/transcriptions", fields)
+
 
 # Global client instance
 client = OpenAIClient()
