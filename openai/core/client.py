@@ -186,6 +186,68 @@ class OpenAIClient:
         logger.info(f"Tasks API action: {kwargs.get('action', 'unknown')}")
         return await self.request("/openai/tasks", kwargs)
 
+    async def request_binary(
+        self,
+        endpoint: str,
+        payload: dict[str, Any],
+        timeout: float | None = None,
+    ) -> bytes:
+        """Make a POST request to the OpenAI API and return raw binary response bytes.
+
+        Args:
+            endpoint: API endpoint path (e.g., "/v1/audio/speech")
+            payload: Request body as dictionary
+            timeout: Optional timeout override
+
+        Returns:
+            Raw response bytes
+
+        Raises:
+            OpenAIAuthError: If authentication fails
+            OpenAIAPIError: If the API request fails
+            OpenAITimeoutError: If the request times out
+        """
+        url = f"{self.base_url}{endpoint}"
+        request_timeout = timeout or self.timeout
+
+        logger.info(f"POST {url} (binary response)")
+        logger.debug(f"Request payload: {json.dumps(payload, ensure_ascii=False, indent=2)}")
+
+        async with httpx.AsyncClient() as http_client:
+            try:
+                response = await http_client.post(
+                    url,
+                    json=payload,
+                    headers=self._get_headers(),
+                    timeout=request_timeout,
+                )
+
+                logger.info(f"Response status: {response.status_code}")
+
+                if response.status_code >= 400:
+                    self._handle_error_response(response)
+
+                logger.success("Binary request successful!")
+                return response.content
+
+            except httpx.TimeoutException as e:
+                logger.error(f"Request timeout after {request_timeout}s: {e}")
+                raise OpenAITimeoutError(
+                    f"Request to {endpoint} timed out after {request_timeout}s"
+                ) from e
+
+            except OpenAIError:
+                raise
+
+            except Exception as e:
+                logger.error(f"Request error: {e}")
+                raise OpenAIAPIError(message=str(e)) from e
+
+    async def audio_speech(self, **kwargs: Any) -> bytes:
+        """Generate speech audio from text."""
+        logger.info(f"Audio speech with model: {kwargs.get('model', 'unknown')}")
+        return await self.request_binary("/v1/audio/speech", kwargs)
+
 
 # Global client instance
 client = OpenAIClient()

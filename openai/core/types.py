@@ -200,6 +200,15 @@ ReasoningEffort = Literal["minimal", "low", "medium", "high"]
 # Chat service tier options
 ServiceTier = Literal["auto", "default", "flex", "scale", "priority"]
 
+# Audio speech model options
+AudioSpeechModel = Literal["tts-1", "tts-1-hd"]
+
+# Audio speech voice options
+AudioSpeechVoice = Literal["alloy", "echo", "fable", "onyx", "nova", "shimmer"]
+
+# Audio speech response format options
+AudioSpeechResponseFormat = Literal["mp3", "opus", "aac", "flac", "wav", "pcm"]
+
 # === Default values ===
 
 DEFAULT_CHAT_MODEL: ChatModel = "gpt-4.1"
@@ -211,3 +220,6 @@ DEFAULT_IMAGE_QUALITY: ImageQuality = "auto"
 DEFAULT_IMAGE_OUTPUT_FORMAT: ImageOutputFormat = "png"
 DEFAULT_IMAGE_RESPONSE_FORMAT: ImageResponseFormat = "url"
 DEFAULT_EMBEDDING_ENCODING_FORMAT: EmbeddingEncodingFormat = "float"
+DEFAULT_AUDIO_SPEECH_MODEL: AudioSpeechModel = "tts-1-hd"
+DEFAULT_AUDIO_SPEECH_VOICE: AudioSpeechVoice = "alloy"
+DEFAULT_AUDIO_SPEECH_RESPONSE_FORMAT: AudioSpeechResponseFormat = "mp3"

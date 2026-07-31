@@ -180,7 +180,7 @@ async def openai_get_usage_guide() -> str:
     Returns:
         Complete usage guide for OpenAI tools.
     """
-    # Last updated: 2026-04-25
+    # Last updated: 2026-07-31
     return """# OpenAI Tools Usage Guide
 
 ## Available Tools
@@ -220,6 +220,15 @@ async def openai_get_usage_guide() -> str:
 - input: Text to embed (required)
 - model: Embedding model (default: text-embedding-3-small)
 - dimensions: Custom output dimensions (optional)
+
+### Text-to-Speech
+**openai_text_to_speech** - Convert text to spoken audio
+- input: Text to synthesize (required)
+- model: TTS model (default: tts-1-hd)
+- voice: Voice to use — alloy, echo, fable, onyx, nova, shimmer (default: alloy)
+- response_format: Audio format — mp3, opus, aac, flac, wav, pcm (default: mp3)
+- speed: Speaking speed 0.25–4.0 (default: 1.0)
+Returns base64-encoded audio in the 'audio' field. Decode with base64 to get raw bytes.
 
 ### Task Retrieval
 **openai_get_task** - Retrieve a single async image task
@@ -292,6 +301,20 @@ openai_create_embedding(
 )
 ```
 
+### Text-to-Speech
+```
+import base64
+result = openai_text_to_speech(
+    input="Hello, welcome to our service!",
+    voice="nova",
+    response_format="mp3"
+)
+# Decode base64 audio to bytes
+audio_bytes = base64.b64decode(result["audio"])
+with open("speech.mp3", "wb") as f:
+    f.write(audio_bytes)
+```
+
 ### Retrieve Async Task
 ```
 # Every image call is async. Poll by the returned task_id...
@@ -319,4 +342,5 @@ openai_get_task(trace_id="my-custom-trace-001")
 3. **Tokens**: Set max_tokens when you need predictable response lengths
 4. **Images**: Use 1024x1024 for general images, larger for detail-rich content
 5. **Embeddings**: text-embedding-3-small is cost-efficient for most use cases
+6. **TTS**: Use tts-1-hd for best quality; nova and shimmer voices work well for most content
 """
