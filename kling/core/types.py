@@ -75,8 +75,38 @@ class KlingReferenceVideo(BaseModel):
     keep_original_sound: Literal["yes", "no"] = "no"
 
 
+# Kling lip-sync mode
+LipSyncMode = Literal["audio2video", "text2video"]
+
+# Kling lip-sync audio type
+LipSyncAudioType = Literal["url", "file"]
+
+# Kling lip-sync voice language
+VoiceLanguage = Literal["zh", "en"]
+
+# Kling talking-photo models (subset of KlingModel that supports talking-photo)
+TalkingPhotoModel = Literal[
+    "kling-v1",
+    "kling-v1-6",
+    "kling-v2-master",
+    "kling-v2-1-master",
+    "kling-v2-5-turbo",
+    "kling-v2-6",
+]
+
+# Kling talking-photo duration (seconds)
+TalkingPhotoDuration = Literal[5, 10]
+
+# Kling talking-photo mode
+TalkingPhotoMode = Literal["std", "pro"]
+
 # Default values
 DEFAULT_MODEL: KlingModel = "kling-v2-master"
 DEFAULT_MODE: Mode = "std"
 DEFAULT_ASPECT_RATIO: AspectRatio = "16:9"
 DEFAULT_DURATION: Duration = 5
+
+# Talking-photo defaults
+DEFAULT_TALKING_PHOTO_MODEL: TalkingPhotoModel = "kling-v2-1-master"
+DEFAULT_TALKING_PHOTO_DURATION: TalkingPhotoDuration = 5
+DEFAULT_TALKING_PHOTO_MODE: TalkingPhotoMode = "pro"
