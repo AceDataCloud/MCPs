@@ -11,6 +11,7 @@ from core.types import (
     MaestroAspect,
     MaestroQuality,
     MaestroScenario,
+    MaestroStyle,
     MaestroVoice,
 )
 from core.utils import format_submission_result
@@ -93,11 +94,12 @@ async def maestro_create_video(
         ),
     ] = None,
     style: Annotated[
-        str | None,
+        MaestroStyle | str | None,
         Field(
             description=(
-                "Visual style preset or freeform style hint, such as cinematic, glass, swiss, "
-                "editorial, warm, neon, or futuristic. Omit to let the server decide."
+                "Visual style preset or freeform style hint. Named presets: cinematic, glass, "
+                "luxury, swiss, modern, editorial, warm, vibrant, neon, mono, pastel, bold, "
+                "industrial, futuristic, retro. Use 'auto' or omit to let the server decide."
             )
         ),
     ] = None,

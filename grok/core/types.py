@@ -10,6 +10,7 @@ GrokVideoModel = Literal[
     "grok-imagine-video:reverse",
     "grok-imagine-video:official",
     "grok-imagine-video-1.5:official",
+    "grok-imagine-video",
 ]
 
 # Aspect ratio options
