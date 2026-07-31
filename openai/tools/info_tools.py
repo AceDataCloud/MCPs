@@ -230,6 +230,16 @@ async def openai_get_usage_guide() -> str:
 - speed: Speaking speed 0.25–4.0 (default: 1.0)
 Returns base64-encoded audio in the 'audio' field. Decode with base64 to get raw bytes.
 
+### Speech-to-Text (Transcription)
+**openai_transcribe_audio** - Transcribe spoken audio to text
+- url: URL of the audio file to transcribe (required)
+- model: Transcription model (default: whisper-1)
+- language: ISO-639-1 language code (e.g. 'en') to improve accuracy (optional)
+- prompt: Optional text hint to guide transcription style
+- response_format: Output format — json (default), text, srt, verbose_json, vtt
+- temperature: Sampling temperature 0–1 (default: 0)
+- timestamp_granularities: List of 'word' and/or 'segment' for verbose_json timestamps
+
 ### Task Retrieval
 **openai_get_task** - Retrieve a single async image task
 - id: Task ID returned by the original image request

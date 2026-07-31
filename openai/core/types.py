@@ -209,6 +209,15 @@ AudioSpeechVoice = Literal["alloy", "echo", "fable", "onyx", "nova", "shimmer"]
 # Audio speech response format options
 AudioSpeechResponseFormat = Literal["mp3", "opus", "aac", "flac", "wav", "pcm"]
 
+# Audio transcription model options
+AudioTranscriptionModel = Literal["whisper-1"]
+
+# Audio transcription response format options
+AudioTranscriptionResponseFormat = Literal["json", "text", "srt", "verbose_json", "vtt"]
+
+# Audio transcription timestamp granularity options
+AudioTranscriptionTimestampGranularity = Literal["word", "segment"]
+
 # === Default values ===
 
 DEFAULT_CHAT_MODEL: ChatModel = "gpt-4.1"
@@ -223,3 +232,5 @@ DEFAULT_EMBEDDING_ENCODING_FORMAT: EmbeddingEncodingFormat = "float"
 DEFAULT_AUDIO_SPEECH_MODEL: AudioSpeechModel = "tts-1-hd"
 DEFAULT_AUDIO_SPEECH_VOICE: AudioSpeechVoice = "alloy"
 DEFAULT_AUDIO_SPEECH_RESPONSE_FORMAT: AudioSpeechResponseFormat = "mp3"
+DEFAULT_AUDIO_TRANSCRIPTION_MODEL: AudioTranscriptionModel = "whisper-1"
+DEFAULT_AUDIO_TRANSCRIPTION_RESPONSE_FORMAT: AudioTranscriptionResponseFormat = "json"
