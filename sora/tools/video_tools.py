@@ -354,7 +354,7 @@ async def sora_generate_video_v2(
     payload: dict = {
         "prompt": prompt,
         "model": model,
-        "version": 2,
+        "version": "2.0",
         "duration": duration,
         "size": size,
     }
@@ -412,7 +412,7 @@ async def sora_generate_video_v2_async(
         "prompt": prompt,
         "callback_url": callback_url,
         "model": model,
-        "version": 2,
+        "version": "2.0",
         "duration": duration,
         "size": size,
     }
