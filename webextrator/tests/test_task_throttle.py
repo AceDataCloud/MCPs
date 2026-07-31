@@ -32,7 +32,7 @@ async def test_get_task_returns_immediately_when_finished(monkeypatch):
     slept: list[float] = []
 
     async def mock_query(**_kwargs):
-        return {"id": "t-1", "finished_at": "2026-07-27T00:00:00Z", "response": {}}
+        return {"id": "t-1", "finished_at": 1785110400.0, "response": {}}
 
     async def fake_sleep(seconds):
         slept.append(seconds)
@@ -43,7 +43,7 @@ async def test_get_task_returns_immediately_when_finished(monkeypatch):
     result = await task_tools.webextrator_get_task(task_id="t-1")
 
     assert slept == []
-    assert json.loads(result)["finished_at"] == "2026-07-27T00:00:00Z"
+    assert json.loads(result)["finished_at"] == 1785110400.0
 
 
 @pytest.mark.asyncio
