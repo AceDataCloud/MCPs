@@ -8,7 +8,7 @@ from pydantic import Field
 from core.client import client
 from core.exceptions import GrokAPIError, GrokAuthError
 from core.server import mcp
-from core.types import DEFAULT_CHAT_MODEL, GrokChatModel, ReasoningEffort
+from core.types import DEFAULT_CHAT_MODEL, GrokChatModel, ReasoningEffort, ServiceTier
 
 
 @mcp.tool()
@@ -90,6 +90,15 @@ async def grok_chat_completions(
         str | None,
         Field(description="End-user identifier for abuse monitoring."),
     ] = None,
+    service_tier: Annotated[
+        ServiceTier | None,
+        Field(
+            description=(
+                "Specifies the processing tier. Options: 'auto' (default), 'default', "
+                "'flex' (asynchronous batch-eligible), 'scale', or 'priority'."
+            )
+        ),
+    ] = None,
 ) -> str:
     """Create a Grok (xAI) chat completion via the AceDataCloud Grok API.
 
@@ -126,6 +135,7 @@ async def grok_chat_completions(
             tools=tools,
             tool_choice=tool_choice,
             user=user,
+            service_tier=service_tier,
         )
 
         if not result:

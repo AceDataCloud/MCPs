@@ -42,6 +42,9 @@ GrokChatModel = Literal[
 # Reasoning effort options (reasoning-capable chat models)
 ReasoningEffort = Literal["minimal", "low", "medium", "high"]
 
+# Service tier options for chat completions
+ServiceTier = Literal["auto", "default", "flex", "scale", "priority"]
+
 # grok-4.5 is the newest model but its provider pool is currently unhealthy
 # (500 "No valid account found"), so the default stays on grok-4.
 DEFAULT_CHAT_MODEL: GrokChatModel = "grok-4"
