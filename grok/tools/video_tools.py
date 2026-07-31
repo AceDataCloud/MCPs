@@ -29,7 +29,7 @@ async def grok_text_to_video(
     model: Annotated[
         GrokVideoModel,
         Field(
-            description="Grok Imagine model. Text-to-video is supported by 'grok-imagine-video-1.5-fast:reverse' (default, fast 6-30s), 'grok-imagine-video:reverse' (standard 1-15s), and 'grok-imagine-video:official' (official, higher fidelity). Do NOT use 'grok-imagine-video-1.5:official' here — it is image-to-video only."
+            description="Grok Imagine model. Text-to-video is supported by 'grok-imagine-video-1.5-fast:reverse' (default, fast 6-30s), 'grok-imagine-video:reverse' (standard 1-15s), 'grok-imagine-video:official' (official, higher fidelity), and 'grok-imagine-video' (standard quality). Do NOT use 'grok-imagine-video-1.5:official' here — it is image-to-video only."
         ),
     ] = DEFAULT_MODEL,
     aspect_ratio: Annotated[
@@ -108,7 +108,7 @@ async def grok_image_to_video(
     model: Annotated[
         GrokVideoModel,
         Field(
-            description="Grok Imagine model. All models support image-to-video. 'grok-imagine-video-1.5-fast:reverse' (default) is fastest and cheapest; 'grok-imagine-video-1.5:official' offers the highest fidelity (up to 1080p) and is image-to-video only."
+            description="Grok Imagine model. All models support image-to-video. 'grok-imagine-video-1.5-fast:reverse' (default) is fastest and cheapest; 'grok-imagine-video-1.5:official' offers the highest fidelity (up to 1080p) and is image-to-video only; 'grok-imagine-video' provides standard quality image-to-video generation."
         ),
     ] = DEFAULT_MODEL,
     reference_image_urls: Annotated[
