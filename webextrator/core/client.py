@@ -117,9 +117,6 @@ class WebExtraterClient:
         headers: dict[str, str] | None = None,
         user_agent: str | None = None,
         callback_url: str | None = None,
-        cookies: list[dict[str, Any]] | None = None,
-        bypass_cache: bool | None = None,
-        cache_ttl_seconds: float | None = None,
         mode: str | None = None,
     ) -> dict[str, Any]:
         """Extract structured content from a web page.
@@ -161,12 +158,6 @@ class WebExtraterClient:
             payload["user_agent"] = user_agent
         if callback_url is not None:
             payload["callback_url"] = callback_url
-        if cookies is not None:
-            payload["cookies"] = cookies
-        if bypass_cache is not None:
-            payload["bypass_cache"] = bypass_cache
-        if cache_ttl_seconds is not None:
-            payload["cache_ttl_seconds"] = cache_ttl_seconds
         _apply_submission_mode(payload, mode)
 
         logger.info(f"Extracting content from: {url}")
@@ -216,9 +207,6 @@ class WebExtraterClient:
         headers: dict[str, str] | None = None,
         user_agent: str | None = None,
         callback_url: str | None = None,
-        cookies: list[dict[str, Any]] | None = None,
-        bypass_cache: bool | None = None,
-        cache_ttl_seconds: float | None = None,
         mode: str | None = None,
     ) -> dict[str, Any]:
         """Render a web page and return the rendered HTML.
@@ -254,12 +242,6 @@ class WebExtraterClient:
             payload["user_agent"] = user_agent
         if callback_url is not None:
             payload["callback_url"] = callback_url
-        if cookies is not None:
-            payload["cookies"] = cookies
-        if bypass_cache is not None:
-            payload["bypass_cache"] = bypass_cache
-        if cache_ttl_seconds is not None:
-            payload["cache_ttl_seconds"] = cache_ttl_seconds
         _apply_submission_mode(payload, mode)
 
         logger.info(f"Rendering page: {url}")
