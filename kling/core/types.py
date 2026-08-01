@@ -75,6 +75,9 @@ class KlingReferenceVideo(BaseModel):
     keep_original_sound: Literal["yes", "no"] = "no"
 
 
+# Kling motion models (subset of KlingModel that supports motion transfer)
+KlingMotionModel = Literal["kling-v2-6", "kling-v3"]
+
 # Kling lip-sync mode
 LipSyncMode = Literal["audio2video", "text2video"]
 

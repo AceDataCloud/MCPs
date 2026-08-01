@@ -6,7 +6,7 @@ from pydantic import Field
 
 from core.client import client
 from core.server import mcp
-from core.types import CharacterOrientation, Mode
+from core.types import CharacterOrientation, KlingMotionModel, Mode
 from core.utils import format_motion_result
 
 
@@ -24,6 +24,12 @@ async def kling_generate_motion(
             description="URL of the reference video providing the motion. The character movements from this video will be transferred to the image."
         ),
     ],
+    model_name: Annotated[
+        KlingMotionModel | None,
+        Field(
+            description="Model to use for motion transfer. Options: 'kling-v2-6' or 'kling-v3'. If not specified, the API uses its default."
+        ),
+    ] = None,
     character_orientation: Annotated[
         CharacterOrientation,
         Field(
@@ -74,6 +80,8 @@ async def kling_generate_motion(
         "callback_url": callback_url,
     }
 
+    if model_name:
+        payload["model_name"] = model_name
     if prompt:
         payload["prompt"] = prompt
     if keep_original_sound:
