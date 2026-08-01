@@ -166,3 +166,36 @@ class TestOpenAIClient:
 
             call_args = mock_instance.post.call_args
             assert "/openai/images/generations" in call_args[0][0]
+
+    @pytest.mark.asyncio
+    async def test_request_multipart_preserves_all_list_items(self, client):
+        """Multipart list fields must be sent as repeated bracketed form entries."""
+        mock_response = MagicMock()
+        mock_response.status_code = 200
+        mock_response.headers = {"content-type": "application/json"}
+        mock_response.json.return_value = {"text": "ok"}
+
+        with patch("httpx.AsyncClient") as mock_http:
+            mock_instance = AsyncMock()
+            mock_instance.post.return_value = mock_response
+            mock_http.return_value.__aenter__.return_value = mock_instance
+
+            await client.request_multipart(
+                "/v1/audio/transcriptions",
+                {
+                    "file": b"audio-bytes",
+                    "timestamp_granularities": ["word", "segment"],
+                    "languages": ["en", "fr"],
+                    "keywords": ["AceDataCloud", "MCP"],
+                },
+            )
+
+            call_kwargs = mock_instance.post.call_args.kwargs
+            assert call_kwargs["data"] == [
+                ("timestamp_granularities[]", "word"),
+                ("timestamp_granularities[]", "segment"),
+                ("languages[]", "en"),
+                ("languages[]", "fr"),
+                ("keywords[]", "AceDataCloud"),
+                ("keywords[]", "MCP"),
+            ]

@@ -157,6 +157,8 @@ def test_openai_transcribe_audio_schema():
     assert "model" in props
     assert "language" in props
     assert "prompt" in props
+    assert "languages" in props
+    assert "keywords" in props
     assert "response_format" in props
     assert "temperature" in props
     assert "timestamp_granularities" in props
@@ -230,17 +232,21 @@ async def test_openai_transcribe_audio_forwards_all_params(monkeypatch):
 
     await audio_tools.openai_transcribe_audio(
         url="https://example.com/audio.mp3",
-        model="whisper-1",
+        model="gpt-transcribe",
         language="en",
         prompt="Test hint",
+        languages=["en", "fr"],
+        keywords=["AceDataCloud", "MCP"],
         response_format="verbose_json",
         temperature=0.2,
         timestamp_granularities=["word"],
     )
 
-    assert captured["model"] == "whisper-1"
+    assert captured["model"] == "gpt-transcribe"
     assert captured["language"] == "en"
     assert captured["prompt"] == "Test hint"
+    assert captured["languages"] == ["en", "fr"]
+    assert captured["keywords"] == ["AceDataCloud", "MCP"]
     assert captured["response_format"] == "verbose_json"
     assert captured["temperature"] == 0.2
     assert captured["timestamp_granularities"] == ["word"]
@@ -279,6 +285,8 @@ async def test_openai_transcribe_audio_omits_none_params(monkeypatch):
 
     assert "language" not in captured
     assert "prompt" not in captured
+    assert "languages" not in captured
+    assert "keywords" not in captured
     assert "temperature" not in captured
     assert "timestamp_granularities" not in captured
 

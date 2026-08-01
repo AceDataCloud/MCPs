@@ -132,7 +132,12 @@ async def openai_transcribe_audio(
     ],
     model: Annotated[
         AudioTranscriptionModel,
-        Field(description="The transcription model to use. Currently only 'whisper-1' is supported."),
+        Field(
+            description=(
+                "The transcription model to use. Options: 'whisper-1' (default) or "
+                "'gpt-transcribe'."
+            )
+        ),
     ] = DEFAULT_AUDIO_TRANSCRIPTION_MODEL,
     language: Annotated[
         str | None,
@@ -149,6 +154,24 @@ async def openai_transcribe_audio(
             description=(
                 "Optional text to guide the model's style or continue a previous audio segment. "
                 "The prompt should match the audio language."
+            )
+        ),
+    ] = None,
+    languages: Annotated[
+        list[str] | None,
+        Field(
+            description=(
+                "Optional list of language codes to constrain transcription to specific "
+                "languages. Use ISO-639-1 values like ['en', 'fr']."
+            )
+        ),
+    ] = None,
+    keywords: Annotated[
+        list[str] | None,
+        Field(
+            description=(
+                "Optional list of keywords or phrases to bias the transcription toward "
+                "important domain-specific terms."
             )
         ),
     ] = None,
@@ -193,9 +216,9 @@ async def openai_transcribe_audio(
         ),
     ] = None,
 ) -> str:
-    """Transcribe audio to text using OpenAI Whisper via AceDataCloud.
+    """Transcribe audio to text using OpenAI transcription models via AceDataCloud.
 
-    Downloads audio from the given URL and sends it to Whisper for transcription.
+    Downloads audio from the given URL and sends it to an OpenAI transcription model.
     Supports a wide range of audio formats and optional language hints.
 
     Use this when:
@@ -222,6 +245,10 @@ async def openai_transcribe_audio(
             kwargs["language"] = language
         if prompt is not None:
             kwargs["prompt"] = prompt
+        if languages is not None:
+            kwargs["languages"] = languages
+        if keywords is not None:
+            kwargs["keywords"] = keywords
         if temperature is not None:
             kwargs["temperature"] = temperature
         if timestamp_granularities is not None:

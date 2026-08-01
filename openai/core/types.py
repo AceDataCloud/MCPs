@@ -210,7 +210,7 @@ AudioSpeechVoice = Literal["alloy", "echo", "fable", "onyx", "nova", "shimmer"]
 AudioSpeechResponseFormat = Literal["mp3", "opus", "aac", "flac", "wav", "pcm"]
 
 # Audio transcription model options
-AudioTranscriptionModel = Literal["whisper-1"]
+AudioTranscriptionModel = Literal["whisper-1", "gpt-transcribe"]
 
 # Audio transcription response format options
 AudioTranscriptionResponseFormat = Literal["json", "text", "srt", "verbose_json", "vtt"]
