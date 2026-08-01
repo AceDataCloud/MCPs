@@ -182,6 +182,16 @@ async def openai_transcribe_audio(
             )
         ),
     ] = None,
+    stream: Annotated[
+        bool | None,
+        Field(
+            description=(
+                "Whether to stream the transcription response. Note: whisper-1 does not "
+                "support streaming; this parameter will be ignored and the complete result "
+                "will be returned."
+            )
+        ),
+    ] = None,
 ) -> str:
     """Transcribe audio to text using OpenAI Whisper via AceDataCloud.
 
@@ -216,6 +226,8 @@ async def openai_transcribe_audio(
             kwargs["temperature"] = temperature
         if timestamp_granularities is not None:
             kwargs["timestamp_granularities"] = timestamp_granularities
+        if stream is not None:
+            kwargs["stream"] = stream
 
         result = await client.audio_transcriptions(audio_bytes, **kwargs)
 
