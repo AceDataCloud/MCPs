@@ -99,3 +99,7 @@ mappings:
     repo: AceDataCloud/AceDataCloudMCP
     exclude:
       - .gitbooks
+  discord-bot:
+    repo: AceDataCloud/DiscordBotMCP
+    exclude:
+      - .gitbooks
