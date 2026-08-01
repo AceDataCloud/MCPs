@@ -11,6 +11,7 @@ Interact with OpenAI models for chat completions, image generation, text embeddi
 - **Image Generation** — Create images with gpt-image-1, gpt-image-2, dall-e-3, and nano-banana models
 - **Image Editing** — Modify existing images with AI
 - **Text Embeddings** — Generate vector representations with text-embedding-3 models
+- **Audio** — Convert text to speech and transcribe audio with whisper-1 or gpt-transcribe
 
 ## Quick Start
 
@@ -47,6 +48,8 @@ mcp-openai
 | `openai_generate_image` | Generate images from text descriptions |
 | `openai_edit_image` | Edit existing images with AI |
 | `openai_create_embedding` | Create text embedding vectors |
+| `openai_text_to_speech` | Convert text to spoken audio |
+| `openai_transcribe_audio` | Transcribe audio from a URL |
 | `openai_list_chat_models` | List available chat/completion models |
 | `openai_list_image_models` | List available image models |
 | `openai_list_embedding_models` | List available embedding models |
@@ -64,6 +67,9 @@ mcp-openai
 
 ### Embedding Models
 - text-embedding-3-small, text-embedding-3-large, text-embedding-ada-002
+
+### Audio Transcription Models
+- whisper-1, gpt-transcribe
 
 ## Usage Examples
 

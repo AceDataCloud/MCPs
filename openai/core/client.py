@@ -279,16 +279,16 @@ class OpenAIClient:
 
         # Build httpx multipart files / data dicts
         files: list[tuple[str, Any]] = []
-        data: dict[str, str] = {}
+        data: list[tuple[str, str]] = []
         for key, value in fields.items():
             if isinstance(value, bytes):
                 files.append((key, ("audio", value, "application/octet-stream")))
             elif isinstance(value, list):
                 # Array fields use bracket notation (e.g. timestamp_granularities[])
                 for item in value:
-                    data[f"{key}[]"] = str(item)
+                    data.append((f"{key}[]", str(item)))
             else:
-                data[key] = str(value)
+                data.append((key, str(value)))
 
         # The auth header must NOT include content-type — httpx sets it for multipart
         token = get_request_api_token() or self.api_token
