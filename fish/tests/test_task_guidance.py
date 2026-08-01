@@ -7,7 +7,7 @@ from core.utils import format_task_result
 _RUNNING = {"id": "t-1", "finished_at": None, "response": None}
 _DONE = {
     "id": "t-1",
-    "started_at": "2026-07-30T09:00:00Z",
+    "started_at": 1785136969.95,
     "finished_at": 1785136982.29,
     "elapsed": 12.34,
     "response": {"success": True},
@@ -34,7 +34,7 @@ def test_completed_task_stops():
     block = payload["mcp_task_polling"]
     assert block["should_poll"] is False
     assert block["is_complete"] is True
-    assert payload["started_at"] == "2026-07-30T09:00:00Z"
+    assert payload["started_at"] == 1785136969.95
     assert payload["elapsed"] == 12.34
 
 
