@@ -105,7 +105,8 @@ async def openai_list_image_models() -> str:
 ## Supported Sizes
 | Size        | Aspect Ratio    | Notes                        |
 |-------------|-----------------|------------------------------|
-| 1024x1024   | 1:1 (Square)    | Default, 1K tier             |
+| auto        | Model-selected  | Default, model picks the size |
+| 1024x1024   | 1:1 (Square)    | 1K tier                      |
 | 1792x1024   | ~16:9 (Wide)    | Landscape, 1K tier           |
 | 1024x1792   | ~9:16 (Tall)    | Portrait, 1K tier            |
 | 1536x1024   | 3:2             | Wide format, 1K tier         |
@@ -203,7 +204,7 @@ async def openai_get_usage_guide() -> str:
 **openai_generate_image** - Create images from text descriptions (async: returns a task_id, poll openai_get_task)
 - prompt: Image description (required)
 - model: Image model (default: gpt-image-1)
-- size: Image dimensions (default: 1024x1024)
+- size: Image dimensions (default: auto)
 - quality: Output quality (default: auto)
 - n: Number of images (1-10)
 - style: vivid or natural (dall-e-3)
