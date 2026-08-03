@@ -139,6 +139,14 @@ async def suno_generate_custom_music(
             description="Advanced parameter for custom mode. Controls how strongly the style prompt influences the generation."
         ),
     ] = None,
+    duration: Annotated[
+        int | None,
+        Field(
+            description="Target length of the generated track in seconds, from 10 to 360. Only supported on the chirp-v5-5 model; passing it with any other model returns a 400. The finished track lands near this value but is not guaranteed to match it exactly.",
+            ge=10,
+            le=360,
+        ),
+    ] = None,
     callback_url: Annotated[
         str | None,
         Field(
@@ -157,6 +165,7 @@ async def suno_generate_custom_music(
     - You need a specific song title
     - You want to specify vocal gender (v4.5+ models)
     - You want the API to auto-generate lyrics from a prompt (use lyric_prompt)
+    - You need a specific track length (use duration, chirp-v5-5 only)
 
     For quick generation without writing lyrics, use suno_generate_music instead.
 
@@ -187,6 +196,8 @@ async def suno_generate_custom_music(
         payload["weirdness"] = weirdness
     if style_influence is not None:
         payload["style_influence"] = style_influence
+    if duration is not None:
+        payload["duration"] = duration
 
     result = await client.generate_audio(**payload)
     return format_audio_result(result)
