@@ -88,6 +88,22 @@ async def test_openai_generate_image_submits_async(monkeypatch):
 
 
 @pytest.mark.asyncio
+async def test_openai_generate_image_uses_auto_size_by_default(monkeypatch):
+    """Generation should let the model choose dimensions by default, as the API does."""
+    captured_payload: dict[str, object] = {}
+
+    async def mock_images_generations(**kwargs):
+        captured_payload.update(kwargs)
+        return {"task_id": "t-3"}
+
+    monkeypatch.setattr(image_tools.client, "images_generations", mock_images_generations)
+
+    await image_tools.openai_generate_image(prompt="a panda", model="gpt-image-1")
+
+    assert captured_payload["size"] == "auto"
+
+
+@pytest.mark.asyncio
 async def test_openai_generate_image_defers_to_explicit_callback_url(monkeypatch):
     """An explicit callback_url already implies async upstream — don't double-flag it."""
     captured_payload: dict[str, object] = {}
