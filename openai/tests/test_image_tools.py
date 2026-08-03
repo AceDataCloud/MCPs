@@ -52,6 +52,26 @@ async def test_openai_edit_image_forwards_image_array(monkeypatch):
 
 
 @pytest.mark.asyncio
+async def test_openai_edit_image_uses_auto_size_by_default(monkeypatch):
+    """Image editing should preserve the reference image aspect ratio by default."""
+    captured_payload: dict[str, object] = {}
+
+    async def mock_images_edits(**kwargs):
+        captured_payload.update(kwargs)
+        return {"task_id": "t-0"}
+
+    monkeypatch.setattr(image_tools.client, "images_edits", mock_images_edits)
+
+    await image_tools.openai_edit_image(
+        image="https://example.com/base.png",
+        prompt="Remove the background.",
+        model="gpt-image-2",
+    )
+
+    assert captured_payload["size"] == "auto"
+
+
+@pytest.mark.asyncio
 async def test_openai_generate_image_submits_async(monkeypatch):
     """Generation must be submitted asynchronously so slow models don't time out."""
     captured_payload: dict[str, object] = {}
