@@ -237,7 +237,7 @@ async def openai_edit_image(
         ImageEditSize,
         Field(
             description=(
-                "Output image dimensions as 'WIDTHxHEIGHT' or 'auto'. Default is '1024x1024'. "
+                "Output image dimensions as 'WIDTHxHEIGHT' or 'auto'. Default is 'auto'. "
                 "gpt-image-2 accepts any custom dimensions (multiples of 16, longer side ≤ 3840, "
                 "total pixels ≤ 8,294,400). Common presets — 1K: '1024x1024', '1536x1024', "
                 "'1024x1536', '1792x1024', '1024x1792'; 2K (1.5× rate): '2048x2048', "
@@ -246,7 +246,7 @@ async def openai_edit_image(
                 "dall-e-2: '256x256', '512x512', '1024x1024'."
             )
         ),
-    ] = "1024x1024",
+    ] = "auto",
     quality: Annotated[
         ImageEditQuality,
         Field(
