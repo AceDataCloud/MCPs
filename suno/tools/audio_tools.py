@@ -142,9 +142,7 @@ async def suno_generate_custom_music(
     duration: Annotated[
         int | None,
         Field(
-            description="Target length of the generated track in seconds, from 10 to 360. Only supported on the chirp-v5-5 model; passing it with any other model returns a 400. The finished track lands near this value but is not guaranteed to match it exactly.",
-            ge=10,
-            le=360,
+            description="Target length of the generated track in seconds, typically between 10 and 360. Support varies by model - newer models such as chirp-v5-5 handle it best, and unsupported combinations may ignore it or return an error. The finished track lands near this value but is not guaranteed to match it exactly."
         ),
     ] = None,
     callback_url: Annotated[
@@ -165,7 +163,7 @@ async def suno_generate_custom_music(
     - You need a specific song title
     - You want to specify vocal gender (v4.5+ models)
     - You want the API to auto-generate lyrics from a prompt (use lyric_prompt)
-    - You need a specific track length (use duration, chirp-v5-5 only)
+    - You need a specific track length (use duration)
 
     For quick generation without writing lyrics, use suno_generate_music instead.
 

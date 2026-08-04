@@ -87,3 +87,19 @@ class TestCustomDuration:
             )
 
         assert "duration" not in mock_generate.await_args.kwargs
+
+    @pytest.mark.asyncio
+    async def test_duration_is_not_range_or_model_gated(self, mock_audio_response):
+        """Any value on any model is forwarded as-is; the API owns the rules."""
+        with patch(
+            "tools.audio_tools.client.generate_audio",
+            new=AsyncMock(return_value=mock_audio_response),
+        ) as mock_generate:
+            await suno_generate_custom_music(
+                lyric="[Verse]\nhello",
+                title="Long Take",
+                model="chirp-v4",
+                duration=900,
+            )
+
+        assert mock_generate.await_args.kwargs["duration"] == 900
