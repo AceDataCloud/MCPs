@@ -33,6 +33,14 @@ V2_AHEAD_OF_SPEC = {
     "gpt-5.6-sol",
 }
 
+# Kimi models the spec removed; they must stay out of the MCP surface.
+V2_RETIRED_KIMI = {
+    "kimi-k2-0711-preview",
+    "kimi-k2-0905-preview",
+    "kimi-k2-instruct-0905",
+    "kimi-k2-turbo-preview",
+}
+
 
 def test_v1_offers_the_newest_models():
     missing = V1_REQUIRED - set(get_args(AiChatModel))
@@ -46,6 +54,11 @@ def test_v2_offers_claude_sonnet_5():
 def test_v2_keeps_models_the_spec_has_not_caught_up_with():
     missing = V2_AHEAD_OF_SPEC - set(get_args(AiChatV2Model))
     assert not missing, f"AiChatV2Model dropped live models {sorted(missing)}"
+
+
+def test_v2_excludes_retired_kimi_models():
+    lingering = V2_RETIRED_KIMI & set(get_args(AiChatV2Model))
+    assert not lingering, f"AiChatV2Model still offers retired models {sorted(lingering)}"
 
 
 def test_v2_exposes_async_request_controls():
