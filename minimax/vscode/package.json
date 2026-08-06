@@ -1,0 +1,61 @@
+{
+  "name": "mcp-minimax",
+  "displayName": "MiniMax H3 MCP",
+  "description": "MiniMax H3 video generation from text, up to nine images, or up to three audio references.",
+  "version": "0.1.0",
+  "publisher": "acedatacloud",
+  "icon": "icon.png",
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.101.0"
+  },
+  "categories": [
+    "AI",
+    "Chat"
+  ],
+  "keywords": [
+    "mcp",
+    "model context protocol",
+    "ai",
+    "copilot",
+    "ace data cloud",
+    "minimax",
+    "minimax h3",
+    "video generation",
+    "audio guided video"
+  ],
+  "galleryBanner": {
+    "color": "#0E1117",
+    "theme": "dark"
+  },
+  "homepage": "https://github.com/AceDataCloud/MinimaxMCP",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AceDataCloud/MinimaxMCP"
+  },
+  "bugs": {
+    "url": "https://github.com/AceDataCloud/MinimaxMCP/issues"
+  },
+  "activationEvents": [],
+  "main": "./extension.js",
+  "contributes": {
+    "mcpServerDefinitionProviders": [
+      {
+        "id": "acedatacloud.minimax",
+        "label": "Minimax MCP"
+      }
+    ],
+    "commands": [
+      {
+        "command": "acedatacloud.minimax.setApiToken",
+        "title": "Minimax MCP: Set Ace Data Cloud API Key",
+        "category": "MCP"
+      },
+      {
+        "command": "acedatacloud.minimax.clearApiToken",
+        "title": "Minimax MCP: Clear Ace Data Cloud API Key",
+        "category": "MCP"
+      }
+    ]
+  }
+}

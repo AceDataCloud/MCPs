@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: mcp-minimax
+  name: mcp-minimax
+  namespace: acedatacloud
+spec:
+  replicas: 1
+  revisionHistoryLimit: 5
+  selector:
+    matchLabels:
+      app: mcp-minimax
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: mcp-minimax
+    spec:
+      containers:
+        - name: mcp-minimax
+          image: ghcr.io/acedatacloud/mcp-minimax:${TAG}
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8000
+              protocol: TCP
+          env:
+            - name: MCP_SERVER_URL
+              value: "https://minimax.mcp.acedata.cloud"
+            - name: ACEDATACLOUD_OAUTH_CLIENT_ID
+              value: "3CVmki1iGl5EGOzX97CQdeTJ-pxib1tu40d9A00Bj1k"
+          resources:
+            limits:
+              cpu: 500m
+              memory: 256Mi
+            requests:
+              cpu: 30m
+              memory: 128Mi
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 10
+            periodSeconds: 30
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+      dnsPolicy: ClusterFirst
+      imagePullSecrets:
+        - name: docker-registry
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
