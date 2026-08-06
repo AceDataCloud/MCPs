@@ -18,9 +18,7 @@ async def test_text_tool_payload(monkeypatch, generated_response):
     result = await video_tools.minimax_generate_video_from_text("fox", duration=6)
 
     assert "task-1" in result
-    generate.assert_awaited_once_with(
-        model="minimax-h3", ratio="16:9", duration=6, prompt="fox"
-    )
+    generate.assert_awaited_once_with(model="minimax-h3", ratio="16:9", duration=6, prompt="fox")
 
 
 @pytest.mark.asyncio

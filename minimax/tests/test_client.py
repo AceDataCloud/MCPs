@@ -61,7 +61,9 @@ class TestMinimaxClient:
             mock_instance.post.return_value = mock_response
             mock_client.return_value.__aenter__.return_value = mock_instance
 
-            result = await client.request("/minimax/videos", {"model": "minimax-h3", "prompt": "fox"})
+            result = await client.request(
+                "/minimax/videos", {"model": "minimax-h3", "prompt": "fox"}
+            )
             assert result == mock_video_response
 
     @pytest.mark.asyncio

@@ -85,7 +85,7 @@ def mock_batch_task_response():
                 "id": "task-123",
                 "created_at": 1705788000.0,
                 "request": {
-                            "prompt": "First test video",
+                    "prompt": "First test video",
                     "model": "minimax-h3",
                 },
                 "response": {
@@ -106,7 +106,7 @@ def mock_batch_task_response():
                 "id": "task-456",
                 "created_at": 1705788100.0,
                 "request": {
-                            "prompt": "Second test video",
+                    "prompt": "Second test video",
                     "model": "minimax-h3",
                 },
                 "response": {
