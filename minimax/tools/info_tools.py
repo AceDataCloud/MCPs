@@ -10,12 +10,13 @@ async def minimax_list_models() -> str:
 
 | Model | Inputs | Duration | Ratios |
 |---|---|---|---|
-| minimax-h3 | text, 1-9 images, 1-3 audio references | 4-15 seconds | 768P, 2K |
+| MiniMax-H3 | text, image, video, and audio URLs | 4-15 seconds | 768P, 2K |
 
 Mode inference:
-- prompt only: text-to-video
-- image_urls without audio: image-to-video
-- audio_urls: audio-guided video (images and prompt are required)
+- text: text-to-video
+- image_url: image-guided video
+- video_url: video-guided video
+- audio_url: audio-guided video
 """
 
 
@@ -28,6 +29,7 @@ Generation:
 - minimax_generate_video_from_text
 - minimax_generate_video_from_images
 - minimax_generate_video_from_audio
+- minimax_generate_video
 
 Tasks:
 - minimax_get_task

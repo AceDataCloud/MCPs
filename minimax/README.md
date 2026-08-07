@@ -11,10 +11,9 @@ Model Context Protocol server for MiniMax H3 multimodal video generation through
 ## Capabilities
 
 - Text-to-video
-- Image-to-video with 1–9 reference images
-- Audio-guided video with 1–3 audio references and required images
-- 4–15 second output in 768P or 2K, with 16:9 or 9:16
-- Asynchronous single and batch task retrieval
+- Image-, video-, and audio-guided video generation
+- 4–15 second output in 768P or 2K, with adaptive, landscape, portrait, and square ratios
+- Asynchronous task retrieval, batch retrieval, and deletion
 - Hosted OAuth HTTP transport and local stdio transport
 
 ## Tools
@@ -24,8 +23,10 @@ Model Context Protocol server for MiniMax H3 multimodal video generation through
 | `minimax_generate_video_from_text` | Generate from a detailed prompt |
 | `minimax_generate_video_from_images` | Generate from one to nine image URLs |
 | `minimax_generate_video_from_audio` | Generate with one to three audio URLs and required images |
+| `minimax_generate_video` | Generate from the full documented content schema |
 | `minimax_get_task` | Retrieve one task |
 | `minimax_get_tasks_batch` | Retrieve several tasks |
+| `minimax_delete_task` | Delete one task |
 | `minimax_list_models` | Show model constraints |
 | `minimax_list_actions` | Show available workflows |
 

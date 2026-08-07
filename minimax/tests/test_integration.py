@@ -126,8 +126,9 @@ class TestClientDirectly:
         client = MinimaxClient()
 
         result = await client.generate_video(
-            model="minimax-h3",
-            prompt="Very short test video",
+            model="MiniMax-H3",
+            content=[{"type": "text", "text": "Very short test video"}],
+            resolution="2K",
             ratio="16:9",
             duration=4,
         )

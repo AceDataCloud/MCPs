@@ -47,7 +47,7 @@ class TestFormatTaskResult:
         result = format_task_result(mock_task_response)
         data = json.loads(result)
         assert data["id"] == "task-123"
-        assert data["request"]["model"] == "minimax-h3"
+        assert data["request"]["model"] == "MiniMax-H3"
         assert data["response"]["success"] is True
         assert data["mcp_task_polling"]["poll_tool"] == "minimax_get_task"
         assert data["mcp_task_polling"]["batch_poll_tool"] == "minimax_get_tasks_batch"
@@ -58,6 +58,13 @@ class TestFormatTaskResult:
         result = format_task_result(error_response)
         data = json.loads(result)
         assert data["error"]["code"] == "not_found"
+
+    def test_format_documented_task_response(self):
+        """The documented task response uses a nested task object."""
+        result = format_task_result({"task": {"id": "task-123", "status": "running"}})
+        data = json.loads(result)
+        assert data["mcp_task_polling"]["task_id"] == "task-123"
+        assert data["mcp_task_polling"]["should_poll"] is True
 
 
 class TestFormatBatchTaskResult:

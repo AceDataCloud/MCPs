@@ -11,6 +11,7 @@ from core.types import (
     DEFAULT_MODEL,
     DEFAULT_RATIO,
     DEFAULT_RESOLUTION,
+    MinimaxContent,
     MinimaxModel,
     MinimaxRatio,
     MinimaxResolution,
@@ -24,13 +25,13 @@ def _common_payload(
     resolution: MinimaxResolution,
     ratio: MinimaxRatio,
     duration: int,
-    prompt: str,
+    content: list[dict[str, str | dict[str, str]]],
     aigc_watermark: bool,
     callback_url: str | None,
 ) -> dict:
     payload: dict = {
         "model": model,
-        "prompt": prompt,
+        "content": content,
         "resolution": resolution,
         "ratio": ratio,
         "duration": duration,
@@ -55,7 +56,7 @@ async def minimax_generate_video_from_text(
         MinimaxResolution, Field(description="Output resolution: 768P or 2K.")
     ] = DEFAULT_RESOLUTION,
     ratio: Annotated[
-        MinimaxRatio, Field(description="Output aspect ratio: 16:9 or 9:16.")
+        MinimaxRatio, Field(description="Output aspect ratio.")
     ] = DEFAULT_RATIO,
     duration: Annotated[
         int, Field(ge=4, le=15, description="Integer output duration from 4 to 15 seconds.")
@@ -72,7 +73,7 @@ async def minimax_generate_video_from_text(
         resolution=resolution,
         ratio=ratio,
         duration=duration,
-        prompt=prompt,
+        content=[{"type": "text", "text": prompt}],
         aigc_watermark=aigc_watermark,
         callback_url=callback_url,
     )
@@ -82,7 +83,7 @@ async def minimax_generate_video_from_text(
 @mcp.tool()
 async def minimax_generate_video_from_images(
     image_urls: Annotated[
-        list[str], Field(min_length=1, max_length=9, description="One to nine public image URLs.")
+        list[str], Field(min_length=1, description="Public image URLs.")
     ],
     prompt: Annotated[
         str, Field(min_length=1, max_length=7000, description="Required motion and style guidance.")
@@ -91,7 +92,7 @@ async def minimax_generate_video_from_images(
         MinimaxResolution, Field(description="Output resolution: 768P or 2K.")
     ] = DEFAULT_RESOLUTION,
     ratio: Annotated[
-        MinimaxRatio, Field(description="Output aspect ratio: 16:9 or 9:16.")
+        MinimaxRatio, Field(description="Output aspect ratio.")
     ] = DEFAULT_RATIO,
     duration: Annotated[
         int, Field(ge=4, le=15, description="Integer output duration from 4 to 15 seconds.")
@@ -108,22 +109,31 @@ async def minimax_generate_video_from_images(
         resolution=resolution,
         ratio=ratio,
         duration=duration,
-        prompt=prompt,
+        content=[
+            {"type": "text", "text": prompt},
+            *[
+                {
+                    "type": "image_url",
+                    "image_url": {"url": image_url},
+                    "role": "first_frame" if index == 0 else "reference_image",
+                }
+                for index, image_url in enumerate(image_urls)
+            ],
+        ],
         aigc_watermark=aigc_watermark,
         callback_url=callback_url,
     )
-    payload["image_urls"] = image_urls
     return format_video_result(await client.generate_video(**payload))
 
 
 @mcp.tool()
 async def minimax_generate_video_from_audio(
     audio_urls: Annotated[
-        list[str], Field(min_length=1, max_length=3, description="One to three public audio URLs.")
+        list[str], Field(min_length=1, description="Public audio URLs.")
     ],
     image_urls: Annotated[
         list[str],
-        Field(min_length=1, max_length=9, description="One to nine required reference images."),
+        Field(min_length=1, description="Required reference images."),
     ],
     prompt: Annotated[
         str, Field(min_length=1, max_length=7000, description="Required scene and rhythm guidance.")
@@ -132,7 +142,7 @@ async def minimax_generate_video_from_audio(
         MinimaxResolution, Field(description="Output resolution: 768P or 2K.")
     ] = DEFAULT_RESOLUTION,
     ratio: Annotated[
-        MinimaxRatio, Field(description="Output aspect ratio: 16:9 or 9:16.")
+        MinimaxRatio, Field(description="Output aspect ratio.")
     ] = DEFAULT_RATIO,
     duration: Annotated[
         int, Field(ge=4, le=15, description="Integer output duration from 4 to 15 seconds.")
@@ -149,10 +159,61 @@ async def minimax_generate_video_from_audio(
         resolution=resolution,
         ratio=ratio,
         duration=duration,
-        prompt=prompt,
+        content=[
+            {"type": "text", "text": prompt},
+            *[
+                {
+                    "type": "image_url",
+                    "image_url": {"url": image_url},
+                    "role": "first_frame" if index == 0 else "reference_image",
+                }
+                for index, image_url in enumerate(image_urls)
+            ],
+            *[
+                {
+                    "type": "audio_url",
+                    "audio_url": {"url": audio_url},
+                    "role": "reference_audio",
+                }
+                for audio_url in audio_urls
+            ],
+        ],
         aigc_watermark=aigc_watermark,
         callback_url=callback_url,
     )
-    payload["audio_urls"] = audio_urls
-    payload["image_urls"] = image_urls
+    return format_video_result(await client.generate_video(**payload))
+
+
+@mcp.tool()
+async def minimax_generate_video(
+    content: Annotated[
+        list[MinimaxContent],
+        Field(min_length=1, description="Ordered text, image, video, and audio content items."),
+    ],
+    resolution: Annotated[
+        MinimaxResolution, Field(description="Output resolution: 768P or 2K.")
+    ] = DEFAULT_RESOLUTION,
+    duration: Annotated[
+        int, Field(ge=4, le=15, description="Integer output duration from 4 to 15 seconds.")
+    ] = DEFAULT_DURATION,
+    ratio: Annotated[
+        MinimaxRatio,
+        Field(description="Output aspect ratio: adaptive, 21:9, 16:9, 4:3, 1:1, 3:4, or 9:16."),
+    ] = DEFAULT_RATIO,
+    aigc_watermark: Annotated[bool, Field(description="Add an AIGC watermark.")] = False,
+    model: Annotated[MinimaxModel, Field(description="MiniMax H3 model name.")] = DEFAULT_MODEL,
+    callback_url: Annotated[
+        str | None, Field(description="Optional public webhook URL for the final result.")
+    ] = None,
+) -> str:
+    """Generate a video from the full MiniMax content schema."""
+    payload = _common_payload(
+        model=model,
+        resolution=resolution,
+        ratio=ratio,
+        duration=duration,
+        content=[item.model_dump(exclude_none=True) for item in content],
+        aigc_watermark=aigc_watermark,
+        callback_url=callback_url,
+    )
     return format_video_result(await client.generate_video(**payload))

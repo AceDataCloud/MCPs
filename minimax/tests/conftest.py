@@ -38,7 +38,7 @@ def mock_video_response():
         "data": [
             {
                 "id": "test-video-789",
-                "model": "minimax-h3",
+                "model": "MiniMax-H3",
                 "prompt": "Test video prompt",
                 "mode": "text_to_video",
                 "video_url": "https://platform.cdn.acedata.cloud/minimax/test-task-123.mp4",
@@ -56,7 +56,7 @@ def mock_task_response():
         "created_at": 1705788000.0,
         "request": {
             "prompt": "A test video",
-            "model": "minimax-h3",
+            "model": "MiniMax-H3",
         },
         "response": {
             "success": True,
@@ -65,7 +65,7 @@ def mock_task_response():
             "data": [
                 {
                     "id": "video-789",
-                    "model": "minimax-h3",
+                    "model": "MiniMax-H3",
                     "prompt": "A test video",
                     "mode": "text_to_video",
                     "video_url": "https://platform.cdn.acedata.cloud/minimax/task-123.mp4",
@@ -86,7 +86,7 @@ def mock_batch_task_response():
                 "created_at": 1705788000.0,
                 "request": {
                     "prompt": "First test video",
-                    "model": "minimax-h3",
+                    "model": "MiniMax-H3",
                 },
                 "response": {
                     "success": True,
@@ -95,7 +95,7 @@ def mock_batch_task_response():
                     "data": [
                         {
                             "id": "video-789",
-                            "model": "minimax-h3",
+                            "model": "MiniMax-H3",
                             "video_url": "https://platform.cdn.acedata.cloud/minimax/task-123.mp4",
                             "status": "completed",
                         }
@@ -107,7 +107,7 @@ def mock_batch_task_response():
                 "created_at": 1705788100.0,
                 "request": {
                     "prompt": "Second test video",
-                    "model": "minimax-h3",
+                    "model": "MiniMax-H3",
                 },
                 "response": {
                     "success": True,
@@ -116,7 +116,7 @@ def mock_batch_task_response():
                     "data": [
                         {
                             "id": "video-012",
-                            "model": "minimax-h3",
+                            "model": "MiniMax-H3",
                             "video_url": "https://platform.cdn.acedata.cloud/minimax/task-456.mp4",
                             "status": "completed",
                         }
