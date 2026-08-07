@@ -3,6 +3,8 @@
 import os
 from unittest.mock import patch
 
+import pytest
+
 
 def test_settings_defaults():
     from core.config import Settings
@@ -48,3 +50,35 @@ def test_prompts_register():
     registered = {prompt.name for prompt in mcp._prompt_manager.list_prompts()}
     missing = expected - registered
     assert not missing, f"Missing prompts: {missing}"
+
+
+@pytest.mark.asyncio
+async def test_get_token_includes_optional_rqdata():
+    from core.client import HCaptchaClient
+
+    captured = {}
+    client = HCaptchaClient(api_token="test-token")
+
+    async def fake_request(method, endpoint, *, payload=None, timeout=None):
+        captured.update({"method": method, "endpoint": endpoint, "payload": payload, "timeout": timeout})
+        return {"success": True}
+
+    client.request = fake_request
+
+    result = await client.get_token(
+        website_key="site-key",
+        website_url="https://example.com",
+        rqdata="rqdata-value",
+        proxy="http://proxy.example:8080",
+        mode="sync",
+    )
+
+    assert result == {"success": True}
+    assert captured["method"] == "POST"
+    assert captured["endpoint"] == "/captcha/token/hcaptcha"
+    assert captured["payload"] == {
+        "website_key": "site-key",
+        "website_url": "https://example.com",
+        "rqdata": "rqdata-value",
+        "proxy": "http://proxy.example:8080",
+    }

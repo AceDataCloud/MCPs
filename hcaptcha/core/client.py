@@ -87,8 +87,10 @@ class HCaptchaClient:
         _apply_submission_mode(payload, mode)
         return await self.request("POST", "/captcha/recognition/hcaptcha", payload=payload)
 
-    async def get_token(self, website_key: str, website_url: str, proxy: str | None = None, mode: str | None = None) -> dict[str, Any]:
+    async def get_token(self, website_key: str, website_url: str, rqdata: str | None = None, proxy: str | None = None, mode: str | None = None) -> dict[str, Any]:
         payload: dict[str, Any] = {"website_key": website_key, "website_url": website_url}
+        if rqdata is not None:
+            payload["rqdata"] = rqdata
         if proxy is not None:
             payload["proxy"] = proxy
         _apply_submission_mode(payload, mode)

@@ -34,6 +34,7 @@ async def hcaptcha_recognize(
 async def hcaptcha_get_token(
     website_key: Annotated[str, Field(description="The hCaptcha site key from the target page.")],
     website_url: Annotated[str, Field(description="The full URL of the page containing the widget.")],
+    rqdata: Annotated[str | None, Field(description="Optional hCaptcha rqdata value expected by the site.")] = None,
     proxy: Annotated[str | None, Field(description="Optional proxy string to use while solving.")] = None,
     mode: Annotated[TaskMode | None, Field(description="Processing mode. Defaults to 'async'; use 'sync' to wait inline.")] = None,
 ) -> str:
@@ -45,6 +46,7 @@ async def hcaptcha_get_token(
         result = await client.get_token(
             website_key=website_key,
             website_url=website_url,
+            rqdata=rqdata,
             proxy=proxy,
             mode=mode,
         )
