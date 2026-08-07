@@ -37,6 +37,8 @@ https://minimax.mcp.acedata.cloud/mcp
 
 The hosted server supports AceDataCloud OAuth. MCP clients that support remote OAuth can connect directly to this URL.
 
+Public API reference: [MiniMax H3 Videos API](https://platform.acedata.cloud/documents/minimax-videos).
+
 ## Local installation
 
 ```bash
