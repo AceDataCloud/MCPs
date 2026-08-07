@@ -37,11 +37,12 @@ def _with_task_guidance(
     data: dict[str, Any], poll_tool: str, batch_poll_tool: str | None = None
 ) -> dict[str, Any]:
     payload = dict(data)
-    task_id = payload.get("id") or payload.get("task_id")
+    task = payload.get("task", payload)
+    task_id = task.get("id") or task.get("task_id")
     if not task_id:
         return payload
 
-    state = str(payload.get("state", "")).lower()
+    state = str(task.get("status") or task.get("state", "")).lower()
     response = payload.get("response", {})
     response_success = response.get("success", False) if isinstance(response, dict) else False
     top_level_success = (

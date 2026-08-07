@@ -13,7 +13,7 @@ def test_settings_default_values():
 
         settings = Settings()
         assert settings.api_base_url == "https://api.acedata.cloud"
-        assert settings.default_model == "minimax-h3"
+        assert settings.default_model == "MiniMax-H3"
         assert settings.request_timeout == 1800.0
         assert settings.server_name == "minimax"
         assert settings.transport == "stdio"
@@ -24,7 +24,7 @@ def test_settings_from_environment():
     env_vars = {
         "ACEDATACLOUD_API_TOKEN": "my-token",
         "ACEDATACLOUD_API_BASE_URL": "https://custom.api.com",
-        "MINIMAX_DEFAULT_MODEL": "minimax-h3",
+        "MINIMAX_DEFAULT_MODEL": "MiniMax-H3",
         "MINIMAX_REQUEST_TIMEOUT": "300",
         "MCP_SERVER_NAME": "my-minimax",
         "LOG_LEVEL": "DEBUG",
@@ -36,7 +36,7 @@ def test_settings_from_environment():
         settings = Settings()
         assert settings.api_token == "my-token"
         assert settings.api_base_url == "https://custom.api.com"
-        assert settings.default_model == "minimax-h3"
+        assert settings.default_model == "MiniMax-H3"
         assert settings.request_timeout == 300.0
         assert settings.server_name == "my-minimax"
         assert settings.log_level == "DEBUG"

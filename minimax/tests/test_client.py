@@ -37,15 +37,15 @@ class TestMinimaxClient:
         with pytest.raises(MinimaxAuthError, match="not configured"):
             client._get_headers()
 
-    def test_with_async_callback_injects_default_callback(self, client):
-        """Test async submission injects an internal callback when missing."""
-        payload = client._with_async_callback({"model": "minimax-h3", "prompt": "fox"})
-        assert payload["async"] is True
+    def test_with_async_callback_does_not_add_undocumented_fields(self, client):
+        """The OpenAPI request schema does not allow an async field."""
+        payload = {"model": "MiniMax-H3", "content": [{"type": "text", "text": "fox"}]}
+        assert client._with_async_callback(payload) == payload
 
     def test_with_async_callback_preserves_explicit_callback(self, client):
         """Test async submission preserves a user-provided callback."""
         payload = client._with_async_callback(
-            {"model": "minimax-h3", "callback_url": "https://example.com/webhook"}
+            {"model": "MiniMax-H3", "callback_url": "https://example.com/webhook"}
         )
         assert payload["callback_url"] == "https://example.com/webhook"
 
@@ -62,7 +62,8 @@ class TestMinimaxClient:
             mock_client.return_value.__aenter__.return_value = mock_instance
 
             result = await client.request(
-                "/minimax/videos", {"model": "minimax-h3", "prompt": "fox"}
+                "/minimax/videos",
+                {"model": "MiniMax-H3", "content": [{"type": "text", "text": "fox"}]},
             )
             assert result == mock_video_response
 

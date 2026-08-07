@@ -58,11 +58,8 @@ class MinimaxClient:
         }
 
     def _with_async_callback(self, payload: dict[str, Any]) -> dict[str, Any]:
-        """Ensure long-running media operations are submitted asynchronously."""
-        request_payload = dict(payload)
-        if not request_payload.get("callback_url"):
-            request_payload["async"] = True
-        return request_payload
+        """Return a copy of a documented video generation payload."""
+        return dict(payload)
 
     def _handle_error_response(self, response: httpx.Response) -> None:
         """Parse API error response and raise the appropriate exception.
@@ -159,7 +156,7 @@ class MinimaxClient:
     # Convenience methods for specific endpoints
     async def generate_video(self, **kwargs: Any) -> dict[str, Any]:
         """Generate video using the videos endpoint."""
-        logger.info(f"Generating video with model: {kwargs.get('model', 'minimax-h3')}")
+        logger.info(f"Generating video with model: {kwargs.get('model', 'MiniMax-H3')}")
         return await self.request("/minimax/videos", self._with_async_callback(kwargs))
 
     async def query_task(self, **kwargs: Any) -> dict[str, Any]:

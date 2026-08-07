@@ -60,7 +60,7 @@ Examples:
 
 Environment Variables:
   ACEDATACLOUD_API_TOKEN     API token from AceDataCloud (required)
-  MINIMAX_DEFAULT_MODEL       Default video model (default: minimax-h3)
+  MINIMAX_DEFAULT_MODEL       Default video model (default: MiniMax-H3)
   MINIMAX_REQUEST_TIMEOUT     Request timeout in seconds (default: 1800)
   LOG_LEVEL                  Logging level (default: INFO)
         """,
@@ -120,8 +120,10 @@ Environment Variables:
     safe_print("    - minimax_generate_video_from_text")
     safe_print("    - minimax_generate_video_from_images")
     safe_print("    - minimax_generate_video_from_audio")
+    safe_print("    - minimax_generate_video")
     safe_print("    - minimax_get_task")
     safe_print("    - minimax_get_tasks_batch")
+    safe_print("    - minimax_delete_task")
     safe_print("    - minimax_list_models")
     safe_print("    - minimax_list_actions")
     safe_print("")
@@ -173,11 +175,16 @@ Environment Variables:
                                 "name": "minimax_generate_video_from_audio",
                                 "description": "Generate video guided by one to three audio references",
                             },
+                            {
+                                "name": "minimax_generate_video",
+                                "description": "Generate video using the full MiniMax content schema",
+                            },
                             {"name": "minimax_get_task", "description": "Query task status"},
                             {
                                 "name": "minimax_get_tasks_batch",
                                 "description": "Query multiple tasks",
                             },
+                            {"name": "minimax_delete_task", "description": "Delete a task"},
                             {
                                 "name": "minimax_list_models",
                                 "description": "List available models",

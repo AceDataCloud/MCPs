@@ -23,7 +23,7 @@ class Settings:
 
     # Default Model
     default_model: str = field(
-        default_factory=lambda: os.getenv("MINIMAX_DEFAULT_MODEL", "minimax-h3")
+        default_factory=lambda: os.getenv("MINIMAX_DEFAULT_MODEL", "MiniMax-H3")
     )
 
     # Request Configuration

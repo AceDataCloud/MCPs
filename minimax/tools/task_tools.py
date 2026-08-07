@@ -75,3 +75,12 @@ async def minimax_get_tasks_batch(
         action="retrieve_batch",
     )
     return format_batch_task_result(result)
+
+
+@mcp.tool()
+async def minimax_delete_task(
+    task_id: Annotated[str, Field(description="The task ID to delete.")],
+) -> str:
+    """Delete a MiniMax video generation task."""
+    result = await client.query_task(id=task_id, action="delete")
+    return format_task_result(result)
