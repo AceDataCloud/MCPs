@@ -13,7 +13,7 @@ Model Context Protocol server for MiniMax H3 multimodal video generation through
 - Text-to-video
 - Image-to-video with 1–9 reference images
 - Audio-guided video with 1–3 audio references and optional images
-- 4–15 second output in 16:9 or 9:16
+- 4–15 second output in 16:9 or 9:16 at 768P or 2K, with optional AIGC watermark
 - Asynchronous single and batch task retrieval
 - Hosted OAuth HTTP transport and local stdio transport
 
