@@ -1,0 +1,36 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.AceDataCloud/mcp-minimax",
+  "description": "MCP server for MiniMax H3 multimodal video generation",
+  "version": "2026.8.7.0",
+  "repository": {
+    "url": "https://github.com/AceDataCloud/MinimaxMCP",
+    "source": "github"
+  },
+  "packages": [
+    {
+      "identifier": "mcp-minimax",
+      "version": "2026.8.7.0",
+      "transport": {
+        "type": "stdio"
+      },
+      "registryType": "pypi",
+      "runtimeHint": "uvx",
+      "environmentVariables": [
+        {
+          "name": "ACEDATACLOUD_API_TOKEN",
+          "description": "API token from Ace Data Cloud (https://platform.acedata.cloud)",
+          "isRequired": true,
+          "isSecret": true
+        }
+      ]
+    }
+  ],
+  "websiteUrl": "https://minimax.mcp.acedata.cloud",
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://minimax.mcp.acedata.cloud/mcp"
+    }
+  ]
+}
