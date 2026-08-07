@@ -18,7 +18,14 @@ async def test_text_tool_payload(monkeypatch, generated_response):
     result = await video_tools.minimax_generate_video_from_text("fox", duration=6)
 
     assert "task-1" in result
-    generate.assert_awaited_once_with(model="minimax-h3", ratio="16:9", duration=6, prompt="fox")
+    generate.assert_awaited_once_with(
+        model="minimax-h3",
+        resolution="2K",
+        ratio="16:9",
+        duration=6,
+        aigc_watermark=False,
+        prompt="fox",
+    )
 
 
 @pytest.mark.asyncio
@@ -32,8 +39,10 @@ async def test_image_tool_payload(monkeypatch, generated_response):
 
     generate.assert_awaited_once_with(
         model="minimax-h3",
+        resolution="2K",
         ratio="16:9",
         duration=4,
+        aigc_watermark=False,
         prompt="move",
         image_urls=["https://cdn.test/one.png", "https://cdn.test/two.png"],
     )
@@ -50,8 +59,10 @@ async def test_audio_tool_payload(monkeypatch, generated_response):
 
     generate.assert_awaited_once_with(
         model="minimax-h3",
+        resolution="2K",
         ratio="16:9",
         duration=4,
+        aigc_watermark=False,
         audio_urls=["https://cdn.test/beat.mp3"],
         image_urls=["https://cdn.test/one.png"],
     )
