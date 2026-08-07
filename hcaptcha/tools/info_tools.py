@@ -20,7 +20,7 @@ async def hcaptcha_get_api_info() -> str:
 Base URL: `https://api.acedata.cloud`
 Endpoints:
 - `POST /captcha/recognition/hcaptcha` with `queries?`, `question?`, `async?`
-- `POST /captcha/token/hcaptcha` with `website_key`, `website_url`, `proxy?`, `async?`
+- `POST /captcha/token/hcaptcha` with `website_key`, `website_url`, `rqdata?`, `proxy?`, `async?`
 - `POST /captcha/tasks` with `task_id`
 
 Ready responses may include `solution`, `token`, and `elapsed`.
