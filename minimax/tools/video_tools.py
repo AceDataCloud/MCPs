@@ -24,19 +24,18 @@ def _common_payload(
     resolution: MinimaxResolution,
     ratio: MinimaxRatio,
     duration: int,
+    prompt: str,
     aigc_watermark: bool,
-    prompt: str | None,
     callback_url: str | None,
 ) -> dict:
     payload: dict = {
         "model": model,
+        "prompt": prompt,
         "resolution": resolution,
         "ratio": ratio,
         "duration": duration,
         "aigc_watermark": aigc_watermark,
     }
-    if prompt:
-        payload["prompt"] = prompt
     if callback_url:
         payload["callback_url"] = callback_url
     return payload
@@ -46,7 +45,11 @@ def _common_payload(
 async def minimax_generate_video_from_text(
     prompt: Annotated[
         str,
-        Field(max_length=7000, description="Detailed scene, motion, camera, and style description."),
+        Field(
+            min_length=1,
+            max_length=7000,
+            description="Scene, motion, camera, and style description.",
+        ),
     ],
     resolution: Annotated[
         MinimaxResolution, Field(description="Output resolution: 768P or 2K.")
@@ -57,10 +60,8 @@ async def minimax_generate_video_from_text(
     duration: Annotated[
         int, Field(ge=4, le=15, description="Integer output duration from 4 to 15 seconds.")
     ] = DEFAULT_DURATION,
+    aigc_watermark: Annotated[bool, Field(description="Add an AIGC watermark.")] = False,
     model: Annotated[MinimaxModel, Field(description="MiniMax H3 model name.")] = DEFAULT_MODEL,
-    aigc_watermark: Annotated[
-        bool, Field(description="Whether to add an AIGC watermark to output video.")
-    ] = False,
     callback_url: Annotated[
         str | None, Field(description="Optional public webhook URL for the final result.")
     ] = None,
@@ -71,8 +72,8 @@ async def minimax_generate_video_from_text(
         resolution=resolution,
         ratio=ratio,
         duration=duration,
-        aigc_watermark=aigc_watermark,
         prompt=prompt,
+        aigc_watermark=aigc_watermark,
         callback_url=callback_url,
     )
     return format_video_result(await client.generate_video(**payload))
@@ -81,12 +82,11 @@ async def minimax_generate_video_from_text(
 @mcp.tool()
 async def minimax_generate_video_from_images(
     image_urls: Annotated[
-        list[str],
-        Field(min_length=1, max_length=9, description="One to nine public reference image URLs."),
+        list[str], Field(min_length=1, max_length=9, description="One to nine public image URLs.")
     ],
     prompt: Annotated[
-        str | None, Field(max_length=7000, description="Optional motion, camera, and style guidance.")
-    ] = None,
+        str, Field(min_length=1, max_length=7000, description="Required motion and style guidance.")
+    ],
     resolution: Annotated[
         MinimaxResolution, Field(description="Output resolution: 768P or 2K.")
     ] = DEFAULT_RESOLUTION,
@@ -96,22 +96,20 @@ async def minimax_generate_video_from_images(
     duration: Annotated[
         int, Field(ge=4, le=15, description="Integer output duration from 4 to 15 seconds.")
     ] = DEFAULT_DURATION,
+    aigc_watermark: Annotated[bool, Field(description="Add an AIGC watermark.")] = False,
     model: Annotated[MinimaxModel, Field(description="MiniMax H3 model name.")] = DEFAULT_MODEL,
-    aigc_watermark: Annotated[
-        bool, Field(description="Whether to add an AIGC watermark to output video.")
-    ] = False,
     callback_url: Annotated[
         str | None, Field(description="Optional public webhook URL for the final result.")
     ] = None,
 ) -> str:
-    """Generate a MiniMax H3 video from one or more reference images."""
+    """Generate from one first-frame image or multiple reference images."""
     payload = _common_payload(
         model=model,
         resolution=resolution,
         ratio=ratio,
         duration=duration,
-        aigc_watermark=aigc_watermark,
         prompt=prompt,
+        aigc_watermark=aigc_watermark,
         callback_url=callback_url,
     )
     payload["image_urls"] = image_urls
@@ -121,21 +119,15 @@ async def minimax_generate_video_from_images(
 @mcp.tool()
 async def minimax_generate_video_from_audio(
     audio_urls: Annotated[
+        list[str], Field(min_length=1, max_length=3, description="One to three public audio URLs.")
+    ],
+    image_urls: Annotated[
         list[str],
-        Field(min_length=1, max_length=3, description="One to three public reference audio URLs."),
+        Field(min_length=1, max_length=9, description="One to nine required reference images."),
     ],
     prompt: Annotated[
-        str | None,
-        Field(max_length=7000, description="Optional scene, motion, camera, and style guidance."),
-    ] = None,
-    image_urls: Annotated[
-        list[str] | None,
-        Field(
-            min_length=1,
-            max_length=9,
-            description="Optional one to nine public reference image URLs.",
-        ),
-    ] = None,
+        str, Field(min_length=1, max_length=7000, description="Required scene and rhythm guidance.")
+    ],
     resolution: Annotated[
         MinimaxResolution, Field(description="Output resolution: 768P or 2K.")
     ] = DEFAULT_RESOLUTION,
@@ -145,25 +137,22 @@ async def minimax_generate_video_from_audio(
     duration: Annotated[
         int, Field(ge=4, le=15, description="Integer output duration from 4 to 15 seconds.")
     ] = DEFAULT_DURATION,
+    aigc_watermark: Annotated[bool, Field(description="Add an AIGC watermark.")] = False,
     model: Annotated[MinimaxModel, Field(description="MiniMax H3 model name.")] = DEFAULT_MODEL,
-    aigc_watermark: Annotated[
-        bool, Field(description="Whether to add an AIGC watermark to output video.")
-    ] = False,
     callback_url: Annotated[
         str | None, Field(description="Optional public webhook URL for the final result.")
     ] = None,
 ) -> str:
-    """Generate a MiniMax H3 video guided by reference audio."""
+    """Generate a MiniMax H3 video guided by audio and reference images."""
     payload = _common_payload(
         model=model,
         resolution=resolution,
         ratio=ratio,
         duration=duration,
-        aigc_watermark=aigc_watermark,
         prompt=prompt,
+        aigc_watermark=aigc_watermark,
         callback_url=callback_url,
     )
     payload["audio_urls"] = audio_urls
-    if image_urls:
-        payload["image_urls"] = image_urls
+    payload["image_urls"] = image_urls
     return format_video_result(await client.generate_video(**payload))
