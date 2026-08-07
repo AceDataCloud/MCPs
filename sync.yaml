@@ -59,6 +59,10 @@ mappings:
     repo: AceDataCloud/HailuoMCP
     exclude:
       - .gitbooks
+  minimax:
+    repo: AceDataCloud/MinimaxMCP
+    exclude:
+      - .gitbooks
   happyhorse:
     repo: AceDataCloud/HappyHorseMCP
     exclude:
