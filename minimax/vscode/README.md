@@ -8,8 +8,8 @@ Connect VS Code MCP clients to MiniMax H3 video generation through AceDataCloud.
 
 - text-to-video
 - one to nine reference images
-- one to three audio references with optional images
-- 4–15 second output in 16:9 or 9:16
+- one to three audio references with required images
+- 4–15 second output in 768P or 2K, with 16:9 or 9:16
 - asynchronous task retrieval
 
 ## Setup
@@ -30,4 +30,4 @@ The extension connects to `https://minimax.mcp.acedata.cloud/mcp`. Get a token a
 - `minimax_list_models`
 - `minimax_list_actions`
 
-Public API pricing is $0.25 per generated second. Failed tasks are not charged.
+Public pricing is $0.057143/s for 768P and $0.091429/s for 2K. Failed tasks are not charged.

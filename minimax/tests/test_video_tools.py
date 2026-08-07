@@ -20,11 +20,11 @@ async def test_text_tool_payload(monkeypatch, generated_response):
     assert "task-1" in result
     generate.assert_awaited_once_with(
         model="minimax-h3",
+        prompt="fox",
         resolution="2K",
         ratio="16:9",
         duration=6,
         aigc_watermark=False,
-        prompt="fox",
     )
 
 
@@ -39,11 +39,11 @@ async def test_image_tool_payload(monkeypatch, generated_response):
 
     generate.assert_awaited_once_with(
         model="minimax-h3",
+        prompt="move",
         resolution="2K",
         ratio="16:9",
         duration=4,
         aigc_watermark=False,
-        prompt="move",
         image_urls=["https://cdn.test/one.png", "https://cdn.test/two.png"],
     )
 
@@ -54,11 +54,12 @@ async def test_audio_tool_payload(monkeypatch, generated_response):
     monkeypatch.setattr(video_tools.client, "generate_video", generate)
 
     await video_tools.minimax_generate_video_from_audio(
-        ["https://cdn.test/beat.mp3"], image_urls=["https://cdn.test/one.png"]
+        ["https://cdn.test/beat.mp3"], ["https://cdn.test/one.png"], "dance"
     )
 
     generate.assert_awaited_once_with(
         model="minimax-h3",
+        prompt="dance",
         resolution="2K",
         ratio="16:9",
         duration=4,

@@ -6,7 +6,7 @@ Configure MiniMax H3 multimodal video generation for JetBrains AI Assistant thro
 
 - text-to-video
 - one to nine reference images
-- one to three audio references with optional images
+- one to three audio references with required images
 - asynchronous task tracking
 
 ## Setup

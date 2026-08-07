@@ -11,9 +11,9 @@ def minimax_video_generation_guide() -> str:
 Choose by available input:
 - Text only: `minimax_generate_video_from_text`
 - One to nine image URLs: `minimax_generate_video_from_images`
-- One to three audio URLs: `minimax_generate_video_from_audio`; images and prompt are optional
+- One to three audio URLs: `minimax_generate_video_from_audio`; images and prompt are required
 
-The model is always `minimax-h3`. Ratios are `16:9` and `9:16`; duration is an integer from 4 to 15 seconds. Generation is asynchronous by default. Return the task_id, then poll `minimax_get_task` until the final video URL is available.
+The model is always `minimax-h3`. Resolutions are `768P` and `2K`; ratios are `16:9` and `9:16`; duration is an integer from 4 to 15 seconds; prompt is always required. Generation is asynchronous by default. Return the task_id, then poll `minimax_get_task` until the final video URL is available.
 """
 
 

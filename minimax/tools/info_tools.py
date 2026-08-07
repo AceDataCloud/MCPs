@@ -8,14 +8,14 @@ async def minimax_list_models() -> str:
     """Describe the MiniMax H3 model and supported input modes."""
     return """MiniMax H3 Video Model
 
-| Model | Inputs | Duration | Ratios | Resolution | AIGC Watermark |
-|---|---|---|---|---|---|
-| minimax-h3 | text, 1-9 images, 1-3 audio references | 4-15 seconds | 16:9, 9:16 | 768P, 2K | false/true |
+| Model | Inputs | Duration | Ratios |
+|---|---|---|---|
+| minimax-h3 | text, 1-9 images, 1-3 audio references | 4-15 seconds | 768P, 2K |
 
 Mode inference:
 - prompt only: text-to-video
 - image_urls without audio: image-to-video
-- audio_urls: audio-guided video (images and prompt remain optional)
+- audio_urls: audio-guided video (images and prompt are required)
 """
 
 
