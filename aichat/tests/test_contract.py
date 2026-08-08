@@ -27,7 +27,6 @@ V1_REQUIRED = {
 
 # Verified live on /aichat2/conversations but not yet in that spec's enum.
 V2_AHEAD_OF_SPEC = {
-    "gemini-3.5-flash",
     "gpt-5.6-luna",
     "gpt-5.6-terra",
     "gpt-5.6-sol",
@@ -49,6 +48,49 @@ def test_v1_offers_the_newest_models():
 
 def test_v2_offers_claude_sonnet_5():
     assert "claude-sonnet-5" in get_args(AiChatV2Model)
+
+
+def test_v2_offers_claude_spec_models():
+    spec_models = {
+        "claude-fable-5",
+        "claude-opus-5",
+        "claude-opus-4-8",
+        "claude-sonnet-5",
+        "claude-sonnet-4-6",
+        "claude-opus-4-7",
+        "claude-opus-4-6",
+        "claude-opus-4-5-20251101",
+        "claude-haiku-4-5-20251001",
+        "claude-sonnet-4-5-20250929",
+        "claude-opus-4-1-20250805",
+        "claude-sonnet-4-20250514",
+        "claude-opus-4-20250514",
+        "claude-3-7-sonnet-20250219",
+        "claude-3-5-sonnet-20241022",
+        "claude-3-5-haiku-20241022",
+        "claude-3-5-sonnet-20240620",
+        "claude-3-haiku-20240307",
+        "claude-3-sonnet-20240229",
+        "claude-3-opus-20240229",
+    }
+    missing = spec_models - set(get_args(AiChatV2Model))
+    assert not missing, f"AiChatV2Model is missing Claude spec models {sorted(missing)}"
+
+
+def test_v2_offers_gemini_spec_models():
+    spec_models = {
+        "gemini-3.1-pro",
+        "gemini-3.0-pro",
+        "gemini-3.5-flash",
+        "gemini-3-flash-preview",
+        "gemini-2.5-pro",
+        "gemini-2.5-flash",
+        "gemini-2.5-flash-lite",
+        "gemini-2.0-flash",
+        "gemini-3.1-flash-lite-preview",
+    }
+    missing = spec_models - set(get_args(AiChatV2Model))
+    assert not missing, f"AiChatV2Model is missing Gemini spec models {sorted(missing)}"
 
 
 def test_v2_keeps_models_the_spec_has_not_caught_up_with():
