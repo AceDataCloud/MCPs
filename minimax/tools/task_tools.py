@@ -11,6 +11,33 @@ from core.utils import format_batch_task_result, format_task_result
 
 
 @mcp.tool()
+async def minimax_list_tasks(
+    limit: Annotated[
+        int | None, Field(description="Maximum number of tasks to return.")
+    ] = None,
+    offset: Annotated[
+        int | None, Field(description="Number of tasks to skip before returning results.")
+    ] = None,
+    created_at_min: Annotated[
+        float | None, Field(description="Return tasks created at or after this timestamp.")
+    ] = None,
+    created_at_max: Annotated[
+        float | None, Field(description="Return tasks created at or before this timestamp.")
+    ] = None,
+) -> str:
+    """List video generation tasks, optionally filtered by creation timestamp."""
+    payload = {
+        "action": "retrieve",
+        "limit": limit,
+        "offset": offset,
+        "created_at_min": created_at_min,
+        "created_at_max": created_at_max,
+    }
+    result = await client.query_task(**{key: value for key, value in payload.items() if value is not None})
+    return format_batch_task_result(result)
+
+
+@mcp.tool()
 async def minimax_get_task(
     task_id: Annotated[
         str,
@@ -41,11 +68,8 @@ async def minimax_get_task(
         id=task_id,
         action="retrieve",
     )
-    # Throttle polling: sleep 5s for incomplete tasks so LLM clients
-    # don't burn through poll attempts in seconds.
-    response = result.get("response", {})
-    is_complete = response.get("success", False)
-    if not is_complete:
+    task = result.get("task", result)
+    if task.get("status") not in {"succeeded", "failed", "cancelled"}:
         await asyncio.sleep(5)
     return format_task_result(result)
 
