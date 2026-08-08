@@ -7,6 +7,7 @@ from tools import (
     embedding_tools,
     image_tools,
     info_tools,
+    realtime_tools,
     responses_tools,
     tasks_tools,
 )
@@ -17,6 +18,7 @@ __all__ = [
     "embedding_tools",
     "image_tools",
     "info_tools",
+    "realtime_tools",
     "responses_tools",
     "tasks_tools",
 ]

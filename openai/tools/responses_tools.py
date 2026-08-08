@@ -53,6 +53,18 @@ async def openai_create_response(
             )
         ),
     ] = None,
+    response_format: Annotated[
+        dict[str, Any] | None,
+        Field(description="Optional response format object."),
+    ] = None,
+    tools: Annotated[
+        list[dict[str, Any]] | None,
+        Field(description="Optional tool definitions available to the response."),
+    ] = None,
+    stream: Annotated[
+        bool | None,
+        Field(description="Whether to stream the response. Default is False."),
+    ] = None,
     n: Annotated[
         int | None,
         Field(description="Number of response choices to generate. Default is 1."),
@@ -90,6 +102,12 @@ async def openai_create_response(
             payload["max_tokens"] = max_tokens
         if temperature is not None:
             payload["temperature"] = temperature
+        if response_format is not None:
+            payload["response_format"] = response_format
+        if tools is not None:
+            payload["tools"] = tools
+        if stream is not None:
+            payload["stream"] = stream
         if n is not None:
             payload["n"] = n
         if background is not None:
