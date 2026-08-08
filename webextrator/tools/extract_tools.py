@@ -1,7 +1,7 @@
 """Extract and render tools for WebExtrator API."""
 
 import json
-from typing import Annotated, Any, cast
+from typing import Annotated, cast
 
 from pydantic import Field
 
@@ -83,34 +83,6 @@ async def webextrator_extract(
             )
         ),
     ] = None,
-    cookies: Annotated[
-        list[dict[str, Any]] | None,
-        Field(
-            description=(
-                "Cookies to install before navigation. Each cookie is an object with at least "
-                "'name' and 'value', plus optional 'domain', 'path', 'expires', 'httpOnly', "
-                "'secure', 'sameSite'. Useful for authenticated pages."
-            )
-        ),
-    ] = None,
-    bypass_cache: Annotated[
-        bool | None,
-        Field(
-            description=(
-                "Skip the Redis result cache for this request (still writes the fresh result "
-                "back). Default is false."
-            )
-        ),
-    ] = None,
-    cache_ttl_seconds: Annotated[
-        float | None,
-        Field(
-            description=(
-                "Override the global cache TTL (seconds) for this entry. 0 means do not cache "
-                "this response. Default is 3600."
-            )
-        ),
-    ] = None,
     mode: Annotated[
         TaskMode | None,
         Field(
@@ -154,9 +126,6 @@ async def webextrator_extract(
             headers=headers,
             user_agent=user_agent,
             callback_url=callback_url,
-            cookies=cookies,
-            bypass_cache=bypass_cache,
-            cache_ttl_seconds=cache_ttl_seconds,
             mode=mode,
         )
 
@@ -226,34 +195,6 @@ async def webextrator_render(
             )
         ),
     ] = None,
-    cookies: Annotated[
-        list[dict[str, Any]] | None,
-        Field(
-            description=(
-                "Cookies to install before navigation. Each cookie is an object with at least "
-                "'name' and 'value', plus optional 'domain', 'path', 'expires', 'httpOnly', "
-                "'secure', 'sameSite'. Useful for authenticated pages."
-            )
-        ),
-    ] = None,
-    bypass_cache: Annotated[
-        bool | None,
-        Field(
-            description=(
-                "Skip the Redis result cache for this request (still writes the fresh result "
-                "back). Default is false."
-            )
-        ),
-    ] = None,
-    cache_ttl_seconds: Annotated[
-        float | None,
-        Field(
-            description=(
-                "Override the global cache TTL (seconds) for this entry. 0 means do not cache "
-                "this response. Default is 3600."
-            )
-        ),
-    ] = None,
     mode: Annotated[
         TaskMode | None,
         Field(
@@ -295,9 +236,6 @@ async def webextrator_render(
             headers=headers,
             user_agent=user_agent,
             callback_url=callback_url,
-            cookies=cookies,
-            bypass_cache=bypass_cache,
-            cache_ttl_seconds=cache_ttl_seconds,
             mode=mode,
         )
 
