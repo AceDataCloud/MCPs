@@ -66,6 +66,18 @@ async def openai_create_response(
             )
         ),
     ] = None,
+    response_format: Annotated[
+        dict[str, Any] | None,
+        Field(description='Response format specification, such as {"type": "json_object"}.'),
+    ] = None,
+    stream: Annotated[
+        bool | None,
+        Field(description="Whether to stream partial response output. Default is false."),
+    ] = None,
+    tools: Annotated[
+        list[dict[str, Any]] | None,
+        Field(description="Tools the model may call while creating the response."),
+    ] = None,
 ) -> str:
     """Create a response using the OpenAI Responses API via AceDataCloud.
 
@@ -94,6 +106,12 @@ async def openai_create_response(
             payload["n"] = n
         if background is not None:
             payload["background"] = background
+        if response_format is not None:
+            payload["response_format"] = response_format
+        if stream is not None:
+            payload["stream"] = stream
+        if tools is not None:
+            payload["tools"] = tools
 
         result = await client.responses(**payload)
 

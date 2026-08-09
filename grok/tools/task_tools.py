@@ -1,6 +1,7 @@
 """Task query tools for Grok Imagine API."""
 
 import asyncio
+import json
 from typing import Annotated
 
 from pydantic import Field
@@ -75,25 +76,4 @@ async def grok_get_tasks_batch(
         action="retrieve_batch",
     )
 
-    if "error" in result:
-        error = result.get("error", {})
-        return f"Error: {error.get('code', 'unknown')} - {error.get('message', 'Unknown error')}"
-
-    lines = [f"Total Tasks: {result.get('count', 0)}", ""]
-
-    for item in result.get("items", []):
-        response_info = item.get("response", {})
-        lines.extend(
-            [
-                f"=== Task: {item.get('id', 'N/A')} ===",
-                f"Created At: {item.get('created_at', 'N/A')}",
-                f"Success: {response_info.get('success', False)}",
-            ]
-        )
-
-        for video in response_info.get("data", []):
-            lines.append(f"  - {video.get('id', 'Unknown')}: {video.get('video_url', 'N/A')}")
-
-        lines.append("")
-
-    return "\n".join(lines)
+    return json.dumps(result, ensure_ascii=False, indent=2)

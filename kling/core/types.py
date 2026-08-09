@@ -26,6 +26,12 @@ CharacterOrientation = Literal["image", "video"]
 # Kling video modes
 Mode = Literal["std", "pro", "4k"]
 
+# Kling motion modes
+MotionMode = Literal["std", "pro"]
+
+# Kling motion sound options
+KeepOriginalSound = Literal["yes", "no"]
+
 # Kling video aspect ratios
 AspectRatio = Literal["16:9", "9:16", "1:1"]
 
@@ -101,7 +107,7 @@ TalkingPhotoDuration = Literal[5, 10]
 TalkingPhotoMode = Literal["std", "pro"]
 
 # Default values
-DEFAULT_MODEL: KlingModel = "kling-v2-master"
+DEFAULT_MODEL: KlingModel = "kling-v1"
 DEFAULT_MODE: Mode = "std"
 DEFAULT_ASPECT_RATIO: AspectRatio = "16:9"
 DEFAULT_DURATION: Duration = 5

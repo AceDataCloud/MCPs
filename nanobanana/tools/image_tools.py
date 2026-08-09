@@ -36,6 +36,14 @@ async def nanobanana_generate_image(
             description="Resolution of the generated image. Options: '1K' (default), '2K', '4K'. Only works with 'nano-banana-pro' model."
         ),
     ] = None,
+    count: Annotated[
+        int | None,
+        Field(description="Number of images to generate. Default is 1.", ge=1),
+    ] = None,
+    callback_url: Annotated[
+        str | None,
+        Field(description="Optional callback URL to receive the result asynchronously."),
+    ] = None,
 ) -> str:
     """Generate an AI image from a text prompt using Google's Nano Banana model.
 
@@ -63,6 +71,10 @@ async def nanobanana_generate_image(
 
     if resolution:
         payload["resolution"] = resolution
+    if count is not None:
+        payload["count"] = count
+    if callback_url:
+        payload["callback_url"] = callback_url
 
     result = await client.generate_image_async(**payload)
     return format_image_result(result)
@@ -100,6 +112,14 @@ async def nanobanana_edit_image(
             description="Resolution of the edited image. Options: '1K', '2K', '4K'. Only works with 'nano-banana-pro' model."
         ),
     ] = None,
+    count: Annotated[
+        int | None,
+        Field(description="Number of edited images to generate. Default is 1.", ge=1),
+    ] = None,
+    callback_url: Annotated[
+        str | None,
+        Field(description="Optional callback URL to receive the result asynchronously."),
+    ] = None,
 ) -> str:
     """Edit or combine images using AI based on a text prompt.
 
@@ -135,6 +155,10 @@ async def nanobanana_edit_image(
         payload["aspect_ratio"] = aspect_ratio
     if resolution:
         payload["resolution"] = resolution
+    if count is not None:
+        payload["count"] = count
+    if callback_url:
+        payload["callback_url"] = callback_url
 
     result = await client.edit_image_async(**payload)
     return format_image_result(result)

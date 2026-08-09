@@ -74,7 +74,11 @@ async def kling_lip_sync(
     ] = "zh",
     voice_speed: Annotated[
         float | None,
-        Field(description="Speech speed multiplier (default 1.0). Used when mode='text2video'."),
+        Field(
+            ge=0.8,
+            le=2.0,
+            description="Speech speed multiplier from 0.8 to 2.0 (default 1.0). Used when mode='text2video'.",
+        ),
     ] = None,
     callback_url: Annotated[
         str | None,

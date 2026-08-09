@@ -1,12 +1,12 @@
 """Motion transfer tools for Kling API."""
 
-from typing import Annotated
+from typing import Annotated, Any
 
 from pydantic import Field
 
 from core.client import client
 from core.server import mcp
-from core.types import CharacterOrientation, Mode
+from core.types import CharacterOrientation, KeepOriginalSound, MotionMode
 from core.utils import format_motion_result
 
 
@@ -31,11 +31,15 @@ async def kling_generate_motion(
         ),
     ] = "image",
     mode: Annotated[
-        Mode,
+        MotionMode,
         Field(
             description="Generation mode. 'std' (standard, default) for faster generation, 'pro' for higher quality."
         ),
     ] = "std",
+    model_name: Annotated[
+        str | None,
+        Field(description="Optional Kling motion model name, such as 'kling-v2-6' or 'kling-v3'."),
+    ] = None,
     prompt: Annotated[
         str | None,
         Field(
@@ -43,10 +47,14 @@ async def kling_generate_motion(
         ),
     ] = None,
     keep_original_sound: Annotated[
-        str | None,
+        KeepOriginalSound | None,
         Field(
             description="Whether to keep the original sound from the reference video. Options: 'yes' or 'no'. Default depends on API."
         ),
+    ] = None,
+    watermark_info: Annotated[
+        dict[str, Any] | None,
+        Field(description="Optional watermark configuration forwarded to the API."),
     ] = None,
     callback_url: Annotated[
         str | None,
@@ -78,6 +86,10 @@ async def kling_generate_motion(
         payload["prompt"] = prompt
     if keep_original_sound:
         payload["keep_original_sound"] = keep_original_sound
+    if model_name:
+        payload["model_name"] = model_name
+    if watermark_info:
+        payload["watermark_info"] = watermark_info
 
     result = await client.generate_motion(**payload)
     return format_motion_result(result)

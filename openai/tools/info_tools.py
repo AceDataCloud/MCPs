@@ -1,6 +1,52 @@
 """Informational tools for OpenAI API."""
 
+import json
+from typing import Annotated, Literal
+
+from pydantic import Field
+
+from core.client import client
+from core.exceptions import OpenAIAPIError, OpenAIAuthError
 from core.server import mcp
+
+
+@mcp.tool()
+async def openai_get_models() -> str:
+    """List models from the OpenAI-compatible models endpoint.
+
+    Returns:
+        JSON response from GET /openai/models.
+    """
+    try:
+        result = await client.models()
+        return json.dumps(result, ensure_ascii=False, indent=2)
+    except OpenAIAuthError as e:
+        return json.dumps({"error": "Authentication Error", "message": e.message})
+    except OpenAIAPIError as e:
+        return json.dumps({"error": "API Error", "message": e.message})
+    except Exception as e:
+        return json.dumps({"error": "Error listing models", "message": str(e)})
+
+
+@mcp.tool()
+async def openai_get_realtime_connection_info(
+    model: Annotated[
+        Literal["gpt-realtime", "gpt-realtime-2"],
+        Field(description="Realtime model to use."),
+    ] = "gpt-realtime",
+) -> str:
+    """Get WebSocket connection details for the OpenAI Realtime endpoint."""
+    return json.dumps(
+        {
+            "url": f"wss://api.acedata.cloud/v1/realtime?model={model}",
+            "model": model,
+            "transport": "websocket",
+            "auth": "Use an Authorization bearer token header. Browser clients can pass the token via the Sec-WebSocket-Protocol subprotocol.",
+            "audio": "pcm16 @ 24kHz mono",
+        },
+        ensure_ascii=False,
+        indent=2,
+    )
 
 
 @mcp.tool()

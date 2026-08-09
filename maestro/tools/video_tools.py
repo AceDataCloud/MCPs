@@ -94,21 +94,20 @@ async def maestro_create_video(
         ),
     ] = None,
     style: Annotated[
-        MaestroStyle | str | None,
+        MaestroStyle | None,
         Field(
             description=(
-                "Visual style preset or freeform style hint. Named presets: cinematic, glass, "
+                "Visual style preset. Named presets: cinematic, glass, "
                 "luxury, swiss, modern, editorial, warm, vibrant, neon, mono, pastel, bold, "
                 "industrial, futuristic, retro. Use 'auto' or omit to let the server decide."
             )
         ),
     ] = None,
     voice: Annotated[
-        MaestroVoice | str | None,
+        MaestroVoice | None,
         Field(
             description=(
-                "Narration voice preset, auto, or a 32-hex-character Fish reference ID. "
-                "Omit to let the server decide."
+                "Narration voice preset. Use 'auto' or omit to let the server decide."
             )
         ),
     ] = None,
