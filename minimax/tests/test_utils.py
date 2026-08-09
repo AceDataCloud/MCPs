@@ -38,6 +38,13 @@ class TestFormatVideoResult:
         assert data["task_id"] == "123"
         assert data["mcp_async_submission"]["poll_tool"] == "minimax_get_task"
 
+    def test_format_documented_task_response(self):
+        """The documented video response may return a nested task object."""
+        result = format_video_result({"task": {"id": "task-123", "status": "running"}})
+        data = json.loads(result)
+        assert data["mcp_task_polling"]["task_id"] == "task-123"
+        assert data["mcp_task_polling"]["should_poll"] is True
+
 
 class TestFormatTaskResult:
     """Tests for format_task_result function."""
