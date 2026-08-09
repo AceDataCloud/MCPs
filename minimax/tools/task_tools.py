@@ -12,9 +12,7 @@ from core.utils import format_batch_task_result, format_task_result
 
 @mcp.tool()
 async def minimax_list_tasks(
-    limit: Annotated[
-        int | None, Field(description="Maximum number of tasks to return.")
-    ] = None,
+    limit: Annotated[int | None, Field(description="Maximum number of tasks to return.")] = None,
     offset: Annotated[
         int | None, Field(description="Number of tasks to skip before returning results.")
     ] = None,
@@ -33,7 +31,9 @@ async def minimax_list_tasks(
         "created_at_min": created_at_min,
         "created_at_max": created_at_max,
     }
-    result = await client.query_task(**{key: value for key, value in payload.items() if value is not None})
+    result = await client.query_task(
+        **{key: value for key, value in payload.items() if value is not None}
+    )
     return format_batch_task_result(result)
 
 

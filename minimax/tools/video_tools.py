@@ -53,9 +53,7 @@ async def minimax_generate_video_from_text(
     resolution: Annotated[
         MinimaxResolution, Field(description="Output resolution: 768P or 2K.")
     ] = DEFAULT_RESOLUTION,
-    ratio: Annotated[
-        MinimaxRatio, Field(description="Output aspect ratio.")
-    ] = DEFAULT_RATIO,
+    ratio: Annotated[MinimaxRatio, Field(description="Output aspect ratio.")] = DEFAULT_RATIO,
     duration: Annotated[
         int, Field(ge=4, le=15, description="Integer output duration from 4 to 15 seconds.")
     ] = DEFAULT_DURATION,
@@ -78,17 +76,14 @@ async def minimax_generate_video_from_text(
 
 @mcp.tool()
 async def minimax_generate_video_from_images(
-    image_urls: Annotated[
-        list[str], Field(min_length=1, description="Public image URLs.")
-    ],    prompt: Annotated[
+    image_urls: Annotated[list[str], Field(min_length=1, description="Public image URLs.")],
+    prompt: Annotated[
         str, Field(min_length=1, max_length=7000, description="Required motion and style guidance.")
     ],
     resolution: Annotated[
         MinimaxResolution, Field(description="Output resolution: 768P or 2K.")
     ] = DEFAULT_RESOLUTION,
-    ratio: Annotated[
-        MinimaxRatio, Field(description="Output aspect ratio.")
-    ] = DEFAULT_RATIO,
+    ratio: Annotated[MinimaxRatio, Field(description="Output aspect ratio.")] = DEFAULT_RATIO,
     duration: Annotated[
         int, Field(ge=4, le=15, description="Integer output duration from 4 to 15 seconds.")
     ] = DEFAULT_DURATION,
@@ -121,9 +116,8 @@ async def minimax_generate_video_from_images(
 
 @mcp.tool()
 async def minimax_generate_video_from_audio(
-    audio_urls: Annotated[
-        list[str], Field(min_length=1, description="Public audio URLs.")
-    ],    image_urls: Annotated[
+    audio_urls: Annotated[list[str], Field(min_length=1, description="Public audio URLs.")],
+    image_urls: Annotated[
         list[str],
         Field(min_length=1, description="Required reference images."),
     ],
@@ -133,9 +127,7 @@ async def minimax_generate_video_from_audio(
     resolution: Annotated[
         MinimaxResolution, Field(description="Output resolution: 768P or 2K.")
     ] = DEFAULT_RESOLUTION,
-    ratio: Annotated[
-        MinimaxRatio, Field(description="Output aspect ratio.")
-    ] = DEFAULT_RATIO,
+    ratio: Annotated[MinimaxRatio, Field(description="Output aspect ratio.")] = DEFAULT_RATIO,
     duration: Annotated[
         int, Field(ge=4, le=15, description="Integer output duration from 4 to 15 seconds.")
     ] = DEFAULT_DURATION,
