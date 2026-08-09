@@ -9,11 +9,20 @@ from core.client import client
 from core.exceptions import SerpAPIError, SerpAuthError
 from core.server import mcp
 
+SearchQuery = Annotated[
+    str,
+    Field(min_length=1, max_length=2048, pattern=r".*\S.*"),
+]
+CountryCode = Annotated[str | None, Field(min_length=1, max_length=32)]
+LanguageCode = Annotated[str | None, Field(min_length=1, max_length=32)]
+ResultCount = Annotated[int | None, Field(ge=1, le=100)]
+PageNumber = Annotated[int | None, Field(ge=1, le=100)]
+
 
 @mcp.tool()
 async def serp_google_search(
     query: Annotated[
-        str,
+        SearchQuery,
         Field(description="The search query string. Required."),
     ],
     search_type: Annotated[
@@ -23,13 +32,13 @@ async def serp_google_search(
         ),
     ] = "search",
     country: Annotated[
-        str | None,
+        CountryCode,
         Field(
             description="Country code for localized results (e.g., 'us', 'cn', 'uk'). Default is 'us'."
         ),
     ] = None,
     language: Annotated[
-        str | None,
+        LanguageCode,
         Field(
             description="Language code for results (e.g., 'en', 'zh-cn', 'fr'). Default is 'en'."
         ),
@@ -62,13 +71,13 @@ async def serp_google_search(
         ),
     ] = None,
     number: Annotated[
-        int | None,
+        ResultCount,
         Field(
             description="Number of results per page (default: 10). Note: More than 10 results may incur additional credits."
         ),
     ] = None,
     page: Annotated[
-        int | None,
+        PageNumber,
         Field(description="Page number for pagination (default: 1)."),
     ] = None,
 ) -> str:
@@ -107,6 +116,9 @@ async def serp_google_search(
         serp_google_search(query="artificial intelligence", search_type="news")
     """
     try:
+        if image_size and search_type != "images":
+            raise ValueError("image_size is only valid when search_type is 'images'")
+
         # Build payload
         payload: dict = {"query": query, "type": search_type}
 
@@ -141,17 +153,17 @@ async def serp_google_search(
 @mcp.tool()
 async def serp_google_images(
     query: Annotated[
-        str,
+        SearchQuery,
         Field(description="The search query string for image search. Required."),
     ],
     country: Annotated[
-        str | None,
+        CountryCode,
         Field(
             description="Country code for localized results (e.g., 'us', 'cn', 'uk'). Default is 'us'."
         ),
     ] = None,
     language: Annotated[
-        str | None,
+        LanguageCode,
         Field(
             description="Language code for results (e.g., 'en', 'zh-cn', 'fr'). Default is 'en'."
         ),
@@ -178,13 +190,13 @@ async def serp_google_images(
         ),
     ] = None,
     number: Annotated[
-        int | None,
+        ResultCount,
         Field(
             description="Number of results per page (default: 10). Note: More than 10 results may incur additional credits."
         ),
     ] = None,
     page: Annotated[
-        int | None,
+        PageNumber,
         Field(description="Page number for pagination (default: 1)."),
     ] = None,
 ) -> str:
@@ -207,17 +219,17 @@ async def serp_google_images(
 @mcp.tool()
 async def serp_google_news(
     query: Annotated[
-        str,
+        SearchQuery,
         Field(description="The search query string for news search. Required."),
     ],
     country: Annotated[
-        str | None,
+        CountryCode,
         Field(
             description="Country code for localized results (e.g., 'us', 'cn', 'uk'). Default is 'us'."
         ),
     ] = None,
     language: Annotated[
-        str | None,
+        LanguageCode,
         Field(
             description="Language code for results (e.g., 'en', 'zh-cn', 'fr'). Default is 'en'."
         ),
@@ -229,13 +241,13 @@ async def serp_google_news(
         ),
     ] = None,
     number: Annotated[
-        int | None,
+        ResultCount,
         Field(
             description="Number of results per page (default: 10). Note: More than 10 results may incur additional credits."
         ),
     ] = None,
     page: Annotated[
-        int | None,
+        PageNumber,
         Field(description="Page number for pagination (default: 1)."),
     ] = None,
 ) -> str:
@@ -258,29 +270,29 @@ async def serp_google_news(
 @mcp.tool()
 async def serp_google_videos(
     query: Annotated[
-        str,
+        SearchQuery,
         Field(description="The search query string for video search. Required."),
     ],
     country: Annotated[
-        str | None,
+        CountryCode,
         Field(
             description="Country code for localized results (e.g., 'us', 'cn', 'uk'). Default is 'us'."
         ),
     ] = None,
     language: Annotated[
-        str | None,
+        LanguageCode,
         Field(
             description="Language code for results (e.g., 'en', 'zh-cn', 'fr'). Default is 'en'."
         ),
     ] = None,
     number: Annotated[
-        int | None,
+        ResultCount,
         Field(
             description="Number of results per page (default: 10). Note: More than 10 results may incur additional credits."
         ),
     ] = None,
     page: Annotated[
-        int | None,
+        PageNumber,
         Field(description="Page number for pagination (default: 1)."),
     ] = None,
 ) -> str:
@@ -302,29 +314,29 @@ async def serp_google_videos(
 @mcp.tool()
 async def serp_google_places(
     query: Annotated[
-        str,
+        SearchQuery,
         Field(description="The search query string for local places/businesses search. Required."),
     ],
     country: Annotated[
-        str | None,
+        CountryCode,
         Field(
             description="Country code for localized results (e.g., 'us', 'cn', 'uk'). Default is 'us'."
         ),
     ] = None,
     language: Annotated[
-        str | None,
+        LanguageCode,
         Field(
             description="Language code for results (e.g., 'en', 'zh-cn', 'fr'). Default is 'en'."
         ),
     ] = None,
     number: Annotated[
-        int | None,
+        ResultCount,
         Field(
             description="Number of results per page (default: 10). Note: More than 10 results may incur additional credits."
         ),
     ] = None,
     page: Annotated[
-        int | None,
+        PageNumber,
         Field(description="Page number for pagination (default: 1)."),
     ] = None,
 ) -> str:
@@ -346,29 +358,29 @@ async def serp_google_places(
 @mcp.tool()
 async def serp_google_maps(
     query: Annotated[
-        str,
+        SearchQuery,
         Field(description="The search query string for maps/location search. Required."),
     ],
     country: Annotated[
-        str | None,
+        CountryCode,
         Field(
             description="Country code for localized results (e.g., 'us', 'cn', 'uk'). Default is 'us'."
         ),
     ] = None,
     language: Annotated[
-        str | None,
+        LanguageCode,
         Field(
             description="Language code for results (e.g., 'en', 'zh-cn', 'fr'). Default is 'en'."
         ),
     ] = None,
     number: Annotated[
-        int | None,
+        ResultCount,
         Field(
             description="Number of results per page (default: 10). Note: More than 10 results may incur additional credits."
         ),
     ] = None,
     page: Annotated[
-        int | None,
+        PageNumber,
         Field(description="Page number for pagination (default: 1)."),
     ] = None,
 ) -> str:
