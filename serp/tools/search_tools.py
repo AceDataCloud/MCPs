@@ -35,9 +35,30 @@ async def serp_google_search(
         ),
     ] = None,
     time_range: Annotated[
-        str | None,
+        Literal["h", "d", "w", "m", "y", "qdr:h", "qdr:d", "qdr:w", "qdr:m", "qdr:y"] | None,
         Field(
-            description="Time filter for results. Options: 'qdr:h' (past hour), 'qdr:d' (past day), 'qdr:w' (past week), 'qdr:m' (past month), or None for no time restriction (default)."
+            description="Time filter for results. Options: 'h'/'qdr:h' (past hour), 'd'/'qdr:d' (past day), 'w'/'qdr:w' (past week), 'm'/'qdr:m' (past month), 'y'/'qdr:y' (past year), or None for no time restriction (default)."
+        ),
+    ] = None,
+    image_size: Annotated[
+        Literal[
+            "large",
+            "medium",
+            "icon",
+            "2mp",
+            "4mp",
+            "6mp",
+            "8mp",
+            "10mp",
+            "12mp",
+            "15mp",
+            "20mp",
+            "40mp",
+            "70mp",
+        ]
+        | None,
+        Field(
+            description="Image size filter. Only valid when search_type is 'images'. Options: large, medium, icon, 2mp, 4mp, 6mp, 8mp, 10mp, 12mp, 15mp, 20mp, 40mp, 70mp."
         ),
     ] = None,
     number: Annotated[
@@ -95,6 +116,8 @@ async def serp_google_search(
             payload["language"] = language
         if time_range:
             payload["range"] = time_range
+        if image_size:
+            payload["image_size"] = image_size
         if number:
             payload["number"] = number
         if page:
@@ -133,6 +156,27 @@ async def serp_google_images(
             description="Language code for results (e.g., 'en', 'zh-cn', 'fr'). Default is 'en'."
         ),
     ] = None,
+    image_size: Annotated[
+        Literal[
+            "large",
+            "medium",
+            "icon",
+            "2mp",
+            "4mp",
+            "6mp",
+            "8mp",
+            "10mp",
+            "12mp",
+            "15mp",
+            "20mp",
+            "40mp",
+            "70mp",
+        ]
+        | None,
+        Field(
+            description="Image size filter for image search. Options: large, medium, icon, 2mp, 4mp, 6mp, 8mp, 10mp, 12mp, 15mp, 20mp, 40mp, 70mp."
+        ),
+    ] = None,
     number: Annotated[
         int | None,
         Field(
@@ -153,6 +197,7 @@ async def serp_google_images(
         search_type="images",
         country=country,
         language=language,
+        image_size=image_size,
         number=number,
         page=page,
     )
@@ -178,9 +223,9 @@ async def serp_google_news(
         ),
     ] = None,
     time_range: Annotated[
-        str | None,
+        Literal["h", "d", "w", "m", "y", "qdr:h", "qdr:d", "qdr:w", "qdr:m", "qdr:y"] | None,
         Field(
-            description="Time filter for results. Options: 'qdr:h' (past hour), 'qdr:d' (past day), 'qdr:w' (past week), 'qdr:m' (past month), or None for no time restriction (default)."
+            description="Time filter for results. Options: 'h'/'qdr:h' (past hour), 'd'/'qdr:d' (past day), 'w'/'qdr:w' (past week), 'm'/'qdr:m' (past month), 'y'/'qdr:y' (past year), or None for no time restriction (default)."
         ),
     ] = None,
     number: Annotated[

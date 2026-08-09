@@ -108,9 +108,15 @@ async def serp_list_time_ranges() -> str:
 | Code    | Time Range   | Description                    |
 |---------|--------------|--------------------------------|
 | qdr:h   | Past Hour    | Results from the last hour     |
+| h       | Past Hour    | Short form for qdr:h           |
 | qdr:d   | Past Day     | Results from the last 24 hours |
+| d       | Past Day     | Short form for qdr:d           |
 | qdr:w   | Past Week    | Results from the last 7 days   |
+| w       | Past Week    | Short form for qdr:w           |
 | qdr:m   | Past Month   | Results from the last 30 days  |
+| m       | Past Month   | Short form for qdr:m           |
+| qdr:y   | Past Year    | Results from the last 12 months |
+| y       | Past Year    | Short form for qdr:y            |
 | (none)  | Any Time     | No time restriction (default)  |
 
 Usage: Pass the time range code to the `time_range` parameter.
@@ -144,7 +150,8 @@ async def serp_get_usage_guide() -> str:
 - search_type: search, images, news, maps, places, videos
 - country: Country code (us, uk, cn, etc.)
 - language: Language code (en, zh-cn, etc.)
-- time_range: Time filter (qdr:h, qdr:d, qdr:w, qdr:m)
+- time_range: Time filter (h/d/w/m/y or qdr:h/qdr:d/qdr:w/qdr:m/qdr:y)
+- image_size: Image size filter for image search (large, medium, icon, 2mp...70mp)
 - number: Results per page (default: 10)
 - page: Page number (default: 1)
 
