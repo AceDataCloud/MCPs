@@ -24,6 +24,7 @@ Model Context Protocol server for MiniMax H3 multimodal video generation through
 | `minimax_generate_video_from_images` | Generate from one to nine image URLs |
 | `minimax_generate_video_from_audio` | Generate with one to three audio URLs and required images |
 | `minimax_generate_video` | Generate from the full documented content schema |
+| `minimax_list_tasks` | List tasks with optional timestamp filters |
 | `minimax_get_task` | Retrieve one task |
 | `minimax_get_tasks_batch` | Retrieve several tasks |
 | `minimax_delete_task` | Delete one task |
