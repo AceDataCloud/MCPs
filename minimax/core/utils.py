@@ -97,11 +97,12 @@ def format_video_result(data: dict[str, Any]) -> str:
     Returns:
         JSON string representation of the result
     """
-    return json.dumps(
-        _with_submission_guidance(data, "minimax_get_task", "minimax_get_tasks_batch"),
-        ensure_ascii=False,
-        indent=2,
+    formatted = (
+        _with_task_guidance(data, "minimax_get_task", "minimax_get_tasks_batch")
+        if isinstance(data.get("task"), dict)
+        else _with_submission_guidance(data, "minimax_get_task", "minimax_get_tasks_batch")
     )
+    return json.dumps(formatted, ensure_ascii=False, indent=2)
 
 
 def format_task_result(data: dict[str, Any]) -> str:

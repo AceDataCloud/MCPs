@@ -58,8 +58,11 @@ class MinimaxClient:
         }
 
     def _with_async_callback(self, payload: dict[str, Any]) -> dict[str, Any]:
-        """Return a copy of a documented video generation payload."""
-        return dict(payload)
+        """Ensure long-running video generation is submitted asynchronously."""
+        request_payload = dict(payload)
+        if not request_payload.get("callback_url"):
+            request_payload["async"] = True
+        return request_payload
 
     def _handle_error_response(self, response: httpx.Response) -> None:
         """Parse API error response and raise the appropriate exception.
@@ -128,7 +131,11 @@ class MinimaxClient:
                     self._handle_error_response(response)
 
                 result = response.json()
-                logger.success(f"Request successful! Task ID: {result.get('task_id', 'N/A')}")
+                task = result.get("task", {})
+                task_id = result.get("task_id") or (
+                    task.get("id") if isinstance(task, dict) else None
+                )
+                logger.success(f"Request successful! Task ID: {task_id or 'N/A'}")
 
                 # Log summary of response
                 if result.get("success"):

@@ -37,10 +37,10 @@ class TestMinimaxClient:
         with pytest.raises(MinimaxAuthError, match="not configured"):
             client._get_headers()
 
-    def test_with_async_callback_does_not_add_undocumented_fields(self, client):
-        """The OpenAPI request schema does not allow an async field."""
+    def test_with_async_callback_injects_documented_async_field(self, client):
+        """Test async submission uses the documented async request field."""
         payload = {"model": "MiniMax-H3", "content": [{"type": "text", "text": "fox"}]}
-        assert client._with_async_callback(payload) == payload
+        assert client._with_async_callback(payload)["async"] is True
 
     def test_with_async_callback_preserves_explicit_callback(self, client):
         """Test async submission preserves a user-provided callback."""
