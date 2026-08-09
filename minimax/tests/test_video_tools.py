@@ -25,7 +25,6 @@ async def test_text_tool_payload(monkeypatch, generated_response):
         resolution="2K",
         ratio="16:9",
         duration=6,
-        aigc_watermark=False,
     )
 
 
@@ -48,7 +47,6 @@ async def test_image_tool_payload(monkeypatch, generated_response):
         resolution="2K",
         ratio="16:9",
         duration=4,
-        aigc_watermark=False,
     )
 
 
@@ -71,7 +69,6 @@ async def test_audio_tool_payload(monkeypatch, generated_response):
         resolution="2K",
         ratio="16:9",
         duration=4,
-        aigc_watermark=False,
     )
 
 
@@ -105,5 +102,4 @@ async def test_full_schema_tool_payload(monkeypatch, generated_response):
         resolution="2K",
         ratio="adaptive",
         duration=4,
-        aigc_watermark=False,
     )
