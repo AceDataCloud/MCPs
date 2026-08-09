@@ -125,3 +125,23 @@ async def test_full_schema_tool_payload(monkeypatch, generated_response):
 def test_content_schema_rejects_extra_fields():
     with pytest.raises(ValidationError):
         MinimaxContent(type="text", text="animate this", unexpected=True)
+
+
+@pytest.mark.parametrize(
+    ("kwargs", "error_match"),
+    [
+        ({"type": "text"}, "text is required"),
+        ({"type": "image_url"}, "image_url is required"),
+        (
+            {"type": "video_url", "video_url": {"url": "https://cdn.test/source.mp4"}},
+            "role is required and must be 'reference_video'",
+        ),
+        (
+            {"type": "audio_url", "audio_url": {"url": "https://cdn.test/source.mp3"}},
+            "role is required and must be 'reference_audio'",
+        ),
+    ],
+)
+def test_content_schema_enforces_openapi_required_fields(kwargs, error_match):
+    with pytest.raises(ValidationError, match=error_match):
+        MinimaxContent(**kwargs)
