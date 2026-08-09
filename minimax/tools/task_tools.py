@@ -57,9 +57,9 @@ async def minimax_get_task(
     - You want to get the full details of a generated video
 
     Task states:
-    - 'pending': Generation is still in progress
-    - 'completed': Generation finished successfully
-    - 'failed': Generation failed (check error message)
+    - 'queued' or 'running': Generation is still in progress
+    - 'succeeded': Generation finished successfully
+    - 'failed' or 'cancelled': Generation reached a terminal error state
 
     Returns:
         Task status and generated video information including URLs and status.

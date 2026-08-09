@@ -117,3 +117,52 @@ class TestMinimaxClient:
                 await client.request("/minimax/videos", {})
 
             assert exc_info.value.status_code == 500
+
+    @pytest.mark.asyncio
+    async def test_request_worker_error_uses_documented_type(self, client):
+        """Test documented WorkerError responses expose the worker error type."""
+        mock_response = MagicMock()
+        mock_response.status_code = 422
+        mock_response.json.return_value = {
+            "type": "error",
+            "error": {
+                "type": "unprocessable_entity_error",
+                "message": "The request did not pass content safety checks.",
+                "http_code": "422",
+            },
+            "request_id": "req_123",
+        }
+        mock_response.text = "worker error"
+
+        with patch("httpx.AsyncClient") as mock_client:
+            mock_instance = AsyncMock()
+            mock_instance.post.return_value = mock_response
+            mock_client.return_value.__aenter__.return_value = mock_instance
+
+            with pytest.raises(MinimaxAPIError, match="content safety") as exc_info:
+                await client.request("/minimax/videos", {})
+
+            assert exc_info.value.code == "unprocessable_entity_error"
+            assert exc_info.value.status_code == 422
+
+    @pytest.mark.asyncio
+    async def test_request_invalid_json_error_uses_documented_code(self, client):
+        """Test documented InvalidJsonError responses expose the top-level code."""
+        mock_response = MagicMock()
+        mock_response.status_code = 400
+        mock_response.json.return_value = {
+            "code": "bad_request",
+            "detail": "The request body must be a JSON object.",
+        }
+        mock_response.text = "bad request"
+
+        with patch("httpx.AsyncClient") as mock_client:
+            mock_instance = AsyncMock()
+            mock_instance.post.return_value = mock_response
+            mock_client.return_value.__aenter__.return_value = mock_instance
+
+            with pytest.raises(MinimaxAPIError, match="JSON object") as exc_info:
+                await client.request("/minimax/tasks", {})
+
+            assert exc_info.value.code == "bad_request"
+            assert exc_info.value.status_code == 400
