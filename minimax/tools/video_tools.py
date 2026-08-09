@@ -104,7 +104,7 @@ async def minimax_generate_video_from_images(
                 {
                     "type": "image_url",
                     "image_url": {"url": image_url},
-                    "role": "first_frame" if index == 0 else "reference_image",
+                    "role": "reference_image",
                 }
                 for index, image_url in enumerate(image_urls)
             ],
@@ -148,7 +148,7 @@ async def minimax_generate_video_from_audio(
                 {
                     "type": "image_url",
                     "image_url": {"url": image_url},
-                    "role": "first_frame" if index == 0 else "reference_image",
+                    "role": "reference_image",
                 }
                 for index, image_url in enumerate(image_urls)
             ],

@@ -45,7 +45,7 @@ async def test_image_tool_payload(monkeypatch, generated_response):
             {
                 "type": "image_url",
                 "image_url": {"url": "https://cdn.test/one.png"},
-                "role": "first_frame",
+                "role": "reference_image",
             },
             {
                 "type": "image_url",
@@ -75,7 +75,7 @@ async def test_audio_tool_payload(monkeypatch, generated_response):
             {
                 "type": "image_url",
                 "image_url": {"url": "https://cdn.test/one.png"},
-                "role": "first_frame",
+                "role": "reference_image",
             },
             {
                 "type": "audio_url",
