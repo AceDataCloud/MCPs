@@ -1,6 +1,6 @@
 # Veo MCP
 
-Google Veo video generation — Veo 2, Veo 3, Veo 3.1 (incl. fast variants and upscale).
+Google Veo video generation — Veo 3 and Veo 3.1, including fast variants and upscale.
 
 [![VS Code Marketplace](https://img.shields.io/badge/VS%20Code-Marketplace-blue?logo=visualstudiocode&logoColor=white)](https://marketplace.visualstudio.com/items?itemName=acedatacloud.mcp-veo) [![PyPI](https://img.shields.io/pypi/v/mcp-veo.svg?label=PyPI)](https://pypi.org/project/mcp-veo/) [![Hosted MCP](https://img.shields.io/badge/hosted-mcp-blue)](https://veo.mcp.acedata.cloud/mcp)
 
@@ -42,17 +42,13 @@ For screenshots, token setup, project-level and user-level `mcp.json`, and Copil
 
 ## Tool Reference
 
-**12 tools** available via this server.
+**8 tools** available via this server.
 
 | Tool | Description |
 | --- | --- |
 | `veo_text_to_video` | Generate AI video from a text prompt using Veo. |
 | `veo_image_to_video` | Generate AI video from one or more reference images using Veo. |
 | `veo_get_1080p` | Get the 1080p high-resolution version of a generated video. |
-| `veo_upsample` | Upsample a generated video to 1080p, 4K, or GIF. |
-| `veo_extend_video` | Extend a Veo 3.1 video with additional content. |
-| `veo_reshoot` | Re-render an existing video with a different camera motion. |
-| `veo_video_objects` | Insert or remove objects in a generated video. |
 | `veo_get_task` | Query the status and result of a video generation task. |
 | `veo_get_tasks_batch` | Query multiple video generation tasks at once. |
 | `veo_list_models` | List all available Veo models and their capabilities. |
