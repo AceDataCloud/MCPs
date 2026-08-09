@@ -32,8 +32,10 @@ Generation:
 - minimax_generate_video
 
 Tasks:
+- minimax_list_tasks
 - minimax_get_task
 - minimax_get_tasks_batch
+- minimax_delete_task
 
 All generation tools submit asynchronously by default. Poll the returned task_id with minimax_get_task until the final video is available.
 """

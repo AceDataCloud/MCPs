@@ -1,6 +1,7 @@
 from unittest.mock import AsyncMock
 
 import pytest
+from pydantic import ValidationError
 
 from core.types import MinimaxContent
 from tools import video_tools
@@ -107,3 +108,8 @@ async def test_full_schema_tool_payload(monkeypatch, generated_response):
         duration=4,
         aigc_watermark=False,
     )
+
+
+def test_content_schema_rejects_extra_fields():
+    with pytest.raises(ValidationError):
+        MinimaxContent(type="text", text="animate this", unexpected=True)

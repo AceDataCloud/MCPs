@@ -2,7 +2,7 @@
 
 from typing import Literal
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 MinimaxModel = Literal["MiniMax-H3"]
 MinimaxRatio = Literal["adaptive", "21:9", "16:9", "4:3", "1:1", "3:4", "9:16"]
@@ -21,11 +21,15 @@ DEFAULT_DURATION = 4
 class MediaUrl(BaseModel):
     """A publicly accessible media URL."""
 
+    model_config = ConfigDict(extra="forbid")
+
     url: str
 
 
 class MinimaxContent(BaseModel):
     """A single MiniMax video generation content item."""
+
+    model_config = ConfigDict(extra="forbid")
 
     type: MinimaxContentType
     text: str | None = Field(default=None, max_length=7000)
