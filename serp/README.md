@@ -390,10 +390,20 @@ Claude: I'll search for aurora borealis images.
 
 | Code    | Time Range |
 | ------- | ---------- |
+| `h`     | Past hour  |
 | `qdr:h` | Past hour  |
+| `d`     | Past day   |
 | `qdr:d` | Past day   |
+| `w`     | Past week  |
 | `qdr:w` | Past week  |
+| `m`     | Past month |
 | `qdr:m` | Past month |
+| `y`     | Past year  |
+| `qdr:y` | Past year  |
+
+### Image Size Filters (for `images` search type)
+
+`large`, `medium`, `icon`, `2mp`, `4mp`, `6mp`, `8mp`, `10mp`, `12mp`, `15mp`, `20mp`, `40mp`, `70mp`
 
 ### Common Country Codes
 
