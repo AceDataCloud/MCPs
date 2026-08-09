@@ -25,7 +25,7 @@ def _common_payload(
     resolution: MinimaxResolution,
     ratio: MinimaxRatio,
     duration: int,
-    content: list[dict[str, str | dict[str, str]]],
+    content: list[dict],
     callback_url: str | None,
 ) -> dict:
     payload: dict = {
