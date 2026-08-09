@@ -89,19 +89,5 @@ class MaestroClient:
         """Retrieve one Maestro task."""
         return await self.request("/maestro/tasks", {"id": task_id, "action": "retrieve"})
 
-    async def list_tasks(
-        self,
-        limit: int,
-        created_at_min: int | None = None,
-        created_at_max: int | None = None,
-    ) -> dict[str, Any]:
-        """List recent Maestro tasks for the authenticated user."""
-        payload: dict[str, Any] = {"action": "retrieve_batch", "limit": limit}
-        if created_at_min is not None:
-            payload["created_at_min"] = created_at_min
-        if created_at_max is not None:
-            payload["created_at_max"] = created_at_max
-        return await self.request("/maestro/tasks", payload)
-
 
 client = MaestroClient()

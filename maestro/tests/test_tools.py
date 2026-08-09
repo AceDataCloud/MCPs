@@ -3,7 +3,7 @@
 import json
 from unittest.mock import AsyncMock, patch
 
-from tools.task_tools import maestro_get_task, maestro_list_tasks
+from tools.task_tools import maestro_get_task
 from tools.video_tools import maestro_create_video
 
 
@@ -69,15 +69,9 @@ async def test_iteration_does_not_clobber_source_format() -> None:
 
 
 async def test_task_tools_delegate_to_client() -> None:
-    with (
-        patch("tools.task_tools.client.get_task", new_callable=AsyncMock) as get_task,
-        patch("tools.task_tools.client.list_tasks", new_callable=AsyncMock) as list_tasks,
-    ):
+    with patch("tools.task_tools.client.get_task", new_callable=AsyncMock) as get_task:
         get_task.return_value = {"id": "task-1", "status": "succeeded"}
-        list_tasks.return_value = {"count": 1, "items": []}
 
         await maestro_get_task("task-1")
-        await maestro_list_tasks(5, 100, 200)
 
     get_task.assert_awaited_once_with("task-1")
-    list_tasks.assert_awaited_once_with(5, 100, 200)

@@ -51,7 +51,7 @@ def test_payload_without_id_is_left_untouched():
 
 
 def test_batch_poll_tool_is_not_advertised():
-    """maestro_list_tasks has no ids filter, so it cannot poll a known task."""
+    """Maestro has no documented batch-retrieval task API."""
     block = _guidance({"id": "t-1", "status": "running"})
     assert block["batch_poll_tool"] is None
 
