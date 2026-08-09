@@ -26,7 +26,6 @@ async def test_text_tool_payload(monkeypatch, generated_response):
         resolution="2K",
         ratio="16:9",
         duration=6,
-        aigc_watermark=False,
     )
 
 
@@ -43,13 +42,20 @@ async def test_image_tool_payload(monkeypatch, generated_response):
         model="MiniMax-H3",
         content=[
             {"type": "text", "text": "move"},
-            {"type": "image_url", "image_url": {"url": "https://cdn.test/one.png"}, "role": "first_frame"},
-            {"type": "image_url", "image_url": {"url": "https://cdn.test/two.png"}, "role": "reference_image"},
+            {
+                "type": "image_url",
+                "image_url": {"url": "https://cdn.test/one.png"},
+                "role": "first_frame",
+            },
+            {
+                "type": "image_url",
+                "image_url": {"url": "https://cdn.test/two.png"},
+                "role": "reference_image",
+            },
         ],
         resolution="2K",
         ratio="16:9",
         duration=4,
-        aigc_watermark=False,
     )
 
 
@@ -66,13 +72,20 @@ async def test_audio_tool_payload(monkeypatch, generated_response):
         model="MiniMax-H3",
         content=[
             {"type": "text", "text": "dance"},
-            {"type": "image_url", "image_url": {"url": "https://cdn.test/one.png"}, "role": "first_frame"},
-            {"type": "audio_url", "audio_url": {"url": "https://cdn.test/beat.mp3"}, "role": "reference_audio"},
+            {
+                "type": "image_url",
+                "image_url": {"url": "https://cdn.test/one.png"},
+                "role": "first_frame",
+            },
+            {
+                "type": "audio_url",
+                "audio_url": {"url": "https://cdn.test/beat.mp3"},
+                "role": "reference_audio",
+            },
         ],
         resolution="2K",
         ratio="16:9",
         duration=4,
-        aigc_watermark=False,
     )
 
 
@@ -106,7 +119,6 @@ async def test_full_schema_tool_payload(monkeypatch, generated_response):
         resolution="2K",
         ratio="adaptive",
         duration=4,
-        aigc_watermark=False,
     )
 
 
