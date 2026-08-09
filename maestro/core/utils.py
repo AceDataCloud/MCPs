@@ -4,7 +4,7 @@ import json
 from typing import Any
 
 POLL_TOOL = "maestro_get_task"
-# maestro_list_tasks takes no ids filter, so it cannot poll one task — advertise none.
+# The API only exposes single-task retrieval, so there is no batch poll tool.
 BATCH_POLL_TOOL = None
 
 # States that mean "still working". Anything else (succeeded, failed, dead, or

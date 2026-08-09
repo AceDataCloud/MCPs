@@ -22,7 +22,6 @@ For a hosted connection, use `https://maestro.mcp.acedata.cloud/mcp`. It accepts
 |---|---|
 | `maestro_create_video` | Create a video or run `remix`, `edit`, or `extend` on an earlier task |
 | `maestro_get_task` | Read progress, status, and final language variants for one task |
-| `maestro_list_tasks` | List recent tasks for the authenticated account |
 
 ## Example
 

@@ -26,20 +26,13 @@ async def test_create_video_uses_public_endpoint(api_token: str) -> None:
 @respx.mock
 async def test_task_operations_use_tasks_endpoint(api_token: str) -> None:
     route = respx.post("https://api.acedata.cloud/maestro/tasks").mock(
-        side_effect=[
-            httpx.Response(200, json={"id": "task-1", "status": "producing"}),
-            httpx.Response(200, json={"count": 1, "items": []}),
-        ]
+        return_value=httpx.Response(200, json={"id": "task-1", "status": "producing"})
     )
     client = MaestroClient(api_token=api_token)
 
     await client.get_task("task-1")
-    await client.list_tasks(10, created_at_min=100, created_at_max=200)
 
-    assert route.calls[0].request.read() == b'{"id":"task-1","action":"retrieve"}'
-    assert route.calls[1].request.read() == (
-        b'{"action":"retrieve_batch","limit":10,"created_at_min":100,"created_at_max":200}'
-    )
+    assert route.calls.last.request.read() == b'{"id":"task-1","action":"retrieve"}'
 
 
 @respx.mock
