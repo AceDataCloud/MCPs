@@ -27,7 +27,7 @@ For a hosted connection, use `https://maestro.mcp.acedata.cloud/mcp`. It accepts
 
 Ask an MCP client:
 
-> Create a 45-second 16:9 English product launch video from this product photo. Use a premium editorial style and a documentary voice.
+> Create a 45-second 16:9 English product launch video from this product photo. Use a pro editorial style and a documentary voice.
 
 The tool returns a `task_id` immediately. Query that ID until `status` is `succeeded` or `failed`. Successful tasks expose videos in `response.data.variants`.
 

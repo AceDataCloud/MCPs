@@ -17,8 +17,8 @@ async def test_create_video_builds_complete_payload() -> None:
             langs=["en", "pt-br"],
             aspect="16:9",
             duration=45,
-            quality="premium",
-            scenario="narrated",
+            quality="pro",
+            scenario="captions",
             style="editorial",
             voice="documentary-male",
         )
@@ -31,8 +31,8 @@ async def test_create_video_builds_complete_payload() -> None:
             "langs": ["en", "pt-br"],
             "aspect": "16:9",
             "duration": 45,
-            "quality": "premium",
-            "scenario": "narrated",
+            "quality": "pro",
+            "scenario": "captions",
             "style": "editorial",
             "voice": "documentary-male",
         }

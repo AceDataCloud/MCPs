@@ -52,7 +52,8 @@ async def maestro_create_video(
             description=(
                 "Output language codes, such as zh-cn, en, ja, or pt-br. Each language produces "
                 "a localized video variant."
-            )
+            ),
+            max_length=4,
         ),
     ] = None,
     aspect: Annotated[
@@ -68,18 +69,18 @@ async def maestro_create_video(
         int | None,
         Field(
             description=(
-                "Target video duration in seconds, from 1 to 600. Omit to use the server default "
+                "Target video duration in seconds, from 5 to 300. Omit to use the server default "
                 "(30) on a new video, or to inherit the source task's duration when iterating."
             ),
-            ge=1,
-            le=600,
+            ge=5,
+            le=300,
         ),
     ] = None,
     quality: Annotated[
         MaestroQuality | None,
         Field(
             description=(
-                "Production tier: draft, standard, or premium. Omit to use the server default "
+                "Production tier: lite, standard, or pro. Omit to use the server default "
                 "(standard) on a new video, or to inherit the source task's tier when iterating."
             )
         ),
@@ -88,8 +89,9 @@ async def maestro_create_video(
         MaestroScenario | None,
         Field(
             description=(
-                "Production workflow: auto, narrated, drama, avatar, motion, or slideshow. "
-                "Avatar normally needs a portrait in file_urls. Omit to let the server decide."
+                "Production workflow: auto, narrated, captions, avatar, or drama. Captions "
+                "requires a source video in file_urls. Avatar normally needs a portrait in "
+                "file_urls. Omit to let the server decide."
             )
         ),
     ] = None,
