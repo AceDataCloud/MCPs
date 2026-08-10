@@ -21,8 +21,15 @@ async def test_openai_get_models_calls_models_endpoint(monkeypatch):
 
 @pytest.mark.asyncio
 async def test_openai_get_realtime_connection_info():
-    response = await info_tools.openai_get_realtime_connection_info(model="gpt-realtime-2")
+    response = await info_tools.openai_get_realtime_connection_info(
+        model="gpt-realtime-2.1-mini",
+        voice="marin",
+    )
     payload = json.loads(response)
 
-    assert payload["url"] == "wss://api.acedata.cloud/v1/realtime?model=gpt-realtime-2"
+    assert (
+        payload["url"]
+        == "wss://api.acedata.cloud/v1/realtime?model=gpt-realtime-2.1-mini&voice=marin"
+    )
+    assert payload["voice"] == "marin"
     assert payload["transport"] == "websocket"
