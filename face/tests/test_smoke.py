@@ -3,6 +3,8 @@
 import os
 from unittest.mock import patch
 
+import pytest
+
 
 def test_settings_defaults():
     """Settings load with sensible defaults."""
@@ -62,3 +64,54 @@ def test_face_prompts_register():
     registered = {p.name for p in mcp._prompt_manager.list_prompts()}
     missing = expected - registered
     assert not missing, f"Missing prompts: {missing}"
+
+
+@pytest.mark.asyncio
+async def test_face_change_age_forwards_age_infos(monkeypatch):
+    """Age transform sends the required age_infos payload."""
+    from tools import face_tools
+
+    captured = {}
+
+    async def fake_change_age(**payload):
+        captured.update(payload)
+        return {"success": True}
+
+    monkeypatch.setattr(face_tools.client, "change_age", fake_change_age)
+
+    result = await face_tools.face_change_age(
+        image_url="https://example.com/face.png",
+        age_infos=[{"age": 30}],
+    )
+
+    assert '"success": true' in result
+    assert captured == {
+        "image_url": "https://example.com/face.png",
+        "age_infos": [{"age": 30}],
+    }
+
+
+@pytest.mark.asyncio
+async def test_face_change_gender_forwards_gender_infos(monkeypatch):
+    """Gender transform sends the required gender_infos payload."""
+    from tools import face_tools
+
+    captured = {}
+    gender_infos = [{"gender": 1, "face_rect": {"x": 0, "y": 0, "width": 100, "height": 100}}]
+
+    async def fake_change_gender(**payload):
+        captured.update(payload)
+        return {"success": True}
+
+    monkeypatch.setattr(face_tools.client, "change_gender", fake_change_gender)
+
+    result = await face_tools.face_change_gender(
+        image_url="https://example.com/face.png",
+        gender_infos=gender_infos,
+    )
+
+    assert '"success": true' in result
+    assert captured == {
+        "image_url": "https://example.com/face.png",
+        "gender_infos": gender_infos,
+    }

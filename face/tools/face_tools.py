@@ -123,11 +123,17 @@ async def face_change_age(
         str,
         Field(description="URL of the portrait to age-transform."),
     ],
+    age_infos: Annotated[
+        list[dict[str, Any]],
+        Field(description="Target age information for each face, for example [{'age': 30}]."),
+    ],
 ) -> str:
-    """Age or de-age a face. The API decides direction based on the input portrait."""
+    """Age or de-age one or more faces using explicit target age information."""
     if not image_url:
         return _json_error("Validation Error", "image_url is required")
-    return await _call(client.change_age, image_url=image_url)
+    if not age_infos:
+        return _json_error("Validation Error", "age_infos is required")
+    return await _call(client.change_age, image_url=image_url, age_infos=age_infos)
 
 
 @mcp.tool()
@@ -136,11 +142,22 @@ async def face_change_gender(
         str,
         Field(description="URL of the portrait whose facial gender should be swapped."),
     ],
+    gender_infos: Annotated[
+        list[dict[str, Any]],
+        Field(
+            description=(
+                "Target gender information for each face, optionally including face_rect. "
+                "Example: [{'gender': 1, 'face_rect': {'x': 0, 'y': 0, 'width': 100, 'height': 100}}]."
+            )
+        ),
+    ],
 ) -> str:
     """Swap perceived facial gender characteristics in a portrait."""
     if not image_url:
         return _json_error("Validation Error", "image_url is required")
-    return await _call(client.change_gender, image_url=image_url)
+    if not gender_infos:
+        return _json_error("Validation Error", "gender_infos is required")
+    return await _call(client.change_gender, image_url=image_url, gender_infos=gender_infos)
 
 
 @mcp.tool()
@@ -222,8 +239,8 @@ async def face_get_usage_guide() -> str:
 |------|----------|---------|
 | `face_detect_keypoints` | POST /face/analyze | Detect 90+ keypoints per face |
 | `face_beautify` | POST /face/beautify | Smoothing / whitening / slimming / eye enlarging |
-| `face_change_age` | POST /face/change-age | Age / de-age a face |
-| `face_change_gender` | POST /face/change-gender | Swap facial gender characteristics |
+| `face_change_age` | POST /face/change-age | Age / de-age faces with `age_infos` |
+| `face_change_gender` | POST /face/change-gender | Swap facial gender characteristics with `gender_infos` |
 | `face_swap` | POST /face/swap | Move source face onto target image |
 | `face_cartoonize` | POST /face/cartoon | Convert portrait to cartoon style |
 | `face_detect_liveness` | POST /face/detect-live | Detect live vs printed/screen face |
