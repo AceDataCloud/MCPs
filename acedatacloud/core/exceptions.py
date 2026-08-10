@@ -11,7 +11,7 @@ class PlatformError(Exception):
 
 
 class PlatformAuthError(PlatformError):
-    """Authentication error (401/403)."""
+    """Authentication error (401)."""
 
     def __init__(self, message: str = "Authentication failed"):
         super().__init__(message, code="auth_error")

@@ -130,7 +130,7 @@ Environment Variables:
             from starlette.responses import JSONResponse
             from starlette.routing import BaseRoute, Mount, Route
 
-            from core.client import set_request_api_token
+            from core.client import reset_request_api_token, set_request_api_token
             from core.server import oauth_provider
 
             class BearerTokenMiddleware:
@@ -144,12 +144,17 @@ Environment Variables:
                     self.app = app
 
                 async def __call__(self, scope, receive, send):  # type: ignore[no-untyped-def]
+                    token_state = None
                     if scope.get("type") == "http":
                         headers = dict(scope.get("headers") or [])
                         auth = headers.get(b"authorization", b"").decode()
                         if auth.lower().startswith("bearer "):
-                            set_request_api_token(auth[7:].strip())
-                    await self.app(scope, receive, send)
+                            token_state = set_request_api_token(auth[7:].strip())
+                    try:
+                        await self.app(scope, receive, send)
+                    finally:
+                        if token_state is not None:
+                            reset_request_api_token(token_state)
 
             async def health(_request: Request) -> JSONResponse:
                 return JSONResponse({"status": "ok"})

@@ -10,7 +10,7 @@ from typing import Annotated, Any
 from pydantic import Field
 
 from core.client import client
-from core.exceptions import PlatformAPIError, PlatformAuthError
+from core.exceptions import PlatformError
 from core.server import mcp
 from core.utils import dumps, error_json
 
@@ -51,10 +51,8 @@ async def acedatacloud_list_model_catalog(
                 "items": items,
             }
         )
-    except PlatformAuthError as e:
-        return error_json("Authentication Error", e.message)
-    except PlatformAPIError as e:
-        return error_json("API Error", e.message)
+    except PlatformError as error:
+        return error_json(error.code, error.message)
 
 
 @mcp.tool()
@@ -78,7 +76,5 @@ async def acedatacloud_get_model(
         if not matches:
             return error_json("Not Found", f"No model matched '{model}'.")
         return dumps({"count": len(matches), "items": matches})
-    except PlatformAuthError as e:
-        return error_json("Authentication Error", e.message)
-    except PlatformAPIError as e:
-        return error_json("API Error", e.message)
+    except PlatformError as error:
+        return error_json(error.code, error.message)

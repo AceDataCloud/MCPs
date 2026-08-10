@@ -7,6 +7,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Resolve the authenticated account through `/platform-tokens/me/` once per request,
+  so opaque `platform-*` credentials scope every owner query correctly instead of
+  omitting `user_id`.
+- Distinguish permission-denied responses from authentication failures and avoid
+  logging submitted JSON values.
+- Limit one-time secret disclosure to exact JSON response paths and redact mutation
+  dry-runs recursively.
+
+### Added
+
+- Add PATCH/PUT, repeated query parameters, bounded CSV/text responses, and explicit
+  redirect policy to the platform HTTP client.
+- Add a machine-checked PlatformBackend operation coverage contract, generated README
+  and usage-guide inventories, and a FastMCP `tools/list` schema snapshot.
+- Add a reusable quality workflow required by both package publishing and deployment.
+
 ### Removed
 
 - **BREAKING:** `acedatacloud_list_channels` and `acedatacloud_search_materials`

@@ -230,6 +230,9 @@ async def test_get_model_substring_match():
 @respx.mock
 @pytest.mark.asyncio
 async def test_list_distributions_merges_status_and_history():
+    respx.get(f"{API}/platform-tokens/me/").mock(
+        return_value=httpx.Response(200, json={"id": "user-1"})
+    )
     respx.get(f"{API}/distribution-statuses/").mock(
         return_value=httpx.Response(200, json={"count": 1, "items": [{"level": 2, "reward": 12.5}]})
     )

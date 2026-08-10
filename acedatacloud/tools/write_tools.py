@@ -9,7 +9,7 @@ from typing import Annotated
 from pydantic import Field
 
 from core.client import client
-from core.exceptions import PlatformAPIError, PlatformAuthError
+from core.exceptions import PlatformError
 from core.server import mcp
 from core.utils import confirmation_required, dumps, error_json
 
@@ -47,12 +47,9 @@ async def acedatacloud_create_credential(
         return confirmation_required("POST /credentials/", body)
     try:
         result = await client.post("/credentials/", body)
-        # reveal=True: the caller needs the freshly minted token in full.
-        return dumps(result, reveal=True)
-    except PlatformAuthError as e:
-        return error_json("Authentication Error", e.message)
-    except PlatformAPIError as e:
-        return error_json("API Error", e.message)
+        return dumps(result, disclose={"/token"})
+    except PlatformError as error:
+        return error_json(error.code, error.message)
 
 
 @mcp.tool()
@@ -69,10 +66,8 @@ async def acedatacloud_delete_credential(
     try:
         await client.delete(f"/credentials/{credential_id}")
         return dumps({"status": "deleted", "credential_id": credential_id})
-    except PlatformAuthError as e:
-        return error_json("Authentication Error", e.message)
-    except PlatformAPIError as e:
-        return error_json("API Error", e.message)
+    except PlatformError as error:
+        return error_json(error.code, error.message)
 
 
 @mcp.tool()
@@ -98,10 +93,8 @@ async def acedatacloud_create_order(
     try:
         result = await client.post("/orders/", body)
         return dumps(result)
-    except PlatformAuthError as e:
-        return error_json("Authentication Error", e.message)
-    except PlatformAPIError as e:
-        return error_json("API Error", e.message)
+    except PlatformError as error:
+        return error_json(error.code, error.message)
 
 
 @mcp.tool()
@@ -124,12 +117,9 @@ async def acedatacloud_pay_order(
         return confirmation_required(f"POST /orders/{order_id}/pay/", body)
     try:
         result = await client.post(f"/orders/{order_id}/pay/", body)
-        # pay_url is needed by the caller to complete payment.
-        return dumps(result, reveal=True)
-    except PlatformAuthError as e:
-        return error_json("Authentication Error", e.message)
-    except PlatformAPIError as e:
-        return error_json("API Error", e.message)
+        return dumps(result, disclose={"/pay_url"})
+    except PlatformError as error:
+        return error_json(error.code, error.message)
 
 
 @mcp.tool()
@@ -146,11 +136,9 @@ async def acedatacloud_create_platform_token(
         return confirmation_required("POST /platform-tokens/", {})
     try:
         result = await client.post("/platform-tokens/", {})
-        return dumps(result, reveal=True)
-    except PlatformAuthError as e:
-        return error_json("Authentication Error", e.message)
-    except PlatformAPIError as e:
-        return error_json("API Error", e.message)
+        return dumps(result, disclose={"/token"})
+    except PlatformError as error:
+        return error_json(error.code, error.message)
 
 
 @mcp.tool()
@@ -166,7 +154,5 @@ async def acedatacloud_delete_platform_token(
     try:
         await client.delete(f"/platform-tokens/{token_id}/")
         return dumps({"status": "deleted", "token_id": token_id})
-    except PlatformAuthError as e:
-        return error_json("Authentication Error", e.message)
-    except PlatformAPIError as e:
-        return error_json("API Error", e.message)
+    except PlatformError as error:
+        return error_json(error.code, error.message)

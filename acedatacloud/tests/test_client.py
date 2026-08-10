@@ -5,7 +5,7 @@ import pytest
 import respx
 
 from core.client import PlatformClient
-from core.exceptions import PlatformAPIError, PlatformAuthError
+from core.exceptions import PlatformAPIError, PlatformAuthError, PlatformTimeoutError
 
 BASE = "https://api.test.com"
 API = f"{BASE}/api/v1"
@@ -55,6 +55,38 @@ async def test_post_success(client):
 
 @respx.mock
 @pytest.mark.asyncio
+async def test_patch_and_put_success(client):
+    patch = respx.patch(f"{API}/credentials/c1").mock(
+        return_value=httpx.Response(200, json={"id": "c1", "name": "new"})
+    )
+    put = respx.put(f"{API}/preferences/topic").mock(
+        return_value=httpx.Response(200, json={"state": "unsubscribed"})
+    )
+    assert (await client.patch("/credentials/c1", {"name": "new"}))["name"] == "new"
+    assert (await client.put("/preferences/topic", {"state": "unsubscribed"}))[
+        "state"
+    ] == "unsubscribed"
+    assert patch.calls[0].request.method == "PATCH"
+    assert put.calls[0].request.method == "PUT"
+
+
+@respx.mock
+@pytest.mark.asyncio
+async def test_repeated_query_values(client):
+    route = respx.get(f"{API}/applications/").mock(
+        return_value=httpx.Response(200, json={"items": []})
+    )
+    await client.get(
+        "/applications/",
+        {"service_id": ["svc-1", "svc-2"], "scope": ["Individual", "Global"]},
+    )
+    params = route.calls[0].request.url.params
+    assert params.get_list("service_id") == ["svc-1", "svc-2"]
+    assert params.get_list("scope") == ["Individual", "Global"]
+
+
+@respx.mock
+@pytest.mark.asyncio
 async def test_delete_204_returns_none(client):
     respx.delete(f"{API}/credentials/c1").mock(return_value=httpx.Response(204))
     result = await client.delete("/credentials/c1")
@@ -79,3 +111,54 @@ async def test_400_raises_api_error(client):
     )
     with pytest.raises(PlatformAPIError, match="package_id is required"):
         await client.post("/orders/", {})
+
+
+@respx.mock
+@pytest.mark.asyncio
+async def test_403_raises_permission_denied(client):
+    respx.get(f"{API}/admin/").mock(return_value=httpx.Response(403, json={"detail": "forbidden"}))
+    with pytest.raises(PlatformAPIError) as caught:
+        await client.get("/admin/")
+    assert caught.value.code == "permission_denied"
+    assert caught.value.status_code == 403
+
+
+@respx.mock
+@pytest.mark.asyncio
+async def test_timeout_raises_timeout_error(client):
+    respx.get(f"{API}/slow/").mock(side_effect=httpx.ReadTimeout("slow"))
+    with pytest.raises(PlatformTimeoutError):
+        await client.get("/slow/")
+
+
+@respx.mock
+@pytest.mark.asyncio
+async def test_bounded_text_response(client):
+    route = respx.get(f"{API}/usage/apis/export/").mock(
+        return_value=httpx.Response(
+            200,
+            content=b"id,status\n1,200\n",
+            headers={
+                "content-type": "text/csv; charset=utf-8",
+                "content-disposition": 'attachment; filename="usage.csv"',
+            },
+        )
+    )
+    result = await client.request_text("/usage/apis/export/", max_bytes=100)
+    assert result.filename == "usage.csv"
+    assert result.content_type == "text/csv"
+    assert result.size_bytes == len(result.content.encode())
+    assert route.call_count == 1
+
+
+@respx.mock
+@pytest.mark.asyncio
+async def test_text_response_size_is_bounded(client):
+    respx.get(f"{API}/usage/apis/export/").mock(
+        return_value=httpx.Response(
+            200, content=b"0123456789", headers={"content-type": "text/csv"}
+        )
+    )
+    with pytest.raises(PlatformAPIError) as caught:
+        await client.request_text("/usage/apis/export/", max_bytes=5)
+    assert caught.value.code == "response_too_large"
