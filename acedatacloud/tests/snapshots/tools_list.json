@@ -106,6 +106,50 @@
     }
   },
   {
+    "name": "acedatacloud_check_frame_ancestor",
+    "inputSchema": {
+      "properties": {
+        "origin": {
+          "description": "Embedding origin or referer.",
+          "title": "Origin",
+          "type": "string"
+        }
+      },
+      "required": [
+        "origin"
+      ],
+      "title": "acedatacloud_check_frame_ancestorArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "acedatacloud_check_site_domain",
+    "inputSchema": {
+      "properties": {
+        "hostname": {
+          "description": "Hostname.",
+          "title": "Hostname",
+          "type": "string"
+        },
+        "kind": {
+          "default": "Page",
+          "description": "Domain kind.",
+          "enum": [
+            "Page",
+            "Api"
+          ],
+          "title": "Kind",
+          "type": "string"
+        }
+      },
+      "required": [
+        "hostname"
+      ],
+      "title": "acedatacloud_check_site_domainArguments",
+      "type": "object"
+    }
+  },
+  {
     "name": "acedatacloud_confirm_auto_recharge_setup",
     "inputSchema": {
       "properties": {
@@ -752,6 +796,507 @@
     }
   },
   {
+    "name": "acedatacloud_create_site_banner",
+    "inputSchema": {
+      "properties": {
+        "site": {
+          "description": "Site UUID.",
+          "title": "Site",
+          "type": "string"
+        },
+        "image_url": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Image URL.",
+          "title": "Image Url"
+        },
+        "link_url": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Link URL.",
+          "title": "Link Url"
+        },
+        "title": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Display title.",
+          "title": "Title"
+        },
+        "subtitle": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Display subtitle.",
+          "title": "Subtitle"
+        },
+        "visible": {
+          "default": true,
+          "description": "Visibility.",
+          "title": "Visible",
+          "type": "boolean"
+        },
+        "sort_order": {
+          "default": 0,
+          "description": "Sort order.",
+          "title": "Sort Order",
+          "type": "integer"
+        },
+        "start_at": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "ISO-8601 visibility start.",
+          "title": "Start At"
+        },
+        "end_at": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "ISO-8601 visibility end.",
+          "title": "End At"
+        },
+        "tags": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Tags.",
+          "title": "Tags"
+        },
+        "metadata": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Metadata.",
+          "title": "Metadata"
+        },
+        "confirm": {
+          "default": false,
+          "description": "Must be true to execute.",
+          "title": "Confirm",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "site"
+      ],
+      "title": "acedatacloud_create_site_bannerArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "acedatacloud_create_site_capability_override",
+    "inputSchema": {
+      "properties": {
+        "site": {
+          "description": "Site UUID.",
+          "title": "Site",
+          "type": "string"
+        },
+        "capability": {
+          "description": "Capability key.",
+          "title": "Capability",
+          "type": "string"
+        },
+        "display_name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Display name.",
+          "title": "Display Name"
+        },
+        "icon_url": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Icon URL.",
+          "title": "Icon Url"
+        },
+        "confirm": {
+          "default": false,
+          "description": "Must be true to execute.",
+          "title": "Confirm",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "site",
+        "capability"
+      ],
+      "title": "acedatacloud_create_site_capability_overrideArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "acedatacloud_create_site_document_override",
+    "inputSchema": {
+      "properties": {
+        "site": {
+          "description": "Site UUID.",
+          "title": "Site",
+          "type": "string"
+        },
+        "document": {
+          "description": "Document UUID.",
+          "title": "Document",
+          "type": "string"
+        },
+        "visible": {
+          "default": true,
+          "description": "Visibility.",
+          "title": "Visible",
+          "type": "boolean"
+        },
+        "cascade": {
+          "default": false,
+          "description": "Cascade visibility to descendants.",
+          "title": "Cascade",
+          "type": "boolean"
+        },
+        "display_title": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Display title.",
+          "title": "Display Title"
+        },
+        "display_summary": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Display summary.",
+          "title": "Display Summary"
+        },
+        "content_mode": {
+          "default": "default",
+          "description": "Content mode.",
+          "title": "Content Mode",
+          "type": "string"
+        },
+        "content_markdown": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Override Markdown content.",
+          "title": "Content Markdown"
+        },
+        "sort_order": {
+          "default": 0,
+          "description": "Sort order.",
+          "title": "Sort Order",
+          "type": "integer"
+        },
+        "tags": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Tags.",
+          "title": "Tags"
+        },
+        "metadata": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Metadata.",
+          "title": "Metadata"
+        },
+        "confirm": {
+          "default": false,
+          "description": "Must be true to execute.",
+          "title": "Confirm",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "site",
+        "document"
+      ],
+      "title": "acedatacloud_create_site_document_overrideArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "acedatacloud_create_site_domain",
+    "inputSchema": {
+      "properties": {
+        "site": {
+          "description": "Site UUID.",
+          "title": "Site",
+          "type": "string"
+        },
+        "hostname": {
+          "description": "Custom hostname.",
+          "title": "Hostname",
+          "type": "string"
+        },
+        "kind": {
+          "default": "Page",
+          "description": "Domain kind.",
+          "enum": [
+            "Page",
+            "Api"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "tags": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Tags.",
+          "title": "Tags"
+        },
+        "metadata": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Metadata.",
+          "title": "Metadata"
+        },
+        "confirm": {
+          "default": false,
+          "description": "Must be true to bind domain.",
+          "title": "Confirm",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "site",
+        "hostname"
+      ],
+      "title": "acedatacloud_create_site_domainArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "acedatacloud_create_site_service_override",
+    "inputSchema": {
+      "properties": {
+        "site": {
+          "description": "Site UUID.",
+          "title": "Site",
+          "type": "string"
+        },
+        "service": {
+          "description": "Service UUID.",
+          "title": "Service",
+          "type": "string"
+        },
+        "visible": {
+          "default": true,
+          "description": "Visibility.",
+          "title": "Visible",
+          "type": "boolean"
+        },
+        "markup_ratio": {
+          "anyOf": [
+            {
+              "maximum": 5,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Pricing markup ratio.",
+          "title": "Markup Ratio"
+        },
+        "display_title": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Display title.",
+          "title": "Display Title"
+        },
+        "display_summary": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Display summary.",
+          "title": "Display Summary"
+        },
+        "sort_order": {
+          "default": 0,
+          "description": "Sort order.",
+          "title": "Sort Order",
+          "type": "integer"
+        },
+        "tags": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Tags.",
+          "title": "Tags"
+        },
+        "metadata": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Metadata.",
+          "title": "Metadata"
+        },
+        "confirm": {
+          "default": false,
+          "description": "Must be true to execute.",
+          "title": "Confirm",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "site",
+        "service"
+      ],
+      "title": "acedatacloud_create_site_service_overrideArguments",
+      "type": "object"
+    }
+  },
+  {
     "name": "acedatacloud_create_wallet_challenge",
     "inputSchema": {
       "properties": {
@@ -850,6 +1395,119 @@
         "token_id"
       ],
       "title": "acedatacloud_delete_platform_tokenArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "acedatacloud_delete_site_banner",
+    "inputSchema": {
+      "properties": {
+        "banner_id": {
+          "description": "Banner UUID.",
+          "title": "Banner Id",
+          "type": "string"
+        },
+        "confirm": {
+          "default": false,
+          "description": "Must be true to delete.",
+          "title": "Confirm",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "banner_id"
+      ],
+      "title": "acedatacloud_delete_site_bannerArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "acedatacloud_delete_site_capability_override",
+    "inputSchema": {
+      "properties": {
+        "override_id": {
+          "description": "Override UUID.",
+          "title": "Override Id",
+          "type": "string"
+        },
+        "confirm": {
+          "default": false,
+          "title": "Confirm",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "override_id"
+      ],
+      "title": "acedatacloud_delete_site_capability_overrideArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "acedatacloud_delete_site_document_override",
+    "inputSchema": {
+      "properties": {
+        "override_id": {
+          "description": "Override UUID.",
+          "title": "Override Id",
+          "type": "string"
+        },
+        "confirm": {
+          "default": false,
+          "title": "Confirm",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "override_id"
+      ],
+      "title": "acedatacloud_delete_site_document_overrideArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "acedatacloud_delete_site_domain",
+    "inputSchema": {
+      "properties": {
+        "domain_id": {
+          "description": "Domain UUID.",
+          "title": "Domain Id",
+          "type": "string"
+        },
+        "confirm": {
+          "default": false,
+          "description": "Must be true to unbind.",
+          "title": "Confirm",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "domain_id"
+      ],
+      "title": "acedatacloud_delete_site_domainArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "acedatacloud_delete_site_service_override",
+    "inputSchema": {
+      "properties": {
+        "override_id": {
+          "description": "Override UUID.",
+          "title": "Override Id",
+          "type": "string"
+        },
+        "confirm": {
+          "default": false,
+          "description": "Must be true to delete.",
+          "title": "Confirm",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "override_id"
+      ],
+      "title": "acedatacloud_delete_site_service_overrideArguments",
       "type": "object"
     }
   },
@@ -1907,6 +2565,108 @@
     }
   },
   {
+    "name": "acedatacloud_get_site",
+    "inputSchema": {
+      "properties": {
+        "site_id": {
+          "description": "Site UUID.",
+          "title": "Site Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "site_id"
+      ],
+      "title": "acedatacloud_get_siteArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "acedatacloud_get_site_banner",
+    "inputSchema": {
+      "properties": {
+        "banner_id": {
+          "description": "Banner UUID.",
+          "title": "Banner Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "banner_id"
+      ],
+      "title": "acedatacloud_get_site_bannerArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "acedatacloud_get_site_capability_override",
+    "inputSchema": {
+      "properties": {
+        "override_id": {
+          "description": "Override UUID.",
+          "title": "Override Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "override_id"
+      ],
+      "title": "acedatacloud_get_site_capability_overrideArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "acedatacloud_get_site_document_override",
+    "inputSchema": {
+      "properties": {
+        "override_id": {
+          "description": "Override UUID.",
+          "title": "Override Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "override_id"
+      ],
+      "title": "acedatacloud_get_site_document_overrideArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "acedatacloud_get_site_domain",
+    "inputSchema": {
+      "properties": {
+        "domain_id": {
+          "description": "Domain UUID.",
+          "title": "Domain Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "domain_id"
+      ],
+      "title": "acedatacloud_get_site_domainArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "acedatacloud_get_site_service_override",
+    "inputSchema": {
+      "properties": {
+        "override_id": {
+          "description": "Override UUID.",
+          "title": "Override Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "override_id"
+      ],
+      "title": "acedatacloud_get_site_service_overrideArguments",
+      "type": "object"
+    }
+  },
+  {
     "name": "acedatacloud_get_survey",
     "inputSchema": {
       "properties": {
@@ -2009,6 +2769,29 @@
         }
       },
       "title": "acedatacloud_initialize_distributionArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "acedatacloud_initialize_site",
+    "inputSchema": {
+      "properties": {
+        "origin": {
+          "description": "Site origin URL.",
+          "title": "Origin",
+          "type": "string"
+        },
+        "confirm": {
+          "default": false,
+          "description": "Must be true to initialize.",
+          "title": "Confirm",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "origin"
+      ],
+      "title": "acedatacloud_initialize_siteArguments",
       "type": "object"
     }
   },
@@ -3020,6 +3803,174 @@
     }
   },
   {
+    "name": "acedatacloud_list_site_banners",
+    "inputSchema": {
+      "properties": {
+        "site": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Optional site UUID.",
+          "title": "Site"
+        },
+        "public": {
+          "default": false,
+          "description": "Use the public active-banner view.",
+          "title": "Public",
+          "type": "boolean"
+        }
+      },
+      "title": "acedatacloud_list_site_bannersArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "acedatacloud_list_site_capability_overrides",
+    "inputSchema": {
+      "properties": {
+        "site": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Optional site UUID.",
+          "title": "Site"
+        }
+      },
+      "title": "acedatacloud_list_site_capability_overridesArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "acedatacloud_list_site_document_overrides",
+    "inputSchema": {
+      "properties": {
+        "site": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Optional site UUID.",
+          "title": "Site"
+        }
+      },
+      "title": "acedatacloud_list_site_document_overridesArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "acedatacloud_list_site_domains",
+    "inputSchema": {
+      "properties": {
+        "site": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Optional site UUID.",
+          "title": "Site"
+        },
+        "status": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Optional status.",
+          "title": "Status"
+        },
+        "kind": {
+          "anyOf": [
+            {
+              "enum": [
+                "Page",
+                "Api"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Page or API domain.",
+          "title": "Kind"
+        }
+      },
+      "title": "acedatacloud_list_site_domainsArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "acedatacloud_list_site_service_overrides",
+    "inputSchema": {
+      "properties": {
+        "site": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Optional site UUID.",
+          "title": "Site"
+        }
+      },
+      "title": "acedatacloud_list_site_service_overridesArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "acedatacloud_list_sites",
+    "inputSchema": {
+      "properties": {
+        "limit": {
+          "default": 50,
+          "maximum": 100,
+          "minimum": 1,
+          "title": "Limit",
+          "type": "integer"
+        },
+        "offset": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Offset",
+          "type": "integer"
+        }
+      },
+      "title": "acedatacloud_list_sitesArguments",
+      "type": "object"
+    }
+  },
+  {
     "name": "acedatacloud_list_surveys",
     "inputSchema": {
       "properties": {},
@@ -3569,6 +4520,64 @@
     }
   },
   {
+    "name": "acedatacloud_set_site_menu_translation",
+    "inputSchema": {
+      "properties": {
+        "site_id": {
+          "description": "Site UUID.",
+          "title": "Site Id",
+          "type": "string"
+        },
+        "scope": {
+          "description": "Menu scope.",
+          "enum": [
+            "nav",
+            "console_nav"
+          ],
+          "title": "Scope",
+          "type": "string"
+        },
+        "custom_item_id": {
+          "description": "Custom menu item ID.",
+          "title": "Custom Item Id",
+          "type": "string"
+        },
+        "enabled": {
+          "description": "Enable auto-translation.",
+          "title": "Enabled",
+          "type": "boolean"
+        },
+        "content": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Source text when enabling.",
+          "title": "Content"
+        },
+        "confirm": {
+          "default": false,
+          "description": "Must be true to update translation.",
+          "title": "Confirm",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "site_id",
+        "scope",
+        "custom_item_id",
+        "enabled"
+      ],
+      "title": "acedatacloud_set_site_menu_translationArguments",
+      "type": "object"
+    }
+  },
+  {
     "name": "acedatacloud_setup_auto_recharge",
     "inputSchema": {
       "properties": {
@@ -3923,6 +4932,692 @@
     }
   },
   {
+    "name": "acedatacloud_update_site",
+    "inputSchema": {
+      "properties": {
+        "site_id": {
+          "description": "Site UUID.",
+          "title": "Site Id",
+          "type": "string"
+        },
+        "title": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Site title.",
+          "title": "Title"
+        },
+        "description": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Site description.",
+          "title": "Description"
+        },
+        "branding": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Branding configuration.",
+          "title": "Branding"
+        },
+        "features": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Feature configuration.",
+          "title": "Features"
+        },
+        "auth": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Authentication configuration; secrets are redacted.",
+          "title": "Auth"
+        },
+        "distribution": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Distribution configuration.",
+          "title": "Distribution"
+        },
+        "nav": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Public navigation configuration.",
+          "title": "Nav"
+        },
+        "console_nav": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Console navigation configuration.",
+          "title": "Console Nav"
+        },
+        "tags": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Site tags.",
+          "title": "Tags"
+        },
+        "metadata": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Site metadata.",
+          "title": "Metadata"
+        },
+        "confirm": {
+          "default": false,
+          "description": "Must be true to update.",
+          "title": "Confirm",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "site_id"
+      ],
+      "title": "acedatacloud_update_siteArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "acedatacloud_update_site_banner",
+    "inputSchema": {
+      "properties": {
+        "banner_id": {
+          "description": "Banner UUID.",
+          "title": "Banner Id",
+          "type": "string"
+        },
+        "image_url": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Image URL.",
+          "title": "Image Url"
+        },
+        "link_url": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Link URL.",
+          "title": "Link Url"
+        },
+        "title": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Display title.",
+          "title": "Title"
+        },
+        "subtitle": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Display subtitle.",
+          "title": "Subtitle"
+        },
+        "visible": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Visibility.",
+          "title": "Visible"
+        },
+        "sort_order": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Sort order.",
+          "title": "Sort Order"
+        },
+        "start_at": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "ISO-8601 visibility start.",
+          "title": "Start At"
+        },
+        "end_at": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "ISO-8601 visibility end.",
+          "title": "End At"
+        },
+        "tags": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Tags.",
+          "title": "Tags"
+        },
+        "metadata": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Metadata.",
+          "title": "Metadata"
+        },
+        "confirm": {
+          "default": false,
+          "description": "Must be true to execute.",
+          "title": "Confirm",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "banner_id"
+      ],
+      "title": "acedatacloud_update_site_bannerArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "acedatacloud_update_site_capability_override",
+    "inputSchema": {
+      "properties": {
+        "override_id": {
+          "description": "Override UUID.",
+          "title": "Override Id",
+          "type": "string"
+        },
+        "display_name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Display name.",
+          "title": "Display Name"
+        },
+        "icon_url": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Icon URL.",
+          "title": "Icon Url"
+        },
+        "confirm": {
+          "default": false,
+          "description": "Must be true to execute.",
+          "title": "Confirm",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "override_id"
+      ],
+      "title": "acedatacloud_update_site_capability_overrideArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "acedatacloud_update_site_document_override",
+    "inputSchema": {
+      "properties": {
+        "override_id": {
+          "description": "Override UUID.",
+          "title": "Override Id",
+          "type": "string"
+        },
+        "visible": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Visibility.",
+          "title": "Visible"
+        },
+        "cascade": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Cascade visibility.",
+          "title": "Cascade"
+        },
+        "display_title": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Display title.",
+          "title": "Display Title"
+        },
+        "display_summary": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Display summary.",
+          "title": "Display Summary"
+        },
+        "content_mode": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Content mode.",
+          "title": "Content Mode"
+        },
+        "content_markdown": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Override Markdown content.",
+          "title": "Content Markdown"
+        },
+        "sort_order": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Sort order.",
+          "title": "Sort Order"
+        },
+        "tags": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Tags.",
+          "title": "Tags"
+        },
+        "metadata": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Metadata.",
+          "title": "Metadata"
+        },
+        "confirm": {
+          "default": false,
+          "description": "Must be true to execute.",
+          "title": "Confirm",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "override_id"
+      ],
+      "title": "acedatacloud_update_site_document_overrideArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "acedatacloud_update_site_domain",
+    "inputSchema": {
+      "properties": {
+        "domain_id": {
+          "description": "Domain UUID.",
+          "title": "Domain Id",
+          "type": "string"
+        },
+        "tags": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Replacement tags.",
+          "title": "Tags"
+        },
+        "metadata": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Replacement metadata.",
+          "title": "Metadata"
+        },
+        "confirm": {
+          "default": false,
+          "description": "Must be true to update.",
+          "title": "Confirm",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "domain_id"
+      ],
+      "title": "acedatacloud_update_site_domainArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "acedatacloud_update_site_service_override",
+    "inputSchema": {
+      "properties": {
+        "override_id": {
+          "description": "Override UUID.",
+          "title": "Override Id",
+          "type": "string"
+        },
+        "visible": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Visibility.",
+          "title": "Visible"
+        },
+        "markup_ratio": {
+          "anyOf": [
+            {
+              "maximum": 5,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Pricing markup ratio.",
+          "title": "Markup Ratio"
+        },
+        "display_title": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Display title.",
+          "title": "Display Title"
+        },
+        "display_summary": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Display summary.",
+          "title": "Display Summary"
+        },
+        "sort_order": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Sort order.",
+          "title": "Sort Order"
+        },
+        "tags": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Tags.",
+          "title": "Tags"
+        },
+        "metadata": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Metadata.",
+          "title": "Metadata"
+        },
+        "confirm": {
+          "default": false,
+          "description": "Must be true to execute.",
+          "title": "Confirm",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "override_id"
+      ],
+      "title": "acedatacloud_update_site_service_overrideArguments",
+      "type": "object"
+    }
+  },
+  {
     "name": "acedatacloud_usage_summary",
     "inputSchema": {
       "properties": {
@@ -3978,6 +5673,29 @@
         "transaction_id"
       ],
       "title": "acedatacloud_verify_apple_orderArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "acedatacloud_verify_site_domain",
+    "inputSchema": {
+      "properties": {
+        "domain_id": {
+          "description": "Domain UUID.",
+          "title": "Domain Id",
+          "type": "string"
+        },
+        "confirm": {
+          "default": false,
+          "description": "Must be true to run HTTPS probe.",
+          "title": "Confirm",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "domain_id"
+      ],
+      "title": "acedatacloud_verify_site_domainArguments",
       "type": "object"
     }
   }
