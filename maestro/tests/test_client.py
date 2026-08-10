@@ -36,6 +36,20 @@ async def test_task_operations_use_tasks_endpoint(api_token: str) -> None:
 
 
 @respx.mock
+async def test_list_tasks_uses_batch_action_and_time_bounds(api_token: str) -> None:
+    route = respx.post("https://api.acedata.cloud/maestro/tasks").mock(
+        return_value=httpx.Response(200, json={"count": 0, "items": []})
+    )
+    client = MaestroClient(api_token=api_token)
+
+    await client.list_tasks(30, 100, 200)
+
+    assert route.calls.last.request.read() == (
+        b'{"action":"retrieve_batch","limit":30,"created_at_min":100,"created_at_max":200}'
+    )
+
+
+@respx.mock
 async def test_api_error_preserves_status(api_token: str) -> None:
     respx.post("https://api.acedata.cloud/maestro/tasks").mock(
         return_value=httpx.Response(404, json={"detail": "task not found"})
