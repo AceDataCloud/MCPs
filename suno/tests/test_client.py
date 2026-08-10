@@ -50,6 +50,14 @@ class TestSunoClient:
         assert payload["callback_url"] == "https://example.com/webhook"
 
     @pytest.mark.asyncio
+    async def test_get_mp4_does_not_inject_async(self, client, mock_audio_response):
+        """MP4 requests should match the API schema and send only explicit payload fields."""
+        with patch.object(client, "request", new=AsyncMock(return_value=mock_audio_response)) as mock_request:
+            await client.get_mp4(audio_id="audio-123")
+
+        mock_request.assert_awaited_once_with("/suno/mp4", {"audio_id": "audio-123"})
+
+    @pytest.mark.asyncio
     async def test_request_success(self, client, mock_audio_response):
         """Test successful API request."""
         mock_response = MagicMock()

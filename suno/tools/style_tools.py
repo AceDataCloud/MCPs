@@ -7,6 +7,7 @@ from pydantic import Field
 
 from core.client import client
 from core.server import mcp
+from core.utils import format_audio_result, format_persona_result
 
 
 @mcp.tool()
@@ -18,10 +19,9 @@ async def suno_optimize_style(
         ),
     ],
 ) -> str:
-    """Optimize a music style description for better generation results.
+    """Generate an optimized music style result from a prompt.
 
-    Takes a rough style description and refines it into an optimized style
-    prompt that Suno can better understand and produce higher quality music for.
+    Submits a style prompt to Suno and returns the resulting task response.
 
     Use this when:
     - You have a vague style idea and want to refine it
@@ -29,10 +29,10 @@ async def suno_optimize_style(
     - You need suggestions for style terms
 
     Returns:
-        Optimized style description ready for use in music generation.
+        Task ID and style result information.
     """
     result = await client.get_style(prompt=prompt)
-    return json.dumps(result, ensure_ascii=False, indent=2)
+    return format_audio_result(result)
 
 
 @mcp.tool()
@@ -105,9 +105,9 @@ async def suno_create_voice(
         ),
     ],
     name: Annotated[
-        str,
-        Field(description="Name for the custom voice persona."),
-    ],
+        str | None,
+        Field(description="Optional name for the custom voice persona."),
+    ] = None,
     description: Annotated[
         str | None,
         Field(description="Description of the custom voice persona (optional)."),
@@ -133,10 +133,11 @@ async def suno_create_voice(
     """
     payload: dict = {
         "audio_url": audio_url,
-        "name": name,
     }
+    if name:
+        payload["name"] = name
     if description:
         payload["description"] = description
 
     result = await client.create_voice(**payload)
-    return json.dumps(result, ensure_ascii=False, indent=2)
+    return format_persona_result(result)
