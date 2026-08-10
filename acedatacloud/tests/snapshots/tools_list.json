@@ -60,6 +60,29 @@
     }
   },
   {
+    "name": "acedatacloud_cancel_access_request",
+    "inputSchema": {
+      "properties": {
+        "request_id": {
+          "description": "Access request UUID.",
+          "title": "Request Id",
+          "type": "string"
+        },
+        "confirm": {
+          "default": false,
+          "description": "Must be true to cancel the request.",
+          "title": "Confirm",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "request_id"
+      ],
+      "title": "acedatacloud_cancel_access_requestArguments",
+      "type": "object"
+    }
+  },
+  {
     "name": "acedatacloud_cancel_invoice",
     "inputSchema": {
       "properties": {
@@ -112,6 +135,106 @@
     }
   },
   {
+    "name": "acedatacloud_confirm_wallet_challenge",
+    "inputSchema": {
+      "properties": {
+        "challenge_id": {
+          "description": "Wallet challenge UUID.",
+          "title": "Challenge Id",
+          "type": "string"
+        },
+        "signature": {
+          "description": "Wallet signature; never echoed.",
+          "title": "Signature",
+          "type": "string"
+        },
+        "confirm": {
+          "default": false,
+          "description": "Must be true to consume the challenge.",
+          "title": "Confirm",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "challenge_id",
+        "signature"
+      ],
+      "title": "acedatacloud_confirm_wallet_challengeArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "acedatacloud_confirm_x402_authorization",
+    "inputSchema": {
+      "properties": {
+        "setup_token": {
+          "description": "One-time setup token.",
+          "title": "Setup Token",
+          "type": "string"
+        },
+        "delegation": {
+          "description": "Delegation account address.",
+          "title": "Delegation",
+          "type": "string"
+        },
+        "delegation_tx": {
+          "description": "Delegation transaction signature.",
+          "title": "Delegation Tx",
+          "type": "string"
+        },
+        "setup_tx": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Optional setup transaction signature.",
+          "title": "Setup Tx"
+        },
+        "confirm": {
+          "default": false,
+          "description": "Must be true to verify and persist authorization.",
+          "title": "Confirm",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "setup_token",
+        "delegation",
+        "delegation_tx"
+      ],
+      "title": "acedatacloud_confirm_x402_authorizationArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "acedatacloud_confirm_x402_revocation",
+    "inputSchema": {
+      "properties": {
+        "revoked_tx": {
+          "description": "On-chain revocation transaction signature.",
+          "title": "Revoked Tx",
+          "type": "string"
+        },
+        "confirm": {
+          "default": false,
+          "description": "Must be true to verify revocation.",
+          "title": "Confirm",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "revoked_tx"
+      ],
+      "title": "acedatacloud_confirm_x402_revocationArguments",
+      "type": "object"
+    }
+  },
+  {
     "name": "acedatacloud_control_deployment",
     "inputSchema": {
       "properties": {
@@ -142,6 +265,87 @@
         "action"
       ],
       "title": "acedatacloud_control_deploymentArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "acedatacloud_create_access_request",
+    "inputSchema": {
+      "properties": {
+        "service": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Service UUID or alias.",
+          "title": "Service"
+        },
+        "policy": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Policy UUID or alias.",
+          "title": "Policy"
+        },
+        "reason": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Request reason.",
+          "title": "Reason"
+        },
+        "contact": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Contact details.",
+          "title": "Contact"
+        },
+        "metadata": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Optional metadata.",
+          "title": "Metadata"
+        },
+        "confirm": {
+          "default": false,
+          "description": "Must be true to submit the request.",
+          "title": "Confirm",
+          "type": "boolean"
+        }
+      },
+      "title": "acedatacloud_create_access_requestArguments",
       "type": "object"
     }
   },
@@ -548,6 +752,39 @@
     }
   },
   {
+    "name": "acedatacloud_create_wallet_challenge",
+    "inputSchema": {
+      "properties": {
+        "operation": {
+          "description": "Wallet binding operation.",
+          "enum": [
+            "bind",
+            "unbind"
+          ],
+          "title": "Operation",
+          "type": "string"
+        },
+        "address": {
+          "description": "Solana wallet address.",
+          "title": "Address",
+          "type": "string"
+        },
+        "confirm": {
+          "default": false,
+          "description": "Must be true to create an expiring challenge.",
+          "title": "Confirm",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "operation",
+        "address"
+      ],
+      "title": "acedatacloud_create_wallet_challengeArguments",
+      "type": "object"
+    }
+  },
+  {
     "name": "acedatacloud_delete_auto_recharge",
     "inputSchema": {
       "properties": {
@@ -687,6 +924,125 @@
         "config_id"
       ],
       "title": "acedatacloud_disable_auto_rechargeArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "acedatacloud_disable_translation",
+    "inputSchema": {
+      "properties": {
+        "model": {
+          "description": "Capability model alias.",
+          "title": "Model",
+          "type": "string"
+        },
+        "object_id": {
+          "description": "Target object UUID.",
+          "title": "Object Id",
+          "type": "string"
+        },
+        "field": {
+          "description": "Translatable field name.",
+          "title": "Field",
+          "type": "string"
+        },
+        "content": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Optional replacement source text.",
+          "title": "Content"
+        },
+        "confirm": {
+          "default": false,
+          "description": "Must be true to disable auto-translation.",
+          "title": "Confirm",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "model",
+        "object_id",
+        "field"
+      ],
+      "title": "acedatacloud_disable_translationArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "acedatacloud_disable_x402_authorization",
+    "inputSchema": {
+      "properties": {
+        "confirm": {
+          "default": false,
+          "description": "Must be true to disable authorization.",
+          "title": "Confirm",
+          "type": "boolean"
+        }
+      },
+      "title": "acedatacloud_disable_x402_authorizationArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "acedatacloud_enable_translation",
+    "inputSchema": {
+      "properties": {
+        "model": {
+          "description": "Capability model alias.",
+          "title": "Model",
+          "type": "string"
+        },
+        "object_id": {
+          "description": "Target object UUID.",
+          "title": "Object Id",
+          "type": "string"
+        },
+        "field": {
+          "description": "Translatable field name.",
+          "title": "Field",
+          "type": "string"
+        },
+        "content": {
+          "description": "Source-language content.",
+          "title": "Content",
+          "type": "string"
+        },
+        "confirm": {
+          "default": false,
+          "description": "Must be true to enable auto-translation.",
+          "title": "Confirm",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "model",
+        "object_id",
+        "field",
+        "content"
+      ],
+      "title": "acedatacloud_enable_translationArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "acedatacloud_enable_x402_authorization",
+    "inputSchema": {
+      "properties": {
+        "confirm": {
+          "default": false,
+          "description": "Must be true to re-enable authorization.",
+          "title": "Confirm",
+          "type": "boolean"
+        }
+      },
+      "title": "acedatacloud_enable_x402_authorizationArguments",
       "type": "object"
     }
   },
@@ -940,6 +1296,23 @@
     }
   },
   {
+    "name": "acedatacloud_get_access_request",
+    "inputSchema": {
+      "properties": {
+        "request_id": {
+          "description": "Access request UUID.",
+          "title": "Request Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "request_id"
+      ],
+      "title": "acedatacloud_get_access_requestArguments",
+      "type": "object"
+    }
+  },
+  {
     "name": "acedatacloud_get_api_spec",
     "inputSchema": {
       "properties": {
@@ -1111,6 +1484,86 @@
         "application_id"
       ],
       "title": "acedatacloud_get_deployment_statusArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "acedatacloud_get_distribution_rank",
+    "inputSchema": {
+      "properties": {
+        "ordering": {
+          "default": "-price",
+          "description": "Rank ordering.",
+          "enum": [
+            "price",
+            "-price",
+            "reward",
+            "-reward"
+          ],
+          "title": "Ordering",
+          "type": "string"
+        },
+        "limit": {
+          "default": 20,
+          "maximum": 100,
+          "minimum": 1,
+          "title": "Limit",
+          "type": "integer"
+        },
+        "offset": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Offset",
+          "type": "integer"
+        }
+      },
+      "title": "acedatacloud_get_distribution_rankArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "acedatacloud_get_distribution_trend",
+    "inputSchema": {
+      "properties": {
+        "start_time": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Optional ISO date/time lower bound.",
+          "title": "Start Time"
+        },
+        "end_time": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Optional ISO date/time upper bound.",
+          "title": "End Time"
+        },
+        "granularity": {
+          "default": "day",
+          "description": "Time bucket size.",
+          "enum": [
+            "day",
+            "week",
+            "month"
+          ],
+          "title": "Granularity",
+          "type": "string"
+        }
+      },
+      "title": "acedatacloud_get_distribution_trendArguments",
       "type": "object"
     }
   },
@@ -1328,6 +1781,81 @@
     }
   },
   {
+    "name": "acedatacloud_get_platform_distribution_rank",
+    "inputSchema": {
+      "properties": {
+        "ordering": {
+          "default": "-total_reward",
+          "description": "Global rank ordering.",
+          "enum": [
+            "total_price",
+            "-total_price",
+            "total_reward",
+            "-total_reward",
+            "invitee_count",
+            "-invitee_count"
+          ],
+          "title": "Ordering",
+          "type": "string"
+        },
+        "start_time": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Optional ISO date/time lower bound.",
+          "title": "Start Time"
+        },
+        "end_time": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Optional ISO date/time upper bound.",
+          "title": "End Time"
+        },
+        "search": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Optional masked username/user ID search.",
+          "title": "Search"
+        },
+        "limit": {
+          "default": 20,
+          "maximum": 100,
+          "minimum": 1,
+          "title": "Limit",
+          "type": "integer"
+        },
+        "offset": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Offset",
+          "type": "integer"
+        }
+      },
+      "title": "acedatacloud_get_platform_distribution_rankArguments",
+      "type": "object"
+    }
+  },
+  {
     "name": "acedatacloud_get_pricing",
     "inputSchema": {
       "properties": {
@@ -1379,6 +1907,48 @@
     }
   },
   {
+    "name": "acedatacloud_get_survey",
+    "inputSchema": {
+      "properties": {
+        "alias": {
+          "description": "Survey template alias.",
+          "title": "Alias",
+          "type": "string"
+        }
+      },
+      "required": [
+        "alias"
+      ],
+      "title": "acedatacloud_get_surveyArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "acedatacloud_get_survey_response",
+    "inputSchema": {
+      "properties": {
+        "alias": {
+          "description": "Survey template alias.",
+          "title": "Alias",
+          "type": "string"
+        }
+      },
+      "required": [
+        "alias"
+      ],
+      "title": "acedatacloud_get_survey_responseArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "acedatacloud_get_translation_capabilities",
+    "inputSchema": {
+      "properties": {},
+      "title": "acedatacloud_get_translation_capabilitiesArguments",
+      "type": "object"
+    }
+  },
+  {
     "name": "acedatacloud_get_usage",
     "inputSchema": {
       "properties": {
@@ -1408,6 +1978,123 @@
     "inputSchema": {
       "properties": {},
       "title": "acedatacloud_get_user_infoArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "acedatacloud_get_wallet_summary",
+    "inputSchema": {
+      "properties": {},
+      "title": "acedatacloud_get_wallet_summaryArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "acedatacloud_get_x402_authorization",
+    "inputSchema": {
+      "properties": {},
+      "title": "acedatacloud_get_x402_authorizationArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "acedatacloud_initialize_distribution",
+    "inputSchema": {
+      "properties": {
+        "confirm": {
+          "default": false,
+          "description": "Must be true to initialize or refresh status.",
+          "title": "Confirm",
+          "type": "boolean"
+        }
+      },
+      "title": "acedatacloud_initialize_distributionArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "acedatacloud_list_access_requests",
+    "inputSchema": {
+      "properties": {
+        "mine": {
+          "default": true,
+          "description": "Restrict to caller requests.",
+          "title": "Mine",
+          "type": "boolean"
+        },
+        "status": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Optional request status.",
+          "title": "Status"
+        },
+        "policy": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Optional policy UUID.",
+          "title": "Policy"
+        },
+        "service": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Optional service UUID.",
+          "title": "Service"
+        },
+        "ordering": {
+          "anyOf": [
+            {
+              "enum": [
+                "created_at",
+                "-created_at",
+                "updated_at",
+                "-updated_at"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Ordering.",
+          "title": "Ordering"
+        },
+        "limit": {
+          "default": 50,
+          "maximum": 100,
+          "minimum": 1,
+          "title": "Limit",
+          "type": "integer"
+        },
+        "offset": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Offset",
+          "type": "integer"
+        }
+      },
+      "title": "acedatacloud_list_access_requestsArguments",
       "type": "object"
     }
   },
@@ -1694,6 +2381,14 @@
     }
   },
   {
+    "name": "acedatacloud_list_coin_info",
+    "inputSchema": {
+      "properties": {},
+      "title": "acedatacloud_list_coin_infoArguments",
+      "type": "object"
+    }
+  },
+  {
     "name": "acedatacloud_list_credentials",
     "inputSchema": {
       "properties": {
@@ -1803,6 +2498,14 @@
     }
   },
   {
+    "name": "acedatacloud_list_distribution_levels",
+    "inputSchema": {
+      "properties": {},
+      "title": "acedatacloud_list_distribution_levelsArguments",
+      "type": "object"
+    }
+  },
+  {
     "name": "acedatacloud_list_distributions",
     "inputSchema": {
       "properties": {
@@ -1879,6 +2582,14 @@
         }
       },
       "title": "acedatacloud_list_docsArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "acedatacloud_list_email_preferences",
+    "inputSchema": {
+      "properties": {},
+      "title": "acedatacloud_list_email_preferencesArguments",
       "type": "object"
     }
   },
@@ -2309,6 +3020,14 @@
     }
   },
   {
+    "name": "acedatacloud_list_surveys",
+    "inputSchema": {
+      "properties": {},
+      "title": "acedatacloud_list_surveysArguments",
+      "type": "object"
+    }
+  },
+  {
     "name": "acedatacloud_list_usage",
     "inputSchema": {
       "properties": {
@@ -2624,6 +3343,29 @@
     }
   },
   {
+    "name": "acedatacloud_refresh_coin_info",
+    "inputSchema": {
+      "properties": {
+        "coin_info_id": {
+          "description": "CoinInfo UUID.",
+          "title": "Coin Info Id",
+          "type": "string"
+        },
+        "confirm": {
+          "default": false,
+          "description": "Must be true to refresh on-chain balance.",
+          "title": "Confirm",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "coin_info_id"
+      ],
+      "title": "acedatacloud_refresh_coin_infoArguments",
+      "type": "object"
+    }
+  },
+  {
     "name": "acedatacloud_refresh_order",
     "inputSchema": {
       "properties": {
@@ -2656,6 +3398,68 @@
         "order_id"
       ],
       "title": "acedatacloud_refresh_orderArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "acedatacloud_report_content",
+    "inputSchema": {
+      "properties": {
+        "service": {
+          "description": "Service identifier.",
+          "title": "Service",
+          "type": "string"
+        },
+        "target_id": {
+          "description": "Reported content/task identifier.",
+          "title": "Target Id",
+          "type": "string"
+        },
+        "reason": {
+          "description": "Report reason.",
+          "title": "Reason",
+          "type": "string"
+        },
+        "detail": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Optional detail, capped server-side.",
+          "title": "Detail"
+        },
+        "snapshot": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Optional bounded context snapshot.",
+          "title": "Snapshot"
+        },
+        "confirm": {
+          "default": false,
+          "description": "Must be true to submit the report.",
+          "title": "Confirm",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "service",
+        "target_id",
+        "reason"
+      ],
+      "title": "acedatacloud_report_contentArguments",
       "type": "object"
     }
   },
@@ -2784,6 +3588,87 @@
         "config_id"
       ],
       "title": "acedatacloud_setup_auto_rechargeArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "acedatacloud_setup_x402_authorization",
+    "inputSchema": {
+      "properties": {
+        "wallet": {
+          "description": "Solana wallet address.",
+          "title": "Wallet",
+          "type": "string"
+        },
+        "daily_limit_atomic": {
+          "description": "Daily atomic-unit limit.",
+          "exclusiveMinimum": 0,
+          "title": "Daily Limit Atomic",
+          "type": "integer"
+        },
+        "expiry_ts": {
+          "description": "Unix expiry within 365 days.",
+          "exclusiveMinimum": 0,
+          "title": "Expiry Ts",
+          "type": "integer"
+        },
+        "confirm": {
+          "default": false,
+          "description": "Must be true to create expiring setup state.",
+          "title": "Confirm",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "wallet",
+        "daily_limit_atomic",
+        "expiry_ts"
+      ],
+      "title": "acedatacloud_setup_x402_authorizationArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "acedatacloud_submit_survey",
+    "inputSchema": {
+      "properties": {
+        "template": {
+          "description": "Survey template alias.",
+          "title": "Template",
+          "type": "string"
+        },
+        "answers": {
+          "additionalProperties": true,
+          "description": "Answers matching the template schema.",
+          "title": "Answers",
+          "type": "object"
+        },
+        "metadata": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Optional metadata.",
+          "title": "Metadata"
+        },
+        "confirm": {
+          "default": false,
+          "description": "Must be true to submit the response.",
+          "title": "Confirm",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "template",
+        "answers"
+      ],
+      "title": "acedatacloud_submit_surveyArguments",
       "type": "object"
     }
   },
@@ -2996,6 +3881,44 @@
         "credential_id"
       ],
       "title": "acedatacloud_update_credentialArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "acedatacloud_update_email_preference",
+    "inputSchema": {
+      "properties": {
+        "topic": {
+          "description": "Email topic.",
+          "enum": [
+            "product_updates",
+            "promotions",
+            "newsletter"
+          ],
+          "title": "Topic",
+          "type": "string"
+        },
+        "state": {
+          "description": "Subscription state.",
+          "enum": [
+            "Subscribed",
+            "Unsubscribed"
+          ],
+          "title": "State",
+          "type": "string"
+        },
+        "confirm": {
+          "default": false,
+          "description": "Must be true to update the preference.",
+          "title": "Confirm",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "topic",
+        "state"
+      ],
+      "title": "acedatacloud_update_email_preferenceArguments",
       "type": "object"
     }
   },
