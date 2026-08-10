@@ -4,8 +4,8 @@ from typing import Literal
 
 MaestroAction = Literal["generate", "remix", "edit", "extend"]
 MaestroAspect = Literal["9:16", "16:9", "1:1"]
-MaestroQuality = Literal["draft", "standard", "premium"]
-MaestroScenario = Literal["auto", "narrated", "drama", "avatar", "motion", "slideshow"]
+MaestroQuality = Literal["lite", "standard", "pro"]
+MaestroScenario = Literal["auto", "narrated", "captions", "avatar", "drama"]
 MaestroStyle = Literal[
     "auto",
     "cinematic",
