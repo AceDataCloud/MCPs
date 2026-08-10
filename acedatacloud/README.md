@@ -29,6 +29,7 @@ MCP-compatible client.
 |------|-------------|
 | `acedatacloud_export_orders` | Export bounded order CSV. |
 | `acedatacloud_export_usage` | Export bounded usage CSV. |
+| `acedatacloud_get_access_request` | Access Detail |
 | `acedatacloud_get_application` | Get one application and service details. |
 | `acedatacloud_get_auto_recharge` | Get auto recharge. |
 | `acedatacloud_get_balance` | Summarize remaining Credits. |
@@ -36,24 +37,37 @@ MCP-compatible client.
 | `acedatacloud_get_deployment_events` | Get deployment scheduling events. |
 | `acedatacloud_get_deployment_logs` | Get bounded deployment logs. |
 | `acedatacloud_get_deployment_status` | Get live deployment status. |
+| `acedatacloud_get_distribution_rank` | Distribution Rank |
+| `acedatacloud_get_distribution_trend` | Distribution Trend |
 | `acedatacloud_get_invoice` | Get one invoice. |
 | `acedatacloud_get_invoice_download` | Get a signed invoice URL. |
 | `acedatacloud_get_order` | Get one order. |
 | `acedatacloud_get_order_invoice` | Get an order's active invoice. |
 | `acedatacloud_get_order_summary` | Summarize caller orders. |
+| `acedatacloud_get_platform_distribution_rank` | Distribution Platform_Rank |
 | `acedatacloud_get_proxy_usage` | Get proxy usage detail. |
+| `acedatacloud_get_survey` | Surveys Detail |
+| `acedatacloud_get_survey_response` | Surveys Response |
+| `acedatacloud_get_translation_capabilities` | Translations Capabilities |
 | `acedatacloud_get_usage` | Get API usage detail. |
 | `acedatacloud_get_user_info` | Current authenticated account profile. |
+| `acedatacloud_get_wallet_summary` | Coin Wallet Summary |
+| `acedatacloud_get_x402_authorization` | X402 Current |
+| `acedatacloud_list_access_requests` | Access List |
 | `acedatacloud_list_applications` | List account subscriptions. |
 | `acedatacloud_list_auto_recharges` | List auto-recharge configs. |
 | `acedatacloud_list_billing_profiles` | List billing profiles. |
+| `acedatacloud_list_coin_info` | Coin Info |
 | `acedatacloud_list_credentials` | List API credentials with secrets masked. |
+| `acedatacloud_list_distribution_levels` | Distribution Levels |
 | `acedatacloud_list_distributions` | Get referral status. |
+| `acedatacloud_list_email_preferences` | Preferences List |
 | `acedatacloud_list_invoices` | List invoices. |
 | `acedatacloud_list_models` | List OpenAI-compatible chat models. |
 | `acedatacloud_list_orders` | List recharge orders. |
 | `acedatacloud_list_platform_tokens` | List management tokens with values masked. |
 | `acedatacloud_list_proxy_usage` | List proxy usage. |
+| `acedatacloud_list_surveys` | Surveys List |
 | `acedatacloud_list_usage` | List recent API usage records. |
 | `acedatacloud_list_usage_status_codes` | List usage status codes. |
 | `acedatacloud_preview_invoice` | Preview invoice amount. |
@@ -83,28 +97,44 @@ MCP-compatible client.
 | Tool | Description |
 |------|-------------|
 | `acedatacloud_apply_invoice` | Apply for an invoice. |
+| `acedatacloud_cancel_access_request` | Access Cancel |
 | `acedatacloud_cancel_invoice` | Cancel an invoice. |
 | `acedatacloud_confirm_auto_recharge_setup` | Confirm saved card setup. |
+| `acedatacloud_confirm_wallet_challenge` | Coin Wallet Confirm |
+| `acedatacloud_confirm_x402_authorization` | X402 Confirm |
+| `acedatacloud_confirm_x402_revocation` | X402 Revoke |
 | `acedatacloud_control_deployment` | Start a stopped deployment. |
+| `acedatacloud_create_access_request` | Access Create |
 | `acedatacloud_create_application` | Create an application subscription. |
 | `acedatacloud_create_auto_recharge` | Create auto recharge. |
 | `acedatacloud_create_credential` | Create an API credential. |
 | `acedatacloud_create_order` | Create a recharge order. |
 | `acedatacloud_create_platform_token` | Create a management token. |
+| `acedatacloud_create_wallet_challenge` | Coin Wallet Challenge |
 | `acedatacloud_delete_auto_recharge` | Delete auto recharge. |
 | `acedatacloud_delete_credential` | Revoke an API credential. |
 | `acedatacloud_delete_platform_token` | Revoke a management token. |
 | `acedatacloud_deploy_application` | Start or redeploy an application workload. |
 | `acedatacloud_disable_auto_recharge` | Disable auto recharge. |
+| `acedatacloud_disable_translation` | Translations Disable |
+| `acedatacloud_disable_x402_authorization` | X402 Disable |
+| `acedatacloud_enable_translation` | Translations Enable |
+| `acedatacloud_enable_x402_authorization` | X402 Enable |
+| `acedatacloud_initialize_distribution` | Distribution Initialize |
 | `acedatacloud_pay_order` | Create an order payment session. |
+| `acedatacloud_refresh_coin_info` | Coin Refresh |
 | `acedatacloud_refresh_order` | Refresh payment state. |
+| `acedatacloud_report_content` | Reports Create |
 | `acedatacloud_rotate_credential` | Rotate and disclose a credential secret once. |
 | `acedatacloud_save_deployment_config` | Save a deployment configuration draft. |
 | `acedatacloud_setup_auto_recharge` | Create card setup state. |
+| `acedatacloud_setup_x402_authorization` | X402 Setup |
+| `acedatacloud_submit_survey` | Surveys Submit |
 | `acedatacloud_teardown_deployment` | Destroy a workload and delete its application. |
 | `acedatacloud_update_application_balance_policy` | Update global-balance fallback policy. |
 | `acedatacloud_update_auto_recharge` | Update auto recharge. |
 | `acedatacloud_update_credential` | Update credential limits and API scope. |
+| `acedatacloud_update_email_preference` | Preferences Update |
 | `acedatacloud_verify_apple_order` | Verify and fulfill Apple IAP. |
 
 ### Admin

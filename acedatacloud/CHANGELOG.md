@@ -19,6 +19,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Add distribution, ACE wallet, service access request, survey, translation, email
+  preference, content report, and X402 authorization self-service tools.
 - Add complete order, invoice, billing-profile, auto-recharge, API usage, and proxy
   usage self-service, including bounded CSV exports and signed invoice downloads.
 - Add complete application self-service: create/detail, balance fallback policy,
