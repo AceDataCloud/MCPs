@@ -5,7 +5,10 @@ from typing import get_args
 from core.client import ProducerClient
 from core.server import mcp
 from core.types import AudioAction, ProducerModel
-from tools import audio_tools  # noqa: F401
+from tools import (
+    audio_tools,  # noqa: F401
+    media_tools,  # noqa: F401
+)
 
 SPEC_MODELS = {
     "FUZZ-2.0 Pro",
@@ -45,6 +48,14 @@ def test_audio_generation_exposes_async_and_string_seed():
     assert "async" in properties
     assert {"type": "boolean"} in properties["async"]["anyOf"]
     assert {"type": "string"} in properties["seed"]["anyOf"]
+
+
+def test_media_generation_matches_spec_audio_id_only():
+    for tool_name in ("producer_generate_video", "producer_generate_wav"):
+        schema = mcp._tool_manager._tools[tool_name].parameters
+
+        assert set(schema["properties"]) == {"audio_id"}
+        assert schema["required"] == ["audio_id"]
 
 
 def test_async_callback_preserves_explicit_false():
