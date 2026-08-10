@@ -172,6 +172,10 @@ async def luma_extend_video(
             description="Optional URL of an image to use as the final frame of the extended video."
         ),
     ] = "",
+    callback_url: Annotated[
+        str | None,
+        Field(description="Webhook callback URL for asynchronous notifications."),
+    ] = None,
 ) -> str:
     """Extend an existing video with additional content.
 
@@ -194,6 +198,8 @@ async def luma_extend_video(
 
     if end_image_url:
         payload["end_image_url"] = end_image_url
+    if callback_url:
+        payload["callback_url"] = callback_url
 
     result = await client.generate_video(**payload)
     return format_video_result(result)
@@ -219,6 +225,10 @@ async def luma_extend_video_from_url(
             description="Optional URL of an image to use as the final frame of the extended video."
         ),
     ] = "",
+    callback_url: Annotated[
+        str | None,
+        Field(description="Webhook callback URL for asynchronous notifications."),
+    ] = None,
 ) -> str:
     """Extend an existing video using its URL.
 
@@ -240,6 +250,8 @@ async def luma_extend_video_from_url(
 
     if end_image_url:
         payload["end_image_url"] = end_image_url
+    if callback_url:
+        payload["callback_url"] = callback_url
 
     result = await client.generate_video(**payload)
     return format_video_result(result)

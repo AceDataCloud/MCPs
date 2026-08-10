@@ -115,9 +115,8 @@ async def webextrator_extract(
         TaskMode | None,
         Field(
             description=(
-                "Processing mode. Defaults to 'async': returns immediately with a "
-                "task_id to poll via webextrator_get_task. Pass 'sync' to wait for "
-                "the result inline (may time out on slow pages)."
+                "Processing mode. Defaults to API sync behavior. Pass 'async' to "
+                "return immediately with a task_id to poll via webextrator_get_task."
             )
         ),
     ] = None,
@@ -133,10 +132,7 @@ async def webextrator_extract(
     - You need LLM-enhanced semantic normalization of extracted content
 
     Returns:
-        By default (async) a JSON envelope with a `task_id` — poll
-        `webextrator_get_task` until it reports `finished_at`, then read the
-        extracted content from its `response`. With mode="sync", the extracted
-        structured content inline.
+        By default, the extracted structured content inline. With mode="async", a JSON envelope with a `task_id` — poll `webextrator_get_task` until it reports `finished_at`, then read the extracted content from its `response`.
     """
     if not url:
         return json.dumps({"error": "Validation Error", "message": "url is required"})
@@ -258,9 +254,8 @@ async def webextrator_render(
         TaskMode | None,
         Field(
             description=(
-                "Processing mode. Defaults to 'async': returns immediately with a "
-                "task_id to poll via webextrator_get_task. Pass 'sync' to wait for "
-                "the result inline (may time out on slow pages)."
+                "Processing mode. Defaults to API sync behavior. Pass 'async' to "
+                "return immediately with a task_id to poll via webextrator_get_task."
             )
         ),
     ] = None,
@@ -276,10 +271,9 @@ async def webextrator_render(
     - You need to capture single-page application (SPA) content
 
     Returns:
-        By default (async) a JSON envelope with a `task_id` — poll
-        `webextrator_get_task` until it reports `finished_at`, then read the
-        rendered HTML from its `response`. With mode="sync", the rendered HTML
-        content inline.
+        By default, the rendered HTML content inline. With mode="async", a JSON
+        envelope with a `task_id` — poll `webextrator_get_task` until it reports
+        `finished_at`, then read the rendered HTML from its `response`.
     """
     if not url:
         return json.dumps({"error": "Validation Error", "message": "url is required"})

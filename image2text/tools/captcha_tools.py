@@ -15,7 +15,7 @@ TaskMode = Literal["sync", "async"]
 @mcp.tool()
 async def image2text_recognize(
     image: Annotated[str, Field(description="Base64-encoded image content to recognize.")],
-    mode: Annotated[TaskMode | None, Field(description="Processing mode. Defaults to 'async'; use 'sync' to wait inline.")] = None,
+    mode: Annotated[TaskMode | None, Field(description="Processing mode. Defaults to API sync behavior; use 'async' to submit asynchronously.")] = None,
 ) -> str:
     """Recognize text from a captcha-style image."""
     if not image:

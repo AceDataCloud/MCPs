@@ -164,10 +164,6 @@ async def kling_generate_video(
             description="One Omni reference video for kling-o1 or kling-v3-omni. Cite it as <<<video_1>>>. Use refer_type='feature' to reference it or 'base' to edit it."
         ),
     ] = None,
-    timeout: Annotated[
-        int | None,
-        Field(description="Timeout in seconds for the API to return data. Default is 300."),
-    ] = None,
     callback_url: Annotated[
         str | None,
         Field(
@@ -211,7 +207,6 @@ async def kling_generate_video(
         "mode": mode,
         "aspect_ratio": aspect_ratio,
         "duration": duration,
-        "timeout": timeout,
         "callback_url": callback_url,
     }
 
@@ -304,10 +299,6 @@ async def kling_generate_video_from_image(
         list[KlingReferenceVideo] | None,
         Field(description="One Omni reference video for kling-o1 or kling-v3-omni."),
     ] = None,
-    timeout: Annotated[
-        int | None,
-        Field(description="Timeout in seconds for the API to return data. Default is 300."),
-    ] = None,
     callback_url: Annotated[
         str | None,
         Field(description="Webhook callback URL for asynchronous notifications."),
@@ -354,7 +345,6 @@ async def kling_generate_video_from_image(
         "mode": mode,
         "aspect_ratio": aspect_ratio,
         "duration": duration,
-        "timeout": timeout,
         "callback_url": callback_url,
     }
 

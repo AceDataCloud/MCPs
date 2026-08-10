@@ -27,9 +27,8 @@ def get_request_api_token() -> str | None:
 
 
 def _apply_submission_mode(payload: dict[str, Any], mode: str | None) -> None:
-    if mode == "sync":
-        return
-    payload["async"] = True
+    if mode == "async":
+        payload["async"] = True
 
 
 class Image2TextClient:

@@ -34,19 +34,15 @@ def get_request_api_token() -> str | None:
 def _apply_submission_mode(payload: dict[str, Any], mode: str | None) -> None:
     """Decide sync vs async submission on the payload.
 
-    Rendering a page routinely outruns a blocking request, so async is the
-    default: the API answers with a task_id and the result is polled. A caller
-    that explicitly asks for `sync` still gets the inline result.
+    The platform schema defaults to synchronous processing. A caller that
+    explicitly asks for `async` gets a task_id and polls for the result.
 
     Note the wire field is `async` — an earlier `mode` field was never part of
     the platform schema and got silently stripped, which is why every call used
     to block regardless of what the caller asked for.
     """
-    if payload.get("callback_url"):
-        return
-    if mode == "sync":
-        return
-    payload["async"] = True
+    if mode == "async":
+        payload["async"] = True
 
 
 class WebExtraterClient:

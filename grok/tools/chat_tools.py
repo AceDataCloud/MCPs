@@ -99,6 +99,58 @@ async def grok_chat_completions(
             )
         ),
     ] = None,
+    n: Annotated[
+        int | None,
+        Field(description="How many chat completion choices to generate. Default 1."),
+    ] = None,
+    max_completion_tokens: Annotated[
+        int | None,
+        Field(description="Upper bound for tokens generated for a completion."),
+    ] = None,
+    logprobs: Annotated[
+        bool | None,
+        Field(description="Whether to return log probabilities of output tokens."),
+    ] = None,
+    top_logprobs: Annotated[
+        int | None,
+        Field(description="Number of most likely tokens to return at each token position."),
+    ] = None,
+    stream_options: Annotated[
+        dict[str, Any] | None,
+        Field(description="Options for streaming responses."),
+    ] = None,
+    parallel_tool_calls: Annotated[
+        bool | None,
+        Field(description="Whether to enable parallel tool calls. Default true."),
+    ] = None,
+    store: Annotated[
+        bool | None,
+        Field(description="Whether to store the output of this chat completion. Default false."),
+    ] = None,
+    metadata: Annotated[
+        dict[str, Any] | None,
+        Field(description="Developer-defined metadata attached to the request."),
+    ] = None,
+    logit_bias: Annotated[
+        dict[str, int] | None,
+        Field(description="Token logit bias map."),
+    ] = None,
+    modalities: Annotated[
+        list[str] | None,
+        Field(description="Output modalities requested for this response."),
+    ] = None,
+    audio: Annotated[
+        dict[str, Any] | None,
+        Field(description="Audio output configuration when requesting audio modality."),
+    ] = None,
+    prediction: Annotated[
+        dict[str, Any] | None,
+        Field(description="Static predicted output content to improve latency."),
+    ] = None,
+    web_search_options: Annotated[
+        dict[str, Any] | None,
+        Field(description="Web search configuration for search-capable models."),
+    ] = None,
 ) -> str:
     """Create a Grok (xAI) chat completion via the AceDataCloud Grok API.
 
@@ -136,6 +188,19 @@ async def grok_chat_completions(
             tool_choice=tool_choice,
             user=user,
             service_tier=service_tier,
+            n=n,
+            max_completion_tokens=max_completion_tokens,
+            logprobs=logprobs,
+            top_logprobs=top_logprobs,
+            stream_options=stream_options,
+            parallel_tool_calls=parallel_tool_calls,
+            store=store,
+            metadata=metadata,
+            logit_bias=logit_bias,
+            modalities=modalities,
+            audio=audio,
+            prediction=prediction,
+            web_search_options=web_search_options,
         )
 
         if not result:

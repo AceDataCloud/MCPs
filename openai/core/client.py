@@ -141,10 +141,59 @@ class OpenAIClient:
                 logger.error(f"Request error: {e}")
                 raise OpenAIAPIError(message=str(e)) from e
 
+    async def request_get(
+        self,
+        endpoint: str,
+        params: dict[str, Any] | None = None,
+        timeout: float | None = None,
+    ) -> dict[str, Any]:
+        """Make a GET request to the OpenAI API."""
+        url = f"{self.base_url}{endpoint}"
+        request_timeout = timeout or self.timeout
+
+        logger.info(f"GET {url}")
+
+        async with httpx.AsyncClient() as http_client:
+            try:
+                response = await http_client.get(
+                    url,
+                    params=params,
+                    headers=self._get_headers(),
+                    timeout=request_timeout,
+                )
+
+                logger.info(f"Response status: {response.status_code}")
+
+                if response.status_code >= 400:
+                    self._handle_error_response(response)
+
+                result = response.json()
+                logger.success("GET request successful!")
+
+                return result  # type: ignore[no-any-return]
+
+            except httpx.TimeoutException as e:
+                logger.error(f"Request timeout after {request_timeout}s: {e}")
+                raise OpenAITimeoutError(
+                    f"Request to {endpoint} timed out after {request_timeout}s"
+                ) from e
+
+            except OpenAIError:
+                raise
+
+            except Exception as e:
+                logger.error(f"Request error: {e}")
+                raise OpenAIAPIError(message=str(e)) from e
+
     async def chat_completions(self, **kwargs: Any) -> dict[str, Any]:
         """Create a chat completion."""
         logger.info(f"Chat completion with model: {kwargs.get('model', 'unknown')}")
         return await self.request("/openai/chat/completions", kwargs)
+
+    async def models(self) -> dict[str, Any]:
+        """List available OpenAI models."""
+        logger.info("List OpenAI models")
+        return await self.request_get("/openai/models")
 
     async def embeddings(self, **kwargs: Any) -> dict[str, Any]:
         """Create text embeddings."""
