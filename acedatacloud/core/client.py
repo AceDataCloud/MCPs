@@ -254,8 +254,13 @@ class PlatformClient:
         """GET a public endpoint, optionally sending a configured token."""
         return await self.request("GET", endpoint, params=params, auth_required=False)
 
-    async def post(self, endpoint: str, json_body: dict[str, Any] | None = None) -> Any:
-        return await self.request("POST", endpoint, json_body=json_body or {})
+    async def post(
+        self,
+        endpoint: str,
+        json_body: dict[str, Any] | None = None,
+        params: dict[str, Any] | list[tuple[str, Any]] | None = None,
+    ) -> Any:
+        return await self.request("POST", endpoint, params=params, json_body=json_body or {})
 
     async def patch(self, endpoint: str, json_body: dict[str, Any] | None = None) -> Any:
         return await self.request("PATCH", endpoint, json_body=json_body or {})
@@ -263,8 +268,12 @@ class PlatformClient:
     async def put(self, endpoint: str, json_body: dict[str, Any] | None = None) -> Any:
         return await self.request("PUT", endpoint, json_body=json_body or {})
 
-    async def delete(self, endpoint: str) -> Any:
-        return await self.request("DELETE", endpoint)
+    async def delete(
+        self,
+        endpoint: str,
+        params: dict[str, Any] | list[tuple[str, Any]] | None = None,
+    ) -> Any:
+        return await self.request("DELETE", endpoint, params=params)
 
 
 def _clean_params(

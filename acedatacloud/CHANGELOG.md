@@ -19,6 +19,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Add complete application self-service: create/detail, balance fallback policy,
+  deployment configuration/deploy/status/power/teardown/logs/events, plus repeated
+  owner/grantee filters and pagination.
+- Add complete credential self-service: detail/update/rotate, API allowlists,
+  owner-issued grants, host/grant filters, and one-time token/password disclosure.
 - Add PATCH/PUT, repeated query parameters, bounded CSV/text responses, and explicit
   redirect policy to the platform HTTP client.
 - Add a machine-checked PlatformBackend operation coverage contract, generated README

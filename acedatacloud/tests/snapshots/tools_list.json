@@ -1,5 +1,39 @@
 [
   {
+    "name": "acedatacloud_control_deployment",
+    "inputSchema": {
+      "properties": {
+        "application_id": {
+          "description": "Deployment application UUID.",
+          "title": "Application Id",
+          "type": "string"
+        },
+        "action": {
+          "description": "Power action: start, stop, or restart.",
+          "enum": [
+            "start",
+            "stop",
+            "restart"
+          ],
+          "title": "Action",
+          "type": "string"
+        },
+        "confirm": {
+          "default": false,
+          "description": "Must be true to perform the action.",
+          "title": "Confirm",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "application_id",
+        "action"
+      ],
+      "title": "acedatacloud_control_deploymentArguments",
+      "type": "object"
+    }
+  },
+  {
     "name": "acedatacloud_create_announcement",
     "inputSchema": {
       "properties": {
@@ -64,11 +98,59 @@
     }
   },
   {
+    "name": "acedatacloud_create_application",
+    "inputSchema": {
+      "properties": {
+        "service_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Service UUID; required for Individual scope.",
+          "title": "Service Id"
+        },
+        "application_type": {
+          "default": "Usage",
+          "description": "Usage or Period application.",
+          "enum": [
+            "Usage",
+            "Period"
+          ],
+          "title": "Application Type",
+          "type": "string"
+        },
+        "scope": {
+          "default": "Individual",
+          "description": "Individual or Global scope.",
+          "enum": [
+            "Individual",
+            "Global"
+          ],
+          "title": "Scope",
+          "type": "string"
+        },
+        "confirm": {
+          "default": false,
+          "description": "Must be true to create the application.",
+          "title": "Confirm",
+          "type": "boolean"
+        }
+      },
+      "title": "acedatacloud_create_applicationArguments",
+      "type": "object"
+    }
+  },
+  {
     "name": "acedatacloud_create_credential",
     "inputSchema": {
       "properties": {
         "application_id": {
-          "description": "UUID of the application (subscription) to attach the key to. Required.",
+          "description": "Application UUID.",
           "title": "Application Id",
           "type": "string"
         },
@@ -82,12 +164,13 @@
             }
           ],
           "default": null,
-          "description": "Optional human-readable name for the key.",
+          "description": "Optional human-readable name.",
           "title": "Name"
         },
         "limited_amount": {
           "anyOf": [
             {
+              "minimum": 0,
               "type": "number"
             },
             {
@@ -95,7 +178,7 @@
             }
           ],
           "default": null,
-          "description": "Optional spend cap for this key, in Credits.",
+          "description": "Optional spend cap in Credits.",
           "title": "Limited Amount"
         },
         "expired_at": {
@@ -108,12 +191,68 @@
             }
           ],
           "default": null,
-          "description": "Optional ISO-8601 expiry, e.g. '2026-12-31T00:00:00Z'.",
+          "description": "Optional ISO-8601 expiry.",
           "title": "Expired At"
+        },
+        "host": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Optional host restriction.",
+          "title": "Host"
+        },
+        "for_user_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "User ID to authorize; application owners only.",
+          "title": "For User Id"
+        },
+        "metadata": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Optional credential metadata.",
+          "title": "Metadata"
+        },
+        "allowed_api_ids": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Optional API UUID allowlist; empty means unrestricted.",
+          "title": "Allowed Api Ids"
         },
         "confirm": {
           "default": false,
-          "description": "Must be true to actually create the key.",
+          "description": "Must be true to create the credential.",
           "title": "Confirm",
           "type": "boolean"
         }
@@ -174,13 +313,13 @@
     "inputSchema": {
       "properties": {
         "credential_id": {
-          "description": "UUID of the credential to delete. Required.",
+          "description": "Credential UUID.",
           "title": "Credential Id",
           "type": "string"
         },
         "confirm": {
           "default": false,
-          "description": "Must be true to actually delete the key.",
+          "description": "Must be true to revoke the credential.",
           "title": "Confirm",
           "type": "boolean"
         }
@@ -216,6 +355,57 @@
     }
   },
   {
+    "name": "acedatacloud_deploy_application",
+    "inputSchema": {
+      "properties": {
+        "application_id": {
+          "description": "Deployment application UUID.",
+          "title": "Application Id",
+          "type": "string"
+        },
+        "config": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Raw deployment configuration to persist.",
+          "title": "Config"
+        },
+        "helm_overrides": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Flat, service-supported Helm value overrides.",
+          "title": "Helm Overrides"
+        },
+        "confirm": {
+          "default": false,
+          "description": "Must be true to start deployment.",
+          "title": "Confirm",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "application_id"
+      ],
+      "title": "acedatacloud_deploy_applicationArguments",
+      "type": "object"
+    }
+  },
+  {
     "name": "acedatacloud_get_api_spec",
     "inputSchema": {
       "properties": {
@@ -229,6 +419,23 @@
         "path"
       ],
       "title": "acedatacloud_get_api_specArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "acedatacloud_get_application",
+    "inputSchema": {
+      "properties": {
+        "application_id": {
+          "description": "Application UUID.",
+          "title": "Application Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "application_id"
+      ],
+      "title": "acedatacloud_get_applicationArguments",
       "type": "object"
     }
   },
@@ -251,6 +458,108 @@
         }
       },
       "title": "acedatacloud_get_balanceArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "acedatacloud_get_credential",
+    "inputSchema": {
+      "properties": {
+        "credential_id": {
+          "description": "Credential UUID.",
+          "title": "Credential Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "credential_id"
+      ],
+      "title": "acedatacloud_get_credentialArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "acedatacloud_get_deployment_events",
+    "inputSchema": {
+      "properties": {
+        "application_id": {
+          "description": "Deployment application UUID.",
+          "title": "Application Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "application_id"
+      ],
+      "title": "acedatacloud_get_deployment_eventsArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "acedatacloud_get_deployment_logs",
+    "inputSchema": {
+      "properties": {
+        "application_id": {
+          "description": "Deployment application UUID.",
+          "title": "Application Id",
+          "type": "string"
+        },
+        "tail": {
+          "default": 100,
+          "description": "Number of log lines.",
+          "maximum": 1000,
+          "minimum": 1,
+          "title": "Tail",
+          "type": "integer"
+        },
+        "since": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Duration such as '30s', '5m', or '1h'.",
+          "title": "Since"
+        },
+        "container": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Optional container name.",
+          "title": "Container"
+        }
+      },
+      "required": [
+        "application_id"
+      ],
+      "title": "acedatacloud_get_deployment_logsArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "acedatacloud_get_deployment_status",
+    "inputSchema": {
+      "properties": {
+        "application_id": {
+          "description": "Deployment application UUID.",
+          "title": "Application Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "application_id"
+      ],
+      "title": "acedatacloud_get_deployment_statusArguments",
       "type": "object"
     }
   },
@@ -408,16 +717,100 @@
               "type": "string"
             },
             {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
               "type": "null"
             }
           ],
           "default": null,
-          "description": "Filter by service UUID.",
+          "description": "Filter by one or more service UUIDs.",
           "title": "Service Id"
+        },
+        "application_type": {
+          "anyOf": [
+            {
+              "enum": [
+                "Usage",
+                "Period"
+              ],
+              "type": "string"
+            },
+            {
+              "items": {
+                "enum": [
+                  "Usage",
+                  "Period"
+                ],
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Filter by Usage or Period application type.",
+          "title": "Application Type"
         },
         "scope": {
           "anyOf": [
             {
+              "enum": [
+                "Individual",
+                "Global"
+              ],
+              "type": "string"
+            },
+            {
+              "items": {
+                "enum": [
+                  "Individual",
+                  "Global"
+                ],
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Filter by Individual or Global scope.",
+          "title": "Scope"
+        },
+        "affiliation": {
+          "anyOf": [
+            {
+              "items": {
+                "enum": [
+                  "owner",
+                  "granted"
+                ],
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Filter applications owned by or granted to the caller.",
+          "title": "Affiliation"
+        },
+        "ordering": {
+          "anyOf": [
+            {
+              "enum": [
+                "created_at",
+                "-created_at"
+              ],
               "type": "string"
             },
             {
@@ -425,8 +818,8 @@
             }
           ],
           "default": null,
-          "description": "Filter by scope: 'Individual' or 'Global'.",
-          "title": "Scope"
+          "description": "Order by creation time.",
+          "title": "Ordering"
         },
         "limit": {
           "default": 50,
@@ -434,6 +827,13 @@
           "maximum": 200,
           "minimum": 1,
           "title": "Limit",
+          "type": "integer"
+        },
+        "offset": {
+          "default": 0,
+          "description": "Pagination offset.",
+          "minimum": 0,
+          "title": "Offset",
           "type": "integer"
         }
       },
@@ -451,12 +851,67 @@
               "type": "string"
             },
             {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
               "type": "null"
             }
           ],
           "default": null,
-          "description": "Filter by application UUID.",
+          "description": "Filter by one or more application UUIDs.",
           "title": "Application Id"
+        },
+        "host": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Filter by one or more credential hosts.",
+          "title": "Host"
+        },
+        "granted": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Filter owner-issued grants (true) or owner-held credentials (false).",
+          "title": "Granted"
+        },
+        "ordering": {
+          "anyOf": [
+            {
+              "enum": [
+                "created_at",
+                "-created_at"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Order by creation time.",
+          "title": "Ordering"
         },
         "limit": {
           "default": 50,
@@ -464,6 +919,13 @@
           "maximum": 100,
           "minimum": 1,
           "title": "Limit",
+          "type": "integer"
+        },
+        "offset": {
+          "default": 0,
+          "description": "Pagination offset.",
+          "minimum": 0,
+          "title": "Offset",
           "type": "integer"
         }
       },
@@ -845,6 +1307,73 @@
     }
   },
   {
+    "name": "acedatacloud_rotate_credential",
+    "inputSchema": {
+      "properties": {
+        "credential_id": {
+          "description": "Credential UUID.",
+          "title": "Credential Id",
+          "type": "string"
+        },
+        "confirm": {
+          "default": false,
+          "description": "Must be true to rotate the credential secret.",
+          "title": "Confirm",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "credential_id"
+      ],
+      "title": "acedatacloud_rotate_credentialArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "acedatacloud_save_deployment_config",
+    "inputSchema": {
+      "properties": {
+        "application_id": {
+          "description": "Deployment application UUID.",
+          "title": "Application Id",
+          "type": "string"
+        },
+        "config": {
+          "additionalProperties": true,
+          "description": "Raw deployment wizard configuration.",
+          "title": "Config",
+          "type": "object"
+        },
+        "step": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Optional wizard step to resume from.",
+          "title": "Step"
+        },
+        "confirm": {
+          "default": false,
+          "description": "Must be true to save the draft.",
+          "title": "Confirm",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "application_id",
+        "config"
+      ],
+      "title": "acedatacloud_save_deployment_configArguments",
+      "type": "object"
+    }
+  },
+  {
     "name": "acedatacloud_search_docs",
     "inputSchema": {
       "properties": {
@@ -879,6 +1408,155 @@
         "query"
       ],
       "title": "acedatacloud_search_docsArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "acedatacloud_teardown_deployment",
+    "inputSchema": {
+      "properties": {
+        "application_id": {
+          "description": "Deployment application UUID.",
+          "title": "Application Id",
+          "type": "string"
+        },
+        "force": {
+          "default": false,
+          "description": "Delete the record even if resource teardown fails.",
+          "title": "Force",
+          "type": "boolean"
+        },
+        "confirm": {
+          "default": false,
+          "description": "Must be true to destroy the workload and application.",
+          "title": "Confirm",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "application_id"
+      ],
+      "title": "acedatacloud_teardown_deploymentArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "acedatacloud_update_application_balance_policy",
+    "inputSchema": {
+      "properties": {
+        "application_id": {
+          "description": "Application UUID.",
+          "title": "Application Id",
+          "type": "string"
+        },
+        "allow_consume_global": {
+          "description": "Allow fallback to the global balance.",
+          "title": "Allow Consume Global",
+          "type": "boolean"
+        },
+        "confirm": {
+          "default": false,
+          "description": "Must be true to update the policy.",
+          "title": "Confirm",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "application_id",
+        "allow_consume_global"
+      ],
+      "title": "acedatacloud_update_application_balance_policyArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "acedatacloud_update_credential",
+    "inputSchema": {
+      "properties": {
+        "credential_id": {
+          "description": "Credential UUID.",
+          "title": "Credential Id",
+          "type": "string"
+        },
+        "name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "New display name.",
+          "title": "Name"
+        },
+        "limited_amount": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "New spend cap in Credits; null leaves unchanged.",
+          "title": "Limited Amount"
+        },
+        "expired_at": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "New ISO-8601 expiry; omitted leaves unchanged.",
+          "title": "Expired At"
+        },
+        "clear_limited_amount": {
+          "default": false,
+          "description": "Set the spend cap to null.",
+          "title": "Clear Limited Amount",
+          "type": "boolean"
+        },
+        "clear_expired_at": {
+          "default": false,
+          "description": "Set the expiry to null.",
+          "title": "Clear Expired At",
+          "type": "boolean"
+        },
+        "allowed_api_ids": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "API UUID allowlist; [] clears the restriction.",
+          "title": "Allowed Api Ids"
+        },
+        "confirm": {
+          "default": false,
+          "description": "Must be true to update the credential.",
+          "title": "Confirm",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "credential_id"
+      ],
+      "title": "acedatacloud_update_credentialArguments",
       "type": "object"
     }
   },
