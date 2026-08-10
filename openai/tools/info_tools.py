@@ -2,12 +2,33 @@
 
 import json
 from typing import Annotated, Literal
+from urllib.parse import urlencode
 
 from pydantic import Field
 
 from core.client import client
 from core.exceptions import OpenAIAPIError, OpenAIAuthError
 from core.server import mcp
+
+RealtimeModel = Literal[
+    "gpt-realtime-2.1",
+    "gpt-realtime-2.1-mini",
+    "gpt-realtime-2",
+    "gpt-realtime",
+    "gpt-realtime-mini",
+]
+RealtimeVoice = Literal[
+    "alloy",
+    "ash",
+    "ballad",
+    "coral",
+    "echo",
+    "sage",
+    "shimmer",
+    "verse",
+    "marin",
+    "cedar",
+]
 
 
 @mcp.tool()
@@ -31,15 +52,26 @@ async def openai_get_models() -> str:
 @mcp.tool()
 async def openai_get_realtime_connection_info(
     model: Annotated[
-        Literal["gpt-realtime", "gpt-realtime-2"],
-        Field(description="Realtime model to use."),
-    ] = "gpt-realtime",
+        RealtimeModel,
+        Field(
+            description=(
+                "Realtime model to use. Use gpt-realtime-2.1 for best quality or "
+                "gpt-realtime-2.1-mini for lower cost."
+            )
+        ),
+    ] = "gpt-realtime-2.1",
+    voice: Annotated[
+        RealtimeVoice,
+        Field(description="Output voice selected when the connection is established."),
+    ] = "alloy",
 ) -> str:
     """Get WebSocket connection details for the OpenAI Realtime endpoint."""
+    query = urlencode({"model": model, "voice": voice})
     return json.dumps(
         {
-            "url": f"wss://api.acedata.cloud/v1/realtime?model={model}",
+            "url": f"wss://api.acedata.cloud/v1/realtime?{query}",
             "model": model,
+            "voice": voice,
             "transport": "websocket",
             "auth": "Use an Authorization bearer token header. Browser clients can pass the token via the Sec-WebSocket-Protocol subprotocol.",
             "audio": "pcm16 @ 24kHz mono",
