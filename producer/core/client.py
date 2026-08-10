@@ -184,12 +184,12 @@ class ProducerClient:
     async def generate_video(self, **kwargs: Any) -> dict[str, Any]:
         """Generate video for a song."""
         logger.info(f"Generating video for audio: {kwargs.get('audio_id', '')}")
-        return await self.request("/producer/videos", self._with_async_callback(kwargs))
+        return await self.request("/producer/videos", kwargs)
 
     async def generate_wav(self, **kwargs: Any) -> dict[str, Any]:
         """Get WAV format of a song."""
         logger.info(f"Getting WAV for audio: {kwargs.get('audio_id', '')}")
-        return await self.request("/producer/wav", self._with_async_callback(kwargs))
+        return await self.request("/producer/wav", kwargs)
 
     async def query_task(self, **kwargs: Any) -> dict[str, Any]:
         """Query task status using the tasks endpoint."""

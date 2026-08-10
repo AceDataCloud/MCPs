@@ -45,10 +45,6 @@ async def producer_generate_video(
             description="ID of the audio to generate a video for. This is the 'id' field from a previous generation result."
         ),
     ],
-    callback_url: Annotated[
-        str | None,
-        Field(description="Webhook callback URL for asynchronous notifications."),
-    ] = None,
 ) -> str:
     """Generate a video for a previously generated song.
 
@@ -65,7 +61,6 @@ async def producer_generate_video(
     """
     result = await client.generate_video(
         audio_id=audio_id,
-        callback_url=callback_url,
     )
     return format_video_result(result)
 
@@ -76,10 +71,6 @@ async def producer_generate_wav(
         str,
         Field(description="ID of the audio to get the WAV format for."),
     ],
-    callback_url: Annotated[
-        str | None,
-        Field(description="Webhook callback URL for asynchronous notifications."),
-    ] = None,
 ) -> str:
     """Get the lossless WAV format of a generated song.
 
@@ -96,6 +87,5 @@ async def producer_generate_wav(
     """
     result = await client.generate_wav(
         audio_id=audio_id,
-        callback_url=callback_url,
     )
     return format_wav_result(result)
