@@ -11,8 +11,15 @@ from core.server import mcp
 from core.utils import dumps, error_json
 from tools.user.applications import acedatacloud_list_applications
 from tools.user.credentials import acedatacloud_list_credentials
+from tools.user.orders import acedatacloud_list_orders
+from tools.user.usage import acedatacloud_list_usage
 
-__all__ = ["acedatacloud_list_applications", "acedatacloud_list_credentials"]
+__all__ = [
+    "acedatacloud_list_applications",
+    "acedatacloud_list_credentials",
+    "acedatacloud_list_orders",
+    "acedatacloud_list_usage",
+]
 
 
 def _since(days: int | None) -> str | None:
@@ -114,34 +121,6 @@ async def acedatacloud_get_balance(
 
 
 @mcp.tool()
-async def acedatacloud_list_usage(
-    api_id: Annotated[str | None, Field(description="Filter by API UUID.")] = None,
-    status_code: Annotated[
-        int | None, Field(description="Filter by HTTP status code, e.g. 200.")
-    ] = None,
-    days: Annotated[
-        int | None, Field(description="Only records newer than N days.", ge=1, le=365)
-    ] = None,
-    limit: Annotated[int, Field(description="Max records to return.", ge=1, le=100)] = 20,
-) -> str:
-    """List recent API call (usage) records: status code, latency, credits deducted."""
-    try:
-        result = await client.get(
-            "/usage/apis/",
-            {
-                "limit": limit,
-                "api_id": api_id,
-                "status_code": status_code,
-                "created_at_from": _since(days),
-                "user_id": await get_request_user_id(),
-            },
-        )
-        return _wrap(result)
-    except PlatformError as error:
-        return error_json(error.code, error.message)
-
-
-@mcp.tool()
 async def acedatacloud_usage_summary(
     days: Annotated[
         int, Field(description="Aggregate spend over the last N days.", ge=1, le=365)
@@ -172,34 +151,6 @@ async def acedatacloud_usage_summary(
         )
         total = result.get("total") if isinstance(result, dict) else None
         return dumps({"days": days, "total_credits": total, "by_api": breakdown})
-    except PlatformError as error:
-        return error_json(error.code, error.message)
-
-
-@mcp.tool()
-async def acedatacloud_list_orders(
-    state: Annotated[
-        str | None,
-        Field(description="Filter by state: Pending/Paid/Finished/Expired/Failed/Refunded."),
-    ] = None,
-    pay_way: Annotated[
-        str | None,
-        Field(description="Filter by pay_way: WechatPay/AliPay/Stripe/X402/PayPal/Reward."),
-    ] = None,
-    limit: Annotated[int, Field(description="Max orders to return.", ge=1, le=100)] = 20,
-) -> str:
-    """List recharge orders with their state and payment method."""
-    try:
-        result = await client.get(
-            "/orders/",
-            {
-                "limit": limit,
-                "state": state,
-                "pay_way": pay_way,
-                "user_id": await get_request_user_id(),
-            },
-        )
-        return _wrap(result)
     except PlatformError as error:
         return error_json(error.code, error.message)
 

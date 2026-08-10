@@ -19,10 +19,12 @@ SECRET_KEYS = {
     "refresh_token",
     "revoked_tx",
     "secret",
+    "setup_intent_id",
     "setup_token",
     "setup_tx",
     "signature",
     "token",
+    "transaction_id",
 }
 SECRET_SUFFIXES = ("_api_key", "_password", "_private_key", "_secret", "_signature", "_token")
 

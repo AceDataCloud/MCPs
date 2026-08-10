@@ -61,8 +61,9 @@ async def test_tools_list_schema_snapshot():
 async def test_usage_guide_is_contract_generated():
     assert await acedatacloud_get_usage_guide() == render_usage_guide()
     guide = render_usage_guide()
+    guide_lines = guide.splitlines()
     for tool in registered_contract_tools() - {INFO_TOOL}:
-        assert guide.count(tool) == 1
+        assert sum(line.startswith(f"- {tool} —") for line in guide_lines) == 1
 
 
 def test_readme_generated_reference_is_current():
