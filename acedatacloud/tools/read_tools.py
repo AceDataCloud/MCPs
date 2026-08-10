@@ -9,6 +9,10 @@ from core.client import client, get_request_user_id
 from core.exceptions import PlatformError
 from core.server import mcp
 from core.utils import dumps, error_json
+from tools.user.applications import acedatacloud_list_applications
+from tools.user.credentials import acedatacloud_list_credentials
+
+__all__ = ["acedatacloud_list_applications", "acedatacloud_list_credentials"]
 
 
 def _since(days: int | None) -> str | None:
@@ -71,32 +75,6 @@ async def acedatacloud_list_services(
             ]
             return dumps({"count": len(items), "items": items})
         result = await client.get("/services/", {"limit": limit, **server_filters})
-        return _wrap(result)
-    except PlatformError as error:
-        return error_json(error.code, error.message)
-
-
-@mcp.tool()
-async def acedatacloud_list_applications(
-    service_id: Annotated[str | None, Field(description="Filter by service UUID.")] = None,
-    scope: Annotated[
-        str | None, Field(description="Filter by scope: 'Individual' or 'Global'.")
-    ] = None,
-    limit: Annotated[int, Field(description="Max applications to return.", ge=1, le=200)] = 50,
-) -> str:
-    """List your subscriptions (applications). Each carries the balance
-    (``remaining_amount``) and spend (``used_amount``) for one service, in Credits.
-    """
-    try:
-        result = await client.get(
-            "/applications/",
-            {
-                "limit": limit,
-                "service_id": service_id,
-                "scope": scope,
-                "user_id": await get_request_user_id(),
-            },
-        )
         return _wrap(result)
     except PlatformError as error:
         return error_json(error.code, error.message)
@@ -194,26 +172,6 @@ async def acedatacloud_usage_summary(
         )
         total = result.get("total") if isinstance(result, dict) else None
         return dumps({"days": days, "total_credits": total, "by_api": breakdown})
-    except PlatformError as error:
-        return error_json(error.code, error.message)
-
-
-@mcp.tool()
-async def acedatacloud_list_credentials(
-    application_id: Annotated[str | None, Field(description="Filter by application UUID.")] = None,
-    limit: Annotated[int, Field(description="Max credentials to return.", ge=1, le=100)] = 50,
-) -> str:
-    """List your API keys (credentials). Token values are masked."""
-    try:
-        result = await client.get(
-            "/credentials/",
-            {
-                "limit": limit,
-                "application_id": application_id,
-                "user_id": await get_request_user_id(),
-            },
-        )
-        return _wrap(result)
     except PlatformError as error:
         return error_json(error.code, error.message)
 

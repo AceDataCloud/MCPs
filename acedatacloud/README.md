@@ -27,7 +27,12 @@ MCP-compatible client.
 
 | Tool | Description |
 |------|-------------|
+| `acedatacloud_get_application` | Get one application and service details. |
 | `acedatacloud_get_balance` | Summarize remaining Credits. |
+| `acedatacloud_get_credential` | Get one credential with secrets masked. |
+| `acedatacloud_get_deployment_events` | Get deployment scheduling events. |
+| `acedatacloud_get_deployment_logs` | Get bounded deployment logs. |
+| `acedatacloud_get_deployment_status` | Get live deployment status. |
 | `acedatacloud_get_user_info` | Current authenticated account profile. |
 | `acedatacloud_list_applications` | List account subscriptions. |
 | `acedatacloud_list_credentials` | List API credentials with secrets masked. |
@@ -60,12 +65,20 @@ MCP-compatible client.
 
 | Tool | Description |
 |------|-------------|
+| `acedatacloud_control_deployment` | Start a stopped deployment. |
+| `acedatacloud_create_application` | Create an application subscription. |
 | `acedatacloud_create_credential` | Create an API credential. |
 | `acedatacloud_create_order` | Create a recharge order. |
 | `acedatacloud_create_platform_token` | Create a management token. |
 | `acedatacloud_delete_credential` | Revoke an API credential. |
 | `acedatacloud_delete_platform_token` | Revoke a management token. |
+| `acedatacloud_deploy_application` | Start or redeploy an application workload. |
 | `acedatacloud_pay_order` | Create an order payment session. |
+| `acedatacloud_rotate_credential` | Rotate and disclose a credential secret once. |
+| `acedatacloud_save_deployment_config` | Save a deployment configuration draft. |
+| `acedatacloud_teardown_deployment` | Destroy a workload and delete its application. |
+| `acedatacloud_update_application_balance_policy` | Update global-balance fallback policy. |
+| `acedatacloud_update_credential` | Update credential limits and API scope. |
 
 ### Admin
 

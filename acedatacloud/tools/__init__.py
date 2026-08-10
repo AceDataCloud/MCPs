@@ -8,6 +8,7 @@ from tools import (
     info_tools,
     model_tools,
     read_tools,
+    user,
     write_tools,
 )
 
@@ -19,4 +20,5 @@ __all__ = [
     "catalog_tools",
     "docs_tools",
     "model_tools",
+    "user",
 ]
