@@ -107,11 +107,7 @@ async def maestro_create_video(
     ] = None,
     voice: Annotated[
         MaestroVoice | None,
-        Field(
-            description=(
-                "Narration voice preset. Use 'auto' or omit to let the server decide."
-            )
-        ),
+        Field(description=("Narration voice preset. Use 'auto' or omit to let the server decide.")),
     ] = None,
     callback_url: Annotated[
         str | None,
