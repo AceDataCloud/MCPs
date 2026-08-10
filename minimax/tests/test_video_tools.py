@@ -30,7 +30,32 @@ async def test_text_tool_payload(monkeypatch, generated_response):
 
 
 @pytest.mark.asyncio
-async def test_image_tool_payload(monkeypatch, generated_response):
+async def test_image_tool_single_image_uses_first_frame(monkeypatch, generated_response):
+    generate = AsyncMock(return_value=generated_response)
+    monkeypatch.setattr(video_tools.client, "generate_video", generate)
+
+    await video_tools.minimax_generate_video_from_images(
+        ["https://cdn.test/one.png"], prompt="move"
+    )
+
+    generate.assert_awaited_once_with(
+        model="MiniMax-H3",
+        content=[
+            {"type": "text", "text": "move"},
+            {
+                "type": "image_url",
+                "image_url": {"url": "https://cdn.test/one.png"},
+                "role": "first_frame",
+            },
+        ],
+        resolution="2K",
+        ratio="16:9",
+        duration=4,
+    )
+
+
+@pytest.mark.asyncio
+async def test_image_tool_multiple_images_uses_reference(monkeypatch, generated_response):
     generate = AsyncMock(return_value=generated_response)
     monkeypatch.setattr(video_tools.client, "generate_video", generate)
 

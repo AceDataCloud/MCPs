@@ -92,7 +92,13 @@ async def minimax_generate_video_from_images(
         str | None, Field(description="Optional public webhook URL for the final result.")
     ] = None,
 ) -> str:
-    """Generate from one first-frame image or multiple reference images."""
+    """Generate from one first-frame image or multiple reference images.
+
+    Single image uses first_frame mode; multiple images use reference_image mode.
+    The two modes are mutually exclusive per MiniMax H3 v2 API contract.
+    """
+    # Official constraint: first_frame/last_frame and reference_image are mutually exclusive.
+    role = "first_frame" if len(image_urls) == 1 else "reference_image"
     payload = _common_payload(
         model=model,
         resolution=resolution,
@@ -104,9 +110,9 @@ async def minimax_generate_video_from_images(
                 {
                     "type": "image_url",
                     "image_url": {"url": image_url},
-                    "role": "reference_image",
+                    "role": role,
                 }
-                for index, image_url in enumerate(image_urls)
+                for image_url in image_urls
             ],
         ],
         callback_url=callback_url,
@@ -136,7 +142,11 @@ async def minimax_generate_video_from_audio(
         str | None, Field(description="Optional public webhook URL for the final result.")
     ] = None,
 ) -> str:
-    """Generate a MiniMax H3 video guided by audio and reference images."""
+    """Generate a MiniMax H3 video guided by audio and reference images.
+
+    Audio-guided generation uses reference mode exclusively (reference_audio
+    forces the entire content into reference-to-video mode per the H3 v2 contract).
+    """
     payload = _common_payload(
         model=model,
         resolution=resolution,
@@ -150,7 +160,7 @@ async def minimax_generate_video_from_audio(
                     "image_url": {"url": image_url},
                     "role": "reference_image",
                 }
-                for index, image_url in enumerate(image_urls)
+                for image_url in image_urls
             ],
             *[
                 {
