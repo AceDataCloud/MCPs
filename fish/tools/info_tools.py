@@ -37,7 +37,7 @@ async def fish_get_usage_guide() -> str:
 **fish_list_models** - List available voice models
 - page_size, page_number: Pagination controls (optional)
 - title, tag, language, title_language: Filters (optional)
-- self_only, author_id, sort_by: Ownership and sort filters (optional)
+- self, author_id, sort_by: Ownership and sort filters (optional)
 
 **fish_get_model** - Get details of a single model
 - model_id: The model ID from fish_list_models (required)
@@ -110,9 +110,9 @@ async def fish_list_models(
         str | None,
         Field(description="Filter by a single tag."),
     ] = None,
-    self_only: Annotated[
+    self_: Annotated[
         bool | None,
-        Field(description="When true, only return models owned by the calling account."),
+        Field(alias="self", description="When true, only return models owned by the calling account."),
     ] = None,
     author_id: Annotated[
         str | None,
@@ -146,8 +146,8 @@ async def fish_list_models(
             params["title"] = title
         if tag is not None:
             params["tag"] = tag
-        if self_only is not None:
-            params["self"] = self_only
+        if self_ is not None:
+            params["self"] = self_
         if author_id is not None:
             params["author_id"] = author_id
         if language is not None:

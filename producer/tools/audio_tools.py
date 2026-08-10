@@ -55,7 +55,7 @@ async def producer_generate_music(
         ),
     ] = None,
     seed: Annotated[
-        int | None,
+        str | None,
         Field(
             description="Seed for reproducible generation. Reuse the same seed to reproduce a result."
         ),
@@ -65,6 +65,10 @@ async def producer_generate_music(
         Field(
             description="Webhook callback URL for asynchronous notifications. When provided, the API will call this URL when the audio is generated."
         ),
+    ] = None,
+    async_: Annotated[
+        bool | None,
+        Field(alias="async", description="Whether to process the request asynchronously."),
     ] = None,
 ) -> str:
     """Generate AI music from a text prompt using Producer/Riffusion.
@@ -98,6 +102,8 @@ async def producer_generate_music(
         payload["weirdness"] = weirdness
     if seed is not None:
         payload["seed"] = seed
+    if async_ is not None:
+        payload["async"] = async_
 
     result = await client.generate_audio(**payload)
     return format_audio_result(result)
@@ -158,7 +164,7 @@ async def producer_generate_custom_music(
         ),
     ] = None,
     seed: Annotated[
-        int | None,
+        str | None,
         Field(
             description="Seed for reproducible generation. Reuse the same seed to reproduce a result."
         ),
@@ -166,6 +172,10 @@ async def producer_generate_custom_music(
     callback_url: Annotated[
         str | None,
         Field(description="Webhook callback URL for asynchronous notifications."),
+    ] = None,
+    async_: Annotated[
+        bool | None,
+        Field(alias="async", description="Whether to process the request asynchronously."),
     ] = None,
 ) -> str:
     """Generate AI music with full control over lyrics, title, and style.
@@ -203,6 +213,8 @@ async def producer_generate_custom_music(
         payload["weirdness"] = weirdness
     if seed is not None:
         payload["seed"] = seed
+    if async_ is not None:
+        payload["async"] = async_
 
     result = await client.generate_audio(**payload)
     return format_audio_result(result)
@@ -242,6 +254,10 @@ async def producer_extend_music(
         str | None,
         Field(description="Webhook callback URL for asynchronous notifications."),
     ] = None,
+    async_: Annotated[
+        bool | None,
+        Field(alias="async", description="Whether to process the request asynchronously."),
+    ] = None,
 ) -> str:
     """Extend an existing song from a specific timestamp with new content.
 
@@ -268,6 +284,8 @@ async def producer_extend_music(
         payload["lyric"] = lyric
     if style:
         payload["style"] = style
+    if async_ is not None:
+        payload["async"] = async_
 
     result = await client.generate_audio(**payload)
     return format_audio_result(result)
@@ -301,6 +319,10 @@ async def producer_cover_music(
         str | None,
         Field(description="Webhook callback URL for asynchronous notifications."),
     ] = None,
+    async_: Annotated[
+        bool | None,
+        Field(alias="async", description="Whether to process the request asynchronously."),
+    ] = None,
 ) -> str:
     """Create a cover or remix version of an existing song in a different style.
 
@@ -326,6 +348,8 @@ async def producer_cover_music(
         payload["prompt"] = prompt
     if style:
         payload["style"] = style
+    if async_ is not None:
+        payload["async"] = async_
 
     result = await client.generate_audio(**payload)
     return format_audio_result(result)
@@ -357,6 +381,10 @@ async def producer_variation_music(
         str | None,
         Field(description="Webhook callback URL for asynchronous notifications."),
     ] = None,
+    async_: Annotated[
+        bool | None,
+        Field(alias="async", description="Whether to process the request asynchronously."),
+    ] = None,
 ) -> str:
     """Create a variation of an existing song with modifications.
 
@@ -382,6 +410,8 @@ async def producer_variation_music(
         payload["prompt"] = prompt
     if style:
         payload["style"] = style
+    if async_ is not None:
+        payload["async"] = async_
 
     result = await client.generate_audio(**payload)
     return format_audio_result(result)
@@ -400,6 +430,10 @@ async def producer_swap_vocals(
     callback_url: Annotated[
         str | None,
         Field(description="Webhook callback URL for asynchronous notifications."),
+    ] = None,
+    async_: Annotated[
+        bool | None,
+        Field(alias="async", description="Whether to process the request asynchronously."),
     ] = None,
 ) -> str:
     """Swap the vocals of one song with vocals from another song.
@@ -420,6 +454,7 @@ async def producer_swap_vocals(
         audio_id=audio_id,
         swap_audio_id=swap_audio_id,
         callback_url=callback_url,
+        **({"async": async_} if async_ is not None else {}),
     )
     return format_audio_result(result)
 
@@ -437,6 +472,10 @@ async def producer_swap_instrumentals(
     callback_url: Annotated[
         str | None,
         Field(description="Webhook callback URL for asynchronous notifications."),
+    ] = None,
+    async_: Annotated[
+        bool | None,
+        Field(alias="async", description="Whether to process the request asynchronously."),
     ] = None,
 ) -> str:
     """Swap the instrumental track of one song with instrumentals from another.
@@ -457,6 +496,7 @@ async def producer_swap_instrumentals(
         audio_id=audio_id,
         swap_audio_id=swap_audio_id,
         callback_url=callback_url,
+        **({"async": async_} if async_ is not None else {}),
     )
     return format_audio_result(result)
 
@@ -493,6 +533,10 @@ async def producer_replace_section(
         str | None,
         Field(description="Webhook callback URL for asynchronous notifications."),
     ] = None,
+    async_: Annotated[
+        bool | None,
+        Field(alias="async", description="Whether to process the request asynchronously."),
+    ] = None,
 ) -> str:
     """Replace a specific time range in a song with new generated content.
 
@@ -521,6 +565,8 @@ async def producer_replace_section(
         payload["lyric"] = lyric
     if style:
         payload["style"] = style
+    if async_ is not None:
+        payload["async"] = async_
 
     result = await client.generate_audio(**payload)
     return format_audio_result(result)
@@ -535,6 +581,10 @@ async def producer_stems_music(
     callback_url: Annotated[
         str | None,
         Field(description="Webhook callback URL for asynchronous notifications."),
+    ] = None,
+    async_: Annotated[
+        bool | None,
+        Field(alias="async", description="Whether to process the request asynchronously."),
     ] = None,
 ) -> str:
     """Separate a song into individual stems (vocals and instruments).
@@ -554,5 +604,6 @@ async def producer_stems_music(
         action="stems",
         audio_id=audio_id,
         callback_url=callback_url,
+        **({"async": async_} if async_ is not None else {}),
     )
     return format_audio_result(result)
