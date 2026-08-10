@@ -2,15 +2,19 @@
 
 import json
 from unittest.mock import AsyncMock, patch
+from uuid import UUID
 
 from tools.task_tools import maestro_get_task, maestro_list_tasks
 from tools.video_tools import maestro_create_video
+
+TASK_ID = UUID("0194c0be-8f6c-7e31-a7d2-0123456789ab")
 
 
 async def test_create_video_builds_complete_payload() -> None:
     with patch("tools.video_tools.client.create_video", new_callable=AsyncMock) as create:
         create.return_value = {"success": True, "task_id": "task-1"}
         result = await maestro_create_video(
+            task_id=TASK_ID,
             prompt="Launch video for a new camera",
             action="generate",
             file_urls=["https://example.com/camera.jpg"],
@@ -25,6 +29,7 @@ async def test_create_video_builds_complete_payload() -> None:
 
     create.assert_awaited_once_with(
         {
+            "task_id": str(TASK_ID),
             "prompt": "Launch video for a new camera",
             "action": "generate",
             "file_urls": ["https://example.com/camera.jpg"],
@@ -41,7 +46,7 @@ async def test_create_video_builds_complete_payload() -> None:
 
 
 async def test_iteration_requires_reference_task() -> None:
-    result = await maestro_create_video(prompt="Make it faster", action="remix")
+    result = await maestro_create_video(task_id=TASK_ID, prompt="Make it faster", action="remix")
 
     assert result == "Error: action=remix requires ref_task_id."
 
@@ -58,13 +63,19 @@ async def test_iteration_does_not_clobber_source_format() -> None:
     with patch("tools.video_tools.client.create_video", new_callable=AsyncMock) as create:
         create.return_value = {"success": True, "task_id": "task-2"}
         await maestro_create_video(
+            task_id=TASK_ID,
             prompt="Tighten the intro",
             action="edit",
             ref_task_id="task-1",
         )
 
     create.assert_awaited_once_with(
-        {"prompt": "Tighten the intro", "action": "edit", "ref_task_id": "task-1"}
+        {
+            "task_id": str(TASK_ID),
+            "prompt": "Tighten the intro",
+            "action": "edit",
+            "ref_task_id": "task-1",
+        }
     )
 
 

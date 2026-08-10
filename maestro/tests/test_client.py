@@ -15,12 +15,21 @@ async def test_create_video_uses_public_endpoint(api_token: str) -> None:
     )
     client = MaestroClient(api_token=api_token)
 
-    result = await client.create_video({"prompt": "Make a product video", "duration": 30})
+    result = await client.create_video(
+        {
+            "task_id": "0194c0be-8f6c-7e31-a7d2-0123456789ab",
+            "prompt": "Make a product video",
+            "duration": 30,
+        }
+    )
 
     assert result["task_id"] == "task-1"
     request = route.calls.last.request
     assert request.headers["authorization"] == "Bearer test-token"
-    assert request.read() == b'{"prompt":"Make a product video","duration":30}'
+    assert request.read() == (
+        b'{"task_id":"0194c0be-8f6c-7e31-a7d2-0123456789ab",'
+        b'"prompt":"Make a product video","duration":30}'
+    )
 
 
 @respx.mock
