@@ -1,6 +1,28 @@
 """Informational tools for the Platform MCP server."""
 
+from core.client import client
+from core.exceptions import PlatformAPIError, PlatformAuthError
 from core.server import mcp
+from core.utils import dumps, error_json
+
+
+@mcp.tool()
+async def acedatacloud_get_user_info() -> str:
+    """Get the current authenticated AceDataCloud account's user profile.
+
+    Returns id, username, email, nickname, and avatar for the account
+    represented by the current platform credential. Useful for constructing
+    personalized content (e.g. inviter_id referral links).
+    """
+    try:
+        result = await client.get("/platform-tokens/me/")
+        if result is None:
+            return error_json("No Response", "The API returned an empty response.")
+        return dumps(result)
+    except PlatformAuthError as e:
+        return error_json("Authentication Error", e.message)
+    except PlatformAPIError as e:
+        return error_json("API Error", e.message)
 
 
 @mcp.tool()
@@ -10,7 +32,7 @@ async def acedatacloud_get_usage_guide() -> str:
     Explains the available tools, the write-confirmation model, and the
     authentication requirements.
     """
-    # Last updated: 2026-06-28
+    # Last updated: 2026-08-10
     return """# AceDataCloud Platform Management — Tool Guide
 
 These tools manage your AceDataCloud account via the console API
@@ -19,6 +41,7 @@ ACEDATACLOUD_PLATFORM_TOKEN — NOT the api.acedata.cloud service token.
 Create one at https://platform.acedata.cloud/console/platform-tokens
 
 ## Read tools (safe)
+- acedatacloud_get_user_info — current authenticated account user ID
 - acedatacloud_get_balance — remaining credits per subscription (+ total)
 - acedatacloud_list_applications — your subscriptions and balances
 - acedatacloud_list_services — list/search available services

@@ -26,6 +26,7 @@ MCP-compatible client.
 
 | Tool | Description |
 |------|-------------|
+| `acedatacloud_get_user_info` | Current authenticated account user ID. |
 | `acedatacloud_get_balance` | Remaining credits per subscription, plus a total. |
 | `acedatacloud_list_applications` | Your subscriptions with balance/spend. |
 | `acedatacloud_list_services` | List or search available services. |

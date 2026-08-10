@@ -6,11 +6,61 @@ import httpx
 import pytest
 import respx
 
+from core.client import set_request_api_token
 from tools.admin_tools import acedatacloud_create_announcement
+from tools.info_tools import acedatacloud_get_user_info
 from tools.read_tools import acedatacloud_get_balance, acedatacloud_list_services
 from tools.write_tools import acedatacloud_create_credential, acedatacloud_delete_credential
 
 API = "https://platform.acedata.cloud/api/v1"
+
+
+@respx.mock
+@pytest.mark.asyncio
+async def test_get_user_info_uses_current_request_token():
+    route = respx.get(f"{API}/platform-tokens/me/").mock(
+        return_value=httpx.Response(
+            200,
+            json={
+                "id": "user-1",
+                "username": "testuser",
+                "email": "test@example.com",
+                "nickname": "Test",
+                "avatar": None,
+            },
+        )
+    )
+    set_request_api_token("platform-request-token")
+    try:
+        out = json.loads(await acedatacloud_get_user_info())
+    finally:
+        set_request_api_token(None)
+
+    assert out["id"] == "user-1"
+    assert out["username"] == "testuser"
+    assert route.calls[0].request.headers["authorization"] == "Bearer platform-request-token"
+
+
+@respx.mock
+@pytest.mark.asyncio
+async def test_get_user_info_maps_authentication_errors():
+    respx.get(f"{API}/platform-tokens/me/").mock(
+        return_value=httpx.Response(401, json={"detail": "Invalid platform token"})
+    )
+
+    out = json.loads(await acedatacloud_get_user_info())
+
+    assert out == {"error": "Authentication Error", "message": "Invalid platform token"}
+
+
+@respx.mock
+@pytest.mark.asyncio
+async def test_get_user_info_maps_empty_response():
+    respx.get(f"{API}/platform-tokens/me/").mock(return_value=httpx.Response(204))
+
+    out = json.loads(await acedatacloud_get_user_info())
+
+    assert out == {"error": "No Response", "message": "The API returned an empty response."}
 
 
 @respx.mock
