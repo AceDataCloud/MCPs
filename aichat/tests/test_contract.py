@@ -81,6 +81,7 @@ def test_v2_offers_gemini_spec_models():
     spec_models = {
         "gemini-3.1-pro",
         "gemini-3.0-pro",
+        "gemini-3.6-flash",
         "gemini-3.5-flash",
         "gemini-3-flash-preview",
         "gemini-2.5-pro",

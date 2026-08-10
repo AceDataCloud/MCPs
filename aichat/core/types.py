@@ -144,6 +144,7 @@ AiChatV2Model = Literal[
     "gemini-2.5-pro",
     "gemini-3.0-pro",
     "gemini-3-pro-preview",
+    "gemini-3.6-flash",
     "gemini-3-flash-preview",
     "gemini-3.1-flash-image-preview",
     "gemini-3.1-flash-lite-preview",
