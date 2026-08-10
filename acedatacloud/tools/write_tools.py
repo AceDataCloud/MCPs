@@ -16,60 +16,14 @@ from tools.user.credentials import (
     acedatacloud_create_credential,
     acedatacloud_delete_credential,
 )
+from tools.user.orders import acedatacloud_create_order, acedatacloud_pay_order
 
-__all__ = ["acedatacloud_create_credential", "acedatacloud_delete_credential"]
-
-
-@mcp.tool()
-async def acedatacloud_create_order(
-    application_id: Annotated[
-        str, Field(description="UUID of the application to recharge. Required.")
-    ],
-    package_id: Annotated[
-        str, Field(description="UUID of the package (quota bundle) to buy. Required.")
-    ],
-    confirm: Annotated[
-        bool, Field(description="Must be true to actually create the order.")
-    ] = False,
-) -> str:
-    """Create a recharge order for an application. Requires ``confirm=true``.
-
-    Returns the order (with its ``id``); call ``acedatacloud_pay_order`` next to get a
-    payment link.
-    """
-    body = {"application_id": application_id, "package_id": package_id}
-    if not confirm:
-        return confirmation_required("POST /orders/", body)
-    try:
-        result = await client.post("/orders/", body)
-        return dumps(result)
-    except PlatformError as error:
-        return error_json(error.code, error.message)
-
-
-@mcp.tool()
-async def acedatacloud_pay_order(
-    order_id: Annotated[str, Field(description="UUID of the order to pay. Required.")],
-    pay_way: Annotated[
-        str, Field(description="Payment method: WechatPay/AliPay/Stripe/X402/PayPal/Reward.")
-    ] = "Stripe",
-    confirm: Annotated[
-        bool, Field(description="Must be true to create the payment session.")
-    ] = False,
-) -> str:
-    """Create a payment session for an order and return its ``pay_url``.
-
-    Requires ``confirm=true``. The returned ``pay_url`` is where the user completes
-    payment.
-    """
-    body = {"pay_way": pay_way}
-    if not confirm:
-        return confirmation_required(f"POST /orders/{order_id}/pay/", body)
-    try:
-        result = await client.post(f"/orders/{order_id}/pay/", body)
-        return dumps(result, disclose={"/pay_url"})
-    except PlatformError as error:
-        return error_json(error.code, error.message)
+__all__ = [
+    "acedatacloud_create_credential",
+    "acedatacloud_create_order",
+    "acedatacloud_delete_credential",
+    "acedatacloud_pay_order",
+]
 
 
 @mcp.tool()

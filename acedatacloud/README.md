@@ -27,20 +27,37 @@ MCP-compatible client.
 
 | Tool | Description |
 |------|-------------|
+| `acedatacloud_export_orders` | Export bounded order CSV. |
+| `acedatacloud_export_usage` | Export bounded usage CSV. |
 | `acedatacloud_get_application` | Get one application and service details. |
+| `acedatacloud_get_auto_recharge` | Get auto recharge. |
 | `acedatacloud_get_balance` | Summarize remaining Credits. |
 | `acedatacloud_get_credential` | Get one credential with secrets masked. |
 | `acedatacloud_get_deployment_events` | Get deployment scheduling events. |
 | `acedatacloud_get_deployment_logs` | Get bounded deployment logs. |
 | `acedatacloud_get_deployment_status` | Get live deployment status. |
+| `acedatacloud_get_invoice` | Get one invoice. |
+| `acedatacloud_get_invoice_download` | Get a signed invoice URL. |
+| `acedatacloud_get_order` | Get one order. |
+| `acedatacloud_get_order_invoice` | Get an order's active invoice. |
+| `acedatacloud_get_order_summary` | Summarize caller orders. |
+| `acedatacloud_get_proxy_usage` | Get proxy usage detail. |
+| `acedatacloud_get_usage` | Get API usage detail. |
 | `acedatacloud_get_user_info` | Current authenticated account profile. |
 | `acedatacloud_list_applications` | List account subscriptions. |
+| `acedatacloud_list_auto_recharges` | List auto-recharge configs. |
+| `acedatacloud_list_billing_profiles` | List billing profiles. |
 | `acedatacloud_list_credentials` | List API credentials with secrets masked. |
 | `acedatacloud_list_distributions` | Get referral status. |
+| `acedatacloud_list_invoices` | List invoices. |
 | `acedatacloud_list_models` | List OpenAI-compatible chat models. |
 | `acedatacloud_list_orders` | List recharge orders. |
 | `acedatacloud_list_platform_tokens` | List management tokens with values masked. |
+| `acedatacloud_list_proxy_usage` | List proxy usage. |
 | `acedatacloud_list_usage` | List recent API usage records. |
+| `acedatacloud_list_usage_status_codes` | List usage status codes. |
+| `acedatacloud_preview_invoice` | Preview invoice amount. |
+| `acedatacloud_quote_auto_recharge` | Quote auto recharge. |
 | `acedatacloud_usage_summary` | Aggregate API spend by API. |
 
 ### Catalog & docs
@@ -65,20 +82,30 @@ MCP-compatible client.
 
 | Tool | Description |
 |------|-------------|
+| `acedatacloud_apply_invoice` | Apply for an invoice. |
+| `acedatacloud_cancel_invoice` | Cancel an invoice. |
+| `acedatacloud_confirm_auto_recharge_setup` | Confirm saved card setup. |
 | `acedatacloud_control_deployment` | Start a stopped deployment. |
 | `acedatacloud_create_application` | Create an application subscription. |
+| `acedatacloud_create_auto_recharge` | Create auto recharge. |
 | `acedatacloud_create_credential` | Create an API credential. |
 | `acedatacloud_create_order` | Create a recharge order. |
 | `acedatacloud_create_platform_token` | Create a management token. |
+| `acedatacloud_delete_auto_recharge` | Delete auto recharge. |
 | `acedatacloud_delete_credential` | Revoke an API credential. |
 | `acedatacloud_delete_platform_token` | Revoke a management token. |
 | `acedatacloud_deploy_application` | Start or redeploy an application workload. |
+| `acedatacloud_disable_auto_recharge` | Disable auto recharge. |
 | `acedatacloud_pay_order` | Create an order payment session. |
+| `acedatacloud_refresh_order` | Refresh payment state. |
 | `acedatacloud_rotate_credential` | Rotate and disclose a credential secret once. |
 | `acedatacloud_save_deployment_config` | Save a deployment configuration draft. |
+| `acedatacloud_setup_auto_recharge` | Create card setup state. |
 | `acedatacloud_teardown_deployment` | Destroy a workload and delete its application. |
 | `acedatacloud_update_application_balance_policy` | Update global-balance fallback policy. |
+| `acedatacloud_update_auto_recharge` | Update auto recharge. |
 | `acedatacloud_update_credential` | Update credential limits and API scope. |
+| `acedatacloud_verify_apple_order` | Verify and fulfill Apple IAP. |
 
 ### Admin
 
