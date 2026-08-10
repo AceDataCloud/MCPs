@@ -8,13 +8,14 @@ from core.utils import dumps, error_json
 
 @mcp.tool()
 async def acedatacloud_get_user_info() -> str:
-    """Get the current authenticated AceDataCloud account's user ID.
+    """Get the current authenticated AceDataCloud account's user profile.
 
-    Call this when a task needs to identify the account represented by the
-    current platform credential, including when constructing an inviter_id URL.
+    Returns id, username, email, nickname, and avatar for the account
+    represented by the current platform credential. Useful for constructing
+    personalized content (e.g. inviter_id referral links).
     """
     try:
-        result = await client.get("/users/me/")
+        result = await client.get("/platform-tokens/me/")
         if result is None:
             return error_json("No Response", "The API returned an empty response.")
         return dumps(result)

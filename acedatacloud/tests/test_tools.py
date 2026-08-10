@@ -18,8 +18,17 @@ API = "https://platform.acedata.cloud/api/v1"
 @respx.mock
 @pytest.mark.asyncio
 async def test_get_user_info_uses_current_request_token():
-    route = respx.get(f"{API}/users/me/").mock(
-        return_value=httpx.Response(200, json={"user_id": "user-1"})
+    route = respx.get(f"{API}/platform-tokens/me/").mock(
+        return_value=httpx.Response(
+            200,
+            json={
+                "id": "user-1",
+                "username": "testuser",
+                "email": "test@example.com",
+                "nickname": "Test",
+                "avatar": None,
+            },
+        )
     )
     set_request_api_token("platform-request-token")
     try:
@@ -27,14 +36,15 @@ async def test_get_user_info_uses_current_request_token():
     finally:
         set_request_api_token(None)
 
-    assert out == {"user_id": "user-1"}
+    assert out["id"] == "user-1"
+    assert out["username"] == "testuser"
     assert route.calls[0].request.headers["authorization"] == "Bearer platform-request-token"
 
 
 @respx.mock
 @pytest.mark.asyncio
 async def test_get_user_info_maps_authentication_errors():
-    respx.get(f"{API}/users/me/").mock(
+    respx.get(f"{API}/platform-tokens/me/").mock(
         return_value=httpx.Response(401, json={"detail": "Invalid platform token"})
     )
 
@@ -46,7 +56,7 @@ async def test_get_user_info_maps_authentication_errors():
 @respx.mock
 @pytest.mark.asyncio
 async def test_get_user_info_maps_empty_response():
-    respx.get(f"{API}/users/me/").mock(return_value=httpx.Response(204))
+    respx.get(f"{API}/platform-tokens/me/").mock(return_value=httpx.Response(204))
 
     out = json.loads(await acedatacloud_get_user_info())
 
