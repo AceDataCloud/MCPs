@@ -1,5 +1,117 @@
 [
   {
+    "name": "acedatacloud_apply_invoice",
+    "inputSchema": {
+      "properties": {
+        "region": {
+          "description": "Invoice region.",
+          "enum": [
+            "china",
+            "overseas"
+          ],
+          "title": "Region",
+          "type": "string"
+        },
+        "billing_profile_id": {
+          "description": "Billing profile ID.",
+          "title": "Billing Profile Id",
+          "type": "string"
+        },
+        "order_ids": {
+          "description": "Non-empty order UUID list.",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Order Ids",
+          "type": "array"
+        },
+        "invoice_type": {
+          "anyOf": [
+            {
+              "enum": [
+                "general",
+                "special"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "China invoice type.",
+          "title": "Invoice Type"
+        },
+        "confirm": {
+          "default": false,
+          "description": "Must be true to apply for the invoice.",
+          "title": "Confirm",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "region",
+        "billing_profile_id",
+        "order_ids"
+      ],
+      "title": "acedatacloud_apply_invoiceArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "acedatacloud_cancel_invoice",
+    "inputSchema": {
+      "properties": {
+        "invoice_id": {
+          "description": "Invoice UUID.",
+          "title": "Invoice Id",
+          "type": "string"
+        },
+        "confirm": {
+          "default": false,
+          "description": "Must be true to cancel the invoice.",
+          "title": "Confirm",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "invoice_id"
+      ],
+      "title": "acedatacloud_cancel_invoiceArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "acedatacloud_confirm_auto_recharge_setup",
+    "inputSchema": {
+      "properties": {
+        "config_id": {
+          "description": "Auto-recharge config UUID.",
+          "title": "Config Id",
+          "type": "string"
+        },
+        "setup_intent_id": {
+          "description": "Completed setup intent ID.",
+          "title": "Setup Intent Id",
+          "type": "string"
+        },
+        "confirm": {
+          "default": false,
+          "description": "Must be true to persist consent and saved card.",
+          "title": "Confirm",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "config_id",
+        "setup_intent_id"
+      ],
+      "title": "acedatacloud_confirm_auto_recharge_setupArguments",
+      "type": "object"
+    }
+  },
+  {
     "name": "acedatacloud_control_deployment",
     "inputSchema": {
       "properties": {
@@ -146,6 +258,49 @@
     }
   },
   {
+    "name": "acedatacloud_create_auto_recharge",
+    "inputSchema": {
+      "properties": {
+        "application_id": {
+          "description": "Application UUID.",
+          "title": "Application Id",
+          "type": "string"
+        },
+        "package_id": {
+          "description": "Recharge package UUID.",
+          "title": "Package Id",
+          "type": "string"
+        },
+        "metadata": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Optional metadata.",
+          "title": "Metadata"
+        },
+        "confirm": {
+          "default": false,
+          "description": "Must be true to create the paused config.",
+          "title": "Confirm",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "application_id",
+        "package_id"
+      ],
+      "title": "acedatacloud_create_auto_rechargeArguments",
+      "type": "object"
+    }
+  },
+  {
     "name": "acedatacloud_create_credential",
     "inputSchema": {
       "properties": {
@@ -269,26 +424,110 @@
     "inputSchema": {
       "properties": {
         "application_id": {
-          "description": "UUID of the application to recharge. Required.",
-          "title": "Application Id",
-          "type": "string"
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Single application UUID.",
+          "title": "Application Id"
         },
         "package_id": {
-          "description": "UUID of the package (quota bundle) to buy. Required.",
-          "title": "Package Id",
-          "type": "string"
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Single package UUID.",
+          "title": "Package Id"
+        },
+        "application_ids": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Batch application UUIDs.",
+          "title": "Application Ids"
+        },
+        "package_ids": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Batch package UUIDs in matching order.",
+          "title": "Package Ids"
+        },
+        "scope": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Optional order scope.",
+          "title": "Scope"
+        },
+        "description": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Optional order description.",
+          "title": "Description"
+        },
+        "metadata": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Optional order metadata.",
+          "title": "Metadata"
         },
         "confirm": {
           "default": false,
-          "description": "Must be true to actually create the order.",
+          "description": "Must be true to create the order.",
           "title": "Confirm",
           "type": "boolean"
         }
       },
-      "required": [
-        "application_id",
-        "package_id"
-      ],
       "title": "acedatacloud_create_orderArguments",
       "type": "object"
     }
@@ -305,6 +544,29 @@
         }
       },
       "title": "acedatacloud_create_platform_tokenArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "acedatacloud_delete_auto_recharge",
+    "inputSchema": {
+      "properties": {
+        "config_id": {
+          "description": "Auto-recharge config UUID.",
+          "title": "Config Id",
+          "type": "string"
+        },
+        "confirm": {
+          "default": false,
+          "description": "Must be true to delete the config.",
+          "title": "Confirm",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "config_id"
+      ],
+      "title": "acedatacloud_delete_auto_rechargeArguments",
       "type": "object"
     }
   },
@@ -406,6 +668,278 @@
     }
   },
   {
+    "name": "acedatacloud_disable_auto_recharge",
+    "inputSchema": {
+      "properties": {
+        "config_id": {
+          "description": "Auto-recharge config UUID.",
+          "title": "Config Id",
+          "type": "string"
+        },
+        "confirm": {
+          "default": false,
+          "description": "Must be true to disable triggering.",
+          "title": "Confirm",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "config_id"
+      ],
+      "title": "acedatacloud_disable_auto_rechargeArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "acedatacloud_export_orders",
+    "inputSchema": {
+      "properties": {
+        "state": {
+          "anyOf": [
+            {
+              "enum": [
+                "Pending",
+                "Paid",
+                "Finished",
+                "Expired",
+                "Failed",
+                "Refunded"
+              ],
+              "type": "string"
+            },
+            {
+              "items": {
+                "enum": [
+                  "Pending",
+                  "Paid",
+                  "Finished",
+                  "Expired",
+                  "Failed",
+                  "Refunded"
+                ],
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Optional state filters.",
+          "title": "State"
+        },
+        "pay_way": {
+          "anyOf": [
+            {
+              "enum": [
+                "WechatPay",
+                "AliPay",
+                "Stripe",
+                "Card",
+                "X402",
+                "PayPal",
+                "AppleIAP",
+                "Reward",
+                "BankTransfer"
+              ],
+              "type": "string"
+            },
+            {
+              "items": {
+                "enum": [
+                  "WechatPay",
+                  "AliPay",
+                  "Stripe",
+                  "Card",
+                  "X402",
+                  "PayPal",
+                  "AppleIAP",
+                  "Reward",
+                  "BankTransfer"
+                ],
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Optional payment filters.",
+          "title": "Pay Way"
+        },
+        "created_at_from": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "ISO-8601 lower creation bound.",
+          "title": "Created At From"
+        },
+        "created_at_to": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "ISO-8601 upper creation bound.",
+          "title": "Created At To"
+        },
+        "max_bytes": {
+          "default": 2097152,
+          "description": "Maximum CSV bytes returned.",
+          "maximum": 10485760,
+          "minimum": 1024,
+          "title": "Max Bytes",
+          "type": "integer"
+        }
+      },
+      "title": "acedatacloud_export_ordersArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "acedatacloud_export_usage",
+    "inputSchema": {
+      "properties": {
+        "application_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Application UUID filters.",
+          "title": "Application Id"
+        },
+        "api_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "API UUID filters.",
+          "title": "Api Id"
+        },
+        "credential_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Credential UUID filters.",
+          "title": "Credential Id"
+        },
+        "status_code": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "items": {
+                "type": "integer"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "HTTP status filters.",
+          "title": "Status Code"
+        },
+        "created_at_from": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "ISO-8601 lower time bound.",
+          "title": "Created At From"
+        },
+        "created_at_to": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "ISO-8601 upper time bound.",
+          "title": "Created At To"
+        },
+        "perspective": {
+          "default": "both",
+          "description": "Billing, actor, or union perspective.",
+          "enum": [
+            "billing",
+            "actor",
+            "both"
+          ],
+          "title": "Perspective",
+          "type": "string"
+        },
+        "max_bytes": {
+          "default": 2097152,
+          "description": "Maximum CSV bytes returned.",
+          "maximum": 10485760,
+          "minimum": 1024,
+          "title": "Max Bytes",
+          "type": "integer"
+        }
+      },
+      "title": "acedatacloud_export_usageArguments",
+      "type": "object"
+    }
+  },
+  {
     "name": "acedatacloud_get_api_spec",
     "inputSchema": {
       "properties": {
@@ -436,6 +970,23 @@
         "application_id"
       ],
       "title": "acedatacloud_get_applicationArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "acedatacloud_get_auto_recharge",
+    "inputSchema": {
+      "properties": {
+        "config_id": {
+          "description": "Auto-recharge config UUID.",
+          "title": "Config Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "config_id"
+      ],
+      "title": "acedatacloud_get_auto_rechargeArguments",
       "type": "object"
     }
   },
@@ -581,6 +1132,40 @@
     }
   },
   {
+    "name": "acedatacloud_get_invoice",
+    "inputSchema": {
+      "properties": {
+        "invoice_id": {
+          "description": "Invoice UUID.",
+          "title": "Invoice Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "invoice_id"
+      ],
+      "title": "acedatacloud_get_invoiceArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "acedatacloud_get_invoice_download",
+    "inputSchema": {
+      "properties": {
+        "invoice_id": {
+          "description": "Issued invoice UUID.",
+          "title": "Invoice Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "invoice_id"
+      ],
+      "title": "acedatacloud_get_invoice_downloadArguments",
+      "type": "object"
+    }
+  },
+  {
     "name": "acedatacloud_get_model",
     "inputSchema": {
       "properties": {
@@ -594,6 +1179,151 @@
         "model"
       ],
       "title": "acedatacloud_get_modelArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "acedatacloud_get_order",
+    "inputSchema": {
+      "properties": {
+        "order_id": {
+          "description": "Order UUID.",
+          "title": "Order Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "order_id"
+      ],
+      "title": "acedatacloud_get_orderArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "acedatacloud_get_order_invoice",
+    "inputSchema": {
+      "properties": {
+        "order_id": {
+          "description": "Order UUID.",
+          "title": "Order Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "order_id"
+      ],
+      "title": "acedatacloud_get_order_invoiceArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "acedatacloud_get_order_summary",
+    "inputSchema": {
+      "properties": {
+        "state": {
+          "anyOf": [
+            {
+              "enum": [
+                "Pending",
+                "Paid",
+                "Finished",
+                "Expired",
+                "Failed",
+                "Refunded"
+              ],
+              "type": "string"
+            },
+            {
+              "items": {
+                "enum": [
+                  "Pending",
+                  "Paid",
+                  "Finished",
+                  "Expired",
+                  "Failed",
+                  "Refunded"
+                ],
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Optional state filters.",
+          "title": "State"
+        },
+        "pay_way": {
+          "anyOf": [
+            {
+              "enum": [
+                "WechatPay",
+                "AliPay",
+                "Stripe",
+                "Card",
+                "X402",
+                "PayPal",
+                "AppleIAP",
+                "Reward",
+                "BankTransfer"
+              ],
+              "type": "string"
+            },
+            {
+              "items": {
+                "enum": [
+                  "WechatPay",
+                  "AliPay",
+                  "Stripe",
+                  "Card",
+                  "X402",
+                  "PayPal",
+                  "AppleIAP",
+                  "Reward",
+                  "BankTransfer"
+                ],
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Optional payment filters.",
+          "title": "Pay Way"
+        },
+        "created_at_from": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "ISO-8601 lower creation bound.",
+          "title": "Created At From"
+        },
+        "created_at_to": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "ISO-8601 upper creation bound.",
+          "title": "Created At To"
+        }
+      },
+      "title": "acedatacloud_get_order_summaryArguments",
       "type": "object"
     }
   },
@@ -615,6 +1345,23 @@
     }
   },
   {
+    "name": "acedatacloud_get_proxy_usage",
+    "inputSchema": {
+      "properties": {
+        "usage_id": {
+          "description": "Proxy usage UUID.",
+          "title": "Usage Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "usage_id"
+      ],
+      "title": "acedatacloud_get_proxy_usageArguments",
+      "type": "object"
+    }
+  },
+  {
     "name": "acedatacloud_get_service",
     "inputSchema": {
       "properties": {
@@ -628,6 +1375,23 @@
         "service"
       ],
       "title": "acedatacloud_get_serviceArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "acedatacloud_get_usage",
+    "inputSchema": {
+      "properties": {
+        "usage_id": {
+          "description": "API usage UUID.",
+          "title": "Usage Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "usage_id"
+      ],
+      "title": "acedatacloud_get_usageArguments",
       "type": "object"
     }
   },
@@ -842,6 +1606,94 @@
     }
   },
   {
+    "name": "acedatacloud_list_auto_recharges",
+    "inputSchema": {
+      "properties": {
+        "application_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Optional application UUID filters.",
+          "title": "Application Id"
+        },
+        "ordering": {
+          "anyOf": [
+            {
+              "enum": [
+                "created_at",
+                "-created_at",
+                "updated_at",
+                "-updated_at"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Creation/update ordering.",
+          "title": "Ordering"
+        },
+        "limit": {
+          "default": 50,
+          "description": "Max configs to return.",
+          "maximum": 100,
+          "minimum": 1,
+          "title": "Limit",
+          "type": "integer"
+        },
+        "offset": {
+          "default": 0,
+          "description": "Pagination offset.",
+          "minimum": 0,
+          "title": "Offset",
+          "type": "integer"
+        }
+      },
+      "title": "acedatacloud_list_auto_rechargesArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "acedatacloud_list_billing_profiles",
+    "inputSchema": {
+      "properties": {
+        "region": {
+          "anyOf": [
+            {
+              "enum": [
+                "china",
+                "overseas"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Optional billing region.",
+          "title": "Region"
+        }
+      },
+      "title": "acedatacloud_list_billing_profilesArguments",
+      "type": "object"
+    }
+  },
+  {
     "name": "acedatacloud_list_credentials",
     "inputSchema": {
       "properties": {
@@ -1048,6 +1900,64 @@
     }
   },
   {
+    "name": "acedatacloud_list_invoices",
+    "inputSchema": {
+      "properties": {
+        "status": {
+          "anyOf": [
+            {
+              "enum": [
+                "Pending",
+                "Processing",
+                "Issued",
+                "Rejected",
+                "Voided",
+                "Cancelled"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Optional invoice status.",
+          "title": "Status"
+        },
+        "order_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Optional linked order UUID.",
+          "title": "Order Id"
+        },
+        "limit": {
+          "default": 50,
+          "description": "Max invoices to return.",
+          "maximum": 100,
+          "minimum": 1,
+          "title": "Limit",
+          "type": "integer"
+        },
+        "offset": {
+          "default": 0,
+          "description": "Pagination offset.",
+          "minimum": 0,
+          "title": "Offset",
+          "type": "integer"
+        }
+      },
+      "title": "acedatacloud_list_invoicesArguments",
+      "type": "object"
+    }
+  },
+  {
     "name": "acedatacloud_list_model_catalog",
     "inputSchema": {
       "properties": {
@@ -1097,17 +2007,80 @@
         "state": {
           "anyOf": [
             {
+              "enum": [
+                "Pending",
+                "Paid",
+                "Finished",
+                "Expired",
+                "Failed",
+                "Refunded"
+              ],
               "type": "string"
+            },
+            {
+              "items": {
+                "enum": [
+                  "Pending",
+                  "Paid",
+                  "Finished",
+                  "Expired",
+                  "Failed",
+                  "Refunded"
+                ],
+                "type": "string"
+              },
+              "type": "array"
             },
             {
               "type": "null"
             }
           ],
           "default": null,
-          "description": "Filter by state: Pending/Paid/Finished/Expired/Failed/Refunded.",
+          "description": "Filter by one or more states.",
           "title": "State"
         },
         "pay_way": {
+          "anyOf": [
+            {
+              "enum": [
+                "WechatPay",
+                "AliPay",
+                "Stripe",
+                "Card",
+                "X402",
+                "PayPal",
+                "AppleIAP",
+                "Reward",
+                "BankTransfer"
+              ],
+              "type": "string"
+            },
+            {
+              "items": {
+                "enum": [
+                  "WechatPay",
+                  "AliPay",
+                  "Stripe",
+                  "Card",
+                  "X402",
+                  "PayPal",
+                  "AppleIAP",
+                  "Reward",
+                  "BankTransfer"
+                ],
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Filter by one or more payment methods.",
+          "title": "Pay Way"
+        },
+        "created_at_from": {
           "anyOf": [
             {
               "type": "string"
@@ -1117,8 +2090,38 @@
             }
           ],
           "default": null,
-          "description": "Filter by pay_way: WechatPay/AliPay/Stripe/X402/PayPal/Reward.",
-          "title": "Pay Way"
+          "description": "ISO-8601 lower creation bound.",
+          "title": "Created At From"
+        },
+        "created_at_to": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "ISO-8601 upper creation bound.",
+          "title": "Created At To"
+        },
+        "ordering": {
+          "anyOf": [
+            {
+              "enum": [
+                "created_at",
+                "-created_at"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Order by creation time.",
+          "title": "Ordering"
         },
         "limit": {
           "default": 20,
@@ -1126,6 +2129,13 @@
           "maximum": 100,
           "minimum": 1,
           "title": "Limit",
+          "type": "integer"
+        },
+        "offset": {
+          "default": 0,
+          "description": "Pagination offset.",
+          "minimum": 0,
+          "title": "Offset",
           "type": "integer"
         }
       },
@@ -1147,6 +2157,85 @@
         }
       },
       "title": "acedatacloud_list_platform_tokensArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "acedatacloud_list_proxy_usage",
+    "inputSchema": {
+      "properties": {
+        "application_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Proxy application UUID filters.",
+          "title": "Application Id"
+        },
+        "proxy_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Proxy UUID filters.",
+          "title": "Proxy Id"
+        },
+        "ordering": {
+          "anyOf": [
+            {
+              "enum": [
+                "-created_at",
+                "-updated_at"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Usage ordering.",
+          "title": "Ordering"
+        },
+        "limit": {
+          "default": 20,
+          "description": "Max records.",
+          "maximum": 100,
+          "minimum": 1,
+          "title": "Limit",
+          "type": "integer"
+        },
+        "offset": {
+          "default": 0,
+          "description": "Pagination offset.",
+          "minimum": 0,
+          "title": "Offset",
+          "type": "integer"
+        }
+      },
+      "title": "acedatacloud_list_proxy_usageArguments",
       "type": "object"
     }
   },
@@ -1223,7 +2312,83 @@
     "name": "acedatacloud_list_usage",
     "inputSchema": {
       "properties": {
+        "application_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Application UUID filters.",
+          "title": "Application Id"
+        },
         "api_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "API UUID filters.",
+          "title": "Api Id"
+        },
+        "credential_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Credential UUID filters.",
+          "title": "Credential Id"
+        },
+        "status_code": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "items": {
+                "type": "integer"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "HTTP status filters.",
+          "title": "Status Code"
+        },
+        "created_at_from": {
           "anyOf": [
             {
               "type": "string"
@@ -1233,21 +2398,21 @@
             }
           ],
           "default": null,
-          "description": "Filter by API UUID.",
-          "title": "Api Id"
+          "description": "ISO-8601 lower time bound.",
+          "title": "Created At From"
         },
-        "status_code": {
+        "created_at_to": {
           "anyOf": [
             {
-              "type": "integer"
+              "type": "string"
             },
             {
               "type": "null"
             }
           ],
           "default": null,
-          "description": "Filter by HTTP status code, e.g. 200.",
-          "title": "Status Code"
+          "description": "ISO-8601 upper time bound.",
+          "title": "Created At To"
         },
         "days": {
           "anyOf": [
@@ -1261,15 +2426,50 @@
             }
           ],
           "default": null,
-          "description": "Only records newer than N days.",
+          "description": "Compatibility shortcut: records newer than N days.",
           "title": "Days"
+        },
+        "perspective": {
+          "default": "both",
+          "description": "Billing, actor, or union perspective.",
+          "enum": [
+            "billing",
+            "actor",
+            "both"
+          ],
+          "title": "Perspective",
+          "type": "string"
+        },
+        "ordering": {
+          "anyOf": [
+            {
+              "enum": [
+                "-created_at",
+                "-updated_at"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Usage ordering.",
+          "title": "Ordering"
         },
         "limit": {
           "default": 20,
-          "description": "Max records to return.",
+          "description": "Max records.",
           "maximum": 100,
           "minimum": 1,
           "title": "Limit",
+          "type": "integer"
+        },
+        "offset": {
+          "default": 0,
+          "description": "Pagination offset.",
+          "minimum": 0,
+          "title": "Offset",
           "type": "integer"
         }
       },
@@ -1278,23 +2478,92 @@
     }
   },
   {
+    "name": "acedatacloud_list_usage_status_codes",
+    "inputSchema": {
+      "properties": {
+        "created_at_from": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "ISO-8601 lower time bound.",
+          "title": "Created At From"
+        },
+        "created_at_to": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "ISO-8601 upper time bound.",
+          "title": "Created At To"
+        },
+        "perspective": {
+          "default": "both",
+          "description": "Billing, actor, or union perspective.",
+          "enum": [
+            "billing",
+            "actor",
+            "both"
+          ],
+          "title": "Perspective",
+          "type": "string"
+        }
+      },
+      "title": "acedatacloud_list_usage_status_codesArguments",
+      "type": "object"
+    }
+  },
+  {
     "name": "acedatacloud_pay_order",
     "inputSchema": {
       "properties": {
         "order_id": {
-          "description": "UUID of the order to pay. Required.",
+          "description": "Order UUID.",
           "title": "Order Id",
           "type": "string"
         },
         "pay_way": {
           "default": "Stripe",
-          "description": "Payment method: WechatPay/AliPay/Stripe/X402/PayPal/Reward.",
+          "description": "Payment method.",
+          "enum": [
+            "WechatPay",
+            "AliPay",
+            "Stripe",
+            "Card",
+            "X402",
+            "PayPal",
+            "AppleIAP",
+            "Reward",
+            "BankTransfer"
+          ],
           "title": "Pay Way",
+          "type": "string"
+        },
+        "surface": {
+          "default": "pc",
+          "description": "Client surface affecting hosted payment flow.",
+          "enum": [
+            "pc",
+            "wap",
+            "android",
+            "ios"
+          ],
+          "title": "Surface",
           "type": "string"
         },
         "confirm": {
           "default": false,
-          "description": "Must be true to create the payment session.",
+          "description": "Must be true to create payment state.",
           "title": "Confirm",
           "type": "boolean"
         }
@@ -1303,6 +2572,90 @@
         "order_id"
       ],
       "title": "acedatacloud_pay_orderArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "acedatacloud_preview_invoice",
+    "inputSchema": {
+      "properties": {
+        "order_ids": {
+          "description": "Non-empty order UUID list.",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Order Ids",
+          "type": "array"
+        }
+      },
+      "required": [
+        "order_ids"
+      ],
+      "title": "acedatacloud_preview_invoiceArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "acedatacloud_quote_auto_recharge",
+    "inputSchema": {
+      "properties": {
+        "application_id": {
+          "description": "Application UUID.",
+          "title": "Application Id",
+          "type": "string"
+        },
+        "package_ids": {
+          "description": "One or more package UUIDs.",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Package Ids",
+          "type": "array"
+        }
+      },
+      "required": [
+        "application_id",
+        "package_ids"
+      ],
+      "title": "acedatacloud_quote_auto_rechargeArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "acedatacloud_refresh_order",
+    "inputSchema": {
+      "properties": {
+        "order_id": {
+          "description": "Order UUID.",
+          "title": "Order Id",
+          "type": "string"
+        },
+        "payer_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "PayPal payer ID when applicable.",
+          "title": "Payer Id"
+        },
+        "confirm": {
+          "default": false,
+          "description": "Must be true to query provider state and refresh the order.",
+          "title": "Confirm",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "order_id"
+      ],
+      "title": "acedatacloud_refresh_orderArguments",
       "type": "object"
     }
   },
@@ -1412,6 +2765,29 @@
     }
   },
   {
+    "name": "acedatacloud_setup_auto_recharge",
+    "inputSchema": {
+      "properties": {
+        "config_id": {
+          "description": "Auto-recharge config UUID.",
+          "title": "Config Id",
+          "type": "string"
+        },
+        "confirm": {
+          "default": false,
+          "description": "Must be true to create provider setup state.",
+          "title": "Confirm",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "config_id"
+      ],
+      "title": "acedatacloud_setup_auto_rechargeArguments",
+      "type": "object"
+    }
+  },
+  {
     "name": "acedatacloud_teardown_deployment",
     "inputSchema": {
       "properties": {
@@ -1466,6 +2842,69 @@
         "allow_consume_global"
       ],
       "title": "acedatacloud_update_application_balance_policyArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "acedatacloud_update_auto_recharge",
+    "inputSchema": {
+      "properties": {
+        "config_id": {
+          "description": "Auto-recharge config UUID.",
+          "title": "Config Id",
+          "type": "string"
+        },
+        "package_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "New package UUID.",
+          "title": "Package Id"
+        },
+        "enabled": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Enable or pause triggering.",
+          "title": "Enabled"
+        },
+        "metadata": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Replacement metadata.",
+          "title": "Metadata"
+        },
+        "confirm": {
+          "default": false,
+          "description": "Must be true to update the config.",
+          "title": "Confirm",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "config_id"
+      ],
+      "title": "acedatacloud_update_auto_rechargeArguments",
       "type": "object"
     }
   },
@@ -1587,6 +3026,35 @@
         }
       },
       "title": "acedatacloud_usage_summaryArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "acedatacloud_verify_apple_order",
+    "inputSchema": {
+      "properties": {
+        "order_id": {
+          "description": "Order UUID.",
+          "title": "Order Id",
+          "type": "string"
+        },
+        "transaction_id": {
+          "description": "StoreKit transaction ID.",
+          "title": "Transaction Id",
+          "type": "string"
+        },
+        "confirm": {
+          "default": false,
+          "description": "Must be true to verify and fulfill the purchase.",
+          "title": "Confirm",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "order_id",
+        "transaction_id"
+      ],
+      "title": "acedatacloud_verify_apple_orderArguments",
       "type": "object"
     }
   }
