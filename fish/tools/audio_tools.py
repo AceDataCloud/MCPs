@@ -14,6 +14,7 @@ from core.types import (
     FishAudioFormat,
     FishLatency,
     FishModel,
+    FishMp3Bitrate,
 )
 from core.utils import format_submission_result
 
@@ -54,7 +55,7 @@ async def fish_generate_audio(
         Field(description="Sampling rate of the output audio (e.g. 16000, 22050, 44100)."),
     ] = None,
     mp3_bitrate: Annotated[
-        int | None,
+        FishMp3Bitrate | None,
         Field(description="MP3 bit rate when format='mp3'. Supported values: 64, 128, 192."),
     ] = None,
     latency: Annotated[
@@ -105,6 +106,10 @@ async def fish_generate_audio(
                 "If provided, the API returns immediately with a task_id."
             )
         ),
+    ] = None,
+    async_: Annotated[
+        bool | None,
+        Field(alias="async", description="Whether to process the request asynchronously."),
     ] = None,
 ) -> str:
     """Generate speech audio from text using Fish TTS.
@@ -157,6 +162,7 @@ async def fish_generate_audio(
         "normalize": normalize,
         "prosody": prosody,
         "references": references,
+        "async": async_,
     }
     for key, value in optional_payload.items():
         if value is not None:

@@ -1,8 +1,11 @@
-"""Guards the Fish TTS model list against the API contract."""
+"""Guards the Fish TTS MCP surface against the API contract."""
 
 from typing import get_args
 
-from core.types import DEFAULT_MODEL, FishModel
+from core.client import FishClient
+from core.server import mcp
+from core.types import DEFAULT_MODEL, FishModel, FishMp3Bitrate
+from tools import audio_tools, info_tools  # noqa: F401
 
 # Mirrors the `model` header-param enum in the Fish TTS OpenAPI spec.
 SPEC_MODELS = {"s1", "s2-pro", "s2.1-pro"}
@@ -14,3 +17,29 @@ def test_models_match_spec():
 
 def test_default_model_is_selectable():
     assert DEFAULT_MODEL in get_args(FishModel)
+
+
+def test_mp3_bitrate_matches_spec():
+    assert set(get_args(FishMp3Bitrate)) == {64, 128, 192}
+
+
+def test_generate_audio_exposes_async_request_control():
+    schema = mcp._tool_manager._tools["fish_generate_audio"].parameters
+    properties = schema["properties"]
+
+    assert "async" in properties
+    assert {"type": "boolean"} in properties["async"]["anyOf"]
+
+
+def test_list_models_uses_spec_self_parameter():
+    schema = mcp._tool_manager._tools["fish_list_models"].parameters
+    properties = schema["properties"]
+
+    assert "self" in properties
+    assert "self_only" not in properties
+
+
+def test_async_callback_preserves_explicit_false():
+    client = FishClient(api_token="test-token", base_url="https://api.test.com")
+
+    assert client._with_async_callback({"async": False})["async"] is False

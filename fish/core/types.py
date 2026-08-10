@@ -8,6 +8,9 @@ FishModel = Literal["s1", "s2-pro", "s2.1-pro"]
 # Fish output format
 FishAudioFormat = Literal["mp3", "wav", "pcm"]
 
+# Fish MP3 bitrate
+FishMp3Bitrate = Literal[64, 128, 192]
+
 # Fish latency mode
 FishLatency = Literal["normal", "balanced"]
 
