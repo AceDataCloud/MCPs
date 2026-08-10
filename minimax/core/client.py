@@ -77,7 +77,9 @@ class MinimaxClient:
             body = {}
 
         error_obj = body.get("error", {})
-        code = body.get("code") or error_obj.get("code") or error_obj.get("type") or f"http_{status}"
+        code = (
+            body.get("code") or error_obj.get("code") or error_obj.get("type") or f"http_{status}"
+        )
         message = (
             error_obj.get("message") or body.get("detail") or response.text or f"HTTP {status}"
         )
