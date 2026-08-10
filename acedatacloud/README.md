@@ -27,6 +27,8 @@ MCP-compatible client.
 
 | Tool | Description |
 |------|-------------|
+| `acedatacloud_check_frame_ancestor` | Site Domains Frame |
+| `acedatacloud_check_site_domain` | Site Domains Check |
 | `acedatacloud_export_orders` | Export bounded order CSV. |
 | `acedatacloud_export_usage` | Export bounded usage CSV. |
 | `acedatacloud_get_access_request` | Access Detail |
@@ -46,6 +48,12 @@ MCP-compatible client.
 | `acedatacloud_get_order_summary` | Summarize caller orders. |
 | `acedatacloud_get_platform_distribution_rank` | Distribution Platform_Rank |
 | `acedatacloud_get_proxy_usage` | Get proxy usage detail. |
+| `acedatacloud_get_site` | Sites Detail |
+| `acedatacloud_get_site_banner` | Site Banners Detail |
+| `acedatacloud_get_site_capability_override` | Site Capability Detail |
+| `acedatacloud_get_site_document_override` | Site Document Detail |
+| `acedatacloud_get_site_domain` | Site Domains Detail |
+| `acedatacloud_get_site_service_override` | Site Service Detail |
 | `acedatacloud_get_survey` | Surveys Detail |
 | `acedatacloud_get_survey_response` | Surveys Response |
 | `acedatacloud_get_translation_capabilities` | Translations Capabilities |
@@ -67,6 +75,12 @@ MCP-compatible client.
 | `acedatacloud_list_orders` | List recharge orders. |
 | `acedatacloud_list_platform_tokens` | List management tokens with values masked. |
 | `acedatacloud_list_proxy_usage` | List proxy usage. |
+| `acedatacloud_list_site_banners` | Site Banners List |
+| `acedatacloud_list_site_capability_overrides` | Site Capability List |
+| `acedatacloud_list_site_document_overrides` | Site Document List |
+| `acedatacloud_list_site_domains` | Site Domains List |
+| `acedatacloud_list_site_service_overrides` | Site Service List |
+| `acedatacloud_list_sites` | Sites List |
 | `acedatacloud_list_surveys` | Surveys List |
 | `acedatacloud_list_usage` | List recent API usage records. |
 | `acedatacloud_list_usage_status_codes` | List usage status codes. |
@@ -110,10 +124,20 @@ MCP-compatible client.
 | `acedatacloud_create_credential` | Create an API credential. |
 | `acedatacloud_create_order` | Create a recharge order. |
 | `acedatacloud_create_platform_token` | Create a management token. |
+| `acedatacloud_create_site_banner` | Site Banners Create |
+| `acedatacloud_create_site_capability_override` | Site Capability Create |
+| `acedatacloud_create_site_document_override` | Site Document Create |
+| `acedatacloud_create_site_domain` | Site Domains Create |
+| `acedatacloud_create_site_service_override` | Site Service Create |
 | `acedatacloud_create_wallet_challenge` | Coin Wallet Challenge |
 | `acedatacloud_delete_auto_recharge` | Delete auto recharge. |
 | `acedatacloud_delete_credential` | Revoke an API credential. |
 | `acedatacloud_delete_platform_token` | Revoke a management token. |
+| `acedatacloud_delete_site_banner` | Site Banners Delete |
+| `acedatacloud_delete_site_capability_override` | Site Capability Delete |
+| `acedatacloud_delete_site_document_override` | Site Document Delete |
+| `acedatacloud_delete_site_domain` | Site Domains Delete |
+| `acedatacloud_delete_site_service_override` | Site Service Delete |
 | `acedatacloud_deploy_application` | Start or redeploy an application workload. |
 | `acedatacloud_disable_auto_recharge` | Disable auto recharge. |
 | `acedatacloud_disable_translation` | Translations Disable |
@@ -121,12 +145,14 @@ MCP-compatible client.
 | `acedatacloud_enable_translation` | Translations Enable |
 | `acedatacloud_enable_x402_authorization` | X402 Enable |
 | `acedatacloud_initialize_distribution` | Distribution Initialize |
+| `acedatacloud_initialize_site` | Sites Initialize |
 | `acedatacloud_pay_order` | Create an order payment session. |
 | `acedatacloud_refresh_coin_info` | Coin Refresh |
 | `acedatacloud_refresh_order` | Refresh payment state. |
 | `acedatacloud_report_content` | Reports Create |
 | `acedatacloud_rotate_credential` | Rotate and disclose a credential secret once. |
 | `acedatacloud_save_deployment_config` | Save a deployment configuration draft. |
+| `acedatacloud_set_site_menu_translation` | Sites Menu Translation |
 | `acedatacloud_setup_auto_recharge` | Create card setup state. |
 | `acedatacloud_setup_x402_authorization` | X402 Setup |
 | `acedatacloud_submit_survey` | Surveys Submit |
@@ -135,7 +161,14 @@ MCP-compatible client.
 | `acedatacloud_update_auto_recharge` | Update auto recharge. |
 | `acedatacloud_update_credential` | Update credential limits and API scope. |
 | `acedatacloud_update_email_preference` | Preferences Update |
+| `acedatacloud_update_site` | Sites Update |
+| `acedatacloud_update_site_banner` | Site Banners Update |
+| `acedatacloud_update_site_capability_override` | Site Capability Update |
+| `acedatacloud_update_site_document_override` | Site Document Update |
+| `acedatacloud_update_site_domain` | Site Domains Update |
+| `acedatacloud_update_site_service_override` | Site Service Update |
 | `acedatacloud_verify_apple_order` | Verify and fulfill Apple IAP. |
+| `acedatacloud_verify_site_domain` | Site Domains Verify |
 
 ### Admin
 

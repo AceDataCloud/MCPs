@@ -22,7 +22,7 @@ jobs:
       - name: Type check
         run: mypy core tools contracts
       - name: Test with coverage
-        run: pytest --cov=core --cov=tools --cov=contracts --cov-report=term-missing --cov-fail-under=73
+        run: pytest --cov=core --cov=tools --cov=contracts --cov-report=term-missing --cov-fail-under=75
       - name: Check generated documentation
         run: python scripts/sync_contract_docs.py --check
       - name: Build package
