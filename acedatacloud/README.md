@@ -20,60 +20,63 @@ MCP-compatible client.
 > from the data-generation MCP servers (Suno, Midjourney, …) that call
 > `api.acedata.cloud`.
 
+<!-- BEGIN GENERATED TOOL REFERENCE -->
 ## Tool Reference
 
-### Read (always safe)
+### Account reads
 
 | Tool | Description |
 |------|-------------|
-| `acedatacloud_get_user_info` | Current authenticated account user ID. |
-| `acedatacloud_get_balance` | Remaining credits per subscription, plus a total. |
-| `acedatacloud_list_applications` | Your subscriptions with balance/spend. |
-| `acedatacloud_list_services` | List or search available services. |
-| `acedatacloud_list_usage` | Recent API call records (status, latency, credits). |
-| `acedatacloud_usage_summary` | Spend aggregated by API over N days. |
-| `acedatacloud_list_credentials` | Your API keys (token values masked). |
-| `acedatacloud_list_orders` | Recharge orders. |
-| `acedatacloud_list_platform_tokens` | Platform tokens (masked). |
-| `acedatacloud_list_models` | Available chat models. |
-| `acedatacloud_list_announcements` | Published announcements. |
-| `acedatacloud_list_distributions` | Your referral/affiliate status + commission history. |
+| `acedatacloud_get_balance` | Summarize remaining Credits. |
+| `acedatacloud_get_user_info` | Current authenticated account profile. |
+| `acedatacloud_list_applications` | List account subscriptions. |
+| `acedatacloud_list_credentials` | List API credentials with secrets masked. |
+| `acedatacloud_list_distributions` | Get referral status. |
+| `acedatacloud_list_models` | List OpenAI-compatible chat models. |
+| `acedatacloud_list_orders` | List recharge orders. |
+| `acedatacloud_list_platform_tokens` | List management tokens with values masked. |
+| `acedatacloud_list_usage` | List recent API usage records. |
+| `acedatacloud_usage_summary` | Aggregate API spend by API. |
 
-### Catalog & Docs (public — no token needed)
+### Catalog & docs
 
 | Tool | Description |
 |------|-------------|
-| `acedatacloud_get_service` | One service's detail (type, unit, free_amount, cost), by alias or id. |
-| `acedatacloud_get_pricing` | A service's billing unit, free_amount and display pricing. |
-| `acedatacloud_list_apis` | API endpoints, optionally scoped to one service (path, method, cost). |
-| `acedatacloud_get_api_spec` | One API's OpenAPI `definition` + cost, by path. |
-| `acedatacloud_list_datasets` | Downloadable datasets (price, download/preview URLs). |
-| `acedatacloud_list_integrations` | Third-party integrations. |
-| `acedatacloud_search_docs` | Full-text search the documentation (alias/title/snippet/url). |
+| `acedatacloud_get_api_spec` | Get one API's OpenAPI definition by path. |
+| `acedatacloud_get_doc` | Fetch one documentation page by UUID. |
+| `acedatacloud_get_model` | Find models by ID or name. |
+| `acedatacloud_get_pricing` | Get one service's display pricing. |
+| `acedatacloud_get_service` | Get one service by UUID or alias. |
+| `acedatacloud_list_announcements` | List published announcements. |
+| `acedatacloud_list_apis` | List API endpoints and billing metadata. |
+| `acedatacloud_list_datasets` | List downloadable datasets. |
 | `acedatacloud_list_docs` | Browse documentation pages. |
-| `acedatacloud_get_doc` | Fetch one doc's full content by UUID. |
-| `acedatacloud_list_model_catalog` | Rich model catalog (provider, modality, credit pricing). |
-| `acedatacloud_get_model` | Look up a model's pricing & capabilities by id/name. |
+| `acedatacloud_list_integrations` | List platform integrations. |
+| `acedatacloud_list_model_catalog` | List rich model metadata and pricing. |
+| `acedatacloud_list_services` | List or search available services. |
+| `acedatacloud_search_docs` | Search public documentation. |
 
-### Write (require `confirm=true`)
+### Writes
 
 | Tool | Description |
 |------|-------------|
-| `acedatacloud_create_credential` | Create an API key on an application. |
-| `acedatacloud_delete_credential` | Revoke an API key. |
+| `acedatacloud_create_credential` | Create an API credential. |
 | `acedatacloud_create_order` | Create a recharge order. |
-| `acedatacloud_pay_order` | Create a payment session and return `pay_url`. |
-| `acedatacloud_create_platform_token` | Create a new platform token. |
-| `acedatacloud_delete_platform_token` | Revoke a platform token. |
+| `acedatacloud_create_platform_token` | Create a management token. |
+| `acedatacloud_delete_credential` | Revoke an API credential. |
+| `acedatacloud_delete_platform_token` | Revoke a management token. |
+| `acedatacloud_pay_order` | Create an order payment session. |
 
-### Admin (superuser token)
+### Admin
 
 | Tool | Description |
 |------|-------------|
-| `acedatacloud_create_announcement` | Publish a platform announcement (`confirm=true`). |
+| `acedatacloud_create_announcement` | Publish a platform announcement. |
 
-Calling a write/admin tool **without** `confirm=true` returns a dry-run preview
-and changes nothing.
+Calling a write/admin tool **without** `confirm=true` returns a redacted
+dry-run preview and performs no HTTP request.
+
+<!-- END GENERATED TOOL REFERENCE -->
 
 ## Quick Start
 

@@ -10,7 +10,11 @@ on:
       - LICENSE
       - ".github/ISSUE_TEMPLATE/**"
 jobs:
+  quality:
+    uses: ./.github/workflows/quality.yml
+
   run:
+    needs: quality
     runs-on: ubuntu-latest
     steps:
       - name: Generate Build Number

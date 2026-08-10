@@ -6,7 +6,7 @@ from typing import Annotated
 from pydantic import Field
 
 from core.client import client, get_request_user_id
-from core.exceptions import PlatformAPIError, PlatformAuthError
+from core.exceptions import PlatformError
 from core.server import mcp
 from core.utils import dumps, error_json
 
@@ -72,10 +72,8 @@ async def acedatacloud_list_services(
             return dumps({"count": len(items), "items": items})
         result = await client.get("/services/", {"limit": limit, **server_filters})
         return _wrap(result)
-    except PlatformAuthError as e:
-        return error_json("Authentication Error", e.message)
-    except PlatformAPIError as e:
-        return error_json("API Error", e.message)
+    except PlatformError as error:
+        return error_json(error.code, error.message)
 
 
 @mcp.tool()
@@ -96,14 +94,12 @@ async def acedatacloud_list_applications(
                 "limit": limit,
                 "service_id": service_id,
                 "scope": scope,
-                "user_id": get_request_user_id(),
+                "user_id": await get_request_user_id(),
             },
         )
         return _wrap(result)
-    except PlatformAuthError as e:
-        return error_json("Authentication Error", e.message)
-    except PlatformAPIError as e:
-        return error_json("API Error", e.message)
+    except PlatformError as error:
+        return error_json(error.code, error.message)
 
 
 @mcp.tool()
@@ -120,7 +116,7 @@ async def acedatacloud_get_balance(
     try:
         result = await client.get(
             "/applications/",
-            {"limit": 200, "service_id": service_id, "user_id": get_request_user_id()},
+            {"limit": 200, "service_id": service_id, "user_id": await get_request_user_id()},
         )
         items = result.get("items", []) if isinstance(result, dict) else []
         summary = [
@@ -135,10 +131,8 @@ async def acedatacloud_get_balance(
         ]
         total = sum((it.get("remaining_amount") or 0) for it in items)
         return dumps({"total_remaining": total, "unit": "Credit", "applications": summary})
-    except PlatformAuthError as e:
-        return error_json("Authentication Error", e.message)
-    except PlatformAPIError as e:
-        return error_json("API Error", e.message)
+    except PlatformError as error:
+        return error_json(error.code, error.message)
 
 
 @mcp.tool()
@@ -161,14 +155,12 @@ async def acedatacloud_list_usage(
                 "api_id": api_id,
                 "status_code": status_code,
                 "created_at_from": _since(days),
-                "user_id": get_request_user_id(),
+                "user_id": await get_request_user_id(),
             },
         )
         return _wrap(result)
-    except PlatformAuthError as e:
-        return error_json("Authentication Error", e.message)
-    except PlatformAPIError as e:
-        return error_json("API Error", e.message)
+    except PlatformError as error:
+        return error_json(error.code, error.message)
 
 
 @mcp.tool()
@@ -182,7 +174,11 @@ async def acedatacloud_usage_summary(
     try:
         result = await client.get(
             "/usage/apis/aggregate/",
-            {"created_at_from": _since(days), "api_id": api_id, "user_id": get_request_user_id()},
+            {
+                "created_at_from": _since(days),
+                "api_id": api_id,
+                "user_id": await get_request_user_id(),
+            },
         )
         apis = result.get("apis", {}) if isinstance(result, dict) else {}
         by_api: dict[str, float] = {}
@@ -198,10 +194,8 @@ async def acedatacloud_usage_summary(
         )
         total = result.get("total") if isinstance(result, dict) else None
         return dumps({"days": days, "total_credits": total, "by_api": breakdown})
-    except PlatformAuthError as e:
-        return error_json("Authentication Error", e.message)
-    except PlatformAPIError as e:
-        return error_json("API Error", e.message)
+    except PlatformError as error:
+        return error_json(error.code, error.message)
 
 
 @mcp.tool()
@@ -213,13 +207,15 @@ async def acedatacloud_list_credentials(
     try:
         result = await client.get(
             "/credentials/",
-            {"limit": limit, "application_id": application_id, "user_id": get_request_user_id()},
+            {
+                "limit": limit,
+                "application_id": application_id,
+                "user_id": await get_request_user_id(),
+            },
         )
         return _wrap(result)
-    except PlatformAuthError as e:
-        return error_json("Authentication Error", e.message)
-    except PlatformAPIError as e:
-        return error_json("API Error", e.message)
+    except PlatformError as error:
+        return error_json(error.code, error.message)
 
 
 @mcp.tool()
@@ -238,13 +234,16 @@ async def acedatacloud_list_orders(
     try:
         result = await client.get(
             "/orders/",
-            {"limit": limit, "state": state, "pay_way": pay_way, "user_id": get_request_user_id()},
+            {
+                "limit": limit,
+                "state": state,
+                "pay_way": pay_way,
+                "user_id": await get_request_user_id(),
+            },
         )
         return _wrap(result)
-    except PlatformAuthError as e:
-        return error_json("Authentication Error", e.message)
-    except PlatformAPIError as e:
-        return error_json("API Error", e.message)
+    except PlatformError as error:
+        return error_json(error.code, error.message)
 
 
 @mcp.tool()
@@ -254,13 +253,11 @@ async def acedatacloud_list_platform_tokens(
     """List your platform tokens (the credentials used to call this management API). Masked."""
     try:
         result = await client.get(
-            "/platform-tokens/", {"limit": limit, "user_id": get_request_user_id()}
+            "/platform-tokens/", {"limit": limit, "user_id": await get_request_user_id()}
         )
         return _wrap(result)
-    except PlatformAuthError as e:
-        return error_json("Authentication Error", e.message)
-    except PlatformAPIError as e:
-        return error_json("API Error", e.message)
+    except PlatformError as error:
+        return error_json(error.code, error.message)
 
 
 @mcp.tool()
@@ -269,10 +266,8 @@ async def acedatacloud_list_models() -> str:
     try:
         result = await client.get("/models/")
         return _wrap(result)
-    except PlatformAuthError as e:
-        return error_json("Authentication Error", e.message)
-    except PlatformAPIError as e:
-        return error_json("API Error", e.message)
+    except PlatformError as error:
+        return error_json(error.code, error.message)
 
 
 @mcp.tool()
@@ -283,10 +278,8 @@ async def acedatacloud_list_announcements(
     try:
         result = await client.get("/announcements/", {"limit": limit})
         return _wrap(result)
-    except PlatformAuthError as e:
-        return error_json("Authentication Error", e.message)
-    except PlatformAPIError as e:
-        return error_json("API Error", e.message)
+    except PlatformError as error:
+        return error_json(error.code, error.message)
 
 
 @mcp.tool()
@@ -300,10 +293,10 @@ async def acedatacloud_list_distributions(
     """
     try:
         status = await client.get(
-            "/distribution-statuses/", {"limit": 1, "user_id": get_request_user_id()}
+            "/distribution-statuses/", {"limit": 1, "user_id": await get_request_user_id()}
         )
         history = await client.get(
-            "/distribution-histories/", {"limit": limit, "user_id": get_request_user_id()}
+            "/distribution-histories/", {"limit": limit, "user_id": await get_request_user_id()}
         )
         status_items = status.get("items", []) if isinstance(status, dict) else []
         return dumps(
@@ -313,7 +306,5 @@ async def acedatacloud_list_distributions(
                 "history": history.get("items", []) if isinstance(history, dict) else [],
             }
         )
-    except PlatformAuthError as e:
-        return error_json("Authentication Error", e.message)
-    except PlatformAPIError as e:
-        return error_json("API Error", e.message)
+    except PlatformError as error:
+        return error_json(error.code, error.message)

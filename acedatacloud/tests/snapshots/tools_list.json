@@ -1,0 +1,915 @@
+[
+  {
+    "name": "acedatacloud_create_announcement",
+    "inputSchema": {
+      "properties": {
+        "title": {
+          "description": "Announcement title. Required.",
+          "title": "Title",
+          "type": "string"
+        },
+        "content": {
+          "description": "Announcement body in Markdown. Required.",
+          "title": "Content",
+          "type": "string"
+        },
+        "rank": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Optional sort weight; higher shows first.",
+          "title": "Rank"
+        },
+        "tags": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Optional tags, e.g. ['product'].",
+          "title": "Tags"
+        },
+        "published": {
+          "default": true,
+          "description": "Publish immediately (True) or save as draft (False).",
+          "title": "Published",
+          "type": "boolean"
+        },
+        "confirm": {
+          "default": false,
+          "description": "Must be true to actually publish.",
+          "title": "Confirm",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "title",
+        "content"
+      ],
+      "title": "acedatacloud_create_announcementArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "acedatacloud_create_credential",
+    "inputSchema": {
+      "properties": {
+        "application_id": {
+          "description": "UUID of the application (subscription) to attach the key to. Required.",
+          "title": "Application Id",
+          "type": "string"
+        },
+        "name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Optional human-readable name for the key.",
+          "title": "Name"
+        },
+        "limited_amount": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Optional spend cap for this key, in Credits.",
+          "title": "Limited Amount"
+        },
+        "expired_at": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Optional ISO-8601 expiry, e.g. '2026-12-31T00:00:00Z'.",
+          "title": "Expired At"
+        },
+        "confirm": {
+          "default": false,
+          "description": "Must be true to actually create the key.",
+          "title": "Confirm",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "application_id"
+      ],
+      "title": "acedatacloud_create_credentialArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "acedatacloud_create_order",
+    "inputSchema": {
+      "properties": {
+        "application_id": {
+          "description": "UUID of the application to recharge. Required.",
+          "title": "Application Id",
+          "type": "string"
+        },
+        "package_id": {
+          "description": "UUID of the package (quota bundle) to buy. Required.",
+          "title": "Package Id",
+          "type": "string"
+        },
+        "confirm": {
+          "default": false,
+          "description": "Must be true to actually create the order.",
+          "title": "Confirm",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "application_id",
+        "package_id"
+      ],
+      "title": "acedatacloud_create_orderArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "acedatacloud_create_platform_token",
+    "inputSchema": {
+      "properties": {
+        "confirm": {
+          "default": false,
+          "description": "Must be true to actually create the token.",
+          "title": "Confirm",
+          "type": "boolean"
+        }
+      },
+      "title": "acedatacloud_create_platform_tokenArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "acedatacloud_delete_credential",
+    "inputSchema": {
+      "properties": {
+        "credential_id": {
+          "description": "UUID of the credential to delete. Required.",
+          "title": "Credential Id",
+          "type": "string"
+        },
+        "confirm": {
+          "default": false,
+          "description": "Must be true to actually delete the key.",
+          "title": "Confirm",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "credential_id"
+      ],
+      "title": "acedatacloud_delete_credentialArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "acedatacloud_delete_platform_token",
+    "inputSchema": {
+      "properties": {
+        "token_id": {
+          "description": "UUID of the platform token to delete. Required.",
+          "title": "Token Id",
+          "type": "string"
+        },
+        "confirm": {
+          "default": false,
+          "description": "Must be true to actually delete the token.",
+          "title": "Confirm",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "token_id"
+      ],
+      "title": "acedatacloud_delete_platform_tokenArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "acedatacloud_get_api_spec",
+    "inputSchema": {
+      "properties": {
+        "path": {
+          "description": "API path, e.g. '/suno/audios' or '/midjourney/imagine'.",
+          "title": "Path",
+          "type": "string"
+        }
+      },
+      "required": [
+        "path"
+      ],
+      "title": "acedatacloud_get_api_specArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "acedatacloud_get_balance",
+    "inputSchema": {
+      "properties": {
+        "service_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Optional service UUID to filter by.",
+          "title": "Service Id"
+        }
+      },
+      "title": "acedatacloud_get_balanceArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "acedatacloud_get_doc",
+    "inputSchema": {
+      "properties": {
+        "doc_id": {
+          "description": "Document UUID (from search results or list).",
+          "title": "Doc Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "doc_id"
+      ],
+      "title": "acedatacloud_get_docArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "acedatacloud_get_model",
+    "inputSchema": {
+      "properties": {
+        "model": {
+          "description": "Model id or name, e.g. 'gpt-4.1', 'claude', 'veo'.",
+          "title": "Model",
+          "type": "string"
+        }
+      },
+      "required": [
+        "model"
+      ],
+      "title": "acedatacloud_get_modelArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "acedatacloud_get_pricing",
+    "inputSchema": {
+      "properties": {
+        "service": {
+          "description": "Service UUID or alias to price (e.g. 'suno').",
+          "title": "Service",
+          "type": "string"
+        }
+      },
+      "required": [
+        "service"
+      ],
+      "title": "acedatacloud_get_pricingArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "acedatacloud_get_service",
+    "inputSchema": {
+      "properties": {
+        "service": {
+          "description": "Service UUID or alias (e.g. 'suno', 'midjourney').",
+          "title": "Service",
+          "type": "string"
+        }
+      },
+      "required": [
+        "service"
+      ],
+      "title": "acedatacloud_get_serviceArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "acedatacloud_get_usage_guide",
+    "inputSchema": {
+      "properties": {},
+      "title": "acedatacloud_get_usage_guideArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "acedatacloud_get_user_info",
+    "inputSchema": {
+      "properties": {},
+      "title": "acedatacloud_get_user_infoArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "acedatacloud_list_announcements",
+    "inputSchema": {
+      "properties": {
+        "limit": {
+          "default": 20,
+          "description": "Max announcements to return.",
+          "maximum": 100,
+          "minimum": 1,
+          "title": "Limit",
+          "type": "integer"
+        }
+      },
+      "title": "acedatacloud_list_announcementsArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "acedatacloud_list_apis",
+    "inputSchema": {
+      "properties": {
+        "service": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Optional service UUID or alias to filter the APIs by.",
+          "title": "Service"
+        },
+        "stage": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Optional publication stage filter: Alpha/Beta/Production.",
+          "title": "Stage"
+        },
+        "limit": {
+          "default": 50,
+          "description": "Max APIs to return.",
+          "maximum": 100,
+          "minimum": 1,
+          "title": "Limit",
+          "type": "integer"
+        }
+      },
+      "title": "acedatacloud_list_apisArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "acedatacloud_list_applications",
+    "inputSchema": {
+      "properties": {
+        "service_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Filter by service UUID.",
+          "title": "Service Id"
+        },
+        "scope": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Filter by scope: 'Individual' or 'Global'.",
+          "title": "Scope"
+        },
+        "limit": {
+          "default": 50,
+          "description": "Max applications to return.",
+          "maximum": 200,
+          "minimum": 1,
+          "title": "Limit",
+          "type": "integer"
+        }
+      },
+      "title": "acedatacloud_list_applicationsArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "acedatacloud_list_credentials",
+    "inputSchema": {
+      "properties": {
+        "application_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Filter by application UUID.",
+          "title": "Application Id"
+        },
+        "limit": {
+          "default": 50,
+          "description": "Max credentials to return.",
+          "maximum": 100,
+          "minimum": 1,
+          "title": "Limit",
+          "type": "integer"
+        }
+      },
+      "title": "acedatacloud_list_credentialsArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "acedatacloud_list_datasets",
+    "inputSchema": {
+      "properties": {
+        "limit": {
+          "default": 50,
+          "description": "Max datasets to return.",
+          "maximum": 100,
+          "minimum": 1,
+          "title": "Limit",
+          "type": "integer"
+        }
+      },
+      "title": "acedatacloud_list_datasetsArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "acedatacloud_list_distributions",
+    "inputSchema": {
+      "properties": {
+        "limit": {
+          "default": 20,
+          "description": "Max commission history records to return.",
+          "maximum": 100,
+          "minimum": 1,
+          "title": "Limit",
+          "type": "integer"
+        }
+      },
+      "title": "acedatacloud_list_distributionsArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "acedatacloud_list_docs",
+    "inputSchema": {
+      "properties": {
+        "doc_type": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Optional document type filter, e.g. 'Text'.",
+          "title": "Doc Type"
+        },
+        "tag": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Optional tag filter, e.g. 'application'. Matches docs carrying this tag.",
+          "title": "Tag"
+        },
+        "private": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Filter by privacy: False = public only, True = private only, unset = all.",
+          "title": "Private"
+        },
+        "offset": {
+          "default": 0,
+          "description": "Pagination offset.",
+          "minimum": 0,
+          "title": "Offset",
+          "type": "integer"
+        },
+        "limit": {
+          "default": 30,
+          "description": "Max documents to return.",
+          "maximum": 100,
+          "minimum": 1,
+          "title": "Limit",
+          "type": "integer"
+        }
+      },
+      "title": "acedatacloud_list_docsArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "acedatacloud_list_integrations",
+    "inputSchema": {
+      "properties": {
+        "limit": {
+          "default": 50,
+          "description": "Max integrations to return.",
+          "maximum": 100,
+          "minimum": 1,
+          "title": "Limit",
+          "type": "integer"
+        }
+      },
+      "title": "acedatacloud_list_integrationsArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "acedatacloud_list_model_catalog",
+    "inputSchema": {
+      "properties": {
+        "modality": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Filter by modality: chat/video/image/music/search/embedding.",
+          "title": "Modality"
+        },
+        "provider": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Filter by provider substring, e.g. 'OpenAI', 'Anthropic'.",
+          "title": "Provider"
+        }
+      },
+      "title": "acedatacloud_list_model_catalogArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "acedatacloud_list_models",
+    "inputSchema": {
+      "properties": {},
+      "title": "acedatacloud_list_modelsArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "acedatacloud_list_orders",
+    "inputSchema": {
+      "properties": {
+        "state": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Filter by state: Pending/Paid/Finished/Expired/Failed/Refunded.",
+          "title": "State"
+        },
+        "pay_way": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Filter by pay_way: WechatPay/AliPay/Stripe/X402/PayPal/Reward.",
+          "title": "Pay Way"
+        },
+        "limit": {
+          "default": 20,
+          "description": "Max orders to return.",
+          "maximum": 100,
+          "minimum": 1,
+          "title": "Limit",
+          "type": "integer"
+        }
+      },
+      "title": "acedatacloud_list_ordersArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "acedatacloud_list_platform_tokens",
+    "inputSchema": {
+      "properties": {
+        "limit": {
+          "default": 50,
+          "description": "Max tokens to return.",
+          "maximum": 100,
+          "minimum": 1,
+          "title": "Limit",
+          "type": "integer"
+        }
+      },
+      "title": "acedatacloud_list_platform_tokensArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "acedatacloud_list_services",
+    "inputSchema": {
+      "properties": {
+        "search": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Optional case-insensitive substring to match against service alias or title.",
+          "title": "Search"
+        },
+        "service_type": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Filter by type: Api/Proxy/Integration/Dataset/Introduction/Agent.",
+          "title": "Service Type"
+        },
+        "tag": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Filter by tag, e.g. 'application'.",
+          "title": "Tag"
+        },
+        "private": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Filter by privacy: False = public only, True = private only, unset = all.",
+          "title": "Private"
+        },
+        "limit": {
+          "default": 100,
+          "description": "Max services to return when not searching.",
+          "maximum": 300,
+          "minimum": 1,
+          "title": "Limit",
+          "type": "integer"
+        }
+      },
+      "title": "acedatacloud_list_servicesArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "acedatacloud_list_usage",
+    "inputSchema": {
+      "properties": {
+        "api_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Filter by API UUID.",
+          "title": "Api Id"
+        },
+        "status_code": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Filter by HTTP status code, e.g. 200.",
+          "title": "Status Code"
+        },
+        "days": {
+          "anyOf": [
+            {
+              "maximum": 365,
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Only records newer than N days.",
+          "title": "Days"
+        },
+        "limit": {
+          "default": 20,
+          "description": "Max records to return.",
+          "maximum": 100,
+          "minimum": 1,
+          "title": "Limit",
+          "type": "integer"
+        }
+      },
+      "title": "acedatacloud_list_usageArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "acedatacloud_pay_order",
+    "inputSchema": {
+      "properties": {
+        "order_id": {
+          "description": "UUID of the order to pay. Required.",
+          "title": "Order Id",
+          "type": "string"
+        },
+        "pay_way": {
+          "default": "Stripe",
+          "description": "Payment method: WechatPay/AliPay/Stripe/X402/PayPal/Reward.",
+          "title": "Pay Way",
+          "type": "string"
+        },
+        "confirm": {
+          "default": false,
+          "description": "Must be true to create the payment session.",
+          "title": "Confirm",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "order_id"
+      ],
+      "title": "acedatacloud_pay_orderArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "acedatacloud_search_docs",
+    "inputSchema": {
+      "properties": {
+        "query": {
+          "description": "Search text, e.g. 'suno lyrics' or 'midjourney imagine'.",
+          "title": "Query",
+          "type": "string"
+        },
+        "lang": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Optional language code, e.g. 'en', 'zh-cn', 'ja'.",
+          "title": "Lang"
+        },
+        "limit": {
+          "default": 10,
+          "description": "Max results to return (server caps at 30).",
+          "maximum": 30,
+          "minimum": 1,
+          "title": "Limit",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "query"
+      ],
+      "title": "acedatacloud_search_docsArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "acedatacloud_usage_summary",
+    "inputSchema": {
+      "properties": {
+        "days": {
+          "default": 30,
+          "description": "Aggregate spend over the last N days.",
+          "maximum": 365,
+          "minimum": 1,
+          "title": "Days",
+          "type": "integer"
+        },
+        "api_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Optional API UUID to filter by.",
+          "title": "Api Id"
+        }
+      },
+      "title": "acedatacloud_usage_summaryArguments",
+      "type": "object"
+    }
+  }
+]

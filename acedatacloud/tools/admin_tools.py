@@ -9,7 +9,7 @@ from typing import Annotated
 from pydantic import Field
 
 from core.client import client
-from core.exceptions import PlatformAPIError, PlatformAuthError
+from core.exceptions import PlatformError
 from core.server import mcp
 from core.utils import confirmation_required, dumps, error_json
 
@@ -42,9 +42,5 @@ async def acedatacloud_create_announcement(
     try:
         result = await client.post("/announcements/admin/", body)
         return dumps(result)
-    except PlatformAuthError as e:
-        return error_json(
-            "Authentication Error", f"{e.message} (announcements require a superuser token)"
-        )
-    except PlatformAPIError as e:
-        return error_json("API Error", e.message)
+    except PlatformError as error:
+        return error_json(error.code, error.message)

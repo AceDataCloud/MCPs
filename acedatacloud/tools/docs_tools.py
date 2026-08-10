@@ -11,7 +11,7 @@ from typing import Annotated
 from pydantic import Field
 
 from core.client import client
-from core.exceptions import PlatformAPIError, PlatformAuthError
+from core.exceptions import PlatformError
 from core.server import mcp
 from core.utils import dumps, error_json
 
@@ -44,10 +44,8 @@ async def acedatacloud_search_docs(
         if not isinstance(result, dict):
             return error_json("No Response", "The API returned an empty response.")
         return dumps(result)
-    except PlatformAuthError as e:
-        return error_json("Authentication Error", e.message)
-    except PlatformAPIError as e:
-        return error_json("API Error", e.message)
+    except PlatformError as error:
+        return error_json(error.code, error.message)
 
 
 @mcp.tool()
@@ -97,10 +95,8 @@ async def acedatacloud_list_docs(
                 slim["content_preview"] = content[:200]
             items.append(slim)
         return dumps({"count": result.get("count"), "items": items})
-    except PlatformAuthError as e:
-        return error_json("Authentication Error", e.message)
-    except PlatformAPIError as e:
-        return error_json("API Error", e.message)
+    except PlatformError as error:
+        return error_json(error.code, error.message)
 
 
 @mcp.tool()
@@ -120,7 +116,5 @@ async def acedatacloud_get_doc(
         if not items:
             return error_json("Not Found", f"No document with id '{ref}'.")
         return dumps(items[0])
-    except PlatformAuthError as e:
-        return error_json("Authentication Error", e.message)
-    except PlatformAPIError as e:
-        return error_json("API Error", e.message)
+    except PlatformError as error:
+        return error_json(error.code, error.message)

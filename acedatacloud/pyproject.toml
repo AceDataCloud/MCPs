@@ -81,13 +81,15 @@ requires = ["hatchling>=1.21.0,<1.30.0"]
 build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
-packages = ["core", "tools", "prompts", "main.py"]
+packages = ["core", "tools", "prompts", "contracts", "main.py"]
 
 [tool.hatch.build.targets.sdist]
 include = [
     "core/",
     "tools/",
     "prompts/",
+    "contracts/",
+    "scripts/",
     "tests/",
     "main.py",
     "README.md",

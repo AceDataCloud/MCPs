@@ -10,7 +10,14 @@ from core.client import set_request_api_token
 from tools.admin_tools import acedatacloud_create_announcement
 from tools.info_tools import acedatacloud_get_user_info
 from tools.read_tools import acedatacloud_get_balance, acedatacloud_list_services
-from tools.write_tools import acedatacloud_create_credential, acedatacloud_delete_credential
+from tools.write_tools import (
+    acedatacloud_create_credential,
+    acedatacloud_create_order,
+    acedatacloud_create_platform_token,
+    acedatacloud_delete_credential,
+    acedatacloud_delete_platform_token,
+    acedatacloud_pay_order,
+)
 
 API = "https://platform.acedata.cloud/api/v1"
 
@@ -47,20 +54,42 @@ async def test_get_user_info_maps_authentication_errors():
     respx.get(f"{API}/platform-tokens/me/").mock(
         return_value=httpx.Response(401, json={"detail": "Invalid platform token"})
     )
+    set_request_api_token("platform-request-token")
+    try:
+        out = json.loads(await acedatacloud_get_user_info())
+    finally:
+        set_request_api_token(None)
 
-    out = json.loads(await acedatacloud_get_user_info())
-
-    assert out == {"error": "Authentication Error", "message": "Invalid platform token"}
+    assert out == {"error": "auth_error", "message": "Invalid platform token"}
 
 
 @respx.mock
 @pytest.mark.asyncio
-async def test_get_user_info_maps_empty_response():
+async def test_get_user_info_fails_closed_on_empty_subject():
     respx.get(f"{API}/platform-tokens/me/").mock(return_value=httpx.Response(204))
+    set_request_api_token("platform-request-token")
+    try:
+        out = json.loads(await acedatacloud_get_user_info())
+    finally:
+        set_request_api_token(None)
 
-    out = json.loads(await acedatacloud_get_user_info())
+    assert out["error"] == "auth_error"
+    assert "subject" in out["message"]
 
-    assert out == {"error": "No Response", "message": "The API returned an empty response."}
+
+@respx.mock
+@pytest.mark.asyncio
+async def test_permission_denied_is_distinct_from_authentication_error():
+    respx.get(f"{API}/platform-tokens/me/").mock(
+        return_value=httpx.Response(403, json={"detail": "You do not have permission"})
+    )
+    set_request_api_token("platform-request-token")
+    try:
+        out = json.loads(await acedatacloud_get_user_info())
+    finally:
+        set_request_api_token(None)
+
+    assert out["error"] == "permission_denied"
 
 
 @respx.mock
@@ -75,10 +104,17 @@ async def test_list_services_filters_by_search(mock_services_page):
 @respx.mock
 @pytest.mark.asyncio
 async def test_get_balance_summarizes(mock_applications_page):
+    respx.get(f"{API}/platform-tokens/me/").mock(
+        return_value=httpx.Response(200, json={"id": "user-1"})
+    )
     respx.get(f"{API}/applications/").mock(
         return_value=httpx.Response(200, json=mock_applications_page)
     )
-    out = json.loads(await acedatacloud_get_balance())
+    set_request_api_token("platform-request-token")
+    try:
+        out = json.loads(await acedatacloud_get_balance())
+    finally:
+        set_request_api_token(None)
     assert out["total_remaining"] == 100.5
     assert out["unit"] == "Credit"
     assert out["applications"][0]["service_id"] == "svc-1"
@@ -121,3 +157,17 @@ async def test_create_announcement_confirm_gate():
     out = json.loads(await acedatacloud_create_announcement(title="T", content="C"))
     assert out["status"] == "confirmation_required"
     assert "superuser" in out["action"]
+
+
+@respx.mock
+@pytest.mark.asyncio
+async def test_registered_mutations_require_confirmation():
+    calls = [
+        acedatacloud_create_order(application_id="app-1", package_id="pkg-1"),
+        acedatacloud_pay_order(order_id="order-1"),
+        acedatacloud_create_platform_token(),
+        acedatacloud_delete_platform_token(token_id="token-1"),
+    ]
+    results = [json.loads(await call) for call in calls]
+    assert all(result["status"] == "confirmation_required" for result in results)
+    assert respx.calls.call_count == 0
