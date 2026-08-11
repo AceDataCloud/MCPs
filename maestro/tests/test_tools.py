@@ -68,6 +68,25 @@ async def test_iteration_does_not_clobber_source_format() -> None:
     )
 
 
+async def test_sku_limits_fail_before_api_call() -> None:
+    with patch("tools.video_tools.client.create_video", new_callable=AsyncMock) as create:
+        create.return_value = {"success": True, "task_id": "task-pro"}
+        assert "at most 30 seconds" in await maestro_create_video(
+            prompt="x", quality="lite", duration=31
+        )
+        assert "higher Maestro SKU" in await maestro_create_video(
+            prompt="x", quality="standard", scenario="drama"
+        )
+        assert "higher Maestro SKU" in await maestro_create_video(
+            prompt="x", quality="standard", action="extend", ref_task_id="task-1"
+        )
+        await maestro_create_video(
+            prompt="x", quality="pro", action="extend", ref_task_id="task-1", duration=300
+        )
+
+    create.assert_awaited_once()
+
+
 async def test_task_tools_delegate_to_client() -> None:
     with patch("tools.task_tools.client.get_task", new_callable=AsyncMock) as get_task:
         get_task.return_value = {"id": "task-1", "status": "succeeded"}
