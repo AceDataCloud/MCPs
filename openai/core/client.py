@@ -350,10 +350,11 @@ class OpenAIClient:
 
         async with httpx.AsyncClient() as http_client:
             try:
+                # A tuple list preserves repeated multipart field names; httpx accepts it at runtime.
                 response = await http_client.post(
                     url,
                     files=files if files else None,
-                    data=data,
+                    data=data,  # type: ignore[arg-type]
                     headers=headers,
                     timeout=request_timeout,
                 )

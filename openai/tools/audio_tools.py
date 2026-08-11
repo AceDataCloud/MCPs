@@ -31,8 +31,7 @@ async def openai_text_to_speech(
         str,
         Field(
             description=(
-                "The text to synthesize into speech. "
-                "Example: 'Hello, welcome to our service!'"
+                "The text to synthesize into speech. Example: 'Hello, welcome to our service!'"
             )
         ),
     ],

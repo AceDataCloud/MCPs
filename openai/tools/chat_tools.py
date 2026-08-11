@@ -93,7 +93,9 @@ async def openai_chat_completion(
     ] = None,
     tool_choice: Annotated[
         str | dict[str, Any] | None,
-        Field(description="Controls tool calling: 'none', 'auto', 'required', or a tool choice object."),
+        Field(
+            description="Controls tool calling: 'none', 'auto', 'required', or a tool choice object."
+        ),
     ] = None,
     top_p: Annotated[
         float | None,
