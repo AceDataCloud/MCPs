@@ -4,7 +4,6 @@ A Model Context Protocol (MCP) server for AceDataCloud's reCAPTCHA captcha-solvi
 
 ## Features
 - Solve reCAPTCHA image challenges and obtain reCAPTCHA v2/v3 tokens.
-- Shared async task polling via `/captcha/tasks`
 - Bearer-token authentication through AceDataCloud
 
 ## Installation
@@ -22,6 +21,5 @@ export RECAPTCHA_REQUEST_TIMEOUT=120
 - `recaptcha2_recognize` — Recognize a reCAPTCHA v2 image challenge
 - `recaptcha2_get_token` — Get a reCAPTCHA v2 token
 - `recaptcha3_get_token` — Get a reCAPTCHA v3 token
-- `recaptcha_get_task` — Poll a reCAPTCHA task result
 - `recaptcha_get_usage_guide` — Get reCAPTCHA usage guide
 - `recaptcha_get_api_info` — Get reCAPTCHA API information

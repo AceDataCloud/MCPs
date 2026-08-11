@@ -99,8 +99,4 @@ class ReCaptchaClient:
         _apply_submission_mode(payload, mode)
         return await self.request("POST", "/captcha/token/recaptcha3", payload=payload)
 
-    async def get_task(self, task_id: str) -> dict[str, Any]:
-        return await self.request("POST", "/captcha/tasks", payload={"task_id": task_id})
-
-
 client = ReCaptchaClient()

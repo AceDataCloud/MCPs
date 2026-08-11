@@ -90,7 +90,6 @@ Environment Variables:
     safe_print("    - recaptcha2_recognize")
     safe_print("    - recaptcha2_get_token")
     safe_print("    - recaptcha3_get_token")
-    safe_print("    - recaptcha_get_task")
     safe_print("    - recaptcha_get_usage_guide")
     safe_print("    - recaptcha_get_api_info")
     safe_print("")
@@ -128,7 +127,6 @@ Environment Variables:
                     "tools": [{"name": "recaptcha2_recognize", "description": "Recognize a reCAPTCHA v2 image challenge"},
                     {"name": "recaptcha2_get_token", "description": "Get a reCAPTCHA v2 token"},
                     {"name": "recaptcha3_get_token", "description": "Get a reCAPTCHA v3 token"},
-                    {"name": "recaptcha_get_task", "description": "Poll a reCAPTCHA task result"},
                     {"name": "recaptcha_get_usage_guide", "description": "Get reCAPTCHA usage guide"},
                     {"name": "recaptcha_get_api_info", "description": "Get reCAPTCHA API information"}],
                     "prompts": [{"name": "recaptcha_guide", "description": "reCAPTCHA tool selection guide"},
