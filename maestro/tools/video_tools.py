@@ -1,6 +1,6 @@
 """Maestro video creation tools."""
 
-from typing import Annotated, Any
+from typing import Annotated, Any, TypedDict
 
 from pydantic import Field
 
@@ -15,6 +15,35 @@ from core.types import (
     MaestroVoice,
 )
 from core.utils import format_submission_result
+
+
+class SkuLimits(TypedDict):
+    duration: int
+    languages: int
+    actions: set[str]
+    scenarios: set[str]
+
+
+SKU_LIMITS: dict[str, SkuLimits] = {
+    "lite": {
+        "duration": 30,
+        "languages": 1,
+        "actions": {"generate", "edit"},
+        "scenarios": {"auto", "narrated", "captions"},
+    },
+    "standard": {
+        "duration": 120,
+        "languages": 2,
+        "actions": {"generate", "remix", "edit"},
+        "scenarios": {"auto", "narrated", "captions", "avatar"},
+    },
+    "pro": {
+        "duration": 300,
+        "languages": 4,
+        "actions": {"generate", "remix", "edit", "extend"},
+        "scenarios": {"auto", "narrated", "captions", "avatar", "drama"},
+    },
+}
 
 
 @mcp.tool()
@@ -121,6 +150,17 @@ async def maestro_create_video(
     """
     if action != "generate" and not ref_task_id:
         return f"Error: action={action} requires ref_task_id."
+
+    sku = quality or "standard"
+    limits = SKU_LIMITS[sku]
+    if duration is not None and duration > limits["duration"]:
+        return f"Error: {sku} supports at most {limits['duration']} seconds."
+    if langs and len(langs) > limits["languages"]:
+        return f"Error: {sku} supports at most {limits['languages']} language(s)."
+    if action not in limits["actions"]:
+        return f"Error: action={action} requires a higher Maestro SKU."
+    if scenario is not None and scenario not in limits["scenarios"]:
+        return f"Error: scenario={scenario} requires a higher Maestro SKU."
 
     # Only send fields the caller set. Omitting them lets the server apply its
     # documented default on a fresh generate and inherit the source task's
