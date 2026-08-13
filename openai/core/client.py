@@ -326,18 +326,16 @@ class OpenAIClient:
         logger.info(f"POST {url} (multipart/form-data)")
         logger.debug(f"Timeout: {request_timeout}s")
 
-        # Build httpx multipart files / data dicts
         files: list[tuple[str, Any]] = []
-        data: list[tuple[str, str]] = []
+        data: dict[str, str] = {}
         for key, value in fields.items():
             if isinstance(value, bytes):
                 files.append((key, ("audio", value, "application/octet-stream")))
             elif isinstance(value, list):
-                # Array fields use bracket notation (e.g. timestamp_granularities[])
                 for item in value:
-                    data.append((f"{key}[]", str(item)))
+                    files.append((f"{key}[]", (None, str(item))))
             else:
-                data.append((key, str(value)))
+                data[key] = str(value)
 
         # The auth header must NOT include content-type — httpx sets it for multipart
         token = get_request_api_token() or self.api_token
@@ -350,11 +348,10 @@ class OpenAIClient:
 
         async with httpx.AsyncClient() as http_client:
             try:
-                # A tuple list preserves repeated multipart field names; httpx accepts it at runtime.
                 response = await http_client.post(
                     url,
                     files=files if files else None,
-                    data=data,  # type: ignore[arg-type]
+                    data=data,
                     headers=headers,
                     timeout=request_timeout,
                 )

@@ -168,34 +168,39 @@ class TestOpenAIClient:
             assert "/openai/images/generations" in call_args[0][0]
 
     @pytest.mark.asyncio
-    async def test_request_multipart_preserves_all_list_items(self, client):
-        """Multipart list fields must be sent as repeated bracketed form entries."""
-        mock_response = MagicMock()
-        mock_response.status_code = 200
-        mock_response.headers = {"content-type": "application/json"}
-        mock_response.json.return_value = {"text": "ok"}
+    async def test_request_multipart_sends_async_stream_with_repeated_fields(
+        self, client, monkeypatch
+    ):
+        """Multipart fields must use an async-compatible httpx request body."""
+        captured_body = b""
 
-        with patch("httpx.AsyncClient") as mock_http:
-            mock_instance = AsyncMock()
-            mock_instance.post.return_value = mock_response
-            mock_http.return_value.__aenter__.return_value = mock_instance
+        async def handler(request: httpx.Request) -> httpx.Response:
+            nonlocal captured_body
+            captured_body = await request.aread()
+            return httpx.Response(200, json={"text": "ok"})
 
-            await client.request_multipart(
-                "/v1/audio/transcriptions",
-                {
-                    "file": b"audio-bytes",
-                    "timestamp_granularities": ["word", "segment"],
-                    "languages": ["en", "fr"],
-                    "keywords": ["AceDataCloud", "MCP"],
-                },
-            )
+        transport = httpx.MockTransport(handler)
+        real_async_client = httpx.AsyncClient
 
-            call_kwargs = mock_instance.post.call_args.kwargs
-            assert call_kwargs["data"] == [
-                ("timestamp_granularities[]", "word"),
-                ("timestamp_granularities[]", "segment"),
-                ("languages[]", "en"),
-                ("languages[]", "fr"),
-                ("keywords[]", "AceDataCloud"),
-                ("keywords[]", "MCP"),
-            ]
+        def make_client(*_args, **_kwargs):
+            return real_async_client(transport=transport)
+
+        monkeypatch.setattr(httpx, "AsyncClient", make_client)
+
+        result = await client.request_multipart(
+            "/v1/audio/transcriptions",
+            {
+                "file": b"audio-bytes",
+                "model": "whisper-1",
+                "timestamp_granularities": ["word", "segment"],
+                "languages": ["en", "fr"],
+            },
+        )
+
+        assert result == {"text": "ok"}
+        assert b'name="file"' in captured_body
+        assert b"audio-bytes" in captured_body
+        assert b'name="model"' in captured_body
+        assert b"whisper-1" in captured_body
+        assert captured_body.count(b'name="timestamp_granularities[]"') == 2
+        assert captured_body.count(b'name="languages[]"') == 2
