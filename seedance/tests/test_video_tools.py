@@ -181,7 +181,9 @@ class TestSeedanceGenerateVideoFromImage:
             assert call_kwargs["model"] == model
 
     @pytest.mark.asyncio
-    async def test_seedance_25_multimodal_roles_and_options(self, mock_video_response: dict) -> None:
+    async def test_seedance_25_multimodal_roles_and_options(
+        self, mock_video_response: dict
+    ) -> None:
         with patch("tools.video_tools.client") as mock_client:
             mock_client.generate_video = AsyncMock(return_value=mock_video_response)
             await seedance_generate_video_from_image(
