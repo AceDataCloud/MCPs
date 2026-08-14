@@ -17,7 +17,7 @@ Generate AI videos directly from Claude, VS Code, or any MCP-compatible client.
 - **Text to Video** - Create AI-generated videos from text prompts
 - **Image to Video** - Animate images with first frame, last frame, and reference image control
 - **Multiple Models** - Support for Seedance 2.0 (incl. Fast/Mini, multimodal reference), 1.5 Pro, 1.0 Pro, 1.0 Pro Fast, 1.0 Lite T2V/I2V
-- **Multiple Resolutions** - 480p, 720p (default), 1080p, and 4k output (4k: `doubao-seedance-2-5-260628` only)
+- **Multiple Resolutions** - 480p, 720p (default), 1080p, and 4k output (4k: `doubao-seedance-2-0-260128` only)
 - **Flexible Aspect Ratios** - 16:9, 9:16, 1:1, 4:3, 3:4, 21:9, and adaptive
 - **Audio Generation** - Generate synchronized audio for videos (1.5 Pro and 2.0 series)
 - **Service Tiers** - Default (priority) and Flex (cost-effective) processing
@@ -364,7 +364,7 @@ Claude: I'll generate a video with synchronized audio.
 
 | Model                                 | Description       | Features                   |
 | ------------------------------------- | ----------------- | -------------------------- |
-| `doubao-seedance-2-5-260628`          | 2.0 (default)     | Latest generation, 4k, multimodal reference |
+| `doubao-seedance-2-5-260628`          | 2.5               | Up to 30s, edit/extend, multimodal reference |
 | `doubao-seedance-2-0-fast-260128`     | 2.0 Fast          | Latest generation fast     |
 | `doubao-seedance-2-0-mini-260615`     | 2.0 Mini          | Latest generation, lightweight, cheapest 2.0 |
 | `doubao-seedance-1-5-pro-251215`      | 1.5 Pro           | Audio generation, T2V, I2V |
@@ -395,7 +395,7 @@ Claude: I'll generate a video with synchronized audio.
 | `ACEDATACLOUD_API_BASE_URL`   | API base URL                | `https://api.acedata.cloud`      |
 | `ACEDATACLOUD_OAUTH_CLIENT_ID`  | OAuth client ID (hosted mode) | —                           |
 | `ACEDATACLOUD_PLATFORM_BASE_URL` | Platform base URL            | `https://platform.acedata.cloud` |
-| `SEEDANCE_DEFAULT_MODEL`      | Default model               | `doubao-seedance-2-5-260628` |
+| `SEEDANCE_DEFAULT_MODEL`      | Default model               | `doubao-seedance-2-0-260128` |
 | `SEEDANCE_DEFAULT_RESOLUTION` | Default resolution          | `720p`                           |
 | `SEEDANCE_DEFAULT_RATIO`      | Default aspect ratio        | `16:9`                           |
 | `SEEDANCE_DEFAULT_DURATION`   | Default duration (seconds)  | `5`                              |

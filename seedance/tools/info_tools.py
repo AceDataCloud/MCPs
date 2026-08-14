@@ -18,7 +18,7 @@ async def seedance_list_models() -> str:
 
 | Model | Type | Strengths | Audio | Credits (720p/sec) |
 |-------|------|-----------|-------|--------------------|
-| doubao-seedance-2-5-260628 | 2.5 | Latest flagship, up to 30s, multimodal reference, edit/extend (default) | Yes | 2.5565 |
+| doubao-seedance-2-5-260628 | 2.5 | Latest flagship, up to 30s, multimodal reference, edit/extend | Yes | 2.5565 |
 | doubao-seedance-2-0-260128 | 2.0 | Latest generation, highest quality, multimodal reference, up to 4k (default) | Yes | ~$0.146 |
 | doubao-seedance-2-0-fast-260128 | 2.0 Fast | Latest generation, faster, up to 720p | Yes | ~$0.117 |
 | doubao-seedance-2-0-mini-260615 | 2.0 Mini | Latest generation, lightweight, cheapest within 2.0, up to 720p | Yes | ~$0.073 |
@@ -29,8 +29,8 @@ async def seedance_list_models() -> str:
 | doubao-seedance-1-0-lite-i2v-250428 | Lite I2V | Lightweight image-to-video | No | ~$0.033 |
 
 Model Selection Guide:
-- Latest flagship / default: doubao-seedance-2-5-260628 (up to 30s, multimodal reference, edit/extend)
-- Highest resolution: doubao-seedance-2-0-260128 (up to 4k)
+- Latest flagship: doubao-seedance-2-5-260628 (up to 30s, multimodal reference, edit/extend)
+- Default / highest resolution: doubao-seedance-2-0-260128 (up to 4k)
 - Latest fast: doubao-seedance-2-0-fast-260128
 - Latest lightweight / cheapest within 2.0: doubao-seedance-2-0-mini-260615
 - 1.5 flagship (audio): doubao-seedance-1-5-pro-251215
