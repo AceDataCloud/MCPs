@@ -78,6 +78,38 @@ async def openai_create_response(
         list[dict[str, Any]] | None,
         Field(description="Tools the model may call while creating the response."),
     ] = None,
+    tool_choice: Annotated[
+        str | dict[str, Any] | None,
+        Field(description="Controls tool calling: 'none', 'auto', 'required', or a tool object."),
+    ] = None,
+    parallel_tool_calls: Annotated[
+        bool | None,
+        Field(description="Whether to enable parallel tool calls. Default is true."),
+    ] = None,
+    include: Annotated[
+        list[str] | None,
+        Field(description="Additional response payload sections to include."),
+    ] = None,
+    reasoning: Annotated[
+        dict[str, Any] | None,
+        Field(description="Reasoning configuration options."),
+    ] = None,
+    text: Annotated[
+        dict[str, Any] | None,
+        Field(description="Text output configuration options."),
+    ] = None,
+    max_output_tokens: Annotated[
+        int | None,
+        Field(description="Upper bound for tokens generated in the response output."),
+    ] = None,
+    store: Annotated[
+        bool | None,
+        Field(description="Whether to store the output of this response."),
+    ] = None,
+    stream_options: Annotated[
+        dict[str, Any] | None,
+        Field(description="Options for streaming responses."),
+    ] = None,
 ) -> str:
     """Create a response using the OpenAI Responses API via AceDataCloud.
 
@@ -112,6 +144,22 @@ async def openai_create_response(
             payload["stream"] = stream
         if tools is not None:
             payload["tools"] = tools
+        if tool_choice is not None:
+            payload["tool_choice"] = tool_choice
+        if parallel_tool_calls is not None:
+            payload["parallel_tool_calls"] = parallel_tool_calls
+        if include is not None:
+            payload["include"] = include
+        if reasoning is not None:
+            payload["reasoning"] = reasoning
+        if text is not None:
+            payload["text"] = text
+        if max_output_tokens is not None:
+            payload["max_output_tokens"] = max_output_tokens
+        if store is not None:
+            payload["store"] = store
+        if stream_options is not None:
+            payload["stream_options"] = stream_options
 
         result = await client.responses(**payload)
 
