@@ -76,7 +76,8 @@ class TestFormatTaskResult:
         assert data["request"]["action"] == "generate"
         assert data["response"]["success"] is True
         assert data["response"]["data"][0]["title"] == "Test Song"
-        assert data["mcp_task_polling"]["poll_tool"] == "producer_get_task"
+        assert data["mcp_task_polling"]["state"] == "complete"
+        assert data["mcp_task_polling"]["should_poll"] is False
 
     def test_format_error(self):
         """Test formatting error response."""
