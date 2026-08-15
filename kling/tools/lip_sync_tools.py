@@ -100,11 +100,15 @@ async def kling_lip_sync(
         Task ID and lip-sync video information.
     """
     if not video_url and not video_id:
-        return '{"error": "Validation Error", "message": "Either video_url or video_id is required."}'
+        return (
+            '{"error": "Validation Error", "message": "Either video_url or video_id is required."}'
+        )
     if mode == "audio2video" and not audio_url and not audio_file:
         return '{"error": "Validation Error", "message": "audio_url or audio_file is required when mode=\'audio2video\'."}'
     if mode == "text2video" and not text:
-        return '{"error": "Validation Error", "message": "text is required when mode=\'text2video\'."}'
+        return (
+            '{"error": "Validation Error", "message": "text is required when mode=\'text2video\'."}'
+        )
 
     payload: dict = {"mode": mode}
 
