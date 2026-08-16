@@ -78,7 +78,9 @@ async def acedatacloud_list_services(
             items = [
                 it
                 for it in items
-                if s in (it.get("alias") or "").lower() or s in (it.get("title") or "").lower()
+                if s in (it.get("alias") or "").lower()
+                or s in (it.get("title") or "").lower()
+                or any(s in str(tag).lower() for tag in (it.get("tags") or []))
             ]
             return dumps({"count": len(items), "items": items})
         result = await client.get("/services/", {"limit": limit, **server_filters})
