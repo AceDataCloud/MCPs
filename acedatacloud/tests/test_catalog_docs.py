@@ -57,6 +57,29 @@ async def test_get_service_by_alias_paginates():
 
 @respx.mock
 @pytest.mark.asyncio
+async def test_get_service_resolves_exact_tag_when_alias_is_missing():
+    respx.get(f"{API}/services/").mock(
+        return_value=httpx.Response(
+            200,
+            json={
+                "count": 1,
+                "items": [
+                    {
+                        "id": "svc-chat",
+                        "alias": None,
+                        "title": "AI Dialogue",
+                        "tags": ["aichat"],
+                    }
+                ],
+            },
+        )
+    )
+    out = json.loads(await acedatacloud_get_service(service="aichat"))
+    assert out["id"] == "svc-chat"
+
+
+@respx.mock
+@pytest.mark.asyncio
 async def test_get_pricing_returns_cost():
     respx.get(f"{API}/services/").mock(
         return_value=httpx.Response(
@@ -83,6 +106,12 @@ async def test_get_pricing_returns_cost():
 @respx.mock
 @pytest.mark.asyncio
 async def test_list_apis_uses_server_side_service_filter():
+    respx.get(f"{API}/services/").mock(
+        return_value=httpx.Response(
+            200,
+            json={"count": 1, "items": [{"id": UUID, "alias": "suno"}]},
+        )
+    )
     route = respx.get(f"{API}/apis/").mock(
         return_value=httpx.Response(
             200,
@@ -100,11 +129,10 @@ async def test_list_apis_uses_server_side_service_filter():
             },
         )
     )
-    out = json.loads(await acedatacloud_list_apis(service=UUID, stage="Production"))
+    out = json.loads(await acedatacloud_list_apis(service="suno", stage="Production"))
     assert out["count"] == 1
     assert out["items"][0]["path"] == "/suno/audios"
     assert "definition" not in out["items"][0]
-    # The service+stage filters are pushed to the server, not paged client-side.
     params = route.calls[0].request.url.params
     assert params["service"] == UUID
     assert params["stage"] == "Production"

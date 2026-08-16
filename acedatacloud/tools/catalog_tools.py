@@ -26,21 +26,29 @@ async def _resolve_service(ref: str) -> dict[str, Any] | None:
         result = await client.get_public("/services/", {"id": ref})
         items: list[dict[str, Any]] = result.get("items", []) if isinstance(result, dict) else []
         return items[0] if items else None
-    target = ref.lower()
+    target = ref.casefold()
     offset = 0
+    title_match = None
+    tag_match = None
     while offset < 600:
         result = await client.get_public("/services/", {"limit": 50, "offset": offset})
         page: list[dict[str, Any]] = result.get("items", []) if isinstance(result, dict) else []
         if not page:
             break
         for it in page:
-            if (it.get("alias") or "").lower() == target:
+            if (it.get("alias") or "").casefold() == target:
                 return it
+            if title_match is None and (it.get("title") or "").casefold() == target:
+                title_match = it
+            if tag_match is None and any(
+                str(tag).casefold() == target for tag in (it.get("tags") or [])
+            ):
+                tag_match = it
         count = result.get("count", 0) if isinstance(result, dict) else 0
         offset += 50
         if offset >= count:
             break
-    return None
+    return title_match or tag_match
 
 
 @mcp.tool()
@@ -107,10 +115,14 @@ async def acedatacloud_list_apis(
     Each item carries the path, method, stage and billing ``cost``. No token required.
     """
     try:
-        # The backend `/apis/` list honors `service` (alias or UUID) and `stage`
-        # server-side, so filter there instead of paging the whole catalog.
+        service_id = service
+        if service:
+            resolved = await _resolve_service(service)
+            if not resolved:
+                return error_json("Not Found", f"No service matched '{service}'.")
+            service_id = resolved.get("id")
         result = await client.get_public(
-            "/apis/", {"limit": limit, "service": service, "stage": stage}
+            "/apis/", {"limit": limit, "service": service_id, "stage": stage}
         )
         if not isinstance(result, dict):
             return error_json("No Response", "The API returned an empty response.")

@@ -103,6 +103,30 @@ async def test_list_services_filters_by_search(mock_services_page):
 
 @respx.mock
 @pytest.mark.asyncio
+async def test_list_services_searches_tags_when_alias_is_missing():
+    respx.get(f"{API}/services/").mock(
+        return_value=httpx.Response(
+            200,
+            json={
+                "count": 1,
+                "items": [
+                    {
+                        "id": "svc-chat",
+                        "alias": None,
+                        "title": "AI Dialogue",
+                        "tags": ["aichat"],
+                    }
+                ],
+            },
+        )
+    )
+    out = json.loads(await acedatacloud_list_services(search="aichat"))
+    assert out["count"] == 1
+    assert out["items"][0]["id"] == "svc-chat"
+
+
+@respx.mock
+@pytest.mark.asyncio
 async def test_get_balance_summarizes(mock_applications_page):
     respx.get(f"{API}/platform-tokens/me/").mock(
         return_value=httpx.Response(200, json={"id": "user-1"})
