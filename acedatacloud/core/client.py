@@ -92,10 +92,12 @@ class PlatformClient:
             "accept": "application/json",
             "content-type": "application/json",
         }
+        if not auth_required:
+            return headers
         token = get_request_api_token() or self.api_token
         if token:
             headers["authorization"] = f"Bearer {token}"
-        elif auth_required:
+        else:
             logger.error("Platform token not configured")
             raise PlatformAuthError("Platform token not configured")
         return headers
@@ -251,7 +253,7 @@ class PlatformClient:
         endpoint: str,
         params: dict[str, Any] | list[tuple[str, Any]] | None = None,
     ) -> Any:
-        """GET a public endpoint, optionally sending a configured token."""
+        """GET a public endpoint without forwarding caller credentials."""
         return await self.request("GET", endpoint, params=params, auth_required=False)
 
     async def post(
