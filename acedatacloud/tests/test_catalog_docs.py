@@ -57,7 +57,7 @@ async def test_get_service_by_alias_paginates():
 
 @respx.mock
 @pytest.mark.asyncio
-async def test_get_service_resolves_exact_tag_when_alias_is_missing():
+async def test_get_service_resolves_unique_exact_tag_when_alias_is_missing():
     respx.get(f"{API}/services/").mock(
         return_value=httpx.Response(
             200,
@@ -76,6 +76,26 @@ async def test_get_service_resolves_exact_tag_when_alias_is_missing():
     )
     out = json.loads(await acedatacloud_get_service(service="aichat"))
     assert out["id"] == "svc-chat"
+
+
+@respx.mock
+@pytest.mark.asyncio
+async def test_get_service_rejects_ambiguous_tag():
+    respx.get(f"{API}/services/").mock(
+        return_value=httpx.Response(
+            200,
+            json={
+                "count": 2,
+                "items": [
+                    {"id": "svc-chat", "title": "AI Dialogue", "tags": ["aichat"]},
+                    {"id": "svc-deepseek", "alias": "deepseek", "tags": ["aichat"]},
+                ],
+            },
+        )
+    )
+    out = json.loads(await acedatacloud_get_service(service="aichat"))
+    assert out["error"] == "validation_error"
+    assert "service UUID or exact alias" in out["message"]
 
 
 @respx.mock

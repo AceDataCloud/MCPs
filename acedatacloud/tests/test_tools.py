@@ -103,8 +103,8 @@ async def test_list_services_filters_by_search(mock_services_page):
 
 @respx.mock
 @pytest.mark.asyncio
-async def test_list_services_searches_tags_when_alias_is_missing():
-    respx.get(f"{API}/services/").mock(
+async def test_list_services_searches_tags_without_forwarding_credentials():
+    route = respx.get(f"{API}/services/").mock(
         return_value=httpx.Response(
             200,
             json={
@@ -123,6 +123,7 @@ async def test_list_services_searches_tags_when_alias_is_missing():
     out = json.loads(await acedatacloud_list_services(search="aichat"))
     assert out["count"] == 1
     assert out["items"][0]["id"] == "svc-chat"
+    assert "authorization" not in {key.lower() for key in route.calls[0].request.headers}
 
 
 @respx.mock
