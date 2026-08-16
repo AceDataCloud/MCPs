@@ -65,8 +65,11 @@ async def minimax_generate_video_from_text(
     ] = None,
     async_: Annotated[
         bool,
-        Field(alias="async", description="Whether to return immediately with a task_id."),
-    ] = False,
+        Field(
+            alias="async",
+            description="Return a task_id immediately for minimax_get_task polling.",
+        ),
+    ] = True,
 ) -> str:
     """Generate a MiniMax H3 video from a text prompt."""
     payload = _common_payload(
@@ -100,8 +103,11 @@ async def minimax_generate_video_from_images(
     ] = None,
     async_: Annotated[
         bool,
-        Field(alias="async", description="Whether to return immediately with a task_id."),
-    ] = False,
+        Field(
+            alias="async",
+            description="Return a task_id immediately for minimax_get_task polling.",
+        ),
+    ] = True,
 ) -> str:
     """Generate from one first-frame image or multiple reference images.
 
@@ -155,8 +161,11 @@ async def minimax_generate_video_from_audio(
     ] = None,
     async_: Annotated[
         bool,
-        Field(alias="async", description="Whether to return immediately with a task_id."),
-    ] = False,
+        Field(
+            alias="async",
+            description="Return a task_id immediately for minimax_get_task polling.",
+        ),
+    ] = True,
 ) -> str:
     """Generate a MiniMax H3 video guided by audio and reference images.
 
@@ -215,8 +224,11 @@ async def minimax_generate_video(
     ] = None,
     async_: Annotated[
         bool,
-        Field(alias="async", description="Whether to return immediately with a task_id."),
-    ] = False,
+        Field(
+            alias="async",
+            description="Return a task_id immediately for minimax_get_task polling.",
+        ),
+    ] = True,
 ) -> str:
     """Generate a video from the full MiniMax content schema."""
     payload = _common_payload(

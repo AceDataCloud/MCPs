@@ -13,7 +13,7 @@ Model Context Protocol server for MiniMax H3 multimodal video generation through
 - Text-to-video
 - Image-, video-, and audio-guided video generation
 - 4–15 second output in 768P or 2K, with adaptive, landscape, portrait, and square ratios
-- Asynchronous task retrieval, batch retrieval, and deletion
+- Optional asynchronous submission, task retrieval, batch retrieval, and deletion
 - Hosted OAuth HTTP transport and local stdio transport
 
 ## Tools
@@ -94,7 +94,7 @@ Audio:
 Create a 9:16 dance video guided by this audio, with cuts and motion following the beat.
 ```
 
-Generation tools wait for a completed task by default. Set `async` to `true` (or provide `callback_url`) to return a task ID immediately, then poll it with `minimax_get_task`.
+The HTTP API waits for completion by default, while MCP generation tools default `async` to `true` so agents receive a task ID immediately. Poll it with `minimax_get_task` until the final AceDataCloud CDN video is available. Set `async=false` only when the client can safely wait for the complete result.
 
 ## Development
 
