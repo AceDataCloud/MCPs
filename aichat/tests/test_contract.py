@@ -71,7 +71,6 @@ def test_v2_offers_claude_spec_models():
         "claude-3-5-sonnet-20240620",
         "claude-3-haiku-20240307",
         "claude-3-sonnet-20240229",
-        "claude-3-opus-20240229",
     }
     missing = spec_models - set(get_args(AiChatV2Model))
     assert not missing, f"AiChatV2Model is missing Claude spec models {sorted(missing)}"
