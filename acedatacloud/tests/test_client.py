@@ -4,7 +4,7 @@ import httpx
 import pytest
 import respx
 
-from core.client import PlatformClient
+from core.client import PlatformClient, reset_request_api_token, set_request_api_token
 from core.exceptions import PlatformAPIError, PlatformAuthError, PlatformTimeoutError
 
 BASE = "https://api.test.com"
@@ -31,6 +31,15 @@ def test_get_headers_no_token_raises():
     c = PlatformClient(api_token="", base_url=BASE)
     with pytest.raises(PlatformAuthError, match="not configured"):
         c._get_headers()
+
+
+def test_public_headers_never_forward_credentials(client):
+    context = set_request_api_token("request-token")
+    try:
+        headers = client._get_headers(auth_required=False)
+    finally:
+        reset_request_api_token(context)
+    assert "authorization" not in headers
 
 
 @respx.mock

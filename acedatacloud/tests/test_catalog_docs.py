@@ -278,6 +278,6 @@ async def test_public_get_omits_auth_header_when_no_token():
     route = respx.get(f"{API}/services/").mock(
         return_value=httpx.Response(200, json={"count": 0, "items": []})
     )
-    public_client = PlatformClient(api_token="")
+    public_client = PlatformClient(api_token="must-not-be-forwarded")
     await public_client.get_public("/services/")
     assert "authorization" not in {k.lower() for k in route.calls[0].request.headers}
