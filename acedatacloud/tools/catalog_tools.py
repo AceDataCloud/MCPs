@@ -12,7 +12,7 @@ from typing import Annotated, Any
 from pydantic import Field
 
 from core.client import client
-from core.exceptions import PlatformError
+from core.exceptions import PlatformError, PlatformValidationError
 from core.server import mcp
 from core.utils import dumps, error_json
 
@@ -29,7 +29,7 @@ async def _resolve_service(ref: str) -> dict[str, Any] | None:
     target = ref.casefold()
     offset = 0
     title_match = None
-    tag_match = None
+    tag_matches: list[dict[str, Any]] = []
     while offset < 600:
         result = await client.get_public("/services/", {"limit": 50, "offset": offset})
         page: list[dict[str, Any]] = result.get("items", []) if isinstance(result, dict) else []
@@ -40,15 +40,21 @@ async def _resolve_service(ref: str) -> dict[str, Any] | None:
                 return it
             if title_match is None and (it.get("title") or "").casefold() == target:
                 title_match = it
-            if tag_match is None and any(
-                str(tag).casefold() == target for tag in (it.get("tags") or [])
-            ):
-                tag_match = it
+            if any(str(tag).casefold() == target for tag in (it.get("tags") or [])):
+                tag_matches.append(it)
         count = result.get("count", 0) if isinstance(result, dict) else 0
         offset += 50
         if offset >= count:
             break
-    return title_match or tag_match
+    if title_match:
+        return title_match
+    if len(tag_matches) == 1:
+        return tag_matches[0]
+    if len(tag_matches) > 1:
+        raise PlatformValidationError(
+            f"Service reference '{ref}' matches multiple tags; use a service UUID or exact alias."
+        )
+    return None
 
 
 @mcp.tool()

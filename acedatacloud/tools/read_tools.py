@@ -72,7 +72,7 @@ async def acedatacloud_list_services(
             "private": None if private is None else str(private).lower(),
         }
         if search:
-            result = await client.get("/services/", {"limit": 300, **server_filters})
+            result = await client.get_public("/services/", {"limit": 300, **server_filters})
             items = result.get("items", []) if isinstance(result, dict) else []
             s = search.lower()
             items = [
@@ -83,7 +83,7 @@ async def acedatacloud_list_services(
                 or any(s in str(tag).lower() for tag in (it.get("tags") or []))
             ]
             return dumps({"count": len(items), "items": items})
-        result = await client.get("/services/", {"limit": limit, **server_filters})
+        result = await client.get_public("/services/", {"limit": limit, **server_filters})
         return _wrap(result)
     except PlatformError as error:
         return error_json(error.code, error.message)
