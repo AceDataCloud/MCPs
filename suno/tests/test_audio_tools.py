@@ -183,3 +183,20 @@ class TestCustomDuration:
             )
 
         assert mock_generate.await_args.kwargs["duration"] == 900
+
+
+class TestCustomLyricPrompt:
+    """Tests for lyric_prompt on custom generation."""
+
+    @pytest.mark.asyncio
+    async def test_lyric_prompt_string_is_forwarded(self, mock_audio_response):
+        with patch(
+            "tools.audio_tools.client.generate_audio",
+            new=AsyncMock(return_value=mock_audio_response),
+        ) as mock_generate:
+            await suno_generate_custom_music(
+                lyric="",
+                lyric_prompt="A nostalgic song about winter",
+            )
+
+        assert mock_generate.await_args.kwargs["lyric_prompt"] == "A nostalgic song about winter"
