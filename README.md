@@ -26,6 +26,13 @@ Monorepo for all AceDataCloud MCP (Model Context Protocol) servers.
 | `suno/` | [SunoMCP](https://github.com/AceDataCloud/SunoMCP) | [mcp-suno](https://pypi.org/project/mcp-suno/) | Music |
 | `veo/` | [VeoMCP](https://github.com/AceDataCloud/VeoMCP) | [mcp-veo](https://pypi.org/project/mcp-veo/) | Video |
 | `wan/` | [WanMCP](https://github.com/AceDataCloud/WanMCP) | [mcp-wan](https://pypi.org/project/mcp-wan/) | Video |
+| `aichat/` | [AiChatMCP](https://github.com/AceDataCloud/AiChatMCP) | [mcp-aichat](https://pypi.org/project/mcp-aichat/) | Chat |
+| `discord-bot/` | [DiscordBotMCP](https://github.com/AceDataCloud/DiscordBotMCP) | [mcp-discord-bot](https://pypi.org/project/mcp-discord-bot/) | Messaging |
+| `glm/` | [GLMMCP](https://github.com/AceDataCloud/GLMMCP) | [mcp-glm](https://pypi.org/project/mcp-glm/) | Chat |
+| `grok/` | [GrokMCP](https://github.com/AceDataCloud/GrokMCP) | [mcp-grok](https://pypi.org/project/mcp-grok/) | Video |
+| `minimax/` | [MinimaxMCP](https://github.com/AceDataCloud/MinimaxMCP) | [mcp-minimax](https://pypi.org/project/mcp-minimax/) | Video |
+| `openai/` | [OpenAIMCP](https://github.com/AceDataCloud/OpenAIMCP) | [mcp-openai](https://pypi.org/project/mcp-openai/) | AI APIs |
+| `webextrator/` | [WebExtratorMCP](https://github.com/AceDataCloud/WebExtratorMCP) | [mcp-webextrator](https://pypi.org/project/mcp-webextrator/) | Web & Data |
 
 ## Publishing
 
