@@ -107,6 +107,7 @@ async def aichat_list_models() -> str:
 - deepseek-r1-0528
 - deepseek-v3
 - deepseek-v3-250324
+- deepseek-v4-pro
 - deepseek-v4-flash
 
 ## xAI Grok
