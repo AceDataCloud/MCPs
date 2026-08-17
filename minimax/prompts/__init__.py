@@ -14,7 +14,7 @@ Choose by available input:
 - One to three audio URLs: `minimax_generate_video_from_audio`; images and prompt are required
 - Mixed text, image, video, and audio content: `minimax_generate_video`
 
-The model is always `MiniMax-H3`. Resolutions are `768P` and `2K`; ratios are `adaptive`, `21:9`, `16:9`, `4:3`, `1:1`, `3:4`, and `9:16`; duration is an integer from 4 to 15 seconds. Generation is asynchronous by default. Return the task_id, then poll `minimax_get_task` until the final video URL is available.
+The model is always `MiniMax-H3`. Resolutions are `768P` and `2K`; ratios are `adaptive`, `21:9`, `16:9`, `4:3`, `1:1`, `3:4`, and `9:16`; duration is an integer from 4 to 15 seconds. Generation waits for completion by default. Set `async` to `true` (or provide `callback_url`) to return a task ID immediately, then poll `minimax_get_task` until the final video URL is available.
 """
 
 
@@ -27,7 +27,7 @@ def minimax_workflow_examples() -> str:
 2. Images: call `minimax_generate_video_from_images(image_urls=[...], prompt=...)`.
 3. Audio: call `minimax_generate_video_from_audio(audio_urls=[...], image_urls=[...], prompt=...)`.
 4. Mixed media: call `minimax_generate_video(content=[...])`; use `first_frame`, `last_frame`, or reference roles where applicable.
-5. Poll the returned task with `minimax_get_task`; use `minimax_get_tasks_batch` for several tasks.
+5. For asynchronous requests, poll the returned task with `minimax_get_task`; use `minimax_get_tasks_batch` for several tasks.
 
 Prompts should describe subject, action, camera movement, lighting, style, and mood. For image input, focus the prompt on desired motion. For audio input, explain how motion and cuts should follow the rhythm.
 """

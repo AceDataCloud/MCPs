@@ -94,7 +94,7 @@ Audio:
 Create a 9:16 dance video guided by this audio, with cuts and motion following the beat.
 ```
 
-Generation tools submit asynchronously. Poll the returned task ID with `minimax_get_task` until the final AceDataCloud CDN video is available.
+Generation tools wait for a completed task by default. Set `async` to `true` (or provide `callback_url`) to return a task ID immediately, then poll it with `minimax_get_task`.
 
 ## Development
 

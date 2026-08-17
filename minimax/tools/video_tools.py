@@ -27,6 +27,7 @@ def _common_payload(
     duration: int,
     content: list[dict],
     callback_url: str | None,
+    async_: bool,
 ) -> dict:
     payload: dict = {
         "model": model,
@@ -34,6 +35,7 @@ def _common_payload(
         "resolution": resolution,
         "ratio": ratio,
         "duration": duration,
+        "async": async_,
     }
     if callback_url:
         payload["callback_url"] = callback_url
@@ -61,6 +63,10 @@ async def minimax_generate_video_from_text(
     callback_url: Annotated[
         str | None, Field(description="Optional public webhook URL for the final result.")
     ] = None,
+    async_: Annotated[
+        bool,
+        Field(alias="async", description="Whether to return immediately with a task_id."),
+    ] = False,
 ) -> str:
     """Generate a MiniMax H3 video from a text prompt."""
     payload = _common_payload(
@@ -70,6 +76,7 @@ async def minimax_generate_video_from_text(
         duration=duration,
         content=[{"type": "text", "text": prompt}],
         callback_url=callback_url,
+        async_=async_,
     )
     return format_video_result(await client.generate_video(**payload))
 
@@ -91,6 +98,10 @@ async def minimax_generate_video_from_images(
     callback_url: Annotated[
         str | None, Field(description="Optional public webhook URL for the final result.")
     ] = None,
+    async_: Annotated[
+        bool,
+        Field(alias="async", description="Whether to return immediately with a task_id."),
+    ] = False,
 ) -> str:
     """Generate from one first-frame image or multiple reference images.
 
@@ -116,6 +127,7 @@ async def minimax_generate_video_from_images(
             ],
         ],
         callback_url=callback_url,
+        async_=async_,
     )
     return format_video_result(await client.generate_video(**payload))
 
@@ -141,6 +153,10 @@ async def minimax_generate_video_from_audio(
     callback_url: Annotated[
         str | None, Field(description="Optional public webhook URL for the final result.")
     ] = None,
+    async_: Annotated[
+        bool,
+        Field(alias="async", description="Whether to return immediately with a task_id."),
+    ] = False,
 ) -> str:
     """Generate a MiniMax H3 video guided by audio and reference images.
 
@@ -172,6 +188,7 @@ async def minimax_generate_video_from_audio(
             ],
         ],
         callback_url=callback_url,
+        async_=async_,
     )
     return format_video_result(await client.generate_video(**payload))
 
@@ -196,6 +213,10 @@ async def minimax_generate_video(
     callback_url: Annotated[
         str | None, Field(description="Optional public webhook URL for the final result.")
     ] = None,
+    async_: Annotated[
+        bool,
+        Field(alias="async", description="Whether to return immediately with a task_id."),
+    ] = False,
 ) -> str:
     """Generate a video from the full MiniMax content schema."""
     payload = _common_payload(
@@ -205,5 +226,6 @@ async def minimax_generate_video(
         duration=duration,
         content=[item.model_dump(exclude_none=True) for item in content],
         callback_url=callback_url,
+        async_=async_,
     )
     return format_video_result(await client.generate_video(**payload))

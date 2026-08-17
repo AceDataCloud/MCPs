@@ -37,18 +37,6 @@ class TestMinimaxClient:
         with pytest.raises(MinimaxAuthError, match="not configured"):
             client._get_headers()
 
-    def test_with_async_callback_injects_documented_async_field(self, client):
-        """Test async submission uses the documented async request field."""
-        payload = {"model": "MiniMax-H3", "content": [{"type": "text", "text": "fox"}]}
-        assert client._with_async_callback(payload)["async"] is True
-
-    def test_with_async_callback_preserves_explicit_callback(self, client):
-        """Test async submission preserves a user-provided callback."""
-        payload = client._with_async_callback(
-            {"model": "MiniMax-H3", "callback_url": "https://example.com/webhook"}
-        )
-        assert payload["callback_url"] == "https://example.com/webhook"
-
     @pytest.mark.asyncio
     async def test_request_success(self, client, mock_video_response):
         """Test successful API request."""
