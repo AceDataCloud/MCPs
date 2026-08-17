@@ -37,5 +37,5 @@ Tasks:
 - minimax_get_tasks_batch
 - minimax_delete_task
 
-All generation tools submit asynchronously by default. Poll the returned task_id with minimax_get_task until the final video is available.
+Generation tools wait for completion by default. Set async to true (or provide callback_url) to return a task_id immediately, then poll it with minimax_get_task.
 """

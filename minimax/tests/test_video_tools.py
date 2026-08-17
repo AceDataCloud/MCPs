@@ -26,6 +26,7 @@ async def test_text_tool_payload(monkeypatch, generated_response):
         resolution="2K",
         ratio="16:9",
         duration=6,
+        **{"async": False},
     )
 
 
@@ -51,6 +52,7 @@ async def test_image_tool_single_image_uses_first_frame(monkeypatch, generated_r
         resolution="2K",
         ratio="16:9",
         duration=4,
+        **{"async": False},
     )
 
 
@@ -81,6 +83,7 @@ async def test_image_tool_multiple_images_uses_reference(monkeypatch, generated_
         resolution="2K",
         ratio="16:9",
         duration=4,
+        **{"async": False},
     )
 
 
@@ -111,6 +114,7 @@ async def test_audio_tool_payload(monkeypatch, generated_response):
         resolution="2K",
         ratio="16:9",
         duration=4,
+        **{"async": False},
     )
 
 
@@ -144,7 +148,34 @@ async def test_full_schema_tool_payload(monkeypatch, generated_response):
         resolution="2K",
         ratio="adaptive",
         duration=4,
+        **{"async": False},
     )
+
+
+@pytest.mark.asyncio
+async def test_text_tool_enables_async_submission(monkeypatch, generated_response):
+    generate = AsyncMock(return_value=generated_response)
+    monkeypatch.setattr(video_tools.client, "generate_video", generate)
+
+    await video_tools.minimax_generate_video_from_text("fox", async_=True)
+
+    assert generate.await_args.kwargs["async"] is True
+
+
+@pytest.mark.asyncio
+async def test_generation_tool_schemas_use_documented_async_default():
+    generation_tools = {
+        tool.name: tool for tool in await video_tools.mcp.list_tools() if "generate_video" in tool.name
+    }
+
+    assert set(generation_tools) == {
+        "minimax_generate_video_from_text",
+        "minimax_generate_video_from_images",
+        "minimax_generate_video_from_audio",
+        "minimax_generate_video",
+    }
+    for tool in generation_tools.values():
+        assert tool.inputSchema["properties"]["async"]["default"] is False
 
 
 def test_content_schema_rejects_extra_fields():
