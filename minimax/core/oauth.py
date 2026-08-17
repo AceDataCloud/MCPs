@@ -19,6 +19,7 @@ import hashlib
 import json
 import secrets
 import time
+from datetime import datetime, timezone
 from urllib.parse import urlencode
 
 import httpx
@@ -39,6 +40,25 @@ from core.client import set_request_api_token
 from core.config import settings
 
 MCP_ACCESS_SCOPE = "mcp:access"
+
+
+def _is_reusable_credential(credential: dict[str, object], user_id: str | None) -> bool:
+    """Reuse only the owner's unlimited, unexpired API credentials."""
+    if not credential.get("token") or credential.get("limited_amount") is not None:
+        return False
+    if user_id and str(credential.get("user_id") or "") != user_id:
+        return False
+    expired_at = credential.get("expired_at")
+    if isinstance(expired_at, str) and expired_at:
+        try:
+            expiry = datetime.fromisoformat(expired_at.replace("Z", "+00:00"))
+            if expiry.tzinfo is None:
+                expiry = expiry.replace(tzinfo=timezone.utc)
+            if expiry <= datetime.now(timezone.utc):
+                return False
+        except ValueError:
+            return False
+    return True
 
 
 def _normalize_scopes(scopes: list[str] | None) -> list[str]:
@@ -393,10 +413,11 @@ class AceDataCloudOAuthProvider:
                                 f"type={cred.get('type')}, "
                                 f"keys={list(cred.keys())}"
                             )
-                            cred_token: str | None = cred.get("token")
-                            if cred_token:
+                            if _is_reusable_credential(cred, user_id):
+                                cred_token = cred.get("token")
+                                assert isinstance(cred_token, str)
                                 logger.info(
-                                    f"Found existing credential token "
+                                    f"Found reusable owner credential "
                                     f"(id={cred.get('id')}, token={cred_token[:12]}...)"
                                 )
                                 return cred_token
@@ -456,15 +477,16 @@ class AceDataCloudOAuthProvider:
                             f"{len(app_creds) if isinstance(app_creds, list) else 'not-list'}"
                         )
                         if isinstance(app_creds, list) and app_creds:
-                            logger.debug(f"Step 2a: first credential in app: {app_creds[0]}")
-                            existing_token: str | None = app_creds[0].get("token")
-                            if isinstance(existing_token, str) and existing_token:
-                                logger.info(
-                                    f"Found credential in existing application "
-                                    f"(app_id={application_id}, token={existing_token[:12]}...)"
-                                )
-                                return existing_token
-                            logger.debug("Step 2a: credential in app has no token field or empty")
+                            for app_cred in app_creds:
+                                if _is_reusable_credential(app_cred, user_id):
+                                    existing_token = app_cred.get("token")
+                                    assert isinstance(existing_token, str)
+                                    logger.info(
+                                        f"Found reusable credential in existing application "
+                                        f"(app_id={application_id}, token={existing_token[:12]}...)"
+                                    )
+                                    return existing_token
+                            logger.debug("Step 2a: application has no reusable owner credential")
                     else:
                         logger.debug("Step 2a: no Global Usage applications found")
                 else:
@@ -499,7 +521,11 @@ class AceDataCloudOAuthProvider:
 
                 # Step 2b: Create a credential under the application
                 cred_create_url = f"{settings.platform_base_url}/api/v1/credentials/"
-                cred_create_payload = {"application_id": application_id}
+                cred_create_payload = {
+                    "application_id": application_id,
+                    "name": "MiniMax MCP OAuth",
+                    "limited_amount": None,
+                }
                 logger.debug(f"Step 2b: POST {cred_create_url} json={cred_create_payload}")
                 cred_resp = await client.post(
                     cred_create_url,
