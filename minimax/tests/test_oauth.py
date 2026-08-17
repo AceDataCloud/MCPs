@@ -23,15 +23,20 @@ async def test_oauth_gets_only_its_managed_credential():
     respx.get(f"{settings.platform_base_url}/api/v1/applications/").mock(
         return_value=Response(200, json={"items": [{"id": "app-1"}]})
     )
-    credentials = respx.post(f"{settings.platform_base_url}/api/v1/credentials/").mock(
+    get_creds = respx.get(
+        f"{settings.platform_base_url}/api/v1/credentials/",
+        params={"application_id": "app-1", "name": "OAuth MCP"},
+    ).mock(return_value=Response(200, json={"items": []}))
+    create_cred = respx.post(f"{settings.platform_base_url}/api/v1/credentials/").mock(
         return_value=Response(201, json={"id": "credential-1", "token": "managed-token"})
     )
 
     token = await AceDataCloudOAuthProvider()._get_user_credential(_jwt(owner))
 
     assert token == "managed-token"
-    assert not any(call.request.method == "GET" for call in credentials.calls)
-    assert json.loads(credentials.calls.last.request.content) == {
+    assert get_creds.called
+    assert create_cred.called
+    assert json.loads(create_cred.calls.last.request.content) == {
         "application_id": "app-1",
         "name": "OAuth MCP",
     }
@@ -47,6 +52,10 @@ async def test_oauth_creates_global_application_before_managed_credential():
     create_app = respx.post(f"{settings.platform_base_url}/api/v1/applications/").mock(
         return_value=Response(201, json={"id": "app-1"})
     )
+    get_creds = respx.get(
+        f"{settings.platform_base_url}/api/v1/credentials/",
+        params={"application_id": "app-1", "name": "OAuth MCP"},
+    ).mock(return_value=Response(200, json={"items": []}))
     create_credential = respx.post(f"{settings.platform_base_url}/api/v1/credentials/").mock(
         return_value=Response(201, json={"id": "credential-1", "token": "managed-token"})
     )
@@ -55,4 +64,5 @@ async def test_oauth_creates_global_application_before_managed_credential():
 
     assert token == "managed-token"
     assert json.loads(create_app.calls.last.request.content) == {"type": "Usage", "scope": "Global"}
+    assert get_creds.called
     assert json.loads(create_credential.calls.last.request.content)["name"] == "OAuth MCP"

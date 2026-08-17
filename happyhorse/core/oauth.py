@@ -296,9 +296,7 @@ class AceDataCloudOAuthProvider:
                     data = existing_creds[0]
                     token = data.get("token") if isinstance(data, dict) else None
                     if isinstance(token, str) and token:
-                        logger.info(
-                            f"Reusing existing OAuth MCP Credential (id={data.get('id')})"
-                        )
+                        logger.info(f"Reusing existing OAuth MCP Credential (id={data.get('id')})")
                         return token
 
                 # Create new credential only if not found
