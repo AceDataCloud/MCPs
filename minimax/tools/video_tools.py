@@ -66,7 +66,7 @@ async def minimax_generate_video_from_text(
     async_: Annotated[
         bool,
         Field(
-            alias="async",
+            validation_alias="async",
             description="Return a task_id immediately for minimax_get_task polling.",
         ),
     ] = True,
@@ -104,7 +104,7 @@ async def minimax_generate_video_from_images(
     async_: Annotated[
         bool,
         Field(
-            alias="async",
+            validation_alias="async",
             description="Return a task_id immediately for minimax_get_task polling.",
         ),
     ] = True,
@@ -162,7 +162,7 @@ async def minimax_generate_video_from_audio(
     async_: Annotated[
         bool,
         Field(
-            alias="async",
+            validation_alias="async",
             description="Return a task_id immediately for minimax_get_task polling.",
         ),
     ] = True,
@@ -225,7 +225,7 @@ async def minimax_generate_video(
     async_: Annotated[
         bool,
         Field(
-            alias="async",
+            validation_alias="async",
             description="Return a task_id immediately for minimax_get_task polling.",
         ),
     ] = True,
