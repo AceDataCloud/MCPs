@@ -38,8 +38,10 @@ def main() -> None:
             "shared OAuth MCP name sent": '"name": "OAuth MCP"' in source,
             "Global Usage application lookup": '"scope": "Global"' in source
             and '"type": "Usage"' in source,
-            "credential list scanning removed": '/api/v1/credentials/"'
-            not in source.split("cred_resp =", 1)[0],
+            "query-first pattern": 'params={"application_id": application_id, "name": "OAuth MCP"}'
+            in source
+            or 'params={\'application_id\': application_id, \'name\': \'OAuth MCP\'}'
+            in source,
             "arbitrary selector removed": "_is_reusable_credential" not in source,
             "per-server managed key removed": "managed_key" not in source
             and "_managed_credential_key" not in functions,
