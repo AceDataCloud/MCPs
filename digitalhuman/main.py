@@ -85,7 +85,10 @@ def main() -> None:
                         "name": "digitalhuman_get_tasks_batch",
                         "description": "Get multiple Digital Human tasks",
                     },
-                    {"name": "digitalhuman_delete_task", "description": "Delete one Digital Human task"},
+                    {
+                        "name": "digitalhuman_delete_task",
+                        "description": "Delete one Digital Human task",
+                    },
                 ],
                 "prompts": [
                     {

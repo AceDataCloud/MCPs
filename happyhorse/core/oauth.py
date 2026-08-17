@@ -2,6 +2,7 @@
 
 import base64
 import hashlib
+import json
 import secrets
 import time
 from typing import Any
@@ -224,67 +225,81 @@ class AceDataCloudOAuthProvider:
             logger.exception("OAuth token exchange failed")
             return None
 
-    async def _get_user_credential(self, jwt_token: str) -> str | None:
-        headers = {"Authorization": f"Bearer {jwt_token}"}
+    @staticmethod
+    def _decode_jwt_payload(token: str) -> dict[str, object] | None:
         try:
-            async with httpx.AsyncClient(timeout=30) as http_client:
-                credentials_url = f"{settings.platform_base_url}/api/v1/credentials/"
-                response = await http_client.get(credentials_url, headers=headers)
-                if response.status_code == 200:
-                    data = response.json()
-                    credentials = data.get("results", data) if isinstance(data, dict) else data
-                    if isinstance(credentials, list):
-                        for credential in credentials:
-                            token = (
-                                credential.get("token") if isinstance(credential, dict) else None
-                            )
-                            if isinstance(token, str) and token:
-                                return token
+            parts = token.split(".")
+            if len(parts) != 3:
+                return None
+            payload = parts[1] + "=" * (-len(parts[1]) % 4)
+            result = json.loads(base64.urlsafe_b64decode(payload))
+            return result if isinstance(result, dict) else None
+        except (ValueError, json.JSONDecodeError):
+            return None
 
-                applications_url = f"{settings.platform_base_url}/api/v1/applications/"
-                response = await http_client.get(
-                    applications_url,
-                    headers=headers,
-                    params={
-                        "limit": "10",
-                        "ordering": "-created_at",
-                        "type": "Usage",
-                        "scope": "Global",
-                    },
-                )
+    async def _get_user_credential(self, jwt_token: str) -> str | None:
+        """Get or create this Hosted MCP's dedicated Global Credential."""
+        headers = {"Authorization": f"Bearer {jwt_token}"}
+        claims = self._decode_jwt_payload(jwt_token)
+        user_id = str(claims.get("user_id")) if claims and claims.get("user_id") else None
+
+        try:
+            async with httpx.AsyncClient(timeout=30) as client:
+                apps_url = f"{settings.platform_base_url}/api/v1/applications/"
+                apps_params: dict[str, str] = {
+                    "limit": "10",
+                    "ordering": "-created_at",
+                    "type": "Usage",
+                    "scope": "Global",
+                }
+                if user_id:
+                    apps_params["user_id"] = user_id
+                app_resp = await client.get(apps_url, params=apps_params, headers=headers)
+
                 application_id: str | None = None
-                if response.status_code == 200:
-                    data = response.json()
-                    items = (
-                        data.get("items", data.get("results", [])) if isinstance(data, dict) else []
-                    )
+                if app_resp.status_code == 200:
+                    app_data = app_resp.json()
+                    items = app_data.get("items", app_data.get("results", []))
                     if isinstance(items, list) and items:
                         application_id = items[0].get("id")
-                        app_credentials = items[0].get("credentials", [])
-                        if isinstance(app_credentials, list) and app_credentials:
-                            token = app_credentials[0].get("token")
-                            if isinstance(token, str) and token:
-                                return token
+
                 if not application_id:
-                    response = await http_client.post(
-                        applications_url,
+                    create_app_resp = await client.post(
+                        apps_url,
                         headers={**headers, "Content-Type": "application/json"},
                         json={"type": "Usage", "scope": "Global"},
                     )
-                    if response.status_code not in (200, 201):
+                    if create_app_resp.status_code not in (200, 201):
+                        logger.error(
+                            "Failed to create Global Application: "
+                            f"{create_app_resp.status_code} {create_app_resp.text[:500]}"
+                        )
                         return None
-                    application_id = response.json().get("id")
+                    application_id = create_app_resp.json().get("id")
+
                 if not application_id:
                     return None
-                response = await http_client.post(
-                    credentials_url,
+
+                cred_resp = await client.post(
+                    f"{settings.platform_base_url}/api/v1/credentials/",
                     headers={**headers, "Content-Type": "application/json"},
-                    json={"application_id": application_id},
+                    json={
+                        "application_id": application_id,
+                        "name": "OAuth MCP",
+                    },
                 )
-                if response.status_code not in (200, 201):
+                if cred_resp.status_code not in (200, 201):
+                    logger.error(
+                        "Failed to get managed MCP Credential: "
+                        f"{cred_resp.status_code} {cred_resp.text[:500]}"
+                    )
                     return None
-                token = response.json().get("token")
-                return token if isinstance(token, str) and token else None
+                data = cred_resp.json()
+                token = data.get("token") if isinstance(data, dict) else None
+                if isinstance(token, str) and token:
+                    logger.info(f"Using shared OAuth MCP Credential (id={data.get('id')})")
+                    return token
+                logger.error("Managed MCP Credential response did not contain a token")
         except Exception:
-            logger.exception("Credential fetch or provisioning failed")
-            return None
+            logger.exception("Managed MCP Credential provisioning failed")
+        return None

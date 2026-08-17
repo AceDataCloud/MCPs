@@ -118,21 +118,50 @@ Environment Variables:
                 return JSONResponse({"status": "ok"})
 
             async def favicon(_request: Request) -> RedirectResponse:
-                return RedirectResponse("https://cdn.acedata.cloud/acedata-logo.png", status_code=301)
+                return RedirectResponse(
+                    "https://cdn.acedata.cloud/acedata-logo.png", status_code=301
+                )
 
             async def server_card(_request: Request) -> JSONResponse:
-                return JSONResponse({
-                    "serverInfo": {"name": "MCP ReCaptcha"},
-                    "authentication": {"required": True, "schemes": ["bearer"]},
-                    "tools": [{"name": "recaptcha2_recognize", "description": "Recognize a reCAPTCHA v2 image challenge"},
-                    {"name": "recaptcha2_get_token", "description": "Get a reCAPTCHA v2 token"},
-                    {"name": "recaptcha3_get_token", "description": "Get a reCAPTCHA v3 token"},
-                    {"name": "recaptcha_get_usage_guide", "description": "Get reCAPTCHA usage guide"},
-                    {"name": "recaptcha_get_api_info", "description": "Get reCAPTCHA API information"}],
-                    "prompts": [{"name": "recaptcha_guide", "description": "reCAPTCHA tool selection guide"},
-                    {"name": "recaptcha_workflow_examples", "description": "Example reCAPTCHA workflows"}],
-                    "resources": [],
-                })
+                return JSONResponse(
+                    {
+                        "serverInfo": {"name": "MCP ReCaptcha"},
+                        "authentication": {"required": True, "schemes": ["bearer"]},
+                        "tools": [
+                            {
+                                "name": "recaptcha2_recognize",
+                                "description": "Recognize a reCAPTCHA v2 image challenge",
+                            },
+                            {
+                                "name": "recaptcha2_get_token",
+                                "description": "Get a reCAPTCHA v2 token",
+                            },
+                            {
+                                "name": "recaptcha3_get_token",
+                                "description": "Get a reCAPTCHA v3 token",
+                            },
+                            {
+                                "name": "recaptcha_get_usage_guide",
+                                "description": "Get reCAPTCHA usage guide",
+                            },
+                            {
+                                "name": "recaptcha_get_api_info",
+                                "description": "Get reCAPTCHA API information",
+                            },
+                        ],
+                        "prompts": [
+                            {
+                                "name": "recaptcha_guide",
+                                "description": "reCAPTCHA tool selection guide",
+                            },
+                            {
+                                "name": "recaptcha_workflow_examples",
+                                "description": "Example reCAPTCHA workflows",
+                            },
+                        ],
+                        "resources": [],
+                    }
+                )
 
             @contextlib.asynccontextmanager
             async def lifespan(_app: Starlette):  # type: ignore[no-untyped-def]

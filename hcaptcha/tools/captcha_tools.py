@@ -14,9 +14,18 @@ TaskMode = Literal["sync", "async"]
 
 @mcp.tool()
 async def hcaptcha_recognize(
-    queries: Annotated[list[str] | None, Field(description="Optional list of base64-encoded challenge tiles.")] = None,
-    question: Annotated[str | None, Field(description="Optional challenge question text shown by hCaptcha.")] = None,
-    mode: Annotated[TaskMode | None, Field(description="Processing mode. Defaults to API sync behavior; use 'async' to submit asynchronously.")] = None,
+    queries: Annotated[
+        list[str] | None, Field(description="Optional list of base64-encoded challenge tiles.")
+    ] = None,
+    question: Annotated[
+        str | None, Field(description="Optional challenge question text shown by hCaptcha.")
+    ] = None,
+    mode: Annotated[
+        TaskMode | None,
+        Field(
+            description="Processing mode. Defaults to API sync behavior; use 'async' to submit asynchronously."
+        ),
+    ] = None,
 ) -> str:
     """Recognize hCaptcha image challenges."""
     try:
@@ -33,14 +42,27 @@ async def hcaptcha_recognize(
 @mcp.tool()
 async def hcaptcha_get_token(
     website_key: Annotated[str, Field(description="The hCaptcha site key from the target page.")],
-    website_url: Annotated[str, Field(description="The full URL of the page containing the widget.")],
-    rqdata: Annotated[str | None, Field(description="Optional hCaptcha rqdata value expected by the site.")] = None,
-    proxy: Annotated[str | None, Field(description="Optional proxy string to use while solving.")] = None,
-    mode: Annotated[TaskMode | None, Field(description="Processing mode. Defaults to API sync behavior; use 'async' to submit asynchronously.")] = None,
+    website_url: Annotated[
+        str, Field(description="The full URL of the page containing the widget.")
+    ],
+    rqdata: Annotated[
+        str | None, Field(description="Optional hCaptcha rqdata value expected by the site.")
+    ] = None,
+    proxy: Annotated[
+        str | None, Field(description="Optional proxy string to use while solving.")
+    ] = None,
+    mode: Annotated[
+        TaskMode | None,
+        Field(
+            description="Processing mode. Defaults to API sync behavior; use 'async' to submit asynchronously."
+        ),
+    ] = None,
 ) -> str:
     """Get an hCaptcha token for a website."""
     if not website_key or not website_url:
-        return json.dumps({"error": "Validation Error", "message": "website_key and website_url are required"})
+        return json.dumps(
+            {"error": "Validation Error", "message": "website_key and website_url are required"}
+        )
 
     try:
         result = await client.get_token(

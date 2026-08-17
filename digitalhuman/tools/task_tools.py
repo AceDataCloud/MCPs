@@ -16,7 +16,9 @@ from core.utils import format_batch_task_result, format_task_result, is_task_set
 async def digitalhuman_get_task(
     task_id: Annotated[
         str,
-        Field(description="Task ID returned by a Digital Human create-video or clone-voice request."),
+        Field(
+            description="Task ID returned by a Digital Human create-video or clone-voice request."
+        ),
     ],
     action: Annotated[
         str | None,

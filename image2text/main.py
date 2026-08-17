@@ -117,20 +117,46 @@ Environment Variables:
                 return JSONResponse({"status": "ok"})
 
             async def favicon(_request: Request) -> RedirectResponse:
-                return RedirectResponse("https://cdn.acedata.cloud/acedata-logo.png", status_code=301)
+                return RedirectResponse(
+                    "https://cdn.acedata.cloud/acedata-logo.png", status_code=301
+                )
 
             async def server_card(_request: Request) -> JSONResponse:
-                return JSONResponse({
-                    "serverInfo": {"name": "MCP Image2Text"},
-                    "authentication": {"required": True, "schemes": ["bearer"]},
-                    "tools": [{"name": "image2text_recognize", "description": "Recognize text from an image"},
-                    {"name": "image2text_get_task", "description": "Poll an image2text task result"},
-                    {"name": "image2text_get_usage_guide", "description": "Get image2text usage guide"},
-                    {"name": "image2text_get_api_info", "description": "Get image2text API information"}],
-                    "prompts": [{"name": "image2text_guide", "description": "image2text tool selection guide"},
-                    {"name": "image2text_workflow_examples", "description": "Example image2text workflows"}],
-                    "resources": [],
-                })
+                return JSONResponse(
+                    {
+                        "serverInfo": {"name": "MCP Image2Text"},
+                        "authentication": {"required": True, "schemes": ["bearer"]},
+                        "tools": [
+                            {
+                                "name": "image2text_recognize",
+                                "description": "Recognize text from an image",
+                            },
+                            {
+                                "name": "image2text_get_task",
+                                "description": "Poll an image2text task result",
+                            },
+                            {
+                                "name": "image2text_get_usage_guide",
+                                "description": "Get image2text usage guide",
+                            },
+                            {
+                                "name": "image2text_get_api_info",
+                                "description": "Get image2text API information",
+                            },
+                        ],
+                        "prompts": [
+                            {
+                                "name": "image2text_guide",
+                                "description": "image2text tool selection guide",
+                            },
+                            {
+                                "name": "image2text_workflow_examples",
+                                "description": "Example image2text workflows",
+                            },
+                        ],
+                        "resources": [],
+                    }
+                )
 
             @contextlib.asynccontextmanager
             async def lifespan(_app: Starlette):  # type: ignore[no-untyped-def]

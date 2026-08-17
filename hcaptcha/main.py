@@ -118,21 +118,50 @@ Environment Variables:
                 return JSONResponse({"status": "ok"})
 
             async def favicon(_request: Request) -> RedirectResponse:
-                return RedirectResponse("https://cdn.acedata.cloud/acedata-logo.png", status_code=301)
+                return RedirectResponse(
+                    "https://cdn.acedata.cloud/acedata-logo.png", status_code=301
+                )
 
             async def server_card(_request: Request) -> JSONResponse:
-                return JSONResponse({
-                    "serverInfo": {"name": "MCP HCaptcha"},
-                    "authentication": {"required": True, "schemes": ["bearer"]},
-                    "tools": [{"name": "hcaptcha_recognize", "description": "Recognize hCaptcha image challenges"},
-                    {"name": "hcaptcha_get_token", "description": "Get an hCaptcha token for a website"},
-                    {"name": "hcaptcha_get_task", "description": "Poll a captcha task result"},
-                    {"name": "hcaptcha_get_usage_guide", "description": "Get hCaptcha usage guide"},
-                    {"name": "hcaptcha_get_api_info", "description": "Get hCaptcha API information"}],
-                    "prompts": [{"name": "hcaptcha_guide", "description": "hCaptcha tool selection guide"},
-                    {"name": "hcaptcha_workflow_examples", "description": "Example hCaptcha workflows"}],
-                    "resources": [],
-                })
+                return JSONResponse(
+                    {
+                        "serverInfo": {"name": "MCP HCaptcha"},
+                        "authentication": {"required": True, "schemes": ["bearer"]},
+                        "tools": [
+                            {
+                                "name": "hcaptcha_recognize",
+                                "description": "Recognize hCaptcha image challenges",
+                            },
+                            {
+                                "name": "hcaptcha_get_token",
+                                "description": "Get an hCaptcha token for a website",
+                            },
+                            {
+                                "name": "hcaptcha_get_task",
+                                "description": "Poll a captcha task result",
+                            },
+                            {
+                                "name": "hcaptcha_get_usage_guide",
+                                "description": "Get hCaptcha usage guide",
+                            },
+                            {
+                                "name": "hcaptcha_get_api_info",
+                                "description": "Get hCaptcha API information",
+                            },
+                        ],
+                        "prompts": [
+                            {
+                                "name": "hcaptcha_guide",
+                                "description": "hCaptcha tool selection guide",
+                            },
+                            {
+                                "name": "hcaptcha_workflow_examples",
+                                "description": "Example hCaptcha workflows",
+                            },
+                        ],
+                        "resources": [],
+                    }
+                )
 
             @contextlib.asynccontextmanager
             async def lifespan(_app: Starlette):  # type: ignore[no-untyped-def]

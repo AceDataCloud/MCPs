@@ -5,4 +5,11 @@ from core.config import settings
 from core.exceptions import HCaptchaAPIError, HCaptchaAuthError, HCaptchaValidationError
 from core.server import mcp
 
-__all__ = ["HCaptchaClient", "settings", "mcp", "HCaptchaAPIError", "HCaptchaAuthError", "HCaptchaValidationError"]
+__all__ = [
+    "HCaptchaClient",
+    "settings",
+    "mcp",
+    "HCaptchaAPIError",
+    "HCaptchaAuthError",
+    "HCaptchaValidationError",
+]

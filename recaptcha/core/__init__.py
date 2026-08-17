@@ -5,4 +5,11 @@ from core.config import settings
 from core.exceptions import ReCaptchaAPIError, ReCaptchaAuthError, ReCaptchaValidationError
 from core.server import mcp
 
-__all__ = ["ReCaptchaClient", "settings", "mcp", "ReCaptchaAPIError", "ReCaptchaAuthError", "ReCaptchaValidationError"]
+__all__ = [
+    "ReCaptchaClient",
+    "settings",
+    "mcp",
+    "ReCaptchaAPIError",
+    "ReCaptchaAuthError",
+    "ReCaptchaValidationError",
+]

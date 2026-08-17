@@ -34,7 +34,13 @@ def test_tools_register():
     import tools  # noqa: F401
     from core.server import mcp
 
-    expected = {"recaptcha2_recognize", "recaptcha2_get_token", "recaptcha3_get_token", "recaptcha_get_usage_guide", "recaptcha_get_api_info"}
+    expected = {
+        "recaptcha2_recognize",
+        "recaptcha2_get_token",
+        "recaptcha3_get_token",
+        "recaptcha_get_usage_guide",
+        "recaptcha_get_api_info",
+    }
     registered = {tool.name for tool in mcp._tool_manager.list_tools()}
     missing = expected - registered
     assert not missing, f"Missing tools: {missing}"

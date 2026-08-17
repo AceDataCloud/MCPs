@@ -12,7 +12,9 @@ from core.server import mcp
 
 
 @mcp.tool()
-async def image2text_get_task(task_id: Annotated[str, Field(description="Task ID returned by an async image2text request.")]) -> str:
+async def image2text_get_task(
+    task_id: Annotated[str, Field(description="Task ID returned by an async image2text request.")],
+) -> str:
     """Poll an async image2text task."""
     if not task_id:
         return json.dumps({"error": "Validation Error", "message": "task_id is required"})

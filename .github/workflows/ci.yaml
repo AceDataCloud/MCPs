@@ -13,6 +13,7 @@ jobs:
     steps:
       - uses: actions/checkout@v6
       - run: python3 scripts/check_readme_inventory.py
+      - run: python3 scripts/check_oauth_contract.py
 
   detect-changes:
     runs-on: ubuntu-latest

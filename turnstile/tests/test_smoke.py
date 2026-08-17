@@ -34,7 +34,12 @@ def test_tools_register():
     import tools  # noqa: F401
     from core.server import mcp
 
-    expected = {"turnstile_get_token", "turnstile_get_task", "turnstile_get_usage_guide", "turnstile_get_api_info"}
+    expected = {
+        "turnstile_get_token",
+        "turnstile_get_task",
+        "turnstile_get_usage_guide",
+        "turnstile_get_api_info",
+    }
     registered = {tool.name for tool in mcp._tool_manager.list_tools()}
     missing = expected - registered
     assert not missing, f"Missing tools: {missing}"

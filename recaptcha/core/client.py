@@ -15,7 +15,9 @@ from core.exceptions import (
     ReCaptchaTimeoutError,
 )
 
-_request_api_token: contextvars.ContextVar[str | None] = contextvars.ContextVar("_request_api_token", default=None)
+_request_api_token: contextvars.ContextVar[str | None] = contextvars.ContextVar(
+    "_request_api_token", default=None
+)
 
 
 def set_request_api_token(token: str | None) -> None:
@@ -58,12 +60,24 @@ class ReCaptchaClient:
             body = {}
         error_obj = body.get("error", {}) if isinstance(body, dict) else {}
         code = error_obj.get("code", f"http_{status}")
-        message = error_obj.get("message") or (body.get("detail") if isinstance(body, dict) else None) or response.text or f"HTTP {status}"
+        message = (
+            error_obj.get("message")
+            or (body.get("detail") if isinstance(body, dict) else None)
+            or response.text
+            or f"HTTP {status}"
+        )
         if status in (401, 403):
             raise ReCaptchaAuthError(message)
         raise ReCaptchaAPIError(message=message, code=code, status_code=status)
 
-    async def request(self, method: str, endpoint: str, *, payload: dict[str, Any] | None = None, timeout: float | None = None) -> dict[str, Any]:
+    async def request(
+        self,
+        method: str,
+        endpoint: str,
+        *,
+        payload: dict[str, Any] | None = None,
+        timeout: float | None = None,
+    ) -> dict[str, Any]:
         method_upper = method.upper()
         url = f"{self.base_url}{endpoint}"
         request_timeout = timeout or self.timeout
@@ -71,32 +85,51 @@ class ReCaptchaClient:
             logger.debug(f"Request payload: {json.dumps(payload, ensure_ascii=False, indent=2)}")
         async with httpx.AsyncClient() as http_client:
             try:
-                response = await http_client.request(method_upper, url, json=payload, headers=self._get_headers(), timeout=request_timeout)
+                response = await http_client.request(
+                    method_upper,
+                    url,
+                    json=payload,
+                    headers=self._get_headers(),
+                    timeout=request_timeout,
+                )
                 if response.status_code >= 400:
                     self._handle_error_response(response)
                 return response.json()  # type: ignore[no-any-return]
             except httpx.TimeoutException as e:
-                raise ReCaptchaTimeoutError(f"Request to {endpoint} timed out after {request_timeout}s") from e
+                raise ReCaptchaTimeoutError(
+                    f"Request to {endpoint} timed out after {request_timeout}s"
+                ) from e
             except ReCaptchaError:
                 raise
             except Exception as e:
                 raise ReCaptchaAPIError(message=str(e)) from e
 
-    async def recognize2(self, image: str, question: str, mode: str | None = None) -> dict[str, Any]:
+    async def recognize2(
+        self, image: str, question: str, mode: str | None = None
+    ) -> dict[str, Any]:
         payload: dict[str, Any] = {"image": image, "question": question}
         _apply_submission_mode(payload, mode)
         return await self.request("POST", "/captcha/recognition/recaptcha2", payload=payload)
 
-    async def get_token2(self, website_key: str, website_url: str, proxy: str | None = None, mode: str | None = None) -> dict[str, Any]:
+    async def get_token2(
+        self, website_key: str, website_url: str, proxy: str | None = None, mode: str | None = None
+    ) -> dict[str, Any]:
         payload: dict[str, Any] = {"website_key": website_key, "website_url": website_url}
         if proxy is not None:
             payload["proxy"] = proxy
         _apply_submission_mode(payload, mode)
         return await self.request("POST", "/captcha/token/recaptcha2", payload=payload)
 
-    async def get_token3(self, page_action: str, website_key: str, website_url: str, mode: str | None = None) -> dict[str, Any]:
-        payload: dict[str, Any] = {"page_action": page_action, "website_key": website_key, "website_url": website_url}
+    async def get_token3(
+        self, page_action: str, website_key: str, website_url: str, mode: str | None = None
+    ) -> dict[str, Any]:
+        payload: dict[str, Any] = {
+            "page_action": page_action,
+            "website_key": website_key,
+            "website_url": website_url,
+        }
         _apply_submission_mode(payload, mode)
         return await self.request("POST", "/captcha/token/recaptcha3", payload=payload)
+
 
 client = ReCaptchaClient()

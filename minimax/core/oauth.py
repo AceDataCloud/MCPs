@@ -19,7 +19,6 @@ import hashlib
 import json
 import secrets
 import time
-from datetime import datetime, timezone
 from urllib.parse import urlencode
 
 import httpx
@@ -40,25 +39,6 @@ from core.client import set_request_api_token
 from core.config import settings
 
 MCP_ACCESS_SCOPE = "mcp:access"
-
-
-def _is_reusable_credential(credential: dict[str, object], user_id: str | None) -> bool:
-    """Reuse only the owner's unlimited, unexpired API credentials."""
-    if not credential.get("token") or credential.get("limited_amount") is not None:
-        return False
-    if user_id and str(credential.get("user_id") or "") != user_id:
-        return False
-    expired_at = credential.get("expired_at")
-    if isinstance(expired_at, str) and expired_at:
-        try:
-            expiry = datetime.fromisoformat(expired_at.replace("Z", "+00:00"))
-            if expiry.tzinfo is None:
-                expiry = expiry.replace(tzinfo=timezone.utc)
-            if expiry <= datetime.now(timezone.utc):
-                return False
-        except ValueError:
-            return False
-    return True
 
 
 def _normalize_scopes(scopes: list[str] | None) -> list[str]:
@@ -354,88 +334,13 @@ class AceDataCloudOAuthProvider:
         return None
 
     async def _get_user_credential(self, jwt_token: str) -> str | None:
-        """Fetch or auto-create user's API credential token from PlatformBackend.
-
-        Flow:
-        1. List existing credentials → return first token if found
-        2. List Global Usage applications → use first if found
-        3. If no application, create one (POST /api/v1/applications/)
-        4. Create credential under that application (POST /api/v1/credentials/)
-        """
+        """Get or create this Hosted MCP's dedicated Global Credential."""
         headers = {"Authorization": f"Bearer {jwt_token}"}
-        logger.debug(
-            f"_get_user_credential: platform_base_url={settings.platform_base_url}, "
-            f"jwt_token={jwt_token[:32]}..."
-        )
-
-        # Decode JWT to extract user_id (needed for filtering API queries)
         claims = self._decode_jwt_payload(jwt_token)
-        user_id: str | None = None
-        if claims:
-            user_id = claims.get("user_id")
-            logger.debug(
-                f"_get_user_credential JWT: user_id={user_id}, "
-                f"scope={claims.get('scope')}, "
-                f"permissions={claims.get('permissions')}, "
-                f"token_type={claims.get('token_type')}, "
-                f"exp={claims.get('exp')}"
-            )
-        else:
-            logger.warning("_get_user_credential: could not decode JWT for debug")
+        user_id = str(claims.get("user_id")) if claims and claims.get("user_id") else None
 
         try:
             async with httpx.AsyncClient(timeout=30) as client:
-                # Step 1: Check for existing credentials
-                creds_url = f"{settings.platform_base_url}/api/v1/credentials/"
-                creds_params: dict[str, str] = {}
-                if user_id:
-                    creds_params["user_id"] = user_id
-                logger.debug(f"Step 1: GET {creds_url} params={creds_params}")
-                response = await client.get(creds_url, headers=headers, params=creds_params)
-                logger.debug(
-                    f"Step 1 response: status={response.status_code}, body={response.text[:1000]}"
-                )
-
-                if response.status_code == 200:
-                    data = response.json()
-                    results = data.get("results", data) if isinstance(data, dict) else data
-                    logger.debug(
-                        f"Step 1 parsed: type(data)={type(data).__name__}, "
-                        f"type(results)={type(results).__name__}, "
-                        f"count={len(results) if isinstance(results, list) else 'N/A'}"
-                    )
-                    if isinstance(results, list):
-                        for i, cred in enumerate(results):
-                            logger.debug(
-                                f"Step 1 credential[{i}]: "
-                                f"id={cred.get('id')}, "
-                                f"token={'present' if cred.get('token') else 'MISSING'}, "
-                                f"type={cred.get('type')}, "
-                                f"keys={list(cred.keys())}"
-                            )
-                            if _is_reusable_credential(cred, user_id):
-                                cred_token = cred.get("token")
-                                assert isinstance(cred_token, str)
-                                logger.info(
-                                    f"Found reusable owner credential "
-                                    f"(id={cred.get('id')}, token={cred_token[:12]}...)"
-                                )
-                                return cred_token
-                        logger.debug(
-                            f"Step 1: iterated {len(results)} credentials, none had a token"
-                        )
-                    else:
-                        logger.warning(f"Step 1: results is not a list: {type(results).__name__}")
-                else:
-                    logger.error(
-                        f"Step 1 FAILED: credentials list returned "
-                        f"status={response.status_code}, body={response.text[:500]}"
-                    )
-
-                # Step 2: No credentials found — auto-provision
-                logger.info("No credentials found, auto-provisioning Application + Credential")
-
-                # Step 2a: Find or create a Global Usage application
                 apps_url = f"{settings.platform_base_url}/api/v1/applications/"
                 apps_params: dict[str, str] = {
                     "limit": "10",
@@ -445,118 +350,52 @@ class AceDataCloudOAuthProvider:
                 }
                 if user_id:
                     apps_params["user_id"] = user_id
-                logger.debug(f"Step 2a: GET {apps_url} params={apps_params}")
                 app_resp = await client.get(apps_url, params=apps_params, headers=headers)
-                logger.debug(
-                    f"Step 2a response: status={app_resp.status_code}, body={app_resp.text[:1000]}"
-                )
 
                 application_id: str | None = None
                 if app_resp.status_code == 200:
                     app_data = app_resp.json()
                     items = app_data.get("items", app_data.get("results", []))
-                    logger.debug(
-                        f"Step 2a parsed: "
-                        f"data_keys={list(app_data.keys()) if isinstance(app_data, dict) else 'not-dict'}, "
-                        f"items_count={len(items) if isinstance(items, list) else 'N/A'}"
-                    )
                     if isinstance(items, list) and items:
-                        app = items[0]
-                        application_id = app.get("id")
-                        logger.debug(
-                            f"Step 2a: using app id={application_id}, "
-                            f"type={app.get('type')}, "
-                            f"scope={app.get('scope')}, "
-                            f"remaining_amount={app.get('remaining_amount')}, "
-                            f"keys={list(app.keys())}"
-                        )
-                        # Check if the app already has a credential
-                        app_creds = app.get("credentials", [])
-                        logger.debug(
-                            f"Step 2a: app.credentials count="
-                            f"{len(app_creds) if isinstance(app_creds, list) else 'not-list'}"
-                        )
-                        if isinstance(app_creds, list) and app_creds:
-                            for app_cred in app_creds:
-                                if _is_reusable_credential(app_cred, user_id):
-                                    existing_token = app_cred.get("token")
-                                    assert isinstance(existing_token, str)
-                                    logger.info(
-                                        f"Found reusable credential in existing application "
-                                        f"(app_id={application_id}, token={existing_token[:12]}...)"
-                                    )
-                                    return existing_token
-                            logger.debug("Step 2a: application has no reusable owner credential")
-                    else:
-                        logger.debug("Step 2a: no Global Usage applications found")
-                else:
-                    logger.error(
-                        f"Step 2a FAILED: applications list returned "
-                        f"status={app_resp.status_code}, body={app_resp.text[:500]}"
-                    )
+                        application_id = items[0].get("id")
 
                 if not application_id:
-                    # Create a new Global Usage application
-                    create_payload = {"type": "Usage", "scope": "Global"}
-                    logger.debug(f"Step 2a-create: POST {apps_url} json={create_payload}")
                     create_app_resp = await client.post(
                         apps_url,
                         headers={**headers, "Content-Type": "application/json"},
-                        json=create_payload,
+                        json={"type": "Usage", "scope": "Global"},
                     )
-                    logger.debug(
-                        f"Step 2a-create response: status={create_app_resp.status_code}, "
-                        f"body={create_app_resp.text[:1000]}"
-                    )
-                    if create_app_resp.status_code in (200, 201):
-                        new_app = create_app_resp.json()
-                        application_id = new_app.get("id")
-                        logger.info(f"Created Global Application: {application_id}")
-                    else:
+                    if create_app_resp.status_code not in (200, 201):
                         logger.error(
-                            f"Failed to create application: "
-                            f"{create_app_resp.status_code} {create_app_resp.text}"
+                            "Failed to create Global Application: "
+                            f"{create_app_resp.status_code} {create_app_resp.text[:500]}"
                         )
                         return None
+                    application_id = create_app_resp.json().get("id")
 
-                # Step 2b: Create a credential under the application
-                cred_create_url = f"{settings.platform_base_url}/api/v1/credentials/"
-                cred_create_payload = {
-                    "application_id": application_id,
-                    "name": "MiniMax MCP OAuth",
-                    "limited_amount": None,
-                }
-                logger.debug(f"Step 2b: POST {cred_create_url} json={cred_create_payload}")
+                if not application_id:
+                    return None
+
                 cred_resp = await client.post(
-                    cred_create_url,
+                    f"{settings.platform_base_url}/api/v1/credentials/",
                     headers={**headers, "Content-Type": "application/json"},
-                    json=cred_create_payload,
+                    json={
+                        "application_id": application_id,
+                        "name": "OAuth MCP",
+                    },
                 )
-                logger.debug(
-                    f"Step 2b response: status={cred_resp.status_code}, "
-                    f"body={cred_resp.text[:1000]}"
-                )
-                if cred_resp.status_code in (200, 201):
-                    cred_data = cred_resp.json()
-                    logger.debug(
-                        f"Step 2b parsed: type={type(cred_data).__name__}, "
-                        f"keys={list(cred_data.keys()) if isinstance(cred_data, dict) else 'not-dict'}"
-                    )
-                    new_token: str | None = (
-                        cred_data.get("token") if isinstance(cred_data, dict) else None
-                    )
-                    if isinstance(new_token, str) and new_token:
-                        logger.info(
-                            f"Auto-provisioned new credential token (token={new_token[:12]}...)"
-                        )
-                        return new_token
-                    logger.error(f"Credential created but no token in response: {cred_data}")
-                else:
+                if cred_resp.status_code not in (200, 201):
                     logger.error(
-                        f"Failed to create credential: {cred_resp.status_code} {cred_resp.text}"
+                        "Failed to get managed MCP Credential: "
+                        f"{cred_resp.status_code} {cred_resp.text[:500]}"
                     )
+                    return None
+                data = cred_resp.json()
+                token = data.get("token") if isinstance(data, dict) else None
+                if isinstance(token, str) and token:
+                    logger.info(f"Using shared OAuth MCP Credential (id={data.get('id')})")
+                    return token
+                logger.error("Managed MCP Credential response did not contain a token")
         except Exception:
-            logger.exception("Credential fetch/provision error")
-
-        logger.error("_get_user_credential: returning None — all steps failed")
+            logger.exception("Managed MCP Credential provisioning failed")
         return None

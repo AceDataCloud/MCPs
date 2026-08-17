@@ -12,7 +12,9 @@ from core.server import mcp
 
 
 @mcp.tool()
-async def hcaptcha_get_task(task_id: Annotated[str, Field(description="Task ID returned by an async hCaptcha request.")]) -> str:
+async def hcaptcha_get_task(
+    task_id: Annotated[str, Field(description="Task ID returned by an async hCaptcha request.")],
+) -> str:
     """Poll an async hCaptcha task."""
     if not task_id:
         return json.dumps({"error": "Validation Error", "message": "task_id is required"})

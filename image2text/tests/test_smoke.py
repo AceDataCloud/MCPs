@@ -34,7 +34,12 @@ def test_tools_register():
     import tools  # noqa: F401
     from core.server import mcp
 
-    expected = {"image2text_recognize", "image2text_get_task", "image2text_get_usage_guide", "image2text_get_api_info"}
+    expected = {
+        "image2text_recognize",
+        "image2text_get_task",
+        "image2text_get_usage_guide",
+        "image2text_get_api_info",
+    }
     registered = {tool.name for tool in mcp._tool_manager.list_tools()}
     missing = expected - registered
     assert not missing, f"Missing tools: {missing}"
