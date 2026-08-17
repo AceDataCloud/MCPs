@@ -44,6 +44,33 @@ async def test_oauth_gets_only_its_managed_credential():
 
 @pytest.mark.asyncio
 @respx.mock
+async def test_oauth_reuses_retrieved_credential_without_creating():
+    owner = "owner-1"
+    respx.get(f"{settings.platform_base_url}/api/v1/applications/").mock(
+        return_value=Response(200, json={"items": [{"id": "app-1"}]})
+    )
+    get_creds = respx.get(
+        f"{settings.platform_base_url}/api/v1/credentials/",
+        params={"application_id": "app-1", "name": "OAuth MCP"},
+    ).mock(
+        return_value=Response(
+            200,
+            json={"items": [{"id": "credential-1", "token": "existing-token"}]},
+        )
+    )
+    create_cred = respx.post(f"{settings.platform_base_url}/api/v1/credentials/").mock(
+        return_value=Response(201, json={"id": "unexpected", "token": "new-token"})
+    )
+
+    token = await AceDataCloudOAuthProvider()._get_user_credential(_jwt(owner))
+
+    assert token == "existing-token"
+    assert get_creds.called
+    assert not create_cred.called
+
+
+@pytest.mark.asyncio
+@respx.mock
 async def test_oauth_creates_global_application_before_managed_credential():
     owner = "owner-1"
     respx.get(f"{settings.platform_base_url}/api/v1/applications/").mock(
