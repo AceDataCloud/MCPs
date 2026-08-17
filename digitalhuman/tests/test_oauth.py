@@ -9,6 +9,15 @@ from pydantic import AnyUrl
 from core.oauth import AceDataCloudOAuthProvider
 
 
+def test_decode_jwt_payload_extracts_owner() -> None:
+    import base64
+    import json
+
+    payload = base64.urlsafe_b64encode(json.dumps({"user_id": "owner-1"}).encode()).rstrip(b"=")
+    token = f"header.{payload.decode()}.signature"
+    assert AceDataCloudOAuthProvider._decode_jwt_payload(token) == {"user_id": "owner-1"}
+
+
 def _client() -> OAuthClientInformationFull:
     return OAuthClientInformationFull(
         client_id="client-1",

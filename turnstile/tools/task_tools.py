@@ -12,7 +12,9 @@ from core.server import mcp
 
 
 @mcp.tool()
-async def turnstile_get_task(task_id: Annotated[str, Field(description="Task ID returned by an async Turnstile request.")]) -> str:
+async def turnstile_get_task(
+    task_id: Annotated[str, Field(description="Task ID returned by an async Turnstile request.")],
+) -> str:
     """Poll an async Turnstile task."""
     if not task_id:
         return json.dumps({"error": "Validation Error", "message": "task_id is required"})

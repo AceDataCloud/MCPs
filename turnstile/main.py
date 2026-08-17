@@ -117,20 +117,46 @@ Environment Variables:
                 return JSONResponse({"status": "ok"})
 
             async def favicon(_request: Request) -> RedirectResponse:
-                return RedirectResponse("https://cdn.acedata.cloud/acedata-logo.png", status_code=301)
+                return RedirectResponse(
+                    "https://cdn.acedata.cloud/acedata-logo.png", status_code=301
+                )
 
             async def server_card(_request: Request) -> JSONResponse:
-                return JSONResponse({
-                    "serverInfo": {"name": "MCP Turnstile"},
-                    "authentication": {"required": True, "schemes": ["bearer"]},
-                    "tools": [{"name": "turnstile_get_token", "description": "Get a Cloudflare Turnstile token"},
-                    {"name": "turnstile_get_task", "description": "Poll a Turnstile task result"},
-                    {"name": "turnstile_get_usage_guide", "description": "Get Turnstile usage guide"},
-                    {"name": "turnstile_get_api_info", "description": "Get Turnstile API information"}],
-                    "prompts": [{"name": "turnstile_guide", "description": "Turnstile tool selection guide"},
-                    {"name": "turnstile_workflow_examples", "description": "Example Turnstile workflows"}],
-                    "resources": [],
-                })
+                return JSONResponse(
+                    {
+                        "serverInfo": {"name": "MCP Turnstile"},
+                        "authentication": {"required": True, "schemes": ["bearer"]},
+                        "tools": [
+                            {
+                                "name": "turnstile_get_token",
+                                "description": "Get a Cloudflare Turnstile token",
+                            },
+                            {
+                                "name": "turnstile_get_task",
+                                "description": "Poll a Turnstile task result",
+                            },
+                            {
+                                "name": "turnstile_get_usage_guide",
+                                "description": "Get Turnstile usage guide",
+                            },
+                            {
+                                "name": "turnstile_get_api_info",
+                                "description": "Get Turnstile API information",
+                            },
+                        ],
+                        "prompts": [
+                            {
+                                "name": "turnstile_guide",
+                                "description": "Turnstile tool selection guide",
+                            },
+                            {
+                                "name": "turnstile_workflow_examples",
+                                "description": "Example Turnstile workflows",
+                            },
+                        ],
+                        "resources": [],
+                    }
+                )
 
             @contextlib.asynccontextmanager
             async def lifespan(_app: Starlette):  # type: ignore[no-untyped-def]

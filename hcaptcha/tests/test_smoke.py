@@ -36,7 +36,13 @@ def test_tools_register():
     import tools  # noqa: F401
     from core.server import mcp
 
-    expected = {"hcaptcha_recognize", "hcaptcha_get_token", "hcaptcha_get_task", "hcaptcha_get_usage_guide", "hcaptcha_get_api_info"}
+    expected = {
+        "hcaptcha_recognize",
+        "hcaptcha_get_token",
+        "hcaptcha_get_task",
+        "hcaptcha_get_usage_guide",
+        "hcaptcha_get_api_info",
+    }
     registered = {tool.name for tool in mcp._tool_manager.list_tools()}
     missing = expected - registered
     assert not missing, f"Missing tools: {missing}"
@@ -60,7 +66,9 @@ async def test_get_token_includes_optional_rqdata():
     client = HCaptchaClient(api_token="test-token")
 
     async def fake_request(method, endpoint, *, payload=None, timeout=None):
-        captured.update({"method": method, "endpoint": endpoint, "payload": payload, "timeout": timeout})
+        captured.update(
+            {"method": method, "endpoint": endpoint, "payload": payload, "timeout": timeout}
+        )
         return {"success": True}
 
     client.request = fake_request
