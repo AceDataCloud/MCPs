@@ -7,6 +7,13 @@ on:
     branches: [main]
 
 jobs:
+  inventory:
+    name: README Inventory
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - run: python3 scripts/check_readme_inventory.py
+
   detect-changes:
     runs-on: ubuntu-latest
     outputs:
