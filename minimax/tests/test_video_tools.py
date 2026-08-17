@@ -29,6 +29,31 @@ async def test_generation_tool_schemas_expose_async_default():
 
 
 @pytest.mark.asyncio
+async def test_fastmcp_dispatch_maps_public_async_parameter(monkeypatch, generated_response):
+    generate = AsyncMock(return_value=generated_response)
+    monkeypatch.setattr(video_tools.client, "generate_video", generate)
+
+    result = await mcp.call_tool(
+        "minimax_generate_video_from_text",
+        {"prompt": "fox", "async": False},
+    )
+
+    assert result
+    assert generate.await_args.kwargs["async"] is False
+
+
+@pytest.mark.asyncio
+async def test_fastmcp_dispatch_applies_async_default(monkeypatch, generated_response):
+    generate = AsyncMock(return_value=generated_response)
+    monkeypatch.setattr(video_tools.client, "generate_video", generate)
+
+    result = await mcp.call_tool("minimax_generate_video_from_text", {"prompt": "fox"})
+
+    assert result
+    assert generate.await_args.kwargs["async"] is True
+
+
+@pytest.mark.asyncio
 async def test_text_tool_payload(monkeypatch, generated_response):
     generate = AsyncMock(return_value=generated_response)
     monkeypatch.setattr(video_tools.client, "generate_video", generate)
