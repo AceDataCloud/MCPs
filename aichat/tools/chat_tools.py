@@ -198,7 +198,7 @@ async def aichat_create_conversation_v2(
     ] = 0,
     limit: Annotated[
         int | None,
-        Field(ge=1, description="Pagination limit for retrieve_batch."),
+        Field(ge=1, le=100, description="Pagination limit for retrieve_batch."),
     ] = 100,
 ) -> str:
     """Create/manage conversations via AiChat v2 endpoint."""

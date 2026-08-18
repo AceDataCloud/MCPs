@@ -61,7 +61,7 @@ mcp-aichat --transport http --port 8000
 - o-series: o1, o1-mini, o1-pro, o3, o3-mini, o3-pro, o4-mini
 
 ### DeepSeek
-- deepseek-r1, deepseek-r1-0528, deepseek-v3, deepseek-v3-250324
+- deepseek-r1, deepseek-r1-0528, deepseek-v3, deepseek-v3-250324, deepseek-v4-flash, deepseek-v4-pro
 
 ### xAI
 - grok-3
