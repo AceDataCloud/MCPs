@@ -19,6 +19,7 @@ V1_REQUIRED = {
     "gpt-5.6-sol",
     "gpt-5.4-mini",
     "gpt-5.4-nano",
+    "deepseek-v4-pro",
     "grok-4.5",
     "glm-5.2",
     "glm-5",
@@ -93,6 +94,22 @@ def test_v2_offers_gemini_spec_models():
     assert not missing, f"AiChatV2Model is missing Gemini spec models {sorted(missing)}"
 
 
+def test_v2_offers_deepseek_spec_models():
+    spec_models = {
+        "deepseek-chat",
+        "deepseek-r1",
+        "deepseek-r1-0528",
+        "deepseek-reasoner",
+        "deepseek-v3",
+        "deepseek-v3-250324",
+        "deepseek-v3.2-exp",
+        "deepseek-v4-flash",
+        "deepseek-v4-pro",
+    }
+    missing = spec_models - set(get_args(AiChatV2Model))
+    assert not missing, f"AiChatV2Model is missing DeepSeek spec models {sorted(missing)}"
+
+
 def test_v2_keeps_models_the_spec_has_not_caught_up_with():
     missing = V2_AHEAD_OF_SPEC - set(get_args(AiChatV2Model))
     assert not missing, f"AiChatV2Model dropped live models {sorted(missing)}"
@@ -113,3 +130,10 @@ def test_v2_exposes_async_request_controls():
     assert "allowed_skills" in properties
     assert "allowed_mcp_servers" in properties
     assert "unattended_policy" in properties
+
+
+def test_v2_retrieve_batch_limit_matches_spec_maximum():
+    schema = mcp._tool_manager._tools["aichat_create_conversation_v2"].parameters
+    properties = schema["properties"]
+
+    assert {"type": "integer", "minimum": 1, "maximum": 100} in properties["limit"]["anyOf"]
