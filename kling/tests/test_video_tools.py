@@ -48,6 +48,18 @@ class TestKlingGenerateVideo:
         _, kwargs = mock_client_generate_video.generate_video.call_args
         assert "image_list" not in kwargs
         assert "video_list" not in kwargs
+        assert "callback_url" not in kwargs
+
+    @pytest.mark.asyncio
+    async def test_callback_url_is_included_when_provided(self, mock_client_generate_video):
+        from tools.video_tools import kling_generate_video
+
+        await kling_generate_video(
+            prompt="A test video", callback_url="https://example.com/webhook"
+        )
+
+        _, kwargs = mock_client_generate_video.generate_video.call_args
+        assert kwargs["callback_url"] == "https://example.com/webhook"
 
     @pytest.mark.asyncio
     async def test_video_list_included_in_v3_omni_payload(self, mock_client_generate_video):

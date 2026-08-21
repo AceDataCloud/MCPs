@@ -79,9 +79,10 @@ async def kling_generate_motion(
         "video_url": video_url,
         "character_orientation": character_orientation,
         "mode": mode,
-        "callback_url": callback_url,
     }
 
+    if callback_url:
+        payload["callback_url"] = callback_url
     if prompt:
         payload["prompt"] = prompt
     if keep_original_sound:
