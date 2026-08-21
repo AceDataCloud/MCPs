@@ -207,9 +207,10 @@ async def kling_generate_video(
         "mode": mode,
         "aspect_ratio": aspect_ratio,
         "duration": duration,
-        "callback_url": callback_url,
     }
 
+    if callback_url:
+        payload["callback_url"] = callback_url
     if generate_audio:
         payload["generate_audio"] = True
     if negative_prompt:
@@ -345,9 +346,10 @@ async def kling_generate_video_from_image(
         "mode": mode,
         "aspect_ratio": aspect_ratio,
         "duration": duration,
-        "callback_url": callback_url,
     }
 
+    if callback_url:
+        payload["callback_url"] = callback_url
     if start_image_url:
         payload["start_image_url"] = start_image_url
     if end_image_url:
