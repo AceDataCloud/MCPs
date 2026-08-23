@@ -50,7 +50,7 @@ For the full VS Code walkthrough, see [All Ace Data Cloud MCP servers in VS Code
 
 ## Pricing
 
-All Face APIs are currently in Alpha. Free trial credit on sign-up. See full pricing at [https://docs.acedata.cloud](https://docs.acedata.cloud).
+All Face APIs are currently in Alpha. Free trial credit on sign-up. See service details at [https://platform.acedata.cloud/services/8efa1d83-9b75-4562-b44a-af95ce563d05](https://platform.acedata.cloud/services/8efa1d83-9b75-4562-b44a-af95ce563d05).
 
 ---
 
@@ -116,7 +116,7 @@ first use (redirect URL `http://127.0.0.1:33418` or `https://vscode.dev/redirect
 - **PyPI package:** [`mcp-face-transform`](https://pypi.org/project/mcp-face-transform/)
 - **Source repository:** https://github.com/AceDataCloud/FaceTransformMCP
 - **Ace Data Cloud platform:** https://platform.acedata.cloud
-- **MCP documentation:** https://docs.acedata.cloud
+- **Service details:** https://platform.acedata.cloud/services/8efa1d83-9b75-4562-b44a-af95ce563d05
 
 ## License
 

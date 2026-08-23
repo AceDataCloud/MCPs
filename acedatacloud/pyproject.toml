@@ -71,7 +71,7 @@ mcp-acedatacloud = "main:main"
 
 [project.urls]
 Homepage = "https://github.com/AceDataCloud/AceDataCloudMCP"
-Documentation = "https://platform.acedata.cloud/documents/platform-token"
+Documentation = "https://platform.acedata.cloud/documents/acedatacloud-mcp"
 Repository = "https://github.com/AceDataCloud/AceDataCloudMCP"
 Issues = "https://github.com/AceDataCloud/AceDataCloudMCP/issues"
 Changelog = "https://github.com/AceDataCloud/AceDataCloudMCP/blob/main/CHANGELOG.md"

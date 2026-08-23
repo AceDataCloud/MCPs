@@ -67,7 +67,7 @@ mcp-glm = "main:main"
 
 [project.urls]
 Homepage = "https://github.com/AceDataCloud/GlmMCP"
-Documentation = "https://platform.acedata.cloud/documents/glm"
+Documentation = "https://platform.acedata.cloud/documents/glm-chat-completions"
 Repository = "https://github.com/AceDataCloud/GlmMCP"
 Issues = "https://github.com/AceDataCloud/GlmMCP/issues"
 Changelog = "https://github.com/AceDataCloud/GlmMCP/blob/main/CHANGELOG.md"

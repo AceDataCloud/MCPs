@@ -69,7 +69,7 @@ mcp-face-transform = "main:main"
 
 [project.urls]
 Homepage = "https://github.com/AceDataCloud/FaceTransformMCP"
-Documentation = "https://docs.acedata.cloud"
+Documentation = "https://platform.acedata.cloud/services/8efa1d83-9b75-4562-b44a-af95ce563d05"
 Repository = "https://github.com/AceDataCloud/FaceTransformMCP"
 Issues = "https://github.com/AceDataCloud/FaceTransformMCP/issues"
 Changelog = "https://github.com/AceDataCloud/FaceTransformMCP/blob/main/CHANGELOG.md"

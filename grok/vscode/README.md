@@ -65,7 +65,7 @@ For screenshots, token setup, project-level and user-level `mcp.json`, and Copil
 
 ## Pricing
 
-From $0.30 per clip. Free trial credit on sign-up. See full pricing at [https://docs.acedata.cloud](https://docs.acedata.cloud).
+From $0.30 per clip. Free trial credit on sign-up. See full pricing at [https://platform.acedata.cloud/documents/grok](https://platform.acedata.cloud/documents/grok).
 
 ---
 
@@ -137,7 +137,7 @@ version, install [`uv`](https://docs.astral.sh/uv/) and use:
 - **PyPI package:** [`mcp-grok`](https://pypi.org/project/mcp-grok/)
 - **Source repository:** https://github.com/AceDataCloud/GrokMCP
 - **Ace Data Cloud platform:** https://platform.acedata.cloud
-- **MCP documentation:** https://docs.acedata.cloud
+- **MCP documentation:** https://platform.acedata.cloud/documents/grok
 
 ## License
 

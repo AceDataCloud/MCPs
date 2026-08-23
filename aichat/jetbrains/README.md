@@ -64,7 +64,7 @@ Runs the MCP server locally. Requires [uv](https://github.com/astral-sh/uv) inst
 ## Links
 
 - [Ace Data Cloud Platform](https://platform.acedata.cloud)
-- [API Documentation](https://docs.acedata.cloud)
+- [Documentation](https://platform.acedata.cloud/documents/aichat)
 - [PyPI Package](https://pypi.org/project/mcp-aichat/)
 - [Source Code](https://github.com/AceDataCloud/AiChatMCP)
 

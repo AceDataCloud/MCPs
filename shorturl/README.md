@@ -8,7 +8,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![MCP](https://img.shields.io/badge/MCP-Compatible-green.svg)](https://modelcontextprotocol.io)
 
-A [Model Context Protocol (MCP)](https://modelcontextprotocol.io) server for URL shortening using [Short URL API](https://platform.acedata.cloud/documents/a2303356-6672-4eb8-9778-75f55c998fe9) through the [AceDataCloud API](https://platform.acedata.cloud).
+A [Model Context Protocol (MCP)](https://modelcontextprotocol.io) server for URL shortening using [Short URL API](https://platform.acedata.cloud/documents/shorturl) through the [AceDataCloud API](https://platform.acedata.cloud).
 
 Create short, shareable URLs directly from Claude, VS Code, or any MCP-compatible client.
 
@@ -35,7 +35,7 @@ Create short, shareable URLs directly from Claude, VS Code, or any MCP-compatibl
 ### 1. Get Your API Token
 
 1. Sign up at [AceDataCloud Platform](https://platform.acedata.cloud)
-2. Go to the [API documentation page](https://platform.acedata.cloud/documents/a2303356-6672-4eb8-9778-75f55c998fe9)
+2. Go to the [API documentation page](https://platform.acedata.cloud/documents/shorturl)
 3. Click **"Acquire"** to get your API token
 4. Copy the token for use below
 
@@ -323,10 +323,10 @@ Clients connect with their own Bearer token — the server extracts the token fr
 ### Shorten a Single URL
 
 ```
-User: Shorten this URL: https://platform.acedata.cloud/documents/a2303356-6672-4eb8-9778-75f55c998fe9
+User: Shorten this URL: https://platform.acedata.cloud/documents/shorturl
 
 Claude: I'll shorten that URL for you.
-[Calls shorturl_create with url="https://platform.acedata.cloud/documents/a2303356-6672-4eb8-9778-75f55c998fe9"]
+[Calls shorturl_create with url="https://platform.acedata.cloud/documents/shorturl"]
 
 Result: https://surl.id/1uHCs01xa5
 ```
@@ -498,7 +498,7 @@ ShortURLMCP/
 
 ## API Reference
 
-This server wraps the [AceDataCloud Short URL API](https://platform.acedata.cloud/documents/a2303356-6672-4eb8-9778-75f55c998fe9):
+This server wraps the [AceDataCloud Short URL API](https://platform.acedata.cloud/documents/shorturl):
 
 - **Endpoint**: `POST /shorturl`
 - **Input**: `{ "content": "https://long-url.example.com/..." }`
@@ -506,7 +506,12 @@ This server wraps the [AceDataCloud Short URL API](https://platform.acedata.clou
 - **Pricing**: Free (0 credits)
 - **Auth**: Bearer token
 
-Full API documentation: [AceDataCloud Platform](https://platform.acedata.cloud/documents/a2303356-6672-4eb8-9778-75f55c998fe9)
+Full API documentation: [AceDataCloud Platform](https://platform.acedata.cloud/documents/shorturl)
+
+## Documentation
+
+<!-- canonical-documentation -->
+[Documentation](https://platform.acedata.cloud/documents/short-url-mcp)
 
 ## License
 

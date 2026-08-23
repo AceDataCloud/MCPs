@@ -262,6 +262,11 @@ mcp-acedatacloud --transport http --port 8000
 - Credential rotation = delete + recreate (no in-place rotate endpoint).
 - Announcement tools require a **superuser** token.
 
+## Documentation
+
+<!-- canonical-documentation -->
+[Documentation](https://platform.acedata.cloud/documents/acedatacloud-mcp)
+
 ## License
 
 MIT — see [LICENSE](LICENSE).

@@ -1,0 +1,164 @@
+{
+  "services": {
+    "acedatacloud": {
+      "status": "active",
+      "type": "document",
+      "alias": "acedatacloud-mcp"
+    },
+    "aichat": {
+      "status": "active",
+      "type": "document",
+      "alias": "aichat"
+    },
+    "digitalhuman": {
+      "status": "active",
+      "type": "document",
+      "alias": "digitalhuman"
+    },
+    "discord-bot": {
+      "status": "active",
+      "type": "document",
+      "alias": "development_discord_bot"
+    },
+    "face": {
+      "status": "active",
+      "type": "service",
+      "id": "8efa1d83-9b75-4562-b44a-af95ce563d05",
+      "note": "The dedicated documentation is private; use the service page."
+    },
+    "fish": {
+      "status": "active",
+      "type": "document",
+      "alias": "fish"
+    },
+    "flux": {
+      "status": "active",
+      "type": "document",
+      "alias": "flux-mcp"
+    },
+    "glm": {
+      "status": "active",
+      "type": "document",
+      "alias": "glm-chat-completions"
+    },
+    "grok": {
+      "status": "active",
+      "type": "document",
+      "alias": "grok"
+    },
+    "hailuo": {
+      "status": "active",
+      "type": "document",
+      "alias": "hailuo"
+    },
+    "happyhorse": {
+      "status": "active",
+      "type": "document",
+      "alias": "happyhorse"
+    },
+    "hcaptcha": {
+      "status": "active",
+      "type": "service",
+      "id": "018c653e-4f1b-433f-82f9-732ef2767040"
+    },
+    "image2text": {
+      "status": "active",
+      "type": "service",
+      "id": "2aaa7faf-099e-410e-82f3-8d78170f25bb"
+    },
+    "kling": {
+      "status": "active",
+      "type": "document",
+      "alias": "kling"
+    },
+    "luma": {
+      "status": "active",
+      "type": "document",
+      "alias": "luma-mcp"
+    },
+    "maestro": {
+      "status": "active",
+      "type": "document",
+      "alias": "maestro"
+    },
+    "midjourney": {
+      "status": "active",
+      "type": "service",
+      "id": "d87e5e99-b797-4ade-9e73-b896896b0461",
+      "note": "The dedicated documentation is private; use the service page."
+    },
+    "minimax": {
+      "status": "active",
+      "type": "document",
+      "alias": "minimax-videos"
+    },
+    "nanobanana": {
+      "status": "active",
+      "type": "document",
+      "alias": "nano-banana-mcp"
+    },
+    "openai": {
+      "status": "active",
+      "type": "document",
+      "alias": "openai"
+    },
+    "producer": {
+      "status": "active",
+      "type": "document",
+      "alias": "producer"
+    },
+    "recaptcha": {
+      "status": "active",
+      "type": "service",
+      "id": "485cc5ca-7f1e-48e5-944e-1fe82b4637e8"
+    },
+    "seedance": {
+      "status": "active",
+      "type": "document",
+      "alias": "seedance-mcp"
+    },
+    "seedream": {
+      "status": "active",
+      "type": "document",
+      "alias": "seedream-mcp"
+    },
+    "serp": {
+      "status": "active",
+      "type": "document",
+      "alias": "serp-mcp"
+    },
+    "shorturl": {
+      "status": "active",
+      "type": "document",
+      "alias": "short-url-mcp"
+    },
+    "sora": {
+      "status": "retired"
+    },
+    "suno": {
+      "status": "active",
+      "type": "document",
+      "alias": "suno-mcp"
+    },
+    "turnstile": {
+      "status": "active",
+      "type": "document",
+      "alias": "turnstile"
+    },
+    "veo": {
+      "status": "active",
+      "type": "document",
+      "alias": "veo-mcp"
+    },
+    "wan": {
+      "status": "active",
+      "type": "document",
+      "alias": "wan"
+    },
+    "webextrator": {
+      "status": "active",
+      "type": "document",
+      "alias": "webextrator"
+    }
+  }
+}

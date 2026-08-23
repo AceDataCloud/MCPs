@@ -33,7 +33,7 @@ mcp-image2text = "main:main"
 
 [project.urls]
 Homepage = "https://github.com/AceDataCloud/MCPs"
-Documentation = "https://platform.acedata.cloud"
+Documentation = "https://platform.acedata.cloud/services/2aaa7faf-099e-410e-82f3-8d78170f25bb"
 Repository = "https://github.com/AceDataCloud/MCPs"
 Issues = "https://github.com/AceDataCloud/MCPs/issues"
 

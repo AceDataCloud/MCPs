@@ -48,6 +48,11 @@ mcp-glm --transport http --port 8000
 | `glm_list_models` | List available GLM models |
 | `glm_get_usage_guide` | Get the API usage guide |
 
+## Documentation
+
+<!-- canonical-documentation -->
+[Documentation](https://platform.acedata.cloud/documents/glm-chat-completions)
+
 ## License
 
 MIT — see [LICENSE](LICENSE).

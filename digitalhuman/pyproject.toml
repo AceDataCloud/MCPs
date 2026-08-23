@@ -36,7 +36,7 @@ mcp-digitalhuman = "main:main"
 
 [project.urls]
 Homepage = "https://github.com/AceDataCloud/MCPs/tree/main/digitalhuman"
-Documentation = "https://docs.acedata.cloud"
+Documentation = "https://platform.acedata.cloud/documents/digitalhuman"
 Repository = "https://github.com/AceDataCloud/MCPs"
 Issues = "https://github.com/AceDataCloud/MCPs/issues"
 

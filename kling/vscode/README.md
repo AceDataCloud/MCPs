@@ -54,7 +54,7 @@ For the full VS Code walkthrough, see [All Ace Data Cloud MCP servers in VS Code
 
 ## Pricing
 
-From $0.20 per 5s clip. Free trial credit on sign-up. See full pricing at [https://docs.acedata.cloud](https://docs.acedata.cloud).
+From $0.20 per 5s clip. Free trial credit on sign-up. See full pricing at [https://platform.acedata.cloud/documents/kling](https://platform.acedata.cloud/documents/kling).
 
 ---
 
@@ -126,7 +126,7 @@ version, install [`uv`](https://docs.astral.sh/uv/) and use:
 - **PyPI package:** [`mcp-kling`](https://pypi.org/project/mcp-kling/)
 - **Source repository:** https://github.com/AceDataCloud/KlingMCP
 - **Ace Data Cloud platform:** https://platform.acedata.cloud
-- **MCP documentation:** https://docs.acedata.cloud
+- **MCP documentation:** https://platform.acedata.cloud/documents/kling
 
 ## License
 

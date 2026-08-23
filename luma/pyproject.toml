@@ -68,7 +68,7 @@ mcp-luma = "main:main"
 
 [project.urls]
 Homepage = "https://github.com/AceDataCloud/LumaMCP"
-Documentation = "https://platform.acedata.cloud/documents/5bd3597d-1ff8-44ad-a580-b66b48393e7f"
+Documentation = "https://platform.acedata.cloud/documents/luma-mcp"
 Repository = "https://github.com/AceDataCloud/LumaMCP"
 Issues = "https://github.com/AceDataCloud/LumaMCP/issues"
 Changelog = "https://github.com/AceDataCloud/LumaMCP/blob/main/CHANGELOG.md"

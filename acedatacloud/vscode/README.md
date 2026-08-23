@@ -42,7 +42,7 @@ _Tool list is dynamically loaded from the server. Run a query to discover availa
 
 ## Pricing
 
-Free — management API calls are not billed. Recharges use your existing balance. See full pricing at [https://docs.acedata.cloud](https://docs.acedata.cloud).
+Free — management API calls are not billed. Recharges use your existing balance. See full pricing at [https://platform.acedata.cloud/documents/acedatacloud-mcp](https://platform.acedata.cloud/documents/acedatacloud-mcp).
 
 ---
 
@@ -114,7 +114,7 @@ version, install [`uv`](https://docs.astral.sh/uv/) and use:
 - **PyPI package:** [`mcp-acedatacloud`](https://pypi.org/project/mcp-acedatacloud/)
 - **Source repository:** https://github.com/AceDataCloud/AceDataCloudMCP
 - **Ace Data Cloud platform:** https://platform.acedata.cloud
-- **MCP documentation:** https://docs.acedata.cloud
+- **MCP documentation:** https://platform.acedata.cloud/documents/acedatacloud-mcp
 
 ## License
 

@@ -56,7 +56,7 @@ Connects to the hosted MCP server at `shorturl.mcp.acedata.cloud`. No local inst
 ## Links
 
 - [Ace Data Cloud Platform](https://platform.acedata.cloud)
-- [API Documentation](https://docs.acedata.cloud)
+- [Documentation](https://platform.acedata.cloud/documents/short-url-mcp)
 - [PyPI Package](https://pypi.org/project/mcp-shorturl/)
 - [Source Code](https://github.com/AceDataCloud/ShortURLMCP)
 

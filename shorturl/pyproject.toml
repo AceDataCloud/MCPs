@@ -67,7 +67,7 @@ mcp-shorturl = "main:main"
 
 [project.urls]
 Homepage = "https://github.com/AceDataCloud/mcp-shorturl"
-Documentation = "https://platform.acedata.cloud/documents/a2303356-6672-4eb8-9778-75f55c998fe9"
+Documentation = "https://platform.acedata.cloud/documents/short-url-mcp"
 Repository = "https://github.com/AceDataCloud/mcp-shorturl"
 Issues = "https://github.com/AceDataCloud/mcp-shorturl/issues"
 Changelog = "https://github.com/AceDataCloud/mcp-shorturl/blob/main/CHANGELOG.md"

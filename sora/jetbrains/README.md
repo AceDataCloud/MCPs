@@ -1,5 +1,7 @@
 # Sora MCP — JetBrains Plugin
 
+> **Status:** This MCP integration is retired.
+
 AI Video Generation with [OpenAI Sora](https://openai.com/sora) via [Model Context Protocol (MCP)](https://modelcontextprotocol.io/) for JetBrains IDEs.
 
 <!-- Plugin description -->
@@ -56,7 +58,6 @@ Connects to the hosted MCP server at `sora.mcp.acedata.cloud`. No local install 
 ## Links
 
 - [Ace Data Cloud Platform](https://platform.acedata.cloud)
-- [API Documentation](https://docs.acedata.cloud)
 - [PyPI Package](https://pypi.org/project/mcp-sora/)
 - [Source Code](https://github.com/AceDataCloud/SoraMCP)
 

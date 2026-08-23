@@ -23,3 +23,8 @@ export TURNSTILE_REQUEST_TIMEOUT=120
 - `turnstile_get_task` — Poll a Turnstile task result
 - `turnstile_get_usage_guide` — Get Turnstile usage guide
 - `turnstile_get_api_info` — Get Turnstile API information
+
+## Documentation
+
+<!-- canonical-documentation -->
+[Documentation](https://platform.acedata.cloud/documents/turnstile)

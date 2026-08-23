@@ -29,6 +29,8 @@ from pathlib import Path
 
 import yaml
 
+from mcp_catalog import documentation_target, load_catalog
+
 ROOT = Path(__file__).resolve().parent.parent
 CONFIG = ROOT / "scripts" / "vscode_extensions.yaml"
 
@@ -49,7 +51,9 @@ class Service:
     ext_name: str
     publisher: str
     signup_url: str
-    docs_url: str
+    docs_url: str | None
+    docs_label: str | None
+    status: str
     vscode_engine: str
     common_categories: list[str]
     common_keywords: list[str]
@@ -100,6 +104,7 @@ class Service:
 def load_services() -> list[Service]:
     with CONFIG.open() as fh:
         raw = yaml.safe_load(fh)
+    catalog = load_catalog()
     defaults = raw["defaults"]
     services: list[Service] = []
     for alias, cfg in raw["services"].items():
@@ -116,6 +121,7 @@ def load_services() -> list[Service]:
         # `mcp-<alias>` to match the marketplace IDs we already own; allow an
         # explicit override for future services whose alias diverges.
         ext_name = cfg.get("ext_name") or f"mcp-{alias}"
+        docs_url, docs_label = documentation_target(catalog[alias])
         services.append(
             Service(
                 alias=alias,
@@ -132,7 +138,9 @@ def load_services() -> list[Service]:
                 ext_name=ext_name,
                 publisher=defaults["publisher"],
                 signup_url=defaults["signup_url"],
-                docs_url=defaults["docs_url"],
+                docs_url=docs_url,
+                docs_label=docs_label,
+                status=catalog[alias]["status"],
                 vscode_engine=defaults["vscode_engine"],
                 common_categories=list(defaults["common_categories"]),
                 common_keywords=list(defaults["common_keywords"]),
@@ -337,10 +345,23 @@ def render_readme(svc: Service, tools: list[tuple[str, str]]) -> str:
         )
 
     pricing = svc.pricing_note or "See Ace Data Cloud pricing for details."
+    documentation_line = (
+        f" See [{svc.docs_label}]({svc.docs_url})." if svc.docs_url else ""
+    )
+    pricing = pricing.rstrip(".") + "." if not svc.docs_url else pricing
+    documentation_link = (
+        f"- **{svc.docs_label}:** {svc.docs_url}\n" if svc.docs_url else ""
+    )
+    lifecycle_notice = (
+        "\n> **Retired:** This MCP integration is no longer actively offered.\n"
+        if svc.status == "retired"
+        else ""
+    )
 
     return f"""# {svc.display_name}
 
 {svc.tagline}
+{lifecycle_notice}
 
 {badge_line}
 
@@ -380,7 +401,7 @@ You can rotate or remove the API key any time from the command palette:
 
 {models_section}## Pricing
 
-{pricing} See full pricing at [{svc.docs_url}]({svc.docs_url}).
+{pricing}{documentation_line}
 
 ---
 
@@ -452,8 +473,7 @@ version, install [`uv`](https://docs.astral.sh/uv/) and use:
 - **PyPI package:** [`{svc.pypi_pkg}`]({svc.pypi_url})
 - **Source repository:** {svc.repo_url}
 - **Ace Data Cloud platform:** {svc.signup_url}
-- **MCP documentation:** {svc.docs_url}
-
+{documentation_link}
 ## License
 
 MIT — see [LICENSE](LICENSE).
@@ -507,8 +527,14 @@ def process(svc: Service, *, dry_run: bool) -> list[str]:
 def main(argv: Iterable[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--only", help="Comma-separated service aliases to regenerate.")
-    parser.add_argument(
+    mode = parser.add_mutually_exclusive_group()
+    mode.add_argument(
         "--dry-run", action="store_true", help="Don't write; just list changes."
+    )
+    mode.add_argument(
+        "--check",
+        action="store_true",
+        help="Fail if VS Code README documentation links differ from the catalog.",
     )
     args = parser.parse_args(list(argv) if argv is not None else None)
 
@@ -517,6 +543,24 @@ def main(argv: Iterable[str] | None = None) -> int:
         selected = {s.strip() for s in args.only.split(",") if s.strip()}
 
     services = load_services()
+    if args.check:
+        errors: list[str] = []
+        for svc in services:
+            if selected and svc.alias not in selected:
+                continue
+            readme = (ROOT / svc.alias / "vscode" / "README.md").read_text()
+            if svc.docs_url and svc.docs_url not in readme:
+                errors.append(f"{svc.alias}/vscode/README.md: missing {svc.docs_url}")
+            if not svc.docs_url and "https://docs.acedata.cloud" in readme:
+                errors.append(
+                    f"{svc.alias}/vscode/README.md: retired MCP still links legacy docs"
+                )
+        if errors:
+            print("\n".join(errors), file=sys.stderr)
+            return 1
+        print("VS Code README documentation links match the MCP catalog.")
+        return 0
+
     total_changes = 0
     for svc in services:
         if selected and svc.alias not in selected:

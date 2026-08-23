@@ -73,6 +73,7 @@ Repository = "https://github.com/AceDataCloud/FishMCP"
 Issues = "https://github.com/AceDataCloud/FishMCP/issues"
 Changelog = "https://github.com/AceDataCloud/FishMCP/blob/main/CHANGELOG.md"
 
+Documentation = "https://platform.acedata.cloud/documents/fish"
 [build-system]
 requires = ["hatchling>=1.21.0,<1.30.0"]
 build-backend = "hatchling.build"

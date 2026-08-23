@@ -102,7 +102,7 @@ first use (redirect URL `http://127.0.0.1:33418` or `https://vscode.dev/redirect
 - **PyPI package:** [`mcp-aichat`](https://pypi.org/project/mcp-aichat/)
 - **Source repository:** https://github.com/AceDataCloud/AiChatMCP
 - **Ace Data Cloud platform:** https://platform.acedata.cloud
-- **MCP documentation:** https://docs.acedata.cloud
+- **MCP documentation:** https://platform.acedata.cloud/documents/aichat
 
 ## License
 

@@ -117,6 +117,11 @@ pytest --cov=core --cov=tools
 ruff check .
 ```
 
+## Service details
+
+<!-- canonical-documentation -->
+[Service details](https://platform.acedata.cloud/services/8efa1d83-9b75-4562-b44a-af95ce563d05)
+
 ## License
 
 MIT — see [LICENSE](LICENSE).

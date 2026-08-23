@@ -69,7 +69,7 @@ mcp-producer = "main:main"
 
 [project.urls]
 Homepage = "https://github.com/AceDataCloud/ProducerMCP"
-Documentation = "https://platform.acedata.cloud"
+Documentation = "https://platform.acedata.cloud/documents/producer"
 Repository = "https://github.com/AceDataCloud/ProducerMCP"
 Issues = "https://github.com/AceDataCloud/ProducerMCP/issues"
 Changelog = "https://github.com/AceDataCloud/ProducerMCP/blob/main/CHANGELOG.md"

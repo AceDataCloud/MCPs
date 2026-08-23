@@ -34,7 +34,7 @@ Generate and edit AI images directly from Claude, VS Code, or any MCP-compatible
 ### 1. Get Your API Token
 
 1. Sign up at [AceDataCloud Platform](https://platform.acedata.cloud)
-2. Go to the [API documentation page](https://platform.acedata.cloud/documents/23985a11-d713-41d1-ad84-24b021805b3d)
+2. Go to the [API documentation page](https://platform.acedata.cloud/documents/nano-banana-images)
 3. Click **"Acquire"** to get your API token
 4. Copy the token for use below
 
@@ -483,10 +483,10 @@ NanoBanana/
 
 ## API Reference
 
-This server wraps the [AceDataCloud NanoBanana API](https://platform.acedata.cloud/documents/23985a11-d713-41d1-ad84-24b021805b3d):
+This server wraps the [AceDataCloud NanoBanana API](https://platform.acedata.cloud/documents/nano-banana-images):
 
-- [NanoBanana Images API](https://platform.acedata.cloud/documents/23985a11-d713-41d1-ad84-24b021805b3d) - Image generation and editing
-- [NanoBanana Tasks API](https://platform.acedata.cloud/documents/617810f5-081f-4866-a21a-cededecb0ccd) - Task queries
+- [NanoBanana Images API](https://platform.acedata.cloud/documents/nano-banana-images) - Image generation and editing
+- [NanoBanana Tasks API](https://platform.acedata.cloud/documents/nano-banana-tasks) - Task queries
 
 ## Use Cases
 
@@ -506,6 +506,11 @@ Contributions are welcome! Please:
 3. Commit your changes (`git commit -m 'Add amazing feature'`)
 4. Push to the branch (`git push origin feature/amazing`)
 5. Open a Pull Request
+
+## Documentation
+
+<!-- canonical-documentation -->
+[Documentation](https://platform.acedata.cloud/documents/nano-banana-mcp)
 
 ## License
 

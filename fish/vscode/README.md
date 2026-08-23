@@ -48,7 +48,7 @@ For the full VS Code walkthrough, see [All Ace Data Cloud MCP servers in VS Code
 
 ## Pricing
 
-Per-character billing. Free trial credit on sign-up. See full pricing at [https://docs.acedata.cloud](https://docs.acedata.cloud).
+Per-character billing. Free trial credit on sign-up. See full pricing at [https://platform.acedata.cloud/documents/fish](https://platform.acedata.cloud/documents/fish).
 
 ---
 
@@ -114,7 +114,7 @@ first use (redirect URL `http://127.0.0.1:33418` or `https://vscode.dev/redirect
 - **PyPI package:** [`mcp-fish`](https://pypi.org/project/mcp-fish/)
 - **Source repository:** https://github.com/AceDataCloud/FishMCP
 - **Ace Data Cloud platform:** https://platform.acedata.cloud
-- **MCP documentation:** https://docs.acedata.cloud
+- **MCP documentation:** https://platform.acedata.cloud/documents/fish
 
 ## License
 

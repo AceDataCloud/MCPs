@@ -56,7 +56,7 @@ Connects to the hosted MCP server at `producer.mcp.acedata.cloud`. No local inst
 ## Links
 
 - [Ace Data Cloud Platform](https://platform.acedata.cloud)
-- [API Documentation](https://docs.acedata.cloud)
+- [Documentation](https://platform.acedata.cloud/documents/producer)
 - [PyPI Package](https://pypi.org/project/mcp-producer/)
 - [Source Code](https://github.com/AceDataCloud/ProducerMCP)
 

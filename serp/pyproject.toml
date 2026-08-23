@@ -67,7 +67,7 @@ mcp-serp = "main:main"
 
 [project.urls]
 Homepage = "https://github.com/AceDataCloud/SerpMCP"
-Documentation = "https://platform.acedata.cloud/documents/44c86226-8eaa-49bf-85f3-1fae8d2e23f1"
+Documentation = "https://platform.acedata.cloud/documents/serp-mcp"
 Repository = "https://github.com/AceDataCloud/SerpMCP"
 Issues = "https://github.com/AceDataCloud/SerpMCP/issues"
 Changelog = "https://github.com/AceDataCloud/SerpMCP/blob/main/CHANGELOG.md"

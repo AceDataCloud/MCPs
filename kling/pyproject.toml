@@ -68,7 +68,7 @@ mcp-kling = "main:main"
 
 [project.urls]
 Homepage = "https://github.com/AceDataCloud/KlingMCP"
-Documentation = "https://platform.acedata.cloud/documents/5bd3597d-1ff8-44ad-a580-b66b48393e7f"
+Documentation = "https://platform.acedata.cloud/documents/kling"
 Repository = "https://github.com/AceDataCloud/KlingMCP"
 Issues = "https://github.com/AceDataCloud/KlingMCP/issues"
 Changelog = "https://github.com/AceDataCloud/KlingMCP/blob/main/CHANGELOG.md"

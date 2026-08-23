@@ -53,6 +53,11 @@ mcp-fish --transport http --port 8000
 | `fish_get_tasks_batch` | Batch-fetch the status / result of multiple tasks |
 | `fish_get_usage_guide` | Get the API usage guide |
 
+## Documentation
+
+<!-- canonical-documentation -->
+[Documentation](https://platform.acedata.cloud/documents/fish)
+
 ## License
 
 MIT — see [LICENSE](../LICENSE) at the repository root.

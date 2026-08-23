@@ -57,7 +57,7 @@ For screenshots, token setup, project-level and user-level `mcp.json`, and Copil
 
 ## Pricing
 
-From $0.35 per 5s clip. Free trial credit on sign-up. See full pricing at [https://docs.acedata.cloud](https://docs.acedata.cloud).
+From $0.35 per 5s clip. Free trial credit on sign-up. See full pricing at [https://platform.acedata.cloud/documents/luma-mcp](https://platform.acedata.cloud/documents/luma-mcp).
 
 ---
 
@@ -129,7 +129,7 @@ version, install [`uv`](https://docs.astral.sh/uv/) and use:
 - **PyPI package:** [`mcp-luma`](https://pypi.org/project/mcp-luma/)
 - **Source repository:** https://github.com/AceDataCloud/LumaMCP
 - **Ace Data Cloud platform:** https://platform.acedata.cloud
-- **MCP documentation:** https://docs.acedata.cloud
+- **MCP documentation:** https://platform.acedata.cloud/documents/luma-mcp
 
 ## License
 

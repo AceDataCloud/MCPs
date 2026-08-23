@@ -23,3 +23,8 @@ export RECAPTCHA_REQUEST_TIMEOUT=120
 - `recaptcha3_get_token` — Get a reCAPTCHA v3 token
 - `recaptcha_get_usage_guide` — Get reCAPTCHA usage guide
 - `recaptcha_get_api_info` — Get reCAPTCHA API information
+
+## Service details
+
+<!-- canonical-documentation -->
+[Service details](https://platform.acedata.cloud/services/485cc5ca-7f1e-48e5-944e-1fe82b4637e8)

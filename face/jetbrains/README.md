@@ -58,7 +58,7 @@ Connects to the hosted MCP server at `face.mcp.acedata.cloud`. No local install 
 ## Links
 
 - [Ace Data Cloud Platform](https://platform.acedata.cloud)
-- [API Documentation](https://docs.acedata.cloud)
+- [Service details](https://platform.acedata.cloud/services/8efa1d83-9b75-4562-b44a-af95ce563d05)
 - [PyPI Package](https://pypi.org/project/mcp-face-transform/)
 - [Source Code](https://github.com/AceDataCloud/FaceTransformMCP)
 
