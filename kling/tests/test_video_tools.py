@@ -171,6 +171,24 @@ class TestKlingGenerateVideo:
             "config": {"horizontal": -0.5},
         }
 
+    @pytest.mark.asyncio
+    async def test_camera_control_accepts_documented_numeric_keys(
+        self, mock_client_generate_video
+    ):
+        from tools.video_tools import kling_generate_video
+
+        await kling_generate_video(
+            prompt="Pan left",
+            model="kling-v3",
+            camera_control=KlingCameraControl(
+                type="simple",
+                config=KlingCameraControlConfig.model_validate({"custom_axis": 0.5}),
+            ),
+        )
+
+        _, kwargs = mock_client_generate_video.generate_video.call_args
+        assert kwargs["camera_control"] == {"type": "simple", "config": {"custom_axis": 0.5}}
+
 
 class TestKlingGenerateVideoFromImage:
     """Tests for kling_generate_video_from_image tool."""

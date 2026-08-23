@@ -1,8 +1,8 @@
 """Type definitions for Kling MCP server."""
 
-from typing import Literal
+from typing import Annotated, Literal
 
-from pydantic import BaseModel, Field, HttpUrl
+from pydantic import BaseModel, ConfigDict, Field, HttpUrl
 
 # Kling video models
 KlingModel = Literal[
@@ -32,6 +32,9 @@ MotionMode = Literal["std", "pro"]
 # Kling motion sound options
 KeepOriginalSound = Literal["yes", "no"]
 
+# Kling motion models
+MotionModel = Literal["kling-v2-6", "kling-v3"]
+
 # Kling video aspect ratios
 AspectRatio = Literal["16:9", "9:16", "1:1"]
 
@@ -50,6 +53,10 @@ CameraControlType = Literal[
 
 class KlingCameraControlConfig(BaseModel):
     """Numeric camera controls accepted by Kling's simple preset."""
+
+    model_config = ConfigDict(extra="allow")
+
+    __pydantic_extra__: dict[str, Annotated[float, Field(ge=-1, le=1)]] = Field(init=False)
 
     horizontal: float | None = Field(default=None, ge=-1, le=1)
     vertical: float | None = Field(default=None, ge=-1, le=1)
@@ -79,6 +86,12 @@ class KlingReferenceVideo(BaseModel):
     video_url: HttpUrl
     refer_type: Literal["feature", "base"] = "feature"
     keep_original_sound: Literal["yes", "no"] = "no"
+
+
+class KlingWatermarkInfo(BaseModel):
+    """Watermark configuration for motion transfer."""
+
+    enabled: bool | None = None
 
 
 # Kling lip-sync mode

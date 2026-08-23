@@ -61,6 +61,7 @@ class TestKlingLipSync:
         assert kwargs["mode"] == "audio2video"
         assert kwargs["video_url"] == "https://example.com/video.mp4"
         assert kwargs["audio_url"] == "https://example.com/audio.mp3"
+        assert kwargs["voice_speed"] == 1.0
 
     @pytest.mark.asyncio
     async def test_text2video_mode(self, mock_client_lip_sync):
