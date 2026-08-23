@@ -175,7 +175,9 @@ class DiscordBotClient:
 
     async def create_text_channel(self, guild_id: str, name: str) -> Any:
         """Create a text channel in a guild."""
-        return await self._request("POST", f"/api/guilds/{guild_id}/channels", payload={"name": name})
+        return await self._request(
+            "POST", f"/api/guilds/{guild_id}/channels", payload={"name": name}
+        )
 
     async def list_members(self, guild_id: str, limit: int | None = None) -> Any:
         """List members of a guild."""
@@ -184,9 +186,7 @@ class DiscordBotClient:
             params["limit"] = limit
         return await self._request("GET", f"/api/guilds/{guild_id}/members", params=params or None)
 
-    async def send_message(
-        self, channel_id: str, content: str, reply_to: str | None = None
-    ) -> Any:
+    async def send_message(self, channel_id: str, content: str, reply_to: str | None = None) -> Any:
         """Send a message to a channel."""
         payload: dict[str, Any] = {"channel_id": channel_id, "content": content}
         if reply_to:
@@ -202,9 +202,7 @@ class DiscordBotClient:
             "GET", f"/api/channels/{channel_id}/messages", params=params or None
         )
 
-    async def edit_message(
-        self, channel_id: str, message_id: str, content: str
-    ) -> Any:
+    async def edit_message(self, channel_id: str, message_id: str, content: str) -> Any:
         """Edit a message."""
         return await self._request(
             "PATCH",
@@ -214,13 +212,9 @@ class DiscordBotClient:
 
     async def delete_message(self, channel_id: str, message_id: str) -> Any:
         """Delete a message."""
-        return await self._request(
-            "DELETE", f"/api/channels/{channel_id}/messages/{message_id}"
-        )
+        return await self._request("DELETE", f"/api/channels/{channel_id}/messages/{message_id}")
 
-    async def search_messages(
-        self, channel_id: str, query: str, limit: int | None = None
-    ) -> Any:
+    async def search_messages(self, channel_id: str, query: str, limit: int | None = None) -> Any:
         """Search messages in a channel."""
         params: dict[str, Any] = {"q": query}
         if limit is not None:
@@ -229,9 +223,7 @@ class DiscordBotClient:
             "GET", f"/api/channels/{channel_id}/messages/search", params=params
         )
 
-    async def add_reaction(
-        self, channel_id: str, message_id: str, emoji: str
-    ) -> Any:
+    async def add_reaction(self, channel_id: str, message_id: str, emoji: str) -> Any:
         """Add an emoji reaction to a message."""
         return await self._request(
             "POST",
@@ -241,9 +233,7 @@ class DiscordBotClient:
 
     async def pin_message(self, channel_id: str, message_id: str) -> Any:
         """Pin a message in a channel."""
-        return await self._request(
-            "POST", f"/api/channels/{channel_id}/messages/{message_id}/pin"
-        )
+        return await self._request("POST", f"/api/channels/{channel_id}/messages/{message_id}/pin")
 
     async def create_dm(self, recipient_id: str) -> Any:
         """Open a direct message channel with a user."""

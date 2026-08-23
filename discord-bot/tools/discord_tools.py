@@ -86,7 +86,9 @@ async def discord_list_channels(
 async def discord_create_text_channel(
     guild_id: Annotated[
         str,
-        Field(description="The ID of the Discord guild (server) to create the channel in. Required."),
+        Field(
+            description="The ID of the Discord guild (server) to create the channel in. Required."
+        ),
     ],
     name: Annotated[
         str,
@@ -204,9 +206,7 @@ async def discord_read_messages(
     limit: Annotated[
         int | None,
         Field(
-            description=(
-                "Number of recent messages to retrieve. Default is 50, maximum is 100."
-            )
+            description=("Number of recent messages to retrieve. Default is 50, maximum is 100.")
         ),
     ] = None,
 ) -> str:
