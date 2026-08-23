@@ -72,7 +72,9 @@ async def wan_generate_video(
     ] = None,
     prompt_extend: Annotated[
         bool,
-        Field(description="Enable LLM-based prompt rewriting for better results. Default is false."),
+        Field(
+            description="Enable LLM-based prompt rewriting for better results. Default is false."
+        ),
     ] = False,
     size: Annotated[
         str | None,
@@ -160,9 +162,7 @@ async def wan_generate_video_from_image(
     ],
     model: Annotated[
         WanModel,
-        Field(
-            description="Wan model to use. Default: 'wan2.6-i2v'."
-        ),
+        Field(description="Wan model to use. Default: 'wan2.6-i2v'."),
     ] = "wan2.6-i2v",
     negative_prompt: Annotated[
         str,
@@ -170,7 +170,9 @@ async def wan_generate_video_from_image(
     ] = "",
     duration: Annotated[
         Duration | None,
-        Field(description="Video duration in seconds. Use 2-30, or -1 when supported by the model."),
+        Field(
+            description="Video duration in seconds. Use 2-30, or -1 when supported by the model."
+        ),
     ] = None,
     resolution: Annotated[
         Resolution,
@@ -278,3 +280,47 @@ async def wan_generate_video_from_image(
 
     result = await client.generate_video(**payload)
     return format_video_result(result)
+
+
+@mcp.tool()
+async def wan_generate_video_all_in_one(
+    prompt: Annotated[
+        str,
+        Field(description="Video intent; refer to media as image 1, video 1, or audio 1 by order."),
+    ] = "",
+    media: Annotated[
+        list[dict[str, str]] | None,
+        Field(
+            description="Media objects with type and URL. Types: first_frame, last_frame, reference_image, reference_video, reference_audio, file, link."
+        ),
+    ] = None,
+    duration: Annotated[
+        int, Field(description="Output seconds: 2-30, or -1 for automatic duration.", ge=-1, le=30)
+    ] = 5,
+    resolution: Annotated[str, Field(description="480P, 720P, or 1080P.")] = "1080P",
+    ratio: Annotated[
+        str, Field(description="adaptive, 16:9, 4:3, 1:1, 3:4, or 9:16.")
+    ] = "adaptive",
+    audio: bool = True,
+    seed: Annotated[int | None, Field(ge=0, le=2147483647)] = None,
+    watermark: bool = False,
+    callback_url: str | None = None,
+) -> str:
+    """Generate a Wan 3 video from text, frames, reference media, a file, or a public link."""
+    if duration == 0 or duration == 1:
+        raise ValueError("duration must be -1 or 2-30")
+    payload: dict = {
+        "model": "wan3.0-video",
+        "prompt": prompt,
+        "media": media,
+        "duration": duration,
+        "resolution": resolution,
+        "ratio": ratio,
+        "audio": audio,
+        "watermark": watermark,
+    }
+    if seed is not None:
+        payload["seed"] = seed
+    if callback_url:
+        payload["callback_url"] = callback_url
+    return format_video_result(await client.generate_video(**payload))

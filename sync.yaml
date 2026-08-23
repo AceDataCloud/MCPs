@@ -71,6 +71,10 @@ mappings:
     repo: AceDataCloud/WanMCP
     exclude:
       - .gitbooks
+  qwen-image:
+    repo: AceDataCloud/QwenImageMCP
+    exclude:
+      - .gitbooks
   producer:
     repo: AceDataCloud/ProducerMCP
     exclude:

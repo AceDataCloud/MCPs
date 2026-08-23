@@ -1,0 +1,9 @@
+version: "3"
+services:
+  mcp-qwen-image:
+    platform: linux/amd64
+    container_name: "mcp-qwen-image"
+    build: ./
+    image: "ghcr.io/acedatacloud/mcp-qwen-image:${BUILD_NUMBER}"
+    ports:
+      - "8000:8000"
