@@ -105,6 +105,11 @@ pytest --cov=core --cov=tools
 mypy core tools
 ```
 
+## Documentation
+
+<!-- canonical-documentation -->
+[Documentation](https://platform.acedata.cloud/documents/minimax-videos)
+
 ## License
 
 MIT

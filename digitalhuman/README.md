@@ -34,3 +34,8 @@ pip install -e ".[dev,test]"
 pytest -q
 ruff check .
 ```
+
+## Documentation
+
+<!-- canonical-documentation -->
+[Documentation](https://platform.acedata.cloud/documents/digitalhuman)

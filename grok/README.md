@@ -137,6 +137,11 @@ pytest --cov=core --cov=tools
 ruff check .
 ```
 
+## Documentation
+
+<!-- canonical-documentation -->
+[Documentation](https://platform.acedata.cloud/documents/grok)
+
 ## License
 
 MIT — see [LICENSE](LICENSE).

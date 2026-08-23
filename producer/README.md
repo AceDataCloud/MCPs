@@ -559,6 +559,11 @@ Contributions are welcome! Please:
 4. Push to the branch (`git push origin feature/amazing`)
 5. Open a Pull Request
 
+## Documentation
+
+<!-- canonical-documentation -->
+[Documentation](https://platform.acedata.cloud/documents/producer)
+
 ## License
 
 MIT License - see [LICENSE](LICENSE) for details.

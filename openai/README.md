@@ -129,6 +129,11 @@ ruff check .
 - [AceDataCloud Platform](https://platform.acedata.cloud)
 - [OpenAI API Documentation](https://platform.openai.com/docs)
 
+## Documentation
+
+<!-- canonical-documentation -->
+[Documentation](https://platform.acedata.cloud/documents/openai)
+
 ## License
 
 MIT

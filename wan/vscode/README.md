@@ -53,7 +53,7 @@ For the full VS Code walkthrough, see [All Ace Data Cloud MCP servers in VS Code
 
 ## Pricing
 
-From $0.18 per clip. Free trial credit on sign-up. See full pricing at [https://docs.acedata.cloud](https://docs.acedata.cloud).
+From $0.18 per clip. Free trial credit on sign-up. See full pricing at [https://platform.acedata.cloud/documents/wan](https://platform.acedata.cloud/documents/wan).
 
 ---
 
@@ -125,7 +125,7 @@ version, install [`uv`](https://docs.astral.sh/uv/) and use:
 - **PyPI package:** [`mcp-wan`](https://pypi.org/project/mcp-wan/)
 - **Source repository:** https://github.com/AceDataCloud/WanMCP
 - **Ace Data Cloud platform:** https://platform.acedata.cloud
-- **MCP documentation:** https://docs.acedata.cloud
+- **MCP documentation:** https://platform.acedata.cloud/documents/wan
 
 ## License
 

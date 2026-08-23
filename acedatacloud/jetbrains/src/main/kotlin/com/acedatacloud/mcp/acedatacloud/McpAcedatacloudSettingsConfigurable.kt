@@ -85,7 +85,7 @@ class McpAcedatacloudSettingsConfigurable : Configurable {
                     browserLink("Ace Data Cloud Platform", "https://platform.acedata.cloud")
                 }
                 row {
-                    browserLink("API Documentation", "https://docs.acedata.cloud")
+                    browserLink("Documentation", "https://platform.acedata.cloud/documents/acedatacloud-mcp")
                 }
                 row {
                     browserLink("Source Code", "https://github.com/AceDataCloud/AceDataCloudMCP")

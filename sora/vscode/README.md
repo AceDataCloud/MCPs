@@ -1,5 +1,7 @@
 # Sora MCP
 
+> **Status:** This MCP integration is retired.
+
 OpenAI Sora video generation — text-to-video, image-to-video, character references.
 
 [![VS Code Marketplace](https://img.shields.io/badge/VS%20Code-Marketplace-blue?logo=visualstudiocode&logoColor=white)](https://marketplace.visualstudio.com/items?itemName=acedatacloud.mcp-sora) [![PyPI](https://img.shields.io/pypi/v/mcp-sora.svg?label=PyPI)](https://pypi.org/project/mcp-sora/) [![Hosted MCP](https://img.shields.io/badge/hosted-mcp-blue)](https://sora.mcp.acedata.cloud/mcp)
@@ -25,13 +27,6 @@ You can rotate or remove the API key any time from the command palette:
 
 > The default config talks to the **hosted streamable-HTTP endpoint** at
 > `https://sora.mcp.acedata.cloud/mcp` — no Python, no `uvx`, no local install needed.
-
-## VS Code Setup Guide
-
-For screenshots, token setup, project-level and user-level `mcp.json`, and Copilot Agent Mode examples, see:
-
-- [Sora MCP VS Code guide](https://platform.acedata.cloud/documents/promotion_article_mcp_sora_vscode)
-- [All Ace Data Cloud MCP servers in VS Code](https://platform.acedata.cloud/documents/promotion_article_mcp_all_vscode)
 
 ### Example prompts
 
@@ -63,7 +58,7 @@ For screenshots, token setup, project-level and user-level `mcp.json`, and Copil
 
 ## Pricing
 
-From $0.50 per clip. Free trial credit on sign-up. See full pricing at [https://docs.acedata.cloud](https://docs.acedata.cloud).
+From $0.50 per clip. Free trial credit on sign-up.
 
 ---
 
@@ -135,7 +130,6 @@ version, install [`uv`](https://docs.astral.sh/uv/) and use:
 - **PyPI package:** [`mcp-sora`](https://pypi.org/project/mcp-sora/)
 - **Source repository:** https://github.com/AceDataCloud/SoraMCP
 - **Ace Data Cloud platform:** https://platform.acedata.cloud
-- **MCP documentation:** https://docs.acedata.cloud
 
 ## License
 

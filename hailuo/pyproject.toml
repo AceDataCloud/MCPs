@@ -68,7 +68,7 @@ mcp-hailuo = "main:main"
 
 [project.urls]
 Homepage = "https://github.com/AceDataCloud/HailuoMCP"
-Documentation = "https://platform.acedata.cloud"
+Documentation = "https://platform.acedata.cloud/documents/hailuo"
 Repository = "https://github.com/AceDataCloud/HailuoMCP"
 Issues = "https://github.com/AceDataCloud/HailuoMCP/issues"
 Changelog = "https://github.com/AceDataCloud/HailuoMCP/blob/main/CHANGELOG.md"

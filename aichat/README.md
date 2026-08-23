@@ -69,6 +69,11 @@ mcp-aichat --transport http --port 8000
 ### Zhipu AI
 - glm-5.1, glm-4.7, glm-4.6, glm-3-turbo
 
+## Documentation
+
+<!-- canonical-documentation -->
+[Documentation](https://platform.acedata.cloud/documents/aichat)
+
 ## License
 
 MIT

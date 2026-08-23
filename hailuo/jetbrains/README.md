@@ -56,7 +56,7 @@ Connects to the hosted MCP server at `hailuo.mcp.acedata.cloud`. No local instal
 ## Links
 
 - [Ace Data Cloud Platform](https://platform.acedata.cloud)
-- [API Documentation](https://docs.acedata.cloud)
+- [Documentation](https://platform.acedata.cloud/documents/hailuo)
 - [PyPI Package](https://pypi.org/project/mcp-hailuo/)
 - [Source Code](https://github.com/AceDataCloud/HailuoMCP)
 

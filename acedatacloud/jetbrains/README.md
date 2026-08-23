@@ -56,7 +56,7 @@ Connects to the hosted MCP server at `mcp.acedata.cloud`. No local install neede
 ## Links
 
 - [Ace Data Cloud Platform](https://platform.acedata.cloud)
-- [API Documentation](https://docs.acedata.cloud)
+- [Documentation](https://platform.acedata.cloud/documents/acedatacloud-mcp)
 - [PyPI Package](https://pypi.org/project/mcp-acedatacloud/)
 - [Source Code](https://github.com/AceDataCloud/AceDataCloudMCP)
 

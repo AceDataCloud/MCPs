@@ -5,7 +5,7 @@
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 Model Context Protocol server for Happy Horse AI video generation and editing through the
-[Ace Data Cloud](https://platform.acedata.cloud/service/happyhorse) API.
+[Ace Data Cloud](https://platform.acedata.cloud/documents/happyhorse) API.
 
 ## Capabilities
 
@@ -122,6 +122,11 @@ pytest --cov=core --cov=tools
 ruff check .
 mypy core tools main.py
 ```
+
+## Documentation
+
+<!-- canonical-documentation -->
+[Documentation](https://platform.acedata.cloud/documents/happyhorse)
 
 ## License
 

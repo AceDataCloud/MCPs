@@ -8,6 +8,8 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![MCP](https://img.shields.io/badge/MCP-Compatible-green.svg)](https://modelcontextprotocol.io)
 
+> **Status:** This MCP integration is retired and is no longer actively offered.
+
 A [Model Context Protocol (MCP)](https://modelcontextprotocol.io) server for AI video generation using [Sora](https://openai.com/sora) through the [AceDataCloud API](https://platform.acedata.cloud).
 
 Generate AI videos directly from Claude, VS Code, or any MCP-compatible client.
@@ -40,10 +42,8 @@ Generate AI videos directly from Claude, VS Code, or any MCP-compatible client.
 
 ### 1. Get Your API Token
 
-1. Sign up at [AceDataCloud Platform](https://platform.acedata.cloud)
-2. Go to the [API documentation page](https://platform.acedata.cloud/documents/99a24421-2e22-4028-8201-e19cb834b67e)
-3. Click **"Acquire"** to get your API token
-4. Copy the token for use below
+1. Sign in to [AceDataCloud Platform](https://platform.acedata.cloud)
+2. Open Applications and copy an existing API token
 
 ### 2. Use the Hosted Server (Recommended)
 
@@ -511,13 +511,6 @@ SoraMCP/
 ├── pyproject.toml         # Project configuration
 └── README.md
 ```
-
-## API Reference
-
-This server wraps the [AceDataCloud Sora API](https://platform.acedata.cloud/documents/99a24421-2e22-4028-8201-e19cb834b67e):
-
-- [Sora Videos API](https://platform.acedata.cloud/documents/99a24421-2e22-4028-8201-e19cb834b67e) - Video generation
-- [Sora Tasks API](https://platform.acedata.cloud/documents/c9d81bad-9064-4796-86b6-4fb43cc93a16) - Task queries
 
 ## Contributing
 

@@ -57,7 +57,7 @@ For screenshots, token setup, project-level and user-level `mcp.json`, and Copil
 
 ## Pricing
 
-From $0.015 per image. Free trial credit on sign-up. See full pricing at [https://docs.acedata.cloud](https://docs.acedata.cloud).
+From $0.015 per image. Free trial credit on sign-up. See full pricing at [https://platform.acedata.cloud/documents/nano-banana-mcp](https://platform.acedata.cloud/documents/nano-banana-mcp).
 
 ---
 
@@ -129,7 +129,7 @@ version, install [`uv`](https://docs.astral.sh/uv/) and use:
 - **PyPI package:** [`mcp-nanobanana-pro`](https://pypi.org/project/mcp-nanobanana-pro/)
 - **Source repository:** https://github.com/AceDataCloud/NanoBananaMCP
 - **Ace Data Cloud platform:** https://platform.acedata.cloud
-- **MCP documentation:** https://docs.acedata.cloud
+- **MCP documentation:** https://platform.acedata.cloud/documents/nano-banana-mcp
 
 ## License
 

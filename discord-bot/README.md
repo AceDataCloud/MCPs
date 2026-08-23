@@ -86,6 +86,11 @@ mcp-discord-bot --transport http --port 8000
 | `discord_send_dm` | Send a direct message to a user |
 | `discord_get_usage_guide` | Get comprehensive usage documentation |
 
+## Documentation
+
+<!-- canonical-documentation -->
+[Documentation](https://platform.acedata.cloud/documents/development_discord_bot)
+
 ## License
 
 MIT

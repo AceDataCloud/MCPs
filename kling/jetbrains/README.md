@@ -56,7 +56,7 @@ Connects to the hosted MCP server at `kling.mcp.acedata.cloud`. No local install
 ## Links
 
 - [Ace Data Cloud Platform](https://platform.acedata.cloud)
-- [API Documentation](https://docs.acedata.cloud)
+- [Documentation](https://platform.acedata.cloud/documents/kling)
 - [PyPI Package](https://pypi.org/project/mcp-kling/)
 - [Source Code](https://github.com/AceDataCloud/KlingMCP)
 

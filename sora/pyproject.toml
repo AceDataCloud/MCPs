@@ -68,7 +68,6 @@ mcp-sora = "main:main"
 
 [project.urls]
 Homepage = "https://github.com/AceDataCloud/SoraMCP"
-Documentation = "https://platform.acedata.cloud/documents/99a24421-2e22-4028-8201-e19cb834b67e"
 Repository = "https://github.com/AceDataCloud/SoraMCP"
 Issues = "https://github.com/AceDataCloud/SoraMCP/issues"
 Changelog = "https://github.com/AceDataCloud/SoraMCP/blob/main/CHANGELOG.md"

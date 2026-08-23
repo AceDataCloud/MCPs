@@ -22,6 +22,10 @@ Local command: `uvx mcp-minimax`
 
 Get a token at https://platform.acedata.cloud/console/applications.
 
+## Documentation
+
+[Documentation](https://platform.acedata.cloud/documents/minimax-videos)
+
 ## License
 
 MIT

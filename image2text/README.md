@@ -23,3 +23,8 @@ export IMAGE2TEXT_REQUEST_TIMEOUT=120
 - `image2text_get_task` — Poll an image2text task result
 - `image2text_get_usage_guide` — Get image2text usage guide
 - `image2text_get_api_info` — Get image2text API information
+
+## Service details
+
+<!-- canonical-documentation -->
+[Service details](https://platform.acedata.cloud/services/2aaa7faf-099e-410e-82f3-8d78170f25bb)

@@ -68,7 +68,7 @@ mcp-grok = "main:main"
 
 [project.urls]
 Homepage = "https://github.com/AceDataCloud/mcp-grok"
-Documentation = "https://platform.acedata.cloud/documents/63e01dc3-eb21-499e-8049-3025c460058f"
+Documentation = "https://platform.acedata.cloud/documents/grok"
 Repository = "https://github.com/AceDataCloud/mcp-grok"
 Issues = "https://github.com/AceDataCloud/mcp-grok/issues"
 Changelog = "https://github.com/AceDataCloud/mcp-grok/blob/main/CHANGELOG.md"

@@ -52,6 +52,11 @@ mcp-webextrator --transport http --port 8000
 | `webextrator_get_tasks_batch` | Batch-fetch the status / result of multiple tasks |
 | `webextrator_get_usage_guide` | Get the API usage guide |
 
+## Documentation
+
+<!-- canonical-documentation -->
+[Documentation](https://platform.acedata.cloud/documents/webextrator)
+
 ## License
 
 MIT — see [LICENSE](LICENSE).

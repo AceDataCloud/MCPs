@@ -8,7 +8,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![MCP](https://img.shields.io/badge/MCP-Compatible-green.svg)](https://modelcontextprotocol.io)
 
-A [Model Context Protocol (MCP)](https://modelcontextprotocol.io) server for Google search using [SERP API](https://platform.acedata.cloud/documents/44c86226-8eaa-49bf-85f3-1fae8d2e23f1) through the [AceDataCloud API](https://platform.acedata.cloud).
+A [Model Context Protocol (MCP)](https://modelcontextprotocol.io) server for Google search using [SERP API](https://platform.acedata.cloud/documents/serp-google) through the [AceDataCloud API](https://platform.acedata.cloud).
 
 Perform Google searches and get structured results directly from Claude, VS Code, or any MCP-compatible client.
 
@@ -45,7 +45,7 @@ Perform Google searches and get structured results directly from Claude, VS Code
 ### 1. Get Your API Token
 
 1. Sign up at [AceDataCloud Platform](https://platform.acedata.cloud)
-2. Go to the [API documentation page](https://platform.acedata.cloud/documents/44c86226-8eaa-49bf-85f3-1fae8d2e23f1)
+2. Go to the [API documentation page](https://platform.acedata.cloud/documents/serp-google)
 3. Click **"Acquire"** to get your API token
 4. Copy the token for use below
 
@@ -563,9 +563,9 @@ SerpMCP/
 
 ## API Reference
 
-This server wraps the [AceDataCloud Google SERP API](https://platform.acedata.cloud/documents/44c86226-8eaa-49bf-85f3-1fae8d2e23f1):
+This server wraps the [AceDataCloud Google SERP API](https://platform.acedata.cloud/documents/serp-google):
 
-- [Google SERP API Documentation](https://platform.acedata.cloud/documents/44c86226-8eaa-49bf-85f3-1fae8d2e23f1)
+- [Google SERP API Documentation](https://platform.acedata.cloud/documents/serp-google)
 
 ## Contributing
 
@@ -577,6 +577,11 @@ Contributions are welcome! Please:
 4. Push to the branch (`git push origin feature/amazing`)
 5. Open a Pull Request
 
+## Documentation
+
+<!-- canonical-documentation -->
+[Documentation](https://platform.acedata.cloud/documents/serp-mcp)
+
 ## License
 
 MIT License - see [LICENSE](LICENSE) for details.
@@ -584,7 +589,7 @@ MIT License - see [LICENSE](LICENSE) for details.
 ## Links
 
 - [AceDataCloud Platform](https://platform.acedata.cloud)
-- [Google SERP API](https://platform.acedata.cloud/documents/44c86226-8eaa-49bf-85f3-1fae8d2e23f1)
+- [Google SERP API](https://platform.acedata.cloud/documents/serp-google)
 - [Model Context Protocol](https://modelcontextprotocol.io)
 - [MCP Python SDK](https://github.com/modelcontextprotocol/python-sdk)
 

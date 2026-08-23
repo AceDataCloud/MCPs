@@ -53,7 +53,7 @@ For screenshots, token setup, project-level and user-level `mcp.json`, and Copil
 
 ## Pricing
 
-Free tier available. Higher quotas with paid plans. See full pricing at [https://docs.acedata.cloud](https://docs.acedata.cloud).
+Free tier available. Higher quotas with paid plans. See full pricing at [https://platform.acedata.cloud/documents/short-url-mcp](https://platform.acedata.cloud/documents/short-url-mcp).
 
 ---
 
@@ -125,7 +125,7 @@ version, install [`uv`](https://docs.astral.sh/uv/) and use:
 - **PyPI package:** [`mcp-shorturl`](https://pypi.org/project/mcp-shorturl/)
 - **Source repository:** https://github.com/AceDataCloud/ShortURLMCP
 - **Ace Data Cloud platform:** https://platform.acedata.cloud
-- **MCP documentation:** https://docs.acedata.cloud
+- **MCP documentation:** https://platform.acedata.cloud/documents/short-url-mcp
 
 ## License
 

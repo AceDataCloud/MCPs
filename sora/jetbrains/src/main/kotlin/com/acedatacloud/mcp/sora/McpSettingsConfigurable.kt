@@ -85,9 +85,6 @@ class McpSettingsConfigurable : Configurable {
                     browserLink("Ace Data Cloud Platform", "https://platform.acedata.cloud")
                 }
                 row {
-                    browserLink("API Documentation", "https://docs.acedata.cloud")
-                }
-                row {
                     browserLink("Source Code", "https://github.com/AceDataCloud/SoraMCP")
                 }
                 row {

@@ -40,7 +40,7 @@ Generate AI videos directly from Claude, VS Code, or any MCP-compatible client.
 ### 1. Get Your API Token
 
 1. Sign up at [AceDataCloud Platform](https://platform.acedata.cloud)
-2. Go to the [API documentation page](https://platform.acedata.cloud/documents/5bd3597d-1ff8-44ad-a580-b66b48393e7f)
+2. Go to the [API documentation page](https://platform.acedata.cloud/documents/luma-videos)
 3. Click **"Acquire"** to get your API token
 4. Copy the token for use below
 
@@ -497,10 +497,10 @@ LumaMCP/
 
 ## API Reference
 
-This server wraps the [AceDataCloud Luma API](https://platform.acedata.cloud/documents/5bd3597d-1ff8-44ad-a580-b66b48393e7f):
+This server wraps the [AceDataCloud Luma API](https://platform.acedata.cloud/documents/luma-videos):
 
-- [Luma Videos API](https://platform.acedata.cloud/documents/5bd3597d-1ff8-44ad-a580-b66b48393e7f) - Video generation
-- [Luma Tasks API](https://platform.acedata.cloud/documents/7d32369c-4ead-4364-a4c5-652bc768b3ff) - Task queries
+- [Luma Videos API](https://platform.acedata.cloud/documents/luma-videos) - Video generation
+- [Luma Tasks API](https://platform.acedata.cloud/documents/luma-tasks) - Task queries
 
 ## Contributing
 
@@ -511,6 +511,11 @@ Contributions are welcome! Please:
 3. Commit your changes (`git commit -m 'Add amazing feature'`)
 4. Push to the branch (`git push origin feature/amazing`)
 5. Open a Pull Request
+
+## Documentation
+
+<!-- canonical-documentation -->
+[Documentation](https://platform.acedata.cloud/documents/luma-mcp)
 
 ## License
 

@@ -70,7 +70,7 @@ mcp-nanobanana-pro = "main:main"
 
 [project.urls]
 Homepage = "https://github.com/AceDataCloud/NanoBananaMCP"
-Documentation = "https://platform.acedata.cloud/documents/23985a11-d713-41d1-ad84-24b021805b3d"
+Documentation = "https://platform.acedata.cloud/documents/nano-banana-mcp"
 Repository = "https://github.com/AceDataCloud/NanoBananaMCP"
 Issues = "https://github.com/AceDataCloud/NanoBananaMCP/issues"
 Changelog = "https://github.com/AceDataCloud/NanoBananaMCP/blob/main/CHANGELOG.md"

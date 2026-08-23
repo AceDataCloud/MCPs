@@ -16,9 +16,7 @@ class Settings:
     """Application settings loaded from environment variables."""
 
     # Discord Bot Configuration
-    bot_base_url: str = field(
-        default_factory=lambda: os.getenv("DISCORD_BOT_BASE_URL", "")
-    )
+    bot_base_url: str = field(default_factory=lambda: os.getenv("DISCORD_BOT_BASE_URL", ""))
     bot_token: str = field(default_factory=lambda: os.getenv("DISCORD_BOT_TOKEN", ""))
 
     # Request Configuration
@@ -27,9 +25,7 @@ class Settings:
     )
 
     # Server Configuration
-    server_name: str = field(
-        default_factory=lambda: os.getenv("MCP_SERVER_NAME", "discord-bot")
-    )
+    server_name: str = field(default_factory=lambda: os.getenv("MCP_SERVER_NAME", "discord-bot"))
     transport: str = field(default_factory=lambda: os.getenv("MCP_TRANSPORT", "stdio"))
     log_level: str = field(default_factory=lambda: os.getenv("LOG_LEVEL", "INFO"))
 

@@ -67,7 +67,7 @@ mcp-discord-bot = "main:main"
 
 [project.urls]
 Homepage = "https://github.com/AceDataCloud/DiscordBotMCP"
-Documentation = "https://platform.acedata.cloud/documents/discord-bot"
+Documentation = "https://platform.acedata.cloud/documents/development_discord_bot"
 Repository = "https://github.com/AceDataCloud/DiscordBotMCP"
 Issues = "https://github.com/AceDataCloud/DiscordBotMCP/issues"
 Changelog = "https://github.com/AceDataCloud/DiscordBotMCP/blob/main/CHANGELOG.md"

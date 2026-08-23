@@ -79,3 +79,8 @@ python -m build
 ```
 
 See the [Maestro API documentation](https://platform.acedata.cloud/documents/maestro) for billing and response details.
+
+## Documentation
+
+<!-- canonical-documentation -->
+[Documentation](https://platform.acedata.cloud/documents/maestro)

@@ -68,7 +68,7 @@ mcp-minimax = "main:main"
 
 [project.urls]
 Homepage = "https://github.com/AceDataCloud/MinimaxMCP"
-Documentation = "https://platform.acedata.cloud"
+Documentation = "https://platform.acedata.cloud/documents/minimax-videos"
 Repository = "https://github.com/AceDataCloud/MinimaxMCP"
 Issues = "https://github.com/AceDataCloud/MinimaxMCP/issues"
 Changelog = "https://github.com/AceDataCloud/MinimaxMCP/blob/main/CHANGELOG.md"
