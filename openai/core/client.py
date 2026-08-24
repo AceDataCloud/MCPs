@@ -3,6 +3,7 @@
 import contextvars
 import json
 from typing import Any
+from urllib.parse import urlencode
 
 import httpx
 from loguru import logger
@@ -388,6 +389,17 @@ class OpenAIClient:
         logger.info(f"Audio transcription with model: {kwargs.get('model', 'whisper-1')}")
         fields: dict[str, Any] = {"file": audio_bytes, **kwargs}
         return await self.request_multipart("/v1/audio/transcriptions", fields)
+
+    def realtime_connection_url(self, model: str, voice: str) -> str:
+        """Build websocket URL for the realtime endpoint."""
+        query = urlencode({"model": model, "voice": voice})
+        if self.base_url.startswith("https://"):
+            ws_base = "wss://" + self.base_url[len("https://") :]
+        elif self.base_url.startswith("http://"):
+            ws_base = "ws://" + self.base_url[len("http://") :]
+        else:
+            ws_base = self.base_url
+        return f"{ws_base}/v1/realtime?{query}"
 
 
 # Global client instance

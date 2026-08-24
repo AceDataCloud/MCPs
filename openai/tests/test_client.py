@@ -37,6 +37,13 @@ class TestOpenAIClient:
         with pytest.raises(OpenAIAuthError, match="not configured"):
             client._get_headers()
 
+    def test_realtime_connection_url(self, client):
+        """Realtime URL should target websocket /v1/realtime endpoint."""
+        assert (
+            client.realtime_connection_url(model="gpt-realtime-2.1-mini", voice="marin")
+            == "wss://api.test.com/v1/realtime?model=gpt-realtime-2.1-mini&voice=marin"
+        )
+
     @pytest.mark.asyncio
     async def test_request_success(self, client, mock_chat_response):
         """Test successful API request."""

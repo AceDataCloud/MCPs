@@ -2,7 +2,6 @@
 
 import json
 from typing import Annotated, Literal
-from urllib.parse import urlencode
 
 from pydantic import Field
 
@@ -66,10 +65,9 @@ async def openai_get_realtime_connection_info(
     ] = "alloy",
 ) -> str:
     """Get WebSocket connection details for the OpenAI Realtime endpoint."""
-    query = urlencode({"model": model, "voice": voice})
     return json.dumps(
         {
-            "url": f"wss://api.acedata.cloud/v1/realtime?{query}",
+            "url": client.realtime_connection_url(model=model, voice=voice),
             "model": model,
             "voice": voice,
             "transport": "websocket",
