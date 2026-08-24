@@ -16,7 +16,7 @@ Generate AI videos from text or images directly from Claude, VS Code, or any MCP
 
 - **Text to Video** - Create AI-generated videos from text prompts
 - **Image to Video** - Generate videos using reference images
-- **Multiple Models** - Support for 4 Wan models (wan2.6-t2v, wan2.6-i2v, wan2.6-r2v, wan2.6-i2v-flash)
+- **Multiple Models** - Support for 5 Wan models (wan2.6-t2v, wan2.6-i2v, wan2.6-r2v, wan2.6-i2v-flash, wan3.0-video)
 - **Multiple Resolutions** - 480P (draft), 720P (default), 1080P (high quality)
 - **Audio Support** - Generate videos with sound
 - **Character Transfer** - Extract character appearance via reference videos (wan2.6-r2v)
@@ -313,6 +313,7 @@ Clients connect with their own Bearer token — the server extracts the token fr
 | `wan2.6-i2v`       | Image to video            | Standard image-to-video generation      |
 | `wan2.6-r2v`       | Reference video-to-video  | Character extraction and transfer       |
 | `wan2.6-i2v-flash` | Fast image to video       | Quick preview, lower quality            |
+| `wan3.0-video`     | Text to video             | Video generation with optional media    |
 
 ## Configuration
 

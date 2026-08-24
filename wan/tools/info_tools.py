@@ -21,12 +21,14 @@ async def wan_list_models() -> str:
 | wan2.6-i2v       | image2video  | Standard image-to-video                  | Animate an image             |
 | wan2.6-r2v       | image2video  | Reference video-to-video                 | Character/timbre extraction  |
 | wan2.6-i2v-flash | image2video  | Fast image-to-video                      | Quick image animation        |
+| wan3.0-video     | text2video   | Video generation with optional media     | Advanced video generation    |
 
 Model Constraints:
 - wan2.6-t2v can ONLY be used with action=text2video (no image input)
 - wan2.6-i2v, wan2.6-r2v, wan2.6-i2v-flash can ONLY be used with action=image2video (requires image_url)
 - wan2.6-r2v supports reference_video_urls for character/timbre extraction
 - wan2.6-i2v-flash is optimized for speed with slightly lower quality
+- wan3.0-video supports optional media inputs and aspect-ratio selection
 
 Recommended: wan2.6-t2v for text-only, wan2.6-i2v for image animation.
 """
@@ -50,7 +52,7 @@ async def wan_list_resolutions() -> str:
 | 720P       | HD (default)     | General use, social media       |
 | 1080P      | Full HD          | High quality, professional      |
 
-Duration Options: 5s, 10s, or 15s
+Duration Options: 2-30 seconds, or -1 when supported by the model
 
 Recommended: 720P for most content, 1080P for final output.
 """
@@ -69,7 +71,7 @@ async def wan_list_actions() -> str:
     return """Available Wan Actions and Tools:
 
 Video Generation:
-- wan_generate_video: Create video from text prompt (wan2.6-t2v model)
+- wan_generate_video: Create video from text prompt (wan2.6-t2v or wan3.0-video)
 - wan_generate_video_from_image: Create video from reference image (wan2.6-i2v/r2v/i2v-flash)
 
 Task Management:

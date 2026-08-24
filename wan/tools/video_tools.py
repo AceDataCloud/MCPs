@@ -7,7 +7,15 @@ from pydantic import BeforeValidator, Field
 
 from core.client import client
 from core.server import mcp
-from core.types import DEFAULT_RESOLUTION, Duration, Resolution, ShotType
+from core.types import (
+    DEFAULT_RESOLUTION,
+    Duration,
+    MediaItem,
+    Ratio,
+    Resolution,
+    ShotType,
+    WanModel,
+)
 from core.utils import format_video_result
 
 _LEGACY_REFERENCE_SEPARATOR = re.compile(r",\s*(?=https?://)", re.IGNORECASE)
@@ -34,6 +42,10 @@ async def wan_generate_video(
             description="Description of the video to generate. Be descriptive about the scene, motion, style, and mood."
         ),
     ],
+    model: Annotated[
+        WanModel,
+        Field(description="Wan model to use. Default: 'wan2.6-t2v'."),
+    ] = "wan2.6-t2v",
     negative_prompt: Annotated[
         str,
         Field(description="Content to exclude from the video. Maximum 500 characters."),
@@ -41,7 +53,7 @@ async def wan_generate_video(
     duration: Annotated[
         Duration | None,
         Field(
-            description="Video duration in seconds. Options: 5, 10, or 15. Default depends on model."
+            description="Video duration in seconds. Use 2-30, or -1 when supported by the model."
         ),
     ] = None,
     resolution: Annotated[
@@ -76,6 +88,25 @@ async def wan_generate_video(
             description="Webhook callback URL for asynchronous notifications. When provided, the API will call this URL when the video is generated."
         ),
     ] = None,
+    media: Annotated[
+        list[MediaItem] | None,
+        Field(
+            max_length=10,
+            description="Optional media inputs with a type and URL, supported by wan3.0-video.",
+        ),
+    ] = None,
+    ratio: Annotated[
+        Ratio | None,
+        Field(description="Video aspect ratio. Options include 'adaptive', '16:9', and '9:16'."),
+    ] = None,
+    seed: Annotated[
+        int | None,
+        Field(ge=0, le=2147483647, description="Optional random seed."),
+    ] = None,
+    watermark: Annotated[
+        bool,
+        Field(description="Whether to add a watermark. Default is false."),
+    ] = False,
 ) -> str:
     """Generate AI video from a text prompt using Wan text-to-video model.
 
@@ -87,7 +118,7 @@ async def wan_generate_video(
     """
     payload: dict = {
         "action": "text2video",
-        "model": "wan2.6-t2v",
+        "model": model,
         "prompt": prompt,
         "resolution": resolution,
         "audio": audio,
@@ -106,6 +137,14 @@ async def wan_generate_video(
         payload["timeout"] = timeout
     if callback_url:
         payload["callback_url"] = callback_url
+    if media is not None:
+        payload["media"] = [item.model_dump() for item in media]
+    if ratio is not None:
+        payload["ratio"] = ratio
+    if seed is not None:
+        payload["seed"] = seed
+    if watermark:
+        payload["watermark"] = watermark
 
     result = await client.generate_video(**payload)
     return format_video_result(result)
@@ -126,9 +165,9 @@ async def wan_generate_video_from_image(
         ),
     ],
     model: Annotated[
-        str,
+        WanModel,
         Field(
-            description="Model to use. Options: 'wan2.6-i2v' (standard image-to-video), 'wan2.6-r2v' (reference video-to-video), 'wan2.6-i2v-flash' (fast image-to-video). Default: 'wan2.6-i2v'."
+            description="Wan model to use. Default: 'wan2.6-i2v'."
         ),
     ] = "wan2.6-i2v",
     negative_prompt: Annotated[
@@ -137,7 +176,7 @@ async def wan_generate_video_from_image(
     ] = "",
     duration: Annotated[
         Duration | None,
-        Field(description="Video duration in seconds. Options: 5, 10, or 15."),
+        Field(description="Video duration in seconds. Use 2-30, or -1 when supported by the model."),
     ] = None,
     resolution: Annotated[
         Resolution,
@@ -184,6 +223,25 @@ async def wan_generate_video_from_image(
         str | None,
         Field(description="Webhook callback URL for asynchronous notifications."),
     ] = None,
+    media: Annotated[
+        list[MediaItem] | None,
+        Field(
+            max_length=10,
+            description="Optional media inputs with a type and URL, supported by wan3.0-video.",
+        ),
+    ] = None,
+    ratio: Annotated[
+        Ratio | None,
+        Field(description="Video aspect ratio. Options include 'adaptive', '16:9', and '9:16'."),
+    ] = None,
+    seed: Annotated[
+        int | None,
+        Field(ge=0, le=2147483647, description="Optional random seed."),
+    ] = None,
+    watermark: Annotated[
+        bool,
+        Field(description="Whether to add a watermark. Default is false."),
+    ] = False,
 ) -> str:
     """Generate AI video from a reference image using Wan image-to-video models.
 
@@ -221,6 +279,14 @@ async def wan_generate_video_from_image(
         payload["timeout"] = timeout
     if callback_url:
         payload["callback_url"] = callback_url
+    if media is not None:
+        payload["media"] = [item.model_dump() for item in media]
+    if ratio is not None:
+        payload["ratio"] = ratio
+    if seed is not None:
+        payload["seed"] = seed
+    if watermark:
+        payload["watermark"] = watermark
 
     result = await client.generate_video(**payload)
     return format_video_result(result)
