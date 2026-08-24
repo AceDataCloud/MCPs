@@ -1,7 +1,6 @@
 """Maestro video creation tools."""
 
 from typing import Annotated, Any, TypedDict
-from uuid import UUID
 
 from pydantic import Field
 
@@ -59,15 +58,6 @@ async def maestro_create_video(
             min_length=1,
         ),
     ],
-    task_id: Annotated[
-        UUID | None,
-        Field(
-            description=(
-                "Optional client-generated UUID. Reusing it is rejected; omit it to let the "
-                "server generate a task ID."
-            )
-        ),
-    ] = None,
     action: Annotated[
         MaestroAction,
         Field(
@@ -177,8 +167,6 @@ async def maestro_create_video(
     # format (ratio/duration/quality) when iterating, avoiding wrong output and
     # mis-billing on remix/edit/extend.
     payload: dict[str, Any] = {"prompt": prompt, "action": action}
-    if task_id is not None:
-        payload["task_id"] = str(task_id)
     if ref_task_id:
         payload["ref_task_id"] = ref_task_id
     if aspect is not None:

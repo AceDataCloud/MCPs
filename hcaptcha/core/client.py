@@ -23,9 +23,9 @@ def get_request_api_token() -> str | None:
     return _request_api_token.get()
 
 
-def _apply_submission_mode(payload: dict[str, Any], mode: str | None) -> None:
-    if mode == "async":
-        payload["async"] = True
+def _apply_async_flag(payload: dict[str, Any], async_: bool | None) -> None:
+    if async_ is not None:
+        payload["async"] = async_
 
 
 class HCaptchaClient:
@@ -100,14 +100,17 @@ class HCaptchaClient:
                 raise HCaptchaAPIError(message=str(e)) from e
 
     async def recognize(
-        self, queries: list[str] | None = None, question: str | None = None, mode: str | None = None
+        self,
+        queries: list[str] | None = None,
+        question: str | None = None,
+        async_: bool | None = None,
     ) -> dict[str, Any]:
         payload: dict[str, Any] = {}
         if queries is not None:
             payload["queries"] = queries
         if question is not None:
             payload["question"] = question
-        _apply_submission_mode(payload, mode)
+        _apply_async_flag(payload, async_)
         return await self.request("POST", "/captcha/recognition/hcaptcha", payload=payload)
 
     async def get_token(
@@ -116,14 +119,14 @@ class HCaptchaClient:
         website_url: str,
         rqdata: str | None = None,
         proxy: str | None = None,
-        mode: str | None = None,
+        async_: bool | None = None,
     ) -> dict[str, Any]:
         payload: dict[str, Any] = {"website_key": website_key, "website_url": website_url}
         if rqdata is not None:
             payload["rqdata"] = rqdata
         if proxy is not None:
             payload["proxy"] = proxy
-        _apply_submission_mode(payload, mode)
+        _apply_async_flag(payload, async_)
         return await self.request("POST", "/captcha/token/hcaptcha", payload=payload)
 
     async def get_task(self, task_id: str) -> dict[str, Any]:

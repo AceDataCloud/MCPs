@@ -38,7 +38,7 @@ async def nanobanana_generate_image(
     ] = None,
     count: Annotated[
         int | None,
-        Field(description="Number of images to generate. Default is 1.", ge=1),
+        Field(description="Number of images to generate. Default is 1.", ge=1, le=4),
     ] = None,
     callback_url: Annotated[
         str | None,
@@ -114,7 +114,7 @@ async def nanobanana_edit_image(
     ] = None,
     count: Annotated[
         int | None,
-        Field(description="Number of edited images to generate. Default is 1.", ge=1),
+        Field(description="Number of edited images to generate. Default is 1.", ge=1, le=4),
     ] = None,
     callback_url: Annotated[
         str | None,

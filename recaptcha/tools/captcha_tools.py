@@ -1,7 +1,7 @@
 """Captcha tools for the reCAPTCHA API."""
 
 import json
-from typing import Annotated, Literal
+from typing import Annotated
 
 from pydantic import Field
 
@@ -9,18 +9,14 @@ from core.client import client
 from core.exceptions import ReCaptchaAPIError, ReCaptchaAuthError
 from core.server import mcp
 
-TaskMode = Literal["sync", "async"]
-
 
 @mcp.tool()
 async def recaptcha2_recognize(
     image: Annotated[str, Field(description="Base64-encoded reCAPTCHA v2 challenge image.")],
     question: Annotated[str, Field(description="Challenge question text shown to the user.")],
-    mode: Annotated[
-        TaskMode | None,
-        Field(
-            description="Processing mode. Defaults to API sync behavior; use 'async' to submit asynchronously."
-        ),
+    async_: Annotated[
+        bool | None,
+        Field(alias="async", description="Whether to submit the recognition task asynchronously."),
     ] = None,
 ) -> str:
     """Recognize a reCAPTCHA v2 image challenge."""
@@ -29,7 +25,7 @@ async def recaptcha2_recognize(
             {"error": "Validation Error", "message": "image and question are required"}
         )
     try:
-        result = await client.recognize2(image=image, question=question, mode=mode)
+        result = await client.recognize2(image=image, question=question, async_=async_)
         return json.dumps(result, ensure_ascii=False, indent=2)
     except ReCaptchaAuthError as e:
         return json.dumps({"error": "Authentication Error", "message": e.message})
@@ -50,11 +46,9 @@ async def recaptcha2_get_token(
     proxy: Annotated[
         str | None, Field(description="Optional proxy string to use while solving.")
     ] = None,
-    mode: Annotated[
-        TaskMode | None,
-        Field(
-            description="Processing mode. Defaults to API sync behavior; use 'async' to submit asynchronously."
-        ),
+    async_: Annotated[
+        bool | None,
+        Field(alias="async", description="Whether to submit the token task asynchronously."),
     ] = None,
 ) -> str:
     """Get a reCAPTCHA v2 token."""
@@ -64,7 +58,7 @@ async def recaptcha2_get_token(
         )
     try:
         result = await client.get_token2(
-            website_key=website_key, website_url=website_url, proxy=proxy, mode=mode
+            website_key=website_key, website_url=website_url, proxy=proxy, async_=async_
         )
         return json.dumps(result, ensure_ascii=False, indent=2)
     except ReCaptchaAuthError as e:
@@ -86,11 +80,9 @@ async def recaptcha3_get_token(
     website_url: Annotated[
         str, Field(description="The full URL of the page containing the widget.")
     ],
-    mode: Annotated[
-        TaskMode | None,
-        Field(
-            description="Processing mode. Defaults to API sync behavior; use 'async' to submit asynchronously."
-        ),
+    async_: Annotated[
+        bool | None,
+        Field(alias="async", description="Whether to submit the token task asynchronously."),
     ] = None,
 ) -> str:
     """Get a reCAPTCHA v3 token."""
@@ -103,7 +95,10 @@ async def recaptcha3_get_token(
         )
     try:
         result = await client.get_token3(
-            page_action=page_action, website_key=website_key, website_url=website_url, mode=mode
+            page_action=page_action,
+            website_key=website_key,
+            website_url=website_url,
+            async_=async_,
         )
         return json.dumps(result, ensure_ascii=False, indent=2)
     except ReCaptchaAuthError as e:

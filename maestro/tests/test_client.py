@@ -17,7 +17,6 @@ async def test_create_video_uses_public_endpoint(api_token: str) -> None:
 
     result = await client.create_video(
         {
-            "task_id": "0194c0be-8f6c-7e31-a7d2-0123456789ab",
             "prompt": "Make a product video",
             "duration": 30,
         }
@@ -26,10 +25,7 @@ async def test_create_video_uses_public_endpoint(api_token: str) -> None:
     assert result["task_id"] == "task-1"
     request = route.calls.last.request
     assert request.headers["authorization"] == "Bearer test-token"
-    assert request.read() == (
-        b'{"task_id":"0194c0be-8f6c-7e31-a7d2-0123456789ab",'
-        b'"prompt":"Make a product video","duration":30}'
-    )
+    assert request.read() == b'{"prompt":"Make a product video","duration":30}'
 
 
 @respx.mock
@@ -42,20 +38,6 @@ async def test_task_operations_use_tasks_endpoint(api_token: str) -> None:
     await client.get_task("task-1")
 
     assert route.calls.last.request.read() == b'{"id":"task-1","action":"retrieve"}'
-
-
-@respx.mock
-async def test_list_tasks_uses_batch_action_and_time_bounds(api_token: str) -> None:
-    route = respx.post("https://api.acedata.cloud/maestro/tasks").mock(
-        return_value=httpx.Response(200, json={"count": 0, "items": []})
-    )
-    client = MaestroClient(api_token=api_token)
-
-    await client.list_tasks(30, 100, 200)
-
-    assert route.calls.last.request.read() == (
-        b'{"action":"retrieve_batch","limit":30,"created_at_min":100,"created_at_max":200}'
-    )
 
 
 @respx.mock

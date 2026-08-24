@@ -2,19 +2,15 @@
 
 import json
 from unittest.mock import AsyncMock, patch
-from uuid import UUID
 
-from tools.task_tools import maestro_get_task, maestro_list_tasks
+from tools.task_tools import maestro_get_task
 from tools.video_tools import maestro_create_video
-
-TASK_ID = UUID("0194c0be-8f6c-7e31-a7d2-0123456789ab")
 
 
 async def test_create_video_builds_complete_payload() -> None:
     with patch("tools.video_tools.client.create_video", new_callable=AsyncMock) as create:
         create.return_value = {"success": True, "task_id": "task-1"}
         result = await maestro_create_video(
-            task_id=TASK_ID,
             prompt="Launch video for a new camera",
             action="generate",
             file_urls=["https://example.com/camera.jpg"],
@@ -29,7 +25,6 @@ async def test_create_video_builds_complete_payload() -> None:
 
     create.assert_awaited_once_with(
         {
-            "task_id": str(TASK_ID),
             "prompt": "Launch video for a new camera",
             "action": "generate",
             "file_urls": ["https://example.com/camera.jpg"],
@@ -46,7 +41,7 @@ async def test_create_video_builds_complete_payload() -> None:
 
 
 async def test_iteration_requires_reference_task() -> None:
-    result = await maestro_create_video(task_id=TASK_ID, prompt="Make it faster", action="remix")
+    result = await maestro_create_video(prompt="Make it faster", action="remix")
 
     assert result == "Error: action=remix requires ref_task_id."
 
@@ -63,7 +58,6 @@ async def test_iteration_does_not_clobber_source_format() -> None:
     with patch("tools.video_tools.client.create_video", new_callable=AsyncMock) as create:
         create.return_value = {"success": True, "task_id": "task-2"}
         await maestro_create_video(
-            task_id=TASK_ID,
             prompt="Tighten the intro",
             action="edit",
             ref_task_id="task-1",
@@ -71,7 +65,6 @@ async def test_iteration_does_not_clobber_source_format() -> None:
 
     create.assert_awaited_once_with(
         {
-            "task_id": str(TASK_ID),
             "prompt": "Tighten the intro",
             "action": "edit",
             "ref_task_id": "task-1",
@@ -105,13 +98,3 @@ async def test_task_tools_delegate_to_client() -> None:
         await maestro_get_task("task-1")
 
     get_task.assert_awaited_once_with("task-1")
-
-
-async def test_list_tasks_delegates_filters_to_client() -> None:
-    with patch("tools.task_tools.client.list_tasks", new_callable=AsyncMock) as list_tasks:
-        list_tasks.return_value = {"count": 0, "items": []}
-
-        result = await maestro_list_tasks(30, 100, 200)
-
-    list_tasks.assert_awaited_once_with(30, 100, 200)
-    assert json.loads(result) == {"count": 0, "items": []}
