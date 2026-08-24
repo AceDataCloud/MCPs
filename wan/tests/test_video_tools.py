@@ -5,6 +5,7 @@ import json
 import pytest
 
 from core.server import mcp
+from core.types import MediaItem
 from tools import video_tools
 
 
@@ -99,3 +100,39 @@ async def test_wan_normalizes_legacy_comma_separated_references(
     )
 
     assert captured_payload["reference_video_urls"] == expected
+
+
+@pytest.mark.asyncio
+async def test_wan3_media_parameters_are_forwarded(monkeypatch):
+    """Wan 3 parameters must be represented in the API payload."""
+    captured_payload: dict[str, object] = {}
+
+    async def mock_generate_video(**kwargs):
+        captured_payload.update(kwargs)
+        return {"task_id": "task-wan3"}
+
+    monkeypatch.setattr(video_tools.client, "generate_video", mock_generate_video)
+
+    await video_tools.wan_generate_video(
+        model="wan3.0-video",
+        prompt="Animate the supplied first frame.",
+        duration=30,
+        media=[MediaItem(type="first_frame", url="https://example.com/frame.png")],
+        ratio="16:9",
+        seed=42,
+        watermark=True,
+    )
+
+    assert captured_payload == {
+        "action": "text2video",
+        "model": "wan3.0-video",
+        "prompt": "Animate the supplied first frame.",
+        "resolution": "720P",
+        "audio": True,
+        "prompt_extend": True,
+        "duration": 30,
+        "media": [{"type": "first_frame", "url": "https://example.com/frame.png"}],
+        "ratio": "16:9",
+        "seed": 42,
+        "watermark": True,
+    }
