@@ -6,6 +6,7 @@ from core.types import DEFAULT_MODEL, GlmModel
 
 # Mirrors the `model` enum in the GLM chat OpenAPI spec.
 SPEC_MODELS = {
+    "glm-5.3",
     "glm-5.2",
     "glm-5",
     "glm-5-turbo",

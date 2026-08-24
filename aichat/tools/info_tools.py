@@ -116,6 +116,7 @@ async def aichat_list_models() -> str:
 - grok-4.5
 
 ## Zhipu GLM
+- glm-5.3
 - glm-5.2
 - glm-5
 - glm-5-turbo

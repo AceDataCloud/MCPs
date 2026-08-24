@@ -23,6 +23,7 @@ def test_flagship_models_are_available_in_aichat_v2() -> None:
 
     assert "gpt-5.2-pro" in models
     assert "grok-4.5" in models
+    assert "glm-5.3" in models
     assert "gemini-3.1-pro-preview" in models
     assert "glm-5.2" in models
 
