@@ -73,13 +73,13 @@ async def kling_lip_sync(
         ),
     ] = "zh",
     voice_speed: Annotated[
-        float | None,
+        float,
         Field(
             ge=0.8,
             le=2.0,
             description="Speech speed multiplier from 0.8 to 2.0 (default 1.0). Used when mode='text2video'.",
         ),
-    ] = None,
+    ] = 1.0,
     callback_url: Annotated[
         str | None,
         Field(description="Webhook URL that receives a POST when the lip-sync task completes."),
@@ -128,8 +128,7 @@ async def kling_lip_sync(
         payload["voice_id"] = voice_id
     if voice_language != "zh":
         payload["voice_language"] = voice_language
-    if voice_speed is not None:
-        payload["voice_speed"] = voice_speed
+    payload["voice_speed"] = voice_speed
     if callback_url:
         payload["callback_url"] = callback_url
 

@@ -4,6 +4,8 @@ from unittest.mock import AsyncMock, patch
 
 import pytest
 
+from core.types import KlingWatermarkInfo
+
 
 @pytest.fixture
 def mock_client_generate_motion(mock_motion_response):
@@ -24,3 +26,19 @@ async def test_callback_url_is_omitted_when_unset(mock_client_generate_motion):
 
     _, kwargs = mock_client_generate_motion.generate_motion.call_args
     assert "callback_url" not in kwargs
+
+
+@pytest.mark.asyncio
+async def test_motion_model_and_watermark_are_serialized(mock_client_generate_motion):
+    from tools.motion_tools import kling_generate_motion
+
+    await kling_generate_motion(
+        image_url="https://example.com/character.jpg",
+        video_url="https://example.com/motion.mp4",
+        model_name="kling-v3",
+        watermark_info=KlingWatermarkInfo(enabled=True),
+    )
+
+    _, kwargs = mock_client_generate_motion.generate_motion.call_args
+    assert kwargs["model_name"] == "kling-v3"
+    assert kwargs["watermark_info"] == {"enabled": True}
