@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """
-MCP Wan Server - AI Video Generation via AceDataCloud API.
+MCP Qwen Image Server - AI Image Generation and Editing via AceDataCloud API.
 
 A Model Context Protocol (MCP) server that provides tools for generating
-AI videos using Wan through the AceDataCloud platform.
+and editing AI images using Qwen Image 3 models through the AceDataCloud platform.
 """
 
 import argparse
@@ -30,7 +30,7 @@ logger = logging.getLogger(__name__)
 def safe_print(text: str) -> None:
     """Print to stderr safely, handling encoding issues."""
     if not sys.stderr.isatty():
-        logger.debug(f"[MCP Wan] {text}")
+        logger.debug(f"[MCP Qwen Image] {text}")
         return
 
     try:
@@ -42,34 +42,32 @@ def safe_print(text: str) -> None:
 def get_version() -> str:
     """Get the package version."""
     try:
-        return metadata.version("mcp-wan")
+        return metadata.version("mcp-qwen-image")
     except metadata.PackageNotFoundError:
         return "dev"
 
 
 def main() -> None:
-    """Run the MCP Wan server."""
+    """Run the MCP Qwen Image server."""
     parser = argparse.ArgumentParser(
-        description="MCP Wan Server - AI Video Generation",
+        description="MCP Qwen Image Server - AI Image Generation and Editing",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
-  mcp-wan                    # Run with stdio transport (default)
-  mcp-wan --transport http   # Run with HTTP transport
-  mcp-wan --version          # Show version
+  mcp-qwen-image                    # Run with stdio transport (default)
+  mcp-qwen-image --transport http   # Run with HTTP transport
+  mcp-qwen-image --version          # Show version
 
 Environment Variables:
-  ACEDATACLOUD_API_TOKEN     API token from AceDataCloud (required)
-  WAN_DEFAULT_MODEL          Default model (default: wan2.6-t2v)
-  WAN_DEFAULT_RESOLUTION     Default resolution (default: 720P)
-  WAN_REQUEST_TIMEOUT        Request timeout in seconds (default: 1800)
-  LOG_LEVEL                  Logging level (default: INFO)
+  ACEDATACLOUD_API_TOKEN         API token from AceDataCloud (required)
+  QWEN_IMAGE_REQUEST_TIMEOUT       Request timeout in seconds (default: 1800)
+  LOG_LEVEL                      Logging level (default: INFO)
         """,
     )
     parser.add_argument(
         "--version",
         action="version",
-        version=f"mcp-wan {get_version()}",
+        version=f"mcp-qwen-image {get_version()}",
     )
     parser.add_argument(
         "--transport",
@@ -88,14 +86,12 @@ Environment Variables:
     # Print startup banner
     safe_print("")
     safe_print("=" * 50)
-    safe_print("  MCP Wan Server - AI Video Generation")
+    safe_print("  MCP Qwen Image Server - AI Image Generation")
     safe_print("=" * 50)
     safe_print("")
-    safe_print(f"  Version:      {get_version()}")
-    safe_print(f"  Transport:    {args.transport}")
-    safe_print(f"  Model:        {settings.default_model}")
-    safe_print(f"  Resolution:   {settings.default_resolution}")
-    safe_print(f"  Log Level:    {settings.log_level}")
+    safe_print(f"  Version:   {get_version()}")
+    safe_print(f"  Transport: {args.transport}")
+    safe_print(f"  Log Level: {settings.log_level}")
     safe_print("")
 
     # Validate configuration
@@ -119,19 +115,13 @@ Environment Variables:
     safe_print("  [OK] Tools and prompts loaded")
     safe_print("")
     safe_print("  Available tools:")
-    safe_print("    - wan_generate_video")
-    safe_print("    - wan_generate_video_from_image")
-    safe_print("    - wan_generate_video_all_in_one")
-    safe_print("    - wan_get_task")
-    safe_print("    - wan_get_tasks_batch")
-    safe_print("    - wan_list_models")
-    safe_print("    - wan_list_resolutions")
-    safe_print("    - wan_list_actions")
+    safe_print("    - qwen_image_generate")
+    safe_print("    - qwen_image_edit")
+    safe_print("    - qwen_image_get_task")
+    safe_print("    - qwen_image_get_tasks_batch")
+    safe_print("    - qwen_image_list_models")
     safe_print("")
     safe_print("  Available prompts:")
-    safe_print("    - wan_video_generation_guide")
-    safe_print("    - wan_workflow_examples")
-    safe_print("    - wan_prompt_suggestions")
     safe_print("")
     safe_print("=" * 50)
     safe_print("  Ready for MCP connections")
@@ -155,54 +145,38 @@ Environment Variables:
                 return JSONResponse({"status": "ok"})
 
             async def favicon(_request: Request) -> RedirectResponse:
-                return RedirectResponse("https://cdn.acedata.cloud/ahjfwi.png", status_code=301)
+                return RedirectResponse("https://cdn.acedata.cloud/9egrbn.png", status_code=301)
 
             async def server_card(_request: Request) -> JSONResponse:
                 """MCP Server Card for Smithery and other registries."""
                 return JSONResponse(
                     {
-                        "serverInfo": {"name": "MCP Wan"},
+                        "serverInfo": {"name": "MCP Qwen Image"},
                         "authentication": {"required": True, "schemes": ["bearer"]},
                         "tools": [
                             {
-                                "name": "wan_generate_video",
-                                "description": "Generate video from text",
+                                "name": "qwen_image_generate",
+                                "description": "Generate image from text",
                             },
                             {
-                                "name": "wan_generate_video_from_image",
-                                "description": "Generate video from image",
+                                "name": "qwen_image_edit",
+                                "description": "Edit an existing image",
                             },
-                            {"name": "wan_get_task", "description": "Query task status"},
+                            {"name": "qwen_image_get_task", "description": "Query task status"},
                             {
-                                "name": "wan_get_tasks_batch",
+                                "name": "qwen_image_get_tasks_batch",
                                 "description": "Query multiple tasks",
                             },
                             {
-                                "name": "wan_list_models",
+                                "name": "qwen_image_list_models",
                                 "description": "List available models",
-                            },
-                            {
-                                "name": "wan_list_resolutions",
-                                "description": "List available resolutions",
-                            },
-                            {
-                                "name": "wan_list_actions",
-                                "description": "List available actions",
                             },
                         ],
                         "prompts": [
                             {
-                                "name": "wan_video_generation_guide",
-                                "description": "Guide for video generation",
-                            },
-                            {
-                                "name": "wan_workflow_examples",
-                                "description": "Example workflows",
-                            },
-                            {
-                                "name": "wan_prompt_suggestions",
-                                "description": "Prompt suggestions",
-                            },
+                                "name": "qwen_image_workflow",
+                                "description": "Qwen Image workflow guidance",
+                            }
                         ],
                         "resources": [],
                     }

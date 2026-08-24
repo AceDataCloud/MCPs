@@ -107,6 +107,11 @@
       "type": "document",
       "alias": "producer"
     },
+    "qwen-image": {
+      "status": "active",
+      "type": "document",
+      "alias": "qwen-image"
+    },
     "recaptcha": {
       "status": "active",
       "type": "service",

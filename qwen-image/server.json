@@ -1,0 +1,36 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.AceDataCloud/mcp-qwen-image",
+  "description": "MCP server for Qwen Image 3 AI image generation",
+  "version": "2026.8.24.0",
+  "repository": {
+    "url": "https://github.com/AceDataCloud/QwenImageMCP",
+    "source": "github"
+  },
+  "packages": [
+    {
+      "identifier": "mcp-qwen-image",
+      "version": "2026.8.24.0",
+      "transport": {
+        "type": "stdio"
+      },
+      "registryType": "pypi",
+      "runtimeHint": "uvx",
+      "environmentVariables": [
+        {
+          "name": "ACEDATACLOUD_API_TOKEN",
+          "description": "API token from Ace Data Cloud (https://platform.acedata.cloud)",
+          "isRequired": true,
+          "isSecret": true
+        }
+      ]
+    }
+  ],
+  "websiteUrl": "https://qwen-image.mcp.acedata.cloud",
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://qwen-image.mcp.acedata.cloud/mcp"
+    }
+  ]
+}
