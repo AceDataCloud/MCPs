@@ -122,3 +122,31 @@ async def test_openai_generate_image_defers_to_explicit_callback_url(monkeypatch
 
     assert "async" not in captured_payload
     assert captured_payload["callback_url"] == "https://example.com/hook"
+
+
+def test_openai_image_tools_expose_async_parameter():
+    """The MCP schema should expose the API's async request-body parameter."""
+    tools = {tool.name: tool for tool in mcp._tool_manager.list_tools()}
+
+    assert "async" in tools["openai_generate_image"].parameters["properties"]
+    assert "async" in tools["openai_edit_image"].parameters["properties"]
+
+
+@pytest.mark.asyncio
+async def test_openai_generate_image_preserves_explicit_sync(monkeypatch):
+    """Callers can opt out of the default async submission when the API supports it."""
+    captured_payload: dict[str, object] = {}
+
+    async def mock_images_generations(**kwargs):
+        captured_payload.update(kwargs)
+        return {"data": [{"url": "https://example.com/image.png"}]}
+
+    monkeypatch.setattr(image_tools.client, "images_generations", mock_images_generations)
+
+    await image_tools.openai_generate_image(
+        prompt="a panda",
+        model="gpt-image-1",
+        async_=False,
+    )
+
+    assert captured_payload["async"] is False
