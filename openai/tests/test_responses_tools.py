@@ -44,3 +44,18 @@ async def test_openai_create_response_forwards_spec_params(monkeypatch):
     assert captured_payload["store"] is False
     assert captured_payload["stream_options"] == {"include_usage": True}
     assert json.loads(response) == {"id": "resp-1"}
+
+
+@pytest.mark.asyncio
+async def test_openai_create_response_accepts_string_input(monkeypatch):
+    captured_payload: dict[str, object] = {}
+
+    async def mock_responses(**kwargs):
+        captured_payload.update(kwargs)
+        return {"id": "resp-2"}
+
+    monkeypatch.setattr(responses_tools.client, "responses", mock_responses)
+
+    await responses_tools.openai_create_response(input="hello")
+
+    assert captured_payload["input"] == "hello"

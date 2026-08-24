@@ -17,11 +17,11 @@ from core.types import (
 @mcp.tool()
 async def openai_create_response(
     input: Annotated[
-        list[dict[str, Any]],
+        str | list[dict[str, Any]],
         Field(
             description=(
-                "A list of messages comprising the conversation. Each message must have a "
-                "'role' ('system', 'user', or 'assistant') and 'content' field. "
+                "A text prompt or a list of messages comprising the conversation. Each message "
+                "must have a 'role' ('system', 'user', or 'assistant') and 'content' field. "
                 "Example: [{'role': 'user', 'content': 'Explain quantum computing'}]"
             )
         ),

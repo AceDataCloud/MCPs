@@ -144,6 +144,10 @@ async def openai_generate_image(
             )
         ),
     ] = None,
+    async_: Annotated[
+        bool | None,
+        Field(alias="async", description="Whether to process the request asynchronously."),
+    ] = None,
 ) -> str:
     """Generate images using OpenAI image models via AceDataCloud.
 
@@ -185,6 +189,8 @@ async def openai_generate_image(
             payload["partial_images"] = partial_images
         if callback_url is not None:
             payload["callback_url"] = callback_url
+        if async_ is not None:
+            payload["async"] = async_
 
         result = await client.images_generations_async(**payload)
 
@@ -303,6 +309,10 @@ async def openai_edit_image(
             )
         ),
     ] = None,
+    async_: Annotated[
+        bool | None,
+        Field(alias="async", description="Whether to process the request asynchronously."),
+    ] = None,
 ) -> str:
     """Edit or modify existing images using OpenAI image models via AceDataCloud.
 
@@ -341,6 +351,8 @@ async def openai_edit_image(
             payload["output_compression"] = output_compression
         if callback_url is not None:
             payload["callback_url"] = callback_url
+        if async_ is not None:
+            payload["async"] = async_
 
         result = await client.images_edits_async(**payload)
 

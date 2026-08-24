@@ -214,7 +214,7 @@ class OpenAIClient:
     def _with_async_callback(self, payload: dict[str, Any]) -> dict[str, Any]:
         """Ensure long-running image operations are submitted asynchronously."""
         request_payload = dict(payload)
-        if not request_payload.get("callback_url"):
+        if not request_payload.get("callback_url") and "async" not in request_payload:
             request_payload["async"] = True
         return request_payload
 
