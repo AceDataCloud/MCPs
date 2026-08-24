@@ -409,6 +409,10 @@ async def kling_extend_video(
         float | None,
         Field(description="Classifier-free guidance scale."),
     ] = None,
+    callback_url: Annotated[
+        str | None,
+        Field(description="Optional webhook URL for asynchronous result notification."),
+    ] = None,
 ) -> str:
     """Extend an existing video with additional content.
 
@@ -446,6 +450,8 @@ async def kling_extend_video(
         payload["negative_prompt"] = negative_prompt
     if cfg_scale is not None:
         payload["cfg_scale"] = cfg_scale
+    if callback_url:
+        payload["callback_url"] = callback_url
 
     result = await client.generate_video(**payload)
     return format_video_result(result)

@@ -1,15 +1,13 @@
 """Captcha tools for the hCaptcha API."""
 
 import json
-from typing import Annotated, Literal
+from typing import Annotated
 
 from pydantic import Field
 
 from core.client import client
 from core.exceptions import HCaptchaAPIError, HCaptchaAuthError
 from core.server import mcp
-
-TaskMode = Literal["sync", "async"]
 
 
 @mcp.tool()
@@ -20,16 +18,14 @@ async def hcaptcha_recognize(
     question: Annotated[
         str | None, Field(description="Optional challenge question text shown by hCaptcha.")
     ] = None,
-    mode: Annotated[
-        TaskMode | None,
-        Field(
-            description="Processing mode. Defaults to API sync behavior; use 'async' to submit asynchronously."
-        ),
+    async_: Annotated[
+        bool | None,
+        Field(alias="async", description="Whether to submit the recognition task asynchronously."),
     ] = None,
 ) -> str:
     """Recognize hCaptcha image challenges."""
     try:
-        result = await client.recognize(queries=queries, question=question, mode=mode)
+        result = await client.recognize(queries=queries, question=question, async_=async_)
         return json.dumps(result, ensure_ascii=False, indent=2)
     except HCaptchaAuthError as e:
         return json.dumps({"error": "Authentication Error", "message": e.message})
@@ -51,11 +47,9 @@ async def hcaptcha_get_token(
     proxy: Annotated[
         str | None, Field(description="Optional proxy string to use while solving.")
     ] = None,
-    mode: Annotated[
-        TaskMode | None,
-        Field(
-            description="Processing mode. Defaults to API sync behavior; use 'async' to submit asynchronously."
-        ),
+    async_: Annotated[
+        bool | None,
+        Field(alias="async", description="Whether to submit the token task asynchronously."),
     ] = None,
 ) -> str:
     """Get an hCaptcha token for a website."""
@@ -70,7 +64,7 @@ async def hcaptcha_get_token(
             website_url=website_url,
             rqdata=rqdata,
             proxy=proxy,
-            mode=mode,
+            async_=async_,
         )
         return json.dumps(result, ensure_ascii=False, indent=2)
     except HCaptchaAuthError as e:

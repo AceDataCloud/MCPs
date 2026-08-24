@@ -228,11 +228,11 @@ async def openai_edit_image(
         ImageModel,
         Field(
             description=(
-                "The image model to use for editing. Options: 'gpt-image-1' (default), "
+                "The image model to use for editing. Options: 'dall-e-3' (default), "
                 "'gpt-image-1.5', 'gpt-image-2', 'dall-e-3', 'nano-banana' variants."
             )
         ),
-    ] = DEFAULT_IMAGE_MODEL,
+    ] = "dall-e-3",
     size: Annotated[
         ImageEditSize,
         Field(

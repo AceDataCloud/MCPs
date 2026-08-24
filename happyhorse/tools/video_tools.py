@@ -123,6 +123,10 @@ async def happyhorse_generate_video_from_image(
         Resolution,
         Field(description="Output resolution: 720P or 1080P."),
     ] = DEFAULT_RESOLUTION,
+    ratio: Annotated[
+        AspectRatio,
+        Field(description="Output aspect ratio: 16:9, 9:16, 1:1, 4:3, or 3:4."),
+    ] = DEFAULT_RATIO,
     duration: Annotated[
         int,
         Field(
@@ -150,6 +154,7 @@ async def happyhorse_generate_video_from_image(
         "model": model,
         "image_url": image_url,
         "prompt": prompt,
+        "ratio": ratio,
         **_generation_options(resolution, duration, watermark, seed, callback_url),
     }
     return format_video_result(await client.generate_video(payload))
@@ -247,6 +252,18 @@ async def happyhorse_edit_video(
         Resolution,
         Field(description="Output resolution: 720P or 1080P."),
     ] = DEFAULT_RESOLUTION,
+    ratio: Annotated[
+        AspectRatio,
+        Field(description="Output aspect ratio: 16:9, 9:16, 1:1, 4:3, or 3:4."),
+    ] = DEFAULT_RATIO,
+    duration: Annotated[
+        int,
+        Field(
+            description="Output duration in seconds, from 3 through 15.",
+            ge=MIN_DURATION,
+            le=MAX_DURATION,
+        ),
+    ] = DEFAULT_DURATION,
     audio_setting: Annotated[
         AudioSetting,
         Field(description="Audio policy: auto, or origin to preserve the source audio."),
@@ -273,6 +290,8 @@ async def happyhorse_edit_video(
         "prompt": prompt,
         "video_url": video_url,
         "resolution": resolution,
+        "ratio": ratio,
+        "duration": duration,
         "audio_setting": audio_setting,
         "watermark": watermark,
     }

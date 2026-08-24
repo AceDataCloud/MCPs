@@ -28,9 +28,9 @@ def get_request_api_token() -> str | None:
     return _request_api_token.get()
 
 
-def _apply_submission_mode(payload: dict[str, Any], mode: str | None) -> None:
-    if mode == "async":
-        payload["async"] = True
+def _apply_async_flag(payload: dict[str, Any], async_: bool | None) -> None:
+    if async_ is not None:
+        payload["async"] = async_
 
 
 class ReCaptchaClient:
@@ -105,30 +105,38 @@ class ReCaptchaClient:
                 raise ReCaptchaAPIError(message=str(e)) from e
 
     async def recognize2(
-        self, image: str, question: str, mode: str | None = None
+        self, image: str, question: str, async_: bool | None = None
     ) -> dict[str, Any]:
         payload: dict[str, Any] = {"image": image, "question": question}
-        _apply_submission_mode(payload, mode)
+        _apply_async_flag(payload, async_)
         return await self.request("POST", "/captcha/recognition/recaptcha2", payload=payload)
 
     async def get_token2(
-        self, website_key: str, website_url: str, proxy: str | None = None, mode: str | None = None
+        self,
+        website_key: str,
+        website_url: str,
+        proxy: str | None = None,
+        async_: bool | None = None,
     ) -> dict[str, Any]:
         payload: dict[str, Any] = {"website_key": website_key, "website_url": website_url}
         if proxy is not None:
             payload["proxy"] = proxy
-        _apply_submission_mode(payload, mode)
+        _apply_async_flag(payload, async_)
         return await self.request("POST", "/captcha/token/recaptcha2", payload=payload)
 
     async def get_token3(
-        self, page_action: str, website_key: str, website_url: str, mode: str | None = None
+        self,
+        page_action: str,
+        website_key: str,
+        website_url: str,
+        async_: bool | None = None,
     ) -> dict[str, Any]:
         payload: dict[str, Any] = {
             "page_action": page_action,
             "website_key": website_key,
             "website_url": website_url,
         }
-        _apply_submission_mode(payload, mode)
+        _apply_async_flag(payload, async_)
         return await self.request("POST", "/captcha/token/recaptcha3", payload=payload)
 
 

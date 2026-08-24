@@ -78,7 +78,7 @@ async def test_get_token_includes_optional_rqdata():
         website_url="https://example.com",
         rqdata="rqdata-value",
         proxy="http://proxy.example:8080",
-        mode="sync",
+        async_=False,
     )
 
     assert result == {"success": True}
@@ -89,4 +89,5 @@ async def test_get_token_includes_optional_rqdata():
         "website_url": "https://example.com",
         "rqdata": "rqdata-value",
         "proxy": "http://proxy.example:8080",
+        "async": False,
     }
