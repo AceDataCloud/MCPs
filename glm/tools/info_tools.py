@@ -15,7 +15,8 @@ async def glm_list_models() -> str:
     return """# Available GLM Models
 
 ## Zhipu GLM Models
-- glm-5.2 — Recommended default, latest flagship model
+- glm-5.3 — Latest GLM model
+- glm-5.2 — Recommended default model
 - glm-5 / glm-5-turbo — GLM-5 family; turbo trades some quality for speed
 - glm-5.1 — Previous GLM-5 revision
 - glm-4.7 — Strong general-purpose model

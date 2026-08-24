@@ -21,6 +21,7 @@ V1_REQUIRED = {
     "gpt-5.4-nano",
     "deepseek-v4-pro",
     "grok-4.5",
+    "glm-5.3",
     "glm-5.2",
     "glm-5",
     "glm-5-turbo",
@@ -108,6 +109,21 @@ def test_v2_offers_deepseek_spec_models():
     }
     missing = spec_models - set(get_args(AiChatV2Model))
     assert not missing, f"AiChatV2Model is missing DeepSeek spec models {sorted(missing)}"
+
+
+def test_v2_offers_glm_spec_models():
+    spec_models = {
+        "glm-5.3",
+        "glm-5.2",
+        "glm-5",
+        "glm-5-turbo",
+        "glm-5.1",
+        "glm-4.7",
+        "glm-4.6",
+        "glm-3-turbo",
+    }
+    missing = spec_models - set(get_args(AiChatV2Model))
+    assert not missing, f"AiChatV2Model is missing GLM spec models {sorted(missing)}"
 
 
 def test_v2_keeps_models_the_spec_has_not_caught_up_with():
