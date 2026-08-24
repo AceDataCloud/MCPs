@@ -64,19 +64,16 @@ async def openai_get_realtime_connection_info(
         Field(description="Output voice selected when the connection is established."),
     ] = "alloy",
 ) -> str:
-    """Get WebSocket connection details for the OpenAI Realtime endpoint."""
-    return json.dumps(
-        {
-            "url": client.realtime_connection_url(model=model, voice=voice),
-            "model": model,
-            "voice": voice,
-            "transport": "websocket",
-            "auth": "Use an Authorization bearer token header. Browser clients can pass the token via the Sec-WebSocket-Protocol subprotocol.",
-            "audio": "pcm16 @ 24kHz mono",
-        },
-        ensure_ascii=False,
-        indent=2,
-    )
+    """Get realtime connection information from GET /v1/realtime."""
+    try:
+        result = await client.realtime(model=model, voice=voice)
+        return json.dumps(result, ensure_ascii=False, indent=2)
+    except OpenAIAuthError as e:
+        return json.dumps({"error": "Authentication Error", "message": e.message})
+    except OpenAIAPIError as e:
+        return json.dumps({"error": "API Error", "message": e.message})
+    except Exception as e:
+        return json.dumps({"error": "Error getting realtime connection info", "message": str(e)})
 
 
 @mcp.tool()

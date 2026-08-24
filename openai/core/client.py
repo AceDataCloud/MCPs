@@ -196,6 +196,11 @@ class OpenAIClient:
         logger.info("List OpenAI models")
         return await self.request_get("/openai/models")
 
+    async def realtime(self, model: str, voice: str) -> dict[str, Any]:
+        """Get realtime connection information."""
+        logger.info(f"Realtime API with model: {model}")
+        return await self.request_get("/v1/realtime", {"model": model, "voice": voice})
+
     async def embeddings(self, **kwargs: Any) -> dict[str, Any]:
         """Create text embeddings."""
         logger.info(f"Embeddings with model: {kwargs.get('model', 'unknown')}")

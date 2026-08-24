@@ -28,3 +28,19 @@ def test_server_module_loads():
     from core.server import mcp
 
     assert mcp is not None
+
+
+def test_extract_and_render_tools_match_openapi_request_fields():
+    """Extract/render tools expose the documented async field, not legacy mode/cache fields."""
+    import tools  # noqa: F401
+    from core.server import mcp
+
+    for tool_name in ("webextrator_extract", "webextrator_render"):
+        schema = mcp._tool_manager._tools[tool_name].parameters
+        properties = schema["properties"]
+
+        assert "async" in properties
+        assert "mode" not in properties
+        assert "cookies" not in properties
+        assert "bypass_cache" not in properties
+        assert "cache_ttl_seconds" not in properties

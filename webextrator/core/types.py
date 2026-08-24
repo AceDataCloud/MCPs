@@ -13,6 +13,3 @@ ExpectedType = Literal["product", "article", "general"]
 
 # Task action options
 TaskAction = Literal["retrieve", "retrieve_batch"]
-
-# Processing mode: synchronous (wait for the result) or asynchronous (return a task_id)
-TaskMode = Literal["sync", "async"]

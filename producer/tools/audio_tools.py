@@ -121,10 +121,10 @@ async def producer_generate_custom_music(
         str,
         Field(description="Title of the song. Keep it concise and memorable."),
     ],
-    style: Annotated[
+    prompt: Annotated[
         str,
         Field(
-            description="Music style description. Be specific about genre, mood, tempo, and instruments. Examples: 'upbeat pop rock, energetic drums, electric guitar', 'acoustic folk, gentle, fingerpicking', 'dark electronic, synthwave, 80s retro'"
+            description="Music style prompt. Be specific about genre, mood, tempo, and instruments. Examples: 'upbeat pop rock, energetic drums, electric guitar', 'acoustic folk, gentle, fingerpicking', 'dark electronic, synthwave, 80s retro'"
         ),
     ] = "",
     model: Annotated[
@@ -203,8 +203,8 @@ async def producer_generate_custom_music(
         "callback_url": callback_url,
     }
 
-    if style:
-        payload["style"] = style
+    if prompt:
+        payload["prompt"] = prompt
     if lyrics_strength is not None:
         payload["lyrics_strength"] = lyrics_strength
     if sound_strength is not None:
@@ -240,10 +240,10 @@ async def producer_extend_music(
             description="Lyrics for the extended section. Use section markers like [Verse], [Chorus], [Bridge], [Outro]. The extension will continue from where the original song left off."
         ),
     ] = "",
-    style: Annotated[
+    prompt: Annotated[
         str,
         Field(
-            description="Music style for the extension. Leave empty to maintain the original style, or specify to change the style mid-song."
+            description="Prompt for the extension. Leave empty to maintain the original style, or specify how to change the style mid-song."
         ),
     ] = "",
     model: Annotated[
@@ -282,8 +282,8 @@ async def producer_extend_music(
 
     if lyric:
         payload["lyric"] = lyric
-    if style:
-        payload["style"] = style
+    if prompt:
+        payload["prompt"] = prompt
     if async_ is not None:
         payload["async"] = async_
 
@@ -303,12 +303,6 @@ async def producer_cover_music(
         str,
         Field(
             description="Description of how you want the cover to sound. Examples: 'acoustic unplugged version', 'jazz lounge style', '80s synthwave remix'"
-        ),
-    ] = "",
-    style: Annotated[
-        str,
-        Field(
-            description="Target music style for the cover. Examples: 'jazz, smooth, saxophone', 'acoustic folk, gentle guitar', 'electronic dance, high energy'"
         ),
     ] = "",
     model: Annotated[
@@ -346,8 +340,6 @@ async def producer_cover_music(
 
     if prompt:
         payload["prompt"] = prompt
-    if style:
-        payload["style"] = style
     if async_ is not None:
         payload["async"] = async_
 
@@ -365,12 +357,6 @@ async def producer_variation_music(
         str,
         Field(
             description="Description of the desired variation. Examples: 'more upbeat tempo', 'darker mood', 'add more bass'"
-        ),
-    ] = "",
-    style: Annotated[
-        str,
-        Field(
-            description="Music style for the variation. Examples: 'faster tempo, more energy', 'softer, more intimate', 'heavier, more distortion'"
         ),
     ] = "",
     model: Annotated[
@@ -408,8 +394,6 @@ async def producer_variation_music(
 
     if prompt:
         payload["prompt"] = prompt
-    if style:
-        payload["style"] = style
     if async_ is not None:
         payload["async"] = async_
 
@@ -423,10 +407,6 @@ async def producer_swap_vocals(
         str,
         Field(description="ID of the base audio whose vocals will be replaced."),
     ],
-    swap_audio_id: Annotated[
-        str,
-        Field(description="ID of the audio whose vocals to use as replacement."),
-    ],
     callback_url: Annotated[
         str | None,
         Field(description="Webhook callback URL for asynchronous notifications."),
@@ -438,8 +418,7 @@ async def producer_swap_vocals(
 ) -> str:
     """Swap the vocals of one song with vocals from another song.
 
-    Takes the instrumental track from the base audio and combines it with
-    the vocal track from the swap audio.
+    Requests vocal swapping for the provided audio.
 
     Use this when:
     - You want to combine vocals from one song with instrumentals from another
@@ -452,7 +431,6 @@ async def producer_swap_vocals(
     result = await client.generate_audio(
         action="swap_vocals",
         audio_id=audio_id,
-        swap_audio_id=swap_audio_id,
         callback_url=callback_url,
         **({"async": async_} if async_ is not None else {}),
     )
@@ -465,10 +443,6 @@ async def producer_swap_instrumentals(
         str,
         Field(description="ID of the base audio whose instrumentals will be replaced."),
     ],
-    swap_audio_id: Annotated[
-        str,
-        Field(description="ID of the audio whose instrumentals to use as replacement."),
-    ],
     callback_url: Annotated[
         str | None,
         Field(description="Webhook callback URL for asynchronous notifications."),
@@ -480,8 +454,7 @@ async def producer_swap_instrumentals(
 ) -> str:
     """Swap the instrumental track of one song with instrumentals from another.
 
-    Takes the vocals from the base audio and combines them with the instrumental
-    track from the swap audio.
+    Requests instrumental swapping for the provided audio.
 
     Use this when:
     - You want to combine instrumentals from one song with vocals from another
@@ -494,7 +467,6 @@ async def producer_swap_instrumentals(
     result = await client.generate_audio(
         action="swap_instrumentals",
         audio_id=audio_id,
-        swap_audio_id=swap_audio_id,
         callback_url=callback_url,
         **({"async": async_} if async_ is not None else {}),
     )
@@ -521,9 +493,9 @@ async def producer_replace_section(
             description="New lyrics for the replaced section. Use section markers like [Verse], [Chorus]."
         ),
     ] = None,
-    style: Annotated[
+    prompt: Annotated[
         str,
-        Field(description="Music style for the replaced section."),
+        Field(description="Prompt for the replaced section."),
     ] = "",
     model: Annotated[
         ProducerModel,
@@ -563,8 +535,8 @@ async def producer_replace_section(
 
     if lyric:
         payload["lyric"] = lyric
-    if style:
-        payload["style"] = style
+    if prompt:
+        payload["prompt"] = prompt
     if async_ is not None:
         payload["async"] = async_
 

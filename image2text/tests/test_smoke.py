@@ -36,13 +36,16 @@ def test_tools_register():
 
     expected = {
         "image2text_recognize",
-        "image2text_get_task",
         "image2text_get_usage_guide",
         "image2text_get_api_info",
     }
     registered = {tool.name for tool in mcp._tool_manager.list_tools()}
     missing = expected - registered
     assert not missing, f"Missing tools: {missing}"
+
+    schema = mcp._tool_manager._tools["image2text_recognize"].parameters
+    assert "async" in schema["properties"]
+    assert "mode" not in schema["properties"]
 
 
 def test_prompts_register():
