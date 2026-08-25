@@ -91,3 +91,40 @@ async def test_get_token_includes_optional_rqdata():
         "proxy": "http://proxy.example:8080",
         "async": False,
     }
+
+
+@pytest.mark.asyncio
+async def test_get_task_allows_terminal_timeout_response():
+    from core.client import HCaptchaClient
+
+    captured = {}
+    timeout_response = {
+        "detail": "The captcha task timed out.",
+        "code": "timeout",
+        "success": False,
+        "task_id": "task-1",
+        "status": "failed",
+    }
+    client = HCaptchaClient(api_token="test-token")
+
+    async def fake_request(method, endpoint, *, payload=None, timeout=None, allowed_statuses=None):
+        captured.update(
+            {
+                "method": method,
+                "endpoint": endpoint,
+                "payload": payload,
+                "timeout": timeout,
+                "allowed_statuses": allowed_statuses,
+            }
+        )
+        return timeout_response
+
+    client.request = fake_request
+
+    result = await client.get_task(task_id="task-1")
+
+    assert result == timeout_response
+    assert captured["method"] == "POST"
+    assert captured["endpoint"] == "/captcha/tasks"
+    assert captured["payload"] == {"task_id": "task-1"}
+    assert captured["allowed_statuses"] == {504}

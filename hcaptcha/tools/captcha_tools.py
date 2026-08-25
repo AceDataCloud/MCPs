@@ -19,9 +19,9 @@ async def hcaptcha_recognize(
         str | None, Field(description="Optional challenge question text shown by hCaptcha.")
     ] = None,
     async_: Annotated[
-        bool | None,
+        bool,
         Field(alias="async", description="Whether to submit the recognition task asynchronously."),
-    ] = None,
+    ] = False,
 ) -> str:
     """Recognize hCaptcha image challenges."""
     try:
@@ -48,9 +48,9 @@ async def hcaptcha_get_token(
         str | None, Field(description="Optional proxy string to use while solving.")
     ] = None,
     async_: Annotated[
-        bool | None,
+        bool,
         Field(alias="async", description="Whether to submit the token task asynchronously."),
-    ] = None,
+    ] = False,
 ) -> str:
     """Get an hCaptcha token for a website."""
     if not website_key or not website_url:
