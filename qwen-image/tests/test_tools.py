@@ -20,5 +20,12 @@ async def test_edit_payload() -> None:
     with patch(
         "tools.image_tools.client.generate_image", new=AsyncMock(return_value={"task_id": "t"})
     ) as call:
-        await qwen_image_edit("restyle", ["https://example.com/a.png"], model="qwen-image-3.0-pro")
-        assert call.call_args.kwargs["image_urls"] == ["https://example.com/a.png"]
+        await qwen_image_edit(
+            "restyle",
+            ["https://example.com/a.png"],
+            model="qwen-image-3.0-pro",
+            prompt_extend_mode="agent",
+        )
+        payload = call.call_args.kwargs
+        assert payload["image_urls"] == ["https://example.com/a.png"]
+        assert payload["prompt_extend_mode"] == "agent"

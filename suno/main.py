@@ -124,6 +124,7 @@ Environment Variables:
     safe_print("    - suno_concat_music")
     safe_print("    - suno_generate_with_persona")
     safe_print("    - suno_generate_with_persona_vox")
+    safe_print("    - suno_generate_inspo")
     safe_print("    - suno_generate_lyrics")
     safe_print("    - suno_create_persona")
     safe_print("    - suno_create_voice")
@@ -202,6 +203,10 @@ Environment Variables:
                             {
                                 "name": "suno_generate_with_persona_vox",
                                 "description": "Generate using a saved voice style with VOX consistency",
+                            },
+                            {
+                                "name": "suno_generate_inspo",
+                                "description": "Generate brand-new music inspired by reference audio URLs",
                             },
                             {
                                 "name": "suno_remaster_music",
