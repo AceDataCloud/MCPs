@@ -1,10 +1,4 @@
-"""Guards the AiChat MCP contract against the API spec.
-
-The spec enum can lag behind what the gateway actually accepts, so the v2
-check is one-directional: everything in the spec must be offered, but the
-MCP may legitimately expose more (each extra is verified live before being
-added here).
-"""
+"""Guards the AiChat MCP contract against the API spec."""
 
 from typing import get_args
 
@@ -27,19 +21,26 @@ V1_REQUIRED = {
     "glm-5-turbo",
 }
 
-# Verified live on /aichat2/conversations but not yet in that spec's enum.
-V2_AHEAD_OF_SPEC = {
-    "gpt-5.6-luna",
-    "gpt-5.6-terra",
-    "gpt-5.6-sol",
-}
-
 # Kimi models the spec removed; they must stay out of the MCP surface.
 V2_RETIRED_KIMI = {
     "kimi-k2-0711-preview",
     "kimi-k2-0905-preview",
     "kimi-k2-instruct-0905",
     "kimi-k2-turbo-preview",
+}
+
+# Models removed from the current /aichat2/conversations spec enum.
+V2_REMOVED_FROM_SPEC = {
+    "gpt-5.6-luna",
+    "gpt-5.6-terra",
+    "gpt-5.6-sol",
+    "gemini-2.0-flash",
+    "gemini-2.5-flash",
+    "gemini-2.5-pro",
+    "gemini-3.0-pro",
+    "gemini-3.6-flash",
+    "gemini-3-flash-preview",
+    "gemini-3.5-flash",
 }
 
 
@@ -81,15 +82,12 @@ def test_v2_offers_claude_spec_models():
 def test_v2_offers_gemini_spec_models():
     spec_models = {
         "gemini-3.1-pro",
-        "gemini-3.0-pro",
-        "gemini-3.6-flash",
-        "gemini-3.5-flash",
-        "gemini-3-flash-preview",
-        "gemini-2.5-pro",
-        "gemini-2.5-flash",
         "gemini-2.5-flash-lite",
-        "gemini-2.0-flash",
         "gemini-3.1-flash-lite-preview",
+        "gemini-3.1-flash-image-preview",
+        "gemini-3.1-pro-preview",
+        "gemini-3-pro-preview",
+        "gemini-2.0-flash-lite",
     }
     missing = spec_models - set(get_args(AiChatV2Model))
     assert not missing, f"AiChatV2Model is missing Gemini spec models {sorted(missing)}"
@@ -126,14 +124,14 @@ def test_v2_offers_glm_spec_models():
     assert not missing, f"AiChatV2Model is missing GLM spec models {sorted(missing)}"
 
 
-def test_v2_keeps_models_the_spec_has_not_caught_up_with():
-    missing = V2_AHEAD_OF_SPEC - set(get_args(AiChatV2Model))
-    assert not missing, f"AiChatV2Model dropped live models {sorted(missing)}"
-
-
 def test_v2_excludes_retired_kimi_models():
     lingering = V2_RETIRED_KIMI & set(get_args(AiChatV2Model))
     assert not lingering, f"AiChatV2Model still offers retired models {sorted(lingering)}"
+
+
+def test_v2_excludes_models_removed_from_spec():
+    lingering = V2_REMOVED_FROM_SPEC & set(get_args(AiChatV2Model))
+    assert not lingering, f"AiChatV2Model still offers removed models {sorted(lingering)}"
 
 
 def test_v2_exposes_async_request_controls():
