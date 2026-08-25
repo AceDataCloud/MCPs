@@ -119,3 +119,8 @@ def format_task_result(data: dict[str, Any]) -> str:
         ensure_ascii=False,
         indent=2,
     )
+
+
+def format_batch_task_result(data: dict[str, Any]) -> str:
+    """Format batch task query result as JSON."""
+    return json.dumps(data, ensure_ascii=False, indent=2)

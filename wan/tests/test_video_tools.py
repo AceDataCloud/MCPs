@@ -136,3 +136,19 @@ async def test_wan3_media_parameters_are_forwarded(monkeypatch):
         "seed": 42,
         "watermark": True,
     }
+
+
+@pytest.mark.asyncio
+async def test_wan3_all_in_one_omits_absent_media(monkeypatch):
+    """Optional media should be omitted from the API payload when absent."""
+    captured_payload: dict[str, object] = {}
+
+    async def mock_generate_video(**kwargs):
+        captured_payload.update(kwargs)
+        return {"task_id": "task-wan3"}
+
+    monkeypatch.setattr(video_tools.client, "generate_video", mock_generate_video)
+
+    await video_tools.wan_generate_video_all_in_one(prompt="Generate from text only.", media=None)
+
+    assert "media" not in captured_payload
