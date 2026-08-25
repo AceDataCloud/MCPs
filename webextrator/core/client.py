@@ -31,18 +31,14 @@ def get_request_api_token() -> str | None:
     return _request_api_token.get()
 
 
-def _apply_submission_mode(payload: dict[str, Any], mode: str | None) -> None:
+def _apply_async_flag(payload: dict[str, Any], async_: bool | None) -> None:
     """Decide sync vs async submission on the payload.
 
-    The platform schema defaults to synchronous processing. A caller that
-    explicitly asks for `async` gets a task_id and polls for the result.
-
-    Note the wire field is `async` — an earlier `mode` field was never part of
-    the platform schema and got silently stripped, which is why every call used
-    to block regardless of what the caller asked for.
+    The platform schema defaults to synchronous processing. A caller that sets
+    `async` gets a task_id and polls for the result.
     """
-    if mode == "async":
-        payload["async"] = True
+    if async_ is not None:
+        payload["async"] = async_
 
 
 class WebExtraterClient:
@@ -113,10 +109,7 @@ class WebExtraterClient:
         headers: dict[str, str] | None = None,
         user_agent: str | None = None,
         callback_url: str | None = None,
-        cookies: list[dict[str, Any]] | None = None,
-        bypass_cache: bool | None = None,
-        cache_ttl_seconds: float | None = None,
-        mode: str | None = None,
+        async_: bool | None = None,
     ) -> dict[str, Any]:
         """Extract structured content from a web page.
 
@@ -157,13 +150,7 @@ class WebExtraterClient:
             payload["user_agent"] = user_agent
         if callback_url is not None:
             payload["callback_url"] = callback_url
-        if cookies is not None:
-            payload["cookies"] = cookies
-        if bypass_cache is not None:
-            payload["bypass_cache"] = bypass_cache
-        if cache_ttl_seconds is not None:
-            payload["cache_ttl_seconds"] = cache_ttl_seconds
-        _apply_submission_mode(payload, mode)
+        _apply_async_flag(payload, async_)
 
         logger.info(f"Extracting content from: {url}")
         endpoint = f"{self.base_url}/webextrator/extract"
@@ -212,10 +199,7 @@ class WebExtraterClient:
         headers: dict[str, str] | None = None,
         user_agent: str | None = None,
         callback_url: str | None = None,
-        cookies: list[dict[str, Any]] | None = None,
-        bypass_cache: bool | None = None,
-        cache_ttl_seconds: float | None = None,
-        mode: str | None = None,
+        async_: bool | None = None,
     ) -> dict[str, Any]:
         """Render a web page and return the rendered HTML.
 
@@ -250,13 +234,7 @@ class WebExtraterClient:
             payload["user_agent"] = user_agent
         if callback_url is not None:
             payload["callback_url"] = callback_url
-        if cookies is not None:
-            payload["cookies"] = cookies
-        if bypass_cache is not None:
-            payload["bypass_cache"] = bypass_cache
-        if cache_ttl_seconds is not None:
-            payload["cache_ttl_seconds"] = cache_ttl_seconds
-        _apply_submission_mode(payload, mode)
+        _apply_async_flag(payload, async_)
 
         logger.info(f"Rendering page: {url}")
         endpoint = f"{self.base_url}/webextrator/render"

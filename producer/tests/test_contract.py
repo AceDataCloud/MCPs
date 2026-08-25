@@ -50,6 +50,23 @@ def test_audio_generation_exposes_async_and_string_seed():
     assert {"type": "string"} in properties["seed"]["anyOf"]
 
 
+def test_audio_tools_do_not_expose_removed_request_fields():
+    for tool_name in (
+        "producer_generate_custom_music",
+        "producer_extend_music",
+        "producer_cover_music",
+        "producer_variation_music",
+        "producer_replace_section",
+    ):
+        schema = mcp._tool_manager._tools[tool_name].parameters
+        assert "style" not in schema["properties"]
+        assert "prompt" in schema["properties"]
+
+    for tool_name in ("producer_swap_vocals", "producer_swap_instrumentals"):
+        schema = mcp._tool_manager._tools[tool_name].parameters
+        assert "swap_audio_id" not in schema["properties"]
+
+
 def test_media_generation_matches_spec_audio_id_only():
     for tool_name in ("producer_generate_video", "producer_generate_wav"):
         schema = mcp._tool_manager._tools[tool_name].parameters

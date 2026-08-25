@@ -28,9 +28,9 @@ def get_request_api_token() -> str | None:
     return _request_api_token.get()
 
 
-def _apply_submission_mode(payload: dict[str, Any], mode: str | None) -> None:
-    if mode == "async":
-        payload["async"] = True
+def _apply_async_flag(payload: dict[str, Any], async_: bool | None) -> None:
+    if async_ is not None:
+        payload["async"] = async_
 
 
 class Image2TextClient:
@@ -104,13 +104,9 @@ class Image2TextClient:
             except Exception as e:
                 raise Image2TextAPIError(message=str(e)) from e
 
-    async def recognize(self, image: str, mode: str | None = None) -> dict[str, Any]:
+    async def recognize(self, image: str, async_: bool | None = None) -> dict[str, Any]:
         payload: dict[str, Any] = {"image": image}
-        _apply_submission_mode(payload, mode)
+        _apply_async_flag(payload, async_)
         return await self.request("POST", "/captcha/recognition/image2text", payload=payload)
-
-    async def get_task(self, task_id: str) -> dict[str, Any]:
-        return await self.request("POST", "/captcha/tasks", payload={"task_id": task_id})
-
 
 client = Image2TextClient()

@@ -8,7 +8,8 @@ async def image2text_get_usage_guide() -> str:
     """Get a usage guide for the image2text tools."""
     return """# Image2Text Usage Guide
 
-Use `image2text_recognize` with a base64 image. Default mode is async; poll returned tasks with `image2text_get_task`.
+Use `image2text_recognize` with a base64 image. The tool supports the documented
+sync/async submission mode for `/captcha/recognition/image2text`.
 """
 
 

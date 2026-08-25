@@ -88,7 +88,6 @@ Environment Variables:
     safe_print("")
     safe_print("  Available tools:")
     safe_print("    - image2text_recognize")
-    safe_print("    - image2text_get_task")
     safe_print("    - image2text_get_usage_guide")
     safe_print("    - image2text_get_api_info")
     safe_print("")
@@ -130,10 +129,6 @@ Environment Variables:
                             {
                                 "name": "image2text_recognize",
                                 "description": "Recognize text from an image",
-                            },
-                            {
-                                "name": "image2text_get_task",
-                                "description": "Poll an image2text task result",
                             },
                             {
                                 "name": "image2text_get_usage_guide",

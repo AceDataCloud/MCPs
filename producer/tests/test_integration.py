@@ -60,7 +60,7 @@ class TestAudioTools:
         result = await producer_generate_custom_music(
             lyric=("[Verse]\nThis is a test song\nJust for testing\n[Chorus]\nTest test test"),
             title="Test Song",
-            style="pop, simple",
+            prompt="pop, simple",
             model="FUZZ-2.0",
             instrumental=False,
         )

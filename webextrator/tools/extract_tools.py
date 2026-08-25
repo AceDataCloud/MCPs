@@ -1,14 +1,14 @@
 """Extract and render tools for WebExtrator API."""
 
 import json
-from typing import Annotated, Any, cast
+from typing import Annotated, cast
 
 from pydantic import Field
 
 from core.client import client
 from core.exceptions import WebExtraterAPIError, WebExtraterAuthError
 from core.server import mcp
-from core.types import BlockResource, ExpectedType, TaskMode, WaitUntil
+from core.types import BlockResource, ExpectedType, WaitUntil
 from core.utils import format_submission_result
 
 
@@ -83,41 +83,11 @@ async def webextrator_extract(
             )
         ),
     ] = None,
-    cookies: Annotated[
-        list[dict[str, Any]] | None,
-        Field(
-            description=(
-                "Cookies to install before navigation. Each cookie is an object with at least "
-                "'name' and 'value', plus optional 'domain', 'path', 'expires', 'httpOnly', "
-                "'secure', 'sameSite'. Useful for authenticated pages."
-            )
-        ),
-    ] = None,
-    bypass_cache: Annotated[
+    async_: Annotated[
         bool | None,
         Field(
-            description=(
-                "Skip the Redis result cache for this request (still writes the fresh result "
-                "back). Default is false."
-            )
-        ),
-    ] = None,
-    cache_ttl_seconds: Annotated[
-        float | None,
-        Field(
-            description=(
-                "Override the global cache TTL (seconds) for this entry. 0 means do not cache "
-                "this response. Default is 3600."
-            )
-        ),
-    ] = None,
-    mode: Annotated[
-        TaskMode | None,
-        Field(
-            description=(
-                "Processing mode. Defaults to API sync behavior. Pass 'async' to "
-                "return immediately with a task_id to poll via webextrator_get_task."
-            )
+            alias="async",
+            description="Whether to process the request asynchronously.",
         ),
     ] = None,
 ) -> str:
@@ -132,7 +102,7 @@ async def webextrator_extract(
     - You need LLM-enhanced semantic normalization of extracted content
 
     Returns:
-        By default, the extracted structured content inline. With mode="async", a JSON envelope with a `task_id` — poll `webextrator_get_task` until it reports `finished_at`, then read the extracted content from its `response`.
+        By default, the extracted structured content inline. With async=true, a JSON envelope with a `task_id` — poll `webextrator_get_task` until it reports `finished_at`, then read the extracted content from its `response`.
     """
     if not url:
         return json.dumps({"error": "Validation Error", "message": "url is required"})
@@ -150,10 +120,7 @@ async def webextrator_extract(
             headers=headers,
             user_agent=user_agent,
             callback_url=callback_url,
-            cookies=cookies,
-            bypass_cache=bypass_cache,
-            cache_ttl_seconds=cache_ttl_seconds,
-            mode=mode,
+            async_=async_,
         )
 
         if not result:
@@ -222,41 +189,11 @@ async def webextrator_render(
             )
         ),
     ] = None,
-    cookies: Annotated[
-        list[dict[str, Any]] | None,
-        Field(
-            description=(
-                "Cookies to install before navigation. Each cookie is an object with at least "
-                "'name' and 'value', plus optional 'domain', 'path', 'expires', 'httpOnly', "
-                "'secure', 'sameSite'. Useful for authenticated pages."
-            )
-        ),
-    ] = None,
-    bypass_cache: Annotated[
+    async_: Annotated[
         bool | None,
         Field(
-            description=(
-                "Skip the Redis result cache for this request (still writes the fresh result "
-                "back). Default is false."
-            )
-        ),
-    ] = None,
-    cache_ttl_seconds: Annotated[
-        float | None,
-        Field(
-            description=(
-                "Override the global cache TTL (seconds) for this entry. 0 means do not cache "
-                "this response. Default is 3600."
-            )
-        ),
-    ] = None,
-    mode: Annotated[
-        TaskMode | None,
-        Field(
-            description=(
-                "Processing mode. Defaults to API sync behavior. Pass 'async' to "
-                "return immediately with a task_id to poll via webextrator_get_task."
-            )
+            alias="async",
+            description="Whether to process the request asynchronously.",
         ),
     ] = None,
 ) -> str:
@@ -271,7 +208,7 @@ async def webextrator_render(
     - You need to capture single-page application (SPA) content
 
     Returns:
-        By default, the rendered HTML content inline. With mode="async", a JSON
+        By default, the rendered HTML content inline. With async=true, a JSON
         envelope with a `task_id` — poll `webextrator_get_task` until it reports
         `finished_at`, then read the rendered HTML from its `response`.
     """
@@ -289,10 +226,7 @@ async def webextrator_render(
             headers=headers,
             user_agent=user_agent,
             callback_url=callback_url,
-            cookies=cookies,
-            bypass_cache=bypass_cache,
-            cache_ttl_seconds=cache_ttl_seconds,
-            mode=mode,
+            async_=async_,
         )
 
         if not result:

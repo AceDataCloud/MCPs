@@ -45,6 +45,20 @@ class TestOpenAIClient:
         )
 
     @pytest.mark.asyncio
+    async def test_realtime_calls_documented_get_endpoint(self, client):
+        """Realtime helper should call GET /v1/realtime with model and voice params."""
+        with patch.object(client, "request_get", new_callable=AsyncMock) as mock_request_get:
+            mock_request_get.return_value = {"url": "wss://example.test/realtime"}
+
+            result = await client.realtime(model="gpt-realtime-2.1-mini", voice="marin")
+
+        assert result == {"url": "wss://example.test/realtime"}
+        mock_request_get.assert_awaited_once_with(
+            "/v1/realtime",
+            {"model": "gpt-realtime-2.1-mini", "voice": "marin"},
+        )
+
+    @pytest.mark.asyncio
     async def test_request_success(self, client, mock_chat_response):
         """Test successful API request."""
         mock_response = MagicMock()

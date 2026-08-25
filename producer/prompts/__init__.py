@@ -28,10 +28,10 @@ When the user wants to generate music, choose the appropriate tool based on thei
 **Tool:** `producer_generate_custom_music`
 **Use when:**
 - User provides specific lyrics
-- User wants control over title and style
+- User wants control over title and style prompt
 
 **Example:** "Here are my lyrics: [Verse] Walking in the rain..."
--> Call `producer_generate_custom_music` with the provided lyrics, a title, and appropriate style
+-> Call `producer_generate_custom_music` with the provided lyrics, a title, and appropriate prompt
 
 ## Extending Songs
 **Tool:** `producer_extend_music`
@@ -94,7 +94,7 @@ def producer_workflow_examples() -> str:
 ## Workflow 2: Custom Song with User's Lyrics
 1. User provides lyrics
 2. Ask for title and style preferences if not provided
-3. Call `producer_generate_custom_music(lyric=user_lyrics, title="...", style="...")`
+3. Call `producer_generate_custom_music(lyric=user_lyrics, title="...", prompt="...")`
 4. Poll with `producer_get_task(task_id)` until `state` is `"complete"` (not just until `audio_url` appears)
 
 ## Workflow 3: Creating a Long Song
@@ -106,12 +106,12 @@ def producer_workflow_examples() -> str:
 ## Workflow 4: Cover/Remix
 1. User has a song_id they want to remix
 2. User describes the new style
-3. Call `producer_cover_music(audio_id, prompt="jazz version", style="smooth jazz, saxophone")`
+3. Call `producer_cover_music(audio_id, prompt="smooth jazz, saxophone")`
 4. Poll with `producer_get_task(task_id)` until `state` is `"complete"`
 
 ## Workflow 5: Vocal Mashup
-1. Generate or identify two songs
-2. Call `producer_swap_vocals(audio_id=song_a, swap_audio_id=song_b)` to put song_b's vocals on song_a's music
+1. Generate or identify a song
+2. Call `producer_swap_vocals(audio_id=song_a)`
 3. Poll with `producer_get_task(task_id)` for the result
 
 ## Workflow 6: Fix a Section

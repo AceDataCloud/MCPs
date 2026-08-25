@@ -390,7 +390,7 @@ User: Here are my lyrics:
 [Chorus] But I keep moving on...
 
 Claude: I'll create a song with your lyrics.
-[Calls producer_generate_custom_music with lyrics, title, and style]
+[Calls producer_generate_custom_music with lyrics, title, and prompt]
 ```
 
 ### Extend a Song
@@ -408,7 +408,7 @@ Claude: I'll extend the song from where it left off.
 User: Make an acoustic version of this song
 
 Claude: I'll create an acoustic cover.
-[Calls producer_cover_music with audio_id and style="acoustic folk, gentle guitar"]
+[Calls producer_cover_music with audio_id and prompt="acoustic folk, gentle guitar"]
 ```
 
 ## Available Models
