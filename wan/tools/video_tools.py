@@ -312,13 +312,14 @@ async def wan_generate_video_all_in_one(
     payload: dict = {
         "model": "wan3.0-video",
         "prompt": prompt,
-        "media": media,
         "duration": duration,
         "resolution": resolution,
         "ratio": ratio,
         "audio": audio,
         "watermark": watermark,
     }
+    if media is not None:
+        payload["media"] = media
     if seed is not None:
         payload["seed"] = seed
     if callback_url:

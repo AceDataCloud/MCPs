@@ -7,7 +7,7 @@ from pydantic import Field
 
 from core.client import client
 from core.server import mcp
-from core.utils import format_task_result
+from core.utils import format_batch_task_result, format_task_result
 
 
 @mcp.tool()
@@ -77,26 +77,4 @@ async def qwen_image_get_tasks_batch(
         ids=task_ids,
         action="retrieve_batch",
     )
-
-    if "error" in result:
-        error = result.get("error", {})
-        return f"Error: {error.get('code', 'unknown')} - {error.get('message', 'Unknown error')}"
-
-    lines = [f"Total Tasks: {result.get('count', 0)}", ""]
-
-    for item in result.get("items", []):
-        response_info = item.get("response", {})
-        lines.extend(
-            [
-                f"=== Task: {item.get('id', 'N/A')} ===",
-                f"Created At: {item.get('created_at', 'N/A')}",
-                f"Success: {response_info.get('success', False)}",
-            ]
-        )
-
-        for image in response_info.get("data", []):
-            lines.append(f"  🖼️ Image: {image.get('image_url', 'N/A')}")
-
-        lines.append("")
-
-    return "\n".join(lines)
+    return format_batch_task_result(result)
