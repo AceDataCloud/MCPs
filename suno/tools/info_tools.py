@@ -72,6 +72,7 @@ Music Generation:
 - suno_remaster_music: Remaster a song to improve audio quality
 - suno_replace_section: Replace a specific time range with new content
 - suno_mashup_music: Blend multiple songs together musically
+- suno_generate_inspo: Create brand-new music inspired by reference audio URLs
 
 Upload-based Operations (for your own music):
 - suno_upload_audio: Upload external audio for use in Suno
@@ -126,6 +127,7 @@ Workflow Examples:
 9. Full stems: suno_all_stems_music → use stems for further production
 10. Remix: suno_stems_music → use stems for further production
 11. Fix section: suno_replace_section → suno_get_task
+12. Inspired song: suno_generate_inspo → suno_get_task
 """
 
 

@@ -132,6 +132,7 @@ class TestInfoTools:
         assert "suno_generate_music" in result
         assert "suno_extend_music" in result
         assert "suno_cover_music" in result
+        assert "suno_generate_inspo" in result
 
     @pytest.mark.asyncio
     async def test_get_lyric_format_guide(self):
