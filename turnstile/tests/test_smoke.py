@@ -36,7 +36,6 @@ def test_tools_register():
 
     expected = {
         "turnstile_get_token",
-        "turnstile_get_task",
         "turnstile_get_usage_guide",
         "turnstile_get_api_info",
     }

@@ -1,15 +1,13 @@
 """Captcha tools for the Turnstile API."""
 
 import json
-from typing import Annotated, Literal
+from typing import Annotated
 
 from pydantic import Field
 
 from core.client import client
 from core.exceptions import TurnstileAPIError, TurnstileAuthError
 from core.server import mcp
-
-TaskMode = Literal["sync", "async"]
 
 
 @mcp.tool()
@@ -24,9 +22,9 @@ async def turnstile_get_token(
     cdata: Annotated[
         str | None, Field(description="Optional Turnstile cData value expected by the site.")
     ] = None,
-    mode: Annotated[
-        TaskMode | None,
-        Field(description="Processing mode. Defaults to 'async'; use 'sync' to wait inline."),
+    async_: Annotated[
+        bool | None,
+        Field(alias="async", description="Whether to submit the token task asynchronously."),
     ] = None,
 ) -> str:
     """Get a Cloudflare Turnstile token."""
@@ -40,7 +38,7 @@ async def turnstile_get_token(
             website_url=website_url,
             action=action,
             cdata=cdata,
-            mode=mode,
+            async_=async_,
         )
         return json.dumps(result, ensure_ascii=False, indent=2)
     except TurnstileAuthError as e:

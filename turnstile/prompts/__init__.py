@@ -5,9 +5,9 @@ from core.server import mcp
 
 @mcp.prompt()
 def turnstile_guide() -> str:
-    return """Use `turnstile_get_token` for Cloudflare Turnstile tokens and `turnstile_get_task` for async polling."""
+    return """Use `turnstile_get_token` for Cloudflare Turnstile tokens."""
 
 
 @mcp.prompt()
 def turnstile_workflow_examples() -> str:
-    return """Submit `turnstile_get_token`, capture `task_id`, then poll with `turnstile_get_task` until ready."""
+    return """Submit `turnstile_get_token` with `website_key` and `website_url`, and include `async` only when asynchronous processing is needed."""
