@@ -88,7 +88,6 @@ Environment Variables:
     safe_print("")
     safe_print("  Available tools:")
     safe_print("    - turnstile_get_token")
-    safe_print("    - turnstile_get_task")
     safe_print("    - turnstile_get_usage_guide")
     safe_print("    - turnstile_get_api_info")
     safe_print("")
@@ -130,10 +129,6 @@ Environment Variables:
                             {
                                 "name": "turnstile_get_token",
                                 "description": "Get a Cloudflare Turnstile token",
-                            },
-                            {
-                                "name": "turnstile_get_task",
-                                "description": "Poll a Turnstile task result",
                             },
                             {
                                 "name": "turnstile_get_usage_guide",

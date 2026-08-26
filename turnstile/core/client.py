@@ -28,10 +28,9 @@ def get_request_api_token() -> str | None:
     return _request_api_token.get()
 
 
-def _apply_submission_mode(payload: dict[str, Any], mode: str | None) -> None:
-    if mode == "sync":
-        return
-    payload["async"] = True
+def _apply_async_flag(payload: dict[str, Any], async_: bool | None) -> None:
+    if async_ is not None:
+        payload["async"] = async_
 
 
 class TurnstileClient:
@@ -111,18 +110,15 @@ class TurnstileClient:
         website_url: str,
         action: str | None = None,
         cdata: str | None = None,
-        mode: str | None = None,
+        async_: bool | None = None,
     ) -> dict[str, Any]:
         payload: dict[str, Any] = {"website_key": website_key, "website_url": website_url}
         if action is not None:
             payload["action"] = action
         if cdata is not None:
             payload["cdata"] = cdata
-        _apply_submission_mode(payload, mode)
+        _apply_async_flag(payload, async_)
         return await self.request("POST", "/captcha/token/turnstile", payload=payload)
-
-    async def get_task(self, task_id: str) -> dict[str, Any]:
-        return await self.request("POST", "/captcha/tasks", payload={"task_id": task_id})
 
 
 client = TurnstileClient()
