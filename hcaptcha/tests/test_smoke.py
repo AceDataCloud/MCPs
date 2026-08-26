@@ -3,6 +3,7 @@
 import os
 from unittest.mock import patch
 
+import httpx
 import pytest
 
 
@@ -91,3 +92,39 @@ async def test_get_token_includes_optional_rqdata():
         "proxy": "http://proxy.example:8080",
         "async": False,
     }
+
+
+@pytest.mark.asyncio
+async def test_get_task_returns_terminal_timeout_response():
+    from core.client import HCaptchaClient
+
+    timeout_response = {
+        "detail": "The captcha task timed out.",
+        "code": "timeout",
+        "success": False,
+        "task_id": "task-123",
+        "status": "failed",
+        "started_at": 1784885653.0,
+        "finished_at": 1784885765.4,
+        "elapsed": 112.4,
+    }
+
+    class MockAsyncClient:
+        async def __aenter__(self):
+            return self
+
+        async def __aexit__(self, exc_type, exc_value, traceback):
+            return None
+
+        async def request(self, *_args, **_kwargs):
+            return httpx.Response(
+                504,
+                json=timeout_response,
+                request=httpx.Request("POST", "https://api.acedata.cloud/captcha/tasks"),
+            )
+
+    client = HCaptchaClient(api_token="test-token")
+    with patch("core.client.httpx.AsyncClient", return_value=MockAsyncClient()):
+        result = await client.get_task("task-123")
+
+    assert result == timeout_response
