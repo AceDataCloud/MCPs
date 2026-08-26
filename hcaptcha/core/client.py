@@ -72,6 +72,7 @@ class HCaptchaClient:
         *,
         payload: dict[str, Any] | None = None,
         timeout: float | None = None,
+        allowed_error_statuses: set[int] | None = None,
     ) -> dict[str, Any]:
         method_upper = method.upper()
         url = f"{self.base_url}{endpoint}"
@@ -87,7 +88,9 @@ class HCaptchaClient:
                     headers=self._get_headers(),
                     timeout=request_timeout,
                 )
-                if response.status_code >= 400:
+                if response.status_code >= 400 and response.status_code not in (
+                    allowed_error_statuses or set()
+                ):
                     self._handle_error_response(response)
                 return response.json()  # type: ignore[no-any-return]
             except httpx.TimeoutException as e:
@@ -130,7 +133,12 @@ class HCaptchaClient:
         return await self.request("POST", "/captcha/token/hcaptcha", payload=payload)
 
     async def get_task(self, task_id: str) -> dict[str, Any]:
-        return await self.request("POST", "/captcha/tasks", payload={"task_id": task_id})
+        return await self.request(
+            "POST",
+            "/captcha/tasks",
+            payload={"task_id": task_id},
+            allowed_error_statuses={504},
+        )
 
 
 client = HCaptchaClient()
