@@ -300,6 +300,15 @@ async def openai_edit_image(
         int | None,
         Field(description="Compression level (0-100%) for jpeg/webp output. Default is 100."),
     ] = None,
+    partial_images: Annotated[
+        int | None,
+        Field(
+            description=(
+                "Number of partial images to emit during streaming (0-3). "
+                "0 returns the final image in one event."
+            )
+        ),
+    ] = None,
     callback_url: Annotated[
         str | None,
         Field(
@@ -349,6 +358,8 @@ async def openai_edit_image(
             payload["input_fidelity"] = input_fidelity
         if output_compression is not None:
             payload["output_compression"] = output_compression
+        if partial_images is not None:
+            payload["partial_images"] = partial_images
         if callback_url is not None:
             payload["callback_url"] = callback_url
         if async_ is not None:
