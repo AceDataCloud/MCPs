@@ -103,24 +103,10 @@ async def test_openai_generate_image_uses_auto_size_by_default(monkeypatch):
     assert captured_payload["size"] == "auto"
 
 
-@pytest.mark.asyncio
-async def test_openai_edit_image_forwards_partial_images(monkeypatch):
-    """Image editing should pass through partial_images from the API schema."""
-    captured_payload: dict[str, object] = {}
-
-    async def mock_images_edits(**kwargs):
-        captured_payload.update(kwargs)
-        return {"task_id": "t-4"}
-
-    monkeypatch.setattr(image_tools.client, "images_edits", mock_images_edits)
-
-    await image_tools.openai_edit_image(
-        image="https://example.com/base.png",
-        prompt="Add a hat.",
-        partial_images=2,
-    )
-
-    assert captured_payload["partial_images"] == 2
+def test_openai_edit_image_schema_omits_partial_images():
+    """JSON edits endpoint doesn't accept partial_images; tool schema must not expose it."""
+    tool = next(tool for tool in mcp._tool_manager.list_tools() if tool.name == "openai_edit_image")
+    assert "partial_images" not in tool.parameters["properties"]
 
 
 @pytest.mark.asyncio
