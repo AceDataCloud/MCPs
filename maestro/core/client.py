@@ -89,4 +89,5 @@ class MaestroClient:
         """Retrieve one Maestro task."""
         return await self.request("/maestro/tasks", {"id": task_id, "action": "retrieve"})
 
+
 client = MaestroClient()
