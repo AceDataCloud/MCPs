@@ -18,6 +18,7 @@ load_dotenv()
 
 from core.config import settings
 from core.server import mcp
+from core.server_card import registered_tool_cards
 
 # Configure logging
 logging.basicConfig(
@@ -155,21 +156,7 @@ Environment Variables:
                     {
                         "serverInfo": {"name": "MCP NanoBanana"},
                         "authentication": {"required": True, "schemes": ["bearer"]},
-                        "tools": [
-                            {
-                                "name": "nanobanana_generate_image",
-                                "description": "Generate image from text",
-                            },
-                            {
-                                "name": "nanobanana_edit_image",
-                                "description": "Edit an existing image",
-                            },
-                            {"name": "nanobanana_get_task", "description": "Query task status"},
-                            {
-                                "name": "nanobanana_get_tasks_batch",
-                                "description": "Query multiple tasks",
-                            },
-                        ],
+                        "tools": registered_tool_cards(mcp),
                         "prompts": [
                             {
                                 "name": "nanobanana_image_generation_guide",

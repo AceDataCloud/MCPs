@@ -18,6 +18,7 @@ load_dotenv()
 
 from core.config import settings
 from core.server import mcp
+from core.server_card import registered_tool_cards
 
 # Configure logging
 logging.basicConfig(
@@ -167,28 +168,7 @@ Environment Variables:
                     {
                         "serverInfo": {"name": "MCP Sora"},
                         "authentication": {"required": True, "schemes": ["bearer"]},
-                        "tools": [
-                            {
-                                "name": "sora_generate_video",
-                                "description": "Generate video from text",
-                            },
-                            {
-                                "name": "sora_generate_video_from_image",
-                                "description": "Generate video from image",
-                            },
-                            {
-                                "name": "sora_generate_video_with_character",
-                                "description": "Generate with character reference",
-                            },
-                            {
-                                "name": "sora_generate_video_async",
-                                "description": "Generate video asynchronously",
-                            },
-                            {"name": "sora_get_task", "description": "Query task status"},
-                            {"name": "sora_get_tasks_batch", "description": "Query multiple tasks"},
-                            {"name": "sora_list_models", "description": "List available models"},
-                            {"name": "sora_list_actions", "description": "List available actions"},
-                        ],
+                        "tools": registered_tool_cards(mcp),
                         "prompts": [
                             {
                                 "name": "sora_video_generation_guide",

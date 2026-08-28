@@ -18,6 +18,7 @@ load_dotenv()
 
 from core.config import settings
 from core.server import mcp
+from core.server_card import registered_tool_cards
 
 # Configure logging
 logging.basicConfig(
@@ -165,31 +166,7 @@ Environment Variables:
                     {
                         "serverInfo": {"name": "MCP Kling"},
                         "authentication": {"required": True, "schemes": ["bearer"]},
-                        "tools": [
-                            {
-                                "name": "kling_generate_video",
-                                "description": "Generate video from text",
-                            },
-                            {
-                                "name": "kling_generate_video_from_image",
-                                "description": "Generate video from image",
-                            },
-                            {
-                                "name": "kling_extend_video",
-                                "description": "Extend existing video",
-                            },
-                            {
-                                "name": "kling_generate_motion",
-                                "description": "Transfer motion to character",
-                            },
-                            {"name": "kling_get_task", "description": "Query task status"},
-                            {
-                                "name": "kling_get_tasks_batch",
-                                "description": "Query multiple tasks",
-                            },
-                            {"name": "kling_list_models", "description": "List available models"},
-                            {"name": "kling_list_actions", "description": "List available actions"},
-                        ],
+                        "tools": registered_tool_cards(mcp),
                         "prompts": [
                             {
                                 "name": "kling_video_generation_guide",

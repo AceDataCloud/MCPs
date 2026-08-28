@@ -37,7 +37,6 @@ async def test_openai_get_realtime_connection_info_calls_realtime_endpoint(monke
     payload = json.loads(response)
 
     assert (
-        payload["url"]
-        == "wss://api.test.com/v1/realtime?model=gpt-realtime-2.1-mini&voice=marin"
+        payload["url"] == "wss://api.test.com/v1/realtime?model=gpt-realtime-2.1-mini&voice=marin"
     )
     assert payload["voice"] == "marin"

@@ -18,6 +18,7 @@ load_dotenv()
 
 from core.config import settings
 from core.server import mcp
+from core.server_card import registered_tool_cards
 
 # Configure logging
 logging.basicConfig(
@@ -162,38 +163,7 @@ Environment Variables:
                     {
                         "serverInfo": {"name": "MCP Minimax"},
                         "authentication": {"required": True, "schemes": ["bearer"]},
-                        "tools": [
-                            {
-                                "name": "minimax_generate_video_from_text",
-                                "description": "Generate video from text",
-                            },
-                            {
-                                "name": "minimax_generate_video_from_images",
-                                "description": "Generate video from one to nine images",
-                            },
-                            {
-                                "name": "minimax_generate_video_from_audio",
-                                "description": "Generate video guided by one to three audio references",
-                            },
-                            {
-                                "name": "minimax_generate_video",
-                                "description": "Generate video using the full MiniMax content schema",
-                            },
-                            {"name": "minimax_get_task", "description": "Query task status"},
-                            {
-                                "name": "minimax_get_tasks_batch",
-                                "description": "Query multiple tasks",
-                            },
-                            {"name": "minimax_delete_task", "description": "Delete a task"},
-                            {
-                                "name": "minimax_list_models",
-                                "description": "List available models",
-                            },
-                            {
-                                "name": "minimax_list_actions",
-                                "description": "List available actions",
-                            },
-                        ],
+                        "tools": registered_tool_cards(mcp),
                         "prompts": [
                             {
                                 "name": "minimax_video_generation_guide",

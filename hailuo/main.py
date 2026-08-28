@@ -18,6 +18,7 @@ load_dotenv()
 
 from core.config import settings
 from core.server import mcp
+from core.server_card import registered_tool_cards
 
 # Configure logging
 logging.basicConfig(
@@ -159,29 +160,7 @@ Environment Variables:
                     {
                         "serverInfo": {"name": "MCP Hailuo"},
                         "authentication": {"required": True, "schemes": ["bearer"]},
-                        "tools": [
-                            {
-                                "name": "hailuo_generate_video",
-                                "description": "Generate video from text",
-                            },
-                            {
-                                "name": "hailuo_generate_video_from_image",
-                                "description": "Generate video from image",
-                            },
-                            {"name": "hailuo_get_task", "description": "Query task status"},
-                            {
-                                "name": "hailuo_get_tasks_batch",
-                                "description": "Query multiple tasks",
-                            },
-                            {
-                                "name": "hailuo_list_models",
-                                "description": "List available models",
-                            },
-                            {
-                                "name": "hailuo_list_actions",
-                                "description": "List available actions",
-                            },
-                        ],
+                        "tools": registered_tool_cards(mcp),
                         "prompts": [
                             {
                                 "name": "hailuo_video_generation_guide",

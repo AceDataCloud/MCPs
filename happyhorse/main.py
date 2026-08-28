@@ -13,6 +13,7 @@ load_dotenv()
 
 from core.config import settings
 from core.server import mcp
+from core.server_card import registered_tool_cards
 
 logger = logging.getLogger(__name__)
 
@@ -73,33 +74,7 @@ def main() -> None:
             {
                 "serverInfo": {"name": "Happy Horse MCP"},
                 "authentication": {"required": True, "schemes": ["bearer", "oauth2"]},
-                "tools": [
-                    {
-                        "name": "happyhorse_generate_video",
-                        "description": "Generate a video from text",
-                    },
-                    {
-                        "name": "happyhorse_generate_video_from_image",
-                        "description": "Animate a first-frame image",
-                    },
-                    {
-                        "name": "happyhorse_generate_video_from_references",
-                        "description": "Generate from reference images",
-                    },
-                    {
-                        "name": "happyhorse_edit_video",
-                        "description": "Edit an existing video",
-                    },
-                    {"name": "happyhorse_get_task", "description": "Get one task"},
-                    {
-                        "name": "happyhorse_get_tasks_batch",
-                        "description": "Get multiple tasks",
-                    },
-                    {
-                        "name": "happyhorse_list_models",
-                        "description": "List models by action",
-                    },
-                ],
+                "tools": registered_tool_cards(mcp),
                 "prompts": [
                     {
                         "name": "happyhorse_video_workflow",

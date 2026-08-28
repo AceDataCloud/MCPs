@@ -18,6 +18,7 @@ load_dotenv()
 
 from core.config import settings
 from core.server import mcp
+from core.server_card import registered_tool_cards
 
 # Configure logging
 logging.basicConfig(
@@ -155,20 +156,7 @@ Environment Variables:
                     {
                         "serverInfo": {"name": "MCP GLM"},
                         "authentication": {"required": True, "schemes": ["bearer"]},
-                        "tools": [
-                            {
-                                "name": "glm_chat_completions",
-                                "description": "Create a chat completion with a GLM model",
-                            },
-                            {
-                                "name": "glm_list_models",
-                                "description": "List all available GLM models",
-                            },
-                            {
-                                "name": "glm_get_usage_guide",
-                                "description": "Get GLM API usage guide",
-                            },
-                        ],
+                        "tools": registered_tool_cards(mcp),
                         "prompts": [
                             {"name": "glm_guide", "description": "GLM model selection guide"},
                             {

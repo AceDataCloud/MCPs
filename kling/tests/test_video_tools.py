@@ -172,9 +172,7 @@ class TestKlingGenerateVideo:
         }
 
     @pytest.mark.asyncio
-    async def test_camera_control_accepts_documented_numeric_keys(
-        self, mock_client_generate_video
-    ):
+    async def test_camera_control_accepts_documented_numeric_keys(self, mock_client_generate_video):
         from tools.video_tools import kling_generate_video
 
         await kling_generate_video(
