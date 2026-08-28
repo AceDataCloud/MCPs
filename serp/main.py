@@ -18,6 +18,7 @@ load_dotenv()
 
 from core.config import settings
 from core.server import mcp
+from core.server_card import registered_tool_cards
 
 # Configure logging
 logging.basicConfig(
@@ -162,34 +163,7 @@ Environment Variables:
                     {
                         "serverInfo": {"name": "MCP Serp"},
                         "authentication": {"required": True, "schemes": ["bearer"]},
-                        "tools": [
-                            {
-                                "name": "serp_google_search",
-                                "description": "Search Google for web results",
-                            },
-                            {"name": "serp_google_images", "description": "Search Google Images"},
-                            {"name": "serp_google_news", "description": "Search Google News"},
-                            {"name": "serp_google_videos", "description": "Search Google Videos"},
-                            {"name": "serp_google_places", "description": "Search Google Places"},
-                            {"name": "serp_google_maps", "description": "Search Google Maps"},
-                            {
-                                "name": "serp_list_search_types",
-                                "description": "List available search types",
-                            },
-                            {
-                                "name": "serp_list_countries",
-                                "description": "List supported countries",
-                            },
-                            {
-                                "name": "serp_list_languages",
-                                "description": "List supported languages",
-                            },
-                            {
-                                "name": "serp_list_time_ranges",
-                                "description": "List time range options",
-                            },
-                            {"name": "serp_get_usage_guide", "description": "Get API usage guide"},
-                        ],
+                        "tools": registered_tool_cards(mcp),
                         "prompts": [
                             {
                                 "name": "serp_search_guide",

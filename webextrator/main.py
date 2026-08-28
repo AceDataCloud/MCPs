@@ -18,6 +18,7 @@ load_dotenv()
 
 from core.config import settings
 from core.server import mcp
+from core.server_card import registered_tool_cards
 
 # Configure logging
 logging.basicConfig(
@@ -157,28 +158,7 @@ Environment Variables:
                     {
                         "serverInfo": {"name": "MCP WebExtrator"},
                         "authentication": {"required": True, "schemes": ["bearer"]},
-                        "tools": [
-                            {
-                                "name": "webextrator_extract",
-                                "description": "Extract structured content from a web page",
-                            },
-                            {
-                                "name": "webextrator_render",
-                                "description": "Render a web page and return the rendered HTML",
-                            },
-                            {
-                                "name": "webextrator_get_task",
-                                "description": "Retrieve the result of a single task",
-                            },
-                            {
-                                "name": "webextrator_get_tasks_batch",
-                                "description": "Retrieve results for multiple tasks",
-                            },
-                            {
-                                "name": "webextrator_get_usage_guide",
-                                "description": "Get API usage guide",
-                            },
-                        ],
+                        "tools": registered_tool_cards(mcp),
                         "prompts": [
                             {
                                 "name": "webextrator_guide",

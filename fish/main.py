@@ -18,6 +18,7 @@ load_dotenv()
 
 from core.config import settings
 from core.server import mcp
+from core.server_card import registered_tool_cards
 
 # Configure logging
 logging.basicConfig(
@@ -159,32 +160,7 @@ Environment Variables:
                     {
                         "serverInfo": {"name": "MCP Fish"},
                         "authentication": {"required": True, "schemes": ["bearer"]},
-                        "tools": [
-                            {
-                                "name": "fish_generate_audio",
-                                "description": "Generate speech audio from text",
-                            },
-                            {
-                                "name": "fish_get_task",
-                                "description": "Query the status of a single Fish task",
-                            },
-                            {
-                                "name": "fish_get_tasks_batch",
-                                "description": "Query the status of multiple Fish tasks",
-                            },
-                            {
-                                "name": "fish_get_usage_guide",
-                                "description": "Get Fish TTS API usage guide",
-                            },
-                            {
-                                "name": "fish_list_models",
-                                "description": "List available Fish voice models",
-                            },
-                            {
-                                "name": "fish_get_model",
-                                "description": "Get details for a Fish voice model by ID",
-                            },
-                        ],
+                        "tools": registered_tool_cards(mcp),
                         "prompts": [
                             {"name": "fish_guide", "description": "Fish TTS tool selection guide"},
                             {

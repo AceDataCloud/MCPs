@@ -18,6 +18,7 @@ load_dotenv()
 
 from core.config import settings
 from core.server import mcp
+from core.server_card import registered_tool_cards
 
 # Configure logging
 logging.basicConfig(
@@ -163,33 +164,7 @@ Environment Variables:
                     {
                         "serverInfo": {"name": "MCP Wan"},
                         "authentication": {"required": True, "schemes": ["bearer"]},
-                        "tools": [
-                            {
-                                "name": "wan_generate_video",
-                                "description": "Generate video from text",
-                            },
-                            {
-                                "name": "wan_generate_video_from_image",
-                                "description": "Generate video from image",
-                            },
-                            {"name": "wan_get_task", "description": "Query task status"},
-                            {
-                                "name": "wan_get_tasks_batch",
-                                "description": "Query multiple tasks",
-                            },
-                            {
-                                "name": "wan_list_models",
-                                "description": "List available models",
-                            },
-                            {
-                                "name": "wan_list_resolutions",
-                                "description": "List available resolutions",
-                            },
-                            {
-                                "name": "wan_list_actions",
-                                "description": "List available actions",
-                            },
-                        ],
+                        "tools": registered_tool_cards(mcp),
                         "prompts": [
                             {
                                 "name": "wan_video_generation_guide",

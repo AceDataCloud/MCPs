@@ -18,6 +18,7 @@ load_dotenv()
 
 from core.config import settings
 from core.server import mcp
+from core.server_card import registered_tool_cards
 
 # Configure logging
 logging.basicConfig(
@@ -174,80 +175,7 @@ Environment Variables:
                     {
                         "serverInfo": {"name": "MCP Producer", "version": get_version()},
                         "authentication": {"required": True, "schemes": ["bearer"]},
-                        "tools": [
-                            {
-                                "name": "producer_generate_music",
-                                "description": "Generate AI music from a text prompt",
-                            },
-                            {
-                                "name": "producer_generate_custom_music",
-                                "description": "Generate music with custom lyrics, title, and style",
-                            },
-                            {
-                                "name": "producer_extend_music",
-                                "description": "Extend an existing song from a timestamp",
-                            },
-                            {
-                                "name": "producer_cover_music",
-                                "description": "Create a cover/remix in a different style",
-                            },
-                            {
-                                "name": "producer_variation_music",
-                                "description": "Create a variation of an existing song",
-                            },
-                            {
-                                "name": "producer_swap_vocals",
-                                "description": "Swap vocals between two songs",
-                            },
-                            {
-                                "name": "producer_swap_instrumentals",
-                                "description": "Swap instrumentals between two songs",
-                            },
-                            {
-                                "name": "producer_replace_section",
-                                "description": "Replace a time range with new content",
-                            },
-                            {
-                                "name": "producer_stems_music",
-                                "description": "Separate into vocal and instrument stems",
-                            },
-                            {
-                                "name": "producer_generate_lyrics",
-                                "description": "Generate structured lyrics from a prompt",
-                            },
-                            {
-                                "name": "producer_upload_audio",
-                                "description": "Upload external audio for processing",
-                            },
-                            {
-                                "name": "producer_generate_video",
-                                "description": "Generate a music video for a song",
-                            },
-                            {
-                                "name": "producer_generate_wav",
-                                "description": "Get lossless WAV format of a song",
-                            },
-                            {
-                                "name": "producer_get_task",
-                                "description": "Query task status and result",
-                            },
-                            {
-                                "name": "producer_get_tasks_batch",
-                                "description": "Query multiple tasks at once",
-                            },
-                            {
-                                "name": "producer_list_models",
-                                "description": "List available FUZZ models",
-                            },
-                            {
-                                "name": "producer_list_actions",
-                                "description": "List available API actions",
-                            },
-                            {
-                                "name": "producer_get_lyric_format_guide",
-                                "description": "Get lyrics formatting guide",
-                            },
-                        ],
+                        "tools": registered_tool_cards(mcp),
                         "prompts": [
                             {
                                 "name": "producer_music_generation_guide",

@@ -18,6 +18,7 @@ load_dotenv()
 
 from core.config import settings
 from core.server import mcp
+from core.server_card import registered_tool_cards
 
 # Configure logging
 logging.basicConfig(
@@ -161,28 +162,7 @@ Environment Variables:
                     {
                         "serverInfo": {"name": "MCP Luma"},
                         "authentication": {"required": True, "schemes": ["bearer"]},
-                        "tools": [
-                            {
-                                "name": "luma_generate_video",
-                                "description": "Generate video from text",
-                            },
-                            {
-                                "name": "luma_generate_video_from_image",
-                                "description": "Generate video from image",
-                            },
-                            {"name": "luma_extend_video", "description": "Extend existing video"},
-                            {
-                                "name": "luma_extend_video_from_url",
-                                "description": "Extend video from URL",
-                            },
-                            {"name": "luma_get_task", "description": "Query task status"},
-                            {"name": "luma_get_tasks_batch", "description": "Query multiple tasks"},
-                            {
-                                "name": "luma_list_aspect_ratios",
-                                "description": "List aspect ratios",
-                            },
-                            {"name": "luma_list_actions", "description": "List available actions"},
-                        ],
+                        "tools": registered_tool_cards(mcp),
                         "prompts": [
                             {
                                 "name": "luma_video_generation_guide",

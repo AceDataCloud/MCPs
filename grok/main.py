@@ -18,6 +18,7 @@ load_dotenv()
 
 from core.config import settings
 from core.server import mcp
+from core.server_card import registered_tool_cards
 
 # Configure logging
 logging.basicConfig(
@@ -161,28 +162,7 @@ Environment Variables:
                     {
                         "serverInfo": {"name": "MCP Grok"},
                         "authentication": {"required": True, "schemes": ["bearer"]},
-                        "tools": [
-                            {
-                                "name": "grok_chat_completions",
-                                "description": "Chat completion with Grok models",
-                            },
-                            {
-                                "name": "grok_text_to_video",
-                                "description": "Generate video from text",
-                            },
-                            {
-                                "name": "grok_image_to_video",
-                                "description": "Generate video from image",
-                            },
-                            {"name": "grok_get_task", "description": "Query task status"},
-                            {"name": "grok_get_tasks_batch", "description": "Query multiple tasks"},
-                            {"name": "grok_list_models", "description": "List available models"},
-                            {"name": "grok_list_actions", "description": "List available actions"},
-                            {
-                                "name": "grok_get_prompt_guide",
-                                "description": "Get prompt writing guide",
-                            },
-                        ],
+                        "tools": registered_tool_cards(mcp),
                         "prompts": [
                             {
                                 "name": "grok_video_generation_guide",

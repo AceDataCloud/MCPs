@@ -19,6 +19,7 @@ load_dotenv()
 
 from core.config import settings
 from core.server import mcp
+from core.server_card import registered_tool_cards
 
 # Configure logging
 logging.basicConfig(
@@ -158,52 +159,7 @@ Environment Variables:
                     {
                         "serverInfo": {"name": "MCP OpenAI"},
                         "authentication": {"required": True, "schemes": ["bearer"]},
-                        "tools": [
-                            {
-                                "name": "openai_chat_completion",
-                                "description": "Create chat completions using OpenAI models",
-                            },
-                            {
-                                "name": "openai_create_response",
-                                "description": "Create responses using the OpenAI Responses API",
-                            },
-                            {
-                                "name": "openai_generate_image",
-                                "description": "Generate images from text descriptions",
-                            },
-                            {
-                                "name": "openai_edit_image",
-                                "description": "Edit existing images with AI",
-                            },
-                            {
-                                "name": "openai_create_embedding",
-                                "description": "Create text embeddings",
-                            },
-                            {
-                                "name": "openai_get_task",
-                                "description": "Retrieve a single async image task by task ID or trace ID",
-                            },
-                            {
-                                "name": "openai_list_tasks",
-                                "description": "List async image tasks using batch query filters",
-                            },
-                            {
-                                "name": "openai_list_chat_models",
-                                "description": "List available chat models",
-                            },
-                            {
-                                "name": "openai_list_image_models",
-                                "description": "List available image models",
-                            },
-                            {
-                                "name": "openai_list_embedding_models",
-                                "description": "List available embedding models",
-                            },
-                            {
-                                "name": "openai_get_usage_guide",
-                                "description": "Get API usage guide",
-                            },
-                        ],
+                        "tools": registered_tool_cards(mcp),
                         "prompts": [],
                         "resources": [],
                     }
