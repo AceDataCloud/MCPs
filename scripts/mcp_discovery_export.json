@@ -1,0 +1,806 @@
+{
+  "schema_version": 1,
+  "services": [
+    {
+      "documentation": {
+        "alias": "acedatacloud-mcp",
+        "type": "document"
+      },
+      "hosted": {
+        "auth": [
+          "oauth_dcr",
+          "bearer"
+        ],
+        "endpoint": "https://mcp.acedata.cloud/mcp",
+        "transport": "streamable-http"
+      },
+      "id": "acedatacloud",
+      "lifecycle": "active",
+      "local_auth": {
+        "env": "ACEDATACLOUD_PLATFORM_TOKEN",
+        "type": "bearer"
+      },
+      "package": {
+        "command": "mcp-acedatacloud",
+        "ecosystem": "pypi",
+        "name": "mcp-acedatacloud",
+        "runner": "uvx"
+      }
+    },
+    {
+      "documentation": {
+        "alias": "aichat",
+        "type": "document"
+      },
+      "hosted": {
+        "auth": [
+          "oauth_dcr",
+          "bearer"
+        ],
+        "endpoint": "https://aichat.mcp.acedata.cloud/mcp",
+        "transport": "streamable-http"
+      },
+      "id": "aichat",
+      "lifecycle": "active",
+      "local_auth": {
+        "env": "ACEDATACLOUD_API_TOKEN",
+        "type": "bearer"
+      },
+      "package": {
+        "command": "mcp-aichat",
+        "ecosystem": "pypi",
+        "name": "mcp-aichat",
+        "runner": "uvx"
+      }
+    },
+    {
+      "documentation": {
+        "alias": "digitalhuman",
+        "type": "document"
+      },
+      "id": "digitalhuman",
+      "lifecycle": "active",
+      "local_auth": {
+        "env": "ACEDATACLOUD_API_TOKEN",
+        "type": "bearer"
+      },
+      "package": {
+        "command": "mcp-digitalhuman",
+        "ecosystem": "pypi",
+        "name": "mcp-digitalhuman",
+        "runner": "uvx"
+      }
+    },
+    {
+      "documentation": {
+        "alias": "development_discord_bot",
+        "type": "document"
+      },
+      "id": "discord-bot",
+      "lifecycle": "active",
+      "local_auth": {
+        "env": "DISCORD_BOT_TOKEN",
+        "type": "bearer"
+      },
+      "package": {
+        "command": "mcp-discord-bot",
+        "ecosystem": "pypi",
+        "name": "mcp-discord-bot",
+        "runner": "uvx"
+      }
+    },
+    {
+      "documentation": {
+        "id": "8efa1d83-9b75-4562-b44a-af95ce563d05",
+        "type": "service"
+      },
+      "hosted": {
+        "auth": [
+          "oauth_dcr",
+          "bearer"
+        ],
+        "endpoint": "https://face.mcp.acedata.cloud/mcp",
+        "transport": "streamable-http"
+      },
+      "id": "face",
+      "lifecycle": "active",
+      "local_auth": {
+        "env": "ACEDATACLOUD_API_TOKEN",
+        "type": "bearer"
+      },
+      "package": {
+        "command": "mcp-face-transform",
+        "ecosystem": "pypi",
+        "name": "mcp-face-transform",
+        "runner": "uvx"
+      }
+    },
+    {
+      "documentation": {
+        "alias": "fish",
+        "type": "document"
+      },
+      "hosted": {
+        "auth": [
+          "oauth_dcr",
+          "bearer"
+        ],
+        "endpoint": "https://fish.mcp.acedata.cloud/mcp",
+        "transport": "streamable-http"
+      },
+      "id": "fish",
+      "lifecycle": "active",
+      "local_auth": {
+        "env": "ACEDATACLOUD_API_TOKEN",
+        "type": "bearer"
+      },
+      "package": {
+        "command": "mcp-fish",
+        "ecosystem": "pypi",
+        "name": "mcp-fish",
+        "runner": "uvx"
+      }
+    },
+    {
+      "documentation": {
+        "alias": "flux-mcp",
+        "type": "document"
+      },
+      "hosted": {
+        "auth": [
+          "oauth_dcr",
+          "bearer"
+        ],
+        "endpoint": "https://flux.mcp.acedata.cloud/mcp",
+        "transport": "streamable-http"
+      },
+      "id": "flux",
+      "lifecycle": "active",
+      "local_auth": {
+        "env": "ACEDATACLOUD_API_TOKEN",
+        "type": "bearer"
+      },
+      "package": {
+        "command": "mcp-flux-pro",
+        "ecosystem": "pypi",
+        "name": "mcp-flux-pro",
+        "runner": "uvx"
+      }
+    },
+    {
+      "documentation": {
+        "alias": "glm-chat-completions",
+        "type": "document"
+      },
+      "hosted": {
+        "auth": [
+          "oauth_dcr",
+          "bearer"
+        ],
+        "endpoint": "https://glm.mcp.acedata.cloud/mcp",
+        "transport": "streamable-http"
+      },
+      "id": "glm",
+      "lifecycle": "active",
+      "local_auth": {
+        "env": "ACEDATACLOUD_API_TOKEN",
+        "type": "bearer"
+      },
+      "package": {
+        "command": "mcp-glm",
+        "ecosystem": "pypi",
+        "name": "mcp-glm",
+        "runner": "uvx"
+      }
+    },
+    {
+      "documentation": {
+        "alias": "grok",
+        "type": "document"
+      },
+      "hosted": {
+        "auth": [
+          "oauth_dcr",
+          "bearer"
+        ],
+        "endpoint": "https://grok.mcp.acedata.cloud/mcp",
+        "transport": "streamable-http"
+      },
+      "id": "grok",
+      "lifecycle": "active",
+      "local_auth": {
+        "env": "ACEDATACLOUD_API_TOKEN",
+        "type": "bearer"
+      },
+      "package": {
+        "command": "mcp-grok",
+        "ecosystem": "pypi",
+        "name": "mcp-grok",
+        "runner": "uvx"
+      }
+    },
+    {
+      "documentation": {
+        "alias": "hailuo",
+        "type": "document"
+      },
+      "hosted": {
+        "auth": [
+          "oauth_dcr",
+          "bearer"
+        ],
+        "endpoint": "https://hailuo.mcp.acedata.cloud/mcp",
+        "transport": "streamable-http"
+      },
+      "id": "hailuo",
+      "lifecycle": "active",
+      "local_auth": {
+        "env": "ACEDATACLOUD_API_TOKEN",
+        "type": "bearer"
+      },
+      "package": {
+        "command": "mcp-hailuo",
+        "ecosystem": "pypi",
+        "name": "mcp-hailuo",
+        "runner": "uvx"
+      }
+    },
+    {
+      "documentation": {
+        "alias": "happyhorse",
+        "type": "document"
+      },
+      "hosted": {
+        "auth": [
+          "oauth_dcr",
+          "bearer"
+        ],
+        "endpoint": "https://happyhorse.mcp.acedata.cloud/mcp",
+        "transport": "streamable-http"
+      },
+      "id": "happyhorse",
+      "lifecycle": "active",
+      "local_auth": {
+        "env": "ACEDATACLOUD_API_TOKEN",
+        "type": "bearer"
+      },
+      "package": {
+        "command": "mcp-happyhorse",
+        "ecosystem": "pypi",
+        "name": "mcp-happyhorse",
+        "runner": "uvx"
+      }
+    },
+    {
+      "documentation": {
+        "id": "018c653e-4f1b-433f-82f9-732ef2767040",
+        "type": "service"
+      },
+      "id": "hcaptcha",
+      "lifecycle": "active",
+      "local_auth": {
+        "env": "ACEDATACLOUD_API_TOKEN",
+        "type": "bearer"
+      },
+      "package": {
+        "command": "mcp-hcaptcha",
+        "ecosystem": "pypi",
+        "name": "mcp-hcaptcha",
+        "runner": "uvx"
+      }
+    },
+    {
+      "documentation": {
+        "id": "2aaa7faf-099e-410e-82f3-8d78170f25bb",
+        "type": "service"
+      },
+      "id": "image2text",
+      "lifecycle": "active",
+      "local_auth": {
+        "env": "ACEDATACLOUD_API_TOKEN",
+        "type": "bearer"
+      },
+      "package": {
+        "command": "mcp-image2text",
+        "ecosystem": "pypi",
+        "name": "mcp-image2text",
+        "runner": "uvx"
+      }
+    },
+    {
+      "documentation": {
+        "alias": "kling",
+        "type": "document"
+      },
+      "hosted": {
+        "auth": [
+          "oauth_dcr",
+          "bearer"
+        ],
+        "endpoint": "https://kling.mcp.acedata.cloud/mcp",
+        "transport": "streamable-http"
+      },
+      "id": "kling",
+      "lifecycle": "active",
+      "local_auth": {
+        "env": "ACEDATACLOUD_API_TOKEN",
+        "type": "bearer"
+      },
+      "package": {
+        "command": "mcp-kling",
+        "ecosystem": "pypi",
+        "name": "mcp-kling",
+        "runner": "uvx"
+      }
+    },
+    {
+      "documentation": {
+        "alias": "luma-mcp",
+        "type": "document"
+      },
+      "hosted": {
+        "auth": [
+          "oauth_dcr",
+          "bearer"
+        ],
+        "endpoint": "https://luma.mcp.acedata.cloud/mcp",
+        "transport": "streamable-http"
+      },
+      "id": "luma",
+      "lifecycle": "active",
+      "local_auth": {
+        "env": "ACEDATACLOUD_API_TOKEN",
+        "type": "bearer"
+      },
+      "package": {
+        "command": "mcp-luma",
+        "ecosystem": "pypi",
+        "name": "mcp-luma",
+        "runner": "uvx"
+      }
+    },
+    {
+      "documentation": {
+        "alias": "maestro",
+        "type": "document"
+      },
+      "hosted": {
+        "auth": [
+          "oauth_dcr",
+          "bearer"
+        ],
+        "endpoint": "https://maestro.mcp.acedata.cloud/mcp",
+        "transport": "streamable-http"
+      },
+      "id": "maestro",
+      "lifecycle": "active",
+      "local_auth": {
+        "env": "ACEDATACLOUD_API_TOKEN",
+        "type": "bearer"
+      },
+      "package": {
+        "command": "mcp-maestro",
+        "ecosystem": "pypi",
+        "name": "mcp-maestro",
+        "runner": "uvx"
+      }
+    },
+    {
+      "documentation": {
+        "id": "d87e5e99-b797-4ade-9e73-b896896b0461",
+        "type": "service"
+      },
+      "hosted": {
+        "auth": [
+          "oauth_dcr",
+          "bearer"
+        ],
+        "endpoint": "https://midjourney.mcp.acedata.cloud/mcp",
+        "transport": "streamable-http"
+      },
+      "id": "midjourney",
+      "lifecycle": "active",
+      "local_auth": {
+        "env": "ACEDATACLOUD_API_TOKEN",
+        "type": "bearer"
+      },
+      "package": {
+        "command": "mcp-midjourney",
+        "ecosystem": "pypi",
+        "name": "mcp-midjourney",
+        "runner": "uvx"
+      }
+    },
+    {
+      "documentation": {
+        "alias": "minimax-videos",
+        "type": "document"
+      },
+      "hosted": {
+        "auth": [
+          "oauth_dcr",
+          "bearer"
+        ],
+        "endpoint": "https://minimax.mcp.acedata.cloud/mcp",
+        "transport": "streamable-http"
+      },
+      "id": "minimax",
+      "lifecycle": "active",
+      "local_auth": {
+        "env": "ACEDATACLOUD_API_TOKEN",
+        "type": "bearer"
+      },
+      "package": {
+        "command": "mcp-minimax",
+        "ecosystem": "pypi",
+        "name": "mcp-minimax",
+        "runner": "uvx"
+      }
+    },
+    {
+      "documentation": {
+        "alias": "nano-banana-mcp",
+        "type": "document"
+      },
+      "hosted": {
+        "auth": [
+          "oauth_dcr",
+          "bearer"
+        ],
+        "endpoint": "https://nanobanana.mcp.acedata.cloud/mcp",
+        "transport": "streamable-http"
+      },
+      "id": "nanobanana",
+      "lifecycle": "active",
+      "local_auth": {
+        "env": "ACEDATACLOUD_API_TOKEN",
+        "type": "bearer"
+      },
+      "package": {
+        "command": "mcp-nanobanana-pro",
+        "ecosystem": "pypi",
+        "name": "mcp-nanobanana-pro",
+        "runner": "uvx"
+      }
+    },
+    {
+      "documentation": {
+        "alias": "openai",
+        "type": "document"
+      },
+      "hosted": {
+        "auth": [
+          "oauth_dcr",
+          "bearer"
+        ],
+        "endpoint": "https://openai.mcp.acedata.cloud/mcp",
+        "transport": "streamable-http"
+      },
+      "id": "openai",
+      "lifecycle": "active",
+      "local_auth": {
+        "env": "ACEDATACLOUD_API_TOKEN",
+        "type": "bearer"
+      },
+      "package": {
+        "command": "mcp-openai",
+        "ecosystem": "pypi",
+        "name": "mcp-openai",
+        "runner": "uvx"
+      }
+    },
+    {
+      "documentation": {
+        "alias": "producer",
+        "type": "document"
+      },
+      "hosted": {
+        "auth": [
+          "oauth_dcr",
+          "bearer"
+        ],
+        "endpoint": "https://producer.mcp.acedata.cloud/mcp",
+        "transport": "streamable-http"
+      },
+      "id": "producer",
+      "lifecycle": "active",
+      "local_auth": {
+        "env": "ACEDATACLOUD_API_TOKEN",
+        "type": "bearer"
+      },
+      "package": {
+        "command": "mcp-producer",
+        "ecosystem": "pypi",
+        "name": "mcp-producer",
+        "runner": "uvx"
+      }
+    },
+    {
+      "documentation": {
+        "alias": "qwen-image",
+        "type": "document"
+      },
+      "hosted": {
+        "auth": [
+          "oauth_dcr",
+          "bearer"
+        ],
+        "endpoint": "https://qwen-image.mcp.acedata.cloud/mcp",
+        "transport": "streamable-http"
+      },
+      "id": "qwen-image",
+      "lifecycle": "active",
+      "local_auth": {
+        "env": "ACEDATACLOUD_API_TOKEN",
+        "type": "bearer"
+      },
+      "package": {
+        "command": "mcp-qwen-image",
+        "ecosystem": "pypi",
+        "name": "mcp-qwen-image",
+        "runner": "uvx"
+      }
+    },
+    {
+      "documentation": {
+        "id": "485cc5ca-7f1e-48e5-944e-1fe82b4637e8",
+        "type": "service"
+      },
+      "id": "recaptcha",
+      "lifecycle": "active",
+      "local_auth": {
+        "env": "ACEDATACLOUD_API_TOKEN",
+        "type": "bearer"
+      },
+      "package": {
+        "command": "mcp-recaptcha",
+        "ecosystem": "pypi",
+        "name": "mcp-recaptcha",
+        "runner": "uvx"
+      }
+    },
+    {
+      "documentation": {
+        "alias": "seedance-mcp",
+        "type": "document"
+      },
+      "hosted": {
+        "auth": [
+          "oauth_dcr",
+          "bearer"
+        ],
+        "endpoint": "https://seedance.mcp.acedata.cloud/mcp",
+        "transport": "streamable-http"
+      },
+      "id": "seedance",
+      "lifecycle": "active",
+      "local_auth": {
+        "env": "ACEDATACLOUD_API_TOKEN",
+        "type": "bearer"
+      },
+      "package": {
+        "command": "mcp-seedance",
+        "ecosystem": "pypi",
+        "name": "mcp-seedance",
+        "runner": "uvx"
+      }
+    },
+    {
+      "documentation": {
+        "alias": "seedream-mcp",
+        "type": "document"
+      },
+      "hosted": {
+        "auth": [
+          "oauth_dcr",
+          "bearer"
+        ],
+        "endpoint": "https://seedream.mcp.acedata.cloud/mcp",
+        "transport": "streamable-http"
+      },
+      "id": "seedream",
+      "lifecycle": "active",
+      "local_auth": {
+        "env": "ACEDATACLOUD_API_TOKEN",
+        "type": "bearer"
+      },
+      "package": {
+        "command": "mcp-seedream-pro",
+        "ecosystem": "pypi",
+        "name": "mcp-seedream-pro",
+        "runner": "uvx"
+      }
+    },
+    {
+      "documentation": {
+        "alias": "serp-mcp",
+        "type": "document"
+      },
+      "hosted": {
+        "auth": [
+          "oauth_dcr",
+          "bearer"
+        ],
+        "endpoint": "https://serp.mcp.acedata.cloud/mcp",
+        "transport": "streamable-http"
+      },
+      "id": "serp",
+      "lifecycle": "active",
+      "local_auth": {
+        "env": "ACEDATACLOUD_API_TOKEN",
+        "type": "bearer"
+      },
+      "package": {
+        "command": "mcp-serp",
+        "ecosystem": "pypi",
+        "name": "mcp-serp",
+        "runner": "uvx"
+      }
+    },
+    {
+      "documentation": {
+        "alias": "short-url-mcp",
+        "type": "document"
+      },
+      "hosted": {
+        "auth": [
+          "oauth_dcr",
+          "bearer"
+        ],
+        "endpoint": "https://shorturl.mcp.acedata.cloud/mcp",
+        "transport": "streamable-http"
+      },
+      "id": "shorturl",
+      "lifecycle": "active",
+      "local_auth": {
+        "env": "ACEDATACLOUD_API_TOKEN",
+        "type": "bearer"
+      },
+      "package": {
+        "command": "mcp-shorturl",
+        "ecosystem": "pypi",
+        "name": "mcp-shorturl",
+        "runner": "uvx"
+      }
+    },
+    {
+      "documentation": {},
+      "id": "sora",
+      "lifecycle": "retired",
+      "local_auth": {
+        "env": "ACEDATACLOUD_API_TOKEN",
+        "type": "bearer"
+      },
+      "package": {
+        "command": "mcp-sora",
+        "ecosystem": "pypi",
+        "name": "mcp-sora",
+        "runner": "uvx"
+      }
+    },
+    {
+      "documentation": {
+        "alias": "suno-mcp",
+        "type": "document"
+      },
+      "hosted": {
+        "auth": [
+          "oauth_dcr",
+          "bearer"
+        ],
+        "endpoint": "https://suno.mcp.acedata.cloud/mcp",
+        "transport": "streamable-http"
+      },
+      "id": "suno",
+      "lifecycle": "active",
+      "local_auth": {
+        "env": "ACEDATACLOUD_API_TOKEN",
+        "type": "bearer"
+      },
+      "package": {
+        "command": "mcp-suno",
+        "ecosystem": "pypi",
+        "name": "mcp-suno",
+        "runner": "uvx"
+      }
+    },
+    {
+      "documentation": {
+        "alias": "turnstile",
+        "type": "document"
+      },
+      "id": "turnstile",
+      "lifecycle": "active",
+      "local_auth": {
+        "env": "ACEDATACLOUD_API_TOKEN",
+        "type": "bearer"
+      },
+      "package": {
+        "command": "mcp-turnstile",
+        "ecosystem": "pypi",
+        "name": "mcp-turnstile",
+        "runner": "uvx"
+      }
+    },
+    {
+      "documentation": {
+        "alias": "veo-mcp",
+        "type": "document"
+      },
+      "hosted": {
+        "auth": [
+          "oauth_dcr",
+          "bearer"
+        ],
+        "endpoint": "https://veo.mcp.acedata.cloud/mcp",
+        "transport": "streamable-http"
+      },
+      "id": "veo",
+      "lifecycle": "active",
+      "local_auth": {
+        "env": "ACEDATACLOUD_API_TOKEN",
+        "type": "bearer"
+      },
+      "package": {
+        "command": "mcp-veo",
+        "ecosystem": "pypi",
+        "name": "mcp-veo",
+        "runner": "uvx"
+      }
+    },
+    {
+      "documentation": {
+        "alias": "wan",
+        "type": "document"
+      },
+      "hosted": {
+        "auth": [
+          "oauth_dcr",
+          "bearer"
+        ],
+        "endpoint": "https://wan.mcp.acedata.cloud/mcp",
+        "transport": "streamable-http"
+      },
+      "id": "wan",
+      "lifecycle": "active",
+      "local_auth": {
+        "env": "ACEDATACLOUD_API_TOKEN",
+        "type": "bearer"
+      },
+      "package": {
+        "command": "mcp-wan",
+        "ecosystem": "pypi",
+        "name": "mcp-wan",
+        "runner": "uvx"
+      }
+    },
+    {
+      "documentation": {
+        "alias": "webextrator",
+        "type": "document"
+      },
+      "hosted": {
+        "auth": [
+          "oauth_dcr",
+          "bearer"
+        ],
+        "endpoint": "https://webextrator.mcp.acedata.cloud/mcp",
+        "transport": "streamable-http"
+      },
+      "id": "webextrator",
+      "lifecycle": "active",
+      "local_auth": {
+        "env": "ACEDATACLOUD_API_TOKEN",
+        "type": "bearer"
+      },
+      "package": {
+        "command": "mcp-webextrator",
+        "ecosystem": "pypi",
+        "name": "mcp-webextrator",
+        "runner": "uvx"
+      }
+    }
+  ],
+  "source": "AceDataCloud/MCPs",
+  "source_digest": "sha256:3f3eff0ed54c224ae5e07e57ec15369080f6c03cf8c683077c5b06c72b299660"
+}

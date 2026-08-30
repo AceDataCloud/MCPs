@@ -8,7 +8,7 @@ import sys
 import tomllib
 from pathlib import Path
 
-from mcp_catalog import documentation_target, load_catalog
+from mcp_catalog import documentation_target, load_catalog, load_manifest
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -22,7 +22,10 @@ def fail(errors: list[str], message: str) -> None:
 
 def main() -> int:
     errors: list[str] = []
+    manifest = load_manifest()
     catalog = load_catalog()
+    if manifest.get("schema_version") != 2:
+        fail(errors, "catalog schema_version must be 2")
     package_dirs = {path.parent.name for path in ROOT.glob("*/pyproject.toml")}
     catalog_dirs = set(catalog)
     if missing := sorted(package_dirs - catalog_dirs):
@@ -74,6 +77,39 @@ def main() -> int:
         url, label = targets.get(alias, (None, None))
         pyproject_path = ROOT / alias / "pyproject.toml"
         project = tomllib.loads(pyproject_path.read_text())["project"]
+        package = entry.get("package") or {}
+        scripts = project.get("scripts") or {}
+        if package.get("ecosystem") != "pypi" or package.get("runner") != "uvx":
+            fail(errors, f"{alias}: package must declare pypi + uvx")
+        if package.get("name") != project.get("name"):
+            fail(errors, f"{alias}: package name does not match pyproject.toml")
+        if package.get("command") not in scripts:
+            fail(errors, f"{alias}: package command is not declared by pyproject.toml")
+        local_auth = entry.get("local_auth") or {}
+        expected_env = "ACEDATACLOUD_PLATFORM_TOKEN" if alias == "acedatacloud" else (
+            "DISCORD_BOT_TOKEN" if alias == "discord-bot" else "ACEDATACLOUD_API_TOKEN"
+        )
+        if local_auth != {"type": "bearer", "env": expected_env}:
+            fail(errors, f"{alias}: local auth must use {expected_env}")
+
+        ingress_path = ROOT / alias / "deploy" / "production" / "ingress.yaml"
+        ingress = ingress_path.read_text() if ingress_path.exists() else ""
+        hosts = re.findall(r"^\s*-?\s*host:\s*([^\s]+)", ingress, re.MULTILINE)
+        hosted = entry.get("hosted")
+        if entry["status"] == "retired":
+            if hosted:
+                fail(errors, f"{alias}: retired MCP must not expose hosted configuration")
+        elif hosts:
+            expected_hosted = {
+                "endpoint": f"https://{hosts[0]}/mcp",
+                "transport": "streamable-http",
+                "auth": ["oauth_dcr", "bearer"] if (ROOT / alias / "core" / "oauth.py").exists() else ["bearer"],
+            }
+            if hosted != expected_hosted:
+                fail(errors, f"{alias}: hosted contract does not match deployment/OAuth metadata")
+        elif hosted:
+            fail(errors, f"{alias}: hosted contract has no production Ingress")
+
         actual_url = (project.get("urls") or {}).get("Documentation")
         if actual_url != url:
             fail(
@@ -91,6 +127,14 @@ def main() -> int:
             fail(
                 errors, f"{alias}/README.md: retired MCP must not expose documentation"
             )
+        if entry["status"] == "retired":
+            retired_patterns = (
+                r"https://[a-z0-9-]+\.mcp\.acedata\.cloud",
+                r"(?im)^##\s+Quick Start",
+                r"(?im)^(?:pip install|uvx|claude mcp add|docker pull)\s+",
+            )
+            if any(re.search(pattern, readme) for pattern in retired_patterns):
+                fail(errors, f"{alias}/README.md: retired MCP still contains setup instructions")
 
         for relative in (Path("vscode/README.md"), Path("jetbrains/README.md")):
             path = ROOT / alias / relative

@@ -12,8 +12,15 @@ PLATFORM_ROOT = "https://platform.acedata.cloud"
 UUID_RE = re.compile(r"[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}")
 
 
+def load_manifest() -> dict[str, Any]:
+    manifest = json.loads(CATALOG_PATH.read_text())
+    if manifest.get("schema_version") != 2:
+        raise ValueError("MCP catalog schema_version must be 2")
+    return manifest
+
+
 def load_catalog() -> dict[str, dict[str, Any]]:
-    return json.loads(CATALOG_PATH.read_text())["services"]
+    return load_manifest()["services"]
 
 
 def documentation_target(entry: dict[str, Any]) -> tuple[str | None, str | None]:
