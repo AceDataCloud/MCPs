@@ -29,18 +29,13 @@ V2_RETIRED_KIMI = {
     "kimi-k2-turbo-preview",
 }
 
-# Models removed from the current /aichat2/conversations spec enum.
-V2_REMOVED_FROM_SPEC = {
-    "gpt-5.6-luna",
-    "gpt-5.6-terra",
-    "gpt-5.6-sol",
-    "gemini-2.0-flash",
-    "gemini-2.5-flash",
-    "gemini-2.5-pro",
-    "gemini-3.0-pro",
-    "gemini-3.6-flash",
-    "gemini-3-flash-preview",
-    "gemini-3.5-flash",
+# Gemini models removed from the current /aichat2/conversations spec enum.
+V2_RETIRED_GEMINI = {
+    "gemini-2.0-flash-lite",
+    "gemini-3-pro-preview",
+    "gemini-3.1-flash-image-preview",
+    "gemini-3.1-flash-lite-preview",
+    "gemini-3.1-pro",
 }
 
 
@@ -81,16 +76,21 @@ def test_v2_offers_claude_spec_models():
 
 def test_v2_offers_gemini_spec_models():
     spec_models = {
-        "gemini-3.1-pro",
-        "gemini-2.5-flash-lite",
-        "gemini-3.1-flash-lite-preview",
-        "gemini-3.1-flash-image-preview",
+        "gemini-3.7-flash",
+        "gemini-3.6-flash",
+        "gemini-3.5-flash",
+        "gemini-3.5-flash-lite",
+        "gemini-3.1-flash-lite",
         "gemini-3.1-pro-preview",
-        "gemini-3-pro-preview",
-        "gemini-2.0-flash-lite",
+        "gemini-3-flash-preview",
+        "gemini-2.5-pro",
+        "gemini-2.5-flash",
+        "gemini-2.5-flash-lite",
     }
-    missing = spec_models - set(get_args(AiChatV2Model))
-    assert not missing, f"AiChatV2Model is missing Gemini spec models {sorted(missing)}"
+    models = set(get_args(AiChatV2Model))
+    assert spec_models <= models, (
+        f"AiChatV2Model is missing Gemini spec models {sorted(spec_models - models)}"
+    )
 
 
 def test_v2_offers_deepseek_spec_models():
@@ -129,9 +129,9 @@ def test_v2_excludes_retired_kimi_models():
     assert not lingering, f"AiChatV2Model still offers retired models {sorted(lingering)}"
 
 
-def test_v2_excludes_models_removed_from_spec():
-    lingering = V2_REMOVED_FROM_SPEC & set(get_args(AiChatV2Model))
-    assert not lingering, f"AiChatV2Model still offers removed models {sorted(lingering)}"
+def test_v2_excludes_retired_gemini_models():
+    lingering = V2_RETIRED_GEMINI & set(get_args(AiChatV2Model))
+    assert not lingering, f"AiChatV2Model still offers retired models {sorted(lingering)}"
 
 
 def test_v2_exposes_async_request_controls():
