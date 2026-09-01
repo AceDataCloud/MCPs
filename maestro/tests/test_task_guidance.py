@@ -46,7 +46,7 @@ def test_batch_poll_tool_is_not_advertised():
     assert block["batch_poll_tool"] is None
 
 
-def test_poll_budget_covers_the_worker_timeout():
-    """AGENT_TIMEOUT is 5400s; the advertised budget must not give up sooner."""
+def test_polling_has_no_fixed_attempt_budget():
     block = _guidance({"id": "t-1", "finished_at": None})
-    assert block["max_poll_attempts"] * block["polling_interval_seconds"] >= 5400
+    assert "max_poll_attempts" not in block
+    assert block["expected_wait_seconds"] == 10800
