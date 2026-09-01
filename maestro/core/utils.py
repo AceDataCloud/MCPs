@@ -8,10 +8,7 @@ POLL_TOOL = "maestro_get_task"
 BATCH_POLL_TOOL = None
 
 _POLLING_INTERVAL_SECONDS = 30
-# Cover the worker's own ceiling: AGENT_TIMEOUT=5400s plus queue wait before it
-# starts. Giving up at 60 min would abandon renders that are still alive.
-_MAX_POLL_ATTEMPTS = 220
-_EXPECTED_WAIT_SECONDS = 5400
+_EXPECTED_WAIT_SECONDS = 10800
 
 
 def _task_outcome(payload: dict[str, Any]) -> tuple[bool, bool, bool]:
@@ -37,12 +34,12 @@ def _with_task_guidance(data: dict[str, Any]) -> dict[str, Any]:
         next_step = "Task is complete. Stop polling and present the final video URL to the user."
     elif is_failed:
         next_step = "Task failed. Stop polling and report the failure to the user."
-    elif in_flight:
+    else:
         next_step = (
             f"The task is still running. Wait {_POLLING_INTERVAL_SECONDS} "
             f'seconds, then call {POLL_TOOL}(task_id="{task_id}") again. '
-            f"Video production commonly takes 10-90 minutes — keep polling and do NOT "
-            f"give up or tell the user it failed."
+            "Video production may use the full three-hour production window plus queue time — "
+            "keep polling and do NOT give up or tell the user it failed."
         )
 
     payload["mcp_task_polling"] = {
@@ -55,7 +52,6 @@ def _with_task_guidance(data: dict[str, Any]) -> dict[str, Any]:
         "is_complete": is_complete,
         "is_failed": is_failed,
         "polling_interval_seconds": _POLLING_INTERVAL_SECONDS,
-        "max_poll_attempts": _MAX_POLL_ATTEMPTS,
         "expected_wait_seconds": _EXPECTED_WAIT_SECONDS,
         "next_step": next_step,
     }
@@ -76,14 +72,12 @@ def _with_submission_guidance(data: dict[str, Any]) -> dict[str, Any]:
         "should_poll": True,
         "terminal_state_reached": False,
         "polling_interval_seconds": _POLLING_INTERVAL_SECONDS,
-        "max_poll_attempts": _MAX_POLL_ATTEMPTS,
         "expected_wait_seconds": _EXPECTED_WAIT_SECONDS,
         "next_step": (
             f'Call {POLL_TOOL}(task_id="{task_id}") until it reports a `finished_at` timestamp. '
-            f"Video production commonly takes 10-90 minutes. "
-            f"Wait at least {_POLLING_INTERVAL_SECONDS} seconds between polls and keep polling "
-            f"for up to {_MAX_POLL_ATTEMPTS} attempts — do NOT stop early or tell the user it "
-            f"failed while the task is still running."
+            "Video production may use the full three-hour production window plus queue time. "
+            f"Wait at least {_POLLING_INTERVAL_SECONDS} seconds between polls and keep polling — "
+            "do NOT stop early or tell the user it failed while the task is still running."
         ),
     }
     return payload

@@ -27,19 +27,14 @@ For a hosted connection, use `https://maestro.mcp.acedata.cloud/mcp`. It accepts
 
 Ask an MCP client:
 
-> Create a 45-second 16:9 English product launch video from this product photo. Use a pro editorial style and a documentary voice.
+> Create a 45-second 16:9 English product launch video from this product photo. Use an editorial style and a documentary voice.
 
 The tool returns a `task_id` immediately. Query that ID until `status` is `succeeded` or `failed`. Successful tasks expose videos in `response.data.variants`.
 
-## Production SKUs
+## Production contract
 
-| SKU | Price | Duration | Output | Languages | Capabilities |
-|---|---:|---:|---|---:|---|
-| `lite` | 0.20 Credits/second | 5–30s | 720p/24fps | 1 | auto/narrated/captions; generate/edit |
-| `standard` | 0.60 Credits/second | 5–120s | 1080p/30fps | 2 | adds avatar and remix |
-| `pro` | 1.20 Credits/second | 5–300s | 1080p/30fps | 4 | adds drama and extend |
+Maestro provides the complete capability set on every request: all actions and scenarios, 5–300 seconds, up to 4 languages, and 1080p/30fps output. The base price is 0.60 Credits per delivered second. Avatar uses a 1.15× scenario multiplier, drama uses 1.35×, and each additional delivered language adds 6 Credits. Failed tasks and task polling are free.
 
-Successful tasks are billed from the delivered integer-second duration; there is no 30-second minimum. Avatar uses a 1.15× scenario multiplier, drama uses 1.35×, and each additional delivered language adds 6 Credits. Failed tasks and task polling are free.
 
 To revise an existing result, call `maestro_create_video` with an iteration action and the prior task ID:
 
