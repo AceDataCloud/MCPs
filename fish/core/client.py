@@ -84,7 +84,7 @@ class FishClient:
 
         logger.error(f"API error {status} [{code}]: {message}")
 
-        if status in (401, 403):
+        if status == 401:
             raise FishAuthError(message)
         raise FishAPIError(message=message, code=code, status_code=status)
 

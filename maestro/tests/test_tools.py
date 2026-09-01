@@ -17,7 +17,6 @@ async def test_create_video_builds_complete_payload() -> None:
             langs=["en", "pt-br"],
             aspect="16:9",
             duration=45,
-            quality="pro",
             scenario="captions",
             style="editorial",
             voice="documentary-male",
@@ -31,7 +30,6 @@ async def test_create_video_builds_complete_payload() -> None:
             "langs": ["en", "pt-br"],
             "aspect": "16:9",
             "duration": 45,
-            "quality": "pro",
             "scenario": "captions",
             "style": "editorial",
             "voice": "documentary-male",
@@ -72,28 +70,27 @@ async def test_iteration_does_not_clobber_source_format() -> None:
     )
 
 
-async def test_sku_limits_fail_before_api_call() -> None:
+async def test_all_documented_actions_are_accepted() -> None:
     with patch("tools.video_tools.client.create_video", new_callable=AsyncMock) as create:
-        create.return_value = {"success": True, "task_id": "task-pro"}
-        assert "at most 30 seconds" in await maestro_create_video(
-            prompt="x", quality="lite", duration=31
-        )
-        assert "higher Maestro SKU" in await maestro_create_video(
-            prompt="x", quality="standard", scenario="drama"
-        )
-        assert "higher Maestro SKU" in await maestro_create_video(
-            prompt="x", quality="standard", action="extend", ref_task_id="task-1"
-        )
+        create.return_value = {"success": True, "task_id": "task-1"}
         await maestro_create_video(
-            prompt="x", quality="pro", action="extend", ref_task_id="task-1", duration=300
+            prompt="x", action="extend", ref_task_id="task-1", duration=300, scenario="drama"
         )
 
-    create.assert_awaited_once()
+    create.assert_awaited_once_with(
+        {
+            "prompt": "x",
+            "action": "extend",
+            "ref_task_id": "task-1",
+            "duration": 300,
+            "scenario": "drama",
+        }
+    )
 
 
 async def test_task_tools_delegate_to_client() -> None:
     with patch("tools.task_tools.client.get_task", new_callable=AsyncMock) as get_task:
-        get_task.return_value = {"id": "task-1", "status": "succeeded"}
+        get_task.return_value = {"id": "task-1", "finished_at": 1, "response": {}}
 
         await maestro_get_task("task-1")
 

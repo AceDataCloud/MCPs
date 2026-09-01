@@ -52,6 +52,19 @@ async def test_api_error_preserves_status(api_token: str) -> None:
     assert exc_info.value.status_code == 404
 
 
+@respx.mock
+async def test_forbidden_is_api_error(api_token: str) -> None:
+    respx.post("https://api.acedata.cloud/maestro/tasks").mock(
+        return_value=httpx.Response(403, json={"error": {"code": "used_up", "message": "funds"}})
+    )
+
+    with pytest.raises(MaestroAPIError, match="funds") as exc_info:
+        await MaestroClient(api_token=api_token).get_task("task-1")
+
+    assert exc_info.value.status_code == 403
+    assert exc_info.value.code == "used_up"
+
+
 async def test_missing_token_is_auth_error() -> None:
     with pytest.raises(MaestroAuthError, match="not configured"):
         await MaestroClient(api_token="").get_task("task-1")

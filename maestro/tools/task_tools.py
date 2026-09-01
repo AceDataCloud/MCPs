@@ -7,7 +7,7 @@ from pydantic import Field
 
 from core.client import client
 from core.server import mcp
-from core.utils import IN_FLIGHT_STATES, format_task_result
+from core.utils import _task_outcome, format_task_result
 
 
 @mcp.tool()
@@ -21,6 +21,7 @@ async def maestro_get_task(
     data = await client.get_task(task_id)
     # Throttle polling: sleep 5s while the task is still running so LLM clients
     # don't burn through poll attempts in seconds.
-    if str(data.get("status", "")).lower() in IN_FLIGHT_STATES:
+    is_in_flight, _, _ = _task_outcome(data)
+    if is_in_flight:
         await asyncio.sleep(5)
     return format_task_result(data)

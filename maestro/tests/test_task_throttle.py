@@ -6,12 +6,11 @@ from tools import task_tools
 
 
 @pytest.mark.asyncio
-@pytest.mark.parametrize("status", ["queued", "planning", "producing"])
-async def test_get_task_throttles_while_running(monkeypatch, status):
+async def test_get_task_throttles_while_unfinished(monkeypatch):
     slept: list[float] = []
 
     async def mock_get_task(_task_id):
-        return {"id": "t-1", "status": status}
+        return {"id": "t-1", "finished_at": None}
 
     async def fake_sleep(seconds):
         slept.append(seconds)
@@ -25,13 +24,12 @@ async def test_get_task_throttles_while_running(monkeypatch, status):
 
 
 @pytest.mark.asyncio
-@pytest.mark.parametrize("status", ["succeeded", "failed", "dead", "brand-new-state"])
-async def test_get_task_returns_immediately_when_settled(monkeypatch, status):
-    """Terminal AND unknown states return now — never strand the caller."""
+@pytest.mark.parametrize("response", [{}, {"error": "failed"}, {"success": False}])
+async def test_get_task_returns_immediately_when_finished(monkeypatch, response):
     slept: list[float] = []
 
     async def mock_get_task(_task_id):
-        return {"id": "t-1", "status": status}
+        return {"id": "t-1", "finished_at": 1, "response": response}
 
     async def fake_sleep(seconds):
         slept.append(seconds)

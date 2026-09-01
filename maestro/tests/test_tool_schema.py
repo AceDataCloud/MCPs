@@ -10,3 +10,5 @@ async def test_create_video_schema_matches_openapi_body() -> None:
 
     assert "prompt" in schema["required"]
     assert "task_id" not in schema["properties"]
+    assert "quality" not in schema["properties"]
+    assert schema["properties"]["file_urls"]["anyOf"][0]["maxItems"] == 20

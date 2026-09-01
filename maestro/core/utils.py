@@ -7,12 +7,6 @@ POLL_TOOL = "maestro_get_task"
 # The API only exposes single-task retrieval, so there is no batch poll tool.
 BATCH_POLL_TOOL = None
 
-# States that mean "still working". Anything else (succeeded, failed, dead, or
-# a status we don't know yet) is treated as terminal — an unknown state must
-# not strand the caller in an endless poll loop.
-IN_FLIGHT_STATES = {"queued", "pending", "planning", "producing", "running", "processing"}
-_FAILED_STATES = {"failed", "dead", "cancelled", "canceled", "error"}
-
 _POLLING_INTERVAL_SECONDS = 30
 # Cover the worker's own ceiling: AGENT_TIMEOUT=5400s plus queue wait before it
 # starts. Giving up at 60 min would abandon renders that are still alive.
@@ -21,11 +15,14 @@ _EXPECTED_WAIT_SECONDS = 5400
 
 
 def _task_outcome(payload: dict[str, Any]) -> tuple[bool, bool, bool]:
-    """Return (is_in_flight, is_complete, is_failed) from the task `status`."""
-    status = str(payload.get("status", "")).lower()
-    if status in IN_FLIGHT_STATES:
+    """Return (is_in_flight, is_complete, is_failed) from task timestamps."""
+    if payload.get("finished_at") is None:
         return True, False, False
-    return False, status == "succeeded", status in _FAILED_STATES
+
+    response = payload.get("response")
+    response = response if isinstance(response, dict) else {}
+    failed = bool(response.get("error")) or response.get("success") is False
+    return False, not failed, failed
 
 
 def _with_task_guidance(data: dict[str, Any]) -> dict[str, Any]:
@@ -35,27 +32,17 @@ def _with_task_guidance(data: dict[str, Any]) -> dict[str, Any]:
         return payload
 
     in_flight, is_complete, is_failed = _task_outcome(payload)
-    status = str(payload.get("status", "")).lower()
 
     if is_complete:
         next_step = "Task is complete. Stop polling and present the final video URL to the user."
     elif is_failed:
-        next_step = (
-            f"Task reached terminal state '{status}'. Stop polling and report the failure "
-            f"to the user. Polling again will not change the outcome."
-        )
+        next_step = "Task failed. Stop polling and report the failure to the user."
     elif in_flight:
         next_step = (
-            f"The task is still running (status '{status}'). Wait {_POLLING_INTERVAL_SECONDS} "
+            f"The task is still running. Wait {_POLLING_INTERVAL_SECONDS} "
             f'seconds, then call {POLL_TOOL}(task_id="{task_id}") again. '
             f"Video production commonly takes 10-90 minutes — keep polling and do NOT "
             f"give up or tell the user it failed."
-        )
-    else:
-        # Unknown status: stop rather than loop on a state we can't interpret.
-        next_step = (
-            f"Task reports an unrecognized status '{status}'. Stop polling and surface the "
-            f"raw task payload to the user instead of guessing."
         )
 
     payload["mcp_task_polling"] = {
@@ -67,7 +54,6 @@ def _with_task_guidance(data: dict[str, Any]) -> dict[str, Any]:
         "terminal_state_reached": not in_flight,
         "is_complete": is_complete,
         "is_failed": is_failed,
-        "status": status,
         "polling_interval_seconds": _POLLING_INTERVAL_SECONDS,
         "max_poll_attempts": _MAX_POLL_ATTEMPTS,
         "expected_wait_seconds": _EXPECTED_WAIT_SECONDS,
@@ -93,8 +79,7 @@ def _with_submission_guidance(data: dict[str, Any]) -> dict[str, Any]:
         "max_poll_attempts": _MAX_POLL_ATTEMPTS,
         "expected_wait_seconds": _EXPECTED_WAIT_SECONDS,
         "next_step": (
-            f'Call {POLL_TOOL}(task_id="{task_id}") until its status leaves the in-flight set '
-            f"({', '.join(sorted(IN_FLIGHT_STATES))}). "
+            f'Call {POLL_TOOL}(task_id="{task_id}") until it reports a `finished_at` timestamp. '
             f"Video production commonly takes 10-90 minutes. "
             f"Wait at least {_POLLING_INTERVAL_SECONDS} seconds between polls and keep polling "
             f"for up to {_MAX_POLL_ATTEMPTS} attempts — do NOT stop early or tell the user it "
