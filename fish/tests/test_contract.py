@@ -2,7 +2,11 @@
 
 from typing import get_args
 
+import httpx
+import pytest
+
 from core.client import FishClient
+from core.exceptions import FishAPIError
 from core.server import mcp
 from core.types import DEFAULT_MODEL, FishModel, FishMp3Bitrate
 from tools import audio_tools, info_tools  # noqa: F401
@@ -43,3 +47,18 @@ def test_async_callback_preserves_explicit_false():
     client = FishClient(api_token="test-token", base_url="https://api.test.com")
 
     assert client._with_async_callback({"async": False})["async"] is False
+
+
+def test_forbidden_is_api_error():
+    client = FishClient(api_token="test-token", base_url="https://api.test.com")
+    response = httpx.Response(
+        403,
+        json={"error": {"code": "used_up", "message": "funds"}},
+        request=httpx.Request("POST", "https://api.test.com/fish/tts"),
+    )
+
+    with pytest.raises(FishAPIError, match="funds") as exc_info:
+        client._handle_error_response(response)
+
+    assert exc_info.value.status_code == 403
+    assert exc_info.value.code == "used_up"

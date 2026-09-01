@@ -52,7 +52,7 @@ class MaestroClient:
             error.get("message") or body.get("detail") or response.text or "API request failed"
         )
         code = error.get("code") or f"http_{response.status_code}"
-        if response.status_code in (401, 403):
+        if response.status_code == 401:
             raise MaestroAuthError(message)
         raise MaestroAPIError(message, code=code, status_code=response.status_code)
 

@@ -1,6 +1,6 @@
 """Maestro video creation tools."""
 
-from typing import Annotated, Any, TypedDict
+from typing import Annotated, Any
 
 from pydantic import Field
 
@@ -9,41 +9,11 @@ from core.server import mcp
 from core.types import (
     MaestroAction,
     MaestroAspect,
-    MaestroQuality,
     MaestroScenario,
     MaestroStyle,
     MaestroVoice,
 )
 from core.utils import format_submission_result
-
-
-class SkuLimits(TypedDict):
-    duration: int
-    languages: int
-    actions: set[str]
-    scenarios: set[str]
-
-
-SKU_LIMITS: dict[str, SkuLimits] = {
-    "lite": {
-        "duration": 30,
-        "languages": 1,
-        "actions": {"generate", "edit"},
-        "scenarios": {"auto", "narrated", "captions"},
-    },
-    "standard": {
-        "duration": 120,
-        "languages": 2,
-        "actions": {"generate", "remix", "edit"},
-        "scenarios": {"auto", "narrated", "captions", "avatar"},
-    },
-    "pro": {
-        "duration": 300,
-        "languages": 4,
-        "actions": {"generate", "remix", "edit", "extend"},
-        "scenarios": {"auto", "narrated", "captions", "avatar", "drama"},
-    },
-}
 
 
 @mcp.tool()
@@ -73,7 +43,10 @@ async def maestro_create_video(
     ] = None,
     file_urls: Annotated[
         list[str] | None,
-        Field(description="Reference image, video, or audio URLs for Maestro to use."),
+        Field(
+            description="Reference image, video, or audio URLs for Maestro to use.",
+            max_length=20,
+        ),
     ] = None,
     langs: Annotated[
         list[str] | None,
@@ -103,15 +76,6 @@ async def maestro_create_video(
             ),
             ge=5,
             le=300,
-        ),
-    ] = None,
-    quality: Annotated[
-        MaestroQuality | None,
-        Field(
-            description=(
-                "Production tier: lite, standard, or pro. Omit to use the server default "
-                "(standard) on a new video, or to inherit the source task's tier when iterating."
-            )
         ),
     ] = None,
     scenario: Annotated[
@@ -151,21 +115,6 @@ async def maestro_create_video(
     if action != "generate" and not ref_task_id:
         return f"Error: action={action} requires ref_task_id."
 
-    sku = quality or "standard"
-    limits = SKU_LIMITS[sku]
-    if duration is not None and duration > limits["duration"]:
-        return f"Error: {sku} supports at most {limits['duration']} seconds."
-    if langs and len(langs) > limits["languages"]:
-        return f"Error: {sku} supports at most {limits['languages']} language(s)."
-    if action not in limits["actions"]:
-        return f"Error: action={action} requires a higher Maestro SKU."
-    if scenario is not None and scenario not in limits["scenarios"]:
-        return f"Error: scenario={scenario} requires a higher Maestro SKU."
-
-    # Only send fields the caller set. Omitting them lets the server apply its
-    # documented default on a fresh generate and inherit the source task's
-    # format (ratio/duration/quality) when iterating, avoiding wrong output and
-    # mis-billing on remix/edit/extend.
     payload: dict[str, Any] = {"prompt": prompt, "action": action}
     if ref_task_id:
         payload["ref_task_id"] = ref_task_id
@@ -173,8 +122,6 @@ async def maestro_create_video(
         payload["aspect"] = aspect
     if duration is not None:
         payload["duration"] = duration
-    if quality is not None:
-        payload["quality"] = quality
     if scenario is not None:
         payload["scenario"] = scenario
     if style is not None:
