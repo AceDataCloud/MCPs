@@ -6,7 +6,13 @@ from pydantic import Field
 
 from core.client import client
 from core.server import mcp
-from core.types import DEFAULT_MODEL, SunoModel, VariationCategory, VocalGender
+from core.types import (
+    DEFAULT_MODEL,
+    ReplaceSectionResultMode,
+    SunoModel,
+    VariationCategory,
+    VocalGender,
+)
 from core.utils import format_audio_result
 
 
@@ -541,6 +547,15 @@ async def suno_replace_section(
         str | None,
         Field(description="Webhook callback URL for asynchronous notifications."),
     ] = None,
+    result_mode: Annotated[
+        ReplaceSectionResultMode | None,
+        Field(
+            description=(
+                "Result shape: candidates returns two replacement clips; full_song returns one complete "
+                "song made from the first candidate. Set explicitly for deterministic behavior."
+            )
+        ),
+    ] = None,
 ) -> str:
     """Replace a specific time range in a song with new generated content.
 
@@ -553,7 +568,7 @@ async def suno_replace_section(
     - You want to replace a verse or chorus with something different
 
     Returns:
-        Task ID and the updated audio information.
+        Task ID plus two replacement clips for candidates mode, or one complete song for full_song mode.
     """
     payload: dict = {
         "action": "replace_section",
@@ -564,6 +579,8 @@ async def suno_replace_section(
         "callback_url": callback_url,
     }
 
+    if result_mode is not None:
+        payload["replace_section_result_mode"] = result_mode
     if lyric:
         payload["lyric"] = lyric
         payload["custom"] = True
