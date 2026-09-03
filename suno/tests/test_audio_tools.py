@@ -227,7 +227,7 @@ class TestReplaceSectionResultMode:
         assert mock_generate.await_args.kwargs["replace_section_result_mode"] == "candidates"
 
     @pytest.mark.asyncio
-    async def test_omitted_result_mode_preserves_legacy_request(self, mock_audio_response):
+    async def test_default_result_mode_requests_two_full_songs(self, mock_audio_response):
         with patch(
             "tools.audio_tools.client.generate_audio",
             new=AsyncMock(return_value=mock_audio_response),
@@ -238,4 +238,4 @@ class TestReplaceSectionResultMode:
                 replace_section_end=20,
             )
 
-        assert "replace_section_result_mode" not in mock_generate.await_args.kwargs
+        assert mock_generate.await_args.kwargs["replace_section_result_mode"] == "full_song"

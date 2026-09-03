@@ -548,14 +548,14 @@ async def suno_replace_section(
         Field(description="Webhook callback URL for asynchronous notifications."),
     ] = None,
     result_mode: Annotated[
-        ReplaceSectionResultMode | None,
+        ReplaceSectionResultMode,
         Field(
             description=(
-                "Result shape: candidates returns two replacement clips; full_song returns one complete "
-                "song made from the first candidate. Set explicitly for deterministic behavior."
+                "Result shape: full_song returns two complete songs, one from each replacement candidate; "
+                "candidates returns the two unmerged replacement clips."
             )
         ),
-    ] = None,
+    ] = "full_song",
 ) -> str:
     """Replace a specific time range in a song with new generated content.
 
@@ -568,7 +568,7 @@ async def suno_replace_section(
     - You want to replace a verse or chorus with something different
 
     Returns:
-        Task ID plus two replacement clips for candidates mode, or one complete song for full_song mode.
+        Task ID plus two complete songs by default, or two unmerged clips in candidates mode.
     """
     payload: dict = {
         "action": "replace_section",
@@ -579,8 +579,7 @@ async def suno_replace_section(
         "callback_url": callback_url,
     }
 
-    if result_mode is not None:
-        payload["replace_section_result_mode"] = result_mode
+    payload["replace_section_result_mode"] = result_mode
     if lyric:
         payload["lyric"] = lyric
         payload["custom"] = True
