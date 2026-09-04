@@ -10,6 +10,7 @@ from core.exceptions import FishAPIError
 from core.server import mcp
 from core.types import DEFAULT_MODEL, FishModel, FishMp3Bitrate
 from tools import audio_tools, info_tools  # noqa: F401
+from tools.audio_tools import fish_generate_audio
 
 # Mirrors the `model` header-param enum in the Fish TTS OpenAPI spec.
 SPEC_MODELS = {"s1", "s2-pro", "s2.1-pro"}
@@ -62,3 +63,42 @@ def test_forbidden_is_api_error():
 
     assert exc_info.value.status_code == 403
     assert exc_info.value.code == "used_up"
+
+
+def test_generate_audio_exposes_structured_instant_reference():
+    schema = mcp._tool_manager._tools["fish_generate_audio"].parameters["properties"]
+    assert "reference_audio_url" in schema
+    assert "reference_text" in schema
+    reference_schema = schema["references"]["anyOf"][0]
+    assert reference_schema["minItems"] == reference_schema["maxItems"] == 1
+
+
+@pytest.mark.asyncio
+async def test_generate_audio_builds_one_shot_reference(monkeypatch):
+    captured = {}
+
+    async def fake_generate_audio(**kwargs):
+        captured.update(kwargs)
+        return {"task_id": "task-1"}
+
+    monkeypatch.setattr(audio_tools.client, "generate_audio", fake_generate_audio)
+    await fish_generate_audio(
+        text="New speech",
+        reference_audio_url="https://cdn.acedata.cloud/reference.mp3",
+        reference_text="Reference transcript",
+    )
+    assert captured["references"] == [
+        {"audio": "https://cdn.acedata.cloud/reference.mp3", "text": "Reference transcript"}
+    ]
+    assert "reference_id" not in captured
+
+
+@pytest.mark.asyncio
+async def test_generate_audio_rejects_conflicting_voice_sources():
+    result = await fish_generate_audio(
+        text="New speech",
+        reference_id="saved-voice",
+        reference_audio_url="https://cdn.acedata.cloud/reference.mp3",
+        reference_text="Reference transcript",
+    )
+    assert "cannot be used together" in result
