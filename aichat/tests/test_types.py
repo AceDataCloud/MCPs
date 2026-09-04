@@ -12,10 +12,11 @@ def test_kimi_k3_models_are_available_in_aichat_v2() -> None:
     assert "kimi-k2.6" in models
 
 
-def test_claude_fable_5_is_available_in_aichat_v2() -> None:
-    models = set(get_args(AiChatV2Model))
+def test_claude_fable_models_are_available_once_in_aichat_v2() -> None:
+    models = get_args(AiChatV2Model)
 
-    assert "claude-fable-5" in models
+    assert models.count("claude-fable-5-1") == 1
+    assert models.count("claude-fable-5") == 1
 
 
 def test_flagship_models_are_available_in_aichat_v2() -> None:

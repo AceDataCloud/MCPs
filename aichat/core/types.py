@@ -122,6 +122,7 @@ AiChatV2Model = Literal[
     "claude-3-7-sonnet-20250219",
     "claude-3-haiku-20240307",
     "claude-3-sonnet-20240229",
+    "claude-fable-5-1",
     "claude-fable-5",
     "claude-haiku-4-5-20251001",
     "claude-opus-4-1-20250805",
