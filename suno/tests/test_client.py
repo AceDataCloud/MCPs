@@ -106,29 +106,6 @@ class TestSunoClient:
         assert request.kwargs["json"] == {"audio_id": "audio-1", "async": True}
 
     @pytest.mark.asyncio
-    async def test_enhanced_upload_uses_dedicated_endpoint(self, client):
-        mock_response = MagicMock()
-        mock_response.status_code = 200
-        mock_response.json.return_value = {"task_id": "task-1"}
-
-        with patch("httpx.AsyncClient") as mock_client:
-            mock_instance = AsyncMock()
-            mock_instance.post.return_value = mock_response
-            mock_client.return_value.__aenter__.return_value = mock_instance
-
-            await client.upload_enhanced_audio(
-                audio_url="https://example.com/audio.mp3",
-                name="My Song",
-            )
-
-        request = mock_instance.post.await_args
-        assert request.args[0] == "https://api.test.com/suno/upload/enhanced"
-        assert request.kwargs["json"] == {
-            "audio_url": "https://example.com/audio.mp3",
-            "name": "My Song",
-        }
-
-    @pytest.mark.asyncio
     async def test_request_auth_error_401(self, client):
         """Test 401 response raises auth error."""
         mock_response = MagicMock()

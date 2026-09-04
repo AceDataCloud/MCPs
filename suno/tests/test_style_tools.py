@@ -4,7 +4,7 @@ from unittest.mock import AsyncMock, patch
 
 import pytest
 
-from tools.style_tools import suno_create_voice, suno_upload_enhanced_audio
+from tools.style_tools import suno_create_voice, suno_upload_audio
 
 
 class TestCreateVoiceTool:
@@ -21,34 +21,42 @@ class TestCreateVoiceTool:
         }
 
 
-class TestEnhancedUploadTool:
+class TestUploadTool:
     @pytest.mark.asyncio
-    async def test_submits_required_fields_without_empty_callback(self):
+    async def test_standard_mode_is_default(self):
         with patch(
-            "tools.style_tools.client.upload_enhanced_audio",
+            "tools.style_tools.client.upload_audio",
+            new=AsyncMock(return_value={"data": {"audio_id": "audio-1"}}),
+        ) as mock_upload:
+            await suno_upload_audio(audio_url="https://example.com/audio.mp3")
+
+        assert mock_upload.await_args.kwargs == {"audio_url": "https://example.com/audio.mp3"}
+
+    @pytest.mark.asyncio
+    async def test_enhanced_mode_forwards_name_and_callback(self):
+        with patch(
+            "tools.style_tools.client.upload_audio",
             new=AsyncMock(return_value={"task_id": "task-1"}),
         ) as mock_upload:
-            result = await suno_upload_enhanced_audio(
+            result = await suno_upload_audio(
                 audio_url="https://example.com/audio.mp3",
+                mode="enhanced",
                 name="My Song",
+                callback_url="https://example.com/webhook",
             )
 
         assert '"task_id": "task-1"' in result
         assert mock_upload.await_args.kwargs == {
             "audio_url": "https://example.com/audio.mp3",
+            "mode": "enhanced",
             "name": "My Song",
+            "callback_url": "https://example.com/webhook",
         }
 
     @pytest.mark.asyncio
-    async def test_forwards_callback_url(self):
-        with patch(
-            "tools.style_tools.client.upload_enhanced_audio",
-            new=AsyncMock(return_value={"task_id": "task-1"}),
-        ) as mock_upload:
-            await suno_upload_enhanced_audio(
+    async def test_enhanced_mode_requires_name(self):
+        with pytest.raises(ValueError, match="name is required"):
+            await suno_upload_audio(
                 audio_url="https://example.com/audio.mp3",
-                name="My Song",
-                callback_url="https://example.com/webhook",
+                mode="enhanced",
             )
-
-        assert mock_upload.await_args.kwargs["callback_url"] == "https://example.com/webhook"

@@ -74,8 +74,7 @@ Music Generation:
 - suno_mashup_music: Blend multiple songs together musically
 
 Upload-based Operations (for your own music):
-- suno_upload_audio: Upload external audio for use in Suno
-- suno_upload_enhanced_audio: Submit a higher-compatibility asynchronous upload for authorized audio
+- suno_upload_audio: Upload external audio in standard or enhanced mode
 - suno_upload_extend: Extend uploaded audio with new AI content
 - suno_upload_cover: Create an AI cover of uploaded audio
 - suno_underpainting: Add AI-generated accompaniment to uploaded vocal audio
@@ -123,7 +122,6 @@ Workflow Examples:
 4. Consistent voice: suno_generate_music → suno_create_persona → suno_generate_with_persona
 5. Custom voice from URL: suno_create_voice → suno_generate_with_persona
 6. Your own music: suno_upload_audio → suno_upload_extend or suno_upload_cover
-6a. Difficult authorized import: suno_upload_enhanced_audio → suno_get_task → Cover, Samples, or Mashup
 7. Add accompaniment: suno_upload_audio → suno_underpainting
 8. Add vocals: suno_upload_audio → suno_overpainting
 9. Full stems: suno_all_stems_music → use stems for further production

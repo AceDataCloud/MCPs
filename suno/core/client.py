@@ -224,11 +224,6 @@ class SunoClient:
         logger.info(f"📤 Uploading audio: {kwargs.get('audio_url', '')[:50]}...")
         return await self.request("/suno/upload", kwargs)
 
-    async def upload_enhanced_audio(self, **kwargs: Any) -> dict[str, Any]:
-        """Submit an enhanced audio upload."""
-        logger.info(f"📤 Submitting enhanced audio upload: {kwargs.get('name', '')}")
-        return await self.request("/suno/upload/enhanced", kwargs)
-
     async def create_voice(self, **kwargs: Any) -> dict[str, Any]:
         """Create a voice persona from an audio URL."""
         logger.info(f"🎤 Creating voice: {kwargs.get('name', 'unnamed')}")
