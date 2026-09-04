@@ -1,7 +1,7 @@
 """Style and mashup tools for Suno API."""
 
 import json
-from typing import Annotated
+from typing import Annotated, Literal
 
 from pydantic import Field
 
@@ -75,6 +75,16 @@ async def suno_upload_audio(
             description="Public URL of the audio file to upload. The URL must be directly accessible (CDN link, cloud storage URL, etc.)."
         ),
     ],
+    mode: Annotated[
+        Literal["standard", "enhanced"] | None,
+        Field(
+            description="Upload mode. Use 'enhanced' for higher quality preprocessing when needed; default server behavior applies when omitted."
+        ),
+    ] = None,
+    callback_url: Annotated[
+        str | None,
+        Field(description="Webhook callback URL for asynchronous notifications."),
+    ] = None,
 ) -> str:
     """Upload an external audio file to Suno for use in subsequent operations.
 
@@ -92,7 +102,13 @@ async def suno_upload_audio(
     Returns:
         Upload result with audio ID for use in subsequent operations.
     """
-    result = await client.upload_audio(audio_url=audio_url)
+    payload: dict = {"audio_url": audio_url}
+    if mode:
+        payload["mode"] = mode
+    if callback_url:
+        payload["callback_url"] = callback_url
+
+    result = await client.upload_audio(**payload)
     return json.dumps(result, ensure_ascii=False, indent=2)
 
 
