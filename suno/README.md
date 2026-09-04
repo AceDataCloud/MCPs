@@ -50,6 +50,7 @@ Generate AI music, lyrics, and manage audio projects directly from Claude, VS Co
 | `suno_optimize_style` | Optimize a music style description for better generation results. |
 | `suno_mashup_lyrics` | Generate mashup lyrics by combining two sets of lyrics. |
 | `suno_upload_audio` | Upload an external audio file to Suno for use in subsequent operations. |
+| `suno_upload_enhanced_audio` | Submit a 4-Credit asynchronous upload for authorized audio that normal upload cannot process. |
 | `suno_get_task` | Query the status and result of a music generation task. |
 | `suno_get_tasks_batch` | Query multiple music generation tasks at once. |
 | `suno_list_models` | List all available Suno models and their capabilities. |
@@ -374,9 +375,10 @@ Clients connect with their own Bearer token — the server extracts the token fr
 
 ### Upload
 
-| Tool           | Description                                                    |
-| -------------- | -------------------------------------------------------------- |
-| `upload_audio` | Upload an external audio file for use in subsequent operations |
+| Tool                    | Description                                                    |
+| ----------------------- | -------------------------------------------------------------- |
+| `upload_audio`          | Upload an external audio file for use in subsequent operations |
+| `upload_enhanced_audio` | Submit an enhanced asynchronous upload for authorized audio    |
 
 ### Tasks
 

@@ -97,6 +97,34 @@ async def suno_upload_audio(
 
 
 @mcp.tool()
+async def suno_upload_enhanced_audio(
+    audio_url: Annotated[
+        str,
+        Field(description="Public HTTPS URL of audio you own or are authorized to use."),
+    ],
+    name: Annotated[
+        str,
+        Field(description="Audio name, between 1 and 100 characters."),
+    ],
+    callback_url: Annotated[
+        str | None,
+        Field(description="Optional HTTPS webhook URL for the final task result."),
+    ] = None,
+) -> str:
+    """Submit an enhanced audio upload for difficult import cases.
+
+    This asynchronous operation costs 4 Credits when it succeeds. Prefer
+    suno_upload_audio for normal uploads. Use the returned task_id with
+    suno_get_task. The resulting audio_id supports Cover, Samples, and Mashup.
+    """
+    payload: dict[str, str] = {"audio_url": audio_url, "name": name}
+    if callback_url:
+        payload["callback_url"] = callback_url
+    result = await client.upload_enhanced_audio(**payload)
+    return json.dumps(result, ensure_ascii=False, indent=2)
+
+
+@mcp.tool()
 async def suno_create_voice(
     audio_url: Annotated[
         str,
