@@ -105,7 +105,6 @@ class TestSunoClient:
         assert request.args[0] == "https://api.test.com/suno/mp3"
         assert request.kwargs["json"] == {"audio_id": "audio-1", "async": True}
 
-
     @pytest.mark.asyncio
     async def test_enhanced_upload_uses_dedicated_endpoint(self, client):
         mock_response = MagicMock()
