@@ -86,10 +86,15 @@ async def openai_list_chat_models() -> str:
     Returns:
         Table of all chat models with descriptions.
     """
-    # Last updated: 2026-07-27
+    # Last updated: 2026-09-05
     return """Available OpenAI Chat Completion Models:
 
-## GPT-5.6 Series (latest)
+## GPT-6 Series (latest)
+| Model       | Description                                      |
+|-------------|--------------------------------------------------|
+| gpt-6-astra | Most capable model for end-to-end complex work   |
+
+## GPT-5.6 Series
 | Model           | Description                              |
 |-----------------|------------------------------------------|
 | gpt-5.6-luna    | GPT-5.6 Luna variant                     |
