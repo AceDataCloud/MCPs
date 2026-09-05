@@ -8,7 +8,7 @@ import pytest
 from core.client import FishClient
 from core.exceptions import FishAPIError
 from core.server import mcp
-from core.types import DEFAULT_MODEL, FishModel, FishMp3Bitrate
+from core.types import DEFAULT_MODEL, FishModel, FishMp3Bitrate, FishReferenceId
 from tools import audio_tools, info_tools  # noqa: F401
 from tools.audio_tools import fish_generate_audio
 
@@ -28,12 +28,39 @@ def test_mp3_bitrate_matches_spec():
     assert set(get_args(FishMp3Bitrate)) == {64, 128, 192}
 
 
+def test_reference_id_matches_spec():
+    assert get_args(FishReferenceId) == (str, list[str])
+
+
 def test_generate_audio_exposes_async_request_control():
     schema = mcp._tool_manager._tools["fish_generate_audio"].parameters
     properties = schema["properties"]
 
     assert "async" in properties
     assert {"type": "boolean"} in properties["async"]["anyOf"]
+
+
+def test_generate_audio_exposes_reference_id_array():
+    schema = mcp._tool_manager._tools["fish_generate_audio"].parameters
+    reference_id_schema = schema["properties"]["reference_id"]
+
+    assert {"type": "string"} in reference_id_schema["anyOf"]
+    assert {"type": "array", "items": {"type": "string"}} in reference_id_schema["anyOf"]
+
+
+@pytest.mark.asyncio
+async def test_generate_audio_forwards_reference_id_array(monkeypatch):
+    captured = {}
+
+    async def mock_generate_audio(**kwargs):
+        captured.update(kwargs)
+        return {"task_id": "task-1"}
+
+    monkeypatch.setattr(audio_tools.client, "generate_audio", mock_generate_audio)
+
+    await audio_tools.fish_generate_audio(text="hello", reference_id=["voice-1", "voice-2"])
+
+    assert captured["reference_id"] == ["voice-1", "voice-2"]
 
 
 def test_list_models_uses_spec_self_parameter():

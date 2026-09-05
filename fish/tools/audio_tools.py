@@ -15,6 +15,7 @@ from core.types import (
     FishLatency,
     FishModel,
     FishMp3Bitrate,
+    FishReferenceId,
 )
 from core.utils import format_submission_result
 
@@ -33,10 +34,10 @@ async def fish_generate_audio(
         Field(description="The text to synthesize. Required."),
     ] = None,
     reference_id: Annotated[
-        str | None,
+        FishReferenceId | None,
         Field(
             description=(
-                "Voice model id (single speaker). "
+                "Voice model id, or a list of voice model ids. "
                 f"Default example voice model ID: {DEFAULT_VOICE_ID}."
             )
         ),
