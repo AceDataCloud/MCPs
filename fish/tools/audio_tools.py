@@ -3,7 +3,7 @@
 import json
 from typing import Annotated
 
-from pydantic import Field
+from pydantic import BaseModel, Field, HttpUrl
 
 from core.client import client
 from core.exceptions import FishAPIError, FishAuthError
@@ -17,6 +17,13 @@ from core.types import (
     FishMp3Bitrate,
 )
 from core.utils import format_submission_result
+
+
+class FishReference(BaseModel):
+    """One-shot voice reference hosted at a public HTTPS URL."""
+
+    audio: HttpUrl
+    text: str = Field(min_length=1, max_length=10_000)
 
 
 @mcp.tool()
@@ -95,8 +102,25 @@ async def fish_generate_audio(
         Field(description="Prosody overrides forwarded to the upstream."),
     ] = None,
     references: Annotated[
-        list[dict] | None,
-        Field(description="Inline reference samples forwarded to the upstream."),
+        list[FishReference] | None,
+        Field(
+            min_length=1,
+            max_length=1,
+            description=(
+                "One-shot voice clone reference: one object with a public HTTPS audio URL "
+                "and the exact transcript. Cannot be combined with reference_id."
+            ),
+        ),
+    ] = None,
+    reference_audio_url: Annotated[
+        HttpUrl | None,
+        Field(description="Convenience HTTPS audio URL for one-shot voice cloning."),
+    ] = None,
+    reference_text: Annotated[
+        str | None,
+        Field(
+            min_length=1, max_length=10_000, description="Exact transcript for reference_audio_url."
+        ),
     ] = None,
     callback_url: Annotated[
         str | None,
@@ -145,6 +169,30 @@ async def fish_generate_audio(
     request_reference_id = reference_id or voice_id
     if not request_text:
         return json.dumps({"error": "Validation Error", "message": "text is required"})
+    if (reference_audio_url is None) != (reference_text is None):
+        return json.dumps(
+            {
+                "error": "Validation Error",
+                "message": "reference_audio_url and reference_text must be provided together.",
+            }
+        )
+    if references is not None and reference_audio_url is not None:
+        return json.dumps(
+            {
+                "error": "Validation Error",
+                "message": "Provide references or the convenience reference fields, not both.",
+            }
+        )
+    if request_reference_id and (references is not None or reference_audio_url is not None):
+        return json.dumps(
+            {
+                "error": "Validation Error",
+                "message": "reference_id and one-shot references cannot be used together.",
+            }
+        )
+    request_references = references
+    if reference_audio_url is not None and reference_text is not None:
+        request_references = [FishReference(audio=reference_audio_url, text=reference_text)]
 
     payload: dict = {"text": request_text, "format": format, "model": model}
     if request_reference_id:
@@ -161,7 +209,9 @@ async def fish_generate_audio(
         "max_new_tokens": max_new_tokens,
         "normalize": normalize,
         "prosody": prosody,
-        "references": references,
+        "references": [reference.model_dump(mode="json") for reference in request_references]
+        if request_references
+        else None,
         "async": async_,
     }
     for key, value in optional_payload.items():

@@ -56,9 +56,10 @@ When the user wants to generate speech or inspect voice models, use the appropri
 
 ## Important Notes:
 1. text is required for fish_generate_audio
-2. reference_id is optional for voice conditioning
-3. Tasks may be asynchronous — poll fish_get_task until state='complete'
-4. Bearer token authentication is required
+2. Use reference_id for a saved voice, or reference_audio_url + reference_text for a one-shot clone; never both
+3. One-shot references must use a public HTTPS MP3/WAV URL and exact transcript
+4. Tasks may be asynchronous — poll fish_get_task until state='complete'
+5. Bearer token authentication is required
 """
 
 
@@ -80,7 +81,12 @@ def fish_workflow_examples() -> str:
 4. Call `fish_generate_audio(text="...", reference_id=<model_id>)`
 5. Poll for completion and return the audio URL
 
-## Workflow 3: Batch Task Monitoring
+## Workflow 3: One-shot Voice Clone
+1. Obtain a public HTTPS MP3/WAV reference URL and exact transcript
+2. Call `fish_generate_audio` with text, reference_audio_url, and reference_text
+3. Poll the returned task_id; no persistent voice model is created
+
+## Workflow 4: Batch Task Monitoring
 1. User starts multiple TTS generations
 2. Collect all task_ids
 3. Call `fish_get_tasks_batch(task_ids=[...])`

@@ -12,6 +12,20 @@ Generate natural-sounding speech and explore the Fish voice model library.
 - **Asynchronous tasks**: Submit generation tasks and poll for results
 - **Batch task lookup**: Query multiple task results in one call
 
+### One-shot voice cloning
+
+Pass one public HTTPS reference audio URL plus its exact transcript. This conditions only the current TTS request and does not create a reusable voice model:
+
+```python
+fish_generate_audio(
+    text="New speech in the referenced voice",
+    reference_audio_url="https://cdn.acedata.cloud/reference.mp3",
+    reference_text="The exact words spoken in the reference audio",
+)
+```
+
+Use `reference_id` for saved or public voices, and the one-shot reference fields for a temporary voice. Do not combine them. Reference audio supports MP3/WAV and should be 10–270 seconds. Billing remains based on the target text's UTF-8 byte count.
+
 ## Installation
 
 ```bash
