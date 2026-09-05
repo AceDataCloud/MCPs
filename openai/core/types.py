@@ -6,6 +6,7 @@ from pydantic import Field
 
 # Chat completion model options
 ChatModel = Literal[
+    "gpt-6-astra",
     "gpt-oss:free",
     "gpt-5.5:free",
     "gpt-5:free",
@@ -48,6 +49,7 @@ ChatModel = Literal[
 
 # Responses API model options
 ResponsesModel = Literal[
+    "gpt-6-astra",
     "gpt-5.6-luna",
     "gpt-5.6-terra",
     "gpt-5.6-sol",

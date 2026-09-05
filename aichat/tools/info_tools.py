@@ -16,7 +16,10 @@ async def aichat_list_models() -> str:
     # Last updated: 2026-07-27
     return """# Available AiChat Models
 
-## OpenAI GPT-5.6 Series (latest)
+## OpenAI GPT-6 Series (latest)
+- gpt-6-astra
+
+## OpenAI GPT-5.6 Series
 - gpt-5.6-luna
 - gpt-5.6-terra
 - gpt-5.6-sol

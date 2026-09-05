@@ -8,6 +8,7 @@ from tools import chat_tools
 
 # Models the /aichat/conversations spec enum requires us to offer.
 V1_REQUIRED = {
+    "gpt-6-astra",
     "gpt-5.6-luna",
     "gpt-5.6-terra",
     "gpt-5.6-sol",
