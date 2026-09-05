@@ -4,6 +4,7 @@ from typing import Literal
 
 # All supported models from OpenAPI spec
 AiChatModel = Literal[
+    "gpt-6-astra",
     "gpt-5.6-luna",
     "gpt-5.6-terra",
     "gpt-5.6-sol",
@@ -101,6 +102,7 @@ AiChatV2Action = Literal["chat", "retrieve", "retrieve_batch", "update", "delete
 AiChatV2ModelGroup = Literal["chatgpt", "claude", "gemini", "grok", "kimi", "glm", "deepseek"]
 
 AiChatV2Model = Literal[
+    "gpt-6-astra",
     "gpt-4",
     "gpt-4.1",
     "gpt-4.1-mini",

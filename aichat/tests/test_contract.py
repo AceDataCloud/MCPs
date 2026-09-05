@@ -8,6 +8,7 @@ from tools import chat_tools
 
 # Models the /aichat/conversations spec enum requires us to offer.
 V1_REQUIRED = {
+    "gpt-6-astra",
     "gpt-5.6-luna",
     "gpt-5.6-terra",
     "gpt-5.6-sol",
@@ -42,6 +43,10 @@ V2_RETIRED_GEMINI = {
 def test_v1_offers_the_newest_models():
     missing = V1_REQUIRED - set(get_args(AiChatModel))
     assert not missing, f"AiChatModel is missing {sorted(missing)}"
+
+
+def test_v2_offers_gpt6_astra():
+    assert "gpt-6-astra" in get_args(AiChatV2Model)
 
 
 def test_v2_offers_claude_sonnet_5():

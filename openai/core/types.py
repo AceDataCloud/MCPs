@@ -12,6 +12,7 @@ ChatModel = Literal[
     "gpt-4.1:free",
     "gpt-4o:free",
     "gpt-4o-mini:free",
+    "gpt-6-astra",
     "gpt-5.6-luna",
     "gpt-5.6-terra",
     "gpt-5.6-sol",
@@ -48,6 +49,7 @@ ChatModel = Literal[
 
 # Responses API model options
 ResponsesModel = Literal[
+    "gpt-6-astra",
     "gpt-5.6-luna",
     "gpt-5.6-terra",
     "gpt-5.6-sol",
