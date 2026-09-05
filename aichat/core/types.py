@@ -4,6 +4,7 @@ from typing import Literal
 
 # All supported models from OpenAPI spec
 AiChatModel = Literal[
+    "gpt-6-astra",
     "gpt-5.6-luna",
     "gpt-5.6-terra",
     "gpt-5.6-sol",
