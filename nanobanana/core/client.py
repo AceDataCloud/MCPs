@@ -89,7 +89,7 @@ class NanoBananaClient:
 
         logger.error(f"API error {status} [{code}]: {message}")
 
-        if status in (401, 403):
+        if status == 401:
             raise NanoBananaAuthError(message)
         raise NanoBananaAPIError(message=message, code=code, status_code=status)
 
