@@ -7,6 +7,7 @@ from pydantic import Field
 from core.client import client
 from core.server import mcp
 from core.types import (
+    Background,
     OutputFormat,
     ResponseFormat,
     SeedreamModel,
@@ -15,6 +16,8 @@ from core.types import (
     WebSearchToolType,
 )
 from core.utils import format_image_result
+
+SEEDREAM_SIZE_PATTERN = r"^(1K|1\.5K|2K|3K|4K|auto|[0-9]+x[0-9]+)$"
 
 
 @mcp.tool()
@@ -35,6 +38,7 @@ async def seedream_generate_image(
             "'doubao-seedream-5-0-pro-260628' (v5.0 Pro, flagship single image, highest quality; "
             "no sequential generation, streaming, or web search). "
             "'doubao-seedream-5-0-260128' (v5.0 Lite, latest flagship, sequential generation, streaming, web search). "
+            "'doubao-seedream-5-0-lite-260128' (v5.0 Lite alias). "
             "'doubao-seedream-4-5-251128' (v4.5, previous flagship, great quality). "
             "'doubao-seedream-4-0-250828' (v4.0, stable, best value)."
         ),
@@ -42,7 +46,8 @@ async def seedream_generate_image(
     size: Annotated[
         SeedreamSize | None,
         Field(
-            description="Output image resolution. '1K' (default), '2K', '3K', or '4K'. "
+            pattern=SEEDREAM_SIZE_PATTERN,
+            description="Output image resolution. '1K' (default), '1.5K', '2K', '3K', '4K', or 'auto'. "
             "You can also specify custom dimensions like '1024x1024', '1280x720', etc."
         ),
     ] = None,
@@ -91,6 +96,21 @@ async def seedream_generate_image(
             "Must be publicly accessible."
         ),
     ] = "",
+    async_: Annotated[
+        bool | None,
+        Field(
+            alias="async",
+            description="Whether to submit the image request asynchronously.",
+        ),
+    ] = None,
+    layer_decomposition: Annotated[
+        bool | None,
+        Field(description="Whether to enable layer decomposition in the generated image."),
+    ] = None,
+    background: Annotated[
+        Background | None,
+        Field(description="Background opacity for the generated image: 'transparent' or 'opaque'."),
+    ] = None,
     tools: Annotated[
         list[WebSearchToolType] | None,
         Field(
@@ -152,6 +172,12 @@ async def seedream_generate_image(
         payload["output_format"] = output_format
     if callback_url:
         payload["callback_url"] = callback_url
+    if async_ is not None:
+        payload["async"] = async_
+    if layer_decomposition is not None:
+        payload["layer_decomposition"] = layer_decomposition
+    if background is not None:
+        payload["background"] = background
     if tools is not None:
         payload["tools"] = [{"type": t} for t in tools]
     if optimize_prompt_options is not None:
@@ -172,11 +198,12 @@ async def seedream_edit_image(
         ),
     ],
     image: Annotated[
-        list[str],
+        str | Annotated[list[str], Field(max_length=14)],
         Field(
-            description="List of image URLs or base64-encoded images to edit. "
+            description="Image URL/base64 string or list of image URLs/base64 strings to edit. "
             "Supports HTTP/HTTPS URLs (publicly accessible) or base64 format "
-            "(data:image/png;base64,...). Each image must be under 10MB."
+            "(data:image/png;base64,...). Each image must be under 10MB. "
+            "Never join multiple URLs with commas; pass multiple images as an array."
         ),
     ],
     model: Annotated[
@@ -188,7 +215,10 @@ async def seedream_edit_image(
     ] = "doubao-seedream-5-0-260128",
     size: Annotated[
         SeedreamSize | None,
-        Field(description="Output image resolution. '1K' (default), '2K', '3K', or '4K'."),
+        Field(
+            pattern=SEEDREAM_SIZE_PATTERN,
+            description="Output image resolution. '1K' (default), '1.5K', '2K', '3K', '4K', 'auto', or custom dimensions.",
+        ),
     ] = None,
     response_format: Annotated[
         ResponseFormat | None,
@@ -226,6 +256,21 @@ async def seedream_edit_image(
         str,
         Field(description="Optional webhook URL for async result notification."),
     ] = "",
+    async_: Annotated[
+        bool | None,
+        Field(
+            alias="async",
+            description="Whether to submit the image edit request asynchronously.",
+        ),
+    ] = None,
+    layer_decomposition: Annotated[
+        bool | None,
+        Field(description="Whether to enable layer decomposition in the edited image."),
+    ] = None,
+    background: Annotated[
+        Background | None,
+        Field(description="Background opacity for the edited image: 'transparent' or 'opaque'."),
+    ] = None,
 ) -> str:
     """Edit or modify existing images using ByteDance's Seedream/SeedEdit model.
 
@@ -277,6 +322,12 @@ async def seedream_edit_image(
         payload["optimize_prompt_options"] = optimize_prompt_options
     if callback_url:
         payload["callback_url"] = callback_url
+    if async_ is not None:
+        payload["async"] = async_
+    if layer_decomposition is not None:
+        payload["layer_decomposition"] = layer_decomposition
+    if background is not None:
+        payload["background"] = background
 
     result = await client.edit_image(**payload)
     return format_image_result(result)

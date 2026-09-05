@@ -17,3 +17,10 @@ def test_with_async_callback_preserves_explicit_callback() -> None:
         {"prompt": "test", "callback_url": "https://example.com/webhook"}
     )
     assert payload["callback_url"] == "https://example.com/webhook"
+
+
+def test_with_async_callback_preserves_explicit_async() -> None:
+    """Callers can opt out of default async submission."""
+    client = SeedreamClient(api_token="test-token", base_url="https://api.test.com")
+    payload = client._with_async_callback({"prompt": "test", "async": False})
+    assert payload["async"] is False

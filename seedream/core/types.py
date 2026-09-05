@@ -6,12 +6,13 @@ from typing import Literal
 SeedreamModel = Literal[
     "doubao-seedream-5-0-pro-260628",
     "doubao-seedream-5-0-260128",
-    "doubao-seedream-4-5-251128",
+    "doubao-seedream-5-0-lite-260128",
     "doubao-seedream-4-0-250828",
+    "doubao-seedream-4-5-251128",
 ]
 
-# Image size presets
-SeedreamSize = Literal["1K", "2K", "3K", "4K"]
+# Image size
+SeedreamSize = str
 
 # Output image format
 OutputFormat = Literal["jpeg", "png"]
@@ -21,6 +22,9 @@ SequentialMode = Literal["auto", "disabled"]
 
 # Response format
 ResponseFormat = Literal["url", "b64_json"]
+
+# Background opacity
+Background = Literal["transparent", "opaque"]
 
 # Task action types
 TaskAction = Literal["retrieve", "retrieve_batch"]
