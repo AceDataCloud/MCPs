@@ -5,6 +5,9 @@ from typing import Literal
 # Fish TTS model
 FishModel = Literal["s1", "s2-pro", "s2.1-pro"]
 
+# Fish reference voice id, accepted as a single model id or a list of model ids
+FishReferenceId = str | list[str]
+
 # Fish output format
 FishAudioFormat = Literal["mp3", "wav", "pcm"]
 

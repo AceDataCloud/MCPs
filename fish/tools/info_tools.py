@@ -28,7 +28,7 @@ async def fish_get_usage_guide() -> str:
 ### Audio Generation
 **fish_generate_audio** - Convert text to speech using a voice
 - text: The text to convert to speech (required)
-- reference_id: Voice model ID to condition speech (optional)
+- reference_id: Voice model ID or list of voice model IDs to condition speech (optional)
 - model: "s1", "s2-pro" or "s2.1-pro" (optional, default: s2-pro)
 - format: "mp3" | "wav" | "pcm" (optional, default: mp3)
 - callback_url: Async callback URL (optional)
