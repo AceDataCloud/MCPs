@@ -111,3 +111,23 @@ mappings:
     repo: AceDataCloud/DiscordBotMCP
     exclude:
       - .gitbooks
+  digitalhuman:
+    repo: AceDataCloud/DigitalHumanMCP
+    exclude:
+      - .gitbooks
+  hcaptcha:
+    repo: AceDataCloud/HCaptchaMCP
+    exclude:
+      - .gitbooks
+  image2text:
+    repo: AceDataCloud/Image2TextMCP
+    exclude:
+      - .gitbooks
+  recaptcha:
+    repo: AceDataCloud/RecaptchaMCP
+    exclude:
+      - .gitbooks
+  turnstile:
+    repo: AceDataCloud/TurnstileMCP
+    exclude:
+      - .gitbooks

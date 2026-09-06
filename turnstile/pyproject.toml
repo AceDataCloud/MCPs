@@ -32,9 +32,9 @@ all = ["mcp-turnstile[dev,test,release]"]
 mcp-turnstile = "main:main"
 
 [project.urls]
-Homepage = "https://github.com/AceDataCloud/MCPs"
+Homepage = "https://github.com/AceDataCloud/TurnstileMCP"
 Documentation = "https://platform.acedata.cloud/documents/turnstile"
-Repository = "https://github.com/AceDataCloud/MCPs"
+Repository = "https://github.com/AceDataCloud/TurnstileMCP"
 Issues = "https://github.com/AceDataCloud/MCPs/issues"
 
 [build-system]

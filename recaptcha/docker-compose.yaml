@@ -1,0 +1,9 @@
+version: "3"
+services:
+  mcp-recaptcha:
+    platform: linux/amd64
+    container_name: "mcp-recaptcha"
+    build: ./
+    image: "ghcr.io/acedatacloud/mcp-recaptcha:${BUILD_NUMBER}"
+    ports:
+      - "8000:8000"

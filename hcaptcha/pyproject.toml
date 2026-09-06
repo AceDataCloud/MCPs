@@ -32,9 +32,9 @@ all = ["mcp-hcaptcha[dev,test,release]"]
 mcp-hcaptcha = "main:main"
 
 [project.urls]
-Homepage = "https://github.com/AceDataCloud/MCPs"
+Homepage = "https://github.com/AceDataCloud/HCaptchaMCP"
 Documentation = "https://platform.acedata.cloud/services/018c653e-4f1b-433f-82f9-732ef2767040"
-Repository = "https://github.com/AceDataCloud/MCPs"
+Repository = "https://github.com/AceDataCloud/HCaptchaMCP"
 Issues = "https://github.com/AceDataCloud/MCPs/issues"
 
 [build-system]

@@ -1,0 +1,30 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: mcp-image2text
+  namespace: acedatacloud
+  labels:
+    app: mcp-image2text
+  annotations:
+    kubernetes.io/ingress.class: "nginx-router"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
+    nginx.ingress.kubernetes.io/proxy-http-version: "1.1"
+spec:
+  ingressClassName: nginx-router
+  tls:
+    - hosts:
+        - image2text.mcp.acedata.cloud
+      secretName: tls-wildcard-acedata-cloud
+  rules:
+    - host: image2text.mcp.acedata.cloud
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: mcp-image2text
+                port:
+                  number: 8000

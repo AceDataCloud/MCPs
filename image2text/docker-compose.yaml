@@ -1,0 +1,9 @@
+version: "3"
+services:
+  mcp-image2text:
+    platform: linux/amd64
+    container_name: "mcp-image2text"
+    build: ./
+    image: "ghcr.io/acedatacloud/mcp-image2text:${BUILD_NUMBER}"
+    ports:
+      - "8000:8000"

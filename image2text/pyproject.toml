@@ -32,9 +32,9 @@ all = ["mcp-image2text[dev,test,release]"]
 mcp-image2text = "main:main"
 
 [project.urls]
-Homepage = "https://github.com/AceDataCloud/MCPs"
+Homepage = "https://github.com/AceDataCloud/Image2TextMCP"
 Documentation = "https://platform.acedata.cloud/services/2aaa7faf-099e-410e-82f3-8d78170f25bb"
-Repository = "https://github.com/AceDataCloud/MCPs"
+Repository = "https://github.com/AceDataCloud/Image2TextMCP"
 Issues = "https://github.com/AceDataCloud/MCPs/issues"
 
 [build-system]

@@ -1,0 +1,9 @@
+version: "3"
+services:
+  mcp-turnstile:
+    platform: linux/amd64
+    container_name: "mcp-turnstile"
+    build: ./
+    image: "ghcr.io/acedatacloud/mcp-turnstile:${BUILD_NUMBER}"
+    ports:
+      - "8000:8000"

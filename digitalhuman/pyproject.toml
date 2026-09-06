@@ -35,9 +35,9 @@ all = ["mcp-digitalhuman[dev,test,release]"]
 mcp-digitalhuman = "main:main"
 
 [project.urls]
-Homepage = "https://github.com/AceDataCloud/MCPs/tree/main/digitalhuman"
+Homepage = "https://github.com/AceDataCloud/DigitalHumanMCP"
 Documentation = "https://platform.acedata.cloud/documents/digitalhuman"
-Repository = "https://github.com/AceDataCloud/MCPs"
+Repository = "https://github.com/AceDataCloud/DigitalHumanMCP"
 Issues = "https://github.com/AceDataCloud/MCPs/issues"
 
 [build-system]
