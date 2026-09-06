@@ -12,8 +12,8 @@ from tools import info_tools
 async def test_fastmcp_dispatch_maps_public_self_parameter(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
-    list_models = AsyncMock(return_value={"items": []})
-    monkeypatch.setattr(info_tools.client, "list_models", list_models)
+    request = AsyncMock(return_value={"items": []})
+    monkeypatch.setattr(info_tools.client, "request", request)
     tools = {tool.name: tool for tool in await mcp.list_tools()}
     properties = tools["fish_list_models"].inputSchema["properties"]
 
@@ -23,4 +23,4 @@ async def test_fastmcp_dispatch_maps_public_self_parameter(
     result = await mcp.call_tool("fish_list_models", {"self": True})
 
     assert result
-    list_models.assert_awaited_once_with(self=True)
+    request.assert_awaited_once_with("GET", "/fish/model", params={"self": True})
