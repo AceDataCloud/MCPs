@@ -177,10 +177,10 @@ class FishClient:
             headers=request_headers,
         )
 
-    async def list_models(self, **kwargs: Any) -> dict[str, Any]:
+    async def list_models(self, params: dict[str, Any] | None = None) -> dict[str, Any]:
         """List available Fish voice models."""
         logger.info("📚 Listing Fish models")
-        return await self.request("GET", "/fish/model", params=kwargs)
+        return await self.request("GET", "/fish/model", params=params or {})
 
     async def get_model(self, model_id: str) -> dict[str, Any]:
         """Get a Fish voice model by ID."""

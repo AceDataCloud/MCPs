@@ -160,7 +160,7 @@ async def fish_list_models(
         if sort_by is not None:
             params["sort_by"] = sort_by
 
-        result = await client.list_models(**params)
+        result = await client.list_models(params)
         if not result:
             return json.dumps({"error": "No response received from the API."})
         return json.dumps(result, ensure_ascii=False, indent=2)
