@@ -134,7 +134,9 @@ async def fish_generate_audio(
     ] = None,
     async_: Annotated[
         bool | None,
-        Field(alias="async", description="Whether to process the request asynchronously."),
+        Field(
+            validation_alias="async", description="Whether to process the request asynchronously."
+        ),
     ] = None,
 ) -> str:
     """Generate speech audio from text using Fish TTS.

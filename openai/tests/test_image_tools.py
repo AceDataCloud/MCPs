@@ -1,6 +1,7 @@
 """Unit tests for image tools."""
 
 import json
+from typing import Any
 
 import pytest
 
@@ -136,6 +137,51 @@ def test_openai_image_tools_expose_async_parameter():
 
     assert "async" in tools["openai_generate_image"].parameters["properties"]
     assert "async" in tools["openai_edit_image"].parameters["properties"]
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize(
+    ("tool_name", "arguments", "client_method"),
+    [
+        (
+            "openai_generate_image",
+            {"prompt": "a panda", "model": "gpt-image-1"},
+            "images_generations_async",
+        ),
+        (
+            "openai_edit_image",
+            {
+                "image": "https://example.com/base.png",
+                "prompt": "Remove the background.",
+                "model": "gpt-image-2",
+            },
+            "images_edits_async",
+        ),
+    ],
+)
+async def test_fastmcp_dispatch_maps_public_async_parameter(
+    monkeypatch: pytest.MonkeyPatch,
+    tool_name: str,
+    arguments: dict[str, object],
+    client_method: str,
+) -> None:
+    captured_payload: dict[str, object] = {}
+
+    async def mock_request(**kwargs: Any) -> dict[str, list[dict[str, str]]]:
+        captured_payload.update(kwargs)
+        return {"data": [{"url": "https://example.com/image.png"}]}
+
+    monkeypatch.setattr(image_tools.client, client_method, mock_request)
+    tools = {tool.name: tool for tool in await mcp.list_tools()}
+    properties = tools[tool_name].inputSchema["properties"]
+
+    assert "async" in properties
+    assert "async_" not in properties
+
+    result = await mcp.call_tool(tool_name, {**arguments, "async": False})
+
+    assert result
+    assert captured_payload["async"] is False
 
 
 @pytest.mark.asyncio

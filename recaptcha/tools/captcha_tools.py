@@ -16,7 +16,10 @@ async def recaptcha2_recognize(
     question: Annotated[str, Field(description="Challenge question text shown to the user.")],
     async_: Annotated[
         bool | None,
-        Field(alias="async", description="Whether to submit the recognition task asynchronously."),
+        Field(
+            validation_alias="async",
+            description="Whether to submit the recognition task asynchronously.",
+        ),
     ] = None,
 ) -> str:
     """Recognize a reCAPTCHA v2 image challenge."""
@@ -48,7 +51,9 @@ async def recaptcha2_get_token(
     ] = None,
     async_: Annotated[
         bool | None,
-        Field(alias="async", description="Whether to submit the token task asynchronously."),
+        Field(
+            validation_alias="async", description="Whether to submit the token task asynchronously."
+        ),
     ] = None,
 ) -> str:
     """Get a reCAPTCHA v2 token."""
@@ -82,7 +87,9 @@ async def recaptcha3_get_token(
     ],
     async_: Annotated[
         bool | None,
-        Field(alias="async", description="Whether to submit the token task asynchronously."),
+        Field(
+            validation_alias="async", description="Whether to submit the token task asynchronously."
+        ),
     ] = None,
 ) -> str:
     """Get a reCAPTCHA v3 token."""

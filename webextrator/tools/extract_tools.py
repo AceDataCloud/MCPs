@@ -86,7 +86,7 @@ async def webextrator_extract(
     async_: Annotated[
         bool | None,
         Field(
-            alias="async",
+            validation_alias="async",
             description="Whether to process the request asynchronously.",
         ),
     ] = None,
@@ -192,7 +192,7 @@ async def webextrator_render(
     async_: Annotated[
         bool | None,
         Field(
-            alias="async",
+            validation_alias="async",
             description="Whether to process the request asynchronously.",
         ),
     ] = None,

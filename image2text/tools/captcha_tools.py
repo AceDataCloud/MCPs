@@ -15,7 +15,9 @@ async def image2text_recognize(
     image: Annotated[str, Field(description="Base64-encoded image content to recognize.")],
     async_: Annotated[
         bool | None,
-        Field(alias="async", description="Whether to process the request asynchronously."),
+        Field(
+            validation_alias="async", description="Whether to process the request asynchronously."
+        ),
     ] = None,
 ) -> str:
     """Recognize text from a captcha-style image."""

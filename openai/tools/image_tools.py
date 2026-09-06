@@ -146,7 +146,9 @@ async def openai_generate_image(
     ] = None,
     async_: Annotated[
         bool | None,
-        Field(alias="async", description="Whether to process the request asynchronously."),
+        Field(
+            validation_alias="async", description="Whether to process the request asynchronously."
+        ),
     ] = None,
 ) -> str:
     """Generate images using OpenAI image models via AceDataCloud.
@@ -311,7 +313,9 @@ async def openai_edit_image(
     ] = None,
     async_: Annotated[
         bool | None,
-        Field(alias="async", description="Whether to process the request asynchronously."),
+        Field(
+            validation_alias="async", description="Whether to process the request asynchronously."
+        ),
     ] = None,
 ) -> str:
     """Edit or modify existing images using OpenAI image models via AceDataCloud.

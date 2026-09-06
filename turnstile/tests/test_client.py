@@ -41,9 +41,7 @@ async def test_get_token_passes_async_flag_when_provided():
 
     client.request = fake_request  # type: ignore[method-assign]
 
-    await client.get_token(
-        website_key="site-key", website_url="https://example.com", async_=False
-    )
+    await client.get_token(website_key="site-key", website_url="https://example.com", async_=False)
 
     assert captured["payload"] == {
         "website_key": "site-key",

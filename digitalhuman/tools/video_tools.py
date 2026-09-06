@@ -90,7 +90,9 @@ async def digitalhuman_create_video(
     ] = None,
     async_: Annotated[
         bool | None,
-        Field(alias="async", description="Whether to return immediately with a task_id."),
+        Field(
+            validation_alias="async", description="Whether to return immediately with a task_id."
+        ),
     ] = None,
 ) -> str:
     """Create a digital human video from a face video or still image."""

@@ -150,7 +150,9 @@ async def aichat_create_conversation_v2(
     ] = None,
     async_: Annotated[
         bool | None,
-        Field(alias="async", description="Whether to process the request asynchronously."),
+        Field(
+            validation_alias="async", description="Whether to process the request asynchronously."
+        ),
     ] = None,
     callback_url: Annotated[
         str | None,

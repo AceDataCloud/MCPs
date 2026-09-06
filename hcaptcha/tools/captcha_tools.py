@@ -20,7 +20,10 @@ async def hcaptcha_recognize(
     ] = None,
     async_: Annotated[
         bool | None,
-        Field(alias="async", description="Whether to submit the recognition task asynchronously."),
+        Field(
+            validation_alias="async",
+            description="Whether to submit the recognition task asynchronously.",
+        ),
     ] = None,
 ) -> str:
     """Recognize hCaptcha image challenges."""
@@ -49,7 +52,9 @@ async def hcaptcha_get_token(
     ] = None,
     async_: Annotated[
         bool | None,
-        Field(alias="async", description="Whether to submit the token task asynchronously."),
+        Field(
+            validation_alias="async", description="Whether to submit the token task asynchronously."
+        ),
     ] = None,
 ) -> str:
     """Get an hCaptcha token for a website."""
