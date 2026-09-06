@@ -109,4 +109,5 @@ class Image2TextClient:
         _apply_async_flag(payload, async_)
         return await self.request("POST", "/captcha/recognition/image2text", payload=payload)
 
+
 client = Image2TextClient()
