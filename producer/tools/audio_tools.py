@@ -68,7 +68,9 @@ async def producer_generate_music(
     ] = None,
     async_: Annotated[
         bool | None,
-        Field(alias="async", description="Whether to process the request asynchronously."),
+        Field(
+            validation_alias="async", description="Whether to process the request asynchronously."
+        ),
     ] = None,
 ) -> str:
     """Generate AI music from a text prompt using Producer/Riffusion.
@@ -175,7 +177,9 @@ async def producer_generate_custom_music(
     ] = None,
     async_: Annotated[
         bool | None,
-        Field(alias="async", description="Whether to process the request asynchronously."),
+        Field(
+            validation_alias="async", description="Whether to process the request asynchronously."
+        ),
     ] = None,
 ) -> str:
     """Generate AI music with full control over lyrics, title, and style.
@@ -256,7 +260,9 @@ async def producer_extend_music(
     ] = None,
     async_: Annotated[
         bool | None,
-        Field(alias="async", description="Whether to process the request asynchronously."),
+        Field(
+            validation_alias="async", description="Whether to process the request asynchronously."
+        ),
     ] = None,
 ) -> str:
     """Extend an existing song from a specific timestamp with new content.
@@ -315,7 +321,9 @@ async def producer_cover_music(
     ] = None,
     async_: Annotated[
         bool | None,
-        Field(alias="async", description="Whether to process the request asynchronously."),
+        Field(
+            validation_alias="async", description="Whether to process the request asynchronously."
+        ),
     ] = None,
 ) -> str:
     """Create a cover or remix version of an existing song in a different style.
@@ -369,7 +377,9 @@ async def producer_variation_music(
     ] = None,
     async_: Annotated[
         bool | None,
-        Field(alias="async", description="Whether to process the request asynchronously."),
+        Field(
+            validation_alias="async", description="Whether to process the request asynchronously."
+        ),
     ] = None,
 ) -> str:
     """Create a variation of an existing song with modifications.
@@ -413,7 +423,9 @@ async def producer_swap_vocals(
     ] = None,
     async_: Annotated[
         bool | None,
-        Field(alias="async", description="Whether to process the request asynchronously."),
+        Field(
+            validation_alias="async", description="Whether to process the request asynchronously."
+        ),
     ] = None,
 ) -> str:
     """Swap the vocals of one song with vocals from another song.
@@ -449,7 +461,9 @@ async def producer_swap_instrumentals(
     ] = None,
     async_: Annotated[
         bool | None,
-        Field(alias="async", description="Whether to process the request asynchronously."),
+        Field(
+            validation_alias="async", description="Whether to process the request asynchronously."
+        ),
     ] = None,
 ) -> str:
     """Swap the instrumental track of one song with instrumentals from another.
@@ -507,7 +521,9 @@ async def producer_replace_section(
     ] = None,
     async_: Annotated[
         bool | None,
-        Field(alias="async", description="Whether to process the request asynchronously."),
+        Field(
+            validation_alias="async", description="Whether to process the request asynchronously."
+        ),
     ] = None,
 ) -> str:
     """Replace a specific time range in a song with new generated content.
@@ -556,7 +572,9 @@ async def producer_stems_music(
     ] = None,
     async_: Annotated[
         bool | None,
-        Field(alias="async", description="Whether to process the request asynchronously."),
+        Field(
+            validation_alias="async", description="Whether to process the request asynchronously."
+        ),
     ] = None,
 ) -> str:
     """Separate a song into individual stems (vocals and instruments).

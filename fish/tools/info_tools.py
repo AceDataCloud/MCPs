@@ -113,7 +113,8 @@ async def fish_list_models(
     self_: Annotated[
         bool | None,
         Field(
-            alias="self", description="When true, only return models owned by the calling account."
+            validation_alias="self",
+            description="When true, only return models owned by the calling account.",
         ),
     ] = None,
     author_id: Annotated[

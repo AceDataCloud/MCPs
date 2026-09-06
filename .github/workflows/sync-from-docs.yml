@@ -109,8 +109,12 @@ jobs:
   wait-and-merge:
     needs: create-task
     runs-on: ubuntu-latest
-    timeout-minutes: 35
+    timeout-minutes: 45
     steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
       - name: Validate sync token
         env:
           SYNC_GH_TOKEN: ${{ secrets.ADMIN_GITHUB_TOKEN || secrets.BOT_GITHUB_TOKEN }}
@@ -136,9 +140,12 @@ jobs:
               exit 0
             fi
 
-            PR_JSON=$(gh pr list --repo "${{ github.repository }}" \
-              --state open --json number,title,author,isDraft,headRefName \
-              --jq '[.[] | select(.headRefName | startswith("copilot/"))] | .[0] // empty')
+            PR_JSON=$(gh api graphql \
+              -f query='query($owner:String!,$name:String!,$number:Int!){repository(owner:$owner,name:$name){issue(number:$number){closedByPullRequestsReferences(first:20){nodes{number title state headRefName headRefOid}}}}}' \
+              -f owner='${{ github.repository_owner }}' \
+              -f name='${{ github.event.repository.name }}' \
+              -F number="$ISSUE_NUMBER" \
+              --jq '[.data.repository.issue.closedByPullRequestsReferences.nodes[] | select(.state == "OPEN") | select(.headRefName | startswith("copilot/"))] | .[0] // empty')
 
             if [ -n "$PR_JSON" ]; then
               PR_NUMBER=$(echo "$PR_JSON" | jq -r '.number')
@@ -160,10 +167,45 @@ jobs:
               fi
 
               if [ "$AGENT_STATUS" = "success" ]; then
-                echo "Copilot agent completed. Merging PR #$PR_NUMBER..."
+                echo "Copilot agent completed. Validating its final head before merge..."
                 gh pr ready "$PR_NUMBER" --repo "${{ github.repository }}" 2>/dev/null || true
+                PR_HEAD=$(gh pr view "$PR_NUMBER" --repo "${{ github.repository }}" --json headRefOid --jq '.headRefOid')
+                cp scripts/check_mcp_tool_parameter_aliases.py /tmp/check_mcp_tool_parameter_aliases.py
+                git fetch origin "$HEAD_BRANCH"
+                git checkout --detach "$PR_HEAD"
+                MCP_ROOT="$GITHUB_WORKSPACE" python3 /tmp/check_mcp_tool_parameter_aliases.py
+
+                CI_STATUS=""
+                for check_attempt in $(seq 1 60); do
+                  CI_STATUS=$(gh api "/repos/${{ github.repository }}/actions/workflows/ci.yaml/runs?event=pull_request&head_sha=$PR_HEAD&per_page=1" \
+                    --jq '.workflow_runs[0] | if .status == "completed" then (.conclusion // "failure") else (.status // "") end')
+                  if [ "$CI_STATUS" = "success" ]; then
+                    break
+                  fi
+                  if [ -n "$CI_STATUS" ] && [ "$CI_STATUS" != "queued" ] && [ "$CI_STATUS" != "in_progress" ] && [ "$CI_STATUS" != "waiting" ] && [ "$CI_STATUS" != "pending" ]; then
+                    echo "CI failed for $PR_HEAD with status: $CI_STATUS"
+                    exit 1
+                  fi
+                  echo "Waiting for CI on $PR_HEAD ($check_attempt/60, status=${CI_STATUS:-not registered})..."
+                  sleep 10
+                done
+                if [ "$CI_STATUS" != "success" ]; then
+                  echo "Timed out waiting for CI on $PR_HEAD."
+                  exit 1
+                fi
+
+                FINAL_PR=$(gh pr view "$PR_NUMBER" --repo "${{ github.repository }}" --json state,headRefOid)
+                FINAL_STATE=$(echo "$FINAL_PR" | jq -r '.state')
+                FINAL_HEAD=$(echo "$FINAL_PR" | jq -r '.headRefOid')
+                if [ "$FINAL_STATE" != "OPEN" ] || [ "$FINAL_HEAD" != "$PR_HEAD" ]; then
+                  echo "PR state or head changed during validation; retrying."
+                  git checkout --detach "${{ github.sha }}"
+                  sleep 20
+                  continue
+                fi
                 gh pr merge "$PR_NUMBER" --repo "${{ github.repository }}" --squash \
-                  --admin --subject "sync: update from Docs [automated]"
+                  --admin --match-head-commit "$PR_HEAD" \
+                  --subject "sync: update from Docs [automated]"
                 echo "PR #$PR_NUMBER merged successfully!"
                 exit 0
               elif [ "$AGENT_STATUS" = "failure" ]; then

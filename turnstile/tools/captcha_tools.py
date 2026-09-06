@@ -24,7 +24,9 @@ async def turnstile_get_token(
     ] = None,
     async_: Annotated[
         bool | None,
-        Field(alias="async", description="Whether to submit the token task asynchronously."),
+        Field(
+            validation_alias="async", description="Whether to submit the token task asynchronously."
+        ),
     ] = None,
 ) -> str:
     """Get a Cloudflare Turnstile token."""
