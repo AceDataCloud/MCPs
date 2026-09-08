@@ -73,6 +73,31 @@ def test_tools_register():
 
 
 @pytest.mark.asyncio
+async def test_fastmcp_dispatch_calls_translate_tool():
+    import tools  # noqa: F401
+    from core.server import mcp
+    from tools import localization_tools
+
+    with patch.object(
+        localization_tools.client, "translate", new_callable=AsyncMock
+    ) as translate:
+        translate.return_value = {"data": {"hello": "Hallo"}, "locale": "de"}
+
+        result = await mcp.call_tool(
+            "localization_translate",
+            {"input": {"hello": "Hello"}, "locale": "de", "extension": "json"},
+        )
+
+    assert result
+    translate.assert_awaited_once_with(
+        input={"hello": "Hello"},
+        locale="de",
+        extension="json",
+        model=None,
+    )
+
+
+@pytest.mark.asyncio
 async def test_translate_tool_sends_openapi_payload():
     from tools.localization_tools import localization_translate
 
