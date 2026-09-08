@@ -159,6 +159,7 @@ async def openai_transcribe_audio(
     languages: Annotated[
         list[str] | None,
         Field(
+            validation_alias="languages[]",
             description=(
                 "Optional list of language codes to constrain transcription to specific "
                 "languages. Use ISO-639-1 values like ['en', 'fr']."
@@ -168,6 +169,7 @@ async def openai_transcribe_audio(
     keywords: Annotated[
         list[str] | None,
         Field(
+            validation_alias="keywords[]",
             description=(
                 "Optional list of keywords or phrases to bias the transcription toward "
                 "important domain-specific terms."
@@ -197,6 +199,7 @@ async def openai_transcribe_audio(
     timestamp_granularities: Annotated[
         list[AudioTranscriptionTimestampGranularity] | None,
         Field(
+            validation_alias="timestamp_granularities[]",
             description=(
                 "Granularity of timestamps in verbose_json output. Options: 'word' "
                 "(word-level timestamps), 'segment' (segment-level timestamps). "

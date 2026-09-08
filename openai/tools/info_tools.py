@@ -315,11 +315,11 @@ Returns base64-encoded audio in the 'audio' field. Decode with base64 to get raw
 - model: Transcription model — whisper-1 (default) or gpt-transcribe
 - language: ISO-639-1 language code (e.g. 'en') to improve accuracy (optional)
 - prompt: Optional text hint to guide transcription style
-- languages: Optional list of ISO-639-1 language codes to constrain transcription
-- keywords: Optional list of important terms to bias the transcription
+- languages[]: Optional list of ISO-639-1 language codes to constrain transcription
+- keywords[]: Optional list of important terms to bias the transcription
 - response_format: Output format — json (default), text, srt, verbose_json, vtt
 - temperature: Sampling temperature 0–1 (default: 0)
-- timestamp_granularities: List of 'word' and/or 'segment' for verbose_json timestamps
+- timestamp_granularities[]: List of 'word' and/or 'segment' for verbose_json timestamps
 
 ### Task Retrieval
 **openai_get_task** - Retrieve a single async image task

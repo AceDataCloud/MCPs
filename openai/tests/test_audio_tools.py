@@ -157,11 +157,11 @@ def test_openai_transcribe_audio_schema():
     assert "model" in props
     assert "language" in props
     assert "prompt" in props
-    assert "languages" in props
-    assert "keywords" in props
+    assert "languages[]" in props
+    assert "keywords[]" in props
     assert "response_format" in props
     assert "temperature" in props
-    assert "timestamp_granularities" in props
+    assert "timestamp_granularities[]" in props
     assert "url" in tool.parameters.get("required", [])
 
 
@@ -289,6 +289,60 @@ async def test_openai_transcribe_audio_omits_none_params(monkeypatch):
     assert "keywords" not in captured
     assert "temperature" not in captured
     assert "timestamp_granularities" not in captured
+
+
+@pytest.mark.asyncio
+async def test_fastmcp_dispatch_maps_public_transcription_array_parameters(monkeypatch):
+    """Multipart array parameters should match the OpenAPI names while dispatching to Python."""
+    captured: dict = {}
+
+    class MockResponse:
+        content = b"audio"
+        status_code = 200
+
+        def raise_for_status(self):
+            pass
+
+    class MockHttpxClient:
+        async def __aenter__(self):
+            return self
+
+        async def __aexit__(self, *args):
+            pass
+
+        async def get(self, _url, **_kwargs):
+            return MockResponse()
+
+    async def mock_audio_transcriptions(_audio_bytes, **kwargs):
+        captured.update(kwargs)
+        return {"text": "Result"}
+
+    monkeypatch.setattr(audio_tools.httpx, "AsyncClient", MockHttpxClient)
+    monkeypatch.setattr(audio_tools.client, "audio_transcriptions", mock_audio_transcriptions)
+    tools = {tool.name: tool for tool in await mcp.list_tools()}
+    properties = tools["openai_transcribe_audio"].inputSchema["properties"]
+
+    assert "languages[]" in properties
+    assert "keywords[]" in properties
+    assert "timestamp_granularities[]" in properties
+    assert "languages" not in properties
+    assert "keywords" not in properties
+    assert "timestamp_granularities" not in properties
+
+    result = await mcp.call_tool(
+        "openai_transcribe_audio",
+        {
+            "url": "https://example.com/audio.mp3",
+            "languages[]": ["en", "fr"],
+            "keywords[]": ["AceDataCloud", "MCP"],
+            "timestamp_granularities[]": ["word"],
+        },
+    )
+
+    assert result
+    assert captured["languages"] == ["en", "fr"]
+    assert captured["keywords"] == ["AceDataCloud", "MCP"]
+    assert captured["timestamp_granularities"] == ["word"]
 
 
 @pytest.mark.asyncio
