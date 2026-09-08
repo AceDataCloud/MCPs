@@ -66,7 +66,7 @@ Generate AI music, lyrics, and manage audio projects directly from Claude, VS Co
 
 ### 1. Get Your API Token
 
-1. Sign up at [AceDataCloud Platform](https://platform.acedata.cloud)
+1. Sign up at [AceDataCloud Platform](https://platform.acedata.cloud/?utm_source=github&utm_medium=repo&utm_campaign=mcp-suno-first-call)
 2. Go to the [API documentation page](https://platform.acedata.cloud/documents/suno-audios)
 3. Click **"Acquire"** to get your API token
 4. Copy the token for use below
@@ -289,7 +289,22 @@ curl -X POST https://suno.mcp.acedata.cloud/mcp \
   -d '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2025-03-26","capabilities":{},"clientInfo":{"name":"test","version":"1.0"}}}'
 ```
 
-### 3. Or Run Locally (Alternative)
+### 3. Verify the Connection (No Generation Charge)
+
+After adding the server, restart or reconnect your MCP client, then run these read-only checks in order:
+
+1. Ask it to use `suno_list_models`. A model table confirms that the client loaded the MCP server and can execute its local information tools.
+2. Ask it to use `suno_list_custom_models` with `limit=1`. An `items` response—even an empty list—confirms that the configured token reached the AceDataCloud API and can access the current application.
+
+Both checks are free: they do not create music or a custom model. They separate a client configuration problem from an API authentication problem before you start a paid generation.
+
+If a check fails:
+
+- **Tool not found:** reconnect the MCP server or restart the client, then confirm both verification tools appear in its tool list.
+- **401 / 403:** create a fresh API token and update the configured `Authorization` header.
+- **Other API error:** keep the returned `trace_id` and include it when contacting support.
+
+### 4. Or Run Locally (Alternative)
 
 If you prefer to run the server on your own machine:
 
