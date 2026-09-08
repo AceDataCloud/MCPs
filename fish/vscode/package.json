@@ -1,7 +1,7 @@
 {
   "name": "mcp-fish",
   "displayName": "Fish Audio MCP",
-  "description": "Fish Audio TTS — generate natural speech and browse the Fish voice library.",
+  "description": "Fish Audio TTS \u2014 generate natural speech and browse the Fish voice library.",
   "version": "0.2.0",
   "publisher": "acedatacloud",
   "icon": "icon.png",
@@ -53,7 +53,7 @@
       {
         "type": "promptString",
         "id": "acedatacloud_api_token",
-        "description": "Ace Data Cloud API token. Sign in at https://platform.acedata.cloud and create a token in 'API Keys'. Stored securely by VS Code.",
+        "description": "Ace Data Cloud API token. Create one at https://platform.acedata.cloud/console/applications?utm_source=vscode&utm_medium=extension&utm_campaign=vscode-fish. Stored securely by VS Code.",
         "password": true
       }
     ]

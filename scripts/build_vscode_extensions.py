@@ -50,7 +50,9 @@ class Service:
     pypi_pkg: str
     ext_name: str
     publisher: str
-    signup_url: str
+    platform_url: str
+    credential_url: str
+    credential_hint: str
     docs_url: str | None
     docs_label: str | None
     status: str
@@ -101,6 +103,14 @@ class Service:
         return out
 
 
+def attributed_url(root: str, path: str, campaign: str) -> str:
+    base = root.rstrip("/")
+    suffix = f"/{path.strip('/')}" if path else "/"
+    return (
+        f"{base}{suffix}?utm_source=vscode&utm_medium=extension&utm_campaign={campaign}"
+    )
+
+
 def load_services() -> list[Service]:
     with CONFIG.open() as fh:
         raw = yaml.safe_load(fh)
@@ -122,6 +132,7 @@ def load_services() -> list[Service]:
         # explicit override for future services whose alias diverges.
         ext_name = cfg.get("ext_name") or f"mcp-{alias}"
         docs_url, docs_label = documentation_target(catalog[alias])
+        campaign = f"vscode-{alias}"
         services.append(
             Service(
                 alias=alias,
@@ -137,7 +148,13 @@ def load_services() -> list[Service]:
                 pypi_pkg=pypi_pkg,
                 ext_name=ext_name,
                 publisher=defaults["publisher"],
-                signup_url=defaults["signup_url"],
+                platform_url=attributed_url(defaults["signup_url"], "", campaign),
+                credential_url=attributed_url(
+                    defaults["signup_url"],
+                    cfg.get("credential_path", defaults["credential_path"]),
+                    campaign,
+                ),
+                credential_hint=cfg.get("credential_hint", defaults["credential_hint"]),
                 docs_url=docs_url,
                 docs_label=docs_label,
                 status=catalog[alias]["status"],
@@ -241,7 +258,7 @@ const CLEAR_TOKEN_CMD = "{svc.clear_token_cmd}";
 // Per-extension SecretStorage namespace; we keep one key per service so
 // rotating one API key doesn't affect siblings.
 const SECRET_KEY = "{svc.alias}.apiToken";
-const SIGNUP_URL = "{svc.signup_url}";
+const CREDENTIAL_URL = "{svc.credential_url}";
 
 async function readToken(context) {{
   const env = process.env.{svc.token_env};
@@ -253,7 +270,7 @@ async function readToken(context) {{
 async function promptForToken(context) {{
   const token = await vscode.window.showInputBox({{
     title: `${{SERVER_LABEL}} — Ace Data Cloud API key`,
-        prompt: `Paste an API key from ${{SIGNUP_URL}}/console/applications (Applications -> API Key). Stored in the OS keychain.`,
+        prompt: `Paste an API key from ${{CREDENTIAL_URL}} ({svc.credential_hint}). Stored in the OS keychain.`,
         placeHolder: "API key from /console/applications",
     password: true,
     ignoreFocusOut: true,
@@ -376,7 +393,7 @@ can call it directly from chat.
 ## Quick Start
 
 1. **Install this extension.** VS Code registers the `{svc.alias}` MCP server automatically.
-2. **Get an API key** from [Ace Data Cloud]({svc.signup_url}/console/applications) (Applications → API Key). New accounts include free trial credit.
+2. **Get an API key** from [Ace Data Cloud]({svc.credential_url}) ({svc.credential_hint}). New accounts include free trial credit.
 3. **Open Copilot Chat** in agent mode and ask for a {svc.domain} task — the extension prompts for the API key the first time and stores it in the OS keychain via VS Code's `SecretStorage`.
 
 You can rotate or remove the API key any time from the command palette:
@@ -472,7 +489,7 @@ version, install [`uv`](https://docs.astral.sh/uv/) and use:
 - **Hosted endpoint:** {svc.hosted_url}
 - **PyPI package:** [`{svc.pypi_pkg}`]({svc.pypi_url})
 - **Source repository:** {svc.repo_url}
-- **Ace Data Cloud platform:** {svc.signup_url}
+- **Ace Data Cloud platform:** {svc.platform_url}
 {documentation_link}
 ## License
 

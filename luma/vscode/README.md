@@ -15,7 +15,7 @@ can call it directly from chat.
 ## Quick Start
 
 1. **Install this extension.** VS Code registers the `luma` MCP server automatically.
-2. **Get an API key** from [Ace Data Cloud](https://platform.acedata.cloud/console/applications) (Applications → API Key). New accounts include free trial credit.
+2. **Get an API key** from [Ace Data Cloud](https://platform.acedata.cloud/console/applications?utm_source=vscode&utm_medium=extension&utm_campaign=vscode-luma) (Applications -> API Key). New accounts include free trial credit.
 3. **Open Copilot Chat** in agent mode and ask for a video task — the extension prompts for the API key the first time and stores it in the OS keychain via VS Code's `SecretStorage`.
 
 You can rotate or remove the API key any time from the command palette:
@@ -128,7 +128,7 @@ version, install [`uv`](https://docs.astral.sh/uv/) and use:
 - **Hosted endpoint:** https://luma.mcp.acedata.cloud/mcp
 - **PyPI package:** [`mcp-luma`](https://pypi.org/project/mcp-luma/)
 - **Source repository:** https://github.com/AceDataCloud/LumaMCP
-- **Ace Data Cloud platform:** https://platform.acedata.cloud
+- **Ace Data Cloud platform:** https://platform.acedata.cloud/?utm_source=vscode&utm_medium=extension&utm_campaign=vscode-luma
 - **MCP documentation:** https://platform.acedata.cloud/documents/luma-mcp
 
 ## License
