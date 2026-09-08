@@ -3,6 +3,9 @@
 A [Model Context Protocol](https://modelcontextprotocol.io) (MCP) server for the
 AceDataCloud Digital Human API.
 
+<!-- canonical-acquisition -->
+[Start with AceDataCloud](https://platform.acedata.cloud/?utm_source=github&utm_medium=repo&utm_campaign=mcp-digitalhuman)
+
 ## Features
 
 - Create lip-synced digital human videos from a source face video or image

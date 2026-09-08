@@ -2,6 +2,9 @@
 
 A Model Context Protocol (MCP) server for AceDataCloud's Image2Text captcha-solving APIs.
 
+<!-- canonical-acquisition -->
+[Start with AceDataCloud](https://platform.acedata.cloud/?utm_source=github&utm_medium=repo&utm_campaign=mcp-image2text)
+
 ## Features
 - Recognize text from base64-encoded captcha or challenge images.
 - Bearer-token authentication through AceDataCloud

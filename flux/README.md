@@ -13,6 +13,9 @@ A [Model Context Protocol (MCP)](https://modelcontextprotocol.io/) server for AI
 
 Generate and edit stunning AI images with Flux models (flux-dev, flux-pro, flux-kontext) directly from Claude, Cursor, or any MCP-compatible client.
 
+<!-- canonical-acquisition -->
+[Start with AceDataCloud](https://platform.acedata.cloud/?utm_source=github&utm_medium=repo&utm_campaign=mcp-flux)
+
 ## Features
 
 - **Image Generation** - Generate images from text prompts with 6 Flux models

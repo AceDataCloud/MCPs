@@ -2,6 +2,9 @@
 
 A Model Context Protocol (MCP) server for AceDataCloud's Turnstile captcha-solving APIs.
 
+<!-- canonical-acquisition -->
+[Start with AceDataCloud](https://platform.acedata.cloud/?utm_source=github&utm_medium=repo&utm_campaign=mcp-turnstile)
+
 ## Features
 - Obtain Cloudflare Turnstile tokens.
 - Bearer-token authentication through AceDataCloud

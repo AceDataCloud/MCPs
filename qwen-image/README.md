@@ -5,6 +5,9 @@
 
 Model Context Protocol server for Qwen Image 3 generation and editing through Ace Data Cloud.
 
+<!-- canonical-acquisition -->
+[Start with AceDataCloud](https://platform.acedata.cloud/?utm_source=github&utm_medium=repo&utm_campaign=mcp-qwen-image)
+
 ## Install
 
 ```bash
