@@ -1,0 +1,50 @@
+name: MCP Registry health
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "*/server.json"
+      - "scripts/mcp_catalog.json"
+      - "scripts/registry_health.py"
+      - "scripts/registry_health_exceptions.json"
+      - "scripts/test_registry_health.py"
+      - ".github/workflows/registry-health.yml"
+  schedule:
+    - cron: "17 6 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  contract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - run: python3 scripts/test_registry_health.py
+      - run: python3 scripts/registry_health.py --skip-live --output registry-health.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: registry-contract-health
+          path: registry-health.json
+
+  live:
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - run: python3 scripts/registry_health.py --output registry-health.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: registry-live-health
+          path: registry-health.json
