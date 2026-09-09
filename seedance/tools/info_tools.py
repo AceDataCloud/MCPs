@@ -13,20 +13,20 @@ async def seedance_list_models() -> str:
     Returns:
         Table of all models with descriptions, capabilities, and pricing.
     """
-    # Last updated: 2026-08-14
+    # Last updated: 2026-09-10
     return """Available Seedance Models:
 
-| Model | Type | Strengths | Audio | Credits (720p/sec) |
-|-------|------|-----------|-------|--------------------|
-| doubao-seedance-2-5-260628 | 2.5 | Latest flagship, up to 30s, multimodal reference, edit/extend | Yes | 2.5565 |
-| doubao-seedance-2-0-260128 | 2.0 | Latest generation, highest quality, multimodal reference, up to 4k (default) | Yes | ~$0.146 |
-| doubao-seedance-2-0-fast-260128 | 2.0 Fast | Latest generation, faster, up to 720p | Yes | ~$0.117 |
-| doubao-seedance-2-0-mini-260615 | 2.0 Mini | Latest generation, lightweight, cheapest within 2.0, up to 720p | Yes | ~$0.073 |
-| doubao-seedance-1-5-pro-251215 | Flagship | 1.5, high quality, audio support | Yes | ~$0.025 |
-| doubao-seedance-1-0-pro-250528 | Standard | Balanced quality and speed | No | ~$0.049 |
-| doubao-seedance-1-0-pro-fast-251015 | Fast | Cost-optimized, faster generation | No | ~$0.014 |
-| doubao-seedance-1-0-lite-t2v-250428 | Lite T2V | Lightweight text-to-video | No | ~$0.033 |
-| doubao-seedance-1-0-lite-i2v-250428 | Lite I2V | Lightweight image-to-video | No | ~$0.033 |
+| Model | Type | Strengths | Audio | Pricing |
+|-------|------|-----------|-------|---------|
+| doubao-seedance-2-5-260628 | 2.5 | Latest flagship, up to 30s, multimodal reference, edit/extend | Yes | See live pricing |
+| doubao-seedance-2-0-260128 | 2.0 | Latest generation, highest quality, multimodal reference, up to 4k (default) | Yes | See live pricing |
+| doubao-seedance-2-0-fast-260128 | 2.0 Fast | Latest generation, faster, up to 720p | Yes | See live pricing |
+| doubao-seedance-2-0-mini-260615 | 2.0 Mini | Latest generation, lightweight, cheapest within 2.0, up to 720p | Yes | See live pricing |
+| doubao-seedance-1-5-pro-251215 | Flagship | 1.5, high quality, audio support | Yes | See live pricing |
+| doubao-seedance-1-0-pro-250528 | Standard | Balanced quality and speed | No | See live pricing |
+| doubao-seedance-1-0-pro-fast-251015 | Fast | Cost-optimized, faster generation | No | See live pricing |
+| doubao-seedance-1-0-lite-t2v-250428 | Lite T2V | Lightweight text-to-video | No | See live pricing |
+| doubao-seedance-1-0-lite-i2v-250428 | Lite I2V | Lightweight image-to-video | No | See live pricing |
 
 Model Selection Guide:
 - Latest flagship: doubao-seedance-2-5-260628 (up to 30s, multimodal reference, edit/extend)
@@ -43,6 +43,7 @@ Notes:
 - Audio generation (generate_audio) is supported by the 1.5 Pro and 2.x models
 - Seedance 2.0 adds multimodal reference inputs; Seedance 2.5 adds pure-audio reference, larger limits, edit, and extend
 - Resolution affects cost: 480p < 720p < 1080p < 4k ('4k' is doubao-seedance-2-0-260128 only; 2.5 maxes at 1080p; 2-0-fast / 2-0-mini max at 720p)
+- Current pricing: https://platform.acedata.cloud/services/seedance?tab=pricing
 """
 
 

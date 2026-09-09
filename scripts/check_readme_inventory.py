@@ -15,7 +15,15 @@ ROOT = Path(__file__).resolve().parents[1]
 
 PLATFORM_ROOT = "https://platform.acedata.cloud"
 LEGACY_DOCS_ROOT = "https://docs.acedata.cloud"
-TOOL_REFERENCE_ALIASES = ("kling", "seedream", "suno")
+TOOL_REFERENCE_ALIASES = ("kling", "nanobanana", "seedream", "suno")
+SAFE_FIRST_CALL_TOOLS = {
+    "flux": "flux_list_models",
+    "kling": "kling_list_models",
+    "midjourney": "midjourney_list_actions",
+    "nanobanana": "nanobanana_list_models",
+    "seedance": "seedance_list_models",
+    "seedream": "seedream_list_models",
+}
 
 
 def registered_tools(alias: str) -> set[str]:
@@ -114,6 +122,35 @@ def main() -> int:
                 errors,
                 f"{alias}/README.md: Tool Reference lists unregistered tools: {', '.join(extra)}",
             )
+
+    for alias, tool in SAFE_FIRST_CALL_TOOLS.items():
+        readme = (ROOT / alias / "README.md").read_text()
+        match = re.search(
+            r"^### Verify after setup \(no generation charge\)\s*$\n(.*?)(?=^### |\Z)",
+            readme,
+            re.MULTILINE | re.DOTALL,
+        )
+        if not match:
+            fail(errors, f"{alias}/README.md: missing safe first-call section")
+            continue
+        section = match.group(1)
+        required = (
+            tool,
+            "MCP tool discovery does not invoke a generation endpoint.",
+            "does not call the generation API and does not consume credits.",
+            "Generation tools can consume credits;",
+            f"https://{alias}.mcp.acedata.cloud/health",
+            f"utm_campaign=mcp-{alias}-first-call",
+            f"utm_campaign=mcp-{alias}-first-call-support",
+            "Owner: **Ace Data Cloud Developer Experience**.",
+            "Last verified: **2026-09-10**.",
+        )
+        for expected in required:
+            if expected not in section:
+                fail(
+                    errors,
+                    f"{alias}/README.md: safe first-call section missing {expected!r}",
+                )
 
     for alias in sorted(package_dirs):
         entry = catalog[alias]

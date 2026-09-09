@@ -36,6 +36,16 @@ Generate and edit stunning AI images with Flux models (flux-dev, flux-pro, flux-
 
 ## Quick Start
 
+### Verify after setup (no generation charge)
+
+After completing one of the connection setups below:
+
+1. Ask your MCP client to list the server's tools and confirm `flux_list_models` appears. MCP tool discovery does not invoke a generation endpoint.
+2. Call `flux_list_models`. This in-process reference tool does not call the generation API and does not consume credits.
+3. Only then run a generation tool. Generation tools can consume credits; review [live pricing](https://platform.acedata.cloud/pricing?utm_source=mcp&utm_medium=readme&utm_campaign=mcp-flux-first-call) and use non-sensitive input.
+
+If discovery fails, check the [server health endpoint](https://flux.mcp.acedata.cloud/health) and [contact support](https://platform.acedata.cloud/support?utm_source=mcp&utm_medium=readme&utm_campaign=mcp-flux-first-call-support). Owner: **Ace Data Cloud Developer Experience**. Last verified: **2026-09-10**.
+
 ### 1. Get Your API Token
 
 1. Sign up at [AceDataCloud Platform](https://platform.acedata.cloud)

@@ -16,7 +16,7 @@ Generate AI videos directly from Claude, VS Code, or any MCP-compatible client.
 
 - **Text to Video** - Create AI-generated videos from text prompts
 - **Image to Video** - Animate images with first frame, last frame, and reference image control
-- **Multiple Models** - Support for Seedance 2.0 (incl. Fast/Mini, multimodal reference), 1.5 Pro, 1.0 Pro, 1.0 Pro Fast, 1.0 Lite T2V/I2V
+- **Multiple Models** - Support for Seedance 2.5, 2.0 (including Fast/Mini), 1.5 Pro, 1.0 Pro, 1.0 Pro Fast, and 1.0 Lite T2V/I2V
 - **Multiple Resolutions** - 480p, 720p (default), 1080p, and 4k output (2.5 supports 1080p; 4k: `doubao-seedance-2-0-260128` only)
 - **Flexible Aspect Ratios** - 16:9, 9:16, 1:1, 4:3, 3:4, 21:9, and adaptive
 - **Audio Generation** - Generate synchronized audio for videos (1.5 Pro and 2.0 series)
@@ -36,6 +36,16 @@ Generate AI videos directly from Claude, VS Code, or any MCP-compatible client.
 | `seedance_list_actions` | List all available Seedance API actions and corresponding tools. |
 
 ## Quick Start
+
+### Verify after setup (no generation charge)
+
+After completing one of the connection setups below:
+
+1. Ask your MCP client to list the server's tools and confirm `seedance_list_models` appears. MCP tool discovery does not invoke a generation endpoint.
+2. Call `seedance_list_models`. This in-process reference tool does not call the generation API and does not consume credits.
+3. Only then run a generation tool. Generation tools can consume credits; review [live pricing](https://platform.acedata.cloud/pricing?utm_source=mcp&utm_medium=readme&utm_campaign=mcp-seedance-first-call) and use non-sensitive input.
+
+If discovery fails, check the [server health endpoint](https://seedance.mcp.acedata.cloud/health) and [contact support](https://platform.acedata.cloud/support?utm_source=mcp&utm_medium=readme&utm_campaign=mcp-seedance-first-call-support). Owner: **Ace Data Cloud Developer Experience**. Last verified: **2026-09-10**.
 
 ### 1. Get Your API Token
 
@@ -365,6 +375,7 @@ Claude: I'll generate a video with synchronized audio.
 | Model                                 | Description       | Features                   |
 | ------------------------------------- | ----------------- | -------------------------- |
 | `doubao-seedance-2-5-260628`          | 2.5               | Up to 30s and 1080p, edit/extend, multimodal reference |
+| `doubao-seedance-2-0-260128`          | 2.0 (default)     | Multimodal reference and up to 4K output                |
 | `doubao-seedance-2-0-fast-260128`     | 2.0 Fast          | Latest generation fast     |
 | `doubao-seedance-2-0-mini-260615`     | 2.0 Mini          | Latest generation, lightweight, cheapest 2.0 |
 | `doubao-seedance-1-5-pro-251215`      | 1.5 Pro           | Audio generation, T2V, I2V |
