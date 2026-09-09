@@ -40,3 +40,11 @@ async def test_openai_get_realtime_connection_info_calls_realtime_endpoint(monke
         payload["url"] == "wss://api.test.com/v1/realtime?model=gpt-realtime-2.1-mini&voice=marin"
     )
     assert payload["voice"] == "marin"
+
+
+@pytest.mark.asyncio
+async def test_openai_list_image_models_names_both_gpt_image_2_5_variants():
+    text = await info_tools.openai_list_image_models()
+    assert "gpt-image-2.5-flare" in text
+    assert "gpt-image-2.5-sunburst" in text
+    assert "gpt-image-2.5 |" not in text

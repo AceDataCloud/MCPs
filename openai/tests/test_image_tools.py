@@ -202,3 +202,39 @@ async def test_openai_generate_image_preserves_explicit_sync(monkeypatch):
     )
 
     assert captured_payload["async"] is False
+
+
+def test_openai_image_tool_schemas_expose_exact_gpt_image_2_5_models():
+    tools = {tool.name: tool for tool in mcp._tool_manager.list_tools()}
+    expected = {"gpt-image-2.5-flare", "gpt-image-2.5-sunburst"}
+    for name in ("openai_generate_image", "openai_edit_image"):
+        model_schema = tools[name].parameters["properties"]["model"]
+        models = set(model_schema["enum"])
+        assert expected <= models
+        assert "gpt-image-2.5" not in models
+        assert "gpt-image-2.5:official" not in models
+        assert "gpt-image-2.5:reverse" not in models
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("model", ["gpt-image-2.5-flare", "gpt-image-2.5-sunburst"])
+async def test_openai_image_tools_forward_gpt_image_2_5_models(monkeypatch, model):
+    generated: dict[str, object] = {}
+    edited: dict[str, object] = {}
+
+    async def mock_generate(**kwargs):
+        generated.update(kwargs)
+        return {"task_id": "generated"}
+
+    async def mock_edit(**kwargs):
+        edited.update(kwargs)
+        return {"task_id": "edited"}
+
+    monkeypatch.setattr(image_tools.client, "images_generations", mock_generate)
+    monkeypatch.setattr(image_tools.client, "images_edits", mock_edit)
+    await image_tools.openai_generate_image(prompt="a circle", model=model)
+    await image_tools.openai_edit_image(
+        image="https://example.com/source.png", prompt="make it red", model=model
+    )
+    assert generated["model"] == model
+    assert edited["model"] == model
