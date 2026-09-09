@@ -27,6 +27,16 @@ def test_openai_edit_image_schema_accepts_single_or_multiple_images():
     assert "never JSON-stringify the array" in image_schema["description"]
 
 
+def test_openai_image_schemas_include_gpt_image_2_5_models():
+    """Generation and editing must expose all GPT Image 2.5 models."""
+    tools = {tool.name: tool for tool in mcp._tool_manager.list_tools()}
+
+    for tool_name in ("openai_generate_image", "openai_edit_image"):
+        models = tools[tool_name].parameters["properties"]["model"]["enum"]
+        assert "gpt-image-2.5-flare" in models
+        assert "gpt-image-2.5-sunburst" in models
+
+
 @pytest.mark.asyncio
 async def test_openai_edit_image_forwards_image_array(monkeypatch):
     """Multiple image URLs must remain an array in the API payload."""

@@ -163,7 +163,7 @@ async def openai_list_image_models() -> str:
     Returns:
         Table of all image models with descriptions.
     """
-    # Last updated: 2026-07-27
+    # Last updated: 2026-09-09
     return """Available OpenAI Image Models:
 
 | Model                | Description                                        |
@@ -171,6 +171,8 @@ async def openai_list_image_models() -> str:
 | gpt-image-1          | GPT Image 1 - versatile image generation (default)|
 | gpt-image-1.5        | GPT Image 1.5 - improved quality                  |
 | gpt-image-2          | GPT Image 2 - latest GPT image model              |
+| gpt-image-2.5-flare  | GPT Image 2.5 Flare                               |
+| gpt-image-2.5-sunburst | GPT Image 2.5 Sunburst                           |
 | gpt-image-2:reverse  | GPT Image 2 reverse mode                          |
 | gpt-image-2:official | GPT Image 2 official mode                         |
 | dall-e-3             | DALL-E 3 - high quality artistic generation       |
