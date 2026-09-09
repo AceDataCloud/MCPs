@@ -327,6 +327,7 @@ Clients connect with their own Bearer token — the server extracts the token fr
 | -------------------------- | --------------------------------------------- |
 | `seedream_generate_image`  | Generate an image from a text prompt           |
 | `seedream_edit_image`      | Edit or modify existing images with AI         |
+| `seedream_decompose_image` | Split an image into positioned layers          |
 
 ### Task Management
 
