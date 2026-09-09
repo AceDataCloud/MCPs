@@ -163,10 +163,10 @@ async def seedream_edit_image(
         ),
     ],
     image: Annotated[
-        list[str],
+        str | Annotated[list[str], Field(max_length=14)],
         Field(
-            description="List of image URLs or base64-encoded images to edit. "
-            "Supports HTTP/HTTPS URLs (publicly accessible) or base64 format "
+            description="An image URL/base64-encoded image, or a list of up to 14 images to "
+            "edit. Supports HTTP/HTTPS URLs (publicly accessible) or base64 format "
             "(data:image/png;base64,...). Each image must be under 10MB."
         ),
     ],

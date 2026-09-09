@@ -1,7 +1,10 @@
 """Contract tests for Seedream image tools."""
 
+from typing import get_args
+
 import tools.image_tools  # noqa: F401
 from core.server import mcp
+from core.types import SeedreamModel
 
 
 def test_image_tool_size_schemas_describe_model_specific_sizes() -> None:
@@ -30,6 +33,17 @@ def test_decomposition_tool_exposes_pro_contract() -> None:
 def test_async_image_tools_do_not_advertise_stream() -> None:
     for tool_name in ("seedream_generate_image", "seedream_edit_image", "seedream_decompose_image"):
         assert "stream" not in mcp._tool_manager._tools[tool_name].parameters["properties"]
+
+
+def test_edit_tool_accepts_one_or_up_to_fourteen_images() -> None:
+    image_schema = mcp._tool_manager._tools["seedream_edit_image"].parameters["properties"]["image"]
+    assert image_schema["anyOf"][0]["type"] == "string"
+    assert image_schema["anyOf"][1]["items"]["type"] == "string"
+    assert image_schema["anyOf"][1]["maxItems"] == 14
+
+
+def test_seedream_model_includes_lite_alias() -> None:
+    assert "doubao-seedream-5-0-lite-260128" in get_args(SeedreamModel)
 
 
 async def test_decomposition_tool_builds_official_payload(monkeypatch) -> None:
