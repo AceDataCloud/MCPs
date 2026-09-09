@@ -152,6 +152,8 @@ ImageModel = Literal[
     "gpt-image-1",
     "gpt-image-1.5",
     "gpt-image-2",
+    "gpt-image-2.5-flare",
+    "gpt-image-2.5-sunburst",
     "gpt-image-2:reverse",
     "gpt-image-2:official",
     "nano-banana",
@@ -161,11 +163,10 @@ ImageModel = Literal[
 ]
 
 # Image size options — free-form "WIDTHxHEIGHT" string or "auto".
-# gpt-image-2 accepts any custom dimensions (multiples of 16, longer side ≤ 3840,
-# total pixels ≤ 8,294,400); common presets include 1024x1024, 1536x1024, 1024x1536,
+# GPT Image 2 and 2.5 models accept custom dimensions (multiples of 16, longer side ≤ 3840,
+# total pixels 655,360–8,294,400, aspect ratio ≤ 3:1); common presets include 1024x1024, 1536x1024, 1024x1536,
 # 1792x1024, 1024x1792 (1K tier), 2048x2048, 2048x1536, 1536x2048, 2048x1152, 1152x2048
-# (2K tier, 1.5× rate), 2880x2880, 3264x2448, 2448x3264, 3840x2160, 2160x3840 (4K tier,
-# 1.5× rate). dall-e-2: 256x256, 512x512, 1024x1024. dall-e-3: 1024x1024, 1792x1024,
+# (2K tier), 2880x2880, 3264x2448, 2448x3264, 3840x2160, 2160x3840 (4K tier). dall-e-2: 256x256, 512x512, 1024x1024. dall-e-3: 1024x1024, 1792x1024,
 # 1024x1792. Pass "auto" to let the model choose.
 ImageSize = str
 
