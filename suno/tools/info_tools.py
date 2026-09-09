@@ -12,6 +12,9 @@ async def suno_list_models() -> str:
     for your music generation.
 
     Model comparison:
+    - chirp-v6: V6 model
+    - chirp-v6-wild: V6 Wild model
+    - chirp-v6-mini: V6 Mini model
     - chirp-v5-5: Latest, highest quality, 8-minute max duration
     - chirp-v5: High quality, 8-minute max duration
     - chirp-v4-5-plus: High quality with 8-minute duration
@@ -27,6 +30,9 @@ async def suno_list_models() -> str:
 
 | Model           | Version | Prompt Limit | Lyric Limit  | Title Limit | Style Limit | Max Duration |
 |-----------------|---------|--------------|--------------|-------------|-------------|--------------|
+| chirp-v6        | V6      | —            | —            | —           | —           | —            |
+| chirp-v6-wild   | V6 Wild | —            | —            | —           | —           | —            |
+| chirp-v6-mini   | V6 Mini | —            | —            | —           | —           | —            |
 | chirp-v5-5      | V5.5    | 500 chars    | 5000 chars   | 100 chars   | 1000 chars  | 8 minutes    |
 | chirp-v5        | V5      | 500 chars    | 5000 chars   | 100 chars   | 1000 chars  | 8 minutes    |
 | chirp-v4-5-plus | V4.5+   | 500 chars    | 5000 chars   | 100 chars   | 1000 chars  | 8 minutes    |
@@ -38,9 +44,10 @@ async def suno_list_models() -> str:
 Prompt limit applies to inspiration mode (custom=false) and is 500 chars for every
 model. Lyric, title and style limits apply to custom mode (custom=true).
 
-Recommended: chirp-v5-5 for best quality, chirp-v4-5 for a reliable alternative.
+Recommended: chirp-v6 for the latest model generation, chirp-v5-5 for an established alternative.
 
 Features by Version:
+- V6: chirp-v6, chirp-v6-wild, and chirp-v6-mini
 - V4.5+: Vocal gender control ('f' for female, 'm' for male)
 - V5/V5.5: High quality model with 8-minute songs
 - Explicit track length via the `duration` parameter (integer seconds, 10-360).
