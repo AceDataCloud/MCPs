@@ -8,10 +8,32 @@ from core.server import mcp
 from tools.audio_tools import (
     suno_generate_custom_music,
     suno_generate_inspo,
+    suno_generate_music,
     suno_mashup_music,
     suno_remaster_music,
     suno_replace_section,
 )
+
+
+class TestModelOptions:
+    @pytest.mark.asyncio
+    async def test_v6_models_are_available_in_tool_schema(self) -> None:
+        tools = {tool.name: tool for tool in await mcp.list_tools()}
+        model_schema = tools["suno_generate_music"].inputSchema["properties"]["model"]
+
+        assert {"chirp-v6", "chirp-v6-wild", "chirp-v6-mini"} <= set(
+            model_schema["enum"]
+        )
+
+    @pytest.mark.asyncio
+    async def test_v6_model_is_forwarded(self, mock_audio_response) -> None:
+        with patch(
+            "tools.audio_tools.client.generate_audio",
+            new=AsyncMock(return_value=mock_audio_response),
+        ) as mock_generate:
+            await suno_generate_music(prompt="Upbeat pop", model="chirp-v6")
+
+        assert mock_generate.await_args.kwargs["model"] == "chirp-v6"
 
 
 class TestInspoTool:
