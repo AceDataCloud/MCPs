@@ -1,0 +1,255 @@
+{
+  "$schema": "./vscode_extension_inventory.schema.json",
+  "inventory_version": 1,
+  "checked_in_packages": [
+    {
+      "alias": "acedatacloud",
+      "extension_id": "acedatacloud.mcp-acedatacloud",
+      "package_json": "acedatacloud/vscode/package.json",
+      "yaml_configured": true,
+      "artifact_maintenance": "generator",
+      "runtime_architecture": "provider",
+      "lifecycle": "active",
+      "product_class": "account-management",
+      "publish_policy": "publishable"
+    },
+    {
+      "alias": "aichat",
+      "extension_id": "acedatacloud.mcp-aichat",
+      "package_json": "aichat/vscode/package.json",
+      "yaml_configured": false,
+      "artifact_maintenance": "manual",
+      "runtime_architecture": "declarative",
+      "lifecycle": "active",
+      "product_class": "service",
+      "publish_policy": "publishable"
+    },
+    {
+      "alias": "face",
+      "extension_id": "acedatacloud.mcp-face-transform",
+      "package_json": "face/vscode/package.json",
+      "yaml_configured": true,
+      "artifact_maintenance": "manual",
+      "runtime_architecture": "declarative",
+      "lifecycle": "active",
+      "product_class": "service",
+      "publish_policy": "publishable"
+    },
+    {
+      "alias": "fish",
+      "extension_id": "acedatacloud.mcp-fish",
+      "package_json": "fish/vscode/package.json",
+      "yaml_configured": true,
+      "artifact_maintenance": "manual",
+      "runtime_architecture": "declarative",
+      "lifecycle": "active",
+      "product_class": "service",
+      "publish_policy": "publishable"
+    },
+    {
+      "alias": "flux",
+      "extension_id": "acedatacloud.mcp-flux",
+      "package_json": "flux/vscode/package.json",
+      "yaml_configured": true,
+      "artifact_maintenance": "generator",
+      "runtime_architecture": "provider",
+      "lifecycle": "active",
+      "product_class": "service",
+      "publish_policy": "publishable"
+    },
+    {
+      "alias": "grok",
+      "extension_id": "acedatacloud.mcp-grok",
+      "package_json": "grok/vscode/package.json",
+      "yaml_configured": true,
+      "artifact_maintenance": "generator",
+      "runtime_architecture": "provider",
+      "lifecycle": "active",
+      "product_class": "service",
+      "publish_policy": "publishable"
+    },
+    {
+      "alias": "hailuo",
+      "extension_id": "acedatacloud.mcp-hailuo",
+      "package_json": "hailuo/vscode/package.json",
+      "yaml_configured": true,
+      "artifact_maintenance": "generator",
+      "runtime_architecture": "provider",
+      "lifecycle": "active",
+      "product_class": "service",
+      "publish_policy": "publishable"
+    },
+    {
+      "alias": "kling",
+      "extension_id": "acedatacloud.mcp-kling",
+      "package_json": "kling/vscode/package.json",
+      "yaml_configured": true,
+      "artifact_maintenance": "generator",
+      "runtime_architecture": "provider",
+      "lifecycle": "active",
+      "product_class": "service",
+      "publish_policy": "publishable"
+    },
+    {
+      "alias": "luma",
+      "extension_id": "acedatacloud.mcp-luma",
+      "package_json": "luma/vscode/package.json",
+      "yaml_configured": true,
+      "artifact_maintenance": "generator",
+      "runtime_architecture": "provider",
+      "lifecycle": "active",
+      "product_class": "service",
+      "publish_policy": "publishable"
+    },
+    {
+      "alias": "midjourney",
+      "extension_id": "acedatacloud.mcp-midjourney",
+      "package_json": "midjourney/vscode/package.json",
+      "yaml_configured": true,
+      "artifact_maintenance": "generator",
+      "runtime_architecture": "provider",
+      "lifecycle": "active",
+      "product_class": "service",
+      "publish_policy": "publishable"
+    },
+    {
+      "alias": "minimax",
+      "extension_id": "acedatacloud.mcp-minimax",
+      "package_json": "minimax/vscode/package.json",
+      "yaml_configured": false,
+      "artifact_maintenance": "manual",
+      "runtime_architecture": "provider",
+      "lifecycle": "active",
+      "product_class": "service",
+      "publish_policy": "publishable"
+    },
+    {
+      "alias": "nanobanana",
+      "extension_id": "acedatacloud.mcp-nanobanana",
+      "package_json": "nanobanana/vscode/package.json",
+      "yaml_configured": true,
+      "artifact_maintenance": "generator",
+      "runtime_architecture": "provider",
+      "lifecycle": "active",
+      "product_class": "service",
+      "publish_policy": "publishable"
+    },
+    {
+      "alias": "openai",
+      "extension_id": "acedatacloud.mcp-openai",
+      "package_json": "openai/vscode/package.json",
+      "yaml_configured": false,
+      "artifact_maintenance": "manual",
+      "runtime_architecture": "declarative",
+      "lifecycle": "active",
+      "product_class": "service",
+      "publish_policy": "publishable"
+    },
+    {
+      "alias": "producer",
+      "extension_id": "acedatacloud.mcp-producer",
+      "package_json": "producer/vscode/package.json",
+      "yaml_configured": true,
+      "artifact_maintenance": "generator",
+      "runtime_architecture": "provider",
+      "lifecycle": "active",
+      "product_class": "service",
+      "publish_policy": "publishable"
+    },
+    {
+      "alias": "seedance",
+      "extension_id": "acedatacloud.mcp-seedance",
+      "package_json": "seedance/vscode/package.json",
+      "yaml_configured": true,
+      "artifact_maintenance": "generator",
+      "runtime_architecture": "provider",
+      "lifecycle": "active",
+      "product_class": "service",
+      "publish_policy": "publishable"
+    },
+    {
+      "alias": "seedream",
+      "extension_id": "acedatacloud.mcp-seedream",
+      "package_json": "seedream/vscode/package.json",
+      "yaml_configured": true,
+      "artifact_maintenance": "generator",
+      "runtime_architecture": "provider",
+      "lifecycle": "active",
+      "product_class": "service",
+      "publish_policy": "publishable"
+    },
+    {
+      "alias": "serp",
+      "extension_id": "acedatacloud.mcp-serp",
+      "package_json": "serp/vscode/package.json",
+      "yaml_configured": true,
+      "artifact_maintenance": "generator",
+      "runtime_architecture": "provider",
+      "lifecycle": "active",
+      "product_class": "service",
+      "publish_policy": "publishable"
+    },
+    {
+      "alias": "shorturl",
+      "extension_id": "acedatacloud.mcp-shorturl",
+      "package_json": "shorturl/vscode/package.json",
+      "yaml_configured": true,
+      "artifact_maintenance": "generator",
+      "runtime_architecture": "provider",
+      "lifecycle": "active",
+      "product_class": "service",
+      "publish_policy": "publishable"
+    },
+    {
+      "alias": "sora",
+      "extension_id": "acedatacloud.mcp-sora",
+      "package_json": "sora/vscode/package.json",
+      "yaml_configured": true,
+      "artifact_maintenance": "generator",
+      "runtime_architecture": "provider",
+      "lifecycle": "retired",
+      "product_class": "service",
+      "publish_policy": "nonpublishable"
+    },
+    {
+      "alias": "suno",
+      "extension_id": "acedatacloud.mcp-suno",
+      "package_json": "suno/vscode/package.json",
+      "yaml_configured": true,
+      "artifact_maintenance": "generator",
+      "runtime_architecture": "provider",
+      "lifecycle": "active",
+      "product_class": "service",
+      "publish_policy": "publishable"
+    },
+    {
+      "alias": "veo",
+      "extension_id": "acedatacloud.mcp-veo",
+      "package_json": "veo/vscode/package.json",
+      "yaml_configured": true,
+      "artifact_maintenance": "generator",
+      "runtime_architecture": "provider",
+      "lifecycle": "active",
+      "product_class": "service",
+      "publish_policy": "publishable"
+    },
+    {
+      "alias": "wan",
+      "extension_id": "acedatacloud.mcp-wan",
+      "package_json": "wan/vscode/package.json",
+      "yaml_configured": true,
+      "artifact_maintenance": "generator",
+      "runtime_architecture": "provider",
+      "lifecycle": "active",
+      "product_class": "service",
+      "publish_policy": "publishable"
+    }
+  ],
+  "external_legacy_aggregate": {
+    "extension_id": "acedatacloud.acedatacloud-mcp",
+    "checked_in": false,
+    "lifecycle": "retirement-pending",
+    "product_class": "legacy-aggregate",
+    "publish_policy": "owner-handoff"
+  }
+}

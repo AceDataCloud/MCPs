@@ -1,0 +1,126 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/AceDataCloud/MCPs/blob/main/scripts/vscode_extension_inventory.schema.json",
+  "title": "Ace Data Cloud VS Code extension inventory",
+  "description": "Governance contract for checked-in VS Code extension packages and the external legacy aggregate.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "inventory_version",
+    "checked_in_packages",
+    "external_legacy_aggregate"
+  ],
+  "properties": {
+    "$schema": {
+      "const": "./vscode_extension_inventory.schema.json"
+    },
+    "inventory_version": {
+      "const": 1
+    },
+    "checked_in_packages": {
+      "type": "array",
+      "minItems": 22,
+      "maxItems": 22,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/checkedInPackage"
+      }
+    },
+    "external_legacy_aggregate": {
+      "$ref": "#/$defs/externalLegacyAggregate"
+    }
+  },
+  "$defs": {
+    "checkedInPackage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "alias",
+        "extension_id",
+        "package_json",
+        "yaml_configured",
+        "artifact_maintenance",
+        "runtime_architecture",
+        "lifecycle",
+        "product_class",
+        "publish_policy"
+      ],
+      "properties": {
+        "alias": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+        },
+        "extension_id": {
+          "type": "string",
+          "pattern": "^acedatacloud\\.[a-z0-9]+(?:-[a-z0-9]+)*$"
+        },
+        "package_json": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*/vscode/package\\.json$"
+        },
+        "yaml_configured": {
+          "type": "boolean"
+        },
+        "artifact_maintenance": {
+          "enum": [
+            "generator",
+            "manual"
+          ]
+        },
+        "runtime_architecture": {
+          "enum": [
+            "provider",
+            "declarative"
+          ]
+        },
+        "lifecycle": {
+          "enum": [
+            "active",
+            "retired"
+          ]
+        },
+        "product_class": {
+          "enum": [
+            "account-management",
+            "service"
+          ]
+        },
+        "publish_policy": {
+          "enum": [
+            "publishable",
+            "nonpublishable"
+          ]
+        }
+      }
+    },
+    "externalLegacyAggregate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "extension_id",
+        "checked_in",
+        "lifecycle",
+        "product_class",
+        "publish_policy"
+      ],
+      "properties": {
+        "extension_id": {
+          "const": "acedatacloud.acedatacloud-mcp"
+        },
+        "checked_in": {
+          "const": false
+        },
+        "lifecycle": {
+          "const": "retirement-pending"
+        },
+        "product_class": {
+          "const": "legacy-aggregate"
+        },
+        "publish_policy": {
+          "const": "owner-handoff"
+        }
+      }
+    }
+  }
+}
