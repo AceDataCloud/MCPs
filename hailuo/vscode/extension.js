@@ -21,7 +21,7 @@ const CLEAR_TOKEN_CMD = "acedatacloud.hailuo.clearApiToken";
 // Per-extension SecretStorage namespace; we keep one key per service so
 // rotating one API key doesn't affect siblings.
 const SECRET_KEY = "hailuo.apiToken";
-const SIGNUP_URL = "https://platform.acedata.cloud";
+const CREDENTIAL_URL = "https://platform.acedata.cloud/console/applications?utm_source=vscode&utm_medium=extension&utm_campaign=vscode-hailuo";
 
 async function readToken(context) {
   const env = process.env.ACEDATACLOUD_API_TOKEN;
@@ -33,7 +33,7 @@ async function readToken(context) {
 async function promptForToken(context) {
   const token = await vscode.window.showInputBox({
     title: `${SERVER_LABEL} — Ace Data Cloud API key`,
-        prompt: `Paste an API key from ${SIGNUP_URL}/console/applications (Applications -> API Key). Stored in the OS keychain.`,
+        prompt: `Paste an API key from ${CREDENTIAL_URL} (Applications -> API Key). Stored in the OS keychain.`,
         placeHolder: "API key from /console/applications",
     password: true,
     ignoreFocusOut: true,

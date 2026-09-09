@@ -15,7 +15,7 @@ can call it directly from chat.
 ## Quick Start
 
 1. **Install this extension.** VS Code registers the `fish` MCP server automatically.
-2. **Get an API token** from [Ace Data Cloud](https://platform.acedata.cloud) → *API Keys*. New accounts include free trial credit.
+2. **Get an API token** from [Ace Data Cloud](https://platform.acedata.cloud/console/applications?utm_source=vscode&utm_medium=extension&utm_campaign=vscode-fish) → *API Keys*. New accounts include free trial credit.
 3. **Open Copilot Chat** in agent mode and ask for a audio task — VS Code will prompt for the token the first time and store it securely.
 
 > The default config talks to the **hosted streamable-HTTP endpoint** at
@@ -113,7 +113,7 @@ first use (redirect URL `http://127.0.0.1:33418` or `https://vscode.dev/redirect
 - **Hosted endpoint:** https://fish.mcp.acedata.cloud/mcp
 - **PyPI package:** [`mcp-fish`](https://pypi.org/project/mcp-fish/)
 - **Source repository:** https://github.com/AceDataCloud/FishMCP
-- **Ace Data Cloud platform:** https://platform.acedata.cloud
+- **Ace Data Cloud platform:** https://platform.acedata.cloud/?utm_source=vscode&utm_medium=extension&utm_campaign=vscode-fish
 - **MCP documentation:** https://platform.acedata.cloud/documents/fish
 
 ## License

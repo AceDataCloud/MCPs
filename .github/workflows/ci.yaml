@@ -12,6 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
+      - run: python3 scripts/test_vscode_acquisition.py
       - run: python3 scripts/check_readme_inventory.py
       - run: python3 scripts/check_oauth_contract.py
       - run: python3 scripts/test_check_mcp_tool_parameter_aliases.py
