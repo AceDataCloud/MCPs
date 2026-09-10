@@ -16,6 +16,13 @@ from tools.custom_model_tools import (
 
 class TestCustomModelTools:
     @pytest.mark.asyncio
+    async def test_custom_model_tool_descriptions_include_current_prices(self):
+        tools = {tool.name: tool for tool in await mcp.list_tools()}
+
+        assert "10-Credit" in tools["suno_create_custom_model"].description
+        assert "0.90 Credits" in tools["suno_generate_with_custom_model"].description
+
+    @pytest.mark.asyncio
     async def test_create_custom_model_forwards_payload_and_idempotency_key(self):
         with patch(
             "tools.custom_model_tools.client.custom_models",
