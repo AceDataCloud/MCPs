@@ -20,6 +20,9 @@ MCP-compatible client.
 > from the data-generation MCP servers (Suno, Midjourney, …) that call
 > `api.acedata.cloud`.
 
+<!-- canonical-acquisition -->
+[Start with AceDataCloud](https://platform.acedata.cloud/?utm_source=github&utm_medium=repo&utm_campaign=mcp-acedatacloud)
+
 <!-- BEGIN GENERATED TOOL REFERENCE -->
 ## Tool Reference
 

@@ -2,6 +2,9 @@
 
 A Model Context Protocol (MCP) server for AceDataCloud's hCaptcha captcha-solving APIs.
 
+<!-- canonical-acquisition -->
+[Start with AceDataCloud](https://platform.acedata.cloud/?utm_source=github&utm_medium=repo&utm_campaign=mcp-hcaptcha)
+
 ## Features
 - Solve hCaptcha image challenges and retrieve hCaptcha site tokens.
 - Shared async task polling via `/captcha/tasks`

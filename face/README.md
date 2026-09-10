@@ -9,6 +9,9 @@ detection.
 
 > **Status:** All Face APIs are currently in **Alpha**. Interfaces may evolve.
 
+<!-- canonical-acquisition -->
+[Start with AceDataCloud](https://platform.acedata.cloud/?utm_source=github&utm_medium=repo&utm_campaign=mcp-face)
+
 ## Features
 
 - **Keypoint detection** — 90+ landmarks per face, multi-face supported

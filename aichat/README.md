@@ -5,6 +5,9 @@
 A Model Context Protocol (MCP) server for AI dialogue via the AceDataCloud platform.
 Supports a wide range of models including GPT-4/5, o-series, DeepSeek, Grok, and GLM.
 
+<!-- canonical-acquisition -->
+[Start with AceDataCloud](https://platform.acedata.cloud/?utm_source=github&utm_medium=repo&utm_campaign=mcp-aichat)
+
 ## Features
 
 - **Multi-model support**: GPT-4.1, GPT-4o, GPT-5, o1, o3, o4-mini, DeepSeek, Grok, GLM, and more

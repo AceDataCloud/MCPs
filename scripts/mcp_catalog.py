@@ -9,11 +9,23 @@ from typing import Any
 
 CATALOG_PATH = Path(__file__).with_name("mcp_catalog.json")
 PLATFORM_ROOT = "https://platform.acedata.cloud"
+ACQUISITION_MARKER = "<!-- canonical-acquisition -->"
 UUID_RE = re.compile(r"[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}")
 
 
 def load_catalog() -> dict[str, dict[str, Any]]:
     return json.loads(CATALOG_PATH.read_text())["services"]
+
+
+def acquisition_target(alias: str, entry: dict[str, Any]) -> str | None:
+    status = entry.get("status")
+    if status == "retired":
+        return None
+    if status != "active":
+        raise ValueError(f"invalid status {status!r}")
+    if not re.fullmatch(r"[a-z0-9-]+", alias):
+        raise ValueError(f"invalid acquisition alias {alias!r}")
+    return f"{PLATFORM_ROOT}/?utm_source=github&utm_medium=repo&utm_campaign=mcp-{alias}"
 
 
 def documentation_target(entry: dict[str, Any]) -> tuple[str | None, str | None]:
