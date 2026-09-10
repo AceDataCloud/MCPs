@@ -50,3 +50,4 @@ async def test_openai_list_image_models_names_all_gpt_image_2_5_variants():
     assert "gpt-image-2.5-sunburst" in text
     assert "gpt-image-2.5-sunburst:official" in text
     assert "gpt-image-2.5 |" not in text
+    assert "gpt-image-2.5:reverse" not in text

@@ -49,7 +49,7 @@ async def openai_generate_image(
                 "'gpt-image-1.5', 'gpt-image-2', 'gpt-image-2.5-flare', "
                 "'gpt-image-2.5-flare:official', 'gpt-image-2.5-sunburst', "
                 "'gpt-image-2.5-sunburst:official', 'dall-e-3', 'dall-e-2', "
-                "'nano-banana', 'nano-banana-2', 'nano-banana-pro'."
+                "'nano-banana', 'nano-banana-2', 'nano-banana-pro'. GPT Image ':official' variants use actual-token billing."
             )
         ),
     ] = DEFAULT_IMAGE_MODEL,
