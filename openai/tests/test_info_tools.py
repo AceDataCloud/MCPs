@@ -43,8 +43,11 @@ async def test_openai_get_realtime_connection_info_calls_realtime_endpoint(monke
 
 
 @pytest.mark.asyncio
-async def test_openai_list_image_models_names_both_gpt_image_2_5_variants():
+async def test_openai_list_image_models_names_all_gpt_image_2_5_variants():
     text = await info_tools.openai_list_image_models()
     assert "gpt-image-2.5-flare" in text
+    assert "gpt-image-2.5-flare:official" in text
     assert "gpt-image-2.5-sunburst" in text
+    assert "gpt-image-2.5-sunburst:official" in text
     assert "gpt-image-2.5 |" not in text
+    assert "gpt-image-2.5:reverse" not in text

@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- GPT Image 2.5 Flare and Sunburst generation and editing models
+- GPT Image 2.5 Flare and Sunburst generation and editing models, including token-metered official variants
 
 ## [2026.4.25.1] - 2026-04-25
 

@@ -206,7 +206,12 @@ async def test_openai_generate_image_preserves_explicit_sync(monkeypatch):
 
 def test_openai_image_tool_schemas_expose_exact_gpt_image_2_5_models():
     tools = {tool.name: tool for tool in mcp._tool_manager.list_tools()}
-    expected = {"gpt-image-2.5-flare", "gpt-image-2.5-sunburst"}
+    expected = {
+        "gpt-image-2.5-flare",
+        "gpt-image-2.5-flare:official",
+        "gpt-image-2.5-sunburst",
+        "gpt-image-2.5-sunburst:official",
+    }
     for name in ("openai_generate_image", "openai_edit_image"):
         model_schema = tools[name].parameters["properties"]["model"]
         models = set(model_schema["enum"])
@@ -217,7 +222,15 @@ def test_openai_image_tool_schemas_expose_exact_gpt_image_2_5_models():
 
 
 @pytest.mark.asyncio
-@pytest.mark.parametrize("model", ["gpt-image-2.5-flare", "gpt-image-2.5-sunburst"])
+@pytest.mark.parametrize(
+    "model",
+    [
+        "gpt-image-2.5-flare",
+        "gpt-image-2.5-flare:official",
+        "gpt-image-2.5-sunburst",
+        "gpt-image-2.5-sunburst:official",
+    ],
+)
 async def test_openai_image_tools_forward_gpt_image_2_5_models(monkeypatch, model):
     generated: dict[str, object] = {}
     edited: dict[str, object] = {}

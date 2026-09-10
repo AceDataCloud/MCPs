@@ -8,7 +8,7 @@ Interact with OpenAI models for chat completions, image generation, text embeddi
 
 - **Chat Completions** — Access GPT-4, GPT-4o, GPT-5, o1, o3, o4-mini, and many more models
 - **Responses API** — Extended model variant support including dated releases and search-preview models
-- **Image Generation** — Create images with gpt-image-1, gpt-image-2, gpt-image-2.5 Flare/Sunburst, dall-e-3, and nano-banana models
+- **Image Generation** — Create images with gpt-image-1, gpt-image-2, GPT Image 2.5 Flare/Sunburst standard or official variants, dall-e-3, and nano-banana models
 - **Image Editing** — Modify existing images with AI
 - **Text Embeddings** — Generate vector representations with text-embedding-3 models
 - **Audio** — Convert text to speech and transcribe audio with whisper-1 or gpt-transcribe
@@ -63,7 +63,8 @@ mcp-openai
 - **Reasoning**: o4-mini, o3, o3-mini, o3-pro, o1, o1-mini, o1-pro
 
 ### Image Models
-- gpt-image-1, gpt-image-1.5, gpt-image-2, gpt-image-2.5-flare, gpt-image-2.5-sunburst, dall-e-3, dall-e-2, nano-banana, nano-banana-2, nano-banana-pro
+- gpt-image-1, gpt-image-1.5, gpt-image-2, gpt-image-2:official, gpt-image-2.5-flare, gpt-image-2.5-flare:official, gpt-image-2.5-sunburst, gpt-image-2.5-sunburst:official, dall-e-3, dall-e-2, nano-banana, nano-banana-2, nano-banana-pro
+- GPT Image `:official` variants settle from actual text-input, image-input, and image-output tokens.
 
 ### Embedding Models
 - text-embedding-3-small, text-embedding-3-large, text-embedding-ada-002
