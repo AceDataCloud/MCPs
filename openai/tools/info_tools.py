@@ -172,7 +172,9 @@ async def openai_list_image_models() -> str:
 | gpt-image-1.5        | GPT Image 1.5 - improved quality                  |
 | gpt-image-2          | GPT Image 2 - established default                |
 | gpt-image-2.5-flare  | GPT Image 2.5 Flare - faster generation           |
+| gpt-image-2.5-flare:official | GPT Image 2.5 Flare official mode         |
 | gpt-image-2.5-sunburst | GPT Image 2.5 Sunburst - high-fidelity control  |
+| gpt-image-2.5-sunburst:official | GPT Image 2.5 Sunburst official mode   |
 | gpt-image-2:reverse  | GPT Image 2 reverse mode                          |
 | gpt-image-2:official | GPT Image 2 official mode                         |
 | dall-e-3             | DALL-E 3 - high quality artistic generation       |
