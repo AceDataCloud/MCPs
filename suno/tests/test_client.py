@@ -42,6 +42,13 @@ class TestSunoClient:
         payload = client._with_async_callback({"action": "generate"})
         assert payload["async"] is True
 
+    def test_with_async_callback_omits_unset_optional_fields(self, client):
+        """Optional API fields must be omitted rather than sent as JSON null."""
+        payload = client._with_async_callback(
+            {"action": "generate", "callback_url": None, "duration": None}
+        )
+        assert payload == {"action": "generate", "async": True}
+
     def test_with_async_callback_preserves_explicit_callback(self, client):
         """Test async submission preserves a user-provided callback."""
         payload = client._with_async_callback(
