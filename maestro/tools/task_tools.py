@@ -7,7 +7,7 @@ from pydantic import Field
 
 from core.client import client
 from core.server import mcp
-from core.utils import _task_outcome, format_task_result
+from core.utils import _task_outcome, format_result, format_task_result
 
 
 @mcp.tool()
@@ -25,3 +25,22 @@ async def maestro_get_task(
     if is_in_flight:
         await asyncio.sleep(5)
     return format_task_result(data)
+
+
+@mcp.tool()
+async def maestro_list_tasks(
+    limit: Annotated[
+        int,
+        Field(description="Maximum number of recent tasks to return.", ge=1, le=100),
+    ] = 20,
+    created_at_min: Annotated[
+        int | None,
+        Field(description="Only include tasks created strictly after this Unix timestamp."),
+    ] = None,
+    created_at_max: Annotated[
+        int | None,
+        Field(description="Only include tasks created strictly before this Unix timestamp."),
+    ] = None,
+) -> str:
+    """List recent Maestro tasks owned by the authenticated user."""
+    return format_result(await client.list_tasks(limit, created_at_min, created_at_max))
