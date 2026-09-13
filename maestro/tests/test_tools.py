@@ -3,7 +3,7 @@
 import json
 from unittest.mock import AsyncMock, patch
 
-from tools.task_tools import maestro_get_task
+from tools.task_tools import maestro_get_task, maestro_list_tasks
 from tools.video_tools import maestro_create_video
 
 
@@ -95,3 +95,22 @@ async def test_task_tools_delegate_to_client() -> None:
         await maestro_get_task("task-1")
 
     get_task.assert_awaited_once_with("task-1")
+
+
+async def test_list_tasks_delegates_filters_to_client() -> None:
+    with patch("tools.task_tools.client.list_tasks", new_callable=AsyncMock) as list_tasks:
+        list_tasks.return_value = {"count": 0, "items": []}
+
+        result = await maestro_list_tasks(30, 100, 200)
+
+    list_tasks.assert_awaited_once_with(30, 100, 200)
+    assert json.loads(result) == {"count": 0, "items": []}
+
+
+async def test_list_tasks_uses_public_defaults() -> None:
+    with patch("tools.task_tools.client.list_tasks", new_callable=AsyncMock) as list_tasks:
+        list_tasks.return_value = {"count": 0, "items": []}
+
+        await maestro_list_tasks()
+
+    list_tasks.assert_awaited_once_with(20, None, None)

@@ -22,6 +22,7 @@ For a hosted connection, use `https://maestro.mcp.acedata.cloud/mcp`. It accepts
 |---|---|
 | `maestro_create_video` | Create a video or run `remix`, `edit`, or `extend` on an earlier task |
 | `maestro_get_task` | Read progress, status, and final language variants for one task |
+| `maestro_list_tasks` | List the authenticated account's recent tasks, newest first |
 
 ## Example
 
@@ -30,6 +31,8 @@ Ask an MCP client:
 > Create a 45-second 16:9 English product launch video from this product photo. Use an editorial style and a documentary voice.
 
 The tool returns a `task_id` immediately. Query that ID until `status` is `succeeded` or `failed`. Successful tasks expose videos in `response.data.variants`.
+
+To inspect existing task history without creating a video, call `maestro_list_tasks`. It accepts a `limit` from 1 to 100 and optional exclusive `created_at_min` / `created_at_max` Unix timestamp bounds. The returned `items` honor those filters; `count` remains the authenticated account's total visible task count.
 
 ## Production contract
 
