@@ -8,6 +8,7 @@ from tools import (
     lyrics_tools,
     media_tools,
     persona_tools,
+    project_tools,
     style_tools,
     task_tools,
 )
@@ -17,6 +18,7 @@ __all__ = [
     "custom_model_tools",
     "lyrics_tools",
     "persona_tools",
+    "project_tools",
     "media_tools",
     "style_tools",
     "task_tools",

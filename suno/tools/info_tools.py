@@ -114,6 +114,18 @@ Custom Music Models:
 - suno_generate_with_custom_model: Generate a song with a ready custom music model
 - suno_delete_custom_model: Archive a custom music model
 
+Studio Projects:
+- suno_create_project: Create a versioned Studio project
+- suno_get_project: Retrieve the current project and complete editable state
+- suno_save_project: Save the complete state with version conflict protection
+- suno_upload_project_audio: Initialize an authorized audio URL for a project
+- suno_add_project_track: Add an existing audio as a track
+- suno_generate_project_track: Generate track candidates for a project range
+- suno_replace_project_section: Generate two replacement candidates
+- suno_commit_project_candidate: Commit one candidate to a project track
+- suno_remove_project_track: Remove a project track
+- suno_render_project: Render a saved project version to final audio
+
 Lyrics:
 - suno_generate_lyrics: Generate song lyrics from a prompt
 - suno_optimize_style: Optimize a style description for better results
@@ -140,6 +152,7 @@ Workflow Examples:
 9. Full stems: suno_all_stems_music → use stems for further production
 10. Remix: suno_stems_music → use stems for further production
 11. Fix section: suno_replace_section → suno_get_task
+12. Studio project: suno_create_project → suno_add_project_track → suno_get_project → suno_render_project → suno_get_task
 """
 
 

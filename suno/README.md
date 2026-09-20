@@ -21,6 +21,7 @@ Generate AI music, lyrics, and manage audio projects directly from Claude, VS Co
 - **Lyrics Generation** - Generate structured lyrics from descriptions
 - **Persona Management** - Save and reuse voice styles
 - **Custom Music Models** - Create and reuse app-owned custom music models
+- **Studio Projects** - Create, edit, version, and render multitrack music projects
 - **Task Tracking** - Monitor generation progress and retrieve results
 
 ## Tool Reference
@@ -53,6 +54,16 @@ Generate AI music, lyrics, and manage audio projects directly from Claude, VS Co
 | `suno_list_custom_models` | List custom music models for the current Suno application. |
 | `suno_generate_with_custom_model` | Generate a song using a ready custom music model. |
 | `suno_delete_custom_model` | Archive a custom music model so it can no longer be used. |
+| `suno_create_project` | Create a versioned Studio project. |
+| `suno_get_project` | Retrieve a project and its complete editable state. |
+| `suno_save_project` | Save complete project state with version conflict protection. |
+| `suno_upload_project_audio` | Initialize an authorized HTTPS audio URL for a project. |
+| `suno_add_project_track` | Add an existing audio as a project track. |
+| `suno_generate_project_track` | Generate track candidates for a project range. |
+| `suno_replace_project_section` | Generate two project replacement candidates. |
+| `suno_commit_project_candidate` | Commit one candidate into a project track. |
+| `suno_remove_project_track` | Remove a track from a project. |
+| `suno_render_project` | Render a saved project version into final audio. |
 | `suno_optimize_style` | Optimize a music style description for better generation results. |
 | `suno_mashup_lyrics` | Generate mashup lyrics by combining two sets of lyrics. |
 | `suno_upload_audio` | Upload external audio in standard or enhanced mode for subsequent operations. |
@@ -552,6 +563,7 @@ SunoMCP/
 │   ├── lyrics_tools.py    # Lyrics generation tools
 │   ├── media_tools.py     # Media conversion tools
 │   ├── persona_tools.py   # Persona management tools
+│   ├── project_tools.py   # Studio project workflow tools
 │   ├── custom_model_tools.py # Custom music model tools
 │   └── task_tools.py      # Task query tools
 ├── tests/                  # Test suite

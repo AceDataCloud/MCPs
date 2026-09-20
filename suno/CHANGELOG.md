@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Added ten intent-specific Suno Studio project tools for project creation, full-state editing, track generation, section replacement, candidate commits, and rendering.
+- Added asynchronous project workflow guidance through the existing Suno task tools.
+
 ## [0.1.0] - 2025-01-21
 
 ### Added

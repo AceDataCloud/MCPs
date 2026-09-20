@@ -211,3 +211,32 @@ class TestSunoClient:
                 await client.request("/suno/audios", {})
 
             assert exc_info.value.status_code == 500
+
+    @pytest.mark.asyncio
+    async def test_projects_uses_endpoint_idempotency_and_async_policy(self, client):
+        mock_response = MagicMock()
+        mock_response.status_code = 200
+        mock_response.json.return_value = {"task_id": "task-1"}
+        with patch("httpx.AsyncClient") as mock_client:
+            mock_instance = AsyncMock()
+            mock_instance.post.return_value = mock_response
+            mock_client.return_value.__aenter__.return_value = mock_instance
+            await client.projects(
+                idempotency_key="retry", action="render", id="p", version_id="v", title="Final"
+            )
+        request = mock_instance.post.await_args
+        assert request.args[0] == "https://api.test.com/suno/projects"
+        assert request.kwargs["json"]["async"] is True
+        assert request.kwargs["headers"]["Idempotency-Key"] == "retry"
+
+    @pytest.mark.asyncio
+    async def test_projects_keeps_retrieve_synchronous(self, client):
+        mock_response = MagicMock()
+        mock_response.status_code = 200
+        mock_response.json.return_value = {"success": True}
+        with patch("httpx.AsyncClient") as mock_client:
+            mock_instance = AsyncMock()
+            mock_instance.post.return_value = mock_response
+            mock_client.return_value.__aenter__.return_value = mock_instance
+            await client.projects(action="retrieve", id="p")
+        assert mock_instance.post.await_args.kwargs["json"] == {"action": "retrieve", "id": "p"}

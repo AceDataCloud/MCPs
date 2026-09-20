@@ -250,6 +250,29 @@ class SunoClient:
         )
         return await self.request("/suno/custom-models", payload, extra_headers=headers)
 
+    async def projects(
+        self,
+        idempotency_key: str | None = None,
+        **kwargs: Any,
+    ) -> dict[str, Any]:
+        """Manage Suno Studio projects through the unified projects endpoint."""
+        logger.info(f"Studio project action: {kwargs.get('action', '')}")
+        headers = {"Idempotency-Key": idempotency_key} if idempotency_key else None
+        payload = (
+            self._with_async_callback(kwargs)
+            if kwargs.get("action")
+            in {
+                "upload",
+                "add_track",
+                "generate_track",
+                "replace_section",
+                "commit_candidate",
+                "render",
+            }
+            else kwargs
+        )
+        return await self.request("/suno/projects", payload, extra_headers=headers)
+
     async def list_personas(self, **kwargs: Any) -> dict[str, Any]:
         """List personas for a user."""
         user_id = kwargs.get("user_id", "")
