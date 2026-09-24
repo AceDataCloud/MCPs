@@ -9,12 +9,15 @@ from tools import chat_tools
 # Models the /aichat/conversations spec enum requires us to offer.
 V1_REQUIRED = {
     "gpt-6-astra",
+    "gpt-6-sol",
+    "gpt-6-luna",
     "gpt-5.6-luna",
     "gpt-5.6-terra",
     "gpt-5.6-sol",
     "gpt-5.4-mini",
     "gpt-5.4-nano",
     "deepseek-v4-pro",
+    "grok-4.7",
     "grok-4.5",
     "glm-5.3",
     "glm-5.2",
@@ -45,8 +48,16 @@ def test_v1_offers_the_newest_models():
     assert not missing, f"AiChatModel is missing {sorted(missing)}"
 
 
-def test_v2_offers_gpt6_astra():
-    assert "gpt-6-astra" in get_args(AiChatV2Model)
+def test_v2_offers_new_chat_compatible_models():
+    models = set(get_args(AiChatV2Model))
+    assert {
+        "gpt-6-astra",
+        "gpt-6-sol",
+        "gpt-6-luna",
+        "grok-4.7",
+        "gemini-3.8-flash",
+    } <= models
+    assert "claude-opus-5-5" not in models
 
 
 def test_v2_offers_claude_sonnet_5():
@@ -82,6 +93,7 @@ def test_v2_offers_claude_spec_models():
 
 def test_v2_offers_gemini_spec_models():
     spec_models = {
+        "gemini-3.8-flash",
         "gemini-3.7-flash",
         "gemini-3.6-flash",
         "gemini-3.5-flash",
