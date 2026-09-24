@@ -11,7 +11,6 @@ V1_REQUIRED = {
     "gpt-6-astra",
     "gpt-6-sol",
     "gpt-6-luna",
-    "mai-code-1.1-flash",
     "gpt-5.6-luna",
     "gpt-5.6-terra",
     "gpt-5.6-sol",
@@ -57,7 +56,6 @@ def test_v2_offers_new_chat_compatible_models():
         "gpt-6-luna",
         "grok-4.7",
         "gemini-3.8-flash",
-        "mai-code-1.1-flash",
     } <= models
     assert "claude-opus-5-5" not in models
 

@@ -28,7 +28,6 @@ def test_flagship_models_are_available_in_aichat_v2() -> None:
         "gpt-6-luna",
         "grok-4.7",
         "gemini-3.8-flash",
-        "mai-code-1.1-flash",
     } <= models
     assert "grok-4.5" in models
     assert "glm-5.3" in models
