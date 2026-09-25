@@ -18,6 +18,7 @@ on:
 permissions:
   contents: read
   issues: write
+  pull-requests: write
 
 concurrency:
   group: platform-contract-sync
@@ -62,7 +63,6 @@ jobs:
           repository: AceDataCloud/PlatformBackend
           ref: ${{ steps.source.outputs.sha }}
           path: PlatformBackend
-          token: ${{ secrets.ADMIN_GITHUB_TOKEN || secrets.BOT_GITHUB_TOKEN }}
 
       - name: Compile and verify contracts
         run: |
@@ -83,7 +83,7 @@ jobs:
 
       - name: Create scoped sync issue
         env:
-          GH_TOKEN: ${{ secrets.ADMIN_GITHUB_TOKEN || secrets.BOT_GITHUB_TOKEN }}
+          GH_TOKEN: ${{ github.token }}
           SOURCE_SHA: ${{ steps.source.outputs.sha }}
           SERVICES: ${{ steps.source.outputs.services }}
           REPO: ${{ github.repository }}
@@ -113,11 +113,11 @@ jobs:
             -f query='query($owner:String!,$name:String!){repository(owner:$owner,name:$name){suggestedActors(capabilities:[CAN_BE_ASSIGNED],first:50){nodes{... on Bot{login id} ... on User{login id}}}}}' \
             -f owner="$owner" -f name="$name" \
             --jq '[.data.repository.suggestedActors.nodes[] | select(.login=="copilot-swe-agent" or .login=="Copilot")][0].id // empty')
-          if [ -z "$copilot_id" ]; then
-            echo "::error::Copilot is not assignable with the configured token."
-            exit 1
+          if [ -n "$copilot_id" ]; then
+            gh api graphql \
+              -f query='mutation($issue:ID!,$actors:[ID!]!){replaceActorsForAssignable(input:{assignableId:$issue,actorIds:$actors}){assignable{... on Issue{number}}}}' \
+              -f issue="$issue_node" -f actors="$copilot_id"
+            echo "Created and assigned issue #$issue_number."
+          else
+            echo "::warning::Created issue #$issue_number, but Copilot is not assignable with github.token."
           fi
-          gh api graphql \
-            -f query='mutation($issue:ID!,$actors:[ID!]!){replaceActorsForAssignable(input:{assignableId:$issue,actorIds:$actors}){assignable{... on Issue{number}}}}' \
-            -f issue="$issue_node" -f actors="$copilot_id"
-          echo "Created and assigned issue #$issue_number."
