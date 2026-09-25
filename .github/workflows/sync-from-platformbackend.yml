@@ -1,0 +1,123 @@
+name: Sync from PlatformBackend
+
+on:
+  repository_dispatch:
+    types: [platform-contracts-updated]
+  workflow_dispatch:
+    inputs:
+      source_sha:
+        description: Full PlatformBackend commit SHA
+        required: true
+        type: string
+      services:
+        description: Comma-separated service aliases, or all
+        required: false
+        default: all
+        type: string
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: platform-contract-sync
+  cancel-in-progress: false
+
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout consumer
+        uses: actions/checkout@v4
+        with:
+          path: consumer
+
+      - name: Resolve source request
+        id: source
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          EVENT_SHA: ${{ github.event.client_payload.source_sha }}
+          MANUAL_SHA: ${{ inputs.source_sha }}
+          EVENT_SERVICES: ${{ toJson(github.event.client_payload.changed_services) }}
+          MANUAL_SERVICES: ${{ inputs.services }}
+        run: |
+          sha="$EVENT_SHA"
+          services="$MANUAL_SERVICES"
+          if [ "$EVENT_NAME" = "repository_dispatch" ]; then
+            services=$(jq -r 'if type == "array" then join(",") elif type == "string" then . else "all" end' <<<"${EVENT_SERVICES:-null}")
+          else
+            sha="$MANUAL_SHA"
+          fi
+          if ! printf '%s' "$sha" | grep -Eq '^[0-9a-f]{40}$'; then
+            echo "::error::A full PlatformBackend source SHA is required."
+            exit 1
+          fi
+          echo "sha=$sha" >> "$GITHUB_OUTPUT"
+          echo "services=${services:-all}" >> "$GITHUB_OUTPUT"
+
+      - name: Checkout exact PlatformBackend source
+        uses: actions/checkout@v4
+        with:
+          repository: AceDataCloud/PlatformBackend
+          ref: ${{ steps.source.outputs.sha }}
+          path: PlatformBackend
+          token: ${{ secrets.ADMIN_GITHUB_TOKEN || secrets.BOT_GITHUB_TOKEN }}
+
+      - name: Compile and verify contracts
+        run: |
+          test "$(git -C PlatformBackend rev-parse HEAD)" = "${{ steps.source.outputs.sha }}"
+          python PlatformBackend/scripts/ecosystem_contracts.py \
+            --backend-dir PlatformBackend compile \
+            --output-dir "$RUNNER_TEMP/contracts" \
+            --source-sha "${{ steps.source.outputs.sha }}"
+          python PlatformBackend/scripts/ecosystem_contracts.py verify \
+            --bundle-dir "$RUNNER_TEMP/contracts" \
+            --source-sha "${{ steps.source.outputs.sha }}"
+          python consumer/scripts/platform_contract.py \
+            --bundle "$RUNNER_TEMP/contracts" \
+            --mapping consumer/sync.yaml \
+            --kind mcp \
+            --services "${{ steps.source.outputs.services }}" \
+            --output "$RUNNER_TEMP/sync-plan.json"
+
+      - name: Create scoped sync issue
+        env:
+          GH_TOKEN: ${{ secrets.ADMIN_GITHUB_TOKEN || secrets.BOT_GITHUB_TOKEN }}
+          SOURCE_SHA: ${{ steps.source.outputs.sha }}
+          SERVICES: ${{ steps.source.outputs.services }}
+          REPO: ${{ github.repository }}
+        run: |
+          targets=$(jq -r '[.targets[].directory] | join(",")' "$RUNNER_TEMP/sync-plan.json")
+          if [ -z "$targets" ]; then
+            echo "No mapped MCP packages are affected."
+            exit 0
+          fi
+          body=$(jq -n --arg sha "$SOURCE_SHA" --arg services "$SERVICES" --arg targets "$targets" \
+            '"PlatformBackend contract changes require a scoped MCP parity update.\n\n## Authoritative source\n\n- Repository: `AceDataCloud/PlatformBackend`\n- Commit: `" + $sha + "`\n- Services: `" + $services + "`\n- Allowed package directories: `" + $targets + "`\n\nRun `PlatformBackend/scripts/ecosystem_contracts.py` at the exact commit above. Do not use Docs as a contract source. Update only the listed package directories, add contract tests, and let normal CI gate the PR. Do not bypass failed checks."')
+          existing=$(gh issue list --repo "$REPO" --label auto-sync --state open --search "$SOURCE_SHA in:body" --json number --jq '.[0].number // empty')
+          if [ -n "$existing" ]; then
+            echo "Issue #$existing already tracks this source SHA."
+            exit 0
+          fi
+          issue=$(jq -n \
+            --arg title "sync: PlatformBackend contracts ${SOURCE_SHA:0:12}" \
+            --arg body "$body" \
+            '{title:$title,body:$body,labels:["auto-sync"]}' \
+            | gh api --method POST "/repos/$REPO/issues" --input -)
+          issue_number=$(jq -r .number <<<"$issue")
+          issue_node=$(jq -r .node_id <<<"$issue")
+          owner="${REPO%/*}"
+          name="${REPO#*/}"
+          copilot_id=$(gh api graphql \
+            -f query='query($owner:String!,$name:String!){repository(owner:$owner,name:$name){suggestedActors(capabilities:[CAN_BE_ASSIGNED],first:50){nodes{... on Bot{login id} ... on User{login id}}}}}' \
+            -f owner="$owner" -f name="$name" \
+            --jq '[.data.repository.suggestedActors.nodes[] | select(.login=="copilot-swe-agent" or .login=="Copilot")][0].id // empty')
+          if [ -z "$copilot_id" ]; then
+            echo "::error::Copilot is not assignable with the configured token."
+            exit 1
+          fi
+          gh api graphql \
+            -f query='mutation($issue:ID!,$actors:[ID!]!){replaceActorsForAssignable(input:{assignableId:$issue,actorIds:$actors}){assignable{... on Issue{number}}}}' \
+            -f issue="$issue_node" -f actors="$copilot_id"
+          echo "Created and assigned issue #$issue_number."

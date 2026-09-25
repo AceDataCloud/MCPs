@@ -17,6 +17,13 @@ jobs:
       - run: python3 scripts/test_check_mcp_tool_parameter_aliases.py
       - run: python3 scripts/check_mcp_tool_parameter_aliases.py
 
+  platform-contract:
+    name: Platform contract resolver
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - run: python3 -m unittest scripts.test_platform_contract -v
+
   detect-changes:
     runs-on: ubuntu-latest
     outputs:
