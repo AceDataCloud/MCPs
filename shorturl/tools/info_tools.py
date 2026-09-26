@@ -20,7 +20,7 @@ async def shorturl_get_usage_guide() -> str:
 
 ### URL Shortening
 **shorturl_create** - Shorten a single URL
-- url: The long URL to shorten (required, must start with http:// or https://)
+- content: The long URL to shorten (required, must start with http:// or https://)
 
 **shorturl_batch_create** - Shorten multiple URLs at once
 - urls: List of long URLs to shorten (max 10 per batch)
@@ -29,7 +29,7 @@ async def shorturl_get_usage_guide() -> str:
 
 ### Shorten a Single URL
 ```
-shorturl_create(url="https://platform.acedata.cloud/documents/a2303356-6672-4eb8-9778-75f55c998fe9")
+shorturl_create(content="https://platform.acedata.cloud/documents/a2303356-6672-4eb8-9778-75f55c998fe9")
 ```
 
 **Response:**
