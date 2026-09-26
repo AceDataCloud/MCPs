@@ -35,7 +35,7 @@ async def suno_create_custom_model(
     """Create a reusable custom music model from authorized audio examples.
 
     This is a paid, long-running operation. Call it only after the user confirms
-    the source files and the 5.6-Credit list price.
+    the source files and the 10-Credit list price.
     """
     payload: dict = {
         "action": "create",
@@ -111,7 +111,8 @@ async def suno_generate_with_custom_model(
     """Generate a song using a ready custom music model.
 
     The initial response only accepts the async task. Poll it until success or
-    failure; this operation never falls back to another model.
+    failure; successful generation costs 0.90 Credits and this operation never
+    falls back to another model.
     """
     result = await client.custom_models(
         action="generate",
