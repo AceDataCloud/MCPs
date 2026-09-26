@@ -12,6 +12,9 @@ A [Model Context Protocol (MCP)](https://modelcontextprotocol.io) server for AI 
 
 Generate and edit AI images directly from Claude, VS Code, or any MCP-compatible client.
 
+<!-- canonical-acquisition -->
+[Start with AceDataCloud](https://platform.acedata.cloud/?utm_source=github&utm_medium=repo&utm_campaign=mcp-seedream)
+
 ## Features
 
 - **Text-to-Image Generation** — Create high-quality images from text prompts (Chinese & English)

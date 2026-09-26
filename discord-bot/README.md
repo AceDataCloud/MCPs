@@ -3,6 +3,9 @@
 A Model Context Protocol (MCP) server that provides tools for automating Discord
 through a self-hosted [Discord Agent Proxy](https://platform.acedata.cloud) instance.
 
+<!-- canonical-acquisition -->
+[Start with AceDataCloud](https://platform.acedata.cloud/?utm_source=github&utm_medium=repo&utm_campaign=mcp-discord-bot)
+
 ## Overview
 
 The Discord Agent Proxy is a standalone service you deploy on AceDataCloud. It maintains

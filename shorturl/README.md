@@ -12,6 +12,9 @@ A [Model Context Protocol (MCP)](https://modelcontextprotocol.io) server for URL
 
 Create short, shareable URLs directly from Claude, VS Code, or any MCP-compatible client.
 
+<!-- canonical-acquisition -->
+[Start with AceDataCloud](https://platform.acedata.cloud/?utm_source=github&utm_medium=repo&utm_campaign=mcp-shorturl)
+
 ## Features
 
 - **URL Shortening** - Convert long URLs into short, shareable links

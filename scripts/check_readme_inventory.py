@@ -8,7 +8,12 @@ import sys
 import tomllib
 from pathlib import Path
 
-from mcp_catalog import documentation_target, load_catalog
+from mcp_catalog import (
+    ACQUISITION_MARKER,
+    acquisition_target,
+    documentation_target,
+    load_catalog,
+)
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -83,6 +88,25 @@ def main() -> int:
 
         readme_path = ROOT / alias / "README.md"
         readme = readme_path.read_text()
+        try:
+            acquisition_url = acquisition_target(alias, entry)
+        except ValueError as exc:
+            fail(errors, f"{alias}: {exc}")
+            acquisition_url = None
+        if acquisition_url:
+            expected_acquisition = (
+                f"{ACQUISITION_MARKER}\n"
+                f"[Start with AceDataCloud]({acquisition_url})"
+            )
+            if readme.count(ACQUISITION_MARKER) != 1:
+                fail(errors, f"{alias}/README.md: expected one acquisition marker")
+            if expected_acquisition not in readme:
+                fail(errors, f"{alias}/README.md: missing canonical acquisition link")
+            generated_start = readme.find("<!-- BEGIN GENERATED")
+            if generated_start >= 0 and readme.find(ACQUISITION_MARKER) > generated_start:
+                fail(errors, f"{alias}/README.md: acquisition link is inside generated content")
+        elif ACQUISITION_MARKER in readme:
+            fail(errors, f"{alias}/README.md: retired MCP must not expose acquisition")
         if url:
             expected = f"<!-- canonical-documentation -->\n[{label}]({url})"
             if expected not in readme:

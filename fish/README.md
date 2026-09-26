@@ -5,6 +5,9 @@
 A Model Context Protocol (MCP) server for Fish Audio TTS (Text-to-Speech) via the AceDataCloud platform.
 Generate natural-sounding speech and explore the Fish voice model library.
 
+<!-- canonical-acquisition -->
+[Start with AceDataCloud](https://platform.acedata.cloud/?utm_source=github&utm_medium=repo&utm_campaign=mcp-fish)
+
 ## Features
 
 - **High-quality TTS**: Generate speech from text via Fish Audio models

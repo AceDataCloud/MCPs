@@ -8,6 +8,9 @@
 
 Model Context Protocol server for MiniMax H3 multimodal video generation through AceDataCloud.
 
+<!-- canonical-acquisition -->
+[Start with AceDataCloud](https://platform.acedata.cloud/?utm_source=github&utm_medium=repo&utm_campaign=mcp-minimax)
+
 ## Capabilities
 
 - Text-to-video

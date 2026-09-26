@@ -2,6 +2,9 @@
 
 A Model Context Protocol (MCP) server for AceDataCloud's reCAPTCHA captcha-solving APIs.
 
+<!-- canonical-acquisition -->
+[Start with AceDataCloud](https://platform.acedata.cloud/?utm_source=github&utm_medium=repo&utm_campaign=mcp-recaptcha)
+
 ## Features
 - Solve reCAPTCHA image challenges and obtain reCAPTCHA v2/v3 tokens.
 - Bearer-token authentication through AceDataCloud

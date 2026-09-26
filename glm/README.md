@@ -4,6 +4,9 @@
 
 A Model Context Protocol (MCP) server for Zhipu GLM chat completions via the AceDataCloud platform.
 
+<!-- canonical-acquisition -->
+[Start with AceDataCloud](https://platform.acedata.cloud/?utm_source=github&utm_medium=repo&utm_campaign=mcp-glm)
+
 ## Features
 
 - **GLM chat completions**: Call Zhipu GLM models through a uniform MCP tool

@@ -10,6 +10,9 @@ A [Model Context Protocol (MCP)](https://modelcontextprotocol.io) server for **G
 
 Chat with Grok models, or generate short AI videos from a text prompt or a still image — directly from any MCP-compatible client (Claude Desktop, Claude Code, Cursor, etc.).
 
+<!-- canonical-acquisition -->
+[Start with AceDataCloud](https://platform.acedata.cloud/?utm_source=github&utm_medium=repo&utm_campaign=mcp-grok)
+
 ## Features
 
 - **Chat / Reasoning / Vision** — Talk to Grok 4.5 / Grok 4 / Grok 3 models, with image input and tool calling

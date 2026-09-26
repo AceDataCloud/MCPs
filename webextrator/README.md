@@ -5,6 +5,9 @@
 A Model Context Protocol (MCP) server for web rendering and structured content extraction
 via the AceDataCloud WebExtrator platform.
 
+<!-- canonical-acquisition -->
+[Start with AceDataCloud](https://platform.acedata.cloud/?utm_source=github&utm_medium=repo&utm_campaign=mcp-webextrator)
+
 ## Features
 
 - **Structured extraction**: Pull structured data out of any URL via WebExtrator

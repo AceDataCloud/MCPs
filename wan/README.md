@@ -12,6 +12,9 @@ A [Model Context Protocol (MCP)](https://modelcontextprotocol.io) server for AI 
 
 Generate AI videos from text or images directly from Claude, VS Code, or any MCP-compatible client.
 
+<!-- canonical-acquisition -->
+[Start with AceDataCloud](https://platform.acedata.cloud/?utm_source=github&utm_medium=repo&utm_campaign=mcp-wan)
+
 ## Features
 
 - **Text to Video** - Create AI-generated videos from text prompts

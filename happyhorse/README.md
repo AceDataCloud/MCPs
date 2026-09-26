@@ -7,6 +7,9 @@
 Model Context Protocol server for Happy Horse AI video generation and editing through the
 [Ace Data Cloud](https://platform.acedata.cloud/documents/happyhorse) API.
 
+<!-- canonical-acquisition -->
+[Start with AceDataCloud](https://platform.acedata.cloud/?utm_source=github&utm_medium=repo&utm_campaign=mcp-happyhorse)
+
 ## Capabilities
 
 - Text-to-video generation
