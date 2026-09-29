@@ -58,22 +58,15 @@ Versioning uses **CalVer** (`YYYY.M.D.BUILD`), auto-generated at publish time.
 
 ### Sync Pipeline
 
-```
-AceDataCloud/Docs (OpenAPI specs)
-     │  push to main
-     ▼
-dispatch-on-push.yml ──► docs-updated event
-     │
-     ▼
-MCPs/sync-from-docs.yml ──► creates issue for Copilot
-     │                       Copilot compares specs, opens PR
-     ▼                       PR auto-merged
-MCPs/sync-to-repos.yml ──► pushes to standalone repos
-     This is a monorepo with MCP servers in subdirectories (luma/, suno/, midjourney/, flux/, etc.).
-     │
-     ▼
-<Repo>/publish.yml ──► PyPI, VS Code, JetBrains, Smithery, MCP Registry
-```
+PlatformBackend dispatches `platform-contracts-updated` with an exact source
+commit. `sync-from-platformbackend.yml` compiles and verifies that contract,
+resolves affected package directories, and opens a scoped parity issue. Custom
+tool adapters are updated in a normal PR with the existing CI and review gates.
+There is no second Docs-triggered code sync, PR cleanup, polling job, or admin
+merge. Published Docs remain a reference for users.
+
+After a reviewed PR lands, `sync-to-repos.yml` distributes the affected packages
+to their standalone repositories for publishing.
 
 ### Rules
 
