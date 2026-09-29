@@ -83,6 +83,37 @@ MCPs/sync-to-repos.yml ──► pushes to standalone repos
 
 ## Development
 
+### Shared OAuth
+
+The 28 servers listed in [`scripts/sync_oauth.py`](scripts/sync_oauth.py) maintain
+their identical OAuth implementation in [`shared/oauth.py`](shared/oauth.py).
+Edit that source, then run:
+
+```bash
+python3 scripts/sync_oauth.py
+python3 scripts/sync_oauth.py --check
+python3 -m unittest scripts.test_sync_oauth -v
+```
+
+Commit the generated `core/oauth.py` copies together with the shared-source
+change. CI rejects stale or manually changed copies; these per-server changes
+also trigger the existing test, build, and standalone-repository sync matrices.
+The copies are distribution artifacts: each server still runs and builds from
+its own directory, with no new dependency or shared service to deploy.
+
+`acedatacloud` keeps its PlatformToken flow. `digitalhuman` and `happyhorse` keep
+their additional redirect validation and revoked-token tracking. `midjourney`
+keeps its distinct callback/token-exchange implementation. Their local files are
+never generated; the sync script requires every OAuth server to be classified
+explicitly before writing any copies.
+
+To run shared OAuth behavior tests, install `./suno[test]` in an isolated Python
+environment (as the representative self-contained package), then run
+`python -m pytest shared/test_oauth.py` from the repository root. Tests mock all
+HTTP calls and do not require account credentials.
+
+### Server development
+
 ```bash
 cd <server>/
 pip install -e ".[dev]"

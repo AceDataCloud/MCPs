@@ -30,3 +30,4 @@ When the Docs repo changes, compare the OpenAPI specs against the MCP server cod
 - When a public MCP parameter needs a different Python name, use `Field(validation_alias="<public-name>")`; never use `Field(alias=...)` on an `@mcp.tool` parameter because FastMCP dispatches the alias as an invalid Python keyword
 - Add an `mcp.call_tool(...)` test for every new or changed public-to-Python parameter mapping
 - Run `ruff check .` in affected subdirectories to verify linting passes
+- OAuth files marked `Generated from shared/oauth.py` are distribution artifacts. Edit `shared/oauth.py` and run `python3 scripts/sync_oauth.py`; commit all generated changes together. The explicitly classified local OAuth variants are not generated.
