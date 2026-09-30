@@ -76,7 +76,13 @@ async def test_pkce_callback_and_single_use_durable_token(provider, client, resp
     expected = base64.urlsafe_b64encode(hashlib.sha256(verifier.encode()).digest())
     assert query["code_challenge"] == [expected.decode().rstrip("=")]
     assert query["code_challenge_method"] == ["S256"]
-    assert query["scope"] == ["profile platform"]
+    assert set(query["scope"][0].split()) == {
+        "profile:read",
+        "applications:read",
+        "applications:write",
+        "credentials:read",
+        "credentials:write",
+    }
     assert query["redirect_uri"] == ["https://mcp.example.com/oauth/callback"]
 
     exchange = respx_mock.post("https://auth.example.com/oauth2/token").respond(

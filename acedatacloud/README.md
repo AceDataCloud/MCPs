@@ -183,6 +183,34 @@ dry-run preview and performs no HTTP request.
 
 ## Quick Start
 
+### Hosted OAuth
+
+Connect to `https://mcp.acedata.cloud/mcp` with an OAuth-capable MCP client and
+review the account capabilities shown on the authorization page:
+
+| Tools | Requested scopes |
+|---|---|
+| Account profile, email, preferences | `profile:read`, `profile:write`, `email:read` |
+| Subscriptions, balances, deployments | `applications:read`, `applications:write` |
+| API keys | `credentials:read`, `credentials:write` |
+| Usage and spend | `usage:read` |
+| Orders, payment actions, invoices | `orders:read`, `orders:write`, `billing-profile:read` |
+| Auto recharge | `auto-recharge:read`, `auto-recharge:write` |
+| Platform tokens | `platform-tokens:read`, `platform-tokens:write` |
+| Wallet and payment authorization | `coin:read`, `coin:write` |
+| Referrals | `distribution:read` |
+| Managed sites, domains, banners and overrides | `sites:read`, `sites:write` |
+
+Documentation, service/pricing catalogs, API definitions and public model
+catalogs are public reads and require no OAuth scope. Administrative tools
+still require the account's existing backend roles and object/site access.
+
+After consent, the hosted server reuses or creates a durable platform token.
+Tool calls use that token and the account's current permissions; the OAuth
+scope list describes consent and is not a scope ceiling stored on the platform
+token. The token stays valid until revoked. Mutating tools retain their
+`confirm=true` checks.
+
 ### 1. Get a platform token
 
 Create one at [platform.acedata.cloud/console/platform-tokens](https://platform.acedata.cloud/console/platform-tokens).

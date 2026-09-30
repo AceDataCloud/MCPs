@@ -112,12 +112,20 @@ class AceDataCloudOAuthProvider:
 
         callback_url = f"{settings.server_url}/oauth/callback"
 
-        # Only need profile + platform to mint a durable platform token.
+        # Show the account capabilities exposed by this MCP, including token issuance.
+        # Public documentation, services and API catalogs need no OAuth scope.
         auth_params = {
             "client_id": settings.oauth_client_id,
             "redirect_uri": callback_url,
             "response_type": "code",
-            "scope": "profile platform",
+            "scope": (
+                "profile:read profile:write email:read "
+                "applications:read applications:write credentials:read credentials:write "
+                "usage:read orders:read orders:write billing-profile:read "
+                "auto-recharge:read auto-recharge:write "
+                "platform-tokens:read platform-tokens:write "
+                "coin:read coin:write distribution:read sites:read sites:write"
+            ),
             "state": mcp_state,
             "code_challenge": auth_code_challenge,
             "code_challenge_method": "S256",

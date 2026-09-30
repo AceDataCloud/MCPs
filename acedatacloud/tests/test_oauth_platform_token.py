@@ -2,15 +2,71 @@
 
 import base64
 import json
+from urllib.parse import parse_qs, urlparse
 
 import httpx
 import pytest
 import respx
-from mcp.server.auth.provider import RefreshToken, TokenError
+from mcp.server.auth.provider import (
+    AuthorizationParams,
+    OAuthClientInformationFull,
+    RefreshToken,
+    TokenError,
+)
+from pydantic import AnyUrl
 
+from core.config import settings
 from core.oauth import PLATFORM_TOKEN_TAG, AceDataCloudOAuthProvider
 
 API = "https://platform.acedata.cloud/api/v1"
+
+
+@pytest.mark.asyncio
+async def test_authorize_requests_canonical_platform_token_scopes(monkeypatch):
+    monkeypatch.setattr(settings, "server_url", "https://mcp.acedata.cloud")
+    monkeypatch.setattr(settings, "oauth_client_id", "platform-mcp")
+    provider = AceDataCloudOAuthProvider()
+    client = OAuthClientInformationFull(
+        client_id="mcp-client", redirect_uris=[AnyUrl("https://client.example/callback")]
+    )
+    params = AuthorizationParams(
+        state="client-state",
+        scopes=["mcp:access"],
+        code_challenge="client-challenge",
+        redirect_uri=AnyUrl("https://client.example/callback"),
+        redirect_uri_provided_explicitly=True,
+    )
+
+    query = parse_qs(urlparse(await provider.authorize(client, params)).query)
+
+    assert set(query["scope"][0].split()) == {
+        "profile:read",
+        "profile:write",
+        "email:read",
+        "applications:read",
+        "applications:write",
+        "credentials:read",
+        "credentials:write",
+        "usage:read",
+        "orders:read",
+        "orders:write",
+        "billing-profile:read",
+        "auto-recharge:read",
+        "auto-recharge:write",
+        "platform-tokens:read",
+        "platform-tokens:write",
+        "coin:read",
+        "coin:write",
+        "distribution:read",
+        "sites:read",
+        "sites:write",
+    }
+    assert query["client_id"] == ["platform-mcp"]
+    assert query["redirect_uri"] == ["https://mcp.acedata.cloud/oauth/callback"]
+    assert query["code_challenge_method"] == ["S256"]
+    pending = provider._pending_auth[query["state"][0]]
+    assert pending["scopes"] == ["mcp:access"]
+    assert pending["state"] == "client-state"
 
 
 def _make_jwt(claims: dict) -> str:
