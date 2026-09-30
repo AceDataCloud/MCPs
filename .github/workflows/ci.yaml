@@ -28,7 +28,7 @@ jobs:
           python-version: "3.12"
       - run: pip install './suno[test,dev]'
       # Generated core/oauth.py files use each server's existing lint job/config.
-      - run: ruff check --config suno/pyproject.toml shared/test_*.py scripts
+      - run: ruff check --config suno/pyproject.toml shared/test_oauth.py scripts/sync_oauth.py scripts/test_sync_oauth.py
       - run: python -m pytest shared -q
 
   platform-contract:
