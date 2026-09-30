@@ -27,7 +27,7 @@ async def suno_generate_music(
     model: Annotated[
         SunoModel,
         Field(
-            description="Suno model version. 'chirp-v5-5' is the latest and recommended for best quality with 8-minute max duration. 'chirp-v4-5' is a reliable choice for most use cases. Older models (v3, v3-5, v4) have shorter duration limits."
+            description="Suno model version. 'chirp-v6' is the current model; 'chirp-v5-5' remains available for best quality with 8-minute max duration. 'chirp-v4-5' is a reliable choice for most use cases. Older models (v3, v3-5, v4) have shorter duration limits."
         ),
     ] = DEFAULT_MODEL,
     instrumental: Annotated[
@@ -40,6 +40,12 @@ async def suno_generate_music(
         VariationCategory | None,
         Field(
             description="Variation intensity for v5+ models. 'high' for maximum variation, 'normal' for balanced, 'subtle' for minimal changes. Only supported in chirp-v5 and above."
+        ),
+    ] = None,
+    personalization: Annotated[
+        bool | None,
+        Field(
+            description="Apply account music preferences to this generation. Omit to keep the service default; false explicitly disables it."
         ),
     ] = None,
     callback_url: Annotated[
@@ -74,6 +80,9 @@ async def suno_generate_music(
 
     if variation_category:
         payload["variation_category"] = variation_category
+
+    if personalization is not None:
+        payload["personalization"] = personalization
 
     result = await client.generate_audio(**payload)
     return format_audio_result(result)
@@ -151,6 +160,12 @@ async def suno_generate_custom_music(
             description="Target length of the generated track in seconds, an integer between 10 and 360. Only takes effect for the 'generate' action in custom mode with model 'chirp-v5-5'; other combinations return a 400 error. The finished track lands near this value but is not guaranteed to match it exactly."
         ),
     ] = None,
+    personalization: Annotated[
+        bool | None,
+        Field(
+            description="Apply account music preferences to this generation. Omit to keep the service default; false explicitly disables it."
+        ),
+    ] = None,
     callback_url: Annotated[
         str | None,
         Field(
@@ -202,6 +217,9 @@ async def suno_generate_custom_music(
         payload["style_influence"] = style_influence
     if duration is not None:
         payload["duration"] = duration
+
+    if personalization is not None:
+        payload["personalization"] = personalization
 
     result = await client.generate_audio(**payload)
     return format_audio_result(result)

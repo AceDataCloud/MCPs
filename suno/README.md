@@ -614,3 +614,5 @@ MIT License - see [LICENSE](LICENSE) for details.
 ---
 
 Made with love by [AceDataCloud](https://platform.acedata.cloud)
+
+`suno_generate_music` and `suno_generate_custom_music` accept optional `personalization` to apply account music preferences. Set it to `false` to disable the feature explicitly; omit it to retain the service default. This option applies only to new generation.
