@@ -113,3 +113,10 @@ pip install -e ".[dev]"
 pytest --cov=core --cov=tools
 ruff check .
 ```
+
+## Test discovery
+
+Run `python -m pytest shared -q` for shared behavior tests and
+`python3 -m unittest discover -s scripts -p 'test_*.py' -v` for repository
+tooling tests. CI discovers both directories; new tests need no workflow edits.
+Each MCP package keeps its existing `pytest` test-discovery configuration.

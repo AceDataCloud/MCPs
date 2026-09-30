@@ -5,9 +5,9 @@ from __future__ import annotations
 
 import re
 import sys
-import tomllib
 from pathlib import Path
 
+import tomllib
 from mcp_catalog import documentation_target, load_catalog
 
 ROOT = Path(__file__).resolve().parents[1]

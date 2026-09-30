@@ -22,13 +22,12 @@ import argparse
 import json
 import re
 import sys
-import tomllib
 from collections.abc import Iterable
 from dataclasses import dataclass
 from pathlib import Path
 
+import tomllib
 import yaml
-
 from mcp_catalog import documentation_target, load_catalog
 
 ROOT = Path(__file__).resolve().parent.parent
