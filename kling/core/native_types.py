@@ -115,7 +115,10 @@ class CommerceSettings(BaseModel):
     allow_polish: bool | None = None
     bgm_enabled: bool | None = None
     voice_id: str | None = None
-    speech_rate: Literal[0.8, 1, 1.2] | None = None
+    speech_rate: float | None = Field(
+        default=None,
+        description="Supported speech rates: 0.8, 1.0, 1.2; unavailable for product voiceover.",
+    )
     action_prompt: str | None = None
 
 
