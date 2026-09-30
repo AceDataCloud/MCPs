@@ -4,6 +4,7 @@
 from tools import info_tools, lip_sync_tools, motion_tools, task_tools, video_tools
 
 __all__ = [
+    "asset_tools",
     "video_tools",
     "native_tools",
     "motion_tools",
