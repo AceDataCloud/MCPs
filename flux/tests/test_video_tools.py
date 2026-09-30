@@ -11,7 +11,14 @@ from tools.video_tools import flux_edit_video, flux_generate_video, flux_upscale
 @pytest.mark.parametrize(
     "body",
     [
-        {"mode": "t2v", "prompt": "ocean", "generate_audio": False, "draft": False, "async": False},
+        {
+            "mode": "t2v",
+            "model": "flux-3",
+            "prompt": "ocean",
+            "generate_audio": False,
+            "draft": False,
+            "async": False,
+        },
         {
             "mode": "i2v",
             "prompt": "ocean",

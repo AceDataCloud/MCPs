@@ -13,6 +13,7 @@ class VideoRequest(BaseModel):
 
 
 class GenerationRequest(VideoRequest):
+    model: Literal["flux-3"] = "flux-3"
     prompt: str = Field(min_length=1, max_length=4096)
     duration: Annotated[int, Field(ge=5, le=20)] | Literal["auto"] = "auto"
     resolution: Literal["hd", "fhd", "qhd", "uhd"] = "hd"
@@ -40,6 +41,7 @@ class VideoVideoRequest(GenerationRequest):
 
 
 class DraftEnhanceRequest(VideoRequest):
+    model: Literal["flux-3"] = "flux-3"
     mode: Literal["draft_enhance"] = "draft_enhance"
     draft_task_id: str = Field(
         min_length=1,
