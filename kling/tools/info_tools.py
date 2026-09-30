@@ -67,6 +67,11 @@ Lip-sync & Talking-Photo:
 - kling_lip_sync: Synchronize lip movements to match audio or TTS text
 - kling_talking_photo: Animate a portrait photo to match an audio track
 
+Assets:
+- kling_manage_elements: List presets and manage platform element IDs; custom creation is unavailable
+- kling_manage_voices: Create or manage platform voice IDs
+- kling_generate_with_assets: Use owned element or specified-voice references
+
 Task Management:
 - kling_get_task: Check status of a single generation
 - kling_get_tasks_batch: Check status of multiple generations
