@@ -51,7 +51,11 @@ def _validate_video_request(
             return "Error: Turbo supports std/pro and integer durations 3–15."
         if generate_audio is False:
             return "Error: Turbo includes native audio with no off switch."
-        if has_references or end_image_url or any(value is not None for value in (negative_prompt, cfg_scale, camera_control)):
+        if (
+            has_references
+            or end_image_url
+            or any(value is not None for value in (negative_prompt, cfg_scale, camera_control))
+        ):
             return "Error: Turbo does not support Omni references, tail frames, negative_prompt, cfg_scale or camera_control."
     elif model == "kling-o1":
         if duration != 5:
