@@ -183,6 +183,14 @@ dry-run preview and performs no HTTP request.
 
 ## Quick Start
 
+### Hosted OAuth
+
+Connect to `https://mcp.acedata.cloud/mcp` with an OAuth-capable MCP client and
+approve access to your profile and platform tokens. The hosted server reuses or
+creates a durable account-management token; it stays valid until revoked. The
+authorization request uses `profile:read`, `platform-tokens:read`, and
+`platform-tokens:write`.
+
 ### 1. Get a platform token
 
 Create one at [platform.acedata.cloud/console/platform-tokens](https://platform.acedata.cloud/console/platform-tokens).

@@ -100,6 +100,12 @@ keeps its distinct callback/token-exchange implementation. Their local files are
 never generated; the sync script requires every OAuth server to be classified
 explicitly before writing any copies.
 
+Hosted OAuth requests use canonical AuthBackend scopes: API-credential servers
+request `profile:read`, `applications:read`, `applications:write`,
+`credentials:read`, and `credentials:write`. The account-management server
+requests `profile:read`, `platform-tokens:read`, and `platform-tokens:write`;
+its trusted OAuth application must be synced by AuthBackend before rollout.
+
 To run shared OAuth behavior tests, install `./suno[test]` in an isolated Python
 environment (as the representative self-contained package), then run
 `python -m pytest shared/test_oauth.py` from the repository root. Tests mock all

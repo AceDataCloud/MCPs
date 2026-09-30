@@ -75,7 +75,10 @@ class AceDataCloudOAuthProvider:
             "client_id": settings.oauth_client_id,
             "redirect_uri": f"{settings.server_url}/oauth/callback",
             "response_type": "code",
-            "scope": "profile platform",
+            "scope": (
+                "profile:read applications:read applications:write "
+                "credentials:read credentials:write"
+            ),
             "state": mcp_state,
             "code_challenge": challenge,
             "code_challenge_method": "S256",
