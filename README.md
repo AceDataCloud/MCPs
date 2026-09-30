@@ -103,8 +103,9 @@ explicitly before writing any copies.
 Hosted OAuth requests use canonical AuthBackend scopes: API-credential servers
 request `profile:read`, `applications:read`, `applications:write`,
 `credentials:read`, and `credentials:write`. The account-management server
-requests `profile:read`, `platform-tokens:read`, and `platform-tokens:write`;
-its trusted OAuth application must be synced by AuthBackend before rollout.
+requests the account scopes documented in [its authorization table](acedatacloud/README.md#hosted-oauth),
+covering the tools as well as platform-token issuance. Its trusted OAuth
+application must be synced by AuthBackend before rollout.
 
 To run shared OAuth behavior tests, install `./suno[test]` in an isolated Python
 environment (as the representative self-contained package), then run

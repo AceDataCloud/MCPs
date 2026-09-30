@@ -25,7 +25,27 @@ def main() -> None:
         }
 
         expected_scopes = {"profile:read"} | (
-            {"platform-tokens:read", "platform-tokens:write"}
+            {
+                "profile:write",
+                "email:read",
+                "applications:read",
+                "applications:write",
+                "credentials:read",
+                "credentials:write",
+                "usage:read",
+                "orders:read",
+                "orders:write",
+                "billing-profile:read",
+                "auto-recharge:read",
+                "auto-recharge:write",
+                "platform-tokens:read",
+                "platform-tokens:write",
+                "coin:read",
+                "coin:write",
+                "distribution:read",
+                "sites:read",
+                "sites:write",
+            }
             if name == PLATFORM_TOKEN_EXEMPTION
             else {
                 "applications:read",
