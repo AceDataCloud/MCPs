@@ -13,6 +13,7 @@ class VideoRequest(BaseModel):
 
 
 class GenerationRequest(VideoRequest):
+    action: Literal["generate"] = "generate"
     model: Literal["flux-3"] = "flux-3"
     prompt: str = Field(min_length=1, max_length=4096)
     duration: Annotated[int, Field(ge=5, le=20)] | Literal["auto"] = "auto"
@@ -41,21 +42,24 @@ class VideoVideoRequest(GenerationRequest):
 
 
 class DraftEnhanceRequest(VideoRequest):
+    action: Literal["generate"] = "generate"
     model: Literal["flux-3"] = "flux-3"
     mode: Literal["draft_enhance"] = "draft_enhance"
     draft_task_id: str = Field(
         min_length=1,
         description="An owned platform draft task ID; draft availability is temporary.",
     )
-    resolution: Literal["hd", "fhd", "qhd", "uhd"] = "hd"
+    resolution: Literal["hd", "fhd", "qhd", "uhd"] = "fhd"
 
 
 class VideoEditRequest(VideoRequest):
+    action: Literal["edit"] = "edit"
     video: str
     prompt: str = Field(min_length=1, max_length=4096)
 
 
 class VideoUpscaleRequest(VideoRequest):
+    action: Literal["upscale"] = "upscale"
     input_video: str
     prompt: str = ""
     upscale_factor: float = Field(default=2, ge=1.5, le=3)

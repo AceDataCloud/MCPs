@@ -41,6 +41,7 @@ async def test_video_modes_preserve_contract(body):
         assert json.loads(await flux_generate_video(request))["task_id"] == "platform"
     path, payload = call.await_args.args
     assert path == "/flux/videos"
+    assert payload["action"] == "generate"
     for key, value in body.items():
         assert payload[key] == value
     assert "cache_reference" not in payload
@@ -59,19 +60,33 @@ def test_unusable_requests_are_rejected(body):
 
 
 @pytest.mark.parametrize(
-    "tool,payload_model,path",
+    "tool,payload_model,action",
     [
-        (flux_edit_video, VideoEditRequest(video="v", prompt="edit"), "/flux/video-edit"),
+        (flux_edit_video, VideoEditRequest(video="v", prompt="edit"), "edit"),
         (
             flux_upscale_video,
             VideoUpscaleRequest(input_video="v", creativity=0),
-            "/flux/video-upscale",
+            "upscale",
         ),
     ],
 )
-async def test_video_utilities_use_exact_routes(tool, payload_model, path):
+async def test_video_utilities_use_exact_routes(tool, payload_model, action):
     with patch(
         "tools.video_tools.client.request", new=AsyncMock(return_value={"task_id": "platform"})
     ) as call:
         await tool(payload_model)
-    assert call.await_args.args[0] == path
+    assert call.await_args.args[0] == "/flux/videos"
+    assert call.await_args.args[1]["action"] == action
+
+
+@pytest.mark.parametrize(
+    "model,body",
+    [
+        (VideoEditRequest, {"action": "upscale", "video": "v", "prompt": "edit"}),
+        (VideoEditRequest, {"video": "v", "prompt": "edit", "mode": "t2v"}),
+        (VideoUpscaleRequest, {"action": "edit", "input_video": "v"}),
+    ],
+)
+def test_video_tools_reject_mixed_actions(model, body):
+    with pytest.raises(ValidationError):
+        model.model_validate(body)

@@ -20,7 +20,7 @@ async def flux_generate_video(request: FluxVideoRequest) -> str:
 async def flux_edit_video(request: VideoEditRequest) -> str:
     """Edit an existing video using a prompt. Poll flux_get_task for final delivery."""
     result = await client.request(
-        "/flux/video-edit", request.model_dump(mode="json", by_alias=True, exclude_none=True)
+        "/flux/videos", request.model_dump(mode="json", by_alias=True, exclude_none=True)
     )
     return json.dumps(result, ensure_ascii=False, indent=2)
 
@@ -29,6 +29,6 @@ async def flux_edit_video(request: VideoEditRequest) -> str:
 async def flux_upscale_video(request: VideoUpscaleRequest) -> str:
     """Upscale a video. Price depends on actual output MP-seconds and frame rate. Poll flux_get_task."""
     result = await client.request(
-        "/flux/video-upscale", request.model_dump(mode="json", by_alias=True, exclude_none=True)
+        "/flux/videos", request.model_dump(mode="json", by_alias=True, exclude_none=True)
     )
     return json.dumps(result, ensure_ascii=False, indent=2)
