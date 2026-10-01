@@ -24,6 +24,7 @@ async def kling_list_models() -> str:
 | kling-v2-1-master  | V2.1 master          | Enhanced quality and consistency      |
 | kling-v2-5-turbo   | V2.5 turbo           | Faster generation, good quality       |
 | kling-v2-6         | V2.6                 | Latest V2 generation improvements     |
+| kling-v3-turbo     | V3 Turbo, native audio | 720p/1080p, integer 3–15 seconds |
 | kling-v3           | V3                   | Next-gen quality, supports 4K mode    |
 | kling-v3-omni      | V3 Omni              | V3 with expanded capabilities, 4K     |
 | kling-o1           | Kling O1             | Omni image/video reference generation |
@@ -46,6 +47,15 @@ async def kling_list_actions() -> str:
     return """Available Kling Actions and Tools:
 
 Video Generation:
+- kling_generate_turbo_video: Typed Turbo generation; native audio included
+- kling_generate_storyboard: V3/V3 Omni multishot generation
+
+Commerce:
+- kling_apparel_video: Apparel demonstration
+- kling_goods_studio: Product studio video
+- kling_video_commerce: Creator or product voiceover
+- kling_virtual_try_on: Try-on images
+
 - kling_generate_video: Create video from a text prompt (text2video)
 - kling_generate_video_from_image: Create video using reference images (image2video)
 - kling_extend_video: Extend an existing video by its ID

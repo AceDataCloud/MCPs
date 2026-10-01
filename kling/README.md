@@ -474,3 +474,11 @@ MIT License - see [LICENSE](LICENSE) for details.
 ---
 
 Made with love by [AceDataCloud](https://platform.acedata.cloud)
+
+## Turbo, storyboards and commerce
+
+Use `kling_generate_turbo_video` for V3 Turbo (std 720p / pro 1080p, integer 3–15 seconds). Native audio is included and cannot be disabled. Tail frames, standalone negative prompts, cfg_scale, camera controls and Omni references are unsupported.
+
+Use `kling_generate_storyboard` for V3/V3 Omni multishot generation: `shot_type="intelligence"` uses a prompt; `customize` takes 1–6 indexed `multi_prompt` shots whose durations sum to the total. For example: `{"shot_type":"customize","duration":5,"multi_prompt":[{"index":1,"prompt":"Ocean","duration":2},{"index":2,"prompt":"Beach","duration":3}]}`.
+
+Commerce tools are `kling_apparel_video`, `kling_goods_studio`, `kling_video_commerce` and `kling_virtual_try_on`. Each takes a structured `request` with `contents` and typed `settings`. Product studio needs `ref_image` and `goods_title`, with duration 15/30/60. Try-on needs one `product_image` and one `person_image` URL. Creator video needs exactly one avatar and a `speech_script`. These tools return asynchronous task IDs by default; use `kling_get_task`, or set `async=false` in the request. Billing uses the selected resolution/content tier and actual output duration or image count.
