@@ -34,6 +34,23 @@ The tool returns a `task_id` immediately. Query that ID until `status` is `succe
 
 To inspect existing task history without creating a video, call `maestro_list_tasks`. It accepts a `limit` from 1 to 100 and optional exclusive `created_at_min` / `created_at_max` Unix timestamp bounds. The returned `items` honor those filters; `count` remains the authenticated account's total visible task count.
 
+## Product launch inputs
+
+Use `style="apple-launch"` for restrained product-led launches (`scenario=auto|narrated`).
+It preserves original product/logo/UI media; `glass` remains a separate Liquid Glass treatment.
+The style field also accepts a custom hint up to 40 characters.
+
+- `assets`: entries with unique `id`, `role`, public `url`, and optional `name`.
+  Roles: logo, product_image, ui_screenshot, product_video, style_reference, music, reference.
+  Together with legacy `file_urls`, at most 20 inputs. A style reference is not product evidence.
+- `website_url`: a public site captured by the service, without browser cookies or private-page access.
+- `brand`: name, #RRGGBB colors (background/foreground/accent), `font_set="inter-noto-sc"`, and CTA text/URL overrides.
+- `audio_mode`: auto, narration, music-only, or silent. Music/silent cannot pin a narration voice;
+  silent is incompatible with avatar/drama.
+
+Omitted inputs inherit on edit/remix/extend. `assets=[]` and `file_urls=[]` clear their
+respective inputs; explicit null brand/website_url clear those sources. An explicit brand object replaces the previous overrides; copy the original object for a one-field edit. Existing captures are reused rather than recapturing the website.
+
 ## Production contract
 
 Maestro provides the complete capability set on every request: all actions and scenarios, 5–300 seconds, up to 4 languages, and 1080p/30fps output. The base price is 0.60 Credits per delivered second. Avatar uses a 1.15× scenario multiplier, drama uses 1.35×, and each additional delivered language adds 6 Credits. Failed tasks and task polling are free.

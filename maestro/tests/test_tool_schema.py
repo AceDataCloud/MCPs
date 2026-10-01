@@ -12,6 +12,10 @@ async def test_create_video_schema_matches_openapi_body() -> None:
     assert "task_id" not in schema["properties"]
     assert "quality" not in schema["properties"]
     assert schema["properties"]["file_urls"]["anyOf"][0]["maxItems"] == 20
+    assert schema["properties"]["style"]["anyOf"][0]["type"] == "string"
+    assert "enum" not in schema["properties"]["style"]["anyOf"][0]
+    assert "audio_mode" in schema["properties"]
+    assert schema["properties"]["assets"]["anyOf"][0]["maxItems"] == 20
 
 
 async def test_list_tasks_schema_matches_history_contract() -> None:

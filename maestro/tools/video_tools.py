@@ -9,6 +9,9 @@ from core.server import mcp
 from core.types import (
     MaestroAction,
     MaestroAspect,
+    MaestroAsset,
+    MaestroAudioMode,
+    MaestroBrand,
     MaestroScenario,
     MaestroStyle,
     MaestroVoice,
@@ -92,10 +95,12 @@ async def maestro_create_video(
         MaestroStyle | None,
         Field(
             description=(
-                "Visual style preset. Named presets: cinematic, glass, "
+                "Visual style preset or custom hint. apple-launch is a restrained product launch "
+                "style for auto/narrated; glass is Liquid Glass. Other presets: cinematic, "
                 "luxury, swiss, modern, editorial, warm, vibrant, neon, mono, pastel, bold, "
                 "industrial, futuristic, retro. Use 'auto' or omit to let the server decide."
-            )
+            ),
+            max_length=40,
         ),
     ] = None,
     voice: Annotated[
@@ -106,6 +111,32 @@ async def maestro_create_video(
         str | None,
         Field(description="Optional webhook URL called when the task succeeds or fails."),
     ] = None,
+    audio_mode: Annotated[
+        MaestroAudioMode | None,
+        Field(
+            description="auto, narration, music-only, or intentional silent. Omit to inherit when editing; do not pin a voice for music/silent."
+        ),
+    ] = None,
+    assets: Annotated[
+        list[MaestroAsset] | None,
+        Field(
+            description="Role-labeled product/logo/UI/style/music inputs. Combined with file_urls: at most 20. [] clears labeled assets on edit.",
+            max_length=20,
+        ),
+    ] = None,
+    brand: Annotated[
+        MaestroBrand | None,
+        Field(
+            description="Exact brand name/colors/font_set/CTA overrides. Omit to inherit; an object replaces previous overrides and explicit null clears them."
+        ),
+    ] = None,
+    website_url: Annotated[
+        str | None,
+        Field(
+            description="Public website source captured by the service. Omit to reuse the original source; explicit null clears it.",
+            max_length=2048,
+        ),
+    ] = None,
 ) -> str:
     """Create a complete video or iterate on a prior Maestro video.
 
@@ -114,6 +145,8 @@ async def maestro_create_video(
     """
     if action != "generate" and not ref_task_id:
         return f"Error: action={action} requires ref_task_id."
+    if len(assets or []) + len(file_urls or []) > 20:
+        return "Error: assets and file_urls support at most 20 combined items."
 
     payload: dict[str, Any] = {"prompt": prompt, "action": action}
     if ref_task_id:
@@ -128,11 +161,31 @@ async def maestro_create_video(
         payload["style"] = style
     if voice is not None:
         payload["voice"] = voice
-    if file_urls:
+    if file_urls is not None:
         payload["file_urls"] = file_urls
+    if audio_mode is not None:
+        payload["audio_mode"] = audio_mode
+    if assets is not None:
+        payload["assets"] = [asset.model_dump(exclude_none=True) for asset in assets]
+    if _supplied("brand", brand):
+        payload["brand"] = brand.model_dump(exclude_none=True) if brand is not None else None
+    if _supplied("website_url", website_url):
+        payload["website_url"] = website_url
     if langs:
         payload["langs"] = langs
     if callback_url:
         payload["callback_url"] = callback_url
 
     return format_submission_result(await client.create_video(payload))
+
+
+def _supplied(field: str, value: object) -> bool:
+    """Keep explicit JSON null distinct from an omitted optional MCP argument."""
+    if value is not None:
+        return True
+    try:
+        request = mcp.get_context().request_context.request
+        arguments = getattr(getattr(request, "params", None), "arguments", None) or {}
+        return field in arguments
+    except (ValueError, LookupError, AttributeError):
+        return False
