@@ -482,3 +482,9 @@ Use `kling_generate_turbo_video` for V3 Turbo (std 720p / pro 1080p, integer 3�
 Use `kling_generate_storyboard` for V3/V3 Omni multishot generation: `shot_type="intelligence"` uses a prompt; `customize` takes 1–6 indexed `multi_prompt` shots whose durations sum to the total. For example: `{"shot_type":"customize","duration":5,"multi_prompt":[{"index":1,"prompt":"Ocean","duration":2},{"index":2,"prompt":"Beach","duration":3}]}`.
 
 Commerce tools are `kling_apparel_video`, `kling_goods_studio`, `kling_video_commerce` and `kling_virtual_try_on`. Each takes a structured `request` with `contents` and typed `settings`. Product studio needs `ref_image` and `goods_title`, with duration 15/30/60. Try-on needs one `product_image` and one `person_image` URL. Creator video needs exactly one avatar and a `speech_script`. These tools return asynchronous task IDs by default; use `kling_get_task`, or set `async=false` in the request. Billing uses the selected resolution/content tier and actual output duration or image count.
+
+## Owned assets
+
+Use `kling_manage_elements` to list verified presets or manage previously owned platform IDs. Custom element creation is unavailable while pricing is pending. `kling_manage_voices` additionally accepts `action="create"`, `voice_name` and a 5–30 second `voice_url`; creation costs 0.07 Credits.
+
+`kling_generate_with_assets` accepts either `element_list` for V3/V3 Omni/O1 or `voice_list` for V2.6 pro with `generate_audio=true`. Voice prompts use `<<<voice_1>>>`/`<<<voice_2>>>` and specified voices cost 1.68 Credits/second. All IDs are platform IDs; the server checks user/application ownership. Presets cannot be deleted. Poll asynchronous voice creation and video tasks using `kling_get_task`.
