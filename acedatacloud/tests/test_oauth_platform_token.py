@@ -22,7 +22,7 @@ API = "https://platform.acedata.cloud/api/v1"
 
 
 @pytest.mark.asyncio
-async def test_authorize_requests_canonical_platform_token_scopes(monkeypatch):
+async def test_authorize_requests_account_derived_scopes(monkeypatch):
     monkeypatch.setattr(settings, "server_url", "https://mcp.acedata.cloud")
     monkeypatch.setattr(settings, "oauth_client_id", "platform-mcp")
     provider = AceDataCloudOAuthProvider()
@@ -39,28 +39,7 @@ async def test_authorize_requests_canonical_platform_token_scopes(monkeypatch):
 
     query = parse_qs(urlparse(await provider.authorize(client, params)).query)
 
-    assert set(query["scope"][0].split()) == {
-        "profile:read",
-        "profile:write",
-        "email:read",
-        "applications:read",
-        "applications:write",
-        "credentials:read",
-        "credentials:write",
-        "usage:read",
-        "orders:read",
-        "orders:write",
-        "billing-profile:read",
-        "auto-recharge:read",
-        "auto-recharge:write",
-        "platform-tokens:read",
-        "platform-tokens:write",
-        "coin:read",
-        "coin:write",
-        "distribution:read",
-        "sites:read",
-        "sites:write",
-    }
+    assert query["scope"] == ["account"]
     assert query["client_id"] == ["platform-mcp"]
     assert query["redirect_uri"] == ["https://mcp.acedata.cloud/oauth/callback"]
     assert query["code_challenge_method"] == ["S256"]

@@ -24,30 +24,14 @@ def main() -> None:
             if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef))
         }
 
-        expected_scopes = {"profile:read"} | (
-            {
-                "profile:write",
-                "email:read",
-                "applications:read",
-                "applications:write",
-                "credentials:read",
-                "credentials:write",
-                "usage:read",
-                "orders:read",
-                "orders:write",
-                "billing-profile:read",
-                "auto-recharge:read",
-                "auto-recharge:write",
-                "platform-tokens:read",
-                "platform-tokens:write",
-                "coin:read",
-                "coin:write",
-                "distribution:read",
-                "sites:read",
-                "sites:write",
-            }
+        # The account MCP asks AuthBackend to resolve the current account's
+        # delegable scopes for consent. Generation MCPs retain their fixed
+        # Credential bootstrap scopes.
+        expected_scopes = (
+            {"account"}
             if name == PLATFORM_TOKEN_EXEMPTION
             else {
+                "profile:read",
                 "applications:read",
                 "applications:write",
                 "credentials:read",

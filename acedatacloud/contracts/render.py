@@ -40,9 +40,17 @@ def render_readme_reference() -> str:
         items = sorted(groups[title], key=lambda item: item.tool or "")
         if not items:
             continue
-        lines.extend((f"### {title}", "", "| Tool | Description |", "|------|-------------|"))
+        lines.extend(
+            (
+                f"### {title}",
+                "",
+                "| Tool | Description | Required permissions |",
+                "|------|-------------|----------------------|",
+            )
+        )
         for operation in items:
-            lines.append(f"| `{operation.tool}` | {operation.description} |")
+            scopes = ", ".join(operation.required_permissions) or operation.authentication
+            lines.append(f"| `{operation.tool}` | {operation.description} | {scopes} |")
         lines.append("")
     lines.extend(
         (
@@ -76,6 +84,8 @@ def render_usage_guide() -> str:
         lines.append(f"## {title}")
         for operation in items:
             suffix = " Requires confirm=true." if operation.confirm else ""
+            if operation.required_permissions:
+                suffix += " Permissions: " + ", ".join(operation.required_permissions) + "."
             lines.append(f"- {operation.tool} — {operation.description}{suffix}")
         lines.append("")
     lines.extend(
@@ -84,7 +94,7 @@ def render_usage_guide() -> str:
             "- Mutations without confirm=true return a redacted dry-run and make zero HTTP calls.",
             "- Amounts are in Credits, not USD.",
             "- Newly created tokens are disclosed only once at their exact response path.",
-            "- All account queries resolve and scope to the authenticated token subject.",
+            "- Backend account permissions and ownership checks apply to every authenticated operation.",
         )
     )
     return "\n".join(lines)
@@ -104,10 +114,8 @@ def replace_readme_reference(content: str) -> str:
 
 
 def _group(operation: Operation) -> str:
-    if operation.permission == "superuser":
-        return "Admin"
     if operation.risk != "read":
         return "Writes"
-    if operation.permission == "public" or operation.domain in {"Catalog", "Documentation"}:
+    if operation.authentication == "public" or operation.domain in {"Catalog", "Documentation"}:
         return "Catalog & docs"
     return "Account reads"
