@@ -170,7 +170,7 @@ def build_catalog() -> dict[str, CatalogEntry]:
         for operation in OPERATIONS
         if operation.tool in CLIENT_HELPERS
     }
-    native_routes = {}
+    native_routes: dict[tuple[str, str], str] = {}
     for operation in OPERATIONS:
         if operation.tool and operation.tool not in generated:
             native_routes.setdefault((operation.method, _route(operation.path)), operation.tool)

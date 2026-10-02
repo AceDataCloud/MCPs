@@ -39,7 +39,7 @@ def render_readme_reference() -> str:
     """Render the README's generated Tool Reference section."""
     groups: dict[str, list[Operation]] = defaultdict(list)
     for operation in documented_operations():
-        if operation.tool in advertised_tools():
+        if operation.tool is not None and operation.tool in advertised_tools():
             groups[TOOL_CATALOG[operation.tool].category].append(operation)
 
     hidden = Counter(entry.reason for entry in TOOL_CATALOG.values() if not entry.advertised)
@@ -67,7 +67,11 @@ def render_readme_reference() -> str:
         )
     )
     for title in CATEGORIES:
-        counts = Counter(TOOL_CATALOG[operation.tool].audience for operation in groups[title])
+        counts = Counter(
+            TOOL_CATALOG[operation.tool].audience
+            for operation in groups[title]
+            if operation.tool is not None
+        )
         lines.append(
             f"| {title} | {counts['public']} | {counts['account']} | {counts['workspace']} | {counts['admin']} |"
         )
@@ -92,6 +96,7 @@ def render_readme_reference() -> str:
             )
         )
         for operation in items:
+            assert operation.tool is not None
             entry = TOOL_CATALOG[operation.tool]
             scopes = ", ".join(entry.required_permissions) or operation.authentication
             lines.append(
@@ -114,7 +119,7 @@ def render_usage_guide(profile: ToolProfile = "curated", tool_names: set[str] | 
     groups: dict[str, list[Operation]] = defaultdict(list)
     included = advertised_tools(profile) if tool_names is None else tool_names
     for operation in documented_operations():
-        if operation.tool in included:
+        if operation.tool is not None and operation.tool in included:
             groups[TOOL_CATALOG[operation.tool].category].append(operation)
 
     lines = [
@@ -131,6 +136,7 @@ def render_usage_guide(profile: ToolProfile = "curated", tool_names: set[str] | 
             continue
         lines.append(f"## {title}")
         for operation in items:
+            assert operation.tool is not None
             suffix = " Requires confirm=true." if operation.confirm else ""
             entry = TOOL_CATALOG[operation.tool]
             suffix += " Audience: " + entry.audience + "."
