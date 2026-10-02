@@ -158,21 +158,57 @@ async def test_visible_tools_follow_current_account_permissions(monkeypatch):
 
 
 @respx.mock
-async def test_unrelated_admin_grant_does_not_broaden_native_account_queries(monkeypatch):
+@pytest.mark.parametrize("permissions", [[], ["orders:read:any"]])
+@pytest.mark.parametrize(
+    ("user_ids", "allowed"),
+    [
+        (None, True),
+        ([], True),
+        (["current-user"], True),
+        (["current-user", "current-user"], True),
+        (["other-user"], False),
+        (["current-user", "other-user"], False),
+    ],
+)
+async def test_account_query_arrays_respect_owner_and_exact_admin_grants(
+    monkeypatch, permissions, user_ids, allowed
+):
     monkeypatch.setattr(
         "tools.management_tools.get_request_subject",
         AsyncMock(
             return_value={
                 "id": "current-user",
-                "permissions": ["orders:read:any"],
+                "permissions": permissions,
             }
         ),
     )
     route = respx.get(f"{API}/applications/").mock(
         return_value=httpx.Response(200, json={"items": []})
     )
-    await REGISTERED_TOOLS["acedatacloud_list_applications_detail"]()
-    assert route.calls.last.request.url.params["user_id"] == "current-user"
+    arguments = {} if user_ids is None else {"user_id": user_ids}
+    content, _ = await mcp.call_tool("acedatacloud_list_applications_detail", arguments)
+    result = json.loads(content[0].text)
+    if allowed:
+        assert route.call_count == 1
+        assert route.calls.last.request.url.params.get_list("user_id") == ["current-user"]
+    else:
+        assert result["error"] == "permission_denied"
+        assert not respx.calls
+
+
+@respx.mock
+async def test_exact_cross_account_grant_preserves_multi_user_filter(monkeypatch):
+    monkeypatch.setattr(
+        "tools.management_tools.get_request_subject",
+        AsyncMock(return_value={"id": "current-user", "permissions": ["applications:read:any"]}),
+    )
+    route = respx.get(f"{API}/applications/").mock(return_value=httpx.Response(200, json={}))
+    await mcp.call_tool(
+        "acedatacloud_list_applications_detail",
+        {"user_id": ["current-user", "other-user"]},
+    )
+    assert route.call_count == 1
+    assert route.calls.last.request.url.params.get_list("user_id") == ["current-user", "other-user"]
 
 
 @respx.mock
