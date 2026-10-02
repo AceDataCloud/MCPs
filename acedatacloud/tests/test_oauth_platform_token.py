@@ -55,12 +55,14 @@ def _make_jwt(claims: dict) -> str:
 
 @respx.mock
 @pytest.mark.asyncio
-async def test_get_platform_token_reuses_existing_tagged_token():
+@pytest.mark.parametrize("pagination_key", ["items", "results"])
+async def test_get_platform_token_reuses_existing_tagged_token(pagination_key):
     provider = AceDataCloudOAuthProvider()
     jwt = _make_jwt({"user_id": "u1"})
     list_route = respx.get(f"{API}/platform-tokens/").mock(
         return_value=httpx.Response(
-            200, json={"results": [{"token": "platform-existing", "tags": [PLATFORM_TOKEN_TAG]}]}
+            200,
+            json={pagination_key: [{"token": "platform-existing", "tags": [PLATFORM_TOKEN_TAG]}]},
         )
     )
     create_route = respx.post(f"{API}/platform-tokens/").mock(
@@ -109,9 +111,11 @@ async def test_get_platform_token_returns_none_on_create_failure():
 
 def test_extract_token_handles_paginated_and_plain_list():
     provider = AceDataCloudOAuthProvider()
+    assert provider._extract_token({"count": 1, "items": [{"token": "platform-a"}]}) == "platform-a"
     assert provider._extract_token({"results": [{"token": "platform-a"}]}) == "platform-a"
     assert provider._extract_token([{"token": "platform-b"}]) == "platform-b"
     assert provider._extract_token({"results": []}) is None
+    assert provider._extract_token({"count": 0, "items": []}) is None
     assert provider._extract_token([{"no_token": 1}]) is None
 
 
