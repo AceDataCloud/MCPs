@@ -2,6 +2,7 @@
 
 from contracts.render import render_usage_guide
 from core.client import get_request_subject
+from core.config import settings
 from core.exceptions import PlatformError
 from core.server import mcp
 from core.utils import dumps, error_json
@@ -28,4 +29,7 @@ async def acedatacloud_get_usage_guide() -> str:
     Explains the available tools, the write-confirmation model, and the
     authentication requirements.
     """
-    return render_usage_guide()
+    from core.visibility import list_visible_tools
+
+    visible = {tool.name for tool in await list_visible_tools()}
+    return render_usage_guide(settings.tool_profile, visible)
