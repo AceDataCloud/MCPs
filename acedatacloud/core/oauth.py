@@ -382,7 +382,11 @@ class AceDataCloudOAuthProvider:
     @staticmethod
     def _extract_token(payload: object) -> str | None:
         """Pull the first token from a list or paginated platform-tokens response."""
-        results = payload.get("results", payload) if isinstance(payload, dict) else payload
+        results = (
+            payload.get("items", payload.get("results", payload))
+            if isinstance(payload, dict)
+            else payload
+        )
         if isinstance(results, list):
             for item in results:
                 if isinstance(item, dict) and item.get("token"):
