@@ -136,12 +136,16 @@ async def suno_generate_custom_music(
     weirdness: Annotated[
         float | None,
         Field(
+            ge=0,
+            le=1,
             description="Advanced parameter for custom mode. Controls how unusual/experimental the generation is."
         ),
     ] = None,
     style_influence: Annotated[
         float | None,
         Field(
+            ge=0,
+            le=1,
             description="Advanced parameter for custom mode. Controls how strongly the style prompt influences the generation."
         ),
     ] = None,
@@ -303,6 +307,8 @@ async def suno_cover_music(
     audio_weight: Annotated[
         float | None,
         Field(
+            ge=0,
+            le=1,
             description="Advanced parameter for cover operations. Controls how much the original audio influences the cover generation."
         ),
     ] = None,
@@ -668,6 +674,8 @@ async def suno_upload_cover(
     audio_weight: Annotated[
         float | None,
         Field(
+            ge=0,
+            le=1,
             description="Advanced parameter for cover operations. Controls how much the original audio influences the cover generation."
         ),
     ] = None,
@@ -1054,6 +1062,8 @@ async def suno_generate_inspo(
     audio_weight: Annotated[
         float | None,
         Field(
+            ge=0,
+            le=1,
             description="How strongly the reference audios influence the result, 0 to 1. Higher means closer to the references' vibe."
         ),
     ] = None,

@@ -267,3 +267,43 @@ class TestReplaceSectionResultMode:
             )
 
         assert mock_generate.await_args.kwargs["replace_section_result_mode"] == "full_song"
+
+
+class TestOpenApiRangeConstraints:
+    @staticmethod
+    def _numeric_schema(property_schema: dict[str, object]) -> dict[str, object]:
+        any_of = property_schema.get("anyOf")
+        if isinstance(any_of, list):
+            for item in any_of:
+                if isinstance(item, dict) and item.get("type") == "number":
+                    return item
+        return property_schema
+
+    @pytest.mark.asyncio
+    async def test_custom_music_ranges_match_openapi(self) -> None:
+        tools = {tool.name: tool for tool in await mcp.list_tools()}
+        properties = tools["suno_generate_custom_music"].inputSchema["properties"]
+        weirdness = self._numeric_schema(properties["weirdness"])
+        style_influence = self._numeric_schema(properties["style_influence"])
+
+        assert weirdness["minimum"] == 0
+        assert weirdness["maximum"] == 1
+        assert style_influence["minimum"] == 0
+        assert style_influence["maximum"] == 1
+
+    @pytest.mark.asyncio
+    async def test_audio_weight_ranges_match_openapi(self) -> None:
+        tools = {tool.name: tool for tool in await mcp.list_tools()}
+        cover_props = tools["suno_cover_music"].inputSchema["properties"]
+        upload_cover_props = tools["suno_upload_cover"].inputSchema["properties"]
+        inspo_props = tools["suno_generate_inspo"].inputSchema["properties"]
+        cover_audio_weight = self._numeric_schema(cover_props["audio_weight"])
+        upload_cover_audio_weight = self._numeric_schema(upload_cover_props["audio_weight"])
+        inspo_audio_weight = self._numeric_schema(inspo_props["audio_weight"])
+
+        assert cover_audio_weight["minimum"] == 0
+        assert cover_audio_weight["maximum"] == 1
+        assert upload_cover_audio_weight["minimum"] == 0
+        assert upload_cover_audio_weight["maximum"] == 1
+        assert inspo_audio_weight["minimum"] == 0
+        assert inspo_audio_weight["maximum"] == 1
