@@ -3,13 +3,40 @@
 from mcp.types import Tool
 
 from contracts.platform_operations import OPERATIONS
+from contracts.tool_catalog import CROSS_ACCOUNT_TOOLS, INFO_TOOL, TOOL_CATALOG, advertised_tools
 from core.client import client, get_request_api_token, get_request_subject
+from core.config import settings
 from core.exceptions import PlatformError
 from core.server import mcp
 
 
+def _describe(tool: Tool) -> Tool:
+    entry = TOOL_CATALOG.get(tool.name)
+    if entry is None:
+        return tool
+    description = tool.description or ""
+    if tool.name in CROSS_ACCOUNT_TOOLS:
+        description += (
+            "\nAdministrative cross-account collection query. Requires "
+            + CROSS_ACCOUNT_TOOLS[tool.name]
+            + ". Use the native account tool for your own data."
+        )
+    return tool.model_copy(
+        update={
+            "description": description,
+            "meta": {
+                **(tool.meta or {}),
+                "acedatacloud/category": entry.category,
+                "acedatacloud/audience": entry.audience,
+            },
+        }
+    )
+
+
 async def list_visible_tools() -> list[Tool]:
     tools = await mcp.list_tools()
+    advertised = advertised_tools(settings.tool_profile)
+    tools = [_describe(tool) for tool in tools if tool.name in advertised]
     if not (get_request_api_token() or client.api_token):
         return tools  # Local schema/installation inspection without a configured credential.
     try:
@@ -22,10 +49,13 @@ async def list_visible_tools() -> list[Tool]:
     for tool in tools:
         operation = by_tool.get(tool.name)
         if (
-            operation is None
-            or operation.authentication == "public"
-            or subject.get("id")
-            and set(operation.required_permissions).issubset(granted)
+            tool.name == INFO_TOOL
+            or operation is not None
+            and (
+                operation.authentication == "public"
+                or subject.get("id")
+                and set(TOOL_CATALOG[tool.name].required_permissions).issubset(granted)
+            )
         ):
             visible.append(tool)
     return visible

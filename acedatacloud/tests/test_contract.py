@@ -13,6 +13,7 @@ from contracts.render import (
     render_usage_guide,
     replace_readme_reference,
 )
+from contracts.tool_catalog import advertised_tools
 from core.server import mcp
 from tools.info_tools import acedatacloud_get_usage_guide
 
@@ -58,11 +59,12 @@ async def test_tools_list_schema_snapshot():
 
 
 @pytest.mark.asyncio
-async def test_usage_guide_is_contract_generated():
+async def test_usage_guide_is_contract_generated(monkeypatch):
+    monkeypatch.setattr("core.visibility.client.api_token", "")
     assert await acedatacloud_get_usage_guide() == render_usage_guide()
     guide = render_usage_guide()
     guide_lines = guide.splitlines()
-    for tool in registered_contract_tools() - {INFO_TOOL}:
+    for tool in advertised_tools() - {INFO_TOOL}:
         assert sum(line.startswith(f"- {tool} —") for line in guide_lines) == 1
 
 

@@ -3,8 +3,11 @@
 import os
 from dataclasses import dataclass, field
 from pathlib import Path
+from typing import cast
 
 from dotenv import load_dotenv
+
+from contracts.tool_catalog import ToolProfile
 
 # Load .env file from project root
 _env_path = Path(__file__).parent.parent / ".env"
@@ -32,6 +35,9 @@ class Settings:
     server_name: str = field(default_factory=lambda: os.getenv("MCP_SERVER_NAME", "acedatacloud"))
     transport: str = field(default_factory=lambda: os.getenv("MCP_TRANSPORT", "stdio"))
     log_level: str = field(default_factory=lambda: os.getenv("LOG_LEVEL", "INFO"))
+    tool_profile: ToolProfile = field(
+        default_factory=lambda: cast(ToolProfile, os.getenv("ACEDATACLOUD_TOOL_PROFILE", "curated"))
+    )
 
     # OAuth / remote-auth configuration. When MCP_SERVER_URL is set, the HTTP
     # transport enables OAuth 2.1 (DCR) and delegates user login to
@@ -47,6 +53,10 @@ class Settings:
     oauth_client_id: str = field(
         default_factory=lambda: os.getenv("ACEDATACLOUD_OAUTH_CLIENT_ID", "")
     )
+
+    def __post_init__(self) -> None:
+        if self.tool_profile not in {"curated", "full"}:
+            raise ValueError("ACEDATACLOUD_TOOL_PROFILE must be curated or full")
 
     def validate(self) -> None:
         """Validate required settings."""

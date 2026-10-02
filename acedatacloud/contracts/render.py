@@ -1,12 +1,18 @@
 """Render public tool inventories from the operation coverage contract."""
 
-from collections import defaultdict
+from collections import Counter, defaultdict
 
 from contracts.platform_operations import OPERATIONS, Operation
+from contracts.tool_catalog import (
+    CATEGORIES,
+    INFO_TOOL,
+    TOOL_CATALOG,
+    ToolProfile,
+    advertised_tools,
+)
 
 README_START = "<!-- BEGIN GENERATED TOOL REFERENCE -->"
 README_END = "<!-- END GENERATED TOOL REFERENCE -->"
-INFO_TOOL = "acedatacloud_get_usage_guide"
 INFO_DESCRIPTION = "Explain authentication, safety, and the available management tools."
 
 
@@ -33,10 +39,51 @@ def render_readme_reference() -> str:
     """Render the README's generated Tool Reference section."""
     groups: dict[str, list[Operation]] = defaultdict(list)
     for operation in documented_operations():
-        groups[_group(operation)].append(operation)
+        if operation.tool is not None and operation.tool in advertised_tools():
+            groups[TOOL_CATALOG[operation.tool].category].append(operation)
 
-    lines = [README_START, "## Tool Reference", ""]
-    for title in ("Account reads", "Catalog & docs", "Writes", "Admin"):
+    hidden = Counter(entry.reason for entry in TOOL_CATALOG.values() if not entry.advertised)
+    lines = [
+        README_START,
+        "## Tool Reference",
+        "",
+        f"The default curated catalog advertises **{len(advertised_tools())} tools** before",
+        "account-permission filtering, including `acedatacloud_get_usage_guide`.",
+        f"The complete compatibility registry retains **{len(registered_contract_tools())} tools**.",
+        "Discovery is grouped by business task, not by one tool per REST endpoint.",
+        "",
+        "| Not advertised by default | Count |",
+        "|---------------------------|-------|",
+    ]
+    for reason, count in sorted(hidden.items()):
+        lines.append(f"| {reason} | {count} |")
+    lines.extend(
+        (
+            "",
+            "### Categories",
+            "",
+            "| Category | Public | Account | Workspace | Admin |",
+            "|----------|--------|---------|-----------|-------|",
+        )
+    )
+    for title in CATEGORIES:
+        counts = Counter(
+            TOOL_CATALOG[operation.tool].audience
+            for operation in groups[title]
+            if operation.tool is not None
+        )
+        lines.append(
+            f"| {title} | {counts['public']} | {counts['account']} | {counts['workspace']} | {counts['admin']} |"
+        )
+    lines.extend(
+        (
+            "",
+            "Workspace tools cover delegated editing and site/webhook management.",
+            "Admin tools require their exact permission grants, not just an admin label.",
+            "",
+        )
+    )
+    for title in CATEGORIES:
         items = sorted(groups[title], key=lambda item: item.tool or "")
         if not items:
             continue
@@ -44,13 +91,17 @@ def render_readme_reference() -> str:
             (
                 f"### {title}",
                 "",
-                "| Tool | Description | Required permissions |",
-                "|------|-------------|----------------------|",
+                "| Tool | Description | Audience | Required permissions |",
+                "|------|-------------|----------|----------------------|",
             )
         )
         for operation in items:
-            scopes = ", ".join(operation.required_permissions) or operation.authentication
-            lines.append(f"| `{operation.tool}` | {operation.description} | {scopes} |")
+            assert operation.tool is not None
+            entry = TOOL_CATALOG[operation.tool]
+            scopes = ", ".join(entry.required_permissions) or operation.authentication
+            lines.append(
+                f"| `{operation.tool}` | {operation.description} | {entry.audience} | {scopes} |"
+            )
         lines.append("")
     lines.extend(
         (
@@ -63,11 +114,13 @@ def render_readme_reference() -> str:
     return "\n".join(lines)
 
 
-def render_usage_guide() -> str:
+def render_usage_guide(profile: ToolProfile = "curated", tool_names: set[str] | None = None) -> str:
     """Render the runtime usage guide from the same contract as the README."""
     groups: dict[str, list[Operation]] = defaultdict(list)
+    included = advertised_tools(profile) if tool_names is None else tool_names
     for operation in documented_operations():
-        groups[_group(operation)].append(operation)
+        if operation.tool is not None and operation.tool in included:
+            groups[TOOL_CATALOG[operation.tool].category].append(operation)
 
     lines = [
         "# AceDataCloud Platform Management — Tool Guide",
@@ -77,15 +130,18 @@ def render_usage_guide() -> str:
         "receive the appropriate platform credential automatically.",
         "",
     ]
-    for title in ("Account reads", "Catalog & docs", "Writes", "Admin"):
+    for title in CATEGORIES:
         items = sorted(groups[title], key=lambda item: item.tool or "")
         if not items:
             continue
         lines.append(f"## {title}")
         for operation in items:
+            assert operation.tool is not None
             suffix = " Requires confirm=true." if operation.confirm else ""
-            if operation.required_permissions:
-                suffix += " Permissions: " + ", ".join(operation.required_permissions) + "."
+            entry = TOOL_CATALOG[operation.tool]
+            suffix += " Audience: " + entry.audience + "."
+            if entry.required_permissions:
+                suffix += " Permissions: " + ", ".join(entry.required_permissions) + "."
             lines.append(f"- {operation.tool} — {operation.description}{suffix}")
         lines.append("")
     lines.extend(
@@ -111,11 +167,3 @@ def replace_readme_reference(content: str) -> str:
     start = content.index("## Tool Reference")
     end = content.index("## Quick Start", start)
     return f"{content[:start]}{generated}\n\n{content[end:]}"
-
-
-def _group(operation: Operation) -> str:
-    if operation.risk != "read":
-        return "Writes"
-    if operation.authentication == "public" or operation.domain in {"Catalog", "Documentation"}:
-        return "Catalog & docs"
-    return "Account reads"
