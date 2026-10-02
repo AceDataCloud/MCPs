@@ -549,6 +549,103 @@
     }
   },
   {
+    "name": "acedatacloud_create_blog_draft",
+    "inputSchema": {
+      "properties": {
+        "slug": {
+          "pattern": "^[a-zA-Z0-9_-]{1,200}$",
+          "title": "Slug",
+          "type": "string"
+        },
+        "title": {
+          "maxLength": 255,
+          "minLength": 1,
+          "title": "Title",
+          "type": "string"
+        },
+        "summary": {
+          "minLength": 1,
+          "title": "Summary",
+          "type": "string"
+        },
+        "content": {
+          "description": "Article source in Markdown.",
+          "minLength": 1,
+          "title": "Content",
+          "type": "string"
+        },
+        "source_lang": {
+          "default": "zh-cn",
+          "enum": [
+            "zh-cn",
+            "en"
+          ],
+          "title": "Source Lang",
+          "type": "string"
+        },
+        "category": {
+          "default": "model-news",
+          "enum": [
+            "model-news",
+            "engineering",
+            "comparison",
+            "product"
+          ],
+          "title": "Category",
+          "type": "string"
+        },
+        "author": {
+          "default": "Ace Data Cloud",
+          "maxLength": 120,
+          "title": "Author",
+          "type": "string"
+        },
+        "cover_url": {
+          "default": "",
+          "description": "HTTPS cover URL; empty for no cover.",
+          "title": "Cover Url",
+          "type": "string"
+        },
+        "cover_alt": {
+          "default": "",
+          "description": "Required with a cover.",
+          "maxLength": 255,
+          "title": "Cover Alt",
+          "type": "string"
+        },
+        "tags": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Tags"
+        },
+        "confirm": {
+          "default": false,
+          "description": "True to save the reviewed draft.",
+          "title": "Confirm",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "slug",
+        "title",
+        "summary",
+        "content"
+      ],
+      "title": "acedatacloud_create_blog_draftArguments",
+      "type": "object"
+    }
+  },
+  {
     "name": "acedatacloud_create_credential",
     "inputSchema": {
       "properties": {
@@ -1353,6 +1450,29 @@
     }
   },
   {
+    "name": "acedatacloud_delete_blog_post",
+    "inputSchema": {
+      "properties": {
+        "blog_id": {
+          "format": "uuid",
+          "title": "Blog Id",
+          "type": "string"
+        },
+        "confirm": {
+          "default": false,
+          "description": "True to permanently delete the reviewed post.",
+          "title": "Confirm",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "blog_id"
+      ],
+      "title": "acedatacloud_delete_blog_postArguments",
+      "type": "object"
+    }
+  },
+  {
     "name": "acedatacloud_delete_credential",
     "inputSchema": {
       "properties": {
@@ -2040,6 +2160,55 @@
         }
       },
       "title": "acedatacloud_get_balanceArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "acedatacloud_get_blog_draft",
+    "inputSchema": {
+      "properties": {
+        "blog_id": {
+          "description": "Blog UUID from the editorial list.",
+          "format": "uuid",
+          "title": "Blog Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "blog_id"
+      ],
+      "title": "acedatacloud_get_blog_draftArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "acedatacloud_get_blog_post",
+    "inputSchema": {
+      "properties": {
+        "slug": {
+          "description": "Public blog slug.",
+          "pattern": "^[a-zA-Z0-9_-]+$",
+          "title": "Slug",
+          "type": "string"
+        },
+        "lang": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Requested translation language.",
+          "title": "Lang"
+        }
+      },
+      "required": [
+        "slug"
+      ],
+      "title": "acedatacloud_get_blog_postArguments",
       "type": "object"
     }
   },
@@ -3164,6 +3333,127 @@
     }
   },
   {
+    "name": "acedatacloud_list_blog_drafts",
+    "inputSchema": {
+      "properties": {
+        "query": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Search title or slug.",
+          "title": "Query"
+        },
+        "category": {
+          "anyOf": [
+            {
+              "enum": [
+                "model-news",
+                "engineering",
+                "comparison",
+                "product"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Optional category filter.",
+          "title": "Category"
+        },
+        "published": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": false,
+          "description": "False for drafts, true for published, null for both.",
+          "title": "Published"
+        },
+        "limit": {
+          "default": 20,
+          "maximum": 100,
+          "minimum": 1,
+          "title": "Limit",
+          "type": "integer"
+        },
+        "offset": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Offset",
+          "type": "integer"
+        }
+      },
+      "title": "acedatacloud_list_blog_draftsArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "acedatacloud_list_blog_posts",
+    "inputSchema": {
+      "properties": {
+        "category": {
+          "anyOf": [
+            {
+              "enum": [
+                "model-news",
+                "engineering",
+                "comparison",
+                "product"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Optional category filter.",
+          "title": "Category"
+        },
+        "lang": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Requested translation language.",
+          "title": "Lang"
+        },
+        "limit": {
+          "default": 20,
+          "maximum": 100,
+          "minimum": 1,
+          "title": "Limit",
+          "type": "integer"
+        },
+        "offset": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Offset",
+          "type": "integer"
+        }
+      },
+      "title": "acedatacloud_list_blog_postsArguments",
+      "type": "object"
+    }
+  },
+  {
     "name": "acedatacloud_list_coin_info",
     "inputSchema": {
       "properties": {},
@@ -4267,6 +4557,42 @@
     }
   },
   {
+    "name": "acedatacloud_publish_blog_post",
+    "inputSchema": {
+      "properties": {
+        "blog_id": {
+          "format": "uuid",
+          "title": "Blog Id",
+          "type": "string"
+        },
+        "publish_at": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Optional ISO 8601 publication time with timezone; omit to publish now.",
+          "title": "Publish At"
+        },
+        "confirm": {
+          "default": false,
+          "description": "True after approval of public publication.",
+          "title": "Confirm",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "blog_id"
+      ],
+      "title": "acedatacloud_publish_blog_postArguments",
+      "type": "object"
+    }
+  },
+  {
     "name": "acedatacloud_quote_auto_recharge",
     "inputSchema": {
       "properties": {
@@ -4711,6 +5037,29 @@
     }
   },
   {
+    "name": "acedatacloud_unpublish_blog_post",
+    "inputSchema": {
+      "properties": {
+        "blog_id": {
+          "format": "uuid",
+          "title": "Blog Id",
+          "type": "string"
+        },
+        "confirm": {
+          "default": false,
+          "description": "True to remove the post from public view.",
+          "title": "Confirm",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "blog_id"
+      ],
+      "title": "acedatacloud_unpublish_blog_postArguments",
+      "type": "object"
+    }
+  },
+  {
     "name": "acedatacloud_update_application_balance_policy",
     "inputSchema": {
       "properties": {
@@ -4799,6 +5148,170 @@
         "config_id"
       ],
       "title": "acedatacloud_update_auto_rechargeArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "acedatacloud_update_blog_post",
+    "inputSchema": {
+      "properties": {
+        "blog_id": {
+          "format": "uuid",
+          "title": "Blog Id",
+          "type": "string"
+        },
+        "slug": {
+          "anyOf": [
+            {
+              "pattern": "^[a-zA-Z0-9_-]{1,200}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Slug"
+        },
+        "title": {
+          "anyOf": [
+            {
+              "maxLength": 255,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Title"
+        },
+        "summary": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Summary"
+        },
+        "content": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Markdown source.",
+          "title": "Content"
+        },
+        "source_lang": {
+          "anyOf": [
+            {
+              "enum": [
+                "zh-cn",
+                "en"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source Lang"
+        },
+        "category": {
+          "anyOf": [
+            {
+              "enum": [
+                "model-news",
+                "engineering",
+                "comparison",
+                "product"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Category"
+        },
+        "author": {
+          "anyOf": [
+            {
+              "maxLength": 120,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Author"
+        },
+        "cover_url": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Cover Url"
+        },
+        "cover_alt": {
+          "anyOf": [
+            {
+              "maxLength": 255,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Cover Alt"
+        },
+        "tags": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Tags"
+        },
+        "confirm": {
+          "default": false,
+          "description": "True to apply the reviewed changes.",
+          "title": "Confirm",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "blog_id"
+      ],
+      "title": "acedatacloud_update_blog_postArguments",
       "type": "object"
     }
   },

@@ -112,20 +112,14 @@ class AceDataCloudOAuthProvider:
 
         callback_url = f"{settings.server_url}/oauth/callback"
 
-        # Show the account capabilities exposed by this MCP, including token issuance.
-        # Public documentation, services and API catalogs need no OAuth scope.
+        # Auth resolves the signed-in account's delegable permissions for consent.
+        # MCP transport scope remains mcp:access; backend account permissions
+        # are enforced by the platform token on every request.
         auth_params = {
             "client_id": settings.oauth_client_id,
             "redirect_uri": callback_url,
             "response_type": "code",
-            "scope": (
-                "profile:read profile:write email:read "
-                "applications:read applications:write credentials:read credentials:write "
-                "usage:read orders:read orders:write billing-profile:read "
-                "auto-recharge:read auto-recharge:write "
-                "platform-tokens:read platform-tokens:write "
-                "coin:read coin:write distribution:read sites:read sites:write"
-            ),
+            "scope": "account",
             "state": mcp_state,
             "code_challenge": auth_code_challenge,
             "code_challenge_method": "S256",

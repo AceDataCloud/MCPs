@@ -3,6 +3,7 @@
 # Import all tool modules so their @mcp.tool() decorators register with the server.
 from tools import (
     admin_tools,
+    blog_tools,
     catalog_tools,
     docs_tools,
     info_tools,
@@ -16,6 +17,7 @@ __all__ = [
     "read_tools",
     "write_tools",
     "admin_tools",
+    "blog_tools",
     "info_tools",
     "catalog_tools",
     "docs_tools",

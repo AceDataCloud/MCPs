@@ -12,9 +12,9 @@ A [Model Context Protocol (MCP)](https://modelcontextprotocol.io) server for
 the [platform management API](https://platform.acedata.cloud/documents/platform-token).
 
 Check your balance, look up usage and spend, manage API keys, list services,
-create and pay recharge orders, manage platform tokens, list models, and (for
-admins) publish announcements — directly from Claude, VS Code, or any
-MCP-compatible client.
+create and pay recharge orders, manage platform tokens, list models, and use
+account permissions to edit and publish blogs or announcements — directly from
+Claude, VS Code, Studio, or any MCP-compatible client.
 
 > This is the **management / console** API (`platform.acedata.cloud`) — different
 > from the data-generation MCP servers (Suno, Midjourney, …) that call
@@ -35,6 +35,7 @@ MCP-compatible client.
 | `acedatacloud_get_application` | Get one application and service details. |
 | `acedatacloud_get_auto_recharge` | Get auto recharge. |
 | `acedatacloud_get_balance` | Summarize remaining Credits. |
+| `acedatacloud_get_blog_draft` | Read full editable blog source. |
 | `acedatacloud_get_credential` | Get one credential with secrets masked. |
 | `acedatacloud_get_deployment_events` | Get deployment scheduling events. |
 | `acedatacloud_get_deployment_logs` | Get bounded deployment logs. |
@@ -65,6 +66,7 @@ MCP-compatible client.
 | `acedatacloud_list_applications` | List account subscriptions. |
 | `acedatacloud_list_auto_recharges` | List auto-recharge configs. |
 | `acedatacloud_list_billing_profiles` | List billing profiles. |
+| `acedatacloud_list_blog_drafts` | List blog drafts and published editorial records. |
 | `acedatacloud_list_coin_info` | Coin Info |
 | `acedatacloud_list_credentials` | List API credentials with secrets masked. |
 | `acedatacloud_list_distribution_levels` | Distribution Levels |
@@ -93,12 +95,14 @@ MCP-compatible client.
 | Tool | Description |
 |------|-------------|
 | `acedatacloud_get_api_spec` | Get one API's OpenAPI definition by path. |
+| `acedatacloud_get_blog_post` | Read a localized published blog post. |
 | `acedatacloud_get_doc` | Fetch one documentation page by UUID. |
 | `acedatacloud_get_model` | Find models by ID or name. |
 | `acedatacloud_get_pricing` | Get one service's display pricing. |
 | `acedatacloud_get_service` | Get one service by UUID or alias. |
 | `acedatacloud_list_announcements` | List published announcements. |
 | `acedatacloud_list_apis` | List API endpoints and billing metadata. |
+| `acedatacloud_list_blog_posts` | List published blog posts. |
 | `acedatacloud_list_datasets` | List downloadable datasets. |
 | `acedatacloud_list_docs` | Browse documentation pages. |
 | `acedatacloud_list_integrations` | List platform integrations. |
@@ -121,6 +125,7 @@ MCP-compatible client.
 | `acedatacloud_create_access_request` | Access Create |
 | `acedatacloud_create_application` | Create an application subscription. |
 | `acedatacloud_create_auto_recharge` | Create auto recharge. |
+| `acedatacloud_create_blog_draft` | Save an unpublished blog draft. |
 | `acedatacloud_create_credential` | Create an API credential. |
 | `acedatacloud_create_order` | Create a recharge order. |
 | `acedatacloud_create_platform_token` | Create a management token. |
@@ -131,6 +136,7 @@ MCP-compatible client.
 | `acedatacloud_create_site_service_override` | Site Service Create |
 | `acedatacloud_create_wallet_challenge` | Coin Wallet Challenge |
 | `acedatacloud_delete_auto_recharge` | Delete auto recharge. |
+| `acedatacloud_delete_blog_post` | Delete a blog and its translations. |
 | `acedatacloud_delete_credential` | Revoke an API credential. |
 | `acedatacloud_delete_platform_token` | Revoke a management token. |
 | `acedatacloud_delete_site_banner` | Site Banners Delete |
@@ -147,6 +153,7 @@ MCP-compatible client.
 | `acedatacloud_initialize_distribution` | Distribution Initialize |
 | `acedatacloud_initialize_site` | Sites Initialize |
 | `acedatacloud_pay_order` | Create an order payment session. |
+| `acedatacloud_publish_blog_post` | Publish now or schedule public visibility. |
 | `acedatacloud_refresh_coin_info` | Coin Refresh |
 | `acedatacloud_refresh_order` | Refresh payment state. |
 | `acedatacloud_report_content` | Reports Create |
@@ -157,8 +164,10 @@ MCP-compatible client.
 | `acedatacloud_setup_x402_authorization` | X402 Setup |
 | `acedatacloud_submit_survey` | Surveys Submit |
 | `acedatacloud_teardown_deployment` | Destroy a workload and delete its application. |
+| `acedatacloud_unpublish_blog_post` | Return a public blog post to draft. |
 | `acedatacloud_update_application_balance_policy` | Update global-balance fallback policy. |
 | `acedatacloud_update_auto_recharge` | Update auto recharge. |
+| `acedatacloud_update_blog_post` | Edit draft or published blog source. |
 | `acedatacloud_update_credential` | Update credential limits and API scope. |
 | `acedatacloud_update_email_preference` | Preferences Update |
 | `acedatacloud_update_site` | Sites Update |
@@ -257,6 +266,9 @@ pip install mcp-acedatacloud
 
 ## Example prompts
 
+- "Draft a Chinese product blog in Markdown, show it for review, then save it."
+- "Read blog draft `<id>` and publish it after I approve the content."
+- "Schedule blog `<id>` for 2026-10-10T09:00:00+08:00."
 - "How many credits do I have left?"
 - "What did I spend on Suno in the last 7 days?"
 - "List my API keys and show which ones have a spend cap."
@@ -288,7 +300,13 @@ mcp-acedatacloud --transport http --port 8000
 - Newly created credential/platform tokens are returned in full **only once** —
   store them immediately.
 - Credential rotation = delete + recreate (no in-place rotate endpoint).
-- Announcement tools require a **superuser** token.
+- Blog editorial tools use `blog:read`, `blog:write`, and `blog:publish` permissions.
+  Direct grants and permission groups work without making the account a superuser.
+- Hosted OAuth resolves the signed-in account's delegable permissions dynamically.
+  The consent page displays the actual scopes; accounts without blog grants receive none.
+  Reconnect OAuth to review newly granted permissions. Existing durable platform tokens
+  follow current account permissions, including revocations, on each request.
+- Announcement tools require the corresponding account permission.
 
 ## Documentation
 
