@@ -143,12 +143,21 @@ def build_tool(spec: dict[str, Any]) -> Any:
                 # An unrelated administrative grant must never broaden this query.
                 cross_account = owner_collections[spec["path"]]
                 if not cross_account or cross_account not in granted:
-                    if query.get("user_id") not in {None, str(subject["id"])}:
+                    owner_id = str(subject["id"])
+                    requested_users = query.get("user_id")
+                    if requested_users is not None and any(
+                        user_id != owner_id
+                        for user_id in (
+                            requested_users
+                            if isinstance(requested_users, list)
+                            else [requested_users]
+                        )
+                    ):
                         return error_json(
                             "permission_denied",
                             "A cross-account query requires the matching account permission",
                         )
-                    query["user_id"] = str(subject["id"])
+                    query["user_id"] = owner_id
             if spec.get("encoding") == "multipart":
                 try:
                     content = base64.b64decode(body["content_base64"], validate=True)
