@@ -7,6 +7,7 @@ from tools import (
     catalog_tools,
     docs_tools,
     info_tools,
+    management_tools,
     model_tools,
     read_tools,
     user,
@@ -22,5 +23,9 @@ __all__ = [
     "catalog_tools",
     "docs_tools",
     "model_tools",
+    "management_tools",
     "user",
 ]
+
+# Install visibility after all decorators/fixed-route registrations are loaded.
+from core import visibility  # noqa: E402,F401

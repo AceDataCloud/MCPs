@@ -1,6 +1,6 @@
 """Admin-only tools for the platform management API.
 
-These require a SUPERUSER platform token; a normal token gets 403. Like all
+The backend enforces announcement permissions and site ownership. Like all
 mutating tools, they require an explicit ``confirm=True``.
 """
 
@@ -27,7 +27,7 @@ async def acedatacloud_create_announcement(
     ] = True,
     confirm: Annotated[bool, Field(description="Must be true to actually publish.")] = False,
 ) -> str:
-    """Publish a platform announcement (SUPERUSER token only).
+    """Publish a platform announcement with announcements:write permission.
 
     The Chinese content is stored as the source-of-truth and other locales are
     auto-translated by a background job. Requires ``confirm=true``.
