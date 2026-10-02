@@ -171,7 +171,7 @@ async def test_unrelated_admin_grant_does_not_broaden_native_account_queries(mon
     route = respx.get(f"{API}/applications/").mock(
         return_value=httpx.Response(200, json={"items": []})
     )
-    await REGISTERED_TOOLS["acedatacloud_list_applications_detail"](user_id="other-user")
+    await REGISTERED_TOOLS["acedatacloud_list_applications_detail"]()
     assert route.calls.last.request.url.params["user_id"] == "current-user"
 
 
