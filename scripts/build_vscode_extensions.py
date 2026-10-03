@@ -361,7 +361,7 @@ def render_readme(svc: Service, tools: list[tuple[str, str]]) -> str:
 
     native_oauth = (
         f"For native VS Code MCP OAuth, run **MCP: Add Server → HTTP**, add `{svc.hosted_url}`, "
-        f"then sign in and authorize. [Setup and pricing]({entry_url(svc.alias, 'native_oauth', 'extension')}). "
+        f"then sign in and authorize. [{svc.docs_label}]({entry_url(svc.alias, 'native_oauth', 'extension')}). "
         "This does not require this API-key extension. Client version must support remote OAuth/DCR.\n\n"
         if svc.alias in ENTRIES else ""
     )

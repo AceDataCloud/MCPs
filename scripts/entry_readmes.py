@@ -16,6 +16,8 @@ def entry_url(alias, content="quick_start", medium="readme"):
     target, _ = documentation_target(load_catalog()[alias])
     if not target:
         raise ValueError(f"No active public target for {alias}")
+    if content == "api_token":
+        target = "https://platform.acedata.cloud/console/applications"
     # A public entry must open independently of analytics availability.
     return target + "?" + urlencode({
         "utm_source": ENTRIES[alias][0].lower(),
@@ -24,11 +26,13 @@ def entry_url(alias, content="quick_start", medium="readme"):
 
 def render(alias):
     name, result, prompt = ENTRIES[alias]
+    _, label = documentation_target(load_catalog()[alias])
+    setup_label = "Open setup guide" if label == "Documentation" else "View service details"
     endpoint = f"https://{alias}.mcp.acedata.cloud/mcp"
     return f"""<!-- BEGIN GENERATED FIRST USE: scripts/build_entry_readmes.py -->
 ## Start with the hosted server
 
-[Setup guide and pricing information]({entry_url(alias)}) · [Example prompt](#verify-your-first-result)
+[{setup_label}]({entry_url(alias)}) · [Example prompt](#verify-your-first-result)
 
 1. In a client that supports remote MCP OAuth, add **`{endpoint}`** as an HTTP server.
 2. Choose **Connect / Sign in**, log in to AceDataCloud, review the requested permissions, and authorize.
@@ -55,7 +59,7 @@ and manage the applications and credentials used for API access. Usage is charge
 This is a reproducible example prompt, not a promised generation time or a recorded success.
 A connected server, `tools/list`, and a task ID only confirm setup/submission. Keep the task ID,
 wait for terminal success, then open or play the final media. Pending previews and failed tasks
-are not a completed result. [View setup and billing guidance]({entry_url(alias, 'usage')}).
+are not a completed result. [{setup_label}]({entry_url(alias, 'usage')}).
 
 ### Charges and common failures
 
@@ -71,7 +75,7 @@ are not a completed result. [View setup and billing guidance]({entry_url(alias, 
 
 ### API Token path
 
-For local stdio or a client without OAuth, [open the setup page]({entry_url(alias, 'api_token')}),
+For local stdio or a client without OAuth, [open your applications]({entry_url(alias, 'api_token')}),
 sign in, choose the service, and create an API credential with the required scope. Configure
 `ACEDATACLOUD_API_TOKEN` locally, or use the client's documented Bearer-header setting.
 Use the local commands below for stdio; HTTP configuration formats are client-specific.

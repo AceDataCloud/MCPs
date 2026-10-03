@@ -11,7 +11,8 @@ class EntryReadmeTests(unittest.TestCase):
             canonical, _ = documentation_target(load_catalog()[alias])
             for content in ("quick_start", "api_token", "usage"):
                 url = urlsplit(entry_url(alias, content))
-                self.assertEqual(url.scheme + "://" + url.netloc + url.path, canonical)
+                expected = "https://platform.acedata.cloud/console/applications" if content == "api_token" else canonical
+                self.assertEqual(url.scheme + "://" + url.netloc + url.path, expected)
                 self.assertNotIn("/api/", url.path)
                 self.assertEqual(parse_qs(url.query), {
                     "utm_source": [entry[0].lower()], "utm_medium": ["readme"],
