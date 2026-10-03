@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import ast
 import re
 import sys
 import tomllib
@@ -14,6 +15,37 @@ ROOT = Path(__file__).resolve().parents[1]
 
 PLATFORM_ROOT = "https://platform.acedata.cloud"
 LEGACY_DOCS_ROOT = "https://docs.acedata.cloud"
+TOOL_REFERENCE_ALIASES = ("kling", "seedream", "suno")
+
+
+def registered_tools(alias: str) -> set[str]:
+    names: set[str] = set()
+    for path in (ROOT / alias / "tools").glob("*.py"):
+        tree = ast.parse(path.read_text(), filename=str(path))
+        for node in tree.body:
+            if not isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
+                continue
+            for decorator in node.decorator_list:
+                call = decorator if isinstance(decorator, ast.Call) else None
+                function = call.func if call else decorator
+                if (
+                    isinstance(function, ast.Attribute)
+                    and isinstance(function.value, ast.Name)
+                    and function.value.id == "mcp"
+                    and function.attr == "tool"
+                ):
+                    names.add(node.name)
+    return names
+
+
+def documented_tools(alias: str) -> set[str]:
+    readme = (ROOT / alias / "README.md").read_text()
+    match = re.search(
+        r"^## Tool Reference\s*$\n(.*?)(?=^## |\Z)", readme, re.MULTILINE | re.DOTALL
+    )
+    if not match:
+        return set()
+    return set(re.findall(r"^\| `([a-z0-9_]+)` \|", match.group(1), re.MULTILINE))
 
 
 def fail(errors: list[str], message: str) -> None:
@@ -68,6 +100,20 @@ def main() -> int:
         url, label = targets[alias]
         if f"| [{label}]({url}) |" not in root_readme:
             fail(errors, f"README uses the wrong documentation target for {alias}")
+
+    for alias in TOOL_REFERENCE_ALIASES:
+        registered = registered_tools(alias)
+        documented = documented_tools(alias)
+        if missing := sorted(registered - documented):
+            fail(
+                errors,
+                f"{alias}/README.md: Tool Reference missing registered tools: {', '.join(missing)}",
+            )
+        if extra := sorted(documented - registered):
+            fail(
+                errors,
+                f"{alias}/README.md: Tool Reference lists unregistered tools: {', '.join(extra)}",
+            )
 
     for alias in sorted(package_dirs):
         entry = catalog[alias]
