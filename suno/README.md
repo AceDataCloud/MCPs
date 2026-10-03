@@ -42,7 +42,7 @@ and manage the applications and credentials used for API access. Usage is charge
 This is a reproducible example prompt, not a promised generation time or a recorded success.
 A connected server, `tools/list`, and a task ID only confirm setup/submission. Keep the task ID,
 wait for terminal success, then open or play the final media. Pending previews and failed tasks
-are not a completed result. [Inspect your usage and billing](https://platform.acedata.cloud/api/v1/marketing-attribution/entry/sunomcp/?utm_source=sunomcp&utm_medium=readme&utm_campaign=opensource_activation&utm_content=usage).
+are not a completed result. [View setup and billing guidance](https://platform.acedata.cloud/api/v1/marketing-attribution/entry/sunomcp/?utm_source=sunomcp&utm_medium=readme&utm_campaign=opensource_activation&utm_content=usage).
 
 ### Charges and common failures
 
