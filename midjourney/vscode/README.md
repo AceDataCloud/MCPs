@@ -2,6 +2,7 @@
 
 AI image generation with Midjourney — imagine, edit, blend, upscale, describe.
 
+
 [![VS Code Marketplace](https://img.shields.io/visual-studio-marketplace/v/acedatacloud.mcp-midjourney?label=VS%20Code)](https://marketplace.visualstudio.com/items?itemName=acedatacloud.mcp-midjourney) [![PyPI](https://img.shields.io/pypi/v/mcp-midjourney.svg?label=PyPI)](https://pypi.org/project/mcp-midjourney/) [![Hosted MCP](https://img.shields.io/badge/hosted-mcp-blue)](https://midjourney.mcp.acedata.cloud/mcp)
 
 Bring Midjourney into VS Code chat. Generate 2x2 grids from prompts, upscale or vary a tile, blend multiple references, describe an image back into a prompt, and animate stills into short video.
@@ -14,8 +15,12 @@ can call it directly from chat.
 
 ## Quick Start
 
+For native VS Code MCP OAuth, run **MCP: Add Server → HTTP**, add `https://midjourney.mcp.acedata.cloud/mcp`, then sign in and authorize. [Setup and pricing](https://platform.acedata.cloud/api/v1/marketing-attribution/entry/midjourneymcp/?utm_source=vscode&utm_medium=extension&utm_campaign=opensource_activation&utm_content=native_oauth). This does not require this API-key extension. Client version must support remote OAuth/DCR.
+
+### Optional API-key extension
+
 1. **Install this extension.** VS Code registers the `midjourney` MCP server automatically.
-2. **Get an API key** from [Ace Data Cloud](https://platform.acedata.cloud/console/applications) (Applications → API Key). New accounts include free trial credit.
+2. **Get an API key** from [Ace Data Cloud](https://platform.acedata.cloud/api/v1/marketing-attribution/entry/midjourneymcp/?utm_source=vscode&utm_medium=extension&utm_campaign=opensource_activation&utm_content=api_token) (Applications → API Key). Check the current service price and account balance before generating.
 3. **Open Copilot Chat** in agent mode and ask for a image task — the extension prompts for the API key the first time and stores it in the OS keychain via VS Code's `SecretStorage`.
 
 You can rotate or remove the API key any time from the command palette:
@@ -63,7 +68,7 @@ You can rotate or remove the API key any time from the command palette:
 
 ## Pricing
 
-From $0.04 per /imagine job. Free trial credit on sign-up. See service details at [https://platform.acedata.cloud/services/d87e5e99-b797-4ade-9e73-b896896b0461](https://platform.acedata.cloud/services/d87e5e99-b797-4ade-9e73-b896896b0461).
+Metered API usage. Check the current service price and account balance before generating; no free allowance is promised. See [Service details](https://platform.acedata.cloud/services/d87e5e99-b797-4ade-9e73-b896896b0461).
 
 ---
 

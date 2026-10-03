@@ -2,7 +2,8 @@
 
 ByteDance Seedance — dance and motion video generation from text or image.
 
-[![VS Code Marketplace](https://img.shields.io/badge/VS%20Code-Marketplace-blue?logo=visualstudiocode&logoColor=white)](https://marketplace.visualstudio.com/items?itemName=acedatacloud.mcp-seedance) [![PyPI](https://img.shields.io/pypi/v/mcp-seedance.svg?label=PyPI)](https://pypi.org/project/mcp-seedance/) [![Hosted MCP](https://img.shields.io/badge/hosted-mcp-blue)](https://seedance.mcp.acedata.cloud/mcp)
+
+[![VS Code Marketplace](https://img.shields.io/visual-studio-marketplace/v/acedatacloud.mcp-seedance?label=VS%20Code)](https://marketplace.visualstudio.com/items?itemName=acedatacloud.mcp-seedance) [![PyPI](https://img.shields.io/pypi/v/mcp-seedance.svg?label=PyPI)](https://pypi.org/project/mcp-seedance/) [![Hosted MCP](https://img.shields.io/badge/hosted-mcp-blue)](https://seedance.mcp.acedata.cloud/mcp)
 
 Generate Seedance AI dance/motion videos. Configurable resolution, aspect ratio, duration, and optional audio.
 
@@ -14,8 +15,12 @@ can call it directly from chat.
 
 ## Quick Start
 
+For native VS Code MCP OAuth, run **MCP: Add Server → HTTP**, add `https://seedance.mcp.acedata.cloud/mcp`, then sign in and authorize. [Setup and pricing](https://platform.acedata.cloud/api/v1/marketing-attribution/entry/seedancemcp/?utm_source=vscode&utm_medium=extension&utm_campaign=opensource_activation&utm_content=native_oauth). This does not require this API-key extension. Client version must support remote OAuth/DCR.
+
+### Optional API-key extension
+
 1. **Install this extension.** VS Code registers the `seedance` MCP server automatically.
-2. **Get an API key** from [Ace Data Cloud](https://platform.acedata.cloud/console/applications) (Applications → API Key). New accounts include free trial credit.
+2. **Get an API key** from [Ace Data Cloud](https://platform.acedata.cloud/api/v1/marketing-attribution/entry/seedancemcp/?utm_source=vscode&utm_medium=extension&utm_campaign=opensource_activation&utm_content=api_token) (Applications → API Key). Check the current service price and account balance before generating.
 3. **Open Copilot Chat** in agent mode and ask for a video task — the extension prompts for the API key the first time and stores it in the OS keychain via VS Code's `SecretStorage`.
 
 You can rotate or remove the API key any time from the command palette:
@@ -25,13 +30,6 @@ You can rotate or remove the API key any time from the command palette:
 
 > The default config talks to the **hosted streamable-HTTP endpoint** at
 > `https://seedance.mcp.acedata.cloud/mcp` — no Python, no `uvx`, no local install needed.
-
-## VS Code Setup Guide
-
-For screenshots, token setup, project-level and user-level `mcp.json`, and Copilot Agent Mode examples, see:
-
-- [Seedance MCP VS Code guide](https://platform.acedata.cloud/documents/promotion_article_mcp_seedance_vscode)
-- [All Ace Data Cloud MCP servers in VS Code](https://platform.acedata.cloud/documents/promotion_article_mcp_all_vscode)
 
 ### Example prompts
 
@@ -56,7 +54,7 @@ For screenshots, token setup, project-level and user-level `mcp.json`, and Copil
 
 ## Pricing
 
-From $0.15 per clip. Free trial credit on sign-up. See full pricing at [https://platform.acedata.cloud/documents/seedance-mcp](https://platform.acedata.cloud/documents/seedance-mcp).
+Metered API usage. Check the current service price and account balance before generating; no free allowance is promised. See [Documentation](https://platform.acedata.cloud/documents/seedance-mcp).
 
 ---
 
@@ -93,7 +91,7 @@ this extension.
     {
       "type": "promptString",
       "id": "acedatacloud_api_token",
-      "description": "Ace Data Cloud API key",
+            "description": "Ace Data Cloud API key",
       "password": true
     }
   ]
@@ -128,7 +126,7 @@ version, install [`uv`](https://docs.astral.sh/uv/) and use:
 - **PyPI package:** [`mcp-seedance`](https://pypi.org/project/mcp-seedance/)
 - **Source repository:** https://github.com/AceDataCloud/SeedanceMCP
 - **Ace Data Cloud platform:** https://platform.acedata.cloud
-- **MCP documentation:** https://platform.acedata.cloud/documents/seedance-mcp
+- **Documentation:** https://platform.acedata.cloud/documents/seedance-mcp
 
 ## License
 

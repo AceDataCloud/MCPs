@@ -62,7 +62,7 @@ services:
       - 'Write lyrics for a punk song about deadline pressure, then turn them into a song.'
       - 'Cover the song with task id <id> in a jazz piano style.'
     models: ["v3.5", "v4", "v4.5", "v5"]
-    pricing_note: "From $0.05 per song. New users get free trial credit at sign-up."
+    pricing_note: "Metered API usage. Check the current service price and account balance before generating; no free allowance is promised."
 
   midjourney:
     display_name: Midjourney MCP
@@ -79,7 +79,7 @@ services:
       - 'Upscale tile 3 of task <id>.'
       - 'Describe https://example.com/photo.jpg and give me a Midjourney prompt.'
     models: ["5.2", "6", "6.1", "7", "8"]
-    pricing_note: "From $0.04 per /imagine job. Free trial credit on sign-up."
+    pricing_note: "Metered API usage. Check the current service price and account balance before generating; no free allowance is promised."
 
   flux:
     display_name: Flux MCP
@@ -242,7 +242,7 @@ services:
     examples:
       - 'Generate a Seedance video of a stylized robot dancing breakdance on a rooftop.'
       - 'Animate https://example.com/character.png into a Seedance clip, vertical 9:16, 8 seconds.'
-    pricing_note: "From $0.15 per clip. Free trial credit on sign-up."
+    pricing_note: "Metered API usage. Check the current service price and account balance before generating; no free allowance is promised."
 
   producer:
     display_name: Producer MCP

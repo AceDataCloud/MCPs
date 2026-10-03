@@ -29,6 +29,7 @@ from pathlib import Path
 
 import yaml
 
+from entry_readmes import ENTRIES, entry_url
 from mcp_catalog import documentation_target, load_catalog
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -358,6 +359,12 @@ def render_readme(svc: Service, tools: list[tuple[str, str]]) -> str:
         else ""
     )
 
+    native_oauth = (
+        f"For native VS Code MCP OAuth, run **MCP: Add Server → HTTP**, add `{svc.hosted_url}`, "
+        f"then sign in and authorize. [Setup and pricing]({entry_url(svc.alias, 'native_oauth', 'extension')}). "
+        "This does not require this API-key extension. Client version must support remote OAuth/DCR.\n\n"
+        if svc.alias in ENTRIES else ""
+    )
     return f"""# {svc.display_name}
 
 {svc.tagline}
@@ -375,8 +382,10 @@ can call it directly from chat.
 
 ## Quick Start
 
+{native_oauth}### Optional API-key extension
+
 1. **Install this extension.** VS Code registers the `{svc.alias}` MCP server automatically.
-2. **Get an API key** from [Ace Data Cloud]({svc.signup_url}/console/applications) (Applications → API Key). New accounts include free trial credit.
+2. **Get an API key** from [Ace Data Cloud]({entry_url(svc.alias, 'api_token', 'extension') if svc.alias in ENTRIES else svc.signup_url + '/console/applications'}) (Applications → API Key). Check the current service price and account balance before generating.
 3. **Open Copilot Chat** in agent mode and ask for a {svc.domain} task — the extension prompts for the API key the first time and stores it in the OS keychain via VS Code's `SecretStorage`.
 
 You can rotate or remove the API key any time from the command palette:

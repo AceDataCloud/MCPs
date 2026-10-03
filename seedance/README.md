@@ -12,6 +12,62 @@ A [Model Context Protocol (MCP)](https://modelcontextprotocol.io) server for AI 
 
 Generate AI videos directly from Claude, VS Code, or any MCP-compatible client.
 
+<!-- BEGIN GENERATED FIRST USE: scripts/build_entry_readmes.py -->
+## Start with the hosted server
+
+[Check current pricing and setup](https://platform.acedata.cloud/api/v1/marketing-attribution/entry/seedancemcp/?utm_source=github&utm_medium=readme&utm_campaign=opensource_activation&utm_content=quick_start) · [Example prompt](#verify-your-first-result)
+
+1. In a client that supports remote MCP OAuth, add **`https://seedance.mcp.acedata.cloud/mcp`** as an HTTP server.
+2. Choose **Connect / Sign in**, log in to AceDataCloud, review the requested permissions, and authorize.
+3. Enable the tools and ask for a playable video. You do not need to create or paste an API token for this route.
+
+The server already supports OAuth discovery, dynamic client registration (DCR), and S256 PKCE.
+DCR registers the **client application**; you still sign in and approve access. Authorization does
+not make generation free. Review the consent screen: the media integration can read your profile
+and manage the applications and credentials used for API access. Usage is charged to your account.
+
+### Client compatibility
+
+| Client / mode | Start path | Boundary |
+| --- | --- | --- |
+| Claude web / Desktop with remote custom connectors | Add the URL in the connector UI, then authorize | Availability and menu names depend on your plan and app version. The local Desktop JSON is for stdio; do not paste HTTP config there. |
+| VS Code with native remote MCP support | Run **MCP: Add Server**, select HTTP, paste the URL, then follow authentication | Use a version with OAuth/DCR support. The optional AceDataCloud extension has its own API-key setup. |
+| Other remote clients | Use the client's documented HTTP + OAuth flow | Support varies by client and version; an endpoint alone does not prove the client's login flow works. |
+| Local stdio / self-hosted / clients without OAuth | Use the API Token path below | Keep the token in a local secret or environment variable; never in the server URL or Git. |
+
+### Verify your first result
+
+> Generate a short video of clouds moving over a mountain, then retrieve the completed task and final video URL.
+
+This is a reproducible example prompt, not a promised generation time or a recorded success.
+A connected server, `tools/list`, and a task ID only confirm setup/submission. Keep the task ID,
+wait for terminal success, then open or play the final media. Pending previews and failed tasks
+are not a completed result. [Inspect your usage and billing](https://platform.acedata.cloud/api/v1/marketing-attribution/entry/seedancemcp/?utm_source=github&utm_medium=readme&utm_campaign=opensource_activation&utm_content=usage).
+
+### Charges and common failures
+
+- The MCP code is open source; hosted API generation is metered. Check current service pricing,
+  model availability, account balance, and applicable terms before generating. No free allowance
+  or commercial-use right is implied by installing this package.
+- **Login loop / 401:** reconnect using the client's authentication UI; for local usage check the
+  token and its scope. Update a client that cannot discover or register an OAuth server.
+- **403 / access denied:** inspect the error and account permissions; a moderation rejection
+  requires changing the input. **Insufficient balance:** inspect billing before retrying.
+- **Pending / failed generation:** poll the same task; read the final error. Do not repeatedly
+  submit new tasks to fix polling. A new generation may incur a new charge.
+
+### API Token path
+
+For local stdio or a client without OAuth, [open the setup page](https://platform.acedata.cloud/api/v1/marketing-attribution/entry/seedancemcp/?utm_source=github&utm_medium=readme&utm_campaign=opensource_activation&utm_content=api_token),
+sign in, choose the service, and create an API credential with the required scope. Configure
+`ACEDATACLOUD_API_TOKEN` locally, or use the client's documented Bearer-header setting.
+Use the local commands below for stdio; HTTP configuration formats are client-specific.
+
+The setup link preserves the four campaign labels in the first-party browser session. Pasting
+the bare endpoint directly into a native client remains supported; if no source can be matched,
+that visit is reported as unknown. No token belongs in a tracking link.
+<!-- END GENERATED FIRST USE -->
+
 ## Features
 
 - **Text to Video** - Create AI-generated videos from text prompts
@@ -35,234 +91,7 @@ Generate AI videos directly from Claude, VS Code, or any MCP-compatible client.
 | `seedance_list_resolutions` | List all available resolutions and aspect ratios for Seedance. |
 | `seedance_list_actions` | List all available Seedance API actions and corresponding tools. |
 
-## Quick Start
-
-### 1. Get Your API Token
-
-1. Sign up at [AceDataCloud Platform](https://platform.acedata.cloud)
-2. Go to the [API documentation page](https://platform.acedata.cloud/documents/seedance-videos)
-3. Click **"Acquire"** to get your API token
-4. Copy the token for use below
-
-### 2. Use the Hosted Server (Recommended)
-
-AceDataCloud hosts a managed MCP server — **no local installation required**.
-
-**Endpoint:** `https://seedance.mcp.acedata.cloud/mcp`
-
-All requests require a Bearer token. Use the API token from Step 1.
-
-#### Claude.ai
-
-Connect directly on [Claude.ai](https://claude.ai) with OAuth — **no API token needed**:
-
-1. Go to Claude.ai **Settings → Integrations → Add More**
-2. Enter the server URL: `https://seedance.mcp.acedata.cloud/mcp`
-3. Complete the OAuth login flow
-4. Start using the tools in your conversation
-
-#### Claude Desktop
-
-Add to your config (`~/Library/Application Support/Claude/claude_desktop_config.json` on macOS):
-
-```json
-{
-  "mcpServers": {
-    "seedance": {
-      "type": "streamable-http",
-      "url": "https://seedance.mcp.acedata.cloud/mcp",
-      "headers": {
-        "Authorization": "Bearer YOUR_API_TOKEN"
-      }
-    }
-  }
-}
-```
-
-#### Cursor / Windsurf
-
-Add to your MCP config (`.cursor/mcp.json` or `.windsurf/mcp.json`):
-
-```json
-{
-  "mcpServers": {
-    "seedance": {
-      "type": "streamable-http",
-      "url": "https://seedance.mcp.acedata.cloud/mcp",
-      "headers": {
-        "Authorization": "Bearer YOUR_API_TOKEN"
-      }
-    }
-  }
-}
-```
-
-#### VS Code (Copilot)
-
-Add to your VS Code MCP config (`.vscode/mcp.json`):
-
-```json
-{
-  "servers": {
-    "seedance": {
-      "type": "streamable-http",
-      "url": "https://seedance.mcp.acedata.cloud/mcp",
-      "headers": {
-        "Authorization": "Bearer YOUR_API_TOKEN"
-      }
-    }
-  }
-}
-```
-
-Or install the [Ace Data Cloud MCP extension](https://marketplace.visualstudio.com/items?itemName=acedatacloud.acedatacloud-mcp) for VS Code, which registers the hosted MCP servers with one-click setup.
-
-#### JetBrains IDEs
-
-1. Go to **Settings → Tools → AI Assistant → Model Context Protocol (MCP)**
-2. Click **Add** → **HTTP**
-3. Paste:
-
-```json
-{
-  "mcpServers": {
-    "seedance": {
-      "url": "https://seedance.mcp.acedata.cloud/mcp",
-      "headers": {
-        "Authorization": "Bearer YOUR_API_TOKEN"
-      }
-    }
-  }
-}
-```
-
-
-#### Claude Code
-
-Claude Code supports MCP servers natively:
-
-```bash
-claude mcp add seedance --transport http https://seedance.mcp.acedata.cloud/mcp \
-  -h "Authorization: Bearer YOUR_API_TOKEN"
-```
-
-Or add to your project's `.mcp.json`:
-
-```json
-{
-  "mcpServers": {
-    "seedance": {
-      "type": "streamable-http",
-      "url": "https://seedance.mcp.acedata.cloud/mcp",
-      "headers": {
-        "Authorization": "Bearer YOUR_API_TOKEN"
-      }
-    }
-  }
-}
-```
-
-#### Cline
-
-Add to Cline's MCP settings (`.cline/mcp_settings.json`):
-
-```json
-{
-  "mcpServers": {
-    "seedance": {
-      "type": "streamable-http",
-      "url": "https://seedance.mcp.acedata.cloud/mcp",
-      "headers": {
-        "Authorization": "Bearer YOUR_API_TOKEN"
-      }
-    }
-  }
-}
-```
-
-#### Amazon Q Developer
-
-Add to your MCP configuration:
-
-```json
-{
-  "mcpServers": {
-    "seedance": {
-      "type": "streamable-http",
-      "url": "https://seedance.mcp.acedata.cloud/mcp",
-      "headers": {
-        "Authorization": "Bearer YOUR_API_TOKEN"
-      }
-    }
-  }
-}
-```
-
-#### Roo Code
-
-Add to Roo Code MCP settings:
-
-```json
-{
-  "mcpServers": {
-    "seedance": {
-      "type": "streamable-http",
-      "url": "https://seedance.mcp.acedata.cloud/mcp",
-      "headers": {
-        "Authorization": "Bearer YOUR_API_TOKEN"
-      }
-    }
-  }
-}
-```
-
-#### Continue.dev
-
-Add to `.continue/config.yaml`:
-
-```yaml
-mcpServers:
-  - name: seedance
-    type: streamable-http
-    url: https://seedance.mcp.acedata.cloud/mcp
-    headers:
-      Authorization: "Bearer YOUR_API_TOKEN"
-```
-
-#### Zed
-
-Add to Zed's settings (`~/.config/zed/settings.json`):
-
-```json
-{
-  "language_models": {
-    "mcp_servers": {
-      "seedance": {
-        "url": "https://seedance.mcp.acedata.cloud/mcp",
-        "headers": {
-          "Authorization": "Bearer YOUR_API_TOKEN"
-        }
-      }
-    }
-  }
-}
-```
-
-#### cURL Test
-
-```bash
-# Health check (no auth required)
-curl https://seedance.mcp.acedata.cloud/health
-
-# MCP initialize
-curl -X POST https://seedance.mcp.acedata.cloud/mcp \
-  -H "Content-Type: application/json" \
-  -H "Accept: application/json" \
-  -H "Authorization: Bearer YOUR_API_TOKEN" \
-  -d '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2025-03-26","capabilities":{},"clientInfo":{"name":"test","version":"1.0"}}}'
-```
-
-### 3. Or Run Locally (Alternative)
+## Run locally with an API token
 
 If you prefer to run the server on your own machine:
 

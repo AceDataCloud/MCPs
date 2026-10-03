@@ -2,7 +2,8 @@
 
 AI music generation with Suno — songs, lyrics, covers, stems, and more.
 
-[![VS Code Marketplace](https://img.shields.io/badge/VS%20Code-Marketplace-blue?logo=visualstudiocode&logoColor=white)](https://marketplace.visualstudio.com/items?itemName=acedatacloud.mcp-suno) [![PyPI](https://img.shields.io/pypi/v/mcp-suno.svg?label=PyPI)](https://pypi.org/project/mcp-suno/) [![Hosted MCP](https://img.shields.io/badge/hosted-mcp-blue)](https://suno.mcp.acedata.cloud/mcp)
+
+[![VS Code Marketplace](https://img.shields.io/visual-studio-marketplace/v/acedatacloud.mcp-suno?label=VS%20Code)](https://marketplace.visualstudio.com/items?itemName=acedatacloud.mcp-suno) [![PyPI](https://img.shields.io/pypi/v/mcp-suno.svg?label=PyPI)](https://pypi.org/project/mcp-suno/) [![Hosted MCP](https://img.shields.io/badge/hosted-mcp-blue)](https://suno.mcp.acedata.cloud/mcp)
 
 Connect VS Code's AI agents to Suno through Ace Data Cloud. Generate songs from text prompts, write custom lyrics with full musical control, extend tracks, remix or cover, separate stems, export MP4/WAV/MIDI — all from chat.
 
@@ -14,8 +15,12 @@ can call it directly from chat.
 
 ## Quick Start
 
+For native VS Code MCP OAuth, run **MCP: Add Server → HTTP**, add `https://suno.mcp.acedata.cloud/mcp`, then sign in and authorize. [Setup and pricing](https://platform.acedata.cloud/api/v1/marketing-attribution/entry/sunomcp/?utm_source=vscode&utm_medium=extension&utm_campaign=opensource_activation&utm_content=native_oauth). This does not require this API-key extension. Client version must support remote OAuth/DCR.
+
+### Optional API-key extension
+
 1. **Install this extension.** VS Code registers the `suno` MCP server automatically.
-2. **Get an API key** from [Ace Data Cloud](https://platform.acedata.cloud/console/applications) (Applications → API Key). New accounts include free trial credit.
+2. **Get an API key** from [Ace Data Cloud](https://platform.acedata.cloud/api/v1/marketing-attribution/entry/sunomcp/?utm_source=vscode&utm_medium=extension&utm_campaign=opensource_activation&utm_content=api_token) (Applications → API Key). Check the current service price and account balance before generating.
 3. **Open Copilot Chat** in agent mode and ask for a music task — the extension prompts for the API key the first time and stores it in the OS keychain via VS Code's `SecretStorage`.
 
 You can rotate or remove the API key any time from the command palette:
@@ -25,13 +30,6 @@ You can rotate or remove the API key any time from the command palette:
 
 > The default config talks to the **hosted streamable-HTTP endpoint** at
 > `https://suno.mcp.acedata.cloud/mcp` — no Python, no `uvx`, no local install needed.
-
-## VS Code Setup Guide
-
-For screenshots, token setup, project-level and user-level `mcp.json`, and Copilot Agent Mode examples, see:
-
-- [Suno MCP VS Code guide](https://platform.acedata.cloud/documents/promotion_article_mcp_suno_vscode)
-- [All Ace Data Cloud MCP servers in VS Code](https://platform.acedata.cloud/documents/promotion_article_mcp_all_vscode)
 
 ### Example prompts
 
@@ -43,7 +41,7 @@ For screenshots, token setup, project-level and user-level `mcp.json`, and Copil
 
 ## Tool Reference
 
-**35 tools** available via this server.
+**34 tools** available via this server.
 
 | Tool | Description |
 | --- | --- |
@@ -53,30 +51,29 @@ For screenshots, token setup, project-level and user-level `mcp.json`, and Copil
 | `suno_cover_music` | Create a cover or remix version of an existing song in a different style. |
 | `suno_concat_music` | Concatenate extended song segments into a single complete audio file. |
 | `suno_generate_with_persona` | Generate music using a saved artist persona for consistent vocal style. |
-| `suno_generate_with_persona_vox` | Generate music with stronger vocal consistency from a saved persona. |
-| `suno_remaster_music` | Remaster an existing song to improve audio quality. |
+| `suno_remaster_music` | Remaster an existing song; v5/v5.5 require a variation category. |
 | `suno_stems_music` | Separate a song into individual stems (vocals and instruments). |
-| `suno_all_stems_music` | Separate a song into vocals, bass, drums, and other instrument stems. |
 | `suno_replace_section` | Replace a specific time range in a song with new generated content. |
 | `suno_upload_extend` | Extend an uploaded audio (your own music) with new AI-generated content. |
 | `suno_upload_cover` | Create an AI cover of an uploaded audio (your own music). |
-| `suno_mashup_music` | Create a musical mashup by blending multiple songs together. |
+| `suno_mashup_music` | Blend exactly two songs using a required creative-direction prompt. |
+| `suno_all_stems_music` | Return two distinct 12-stem candidate sets, labeled `stem_set` 1 and 2 in task results. |
 | `suno_generate_lyrics` | Generate song lyrics from a text prompt. |
 | `suno_get_mp4` | Get an MP4 video version of a generated song. |
 | `suno_get_timing` | Get timing and subtitle data for a generated song. |
-| `suno_extract_vocals` | Extract the vocal track from a generated song (stem separation). |
+| `suno_extract_vocals` | Extract a required vocal interval shorter than 30 seconds. |
 | `suno_get_wav` | Get the lossless WAV format of a generated song. |
+| `suno_get_mp3` | Get the compressed MP3 format of a generated song. |
 | `suno_get_midi` | Get MIDI data extracted from a generated song. |
 | `suno_create_persona` | Create a new artist persona from an existing audio's vocal style. |
-| `suno_create_voice` | Create a custom voice persona from an external audio URL. |
-| `suno_list_personas` | List saved artist personas and voice IDs. |
-| `suno_delete_persona` | Delete a saved artist persona. |
+| `suno_create_custom_model` | Create a reusable custom music model from 6 to 24 authorized audio URLs. |
+| `suno_get_custom_model` | Retrieve one custom music model by ID. |
+| `suno_list_custom_models` | List custom music models for the current Suno application. |
+| `suno_generate_with_custom_model` | Generate a song using a ready custom music model. |
+| `suno_delete_custom_model` | Archive a custom music model so it can no longer be used. |
 | `suno_optimize_style` | Optimize a music style description for better generation results. |
 | `suno_mashup_lyrics` | Generate mashup lyrics by combining two sets of lyrics. |
-| `suno_upload_audio` | Upload an external audio file to Suno for use in subsequent operations. |
-| `suno_underpainting` | Add AI-generated accompaniment under uploaded vocals. |
-| `suno_overpainting` | Add AI-generated vocals over uploaded instrumental audio. |
-| `suno_samples_music` | Add AI-generated samples to uploaded audio. |
+| `suno_upload_audio` | Upload external audio in standard or enhanced mode for subsequent operations. |
 | `suno_get_task` | Query the status and result of a music generation task. |
 | `suno_get_tasks_batch` | Query multiple music generation tasks at once. |
 | `suno_list_models` | List all available Suno models and their capabilities. |
@@ -89,7 +86,7 @@ For screenshots, token setup, project-level and user-level `mcp.json`, and Copil
 
 ## Pricing
 
-From $0.05 per song. New users get free trial credit at sign-up. See full pricing at [https://platform.acedata.cloud/documents/suno-mcp](https://platform.acedata.cloud/documents/suno-mcp).
+Metered API usage. Check the current service price and account balance before generating; no free allowance is promised. See [Documentation](https://platform.acedata.cloud/documents/suno-mcp).
 
 ---
 
@@ -126,7 +123,7 @@ this extension.
     {
       "type": "promptString",
       "id": "acedatacloud_api_token",
-      "description": "Ace Data Cloud API key",
+            "description": "Ace Data Cloud API key",
       "password": true
     }
   ]
@@ -161,7 +158,7 @@ version, install [`uv`](https://docs.astral.sh/uv/) and use:
 - **PyPI package:** [`mcp-suno`](https://pypi.org/project/mcp-suno/)
 - **Source repository:** https://github.com/AceDataCloud/SunoMCP
 - **Ace Data Cloud platform:** https://platform.acedata.cloud
-- **MCP documentation:** https://platform.acedata.cloud/documents/suno-mcp
+- **Documentation:** https://platform.acedata.cloud/documents/suno-mcp
 
 ## License
 
