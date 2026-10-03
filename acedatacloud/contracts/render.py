@@ -58,23 +58,6 @@ def render_readme_reference() -> str:
     ]
     for reason, count in sorted(hidden.items()):
         lines.append(f"| {reason} | {count} |")
-    deprecated = {name: entry for name, entry in TOOL_CATALOG.items() if entry.deprecated}
-    if deprecated:
-        lines.extend(
-            (
-                "",
-                "### Deprecated compatibility tools",
-                "",
-                "Deprecated tools are hidden from curated discovery. Full discovery marks them",
-                "as deprecated and still requires their exact permissions. Existing calls retain",
-                "their compatibility routes. The model list uses the canonical health-card payload.",
-                "",
-                "| Deprecated tool | Preferred tool |",
-                "|-----------------|----------------|",
-            )
-        )
-        for name, entry in sorted(deprecated.items()):
-            lines.append(f"| `{name}` | `{entry.replacement}` |")
     lines.extend(
         (
             "",

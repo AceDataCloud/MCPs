@@ -25,26 +25,15 @@ Claude, VS Code, Studio, or any MCP-compatible client.
 
 The default curated catalog advertises **343 tools** before
 account-permission filtering, including `acedatacloud_get_usage_guide`.
-The complete compatibility registry retains **515 tools**.
+The complete compatibility registry retains **514 tools**.
 Discovery is grouped by business task, not by one tool per REST endpoint.
 
 | Not advertised by default | Count |
 |---------------------------|-------|
 | alternate full-replacement update | 20 |
 | client rendering, telemetry or protocol helper | 19 |
-| deprecated versioned compatibility alias | 1 |
 | duplicate native route | 128 |
 | prefer the task-oriented catalog reader | 4 |
-
-### Deprecated compatibility tools
-
-Deprecated tools are hidden from curated discovery. Full discovery marks them
-as deprecated and still requires their exact permissions. Existing calls retain
-their compatibility routes. The model list uses the canonical health-card payload.
-
-| Deprecated tool | Preferred tool |
-|-----------------|----------------|
-| `acedatacloud_list_configuration_models_v2` | `acedatacloud_list_configuration_models` |
 
 ### Categories
 

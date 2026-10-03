@@ -109,17 +109,10 @@ PREFERRED_READS = {
     "acedatacloud_get_models_introduction": "acedatacloud_get_model",
 }
 
-DEPRECATED_TOOLS = {
-    "acedatacloud_list_configuration_models_v2": "acedatacloud_list_configuration_models",
-}
-
 TOOL_DESCRIPTIONS = {
     "acedatacloud_list_configuration_models": (
         "List administrative model routing and health cards, including status, active provider, "
         "latency, check statistics and provider coverage. Supports q, status and provider filters."
-    ),
-    "acedatacloud_list_configuration_models_v2": (
-        "Compatibility alias for the administrative model routing and health card list."
     ),
 }
 
@@ -153,7 +146,6 @@ class CatalogEntry:
     advertised: bool = True
     reason: str = "business operation"
     replacement: str | None = None
-    deprecated: bool = False
 
 
 def _route(path: str) -> str:
@@ -208,10 +200,7 @@ def build_catalog() -> dict[str, CatalogEntry]:
         advertised = True
         reason = "business operation"
         replacement = None
-        if name in DEPRECATED_TOOLS:
-            advertised, reason = False, "deprecated versioned compatibility alias"
-            replacement = DEPRECATED_TOOLS[name]
-        elif name in CLIENT_HELPERS or (operation.method, _route(operation.path)) in helper_routes:
+        if name in CLIENT_HELPERS or (operation.method, _route(operation.path)) in helper_routes:
             advertised, reason = False, "client rendering, telemetry or protocol helper"
         elif name in PREFERRED_READS:
             advertised, reason = False, "prefer the task-oriented catalog reader"
@@ -230,7 +219,6 @@ def build_catalog() -> dict[str, CatalogEntry]:
             advertised,
             reason,
             replacement,
-            deprecated=name in DEPRECATED_TOOLS,
         )
     return catalog
 
@@ -239,15 +227,8 @@ TOOL_CATALOG = build_catalog()
 
 
 def tool_description(name: str, fallback: str) -> str:
-    """Describe current tools and explain deprecated compatibility entries consistently."""
-    description = TOOL_DESCRIPTIONS.get(name, fallback)
-    entry = TOOL_CATALOG.get(name)
-    if entry is not None and entry.deprecated:
-        description += (
-            f" Deprecated: prefer {entry.replacement} for new integrations. "
-            "The compatibility route returns the same model health cards as the canonical tool."
-        )
-    return description
+    """Describe current tools consistently."""
+    return TOOL_DESCRIPTIONS.get(name, fallback)
 
 
 def advertised_tools(profile: ToolProfile = "curated") -> set[str]:
