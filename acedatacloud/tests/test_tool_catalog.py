@@ -16,6 +16,7 @@ from contracts.tool_catalog import (
     CATEGORIES,
     CLIENT_HELPERS,
     CROSS_ACCOUNT_TOOLS,
+    DEPRECATED_TOOLS,
     INFO_TOOL,
     TOOL_CATALOG,
     advertised_tools,
@@ -69,6 +70,54 @@ def test_generated_business_workflows_are_not_removed_with_aliases():
     assert "acedatacloud_publish_blog_post" in advertised_tools()
     assert "acedatacloud_create_platform_token" in advertised_tools()
     assert "acedatacloud_create_platform_tokens" not in advertised_tools()
+
+
+def test_versioned_model_list_is_deprecated_without_changing_registry():
+    legacy = "acedatacloud_list_configuration_models_v2"
+    current = "acedatacloud_list_configuration_models"
+    entry = TOOL_CATALOG[legacy]
+    assert DEPRECATED_TOOLS[legacy] == current
+    assert entry.deprecated and not entry.advertised
+    assert entry.replacement == current
+    assert entry.required_permissions == TOOL_CATALOG[current].required_permissions
+    assert legacy not in advertised_tools()
+    assert current in advertised_tools()
+    assert {legacy, current} <= advertised_tools("full")
+    assert {legacy, current} <= registered_contract_tools()
+
+
+@pytest.mark.parametrize("profile", ["curated", "full"])
+async def test_model_discovery_and_guide_mark_deprecation_and_keep_exact_grants(
+    monkeypatch, profile
+):
+    legacy = "acedatacloud_list_configuration_models_v2"
+    current = "acedatacloud_list_configuration_models"
+    subject = {"id": "routing-admin", "permissions": ["provider-routing:read"]}
+    monkeypatch.setattr(settings, "tool_profile", profile)
+    monkeypatch.setattr("core.visibility.get_request_subject", AsyncMock(return_value=subject))
+    result = await mcp._mcp_server.request_handlers[ListToolsRequest](ListToolsRequest())
+    visible = {tool.name: tool for tool in result.root.tools}
+    assert current in visible
+    assert "health cards" in visible[current].description
+    assert "q, status and provider filters" in visible[current].description
+    assert "acedatacloud/deprecated" not in visible[current].meta
+    guide = await acedatacloud_get_usage_guide()
+    assert f"- {current} —" in guide
+    if profile == "curated":
+        assert legacy not in visible
+        assert f"- {legacy} —" not in guide
+    else:
+        assert visible[legacy].meta["acedatacloud/deprecated"] is True
+        assert visible[legacy].meta["acedatacloud/replacement"] == current
+        assert "Deprecated:" in visible[legacy].description
+        assert "same model health cards as the canonical tool" in visible[legacy].description
+        assert f"- {legacy} —" in guide
+        assert "Deprecated:" in guide
+    subject["permissions"] = ["orders:read:any"]
+    assert not {legacy, current} & {tool.name for tool in await list_visible_tools()}
+    revoked_guide = await acedatacloud_get_usage_guide()
+    assert f"- {legacy} —" not in revoked_guide
+    assert f"- {current} —" not in revoked_guide
 
 
 async def test_protocol_handler_uses_curated_catalog_without_changing_registry(monkeypatch):

@@ -9,6 +9,7 @@ from contracts.tool_catalog import (
     TOOL_CATALOG,
     ToolProfile,
     advertised_tools,
+    tool_description,
 )
 
 README_START = "<!-- BEGIN GENERATED TOOL REFERENCE -->"
@@ -57,6 +58,23 @@ def render_readme_reference() -> str:
     ]
     for reason, count in sorted(hidden.items()):
         lines.append(f"| {reason} | {count} |")
+    deprecated = {name: entry for name, entry in TOOL_CATALOG.items() if entry.deprecated}
+    if deprecated:
+        lines.extend(
+            (
+                "",
+                "### Deprecated compatibility tools",
+                "",
+                "Deprecated tools are hidden from curated discovery. Full discovery marks them",
+                "as deprecated and still requires their exact permissions. Existing calls retain",
+                "their compatibility routes. The model list uses the canonical health-card payload.",
+                "",
+                "| Deprecated tool | Preferred tool |",
+                "|-----------------|----------------|",
+            )
+        )
+        for name, entry in sorted(deprecated.items()):
+            lines.append(f"| `{name}` | `{entry.replacement}` |")
     lines.extend(
         (
             "",
@@ -99,9 +117,8 @@ def render_readme_reference() -> str:
             assert operation.tool is not None
             entry = TOOL_CATALOG[operation.tool]
             scopes = ", ".join(entry.required_permissions) or operation.authentication
-            lines.append(
-                f"| `{operation.tool}` | {operation.description} | {entry.audience} | {scopes} |"
-            )
+            description = tool_description(operation.tool, operation.description)
+            lines.append(f"| `{operation.tool}` | {description} | {entry.audience} | {scopes} |")
         lines.append("")
     lines.extend(
         (
@@ -142,7 +159,8 @@ def render_usage_guide(profile: ToolProfile = "curated", tool_names: set[str] | 
             suffix += " Audience: " + entry.audience + "."
             if entry.required_permissions:
                 suffix += " Permissions: " + ", ".join(entry.required_permissions) + "."
-            lines.append(f"- {operation.tool} — {operation.description}{suffix}")
+            description = tool_description(operation.tool, operation.description)
+            lines.append(f"- {operation.tool} — {description}{suffix}")
         lines.append("")
     lines.extend(
         (

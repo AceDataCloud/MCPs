@@ -23,7 +23,7 @@ Claude, VS Code, Studio, or any MCP-compatible client.
 <!-- BEGIN GENERATED TOOL REFERENCE -->
 ## Tool Reference
 
-The default curated catalog advertises **344 tools** before
+The default curated catalog advertises **343 tools** before
 account-permission filtering, including `acedatacloud_get_usage_guide`.
 The complete compatibility registry retains **515 tools**.
 Discovery is grouped by business task, not by one tool per REST endpoint.
@@ -32,8 +32,19 @@ Discovery is grouped by business task, not by one tool per REST endpoint.
 |---------------------------|-------|
 | alternate full-replacement update | 20 |
 | client rendering, telemetry or protocol helper | 19 |
+| deprecated versioned compatibility alias | 1 |
 | duplicate native route | 128 |
 | prefer the task-oriented catalog reader | 4 |
+
+### Deprecated compatibility tools
+
+Deprecated tools are hidden from curated discovery. Full discovery marks them
+as deprecated and still requires their exact permissions. Existing calls retain
+their compatibility routes. The model list uses the canonical health-card payload.
+
+| Deprecated tool | Preferred tool |
+|-----------------|----------------|
+| `acedatacloud_list_configuration_models_v2` | `acedatacloud_list_configuration_models` |
 
 ### Categories
 
@@ -49,7 +60,7 @@ Discovery is grouped by business task, not by one tool per REST endpoint.
 | Email marketing & analytics | 0 | 0 | 0 | 37 |
 | Access control & automation | 0 | 5 | 13 | 20 |
 | Payment authorization | 0 | 10 | 0 | 0 |
-| Administration & risk | 0 | 0 | 0 | 36 |
+| Administration & risk | 0 | 0 | 0 | 35 |
 | Files & utilities | 0 | 1 | 0 | 0 |
 
 Workspace tools cover delegated editing and site/webhook management.
@@ -443,8 +454,7 @@ Admin tools require their exact permission grants, not just an admin label.
 | `acedatacloud_get_distribution_risk_bypasses_id` | Get distribution risk bypasses id. Backend account permissions and ownership checks apply. | admin | distribution-risk:read |
 | `acedatacloud_list_admin_ace_snapshots` | List admin ace snapshots. Backend account permissions and ownership checks apply. | admin | ace-snapshot:read |
 | `acedatacloud_list_admin_ace_snapshots_entries` | List admin ace snapshots entries. Backend account permissions and ownership checks apply. | admin | ace-snapshot:read |
-| `acedatacloud_list_configuration_models` | List configuration models. Backend account permissions and ownership checks apply. | admin | provider-routing:read |
-| `acedatacloud_list_configuration_models_v2` | List configuration models v2. Backend account permissions and ownership checks apply. | admin | provider-routing:read |
+| `acedatacloud_list_configuration_models` | List administrative model routing and health cards, including status, active provider, latency, check statistics and provider coverage. Supports q, status and provider filters. | admin | provider-routing:read |
 | `acedatacloud_list_configuration_providers` | List configuration providers. Backend account permissions and ownership checks apply. | admin | provider-routing:read |
 | `acedatacloud_list_distribution_risk_bans` | List distribution risk bans. Backend account permissions and ownership checks apply. | admin | distribution-risk:read |
 | `acedatacloud_list_distribution_risk_bypasses` | List distribution risk bypasses. Backend account permissions and ownership checks apply. | admin | distribution-risk:read |
