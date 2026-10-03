@@ -1,6 +1,11 @@
 """Generate the first-use section shared by GitHub/PyPI and editor listings."""
 from urllib.parse import urlencode
 
+try:
+    from .mcp_catalog import documentation_target, load_catalog
+except ImportError:
+    from mcp_catalog import documentation_target, load_catalog
+
 ENTRIES = {
     "suno": ("SunoMCP", "a playable music track", "Generate an instrumental lo-fi track, then poll the task until it completes and return the final audio URL."),
     "midjourney": ("MidjourneyMCP", "a viewable image", "Generate an image of a ceramic cup on a sunny desk, then retrieve the completed task and final image URL."),
@@ -8,7 +13,11 @@ ENTRIES = {
 }
 
 def entry_url(alias, content="quick_start", medium="readme"):
-    return "https://platform.acedata.cloud/api/v1/marketing-attribution/entry/" + ENTRIES[alias][0].lower() + "/?" + urlencode({
+    target, _ = documentation_target(load_catalog()[alias])
+    if not target:
+        raise ValueError(f"No active public target for {alias}")
+    # A public entry must open independently of analytics availability.
+    return target + "?" + urlencode({
         "utm_source": ENTRIES[alias][0].lower(),
         "utm_medium": medium, "utm_campaign": "opensource_activation", "utm_content": content,
     })
@@ -19,7 +28,7 @@ def render(alias):
     return f"""<!-- BEGIN GENERATED FIRST USE: scripts/build_entry_readmes.py -->
 ## Start with the hosted server
 
-[Check current pricing and setup]({entry_url(alias)}) · [Example prompt](#verify-your-first-result)
+[Setup guide and pricing information]({entry_url(alias)}) · [Example prompt](#verify-your-first-result)
 
 1. In a client that supports remote MCP OAuth, add **`{endpoint}`** as an HTTP server.
 2. Choose **Connect / Sign in**, log in to AceDataCloud, review the requested permissions, and authorize.
@@ -67,7 +76,8 @@ sign in, choose the service, and create an API credential with the required scop
 `ACEDATACLOUD_API_TOKEN` locally, or use the client's documented Bearer-header setting.
 Use the local commands below for stdio; HTTP configuration formats are client-specific.
 
-The setup link preserves the four campaign labels in the first-party browser session. Pasting
+The setup link opens the existing page directly and carries four campaign labels. Analytics
+failures never block the page. Pasting
 the bare endpoint directly into a native client remains supported; if no source can be matched,
 that visit is reported as unknown. No token belongs in a tracking link.
 <!-- END GENERATED FIRST USE -->

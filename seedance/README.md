@@ -15,7 +15,7 @@ Generate AI videos directly from Claude, VS Code, or any MCP-compatible client.
 <!-- BEGIN GENERATED FIRST USE: scripts/build_entry_readmes.py -->
 ## Start with the hosted server
 
-[Check current pricing and setup](https://platform.acedata.cloud/api/v1/marketing-attribution/entry/seedancemcp/?utm_source=seedancemcp&utm_medium=readme&utm_campaign=opensource_activation&utm_content=quick_start) · [Example prompt](#verify-your-first-result)
+[Setup guide and pricing information](https://platform.acedata.cloud/documents/seedance-mcp?utm_source=seedancemcp&utm_medium=readme&utm_campaign=opensource_activation&utm_content=quick_start) · [Example prompt](#verify-your-first-result)
 
 1. In a client that supports remote MCP OAuth, add **`https://seedance.mcp.acedata.cloud/mcp`** as an HTTP server.
 2. Choose **Connect / Sign in**, log in to AceDataCloud, review the requested permissions, and authorize.
@@ -42,7 +42,7 @@ and manage the applications and credentials used for API access. Usage is charge
 This is a reproducible example prompt, not a promised generation time or a recorded success.
 A connected server, `tools/list`, and a task ID only confirm setup/submission. Keep the task ID,
 wait for terminal success, then open or play the final media. Pending previews and failed tasks
-are not a completed result. [View setup and billing guidance](https://platform.acedata.cloud/api/v1/marketing-attribution/entry/seedancemcp/?utm_source=seedancemcp&utm_medium=readme&utm_campaign=opensource_activation&utm_content=usage).
+are not a completed result. [View setup and billing guidance](https://platform.acedata.cloud/documents/seedance-mcp?utm_source=seedancemcp&utm_medium=readme&utm_campaign=opensource_activation&utm_content=usage).
 
 ### Charges and common failures
 
@@ -58,12 +58,13 @@ are not a completed result. [View setup and billing guidance](https://platform.a
 
 ### API Token path
 
-For local stdio or a client without OAuth, [open the setup page](https://platform.acedata.cloud/api/v1/marketing-attribution/entry/seedancemcp/?utm_source=seedancemcp&utm_medium=readme&utm_campaign=opensource_activation&utm_content=api_token),
+For local stdio or a client without OAuth, [open the setup page](https://platform.acedata.cloud/documents/seedance-mcp?utm_source=seedancemcp&utm_medium=readme&utm_campaign=opensource_activation&utm_content=api_token),
 sign in, choose the service, and create an API credential with the required scope. Configure
 `ACEDATACLOUD_API_TOKEN` locally, or use the client's documented Bearer-header setting.
 Use the local commands below for stdio; HTTP configuration formats are client-specific.
 
-The setup link preserves the four campaign labels in the first-party browser session. Pasting
+The setup link opens the existing page directly and carries four campaign labels. Analytics
+failures never block the page. Pasting
 the bare endpoint directly into a native client remains supported; if no source can be matched,
 that visit is reported as unknown. No token belongs in a tracking link.
 <!-- END GENERATED FIRST USE -->
