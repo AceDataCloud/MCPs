@@ -10,7 +10,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument("--input", type=Path, required=True)
 parser.add_argument("--backend", type=Path, required=True)
 parser.add_argument("--output", type=Path)
-parser.add_argument("--paths", nargs="+", help="Refresh only these routes in the existing ledger.")
+parser.add_argument("--paths", nargs="+", help="Refresh or remove only these known routes in the existing ledger.")
 parser.add_argument("--source-sha", help="Committed backend revision used for the export.")
 args = parser.parse_args()
 root = Path(__file__).resolve().parents[1] / "acedatacloud"
@@ -251,9 +251,10 @@ output = {
 if args.paths:
     selected = {norm(path) for path in args.paths}
     available = {norm(row["path"]) for row in inventory}
-    if selected - available:
-        raise RuntimeError(f"Unknown routes: {sorted(selected - available)}")
     previous = json.loads((root / "contracts/management_surface.json").read_text())
+    known = {norm(row["path"]) for row in previous["operations"]}
+    if selected - available - known:
+        raise RuntimeError(f"Unknown routes: {sorted(selected - available - known)}")
     for section in ("operations", "tools"):
         replacements = {
             (row["method"], norm(row["path"])): row
@@ -264,8 +265,13 @@ if args.paths:
             replacements.pop((row["method"], norm(row["path"])), row)
             if norm(row["path"]) in selected else row
             for row in previous[section]
+            if norm(row["path"]) not in selected
+            or (row["method"], norm(row["path"])) in replacements
         ] + list(replacements.values())
-    previous.setdefault("source_overrides", {}).update({path: sha for path in sorted(selected)})
+    overrides = previous.setdefault("source_overrides", {})
+    for path in selected - available:
+        overrides.pop(path, None)
+    overrides.update({path: sha for path in sorted(selected & available)})
     output = previous
 (args.output or root / "contracts/management_surface.json").write_text(
     json.dumps(output, indent=2, ensure_ascii=False) + "\n"

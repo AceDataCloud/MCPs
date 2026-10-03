@@ -56,6 +56,23 @@ class ScopedManagementCompilationTests(unittest.TestCase):
             self.assertIn("Unknown routes", result.stderr)
             self.assertFalse(output.exists())
 
+    def test_scoped_refresh_removes_retired_routes_without_touching_other_contracts(self):
+        previous = json.loads(SURFACE.read_text())
+        retired_path = "admin/upstreams/{domain}/providers"
+        self.assertTrue(any(row["path"].strip("/") == retired_path for row in previous["tools"]))
+        with tempfile.TemporaryDirectory() as temporary:
+            result, output = self.compile(Path(temporary), MODEL_PATH, retired_path)
+            self.assertEqual(result.returncode, 0, result.stderr)
+            updated = json.loads(output.read_text())
+        for section in ("operations", "tools"):
+            self.assertFalse(any(row["path"].strip("/") == retired_path for row in updated[section]))
+            self.assertEqual(
+                [row for row in updated[section] if row["path"].strip("/") != MODEL_PATH],
+                [row for row in previous[section] if row["path"].strip("/") not in {MODEL_PATH, retired_path}],
+            )
+        self.assertNotIn(retired_path, updated["source_overrides"])
+        self.assertIn(MODEL_PATH, updated["source_overrides"])
+
 
 if __name__ == "__main__":
     unittest.main()

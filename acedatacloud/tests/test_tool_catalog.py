@@ -16,7 +16,6 @@ from contracts.tool_catalog import (
     CATEGORIES,
     CLIENT_HELPERS,
     CROSS_ACCOUNT_TOOLS,
-    DEPRECATED_TOOLS,
     INFO_TOOL,
     TOOL_CATALOG,
     advertised_tools,
@@ -72,22 +71,20 @@ def test_generated_business_workflows_are_not_removed_with_aliases():
     assert "acedatacloud_create_platform_tokens" not in advertised_tools()
 
 
-def test_versioned_model_list_is_deprecated_without_changing_registry():
+def test_versioned_model_list_is_removed_from_all_registries():
     legacy = "acedatacloud_list_configuration_models_v2"
     current = "acedatacloud_list_configuration_models"
-    entry = TOOL_CATALOG[legacy]
-    assert DEPRECATED_TOOLS[legacy] == current
-    assert entry.deprecated and not entry.advertised
-    assert entry.replacement == current
-    assert entry.required_permissions == TOOL_CATALOG[current].required_permissions
+    assert legacy not in TOOL_CATALOG
+    assert TOOL_CATALOG[current].required_permissions == ("provider-routing:read",)
     assert legacy not in advertised_tools()
     assert current in advertised_tools()
-    assert {legacy, current} <= advertised_tools("full")
-    assert {legacy, current} <= registered_contract_tools()
+    assert legacy not in advertised_tools("full")
+    assert legacy not in registered_contract_tools()
+    assert current in registered_contract_tools()
 
 
 @pytest.mark.parametrize("profile", ["curated", "full"])
-async def test_model_discovery_and_guide_mark_deprecation_and_keep_exact_grants(
+async def test_model_discovery_and_guide_only_expose_canonical_tool_with_exact_grants(
     monkeypatch, profile
 ):
     legacy = "acedatacloud_list_configuration_models_v2"
@@ -103,16 +100,8 @@ async def test_model_discovery_and_guide_mark_deprecation_and_keep_exact_grants(
     assert "acedatacloud/deprecated" not in visible[current].meta
     guide = await acedatacloud_get_usage_guide()
     assert f"- {current} —" in guide
-    if profile == "curated":
-        assert legacy not in visible
-        assert f"- {legacy} —" not in guide
-    else:
-        assert visible[legacy].meta["acedatacloud/deprecated"] is True
-        assert visible[legacy].meta["acedatacloud/replacement"] == current
-        assert "Deprecated:" in visible[legacy].description
-        assert "same model health cards as the canonical tool" in visible[legacy].description
-        assert f"- {legacy} —" in guide
-        assert "Deprecated:" in guide
+    assert legacy not in visible
+    assert f"- {legacy} —" not in guide
     subject["permissions"] = ["orders:read:any"]
     assert not {legacy, current} & {tool.name for tool in await list_visible_tools()}
     revoked_guide = await acedatacloud_get_usage_guide()

@@ -32,9 +32,6 @@ def _describe(tool: Tool) -> Tool:
         "acedatacloud/category": entry.category,
         "acedatacloud/audience": entry.audience,
     }
-    if entry.deprecated:
-        metadata["acedatacloud/deprecated"] = True
-        metadata["acedatacloud/replacement"] = entry.replacement
     return tool.model_copy(update={"description": description, "meta": metadata})
 
 
