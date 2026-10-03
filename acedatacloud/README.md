@@ -32,7 +32,7 @@ Discovery is grouped by business task, not by one tool per REST endpoint.
 |---------------------------|-------|
 | alternate full-replacement update | 20 |
 | client rendering, telemetry or protocol helper | 19 |
-| deprecated administrative model summary | 1 |
+| deprecated versioned compatibility alias | 1 |
 | duplicate native route | 128 |
 | prefer the task-oriented catalog reader | 4 |
 
@@ -40,11 +40,11 @@ Discovery is grouped by business task, not by one tool per REST endpoint.
 
 Deprecated tools are hidden from curated discovery. Full discovery marks them
 as deprecated and still requires their exact permissions. Existing calls retain
-their original routes and response shapes; there is no automatic redirection.
+their compatibility routes. The model list uses the canonical health-card payload.
 
 | Deprecated tool | Preferred tool |
 |-----------------|----------------|
-| `acedatacloud_list_configuration_models` | `acedatacloud_list_configuration_models_v2` |
+| `acedatacloud_list_configuration_models_v2` | `acedatacloud_list_configuration_models` |
 
 ### Categories
 
@@ -454,7 +454,7 @@ Admin tools require their exact permission grants, not just an admin label.
 | `acedatacloud_get_distribution_risk_bypasses_id` | Get distribution risk bypasses id. Backend account permissions and ownership checks apply. | admin | distribution-risk:read |
 | `acedatacloud_list_admin_ace_snapshots` | List admin ace snapshots. Backend account permissions and ownership checks apply. | admin | ace-snapshot:read |
 | `acedatacloud_list_admin_ace_snapshots_entries` | List admin ace snapshots entries. Backend account permissions and ownership checks apply. | admin | ace-snapshot:read |
-| `acedatacloud_list_configuration_models_v2` | List administrative model routing and health cards, including status, active provider, latency, check statistics and provider coverage. Supports q, status and provider filters. | admin | provider-routing:read |
+| `acedatacloud_list_configuration_models` | List administrative model routing and health cards, including status, active provider, latency, check statistics and provider coverage. Supports q, status and provider filters. | admin | provider-routing:read |
 | `acedatacloud_list_configuration_providers` | List configuration providers. Backend account permissions and ownership checks apply. | admin | provider-routing:read |
 | `acedatacloud_list_distribution_risk_bans` | List distribution risk bans. Backend account permissions and ownership checks apply. | admin | distribution-risk:read |
 | `acedatacloud_list_distribution_risk_bypasses` | List distribution risk bypasses. Backend account permissions and ownership checks apply. | admin | distribution-risk:read |

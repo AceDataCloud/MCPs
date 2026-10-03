@@ -23859,6 +23859,42 @@
           "title": "Domain",
           "type": "string"
         },
+        "q": {
+          "anyOf": [
+            {
+              "description": "acedatacloud_list_configuration_models_q"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Q"
+        },
+        "status": {
+          "anyOf": [
+            {
+              "description": "acedatacloud_list_configuration_models_status"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Status"
+        },
+        "provider": {
+          "anyOf": [
+            {
+              "description": "acedatacloud_list_configuration_models_provider"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Provider"
+        },
         "limit": {
           "anyOf": [
             {

@@ -67,33 +67,32 @@ async def test_confirmed_fixed_routes():
 
 
 @respx.mock
-async def test_deprecated_model_summary_and_current_health_cards_keep_original_routes():
-    legacy_payload = {
-        "data": [{"model": "test-model", "providers_total": 2, "providers_healthy": 1}]
-    }
-    current_payload = {"data": [{"model": "test-model", "status": "degraded", "latency": 1.5}]}
-    legacy_route = respx.get(f"{API}/admin/upstreams/llm/models/").mock(
-        return_value=httpx.Response(200, json=legacy_payload)
+async def test_canonical_model_list_and_compatibility_alias_share_health_contract():
+    payload = {"data": [{"model": "test-model", "status": "degraded", "latency": 1.5}]}
+    current_route = respx.get(f"{API}/admin/upstreams/llm/models/").mock(
+        return_value=httpx.Response(200, json=payload)
     )
-    current_route = respx.get(f"{API}/admin/upstreams/llm/models-v2/").mock(
-        return_value=httpx.Response(200, json=current_payload)
+    legacy_route = respx.get(f"{API}/admin/upstreams/llm/models-v2/").mock(
+        return_value=httpx.Response(200, json=payload)
     )
-    legacy_content, _ = await mcp.call_tool(
-        "acedatacloud_list_configuration_models", {"domain": "llm"}
-    )
-    current_content, _ = await mcp.call_tool(
-        "acedatacloud_list_configuration_models_v2",
-        {"domain": "llm", "q": "test-model", "status": "attention", "provider": "test-provider"},
-    )
-    assert json.loads(legacy_content[0].text) == legacy_payload
-    assert json.loads(current_content[0].text) == current_payload
-    assert legacy_route.call_count == current_route.call_count == 1
-    assert not legacy_route.calls.last.request.url.params
-    assert dict(current_route.calls.last.request.url.params) == {
+    arguments = {
+        "domain": "llm",
         "q": "test-model",
         "status": "attention",
         "provider": "test-provider",
     }
+    current_content, _ = await mcp.call_tool("acedatacloud_list_configuration_models", arguments)
+    legacy_content, _ = await mcp.call_tool("acedatacloud_list_configuration_models_v2", arguments)
+    assert json.loads(legacy_content[0].text) == payload
+    assert json.loads(current_content[0].text) == payload
+    assert legacy_route.call_count == current_route.call_count == 1
+    expected_query = {
+        "q": "test-model",
+        "status": "attention",
+        "provider": "test-provider",
+    }
+    assert dict(current_route.calls.last.request.url.params) == expected_query
+    assert dict(legacy_route.calls.last.request.url.params) == expected_query
 
 
 @respx.mock

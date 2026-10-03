@@ -72,9 +72,9 @@ def test_generated_business_workflows_are_not_removed_with_aliases():
     assert "acedatacloud_create_platform_tokens" not in advertised_tools()
 
 
-def test_legacy_model_summary_is_deprecated_without_changing_registry():
-    legacy = "acedatacloud_list_configuration_models"
-    current = "acedatacloud_list_configuration_models_v2"
+def test_versioned_model_list_is_deprecated_without_changing_registry():
+    legacy = "acedatacloud_list_configuration_models_v2"
+    current = "acedatacloud_list_configuration_models"
     entry = TOOL_CATALOG[legacy]
     assert DEPRECATED_TOOLS[legacy] == current
     assert entry.deprecated and not entry.advertised
@@ -90,8 +90,8 @@ def test_legacy_model_summary_is_deprecated_without_changing_registry():
 async def test_model_discovery_and_guide_mark_deprecation_and_keep_exact_grants(
     monkeypatch, profile
 ):
-    legacy = "acedatacloud_list_configuration_models"
-    current = "acedatacloud_list_configuration_models_v2"
+    legacy = "acedatacloud_list_configuration_models_v2"
+    current = "acedatacloud_list_configuration_models"
     subject = {"id": "routing-admin", "permissions": ["provider-routing:read"]}
     monkeypatch.setattr(settings, "tool_profile", profile)
     monkeypatch.setattr("core.visibility.get_request_subject", AsyncMock(return_value=subject))
@@ -110,7 +110,7 @@ async def test_model_discovery_and_guide_mark_deprecation_and_keep_exact_grants(
         assert visible[legacy].meta["acedatacloud/deprecated"] is True
         assert visible[legacy].meta["acedatacloud/replacement"] == current
         assert "Deprecated:" in visible[legacy].description
-        assert "original route and summary response shape" in visible[legacy].description
+        assert "same model health cards as the canonical tool" in visible[legacy].description
         assert f"- {legacy} —" in guide
         assert "Deprecated:" in guide
     subject["permissions"] = ["orders:read:any"]

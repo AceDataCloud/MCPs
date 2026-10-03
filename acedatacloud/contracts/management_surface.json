@@ -3141,7 +3141,7 @@
     {
       "method": "GET",
       "path": "/admin/upstreams/{domain}/models-v2/",
-      "handler": "UpstreamModelV2ListView",
+      "handler": "UpstreamModelListView",
       "coverage": "covered",
       "tool": "acedatacloud_list_configuration_models_v2"
     },
@@ -20095,6 +20095,9 @@
       "query_schema": {
         "type": "object",
         "properties": {
+          "q": {},
+          "status": {},
+          "provider": {},
           "limit": {
             "type": "integer",
             "minimum": 1,
@@ -20187,5 +20190,9 @@
       "description": "Get admin users analytics. Backend account permissions and ownership checks apply.",
       "disclose": []
     }
-  ]
+  ],
+  "source_overrides": {
+    "admin/upstreams/{domain}/models": "4efc4f5c2f562a7ee3f02766cafb3e09620c22a6",
+    "admin/upstreams/{domain}/models-v2": "4efc4f5c2f562a7ee3f02766cafb3e09620c22a6"
+  }
 }

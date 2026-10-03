@@ -110,16 +110,16 @@ PREFERRED_READS = {
 }
 
 DEPRECATED_TOOLS = {
-    "acedatacloud_list_configuration_models": "acedatacloud_list_configuration_models_v2",
+    "acedatacloud_list_configuration_models_v2": "acedatacloud_list_configuration_models",
 }
 
 TOOL_DESCRIPTIONS = {
     "acedatacloud_list_configuration_models": (
-        "List legacy administrative model summaries with provider counts and the active provider."
-    ),
-    "acedatacloud_list_configuration_models_v2": (
         "List administrative model routing and health cards, including status, active provider, "
         "latency, check statistics and provider coverage. Supports q, status and provider filters."
+    ),
+    "acedatacloud_list_configuration_models_v2": (
+        "Compatibility alias for the administrative model routing and health card list."
     ),
 }
 
@@ -209,7 +209,7 @@ def build_catalog() -> dict[str, CatalogEntry]:
         reason = "business operation"
         replacement = None
         if name in DEPRECATED_TOOLS:
-            advertised, reason = False, "deprecated administrative model summary"
+            advertised, reason = False, "deprecated versioned compatibility alias"
             replacement = DEPRECATED_TOOLS[name]
         elif name in CLIENT_HELPERS or (operation.method, _route(operation.path)) in helper_routes:
             advertised, reason = False, "client rendering, telemetry or protocol helper"
@@ -245,7 +245,7 @@ def tool_description(name: str, fallback: str) -> str:
     if entry is not None and entry.deprecated:
         description += (
             f" Deprecated: prefer {entry.replacement} for new integrations. "
-            "Legacy calls retain their original route and summary response shape."
+            "The compatibility route returns the same model health cards as the canonical tool."
         )
     return description
 
