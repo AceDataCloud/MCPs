@@ -3,7 +3,13 @@
 from mcp.types import Tool
 
 from contracts.platform_operations import OPERATIONS
-from contracts.tool_catalog import CROSS_ACCOUNT_TOOLS, INFO_TOOL, TOOL_CATALOG, advertised_tools
+from contracts.tool_catalog import (
+    CROSS_ACCOUNT_TOOLS,
+    INFO_TOOL,
+    TOOL_CATALOG,
+    advertised_tools,
+    tool_description,
+)
 from core.client import client, get_request_api_token, get_request_subject
 from core.config import settings
 from core.exceptions import PlatformError
@@ -14,23 +20,22 @@ def _describe(tool: Tool) -> Tool:
     entry = TOOL_CATALOG.get(tool.name)
     if entry is None:
         return tool
-    description = tool.description or ""
+    description = tool_description(tool.name, tool.description or "")
     if tool.name in CROSS_ACCOUNT_TOOLS:
         description += (
             "\nAdministrative cross-account collection query. Requires "
             + CROSS_ACCOUNT_TOOLS[tool.name]
             + ". Use the native account tool for your own data."
         )
-    return tool.model_copy(
-        update={
-            "description": description,
-            "meta": {
-                **(tool.meta or {}),
-                "acedatacloud/category": entry.category,
-                "acedatacloud/audience": entry.audience,
-            },
-        }
-    )
+    metadata = {
+        **(tool.meta or {}),
+        "acedatacloud/category": entry.category,
+        "acedatacloud/audience": entry.audience,
+    }
+    if entry.deprecated:
+        metadata["acedatacloud/deprecated"] = True
+        metadata["acedatacloud/replacement"] = entry.replacement
+    return tool.model_copy(update={"description": description, "meta": metadata})
 
 
 async def list_visible_tools() -> list[Tool]:

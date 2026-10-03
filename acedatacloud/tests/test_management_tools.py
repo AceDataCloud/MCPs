@@ -67,6 +67,36 @@ async def test_confirmed_fixed_routes():
 
 
 @respx.mock
+async def test_deprecated_model_summary_and_current_health_cards_keep_original_routes():
+    legacy_payload = {
+        "data": [{"model": "test-model", "providers_total": 2, "providers_healthy": 1}]
+    }
+    current_payload = {"data": [{"model": "test-model", "status": "degraded", "latency": 1.5}]}
+    legacy_route = respx.get(f"{API}/admin/upstreams/llm/models/").mock(
+        return_value=httpx.Response(200, json=legacy_payload)
+    )
+    current_route = respx.get(f"{API}/admin/upstreams/llm/models-v2/").mock(
+        return_value=httpx.Response(200, json=current_payload)
+    )
+    legacy_content, _ = await mcp.call_tool(
+        "acedatacloud_list_configuration_models", {"domain": "llm"}
+    )
+    current_content, _ = await mcp.call_tool(
+        "acedatacloud_list_configuration_models_v2",
+        {"domain": "llm", "q": "test-model", "status": "attention", "provider": "test-provider"},
+    )
+    assert json.loads(legacy_content[0].text) == legacy_payload
+    assert json.loads(current_content[0].text) == current_payload
+    assert legacy_route.call_count == current_route.call_count == 1
+    assert not legacy_route.calls.last.request.url.params
+    assert dict(current_route.calls.last.request.url.params) == {
+        "q": "test-model",
+        "status": "attention",
+        "provider": "test-provider",
+    }
+
+
+@respx.mock
 async def test_actual_mcp_schema_validates_required_allocation_fields():
     with pytest.raises(ToolError):
         await mcp.call_tool(
