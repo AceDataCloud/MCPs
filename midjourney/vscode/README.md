@@ -15,12 +15,12 @@ can call it directly from chat.
 
 ## Quick Start
 
-For native VS Code MCP OAuth, run **MCP: Add Server → HTTP**, add `https://midjourney.mcp.acedata.cloud/mcp`, then sign in and authorize. [Setup and pricing](https://platform.acedata.cloud/api/v1/marketing-attribution/entry/midjourneymcp/?utm_source=vscode&utm_medium=extension&utm_campaign=opensource_activation&utm_content=native_oauth). This does not require this API-key extension. Client version must support remote OAuth/DCR.
+For native VS Code MCP OAuth, run **MCP: Add Server → HTTP**, add `https://midjourney.mcp.acedata.cloud/mcp`, then sign in and authorize. [Setup and pricing](https://platform.acedata.cloud/api/v1/marketing-attribution/entry/midjourneymcp/?utm_source=midjourneymcp&utm_medium=extension&utm_campaign=opensource_activation&utm_content=native_oauth). This does not require this API-key extension. Client version must support remote OAuth/DCR.
 
 ### Optional API-key extension
 
 1. **Install this extension.** VS Code registers the `midjourney` MCP server automatically.
-2. **Get an API key** from [Ace Data Cloud](https://platform.acedata.cloud/api/v1/marketing-attribution/entry/midjourneymcp/?utm_source=vscode&utm_medium=extension&utm_campaign=opensource_activation&utm_content=api_token) (Applications → API Key). Check the current service price and account balance before generating.
+2. **Get an API key** from [Ace Data Cloud](https://platform.acedata.cloud/api/v1/marketing-attribution/entry/midjourneymcp/?utm_source=midjourneymcp&utm_medium=extension&utm_campaign=opensource_activation&utm_content=api_token) (Applications → API Key). Check the current service price and account balance before generating.
 3. **Open Copilot Chat** in agent mode and ask for a image task — the extension prompts for the API key the first time and stores it in the OS keychain via VS Code's `SecretStorage`.
 
 You can rotate or remove the API key any time from the command palette:

@@ -9,7 +9,7 @@ ENTRIES = {
 
 def entry_url(alias, content="quick_start", medium="readme"):
     return "https://platform.acedata.cloud/api/v1/marketing-attribution/entry/" + ENTRIES[alias][0].lower() + "/?" + urlencode({
-        "utm_source": "github" if medium == "readme" else "vscode",
+        "utm_source": ENTRIES[alias][0].lower(),
         "utm_medium": medium, "utm_campaign": "opensource_activation", "utm_content": content,
     })
 
