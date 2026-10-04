@@ -133,7 +133,7 @@ def build_tool(spec: dict[str, Any]) -> Any:
             for key, arg in query_names.items()
             if kwargs.get(arg) is not None
         }
-        target = {
+        target: dict[str, Any] = {
             "path": {key: kwargs[key] for key in spec["path_parameters"]},
             "body": body,
             "query": query,

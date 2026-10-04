@@ -21,6 +21,10 @@ Claude, VS Code, Studio, or any MCP-compatible client.
 > from the data-generation MCP servers (Suno, Midjourney, …) that call
 > `api.acedata.cloud`.
 
+### Editing Site configuration safely
+
+Read `acedatacloud_get_site` (or `acedatacloud_get_sites_id`) before preparing a Site edit. Pass that response's `configuration_revision` to Site update/replace, menu translation, and `model="site"` translation tools. The revision is sent as `If-Match`, never written into the Site body. Previews include the revision and make no HTTP calls. A confirmed write without a revision is rejected locally; a stale revision returns a conflict without an automatic retry. Re-read and reconcile your intended change before confirming again. Public Site lists omit private assistant configuration and are not complete editing snapshots.
+
 <!-- BEGIN GENERATED TOOL REFERENCE -->
 ## Tool Reference
 
