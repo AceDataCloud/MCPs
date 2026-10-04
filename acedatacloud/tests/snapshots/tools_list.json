@@ -9252,6 +9252,20 @@
           "default": null,
           "title": "Content"
         },
+        "configuration_revision": {
+          "anyOf": [
+            {
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Revision from the Site management read used to prepare this edit; required for Site writes.",
+          "title": "Configuration Revision"
+        },
         "confirm": {
           "default": false,
           "title": "Confirm",
@@ -9546,6 +9560,20 @@
           "default": null,
           "title": "Content"
         },
+        "configuration_revision": {
+          "anyOf": [
+            {
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Revision from the Site management read used to prepare this edit; required for Site writes.",
+          "title": "Configuration Revision"
+        },
         "confirm": {
           "default": false,
           "title": "Confirm",
@@ -9607,6 +9635,20 @@
           ],
           "default": null,
           "title": "Content"
+        },
+        "configuration_revision": {
+          "anyOf": [
+            {
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Revision from the Site management read used to prepare this edit; required for Site writes.",
+          "title": "Configuration Revision"
         },
         "confirm": {
           "default": false,
@@ -14536,6 +14578,20 @@
           "description": "Must be true to disable auto-translation.",
           "title": "Confirm",
           "type": "boolean"
+        },
+        "configuration_revision": {
+          "anyOf": [
+            {
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Required for model=site: revision from acedatacloud_get_site used to prepare the edit.",
+          "title": "Configuration Revision"
         }
       },
       "required": [
@@ -14591,6 +14647,20 @@
           "description": "Must be true to enable auto-translation.",
           "title": "Confirm",
           "type": "boolean"
+        },
+        "configuration_revision": {
+          "anyOf": [
+            {
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Required for model=site: revision from acedatacloud_get_site used to prepare the edit.",
+          "title": "Configuration Revision"
         }
       },
       "required": [
@@ -31512,21 +31582,6 @@
           "default": null,
           "title": "Auth"
         },
-        "configuration_revision": {
-          "anyOf": [
-            {
-              "description": "acedatacloud_replace_sites_id_configuration_revision",
-              "maximum": 9223372036854775807,
-              "minimum": 0,
-              "type": "integer"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "title": "Configuration Revision"
-        },
         "tags": {
           "anyOf": [
             {
@@ -31717,6 +31772,20 @@
           ],
           "default": null,
           "title": "Analytics"
+        },
+        "configuration_revision": {
+          "anyOf": [
+            {
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Revision from the Site management read used to prepare this edit; required for Site writes.",
+          "title": "Configuration Revision"
         },
         "confirm": {
           "default": false,
@@ -32801,6 +32870,20 @@
           "description": "Must be true to update translation.",
           "title": "Confirm",
           "type": "boolean"
+        },
+        "configuration_revision": {
+          "anyOf": [
+            {
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Revision from acedatacloud_get_site used to prepare this edit; reload after a conflict.",
+          "title": "Configuration Revision"
         }
       },
       "required": [
@@ -35701,6 +35784,20 @@
           "description": "Must be true to update.",
           "title": "Confirm",
           "type": "boolean"
+        },
+        "configuration_revision": {
+          "anyOf": [
+            {
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Revision from acedatacloud_get_site used to prepare this edit; reload after a conflict.",
+          "title": "Configuration Revision"
         }
       },
       "required": [
@@ -37271,21 +37368,6 @@
           "default": null,
           "title": "Auth"
         },
-        "configuration_revision": {
-          "anyOf": [
-            {
-              "description": "acedatacloud_update_sites_id_configuration_revision",
-              "maximum": 9223372036854775807,
-              "minimum": 0,
-              "type": "integer"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "title": "Configuration Revision"
-        },
         "tags": {
           "anyOf": [
             {
@@ -37476,6 +37558,20 @@
           ],
           "default": null,
           "title": "Analytics"
+        },
+        "configuration_revision": {
+          "anyOf": [
+            {
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Revision from the Site management read used to prepare this edit; required for Site writes.",
+          "title": "Configuration Revision"
         },
         "confirm": {
           "default": false,

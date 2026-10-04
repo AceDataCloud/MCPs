@@ -36,6 +36,24 @@ async def _mutate(method: str, path: str, body: dict, confirm: bool) -> str:
         return error_json(error.code, error.message)
 
 
+async def _mutate_site(
+    method: str, path: str, body: dict, confirm: bool, revision: int | None
+) -> str:
+    if not confirm:
+        return confirmation_required(
+            f"{method} {path}", {**body, "configuration_revision": revision}
+        )
+    if type(revision) is not int or revision < 1:
+        return error_json(
+            "configuration_revision_required",
+            "Read acedatacloud_get_site and pass its configuration_revision before saving.",
+        )
+    try:
+        return dumps(await client.request(method, path, json_body=body, if_match=revision))
+    except PlatformError as error:
+        return error_json(error.code, error.message)
+
+
 @mcp.tool()
 async def acedatacloud_initialize_site(
     origin: Annotated[str, Field(description="Site origin URL.")],
@@ -82,9 +100,16 @@ async def acedatacloud_update_site(
     tags: Annotated[list[str] | None, Field(description="Site tags.")] = None,
     metadata: Annotated[dict[str, Any] | None, Field(description="Site metadata.")] = None,
     confirm: Annotated[bool, Field(description="Must be true to update.")] = False,
+    configuration_revision: Annotated[
+        int | None,
+        Field(
+            ge=1,
+            description="Revision from acedatacloud_get_site used to prepare this edit; reload after a conflict.",
+        ),
+    ] = None,
 ) -> str:
     """Patch safe site-admin configuration fields."""
-    return await _mutate(
+    return await _mutate_site(
         "PATCH",
         f"/sites/{site_id}",
         _body(
@@ -100,6 +125,7 @@ async def acedatacloud_update_site(
             metadata=metadata,
         ),
         confirm,
+        configuration_revision,
     )
 
 
@@ -111,13 +137,21 @@ async def acedatacloud_set_site_menu_translation(
     enabled: Annotated[bool, Field(description="Enable auto-translation.")],
     content: Annotated[str | None, Field(description="Source text when enabling.")] = None,
     confirm: Annotated[bool, Field(description="Must be true to update translation.")] = False,
+    configuration_revision: Annotated[
+        int | None,
+        Field(
+            ge=1,
+            description="Revision from acedatacloud_get_site used to prepare this edit; reload after a conflict.",
+        ),
+    ] = None,
 ) -> str:
     """Enable or disable translation for one custom menu item."""
-    return await _mutate(
+    return await _mutate_site(
         "POST",
         f"/sites/{site_id}/menu-translations",
         _body(scope=scope, custom_item_id=custom_item_id, enabled=enabled, content=content),
         confirm,
+        configuration_revision,
     )
 
 

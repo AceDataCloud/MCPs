@@ -144,6 +144,7 @@ class PlatformClient:
         timeout: float | None = None,
         auth_required: bool = True,
         follow_redirects: bool = False,
+        if_match: int | None = None,
     ) -> Any:
         """Make a JSON request to ``/api/v1{endpoint}``."""
         response = await self._send(
@@ -154,6 +155,7 @@ class PlatformClient:
             timeout=timeout,
             auth_required=auth_required,
             follow_redirects=follow_redirects,
+            if_match=if_match,
         )
         if response.status_code == 204 or not response.content:
             return None
@@ -209,10 +211,18 @@ class PlatformClient:
         auth_required: bool = True,
         follow_redirects: bool = False,
         display_endpoint: str | None = None,
+        if_match: int | None = None,
     ) -> httpx.Response:
         url = f"{self.base_url}/api/v1{endpoint}"
         request_timeout = timeout or self.timeout
         clean_params = _clean_params(params)
+        headers = self._get_headers(auth_required)
+        if if_match is not None:
+            if type(if_match) is not int or if_match < 1:
+                raise PlatformAPIError(
+                    "Invalid configuration revision", code="invalid_configuration_revision"
+                )
+            headers["If-Match"] = str(if_match)
 
         logged_endpoint = display_endpoint or endpoint
         logger.info(f"{method} {self.base_url}/api/v1{logged_endpoint}")
@@ -226,7 +236,7 @@ class PlatformClient:
                     url,
                     params=clean_params or None,
                     json=json_body,
-                    headers=self._get_headers(auth_required),
+                    headers=headers,
                     timeout=request_timeout,
                 )
                 logger.info(f"Response status: {response.status_code}")
@@ -253,6 +263,7 @@ class PlatformClient:
         json_body: dict[str, Any] | None = None,
         auth_required: bool = True,
         display_endpoint: str | None = None,
+        if_match: int | None = None,
     ) -> Any:
         """Return JSON, a redirect link, or a bounded downloadable artifact."""
         response = await self._send(
@@ -262,6 +273,7 @@ class PlatformClient:
             json_body=json_body,
             auth_required=auth_required,
             display_endpoint=display_endpoint,
+            if_match=if_match,
         )
         if response.status_code == 204 or not response.content and not response.is_redirect:
             return None

@@ -175,3 +175,31 @@ async def test_override_confirmed_methods_and_bodies():
         )
         assert json.loads(await function(*args, confirm=True))["ok"] is True
         assert route.call_count == 1
+
+
+@respx.mock
+@pytest.mark.asyncio
+@pytest.mark.parametrize("revision", [None, 0, -1, True])
+async def test_site_confirmed_write_requires_original_read_revision(revision):
+    result = json.loads(
+        await acedatacloud_update_site(
+            ID, title="Draft", confirm=True, configuration_revision=revision
+        )
+    )
+    assert result["error"] == "configuration_revision_required"
+    assert not respx.calls
+
+
+@respx.mock
+@pytest.mark.asyncio
+async def test_site_write_sends_if_match_and_does_not_retry_conflict():
+    route = respx.patch(f"{API}/sites/{ID}").mock(
+        return_value=httpx.Response(409, json={"detail": "Reload Site"})
+    )
+    result = json.loads(
+        await acedatacloud_update_site(ID, title="Draft", confirm=True, configuration_revision=7)
+    )
+    assert result["error"] == "http_409"
+    assert route.call_count == 1
+    assert route.calls.last.request.headers["If-Match"] == "7"
+    assert json.loads(route.calls.last.request.content) == {"title": "Draft"}

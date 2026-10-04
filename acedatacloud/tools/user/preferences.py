@@ -8,6 +8,7 @@ from core.client import client
 from core.exceptions import PlatformError
 from core.server import mcp
 from core.utils import confirmation_required, dumps, error_json
+from tools.user.sites import _mutate_site
 
 
 @mcp.tool()
@@ -26,9 +27,20 @@ async def acedatacloud_enable_translation(
     field: Annotated[str, Field(description="Translatable field name.")],
     content: Annotated[str, Field(description="Source-language content.")],
     confirm: Annotated[bool, Field(description="Must be true to enable auto-translation.")] = False,
+    configuration_revision: Annotated[
+        int | None,
+        Field(
+            ge=1,
+            description="Required for model=site: revision from acedatacloud_get_site used to prepare the edit.",
+        ),
+    ] = None,
 ) -> str:
     """Store source text and replace a field with an auto-translation reference."""
     body = {"model": model, "object_id": object_id, "field": field, "content": content}
+    if model == "site":
+        return await _mutate_site(
+            "POST", "/translations/enable", body, confirm, configuration_revision
+        )
     if not confirm:
         return confirmation_required("POST /translations/enable", body)
     try:
@@ -46,11 +58,22 @@ async def acedatacloud_disable_translation(
     confirm: Annotated[
         bool, Field(description="Must be true to disable auto-translation.")
     ] = False,
+    configuration_revision: Annotated[
+        int | None,
+        Field(
+            ge=1,
+            description="Required for model=site: revision from acedatacloud_get_site used to prepare the edit.",
+        ),
+    ] = None,
 ) -> str:
     """Remove an auto-translation reference and restore source content."""
     body = {"model": model, "object_id": object_id, "field": field}
     if content is not None:
         body["content"] = content
+    if model == "site":
+        return await _mutate_site(
+            "POST", "/translations/disable", body, confirm, configuration_revision
+        )
     if not confirm:
         return confirmation_required("POST /translations/disable", body)
     try:

@@ -65,6 +65,11 @@ def _plain(value: Any) -> Any:
 
 def build_tool(spec: dict[str, Any]) -> Any:
     """Build one native tool with a fixed method/path and validated request fields."""
+    site_write = (spec["path"] == "/sites/{id}" and spec["method"] in {"PATCH", "PUT"}) or spec[
+        "path"
+    ] == "/sites/{id}/menu-translations"
+    site_translation = spec["path"] in {"/translations/enable", "/translations/disable"}
+    revision_capable = site_write or site_translation
     parameters: list[inspect.Parameter] = []
     names: set[str] = set()
     body_names: dict[str, str] = {}
@@ -76,6 +81,8 @@ def build_tool(spec: dict[str, Any]) -> Any:
         schema = spec[schema_name]
         required = set(schema.get("required", []))
         for key, value in schema.get("properties", {}).items():
+            if revision_capable and key == "configuration_revision":
+                continue
             argument = (
                 key
                 if key not in names and key != "confirm"
@@ -92,6 +99,21 @@ def build_tool(spec: dict[str, Any]) -> Any:
                     default=inspect.Parameter.empty if key in required else None,
                 )
             )
+    if revision_capable:
+        parameters.append(
+            inspect.Parameter(
+                "configuration_revision",
+                inspect.Parameter.KEYWORD_ONLY,
+                annotation=Annotated[
+                    int | None,
+                    Field(
+                        ge=1,
+                        description="Revision from the Site management read used to prepare this edit; required for Site writes.",
+                    ),
+                ],
+                default=None,
+            )
+        )
     if spec["confirm"]:
         parameters.append(
             inspect.Parameter(
@@ -116,8 +138,17 @@ def build_tool(spec: dict[str, Any]) -> Any:
             "body": body,
             "query": query,
         }
+        revision = kwargs.get("configuration_revision")
+        requires_revision = site_write or (site_translation and body.get("model") == "site")
+        if requires_revision:
+            target["configuration_revision"] = revision
         if spec["confirm"] and not kwargs.get("confirm", False):
             return confirmation_required(spec["method"] + " " + spec["path"], target)
+        if requires_revision and (type(revision) is not int or revision < 1):
+            return error_json(
+                "configuration_revision_required",
+                "Read the Site configuration and pass its configuration_revision before saving.",
+            )
         endpoint = spec["path"]
         for key in spec["path_parameters"]:
             value = str(kwargs[key])
@@ -184,6 +215,7 @@ def build_tool(spec: dict[str, Any]) -> Any:
                     json_body=body if spec["method"] != "GET" else None,
                     auth_required=spec["authentication"] != "public",
                     display_endpoint=spec["path"],
+                    if_match=revision if requires_revision else None,
                 )
             return dumps(result, disclose=set(spec.get("disclose", [])))
         except PlatformError as error:

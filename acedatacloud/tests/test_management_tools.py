@@ -255,3 +255,52 @@ async def test_native_token_creation_discloses_only_the_new_token():
     result = json.loads(await REGISTERED_TOOLS["acedatacloud_create_platform_tokens"](confirm=True))
     assert result["token"] == "platform-new-token"
     assert result["metadata"]["other_token"] != "secret-sibling-value"
+
+
+@respx.mock
+@pytest.mark.parametrize(
+    "name,method,path,extra",
+    [
+        (
+            "acedatacloud_update_sites_id",
+            "PATCH",
+            "/sites/site-1",
+            {"id": "site-1", "title": "Draft"},
+        ),
+        (
+            "acedatacloud_replace_sites_id",
+            "PUT",
+            "/sites/site-1",
+            {"id": "site-1", "title": "Draft"},
+        ),
+        (
+            "acedatacloud_create_sites_menu_translations",
+            "POST",
+            "/sites/site-1/menu-translations",
+            {"id": "site-1"},
+        ),
+        (
+            "acedatacloud_create_translations_enable",
+            "POST",
+            "/translations/enable",
+            {"model": "site", "object_id": "site-1", "field": "title", "content": "Source"},
+        ),
+        (
+            "acedatacloud_create_translations_disable",
+            "POST",
+            "/translations/disable",
+            {"model": "site", "object_id": "site-1", "field": "title"},
+        ),
+    ],
+)
+async def test_generated_site_mutations_require_and_forward_revision(name, method, path, extra):
+    tool = REGISTERED_TOOLS[name]
+    missing = json.loads(await tool(**extra, confirm=True))
+    assert missing["error"] == "configuration_revision_required"
+    assert not respx.calls
+    route = respx.request(method, f"{API}{path}").mock(
+        return_value=httpx.Response(200, json={"ok": True})
+    )
+    assert json.loads(await tool(**extra, confirm=True, configuration_revision=7))["ok"]
+    assert route.calls.last.request.headers["If-Match"] == "7"
+    assert "configuration_revision" not in json.loads(route.calls.last.request.content)

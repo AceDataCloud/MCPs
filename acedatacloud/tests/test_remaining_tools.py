@@ -174,7 +174,8 @@ async def test_remaining_confirmed_mutation_routes():
         route = respx.request(method, f"{API}{path}").mock(
             return_value=httpx.Response(200, json={"ok": True})
         )
-        result = json.loads(await function(*args, confirm=True))
+        kwargs = {"configuration_revision": 7} if path.startswith("/translations/") else {}
+        result = json.loads(await function(*args, confirm=True, **kwargs))
         assert result["ok"] is True
         assert route.call_count == 1
 
