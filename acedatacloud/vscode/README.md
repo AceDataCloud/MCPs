@@ -1,8 +1,9 @@
-# Ace Data Cloud MCP
+# Ace Data Cloud Account MCP
 
 Manage your Ace Data Cloud account — balance, usage, API keys, orders, and tokens.
 
-[![VS Code Marketplace](https://img.shields.io/badge/VS%20Code-Marketplace-blue?logo=visualstudiocode&logoColor=white)](https://marketplace.visualstudio.com/items?itemName=acedatacloud.mcp-acedatacloud) [![PyPI](https://img.shields.io/pypi/v/mcp-acedatacloud.svg?label=PyPI)](https://pypi.org/project/mcp-acedatacloud/) [![Hosted MCP](https://img.shields.io/badge/hosted-mcp-blue)](https://mcp.acedata.cloud/mcp)
+
+[![VS Code Marketplace](https://img.shields.io/visual-studio-marketplace/v/acedatacloud.mcp-acedatacloud?label=VS%20Code)](https://marketplace.visualstudio.com/items?itemName=acedatacloud.mcp-acedatacloud) [![PyPI](https://img.shields.io/pypi/v/mcp-acedatacloud.svg?label=PyPI)](https://pypi.org/project/mcp-acedatacloud/) [![Hosted MCP](https://img.shields.io/badge/hosted-mcp-blue)](https://mcp.acedata.cloud/mcp)
 
 Connect VS Code's AI agents to the Ace Data Cloud platform console. Check your balance, look up usage and spend, manage API keys and platform tokens, list services and models, and create or pay recharge orders — all from chat.
 
@@ -20,8 +21,8 @@ can call it directly from chat.
 
 You can rotate or remove the API key any time from the command palette:
 
-- **Ace Data Cloud MCP: Set Ace Data Cloud API Key**
-- **Ace Data Cloud MCP: Clear Ace Data Cloud API Key**
+- **Ace Data Cloud Account MCP: Set Ace Data Cloud API Key**
+- **Ace Data Cloud Account MCP: Clear Ace Data Cloud API Key**
 
 > The default config talks to the **hosted streamable-HTTP endpoint** at
 > `https://mcp.acedata.cloud/mcp` — no Python, no `uvx`, no local install needed.
@@ -42,7 +43,7 @@ _Tool list is dynamically loaded from the server. Run a query to discover availa
 
 ## Pricing
 
-Free — management API calls are not billed. Recharges use your existing balance. See full pricing at [https://platform.acedata.cloud/documents/acedatacloud-mcp](https://platform.acedata.cloud/documents/acedatacloud-mcp?utm_source=vscode_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=acedatacloud_mcp_vscode_quick_start).
+Free — management API calls are not billed. Recharges use your existing balance. See [Documentation](https://platform.acedata.cloud/documents/acedatacloud-mcp?utm_source=vscode_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=acedatacloud_mcp_vscode_quick_start).
 
 ---
 
@@ -53,7 +54,7 @@ and registers a single hosted server with VS Code:
 
 ```text
 Provider id : acedatacloud.acedatacloud
-Server label: Ace Data Cloud MCP
+Server label: Ace Data Cloud Account MCP
 Server URL  : https://mcp.acedata.cloud/mcp
 Transport   : Streamable HTTP
 Auth        : Bearer API key from VS Code SecretStorage (or $ACEDATACLOUD_PLATFORM_TOKEN)
@@ -79,7 +80,7 @@ this extension.
     {
       "type": "promptString",
       "id": "acedatacloud_api_token",
-    "description": "Ace Data Cloud API key",
+            "description": "Ace Data Cloud API key",
       "password": true
     }
   ]
@@ -114,7 +115,7 @@ version, install [`uv`](https://docs.astral.sh/uv/) and use:
 - **PyPI package:** [`mcp-acedatacloud`](https://pypi.org/project/mcp-acedatacloud/)
 - **Source repository:** https://github.com/AceDataCloud/AceDataCloudMCP
 - **Ace Data Cloud platform:** https://platform.acedata.cloud?utm_source=vscode_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=acedatacloud_mcp_vscode_platform
-- **MCP documentation:** https://platform.acedata.cloud/documents/acedatacloud-mcp?utm_source=vscode_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=acedatacloud_mcp_vscode_quick_start
+- **Documentation:** https://platform.acedata.cloud/documents/acedatacloud-mcp?utm_source=vscode_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=acedatacloud_mcp_vscode_quick_start
 
 ## License
 

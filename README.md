@@ -42,6 +42,19 @@ Monorepo for all AceDataCloud MCP (Model Context Protocol) servers.
 
 ## Publishing
 
+The combined [Ace Data Cloud MCP extension](https://marketplace.visualstudio.com/items?itemName=acedatacloud.mcp-toolbox)
+is maintained in `vscode-bundle/`. `sync.yaml` distributes that source to
+[VSCodeMCP](https://github.com/AceDataCloud/VSCodeMCP), whose publish workflow
+builds and verifies the Marketplace release. Individual service extensions remain
+independent.
+
+Enable a verified hosted service through `vscode_bundle` in
+`scripts/mcp_catalog.json`, then run `python3 scripts/build_vscode_bundle.py`.
+The generator reads hosted URLs and credential kinds from each `server.json`;
+it excludes retired services and rejects unexpected credential destinations.
+Normal CI checks the generated service list and runs the bundle's tests/package
+build. Update the source here rather than editing the standalone repository.
+
 Each MCP is published to multiple channels automatically on every push to `main`:
 
 | Channel | Status |
