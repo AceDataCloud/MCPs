@@ -1,8 +1,14 @@
 # OpenAIMCP
 
+<!-- mcp-name: io.github.AceDataCloud/mcp-openai -->
+
 A [Model Context Protocol (MCP)](https://modelcontextprotocol.io) server for OpenAI API access using [AceDataCloud](https://platform.acedata.cloud?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=openai_mcp_readme_platform).
 
 Interact with OpenAI models for chat completions, image generation, text embeddings, and more — directly from Claude, VS Code, or any MCP-compatible client.
+
+The AceDataCloud distribution is `mcp-openai-acedatacloud`. The unrelated
+`mcp-openai` package on PyPI is not maintained by AceDataCloud. Update existing
+`uvx` configurations to the new package name; the hosted MCP URL is unchanged.
 
 ## Features
 
@@ -22,7 +28,7 @@ Get an API token from [AceDataCloud](https://platform.acedata.cloud?utm_source=g
 ### Installation
 
 ```bash
-pip install mcp-openai
+pip install mcp-openai-acedatacloud
 ```
 
 ### Configuration
@@ -36,7 +42,7 @@ export ACEDATACLOUD_API_TOKEN=your_api_token_here
 ### Run
 
 ```bash
-mcp-openai
+mcp-openai-acedatacloud
 ```
 
 ## Available Tools
