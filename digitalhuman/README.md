@@ -38,4 +38,4 @@ ruff check .
 ## Documentation
 
 <!-- canonical-documentation -->
-[Documentation](https://platform.acedata.cloud/documents/digitalhuman)
+[Documentation](https://platform.acedata.cloud/documents/digitalhuman?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=digitalhuman_mcp_readme_quick_start)

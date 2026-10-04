@@ -33,7 +33,7 @@ Set your AceDataCloud API token:
 export ACEDATACLOUD_API_TOKEN=your_token_here
 ```
 
-Get your token from [https://platform.acedata.cloud](https://platform.acedata.cloud).
+Get your token from [https://platform.acedata.cloud](https://platform.acedata.cloud?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=face_mcp_readme_platform).
 
 ## Usage
 
@@ -120,7 +120,7 @@ ruff check .
 ## Service details
 
 <!-- canonical-documentation -->
-[Service details](https://platform.acedata.cloud/services/8efa1d83-9b75-4562-b44a-af95ce563d05)
+[Service details](https://platform.acedata.cloud/services/8efa1d83-9b75-4562-b44a-af95ce563d05?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=face_mcp_readme_quick_start)
 
 ## License
 

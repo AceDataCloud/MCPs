@@ -7,6 +7,7 @@ import re
 import sys
 import tomllib
 from pathlib import Path
+from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
 
 from mcp_catalog import documentation_target, load_catalog
 
@@ -14,6 +15,21 @@ ROOT = Path(__file__).resolve().parents[1]
 
 PLATFORM_ROOT = "https://platform.acedata.cloud"
 LEGACY_DOCS_ROOT = "https://docs.acedata.cloud"
+
+
+def without_utm(text: str) -> str:
+    def clean(match):
+        parts = urlsplit(match[0])
+        query = [
+            (key, value)
+            for key, value in parse_qsl(parts.query)
+            if key not in {"utm_source", "utm_medium", "utm_campaign", "utm_content"}
+        ]
+        return urlunsplit(
+            (parts.scheme, parts.netloc, parts.path, urlencode(query), parts.fragment)
+        )
+
+    return re.sub(r"https://platform\.acedata\.cloud[^\s)\"<>\[\]`]*", clean, text)
 
 
 def fail(errors: list[str], message: str) -> None:
@@ -75,14 +91,14 @@ def main() -> int:
         pyproject_path = ROOT / alias / "pyproject.toml"
         project = tomllib.loads(pyproject_path.read_text())["project"]
         actual_url = (project.get("urls") or {}).get("Documentation")
-        if actual_url != url:
+        if (without_utm(actual_url) if actual_url else None) != url:
             fail(
                 errors,
                 f"{alias}/pyproject.toml: Documentation must be {url!r}, found {actual_url!r}",
             )
 
         readme_path = ROOT / alias / "README.md"
-        readme = readme_path.read_text()
+        readme = without_utm(readme_path.read_text())
         if url:
             expected = f"<!-- canonical-documentation -->\n[{label}]({url})"
             if expected not in readme:

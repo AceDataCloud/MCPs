@@ -5,7 +5,7 @@ Google Search with [Google SERP](https://google.com) via [Model Context Protocol
 <!-- Plugin description -->
 This plugin helps you set up the MCP Google SERP server with JetBrains AI Assistant.
 Once configured, AI Assistant can web, images, news, videos, maps and more
-— all powered by [Ace Data Cloud](https://platform.acedata.cloud).
+— all powered by [Ace Data Cloud](https://platform.acedata.cloud?utm_source=jetbrains_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=serp_mcp_jetbrains_platform).
 
 **11 AI Tools** — Web, Images, News, Videos, Maps and more.
 <!-- Plugin description end -->
@@ -14,7 +14,7 @@ Once configured, AI Assistant can web, images, news, videos, maps and more
 
 1. Install this plugin from the [JetBrains Marketplace](https://plugins.jetbrains.com/plugin/com.acedatacloud.mcp.serp)
 2. Open **Settings → Tools → Serp MCP**
-3. Enter your [Ace Data Cloud](https://platform.acedata.cloud) API token
+3. Enter your [Ace Data Cloud](https://platform.acedata.cloud?utm_source=jetbrains_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=serp_mcp_jetbrains_platform) API token
 4. Click **Copy Config** (STDIO or HTTP)
 5. Paste into **Settings → Tools → AI Assistant → Model Context Protocol (MCP)**
 
@@ -55,8 +55,8 @@ Connects to the hosted MCP server at `serp.mcp.acedata.cloud`. No local install 
 
 ## Links
 
-- [Ace Data Cloud Platform](https://platform.acedata.cloud)
-- [Documentation](https://platform.acedata.cloud/documents/serp-mcp)
+- [Ace Data Cloud Platform](https://platform.acedata.cloud?utm_source=jetbrains_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=serp_mcp_jetbrains_platform)
+- [Documentation](https://platform.acedata.cloud/documents/serp-mcp?utm_source=jetbrains_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=serp_mcp_jetbrains_quick_start)
 - [PyPI Package](https://pypi.org/project/mcp-serp/)
 - [Source Code](https://github.com/AceDataCloud/SerpMCP)
 

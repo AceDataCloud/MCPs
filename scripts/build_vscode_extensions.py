@@ -30,6 +30,7 @@ from pathlib import Path
 import yaml
 
 from mcp_catalog import documentation_target, load_catalog
+from marketing_readmes import render as render_marketing_readme
 
 ROOT = Path(__file__).resolve().parent.parent
 CONFIG = ROOT / "scripts" / "vscode_extensions.yaml"
@@ -358,7 +359,7 @@ def render_readme(svc: Service, tools: list[tuple[str, str]]) -> str:
         else ""
     )
 
-    return f"""# {svc.display_name}
+    content = f"""# {svc.display_name}
 
 {svc.tagline}
 {lifecycle_notice}
@@ -478,6 +479,8 @@ version, install [`uv`](https://docs.astral.sh/uv/) and use:
 
 MIT — see [LICENSE](LICENSE).
 """
+
+    return render_marketing_readme(content, svc.alias, "vscode_marketplace")
 
 
 VSCODEIGNORE = """.vscode/**

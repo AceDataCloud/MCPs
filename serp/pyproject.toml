@@ -2,7 +2,7 @@
 name = "mcp-serp"
 version = "2026.1.24.1"
 description = "MCP Server for Google SERP Search via AceDataCloud API"
-readme = "README.md"
+readme = "README.pypi.md"
 license = { text = "MIT" }
 requires-python = ">=3.10"
 authors = [
@@ -67,7 +67,7 @@ mcp-serp = "main:main"
 
 [project.urls]
 Homepage = "https://github.com/AceDataCloud/SerpMCP"
-Documentation = "https://platform.acedata.cloud/documents/serp-mcp"
+Documentation = "https://platform.acedata.cloud/documents/serp-mcp?utm_source=pypi&utm_medium=referral&utm_campaign=evergreen&utm_content=serp_mcp_package_quick_start"
 Repository = "https://github.com/AceDataCloud/SerpMCP"
 Issues = "https://github.com/AceDataCloud/SerpMCP/issues"
 Changelog = "https://github.com/AceDataCloud/SerpMCP/blob/main/CHANGELOG.md"
@@ -87,6 +87,7 @@ include = [
     "tests/",
     "main.py",
     "README.md",
+    "README.pypi.md",
     "LICENSE",
     "CHANGELOG.md",
     ".env.example",

@@ -6,7 +6,7 @@ Text-to-speech via the [Fish Audio](https://acedata.cloud) API, exposed through 
 This plugin sets up the MCP Fish Audio server for JetBrains AI Assistant.
 Once configured, AI Assistant can synthesise natural-sounding speech from text,
 list available voice models, and track TTS tasks — all powered by
-[Ace Data Cloud](https://platform.acedata.cloud).
+[Ace Data Cloud](https://platform.acedata.cloud?utm_source=jetbrains_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=fish_mcp_jetbrains_platform).
 
 **6 MCP Tools** — Generate speech, browse voice models, track tasks.
 <!-- Plugin description end -->
@@ -15,7 +15,7 @@ list available voice models, and track TTS tasks — all powered by
 
 1. Install this plugin from the [JetBrains Marketplace](https://plugins.jetbrains.com/plugin/com.acedatacloud.mcp.fish)
 2. Open **Settings → Tools → Fish Audio MCP**
-3. Enter your [Ace Data Cloud](https://platform.acedata.cloud) API token
+3. Enter your [Ace Data Cloud](https://platform.acedata.cloud?utm_source=jetbrains_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=fish_mcp_jetbrains_platform) API token
 4. Click **Copy Config** (STDIO or HTTP)
 5. Paste into **Settings → Tools → AI Assistant → Model Context Protocol (MCP)**
 
@@ -56,8 +56,8 @@ Connects to the hosted MCP server at `fish.mcp.acedata.cloud`. No local install 
 
 ## Links
 
-- [Ace Data Cloud Platform](https://platform.acedata.cloud)
-- [Documentation](https://platform.acedata.cloud/documents/fish)
+- [Ace Data Cloud Platform](https://platform.acedata.cloud?utm_source=jetbrains_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=fish_mcp_jetbrains_platform)
+- [Documentation](https://platform.acedata.cloud/documents/fish?utm_source=jetbrains_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=fish_mcp_jetbrains_quick_start)
 - [PyPI Package](https://pypi.org/project/mcp-fish/)
 - [Source Code](https://github.com/AceDataCloud/FishMCP)
 

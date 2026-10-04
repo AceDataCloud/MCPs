@@ -1,6 +1,6 @@
 # OpenAIMCP
 
-A [Model Context Protocol (MCP)](https://modelcontextprotocol.io) server for OpenAI API access using [AceDataCloud](https://platform.acedata.cloud).
+A [Model Context Protocol (MCP)](https://modelcontextprotocol.io) server for OpenAI API access using [AceDataCloud](https://platform.acedata.cloud?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=openai_mcp_readme_platform).
 
 Interact with OpenAI models for chat completions, image generation, text embeddings, and more — directly from Claude, VS Code, or any MCP-compatible client.
 
@@ -17,7 +17,7 @@ Interact with OpenAI models for chat completions, image generation, text embeddi
 
 ### Prerequisites
 
-Get an API token from [AceDataCloud](https://platform.acedata.cloud).
+Get an API token from [AceDataCloud](https://platform.acedata.cloud?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=openai_mcp_readme_platform).
 
 ### Installation
 
@@ -127,13 +127,13 @@ ruff check .
 
 ## API Reference
 
-- [AceDataCloud Platform](https://platform.acedata.cloud)
+- [AceDataCloud Platform](https://platform.acedata.cloud?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=openai_mcp_readme_platform)
 - [OpenAI API Documentation](https://platform.openai.com/docs)
 
 ## Documentation
 
 <!-- canonical-documentation -->
-[Documentation](https://platform.acedata.cloud/documents/openai)
+[Documentation](https://platform.acedata.cloud/documents/openai?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=openai_mcp_readme_quick_start)
 
 ## License
 

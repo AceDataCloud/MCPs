@@ -5,7 +5,7 @@ AI Video Generation with [Wan](https://wanx.aliyun.com/) via [Model Context Prot
 <!-- Plugin description -->
 This plugin helps you set up the MCP Wan server with JetBrains AI Assistant.
 Once configured, AI Assistant can generate videos from text or images
-— all powered by [Ace Data Cloud](https://platform.acedata.cloud).
+— all powered by [Ace Data Cloud](https://platform.acedata.cloud?utm_source=jetbrains_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=wan_mcp_jetbrains_platform).
 
 **7 AI Tools** — Generate videos from text or images.
 <!-- Plugin description end -->
@@ -14,7 +14,7 @@ Once configured, AI Assistant can generate videos from text or images
 
 1. Install this plugin from the [JetBrains Marketplace](https://plugins.jetbrains.com/plugin/com.acedatacloud.mcp.wan)
 2. Open **Settings → Tools → Wan MCP**
-3. Enter your [Ace Data Cloud](https://platform.acedata.cloud) API token
+3. Enter your [Ace Data Cloud](https://platform.acedata.cloud?utm_source=jetbrains_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=wan_mcp_jetbrains_platform) API token
 4. Click **Copy Config** (STDIO or HTTP)
 5. Paste into **Settings → Tools → AI Assistant → Model Context Protocol (MCP)**
 
@@ -55,8 +55,8 @@ Connects to the hosted MCP server at `wan.mcp.acedata.cloud`. No local install n
 
 ## Links
 
-- [Ace Data Cloud Platform](https://platform.acedata.cloud)
-- [Documentation](https://platform.acedata.cloud/documents/wan)
+- [Ace Data Cloud Platform](https://platform.acedata.cloud?utm_source=jetbrains_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=wan_mcp_jetbrains_platform)
+- [Documentation](https://platform.acedata.cloud/documents/wan?utm_source=jetbrains_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=wan_mcp_jetbrains_quick_start)
 - [PyPI Package](https://pypi.org/project/mcp-wan/)
 - [Source Code](https://github.com/AceDataCloud/WanMCP)
 

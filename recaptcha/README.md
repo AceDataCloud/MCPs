@@ -27,4 +27,4 @@ export RECAPTCHA_REQUEST_TIMEOUT=120
 ## Service details
 
 <!-- canonical-documentation -->
-[Service details](https://platform.acedata.cloud/services/485cc5ca-7f1e-48e5-944e-1fe82b4637e8)
+[Service details](https://platform.acedata.cloud/services/485cc5ca-7f1e-48e5-944e-1fe82b4637e8?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=recaptcha_mcp_readme_quick_start)

@@ -5,7 +5,7 @@ URL Shortening with [ShortURL](https://surl.id) via [Model Context Protocol (MCP
 <!-- Plugin description -->
 This plugin helps you set up the MCP ShortURL server with JetBrains AI Assistant.
 Once configured, AI Assistant can create and manage short urls
-— all powered by [Ace Data Cloud](https://platform.acedata.cloud).
+— all powered by [Ace Data Cloud](https://platform.acedata.cloud?utm_source=jetbrains_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=shorturl_mcp_jetbrains_platform).
 
 **4 AI Tools** — Create and manage short URLs.
 <!-- Plugin description end -->
@@ -14,7 +14,7 @@ Once configured, AI Assistant can create and manage short urls
 
 1. Install this plugin from the [JetBrains Marketplace](https://plugins.jetbrains.com/plugin/com.acedatacloud.mcp.shorturl)
 2. Open **Settings → Tools → ShortURL MCP**
-3. Enter your [Ace Data Cloud](https://platform.acedata.cloud) API token
+3. Enter your [Ace Data Cloud](https://platform.acedata.cloud?utm_source=jetbrains_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=shorturl_mcp_jetbrains_platform) API token
 4. Click **Copy Config** (STDIO or HTTP)
 5. Paste into **Settings → Tools → AI Assistant → Model Context Protocol (MCP)**
 
@@ -55,8 +55,8 @@ Connects to the hosted MCP server at `shorturl.mcp.acedata.cloud`. No local inst
 
 ## Links
 
-- [Ace Data Cloud Platform](https://platform.acedata.cloud)
-- [Documentation](https://platform.acedata.cloud/documents/short-url-mcp)
+- [Ace Data Cloud Platform](https://platform.acedata.cloud?utm_source=jetbrains_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=shorturl_mcp_jetbrains_platform)
+- [Documentation](https://platform.acedata.cloud/documents/short-url-mcp?utm_source=jetbrains_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=shorturl_mcp_jetbrains_quick_start)
 - [PyPI Package](https://pypi.org/project/mcp-shorturl/)
 - [Source Code](https://github.com/AceDataCloud/ShortURLMCP)
 

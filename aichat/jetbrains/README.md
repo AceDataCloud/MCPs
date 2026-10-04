@@ -13,7 +13,7 @@ Once configured, AI Assistant can chat with 50+ LLM models — GPT, Claude, Gemi
 
 1. Install this plugin from the [JetBrains Marketplace](https://plugins.jetbrains.com/plugin/com.acedatacloud.mcp.aichat)
 2. Open **Settings → Tools → AiChat MCP**
-3. Enter your [Ace Data Cloud](https://platform.acedata.cloud) API token
+3. Enter your [Ace Data Cloud](https://platform.acedata.cloud?utm_source=jetbrains_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=aichat_mcp_jetbrains_platform) API token
 4. Click **Copy Config** (STDIO or HTTP)
 5. Paste into **Settings → Tools → AI Assistant → Model Context Protocol (MCP)**
 
@@ -63,8 +63,8 @@ Runs the MCP server locally. Requires [uv](https://github.com/astral-sh/uv) inst
 
 ## Links
 
-- [Ace Data Cloud Platform](https://platform.acedata.cloud)
-- [Documentation](https://platform.acedata.cloud/documents/aichat)
+- [Ace Data Cloud Platform](https://platform.acedata.cloud?utm_source=jetbrains_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=aichat_mcp_jetbrains_platform)
+- [Documentation](https://platform.acedata.cloud/documents/aichat?utm_source=jetbrains_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=aichat_mcp_jetbrains_quick_start)
 - [PyPI Package](https://pypi.org/project/mcp-aichat/)
 - [Source Code](https://github.com/AceDataCloud/AiChatMCP)
 

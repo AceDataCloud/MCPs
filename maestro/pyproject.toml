@@ -2,7 +2,7 @@
 name = "mcp-maestro"
 version = "0.1.0"
 description = "MCP server for end-to-end AI video production with Maestro via AceDataCloud"
-readme = "README.md"
+readme = "README.pypi.md"
 license = { text = "MIT" }
 requires-python = ">=3.10"
 authors = [{ name = "AceDataCloud", email = "support@acedata.cloud" }]
@@ -35,7 +35,7 @@ mcp-maestro = "main:main"
 
 [project.urls]
 Homepage = "https://github.com/AceDataCloud/MaestroMCP"
-Documentation = "https://platform.acedata.cloud/documents/maestro"
+Documentation = "https://platform.acedata.cloud/documents/maestro?utm_source=pypi&utm_medium=referral&utm_campaign=evergreen&utm_content=maestro_mcp_package_quick_start"
 Repository = "https://github.com/AceDataCloud/MaestroMCP"
 Issues = "https://github.com/AceDataCloud/MaestroMCP/issues"
 
@@ -47,7 +47,7 @@ build-backend = "hatchling.build"
 packages = ["core", "tools", "prompts", "main.py"]
 
 [tool.hatch.build.targets.sdist]
-include = ["core/", "tools/", "prompts/", "tests/", "main.py", "README.md", "LICENSE"]
+include = ["core/", "tools/", "prompts/", "tests/", "main.py", "README.md", "README.pypi.md", "LICENSE"]
 
 [tool.mypy]
 python_version = "3.10"

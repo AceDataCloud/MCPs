@@ -8,7 +8,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![MCP](https://img.shields.io/badge/MCP-Compatible-green.svg)](https://modelcontextprotocol.io)
 
-A [Model Context Protocol (MCP)](https://modelcontextprotocol.io) server for AI video generation using [Veo](https://deepmind.google/technologies/veo/) through the [AceDataCloud API](https://platform.acedata.cloud).
+A [Model Context Protocol (MCP)](https://modelcontextprotocol.io) server for AI video generation using [Veo](https://deepmind.google/technologies/veo/) through the [AceDataCloud API](https://platform.acedata.cloud?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=veo_mcp_readme_platform).
 
 Generate AI videos from text prompts or images directly from Claude, VS Code, or any MCP-compatible client.
 
@@ -38,8 +38,8 @@ Generate AI videos from text prompts or images directly from Claude, VS Code, or
 
 ### 1. Get Your API Token
 
-1. Sign up at [AceDataCloud Platform](https://platform.acedata.cloud)
-2. Go to the [API documentation page](https://platform.acedata.cloud/documents/veo-videos)
+1. Sign up at [AceDataCloud Platform](https://platform.acedata.cloud?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=veo_mcp_readme_platform)
+2. Go to the [API documentation page](https://platform.acedata.cloud/documents/veo-videos?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=veo_mcp_readme_documents_veo-videos)
 3. Click **"Acquire"** to get your API token
 4. Copy the token for use below
 
@@ -498,10 +498,10 @@ VeoMCP/
 
 ## API Reference
 
-This server wraps the [AceDataCloud Veo API](https://platform.acedata.cloud/documents/veo-videos):
+This server wraps the [AceDataCloud Veo API](https://platform.acedata.cloud/documents/veo-videos?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=veo_mcp_readme_documents_veo-videos):
 
-- [Veo Videos API](https://platform.acedata.cloud/documents/veo-videos) - Video generation
-- [Veo Tasks API](https://platform.acedata.cloud/documents/veo-videos) - Task queries
+- [Veo Videos API](https://platform.acedata.cloud/documents/veo-videos?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=veo_mcp_readme_documents_veo-videos) - Video generation
+- [Veo Tasks API](https://platform.acedata.cloud/documents/veo-videos?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=veo_mcp_readme_documents_veo-videos) - Task queries
 
 ## Contributing
 
@@ -516,7 +516,7 @@ Contributions are welcome! Please:
 ## Documentation
 
 <!-- canonical-documentation -->
-[Documentation](https://platform.acedata.cloud/documents/veo-mcp)
+[Documentation](https://platform.acedata.cloud/documents/veo-mcp?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=veo_mcp_readme_quick_start)
 
 ## License
 
@@ -524,11 +524,11 @@ MIT License - see [LICENSE](LICENSE) for details.
 
 ## Links
 
-- [AceDataCloud Platform](https://platform.acedata.cloud)
+- [AceDataCloud Platform](https://platform.acedata.cloud?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=veo_mcp_readme_platform)
 - [Google Veo](https://deepmind.google/technologies/veo/)
 - [Model Context Protocol](https://modelcontextprotocol.io)
 - [MCP Python SDK](https://github.com/modelcontextprotocol/python-sdk)
 
 ---
 
-Made with love by [AceDataCloud](https://platform.acedata.cloud)
+Made with love by [AceDataCloud](https://platform.acedata.cloud?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=veo_mcp_readme_platform)

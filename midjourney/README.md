@@ -8,7 +8,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![MCP](https://img.shields.io/badge/MCP-Compatible-green.svg)](https://modelcontextprotocol.io)
 
-A [Model Context Protocol (MCP)](https://modelcontextprotocol.io) server for AI image and video generation using [Midjourney](https://midjourney.com) through the [AceDataCloud API](https://platform.acedata.cloud).
+A [Model Context Protocol (MCP)](https://modelcontextprotocol.io) server for AI image and video generation using [Midjourney](https://midjourney.com) through the [AceDataCloud API](https://platform.acedata.cloud?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=midjourney_mcp_readme_platform).
 
 Generate AI images, videos, and manage creative projects directly from Claude, VS Code, or any MCP-compatible client.
 
@@ -50,8 +50,8 @@ Generate AI images, videos, and manage creative projects directly from Claude, V
 
 ### 1. Get Your API Token
 
-1. Sign up at [AceDataCloud Platform](https://platform.acedata.cloud)
-2. Go to the [API documentation page](https://platform.acedata.cloud/services/d87e5e99-b797-4ade-9e73-b896896b0461)
+1. Sign up at [AceDataCloud Platform](https://platform.acedata.cloud?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=midjourney_mcp_readme_platform)
+2. Go to the [API documentation page](https://platform.acedata.cloud/services/d87e5e99-b797-4ade-9e73-b896896b0461?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=midjourney_mcp_readme_quick_start)
 3. Click **"Acquire"** to get your API token
 4. Copy the token for use below
 
@@ -534,14 +534,14 @@ MidjourneyMCP/
 
 ## API Reference
 
-This server wraps the [AceDataCloud Midjourney API](https://platform.acedata.cloud):
+This server wraps the [AceDataCloud Midjourney API](https://platform.acedata.cloud?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=midjourney_mcp_readme_platform):
 
-- [Midjourney Imagine API](https://platform.acedata.cloud/services/d87e5e99-b797-4ade-9e73-b896896b0461) - Image generation
-- [Midjourney Describe API](https://platform.acedata.cloud/services/d87e5e99-b797-4ade-9e73-b896896b0461) - Image description
-- [Midjourney Tasks API](https://platform.acedata.cloud/services/d87e5e99-b797-4ade-9e73-b896896b0461) - Task queries
-- [Midjourney Edits API](https://platform.acedata.cloud/documents/midjourney-edits) - Image editing
-- [Midjourney Videos API](https://platform.acedata.cloud/documents/midjourney-videos) - Video generation
-- [Midjourney Translate API](https://platform.acedata.cloud/services/d87e5e99-b797-4ade-9e73-b896896b0461) - Translation
+- [Midjourney Imagine API](https://platform.acedata.cloud/services/d87e5e99-b797-4ade-9e73-b896896b0461?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=midjourney_mcp_readme_quick_start) - Image generation
+- [Midjourney Describe API](https://platform.acedata.cloud/services/d87e5e99-b797-4ade-9e73-b896896b0461?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=midjourney_mcp_readme_quick_start) - Image description
+- [Midjourney Tasks API](https://platform.acedata.cloud/services/d87e5e99-b797-4ade-9e73-b896896b0461?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=midjourney_mcp_readme_quick_start) - Task queries
+- [Midjourney Edits API](https://platform.acedata.cloud/documents/midjourney-edits?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=midjourney_mcp_readme_documents_midjourney-edits) - Image editing
+- [Midjourney Videos API](https://platform.acedata.cloud/documents/midjourney-videos?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=midjourney_mcp_readme_documents_midjourney-videos) - Video generation
+- [Midjourney Translate API](https://platform.acedata.cloud/services/d87e5e99-b797-4ade-9e73-b896896b0461?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=midjourney_mcp_readme_quick_start) - Translation
 
 ## Contributing
 
@@ -556,7 +556,7 @@ Contributions are welcome! Please:
 ## Service details
 
 <!-- canonical-documentation -->
-[Service details](https://platform.acedata.cloud/services/d87e5e99-b797-4ade-9e73-b896896b0461)
+[Service details](https://platform.acedata.cloud/services/d87e5e99-b797-4ade-9e73-b896896b0461?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=midjourney_mcp_readme_quick_start)
 
 ## License
 
@@ -564,11 +564,11 @@ MIT License - see [LICENSE](LICENSE) for details.
 
 ## Links
 
-- [AceDataCloud Platform](https://platform.acedata.cloud)
+- [AceDataCloud Platform](https://platform.acedata.cloud?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=midjourney_mcp_readme_platform)
 - [Midjourney Official](https://midjourney.com)
 - [Model Context Protocol](https://modelcontextprotocol.io)
 - [MCP Python SDK](https://github.com/modelcontextprotocol/python-sdk)
 
 ---
 
-Made with love by [AceDataCloud](https://platform.acedata.cloud)
+Made with love by [AceDataCloud](https://platform.acedata.cloud?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=midjourney_mcp_readme_platform)

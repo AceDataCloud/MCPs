@@ -7,7 +7,7 @@ This plugin sets up the MCP Face Transform server for JetBrains AI Assistant.
 Once configured, AI Assistant can detect keypoints, beautify portraits,
 age or de-age faces, swap perceived gender, transplant a face onto a different
 scene, cartoonize a portrait, and run liveness checks — all powered by
-[Ace Data Cloud](https://platform.acedata.cloud).
+[Ace Data Cloud](https://platform.acedata.cloud?utm_source=jetbrains_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=face_mcp_jetbrains_platform).
 
 **8 MCP Tools** covering the full AceDataCloud Face API surface.
 <!-- Plugin description end -->
@@ -16,7 +16,7 @@ scene, cartoonize a portrait, and run liveness checks — all powered by
 
 1. Install this plugin from the [JetBrains Marketplace](https://plugins.jetbrains.com/plugin/com.acedatacloud.mcp.face)
 2. Open **Settings → Tools → Face Transform MCP**
-3. Enter your [Ace Data Cloud](https://platform.acedata.cloud) API token
+3. Enter your [Ace Data Cloud](https://platform.acedata.cloud?utm_source=jetbrains_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=face_mcp_jetbrains_platform) API token
 4. Click **Copy Config** (STDIO or HTTP)
 5. Paste into **Settings → Tools → AI Assistant → Model Context Protocol (MCP)**
 
@@ -57,8 +57,8 @@ Connects to the hosted MCP server at `face.mcp.acedata.cloud`. No local install 
 
 ## Links
 
-- [Ace Data Cloud Platform](https://platform.acedata.cloud)
-- [Service details](https://platform.acedata.cloud/services/8efa1d83-9b75-4562-b44a-af95ce563d05)
+- [Ace Data Cloud Platform](https://platform.acedata.cloud?utm_source=jetbrains_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=face_mcp_jetbrains_platform)
+- [Service details](https://platform.acedata.cloud/services/8efa1d83-9b75-4562-b44a-af95ce563d05?utm_source=jetbrains_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=face_mcp_jetbrains_quick_start)
 - [PyPI Package](https://pypi.org/project/mcp-face-transform/)
 - [Source Code](https://github.com/AceDataCloud/FaceTransformMCP)
 

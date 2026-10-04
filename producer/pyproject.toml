@@ -2,7 +2,7 @@
 name = "mcp-producer"
 version = "2026.4.5.0"
 description = "MCP Server for Producer AI Music Generation via AceDataCloud API"
-readme = "README.md"
+readme = "README.pypi.md"
 license = { text = "MIT" }
 requires-python = ">=3.10"
 authors = [
@@ -69,7 +69,7 @@ mcp-producer = "main:main"
 
 [project.urls]
 Homepage = "https://github.com/AceDataCloud/ProducerMCP"
-Documentation = "https://platform.acedata.cloud/documents/producer"
+Documentation = "https://platform.acedata.cloud/documents/producer?utm_source=pypi&utm_medium=referral&utm_campaign=evergreen&utm_content=producer_mcp_package_quick_start"
 Repository = "https://github.com/AceDataCloud/ProducerMCP"
 Issues = "https://github.com/AceDataCloud/ProducerMCP/issues"
 Changelog = "https://github.com/AceDataCloud/ProducerMCP/blob/main/CHANGELOG.md"
@@ -89,6 +89,7 @@ include = [
     "tests/",
     "main.py",
     "README.md",
+    "README.pypi.md",
     "LICENSE",
     "CHANGELOG.md",
     ".env.example",

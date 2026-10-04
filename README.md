@@ -127,3 +127,25 @@ Run `pytest` for shared behavior tests and
 `python3 -m unittest` for repository
 tooling tests. CI discovers both directories; new tests need no workflow edits.
 Each MCP package keeps its existing `pytest` test-discovery configuration.
+
+## Marketing links
+
+Edit each package's `README.md`, then run `python3 scripts/marketing_readmes.py`.
+The same source generates `README.pypi.md`; the package metadata selects that file.
+All active entries in `scripts/mcp_catalog.json` participate, including available
+VS Code and JetBrains READMEs. Sora remains retired. Code examples and MCP/API
+protocol URLs are not marketing links and remain unchanged.
+
+Channel rules come from the `links` projection of the single
+`PlatformBackend/config/marketing_attribution.json` source. Refresh that generated
+snapshot using PlatformBackend's `scripts/export_marketing_contract.py --consumer
+mcps --target /path/to/MCPs`. Service destinations stay in the existing MCP catalog.
+A new service needs no AuthBackend, frontend or global-contract edit.
+
+Tags use source `github`, `pypi`, `vscode_marketplace` or `jetbrains_marketplace`,
+medium `referral`, campaign `evergreen`, and content
+`<service>_mcp_<readme|package|vscode|jetbrains>_<placement>`. A marketplace README
+identifies its distribution artifact; UTM labels are not verified HTTP referrers.
+CI's discovered unittest suite rejects stale generated files, wrong channels,
+and missing package README inclusion. `python3 scripts/marketing_readmes.py --check`
+can also be run directly. Package publication follows the existing release workflow.

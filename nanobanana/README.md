@@ -8,7 +8,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![MCP](https://img.shields.io/badge/MCP-Compatible-green.svg)](https://modelcontextprotocol.io)
 
-A [Model Context Protocol (MCP)](https://modelcontextprotocol.io) server for AI image generation and editing using [Google's Nano Banana](https://deepmind.google/technologies/imagen/) model through the [AceDataCloud API](https://platform.acedata.cloud).
+A [Model Context Protocol (MCP)](https://modelcontextprotocol.io) server for AI image generation and editing using [Google's Nano Banana](https://deepmind.google/technologies/imagen/) model through the [AceDataCloud API](https://platform.acedata.cloud?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=nanobanana_mcp_readme_platform).
 
 Generate and edit AI images directly from Claude, VS Code, or any MCP-compatible client.
 
@@ -33,8 +33,8 @@ Generate and edit AI images directly from Claude, VS Code, or any MCP-compatible
 
 ### 1. Get Your API Token
 
-1. Sign up at [AceDataCloud Platform](https://platform.acedata.cloud)
-2. Go to the [API documentation page](https://platform.acedata.cloud/documents/nano-banana-images)
+1. Sign up at [AceDataCloud Platform](https://platform.acedata.cloud?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=nanobanana_mcp_readme_platform)
+2. Go to the [API documentation page](https://platform.acedata.cloud/documents/nano-banana-images?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=nanobanana_mcp_readme_documents_nano-banana-images)
 3. Click **"Acquire"** to get your API token
 4. Copy the token for use below
 
@@ -483,10 +483,10 @@ NanoBanana/
 
 ## API Reference
 
-This server wraps the [AceDataCloud NanoBanana API](https://platform.acedata.cloud/documents/nano-banana-images):
+This server wraps the [AceDataCloud NanoBanana API](https://platform.acedata.cloud/documents/nano-banana-images?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=nanobanana_mcp_readme_documents_nano-banana-images):
 
-- [NanoBanana Images API](https://platform.acedata.cloud/documents/nano-banana-images) - Image generation and editing
-- [NanoBanana Tasks API](https://platform.acedata.cloud/documents/nano-banana-tasks) - Task queries
+- [NanoBanana Images API](https://platform.acedata.cloud/documents/nano-banana-images?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=nanobanana_mcp_readme_documents_nano-banana-images) - Image generation and editing
+- [NanoBanana Tasks API](https://platform.acedata.cloud/documents/nano-banana-tasks?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=nanobanana_mcp_readme_documents_nano-banana-tasks) - Task queries
 
 ## Use Cases
 
@@ -510,7 +510,7 @@ Contributions are welcome! Please:
 ## Documentation
 
 <!-- canonical-documentation -->
-[Documentation](https://platform.acedata.cloud/documents/nano-banana-mcp)
+[Documentation](https://platform.acedata.cloud/documents/nano-banana-mcp?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=nanobanana_mcp_readme_quick_start)
 
 ## License
 
@@ -518,10 +518,10 @@ MIT License - see [LICENSE](LICENSE) for details.
 
 ## Links
 
-- [AceDataCloud Platform](https://platform.acedata.cloud)
+- [AceDataCloud Platform](https://platform.acedata.cloud?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=nanobanana_mcp_readme_platform)
 - [Model Context Protocol](https://modelcontextprotocol.io)
 - [MCP Python SDK](https://github.com/modelcontextprotocol/python-sdk)
 
 ---
 
-Made with love by [AceDataCloud](https://platform.acedata.cloud)
+Made with love by [AceDataCloud](https://platform.acedata.cloud?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=nanobanana_mcp_readme_platform)

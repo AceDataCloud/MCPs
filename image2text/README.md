@@ -25,4 +25,4 @@ export IMAGE2TEXT_REQUEST_TIMEOUT=120
 ## Service details
 
 <!-- canonical-documentation -->
-[Service details](https://platform.acedata.cloud/services/2aaa7faf-099e-410e-82f3-8d78170f25bb)
+[Service details](https://platform.acedata.cloud/services/2aaa7faf-099e-410e-82f3-8d78170f25bb?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=image2text_mcp_readme_quick_start)

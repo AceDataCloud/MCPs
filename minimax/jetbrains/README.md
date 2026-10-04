@@ -20,11 +20,11 @@ Hosted endpoint: `https://minimax.mcp.acedata.cloud/mcp`
 
 Local command: `uvx mcp-minimax`
 
-Get a token at https://platform.acedata.cloud/console/applications.
+Get a token at https://platform.acedata.cloud/console/applications.?utm_source=jetbrains_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=minimax_mcp_jetbrains_api_key
 
 ## Documentation
 
-[Documentation](https://platform.acedata.cloud/documents/minimax-videos)
+[Documentation](https://platform.acedata.cloud/documents/minimax-videos?utm_source=jetbrains_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=minimax_mcp_jetbrains_quick_start)
 
 ## License
 

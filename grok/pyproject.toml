@@ -2,7 +2,7 @@
 name = "mcp-grok"
 version = "2026.6.13.0"
 description = "MCP Server for Grok Imagine AI Video Generation via AceDataCloud API"
-readme = "README.md"
+readme = "README.pypi.md"
 license = { text = "MIT" }
 requires-python = ">=3.10"
 authors = [
@@ -68,7 +68,7 @@ mcp-grok = "main:main"
 
 [project.urls]
 Homepage = "https://github.com/AceDataCloud/mcp-grok"
-Documentation = "https://platform.acedata.cloud/documents/grok"
+Documentation = "https://platform.acedata.cloud/documents/grok?utm_source=pypi&utm_medium=referral&utm_campaign=evergreen&utm_content=grok_mcp_package_quick_start"
 Repository = "https://github.com/AceDataCloud/mcp-grok"
 Issues = "https://github.com/AceDataCloud/mcp-grok/issues"
 Changelog = "https://github.com/AceDataCloud/mcp-grok/blob/main/CHANGELOG.md"
@@ -88,6 +88,7 @@ include = [
     "tests/",
     "main.py",
     "README.md",
+    "README.pypi.md",
     "LICENSE",
     "CHANGELOG.md",
     ".env.example",
