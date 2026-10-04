@@ -43,7 +43,7 @@ Runs the MCP server locally. Requires [uv](https://github.com/astral-sh/uv) inst
   "mcpServers": {
     "openai": {
       "command": "uvx",
-      "args": ["mcp-openai-acedatacloud"],
+      "args": ["mcp-openai-pro"],
       "env": {
         "ACEDATACLOUD_API_TOKEN": "your-token"
       }
@@ -72,7 +72,7 @@ Runs the MCP server locally. Requires [uv](https://github.com/astral-sh/uv) inst
 
 - [Ace Data Cloud Platform](https://platform.acedata.cloud?utm_source=jetbrains_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=openai_mcp_jetbrains_platform)
 - [Documentation](https://platform.acedata.cloud/documents/openai?utm_source=jetbrains_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=openai_mcp_jetbrains_quick_start)
-- [PyPI Package](https://pypi.org/project/mcp-openai-acedatacloud/)
+- [PyPI Package](https://pypi.org/project/mcp-openai-pro/)
 - [Source Code](https://github.com/AceDataCloud/OpenAIMCP)
 
 ## License

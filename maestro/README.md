@@ -1,9 +1,5 @@
 # Maestro MCP Server
 
-<!-- platform-reference:start -->
-Read the [current API reference](docs/platform/README.md) for endpoints, request fields and the backend integration guides before using optional or recently added capabilities.
-<!-- platform-reference:end -->
-
 <!-- mcp-name: io.github.AceDataCloud/mcp-maestro -->
 
 Produce complete videos from a natural-language brief with [Maestro](https://studio.acedata.cloud/maestro) through the Ace Data Cloud API. Maestro plans the script, creates or sources media, generates voiceover and music, edits, captions, renders, and returns finished video variants.

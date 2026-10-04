@@ -16,7 +16,7 @@ startCommand:
     - |-
       (config) => ({{
         command: 'uvx',
-        args: ['mcp-openai-acedatacloud'],
+        args: ['mcp-openai-pro'],
         env: {{
           ACEDATACLOUD_API_TOKEN: config.ACEDATACLOUD_API_TOKEN
         }}

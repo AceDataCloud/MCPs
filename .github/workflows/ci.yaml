@@ -63,7 +63,7 @@ jobs:
           HAS_CHANGES="false"
 
           for dir in $DIRS; do
-            if [ -f "$dir/pyproject.toml" ] && echo "$CHANGED" | grep -Eq "^${dir}/(.*\.py$|pyproject\.toml$|requirements[^/]*$|uv\.lock$)"; then
+            if [ -f "$dir/pyproject.toml" ] && echo "$CHANGED" | grep -q "^${dir}/"; then
               MATRIX=$(echo "$MATRIX" | jq -c --arg d "$dir" '. + [$d]')
               HAS_CHANGES="true"
             fi
@@ -102,7 +102,7 @@ jobs:
 
       - name: Run Ruff formatter check
         working-directory: ${{ matrix.mcp }}
-        run: ruff format --check --exclude "**/docs/platform/**" .
+        run: ruff format --check .
 
       - name: Run mypy
         working-directory: ${{ matrix.mcp }}

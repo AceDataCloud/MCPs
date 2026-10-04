@@ -32,7 +32,7 @@ jobs:
           LATEST_BUILD=$(python -c "
           import requests
           try:
-              resp = requests.get('https://pypi.org/pypi/mcp-openai-acedatacloud/json', timeout=10)
+              resp = requests.get('https://pypi.org/pypi/mcp-openai-pro/json', timeout=10)
               if resp.status_code == 200:
                   versions = resp.json().get('releases', {}).keys()
                   today_prefix = '${DATE_PREFIX}'
@@ -91,7 +91,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: pypi
-      url: https://pypi.org/project/mcp-openai-acedatacloud/${{ needs.build.outputs.version }}
+      url: https://pypi.org/project/mcp-openai-pro/${{ needs.build.outputs.version }}
     steps:
       - name: Download distribution artifacts
         uses: actions/download-artifact@v8

@@ -1,9 +1,5 @@
 # WanMCP
 
-<!-- platform-reference:start -->
-Read the [current API reference](docs/platform/README.md) for endpoints, request fields and the backend integration guides before using optional or recently added capabilities.
-<!-- platform-reference:end -->
-
 <!-- mcp-name: io.github.AceDataCloud/mcp-wan -->
 
 [![PyPI version](https://img.shields.io/pypi/v/mcp-wan.svg)](https://pypi.org/project/mcp-wan/)
