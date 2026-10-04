@@ -113,3 +113,9 @@ mypy core tools
 ## License
 
 MIT
+
+## H3 Max and native tools
+
+`minimax_generate_max_video` accepts structured content with 480P/768P resolution and an integer duration of 5–15 seconds. `minimax_enhance_prompt` accepts H3 content, duration and ratio, and returns structured prompt guidance. `minimax_regenerate_video` accepts an owned, completed H3 768P `source_task_id` for 2K regeneration; alternatively provide the exact original content plus one `base_video`. It accepts platform task IDs. Missing original materials cause an error.
+
+These tools take a `request` object and submit asynchronously by default. Use `minimax_get_task` for the full result, or set `async=false` in the request. Existing H3 tool defaults are unchanged.
