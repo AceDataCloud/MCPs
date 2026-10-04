@@ -16,7 +16,7 @@ Generate AI videos directly from Claude, VS Code, or any MCP-compatible client.
 
 ## Start with the hosted server
 
-[Open setup guide](https://platform.acedata.cloud/documents/seedance-mcp?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=seedance_mcp_readme_quick_start) · [Example prompt](#verify-your-first-result)
+[Open setup guide](https://platform.acedata.cloud/documents/seedance-mcp?utm_source=pypi&utm_medium=referral&utm_campaign=evergreen&utm_content=seedance_mcp_package_quick_start) · [Example prompt](#verify-your-first-result)
 
 1. In a client that supports remote MCP OAuth, add **`https://seedance.mcp.acedata.cloud/mcp`** as an HTTP server.
 2. Choose **Connect / Sign in**, log in to AceDataCloud, review the requested permissions, and authorize.
@@ -59,7 +59,7 @@ are not a completed result.
 
 ### API Token path
 
-For local stdio or a client without OAuth, [open your applications](https://platform.acedata.cloud/console/applications?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=seedance_mcp_readme_api_key),
+For local stdio or a client without OAuth, [open your applications](https://platform.acedata.cloud/console/applications?utm_source=pypi&utm_medium=referral&utm_campaign=evergreen&utm_content=seedance_mcp_package_api_key),
 sign in, choose the service, and create an API credential with the required scope. Configure
 `ACEDATACLOUD_API_TOKEN` locally, or use the client's documented Bearer-header setting.
 Use the local commands below for stdio; HTTP configuration formats are client-specific.
