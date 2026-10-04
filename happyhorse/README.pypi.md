@@ -5,6 +5,8 @@
 Read the [current API reference](docs/platform/README.md) for endpoints, request fields and the backend integration guides before using optional or recently added capabilities.
 <!-- platform-reference:end -->
 
+<!-- mcp-name: io.github.AceDataCloud/mcp-happyhorse -->
+
 [![PyPI](https://img.shields.io/pypi/v/mcp-happyhorse.svg)](https://pypi.org/project/mcp-happyhorse/)
 [![Python](https://img.shields.io/pypi/pyversions/mcp-happyhorse.svg)](https://pypi.org/project/mcp-happyhorse/)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)

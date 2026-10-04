@@ -44,7 +44,7 @@ def safe_print(text: str) -> None:
 def get_version() -> str:
     """Get the package version."""
     try:
-        return metadata.version("mcp-openai")
+        return metadata.version("mcp-openai-acedatacloud")
     except metadata.PackageNotFoundError:
         return "dev"
 
@@ -56,9 +56,9 @@ def main() -> None:
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
-  mcp-openai                    # Run with stdio transport (default)
-  mcp-openai --transport http   # Run with HTTP transport
-  mcp-openai --version          # Show version
+  mcp-openai-acedatacloud                    # Run with stdio transport (default)
+  mcp-openai-acedatacloud --transport http   # Run with HTTP transport
+  mcp-openai-acedatacloud --version          # Show version
 
 Environment Variables:
   ACEDATACLOUD_API_TOKEN      API token from AceDataCloud (required)
@@ -69,7 +69,7 @@ Environment Variables:
     parser.add_argument(
         "--version",
         action="version",
-        version=f"mcp-openai {get_version()}",
+        version=f"mcp-openai-acedatacloud {get_version()}",
     )
     parser.add_argument(
         "--transport",

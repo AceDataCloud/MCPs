@@ -2,7 +2,7 @@
 
 OpenAI models via Ace Data Cloud — chat completions, embeddings, image generation and editing, Responses API, async tasks.
 
-[![VS Code Marketplace](https://img.shields.io/badge/VS%20Code-Marketplace-blue?logo=visualstudiocode&logoColor=white)](https://marketplace.visualstudio.com/items?itemName=acedatacloud.mcp-openai) [![PyPI](https://img.shields.io/pypi/v/mcp-openai.svg?label=PyPI)](https://pypi.org/project/mcp-openai/) [![Hosted MCP](https://img.shields.io/badge/hosted-mcp-blue)](https://openai.mcp.acedata.cloud/mcp)
+[![VS Code Marketplace](https://img.shields.io/badge/VS%20Code-Marketplace-blue?logo=visualstudiocode&logoColor=white)](https://marketplace.visualstudio.com/items?itemName=acedatacloud.mcp-openai) [![PyPI](https://img.shields.io/pypi/v/mcp-openai-acedatacloud.svg?label=PyPI)](https://pypi.org/project/mcp-openai-acedatacloud/) [![Hosted MCP](https://img.shields.io/badge/hosted-mcp-blue)](https://openai.mcp.acedata.cloud/mcp)
 
 Connect VS Code's AI agents to the **OpenAI models via Ace Data Cloud** service. Once configured, AI Assistant can run OpenAI chat completions, generate embeddings, create or edit images, and orchestrate the Responses API — all routed through Ace Data Cloud.
 
@@ -86,14 +86,14 @@ environments, or to pin to a specific PyPI version — install
     "openai": {
       "type": "stdio",
       "command": "uvx",
-      "args": ["mcp-openai"],
+      "args": ["mcp-openai-acedatacloud"],
       "env": { "ACEDATACLOUD_API_TOKEN": "${input:acedatacloud_api_token}" }
     }
   }
 }
 ```
 
-`uvx` will download and run the latest [`mcp-openai`](https://pypi.org/project/mcp-openai/) on demand.
+`uvx` will download and run the latest [`mcp-openai-acedatacloud`](https://pypi.org/project/mcp-openai-acedatacloud/) on demand.
 
 ### Alternative: OAuth via Dynamic Client Registration
 
@@ -106,7 +106,7 @@ first use (redirect URL `http://127.0.0.1:33418` or `https://vscode.dev/redirect
 ## Links
 
 - **Hosted endpoint:** https://openai.mcp.acedata.cloud/mcp
-- **PyPI package:** [`mcp-openai`](https://pypi.org/project/mcp-openai/)
+- **PyPI package:** [`mcp-openai-acedatacloud`](https://pypi.org/project/mcp-openai-acedatacloud/)
 - **Source repository:** https://github.com/AceDataCloud/OpenAIMCP
 - **Ace Data Cloud platform:** https://platform.acedata.cloud?utm_source=vscode_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=openai_mcp_vscode_platform
 - **MCP documentation:** https://platform.acedata.cloud/documents/openai?utm_source=vscode_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=openai_mcp_vscode_quick_start

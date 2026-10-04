@@ -30,7 +30,7 @@ class McpSettings : PersistentStateComponent<McpSettings.State> {
 
     fun getStdioConfig(): String {
         val token = myState.apiToken.ifEmpty { "YOUR_API_TOKEN" }
-        return """{"mcpServers": {"openai": {"command": "uvx", "args": ["mcp-openai"], "env": {"ACEDATACLOUD_API_TOKEN": "$$token"}}}}"""
+        return """{"mcpServers": {"openai": {"command": "uvx", "args": ["mcp-openai-acedatacloud"], "env": {"ACEDATACLOUD_API_TOKEN": "$$token"}}}}"""
     }
 
     fun getHttpConfig(): String {

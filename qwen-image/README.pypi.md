@@ -5,6 +5,8 @@
 Read the [current API reference](docs/platform/README.md) for endpoints, request fields and the backend integration guides before using optional or recently added capabilities.
 <!-- platform-reference:end -->
 
+<!-- mcp-name: io.github.AceDataCloud/mcp-qwen-image -->
+
 <!-- canonical-documentation -->
 [Documentation](https://platform.acedata.cloud/documents/qwen-image?utm_source=pypi&utm_medium=referral&utm_campaign=evergreen&utm_content=qwen_image_mcp_package_quick_start)
 
