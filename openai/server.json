@@ -9,7 +9,7 @@
   },
   "packages": [
     {
-      "identifier": "mcp-openai",
+      "identifier": "mcp-openai-acedatacloud",
       "version": "2026.4.25.1",
       "transport": {
         "type": "stdio"

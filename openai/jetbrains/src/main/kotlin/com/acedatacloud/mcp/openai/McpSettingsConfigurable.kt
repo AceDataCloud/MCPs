@@ -91,7 +91,7 @@ class McpSettingsConfigurable : Configurable {
                     browserLink("Source Code", "https://github.com/AceDataCloud/OpenAIMCP")
                 }
                 row {
-                    browserLink("PyPI Package", "https://pypi.org/project/mcp-openai/")
+                    browserLink("PyPI Package", "https://pypi.org/project/mcp-openai-acedatacloud/")
                 }
             }
         }

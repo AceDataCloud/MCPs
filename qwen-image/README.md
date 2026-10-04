@@ -1,5 +1,7 @@
 # Qwen Image MCP Server
 
+<!-- mcp-name: io.github.AceDataCloud/mcp-qwen-image -->
+
 <!-- canonical-documentation -->
 [Documentation](https://platform.acedata.cloud/documents/qwen-image?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=qwen_image_mcp_readme_quick_start)
 

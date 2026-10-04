@@ -6,4 +6,4 @@ COPY . .
 
 RUN pip install --no-cache-dir .
 
-CMD ["mcp-openai", "--transport", "http", "--port", "8000"]
+CMD ["mcp-openai-acedatacloud", "--transport", "http", "--port", "8000"]

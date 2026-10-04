@@ -31,7 +31,7 @@ Monorepo for all AceDataCloud MCP (Model Context Protocol) servers.
 | `glm/` | [GLMMCP](https://github.com/AceDataCloud/GLMMCP) | [mcp-glm](https://pypi.org/project/mcp-glm/) | Chat | [Documentation](https://platform.acedata.cloud/documents/glm-chat-completions) |
 | `grok/` | [GrokMCP](https://github.com/AceDataCloud/GrokMCP) | [mcp-grok](https://pypi.org/project/mcp-grok/) | Video | [Documentation](https://platform.acedata.cloud/documents/grok) |
 | `minimax/` | [MinimaxMCP](https://github.com/AceDataCloud/MinimaxMCP) | [mcp-minimax](https://pypi.org/project/mcp-minimax/) | Video | [Documentation](https://platform.acedata.cloud/documents/minimax-videos) |
-| `openai/` | [OpenAIMCP](https://github.com/AceDataCloud/OpenAIMCP) | [mcp-openai](https://pypi.org/project/mcp-openai/) | AI APIs | [Documentation](https://platform.acedata.cloud/documents/openai) |
+| `openai/` | [OpenAIMCP](https://github.com/AceDataCloud/OpenAIMCP) | [mcp-openai-acedatacloud](https://pypi.org/project/mcp-openai-acedatacloud/) | AI APIs | [Documentation](https://platform.acedata.cloud/documents/openai) |
 | `webextrator/` | [WebExtratorMCP](https://github.com/AceDataCloud/WebExtratorMCP) | [mcp-webextrator](https://pypi.org/project/mcp-webextrator/) | Web & Data | [Documentation](https://platform.acedata.cloud/documents/webextrator) |
 
 ## Retired
