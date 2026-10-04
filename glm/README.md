@@ -1,5 +1,9 @@
 # MCP GLM Server
 
+<!-- platform-reference:start -->
+Read the [current API reference](docs/platform/README.md) for endpoints, request fields and the backend integration guides before using optional or recently added capabilities.
+<!-- platform-reference:end -->
+
 <!-- mcp-name: io.github.AceDataCloud/mcp-glm -->
 
 A Model Context Protocol (MCP) server for Zhipu GLM chat completions via the AceDataCloud platform.

@@ -38,7 +38,7 @@ async def kling_generate_storyboard(request: StoryboardRequest) -> str:
     )
 
 
-@mcp.tool()
+# Not published until its backend Document is public.
 async def kling_apparel_video(request: ApparelRequest) -> str:
     """Generate apparel product video from product_info, source_video and product_image contents. Poll kling_get_task."""
     return json.dumps(
@@ -75,7 +75,7 @@ async def kling_video_commerce(request: CommerceRequest) -> str:
     )
 
 
-@mcp.tool()
+# Not published until its backend Document is public.
 async def kling_virtual_try_on(request: TryOnRequest) -> str:
     """Generate try-on images from exactly one product_image and one person_image URL. Poll kling_get_task."""
     return json.dumps(

@@ -6,13 +6,16 @@ from pydantic import Field
 
 # Chat completion model options
 ChatModel = Literal[
+    "gpt-6.1-sol",
+    "gpt-6-sol",
+    "gpt-6-luna",
+    "gpt-6-astra",
     "gpt-oss:free",
     "gpt-5.5:free",
     "gpt-5:free",
     "gpt-4.1:free",
     "gpt-4o:free",
     "gpt-4o-mini:free",
-    "gpt-6-astra",
     "gpt-5.6-luna",
     "gpt-5.6-terra",
     "gpt-5.6-sol",
@@ -26,6 +29,7 @@ ChatModel = Literal[
     "gpt-5.1",
     "gpt-5.1-all",
     "gpt-5",
+    "gpt-5-pro",
     "gpt-5-mini",
     "gpt-5-nano",
     "gpt-4",
@@ -49,6 +53,9 @@ ChatModel = Literal[
 
 # Responses API model options
 ResponsesModel = Literal[
+    "gpt-6.1-sol",
+    "gpt-6-sol",
+    "gpt-6-luna",
     "gpt-6-astra",
     "gpt-5.6-luna",
     "gpt-5.6-terra",
@@ -60,8 +67,10 @@ ResponsesModel = Literal[
     "gpt-5.4-nano",
     "gpt-5.4-pro",
     "gpt-5.1",
+    "gpt-5.2",
     "gpt-5.1-all",
     "gpt-5",
+    "gpt-5-pro",
     "gpt-5-mini",
     "gpt-5-nano",
     "gpt-4",

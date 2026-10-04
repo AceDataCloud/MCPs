@@ -1,0 +1,11 @@
+{
+  "repository": "AceDataCloud/PlatformBackend",
+  "sha": "945664eca88d16d21159d3739f874c830c046005",
+  "sha256": "47deb585ed8680ad29d1814bc20fa2ccf33c4d9b8d9354f711e7a2ef8b39e365",
+  "services": [
+    "glm"
+  ],
+  "guides": [
+    "development_glm_chat_completions.md"
+  ]
+}

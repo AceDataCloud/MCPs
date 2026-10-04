@@ -29,12 +29,10 @@ asyncio.run(main())
     expected = {
         "kling_generate_turbo_video",
         "kling_generate_storyboard",
-        "kling_apparel_video",
         "kling_goods_studio",
         "kling_video_commerce",
-        "kling_virtual_try_on",
-        "kling_manage_elements",
-        "kling_manage_voices",
         "kling_generate_with_assets",
     }
     assert expected <= names
+
+    assert not {"kling_apparel_video", "kling_virtual_try_on", "kling_manage_elements", "kling_manage_voices"} & names
