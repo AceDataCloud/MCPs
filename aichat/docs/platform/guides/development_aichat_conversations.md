@@ -75,10 +75,13 @@ url = "https://api.acedata.cloud/aichat/conversations"
 headers = {
     "accept": "application/json",
     "authorization": "Bearer {token}",
-    "content-type": "application/json",
+    "content-type": "application/json"
 }
 
-payload = {"model": "gpt-3.5", "question": "What's your name?"}
+payload = {
+    "model": "gpt-3.5",
+    "question": "What's your name?"
+}
 
 response = requests.post(url, json=payload, headers=headers)
 print(response.text)
@@ -169,14 +172,14 @@ url = "https://api.acedata.cloud/aichat/conversations"
 headers = {
     "accept": "application/x-ndjson",
     "authorization": "Bearer {token}",
-    "content-type": "application/json",
+    "content-type": "application/json"
 }
 
 payload = {
     "model": "gpt-3.5",
     "stateful": True,
     "id": "7cdb293b-2267-4979-a1ec-48d9ad149916",
-    "question": "Hello",
+    "question": "Hello"
 }
 
 response = requests.post(url, json=payload, headers=headers, stream=True)

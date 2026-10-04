@@ -65,13 +65,15 @@ url = "https://api.acedata.cloud/v1/messages"
 headers = {
     "accept": "application/json",
     "authorization": "Bearer {token}",
-    "content-type": "application/json",
+    "content-type": "application/json"
 }
 
 payload = {
     "model": "claude-fable-5-1",
     "max_tokens": 1024,
-    "messages": [{"role": "user", "content": "Hello, Claude"}],
+    "messages": [
+        {"role": "user", "content": "Hello, Claude"}
+    ]
 }
 
 response = requests.post(url, json=payload, headers=headers)
@@ -129,14 +131,16 @@ url = "https://api.acedata.cloud/v1/messages"
 headers = {
     "accept": "application/json",
     "authorization": "Bearer {token}",
-    "content-type": "application/json",
+    "content-type": "application/json"
 }
 
 payload = {
     "model": "claude-sonnet-4-20250514",
     "max_tokens": 1024,
     "system": "你是一位专业的中文翻译助手，请将用户输入的英文翻译成中文。",
-    "messages": [{"role": "user", "content": "The quick brown fox jumps over the lazy dog."}],
+    "messages": [
+        {"role": "user", "content": "The quick brown fox jumps over the lazy dog."}
+    ]
 }
 
 response = requests.post(url, json=payload, headers=headers)
@@ -159,14 +163,16 @@ url = "https://api.acedata.cloud/v1/messages"
 headers = {
     "accept": "application/json",
     "authorization": "Bearer {token}",
-    "content-type": "application/json",
+    "content-type": "application/json"
 }
 
 payload = {
     "model": "claude-sonnet-4-20250514",
     "max_tokens": 1024,
     "stream": True,
-    "messages": [{"role": "user", "content": "Hello, Claude"}],
+    "messages": [
+        {"role": "user", "content": "Hello, Claude"}
+    ]
 }
 
 response = requests.post(url, json=payload, headers=headers, stream=True)
@@ -257,7 +263,7 @@ url = "https://api.acedata.cloud/v1/messages"
 headers = {
     "accept": "application/json",
     "authorization": "Bearer {token}",
-    "content-type": "application/json",
+    "content-type": "application/json"
 }
 
 payload = {
@@ -265,12 +271,9 @@ payload = {
     "max_tokens": 1024,
     "messages": [
         {"role": "user", "content": "Hello, my name is Alice."},
-        {
-            "role": "assistant",
-            "content": "Hello Alice! Nice to meet you. How can I help you today?",
-        },
-        {"role": "user", "content": "What is my name?"},
-    ],
+        {"role": "assistant", "content": "Hello Alice! Nice to meet you. How can I help you today?"},
+        {"role": "user", "content": "What is my name?"}
+    ]
 }
 
 response = requests.post(url, json=payload, headers=headers)
@@ -315,14 +318,21 @@ url = "https://api.acedata.cloud/v1/messages"
 headers = {
     "accept": "application/json",
     "authorization": "Bearer {token}",
-    "content-type": "application/json",
+    "content-type": "application/json"
 }
 payload = {
     "model": "claude-opus-5",
     "max_tokens": 16000,
-    "thinking": {"type": "adaptive", "display": "summarized"},
-    "output_config": {"effort": "high"},
-    "messages": [{"role": "user", "content": "What is the sine of 30 degrees?"}],
+    "thinking": {
+        "type": "adaptive",
+        "display": "summarized"
+    },
+    "output_config": {
+        "effort": "high"
+    },
+    "messages": [
+        {"role": "user", "content": "What is the sine of 30 degrees?"}
+    ]
 }
 
 response = requests.post(url, json=payload, headers=headers)
@@ -367,7 +377,7 @@ url = "https://api.acedata.cloud/v1/messages"
 headers = {
     "accept": "application/json",
     "authorization": "Bearer {token}",
-    "content-type": "application/json",
+    "content-type": "application/json"
 }
 
 # 读取并编码图片
@@ -383,12 +393,19 @@ payload = {
             "content": [
                 {
                     "type": "image",
-                    "source": {"type": "base64", "media_type": "image/png", "data": image_data},
+                    "source": {
+                        "type": "base64",
+                        "media_type": "image/png",
+                        "data": image_data
+                    }
                 },
-                {"type": "text", "text": "What's in this image?"},
-            ],
+                {
+                    "type": "text",
+                    "text": "What's in this image?"
+                }
+            ]
         }
-    ],
+    ]
 }
 
 response = requests.post(url, json=payload, headers=headers)
@@ -405,7 +422,7 @@ url = "https://api.acedata.cloud/v1/messages"
 headers = {
     "accept": "application/json",
     "authorization": "Bearer {token}",
-    "content-type": "application/json",
+    "content-type": "application/json"
 }
 
 payload = {
@@ -417,12 +434,18 @@ payload = {
             "content": [
                 {
                     "type": "image",
-                    "source": {"type": "url", "url": "https://cdn.acedata.cloud/ueugot.png"},
+                    "source": {
+                        "type": "url",
+                        "url": "https://cdn.acedata.cloud/ueugot.png"
+                    }
                 },
-                {"type": "text", "text": "What's in this image?"},
-            ],
+                {
+                    "type": "text",
+                    "text": "What's in this image?"
+                }
+            ]
         }
-    ],
+    ]
 }
 
 response = requests.post(url, json=payload, headers=headers)
@@ -475,19 +498,21 @@ with open("report.pdf", "rb") as f:
 payload = {
     "model": "claude-fable-5-1",
     "max_tokens": 1024,
-    "messages": [
-        {
-            "role": "user",
-            "content": [
-                {
-                    "type": "document",
-                    "source": {"type": "base64", "media_type": "application/pdf", "data": pdf_data},
-                    "title": "Quarterly report",
+    "messages": [{
+        "role": "user",
+        "content": [
+            {
+                "type": "document",
+                "source": {
+                    "type": "base64",
+                    "media_type": "application/pdf",
+                    "data": pdf_data
                 },
-                {"type": "text", "text": "Summarize this PDF."},
-            ],
-        }
-    ],
+                "title": "Quarterly report"
+            },
+            {"type": "text", "text": "Summarize this PDF."}
+        ]
+    }]
 }
 ```
 
@@ -503,7 +528,7 @@ payload = {
     "max_tokens": 1024,
     "cache_control": {"type": "ephemeral", "ttl": "5m"},
     "system": "You are an expert on this reference material.",
-    "messages": [{"role": "user", "content": "Summarize the key points."}],
+    "messages": [{"role": "user", "content": "Summarize the key points."}]
 }
 ```
 
@@ -548,7 +573,7 @@ url = "https://api.acedata.cloud/v1/messages"
 headers = {
     "accept": "application/json",
     "authorization": "Bearer {token}",
-    "content-type": "application/json",
+    "content-type": "application/json"
 }
 
 payload = {
@@ -563,14 +588,16 @@ payload = {
                 "properties": {
                     "location": {
                         "type": "string",
-                        "description": "The city and state, e.g. San Francisco, CA",
+                        "description": "The city and state, e.g. San Francisco, CA"
                     }
                 },
-                "required": ["location"],
-            },
+                "required": ["location"]
+            }
         }
     ],
-    "messages": [{"role": "user", "content": "What's the weather like in San Francisco?"}],
+    "messages": [
+        {"role": "user", "content": "What's the weather like in San Francisco?"}
+    ]
 }
 
 response = requests.post(url, json=payload, headers=headers)
@@ -623,11 +650,11 @@ payload = {
                 "properties": {
                     "location": {
                         "type": "string",
-                        "description": "The city and state, e.g. San Francisco, CA",
+                        "description": "The city and state, e.g. San Francisco, CA"
                     }
                 },
-                "required": ["location"],
-            },
+                "required": ["location"]
+            }
         }
     ],
     "messages": [
@@ -636,13 +663,8 @@ payload = {
             "role": "assistant",
             "content": [
                 {"type": "text", "text": "Let me check the weather in San Francisco for you."},
-                {
-                    "type": "tool_use",
-                    "id": "toolu_01A09q90qw90lq917835lgs",
-                    "name": "get_weather",
-                    "input": {"location": "San Francisco, CA"},
-                },
-            ],
+                {"type": "tool_use", "id": "toolu_01A09q90qw90lq917835lgs", "name": "get_weather", "input": {"location": "San Francisco, CA"}}
+            ]
         },
         {
             "role": "user",
@@ -650,11 +672,11 @@ payload = {
                 {
                     "type": "tool_result",
                     "tool_use_id": "toolu_01A09q90qw90lq917835lgs",
-                    "content": "Sunny, 72°F",
+                    "content": "Sunny, 72°F"
                 }
-            ],
-        },
-    ],
+            ]
+        }
+    ]
 }
 
 response = requests.post(url, json=payload, headers=headers)

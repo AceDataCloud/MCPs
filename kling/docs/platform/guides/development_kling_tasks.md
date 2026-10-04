@@ -73,10 +73,13 @@ url = "https://api.acedata.cloud/kling/tasks"
 headers = {
     "accept": "application/json",
     "authorization": "Bearer {token}",
-    "content-type": "application/json",
+    "content-type": "application/json"
 }
 
-payload = {"id": "20068983-0cc9-4c6a-aeb6-9c6a3c668be0", "action": "retrieve"}
+payload = {
+    "id": "20068983-0cc9-4c6a-aeb6-9c6a3c668be0",
+    "action": "retrieve"
+}
 
 response = requests.post(url, json=payload, headers=headers)
 print(response.text)

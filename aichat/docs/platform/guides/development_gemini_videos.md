@@ -101,13 +101,13 @@ url = "https://api.acedata.cloud/gemini/videos"
 headers = {
     "accept": "application/json",
     "authorization": "Bearer {token}",
-    "content-type": "application/json",
+    "content-type": "application/json"
 }
 
 payload = {
     "prompt": "A cinematic shot of a kitten chasing a butterfly in a sunlit garden",
     "model": "omni-flash",
-    "aspect_ratio": "16:9",
+    "aspect_ratio": "16:9"
 }
 
 response = requests.post(url, json=payload, headers=headers)

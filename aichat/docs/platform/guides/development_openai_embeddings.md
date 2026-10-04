@@ -43,13 +43,13 @@ url = "https://api.acedata.cloud/openai/embeddings"
 headers = {
     "accept": "application/json",
     "authorization": "Bearer {token}",
-    "content-type": "application/json",
+    "content-type": "application/json"
 }
 
 payload = {
     "input": "The food was delicious and the waiter...",
     "model": "text-embedding-ada-002",
-    "encoding_format": "float",
+    "encoding_format": "float"
 }
 
 response = requests.post(url, json=payload, headers=headers)

@@ -116,10 +116,14 @@ url = "https://api.acedata.cloud/openai/chat/completions"
 headers = {
     "accept": "application/json",
     "authorization": "Bearer {token}",
-    "content-type": "application/json",
+    "content-type": "application/json"
 }
 
-payload = {"model": "gpt-4", "messages": [{"role": "user", "content": "hello"}], "stream": True}
+payload = {
+    "model": "gpt-4",
+    "messages": [{"role":"user","content":"hello"}],
+    "stream": True
+}
 
 response = requests.post(url, json=payload, headers=headers)
 print(response.text)
@@ -227,16 +231,12 @@ url = "https://api.acedata.cloud/openai/chat/completions"
 headers = {
     "accept": "application/json",
     "authorization": "Bearer {token}",
-    "content-type": "application/json",
+    "content-type": "application/json"
 }
 
 payload = {
     "model": "gpt-4",
-    "messages": [
-        {"role": "user", "content": "Hello"},
-        {"role": "assistant", "content": "Hi! How can I assist you today?"},
-        {"role": "user", "content": "What I say just now?"},
-    ],
+    "messages": [{"role":"user","content":"Hello"},{"role":"assistant","content":"Hi! How can I assist you today?"},{"role":"user","content":"What I say just now?"}]
 }
 
 response = requests.post(url, json=payload, headers=headers)
@@ -412,7 +412,7 @@ url = "https://api.acedata.cloud/openai/chat/completions"
 headers = {
     "accept": "application/json",
     "authorization": "Bearer {token}",
-    "content-type": "application/json",
+    "content-type": "application/json"
 }
 
 payload = {
@@ -421,16 +421,18 @@ payload = {
         {
             "role": "user",
             "content": [
-                {"type": "text", "text": "What's in this image?"},
+                {
+                    "type": "text", "text": "What's in this image?"
+                },
                 {
                     "type": "image_url",
                     "image_url": {
                         "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/dd/Gfp-wisconsin-madison-the-nature-boardwalk.jpg/2560px-Gfp-wisconsin-madison-the-nature-boardwalk.jpg"
-                    },
+                    }
                 },
             ],
         }
-    ],
+    ]
 }
 
 response = requests.post(url, json=payload, headers=headers)

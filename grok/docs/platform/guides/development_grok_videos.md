@@ -98,14 +98,14 @@ url = "https://api.acedata.cloud/grok/videos"
 headers = {
     "accept": "application/json",
     "authorization": "Bearer {token}",
-    "content-type": "application/json",
+    "content-type": "application/json"
 }
 
 payload = {
     "prompt": "A cinematic shot of a kitten chasing a butterfly in a sunlit garden",
     "model": "grok-imagine-video-1.5-fast:reverse",
     "resolution": "480p",
-    "duration": 6,
+    "duration": 6
 }
 
 response = requests.post(url, json=payload, headers=headers)
