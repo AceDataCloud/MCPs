@@ -1,9 +1,11 @@
 {
   "contract": {
+    "acquisition_model": "last_tagged_before_signup_7d",
     "campaigns": [
       "evergreen",
       "2026q4_seedance_launch"
     ],
+    "captured_at_key": "utm_captured_at",
     "contents": {
       "seedance_mcp_package_api_key": {
         "destination": "https://platform.acedata.cloud/console/applications",
@@ -60,11 +62,6 @@
         "surface": "shared_readme"
       }
     },
-    "cta_placements": [
-      "document_api_key",
-      "document_pricing",
-      "application_buy"
-    ],
     "entries": {
       "seedance_mcp": {
         "guide": "https://platform.acedata.cloud/documents/seedance-mcp",
@@ -72,7 +69,7 @@
       }
     },
     "max_tag_length": 96,
-    "retention_days": 90,
+    "observation_days": 30,
     "sources": {
       "agent_skill": "referral",
       "bilibili": "social",
@@ -113,10 +110,10 @@
       "utm_campaign",
       "utm_content"
     ],
-    "version": 1,
+    "version": 2,
     "window_seconds": 604800
   },
   "producer": "AceDataCloud/PlatformBackend",
-  "sha256": "7c146cb42d9d213d3a4b82169bc324f946dfd4f03034a93147a4d3155e413d47",
-  "source_sha": "9ba471d02fae0ba8e7e28d76fa08796d4fb05c6e"
+  "sha256": "be06bd62b1ffa38263e019fe65dc1c467888301b0c5e12f3a590493024cd7519",
+  "source_sha": "0da5f34c58c307052eb33b0d427c3c4b883fb28b"
 }
