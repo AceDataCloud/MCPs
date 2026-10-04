@@ -35,4 +35,12 @@ asyncio.run(main())
     }
     assert expected <= names
 
-    assert not {"kling_apparel_video", "kling_virtual_try_on", "kling_manage_elements", "kling_manage_voices"} & names
+    assert (
+        not {
+            "kling_apparel_video",
+            "kling_virtual_try_on",
+            "kling_manage_elements",
+            "kling_manage_voices",
+        }
+        & names
+    )

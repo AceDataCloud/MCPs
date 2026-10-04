@@ -153,7 +153,7 @@ url = "https://api.acedata.cloud/kling/videos"
 headers = {
     "accept": "application/json",
     "authorization": "Bearer {token}",
-    "content-type": "application/json"
+    "content-type": "application/json",
 }
 
 payload = {
@@ -161,7 +161,7 @@ payload = {
     "model": "kling-v1",
     "video_id": "030bb06d-98d4-4044-9042-0aa0822e8c8c",
     "prompt": "White ceramic coffee mug on glossy marble countertop with morning window light. Camera slowly rotates 360 degrees around the mug, pausing briefly at the handle.",
-    "duration": 10
+    "duration": 10,
 }
 
 response = requests.post(url, json=payload, headers=headers)

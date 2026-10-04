@@ -123,14 +123,14 @@ url = "https://api.acedata.cloud/kimi/chat/completions"
 headers = {
     "accept": "application/json",
     "authorization": "Bearer {token}",
-    "content-type": "application/json"
+    "content-type": "application/json",
 }
 
 payload = {
     "model": "kimi-k3",
-    "messages": [{"role":"user","content":"Hello"}],
+    "messages": [{"role": "user", "content": "Hello"}],
     "reasoning_effort": "max",
-    "stream": True
+    "stream": True,
 }
 
 response = requests.post(url, json=payload, headers=headers)
@@ -226,13 +226,16 @@ url = "https://api.acedata.cloud/kimi/chat/completions"
 headers = {
     "accept": "application/json",
     "authorization": "Bearer {token}",
-    "content-type": "application/json"
+    "content-type": "application/json",
 }
 
 payload = {
     "model": "kimi-k3",
-    "messages": [{"role":"assistant","content":"Hello! How can I help you today?"},{"role":"user","content":"What model are you?"}],
-    "reasoning_effort": "max"
+    "messages": [
+        {"role": "assistant", "content": "Hello! How can I help you today?"},
+        {"role": "user", "content": "What model are you?"},
+    ],
+    "reasoning_effort": "max",
 }
 
 response = requests.post(url, json=payload, headers=headers)

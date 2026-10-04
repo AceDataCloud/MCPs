@@ -64,12 +64,7 @@ headers = {
 }
 payload = {
     "model": "claude-fable-5-1",
-    "messages": [
-        {
-            "role": "user",
-            "content": "Hello, Claude"
-        }
-    ],
+    "messages": [{"role": "user", "content": "Hello, Claude"}],
 }
 response = httpx.post(url, headers=headers, json=payload)
 print(response.json())
@@ -97,12 +92,7 @@ client = Anthropic(
 
 result = client.messages.count_tokens(
     model="claude-opus-4-8",
-    messages=[
-        {
-            "role": "user",
-            "content": "Hello, Claude"
-        }
-    ],
+    messages=[{"role": "user", "content": "Hello, Claude"}],
 )
 print(result.input_tokens)
 ```
@@ -114,12 +104,7 @@ print(result.input_tokens)
 ```python
 result = client.messages.count_tokens(
     model="claude-opus-4-8",
-    messages=[
-        {
-            "role": "user",
-            "content": "What is the weather in San Francisco?"
-        }
-    ],
+    messages=[{"role": "user", "content": "What is the weather in San Francisco?"}],
     tools=[
         {
             "name": "get_weather",
@@ -129,11 +114,11 @@ result = client.messages.count_tokens(
                 "properties": {
                     "location": {
                         "type": "string",
-                        "description": "The city and state, e.g. San Francisco, CA"
+                        "description": "The city and state, e.g. San Francisco, CA",
                     }
                 },
-                "required": ["location"]
-            }
+                "required": ["location"],
+            },
         }
     ],
 )
@@ -148,12 +133,7 @@ print(result.input_tokens)
 result = client.messages.count_tokens(
     model="claude-opus-4-8",
     system="You are a helpful assistant that speaks Chinese.",
-    messages=[
-        {
-            "role": "user",
-            "content": "Hello"
-        }
-    ],
+    messages=[{"role": "user", "content": "Hello"}],
 )
 print(result.input_tokens)
 ```

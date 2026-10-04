@@ -145,14 +145,10 @@ url = "https://api.acedata.cloud/openai/responses"
 headers = {
     "accept": "application/json",
     "authorization": "Bearer {token}",
-    "content-type": "application/json"
+    "content-type": "application/json",
 }
 
-payload = {
-    "model": "gpt-4.1",
-    "input": [{"role":"user","content":"Hello"}],
-    "stream": True
-}
+payload = {"model": "gpt-4.1", "input": [{"role": "user", "content": "Hello"}], "stream": True}
 
 response = requests.post(url, json=payload, headers=headers)
 print(response.text)
@@ -273,12 +269,16 @@ url = "https://api.acedata.cloud/openai/responses"
 headers = {
     "accept": "application/json",
     "authorization": "Bearer {token}",
-    "content-type": "application/json"
+    "content-type": "application/json",
 }
 
 payload = {
     "model": "gpt-4.1",
-    "input": [{"role":"user","content":"Hello"},{"role":"assistant","content":"Hello! How can I help you today? 😊"},{"role":"user","content":"What did I just say?"}]
+    "input": [
+        {"role": "user", "content": "Hello"},
+        {"role": "assistant", "content": "Hello! How can I help you today? 😊"},
+        {"role": "user", "content": "What did I just say?"},
+    ],
 }
 
 response = requests.post(url, json=payload, headers=headers)
@@ -396,24 +396,21 @@ url = "https://api.acedata.cloud/openai/chat/completions"
 headers = {
     "accept": "application/json",
     "authorization": "Bearer {token}",
-    "content-type": "application/json"
+    "content-type": "application/json",
 }
 
 payload = {
     "model": "gpt-4.1",
     "input": [
-      {
-        "role": "user",
-        "content": [
-          {"type": "input_text", "text": "what is in this image?"},
-          {
-            "type": "input_image",
-            "image_url": "https://cdn.acedata.cloud/e724d7f13d.png"
-          }
-        ]
-      }
-    ]
-  }
+        {
+            "role": "user",
+            "content": [
+                {"type": "input_text", "text": "what is in this image?"},
+                {"type": "input_image", "image_url": "https://cdn.acedata.cloud/e724d7f13d.png"},
+            ],
+        }
+    ],
+}
 
 response = requests.post(url, json=payload, headers=headers)
 print(response.text)

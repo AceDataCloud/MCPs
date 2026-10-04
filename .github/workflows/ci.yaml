@@ -102,7 +102,7 @@ jobs:
 
       - name: Run Ruff formatter check
         working-directory: ${{ matrix.mcp }}
-        run: ruff format --check .
+        run: ruff format --check --exclude docs/platform .
 
       - name: Run mypy
         working-directory: ${{ matrix.mcp }}

@@ -51,15 +51,10 @@ url = "https://api.acedata.cloud/glm/chat/completions"
 headers = {
     "accept": "application/json",
     "authorization": "Bearer {token}",
-    "content-type": "application/json"
+    "content-type": "application/json",
 }
 
-payload = {
-    "model": "glm-5.2",
-    "messages": [
-        {"role": "user", "content": "hello"}
-    ]
-}
+payload = {"model": "glm-5.2", "messages": [{"role": "user", "content": "hello"}]}
 
 response = requests.post(url, json=payload, headers=headers)
 print(response.text)
@@ -115,14 +110,10 @@ url = "https://api.acedata.cloud/glm/chat/completions"
 headers = {
     "accept": "application/json",
     "authorization": "Bearer {token}",
-    "content-type": "application/json"
+    "content-type": "application/json",
 }
 
-payload = {
-    "model": "glm-4.7",
-    "messages": [{"role": "user", "content": "hi"}],
-    "stream": True
-}
+payload = {"model": "glm-4.7", "messages": [{"role": "user", "content": "hi"}], "stream": True}
 
 response = requests.post(url, json=payload, headers=headers, stream=True)
 for line in response.iter_lines():
@@ -215,7 +206,7 @@ url = "https://api.acedata.cloud/glm/chat/completions"
 headers = {
     "accept": "application/json",
     "authorization": "Bearer {token}",
-    "content-type": "application/json"
+    "content-type": "application/json",
 }
 
 payload = {
@@ -223,8 +214,8 @@ payload = {
     "messages": [
         {"role": "user", "content": "Hello"},
         {"role": "assistant", "content": "Hi! How can I assist you today?"},
-        {"role": "user", "content": "What did I say just now?"}
-    ]
+        {"role": "user", "content": "What did I say just now?"},
+    ],
 }
 
 response = requests.post(url, json=payload, headers=headers)
@@ -268,8 +259,8 @@ payload = {
     "model": "glm-4.7",
     "messages": [
         {"role": "system", "content": "你是一名资深的中文写作助手，请用简洁专业的语气回复。"},
-        {"role": "user", "content": "请用三句话介绍一下 GLM 模型。"}
-    ]
+        {"role": "user", "content": "请用三句话介绍一下 GLM 模型。"},
+    ],
 }
 ```
 
@@ -280,9 +271,7 @@ GLM 模型支持 OpenAI 兼容的 Function Calling，可以通过 `tools` 参数
 ```python
 payload = {
     "model": "glm-4.7",
-    "messages": [
-        {"role": "user", "content": "北京今天天气怎么样？"}
-    ],
+    "messages": [{"role": "user", "content": "北京今天天气怎么样？"}],
     "tools": [
         {
             "type": "function",
@@ -291,14 +280,12 @@ payload = {
                 "description": "查询指定城市的天气",
                 "parameters": {
                     "type": "object",
-                    "properties": {
-                        "city": {"type": "string", "description": "城市名称"}
-                    },
-                    "required": ["city"]
-                }
-            }
+                    "properties": {"city": {"type": "string", "description": "城市名称"}},
+                    "required": ["city"],
+                },
+            },
         }
-    ]
+    ],
 }
 ```
 

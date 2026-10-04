@@ -109,14 +109,10 @@ url = "https://api.acedata.cloud/grok/chat/completions"
 headers = {
     "accept": "application/json",
     "authorization": "Bearer {token}",
-    "content-type": "application/json"
+    "content-type": "application/json",
 }
 
-payload = {
-    "model": "grok-3",
-    "messages": [{"role":"user","content":"Hello"}],
-    "stream": True
-}
+payload = {"model": "grok-3", "messages": [{"role": "user", "content": "Hello"}], "stream": True}
 
 response = requests.post(url, json=payload, headers=headers)
 print(response.text)
@@ -241,12 +237,16 @@ url = "https://api.acedata.cloud/grok/chat/completions"
 headers = {
     "accept": "application/json",
     "authorization": "Bearer {token}",
-    "content-type": "application/json"
+    "content-type": "application/json",
 }
 
 payload = {
     "model": "grok-3",
-    "messages": [{"role":"user","content":"Hello"},{"role":"assistant","content":"What model are you?"},{"role":"user","content":"What did I just say?"}]
+    "messages": [
+        {"role": "user", "content": "Hello"},
+        {"role": "assistant", "content": "What model are you?"},
+        {"role": "user", "content": "What did I just say?"},
+    ],
 }
 
 response = requests.post(url, json=payload, headers=headers)

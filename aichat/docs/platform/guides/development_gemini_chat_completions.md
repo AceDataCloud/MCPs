@@ -113,7 +113,7 @@ data_uri = f"data:image/jpeg;base64,{base64_image}"
 headers = {
     "accept": "application/json",
     "authorization": "Bearer {token}",
-    "content-type": "application/json"
+    "content-type": "application/json",
 }
 
 payload = {
@@ -123,10 +123,10 @@ payload = {
             "role": "user",
             "content": [
                 {"type": "text", "text": "请用一句话描述这张图片。"},
-                {"type": "image_url", "image_url": {"url": data_uri}}
-            ]
+                {"type": "image_url", "image_url": {"url": data_uri}},
+            ],
         }
-    ]
+    ],
 }
 
 response = requests.post(url, json=payload, headers=headers)
@@ -143,10 +143,10 @@ payload = {
             "role": "user",
             "content": [
                 {"type": "text", "text": "请用一句话描述这张图片。"},
-                {"type": "image_url", "image_url": {"url": "https://cdn.acedata.cloud/4hfydw.jpg"}}
-            ]
+                {"type": "image_url", "image_url": {"url": "https://cdn.acedata.cloud/4hfydw.jpg"}},
+            ],
         }
-    ]
+    ],
 }
 ```
 
@@ -174,14 +174,14 @@ url = "https://api.acedata.cloud/gemini/chat/completions"
 headers = {
     "accept": "application/json",
     "authorization": "Bearer {token}",
-    "content-type": "application/json"
+    "content-type": "application/json",
 }
 
 payload = {
     "model": "gemini-2.5-pro",
-    "messages": [{"role":"user","content":"Hello,What model are you?"}],
+    "messages": [{"role": "user", "content": "Hello,What model are you?"}],
     "stream": True,
-    "stream_options": {"include_usage": True}
+    "stream_options": {"include_usage": True},
 }
 
 response = requests.post(url, json=payload, headers=headers)
@@ -281,12 +281,16 @@ url = "https://api.acedata.cloud/gemini/chat/completions"
 headers = {
     "accept": "application/json",
     "authorization": "Bearer {token}",
-    "content-type": "application/json"
+    "content-type": "application/json",
 }
 
 payload = {
     "model": "gemini-2.5-pro",
-    "messages": [{"role":"user","content":"Hello"},{"role":"assistant","content":"Hello there! How can I help you today?"},{"role":"user","content":"What model are you?"}]
+    "messages": [
+        {"role": "user", "content": "Hello"},
+        {"role": "assistant", "content": "Hello there! How can I help you today?"},
+        {"role": "user", "content": "What model are you?"},
+    ],
 }
 
 response = requests.post(url, json=payload, headers=headers)

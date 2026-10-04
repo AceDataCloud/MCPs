@@ -37,8 +37,11 @@ curl -X POST 'https://api.acedata.cloud/v1/audio/speech' \
 
 ```python
 from openai import OpenAI
+
 client = OpenAI(base_url="https://api.acedata.cloud/v1", api_key="{token}")
-client.audio.speech.create(model="tts-1-hd", voice="nova", input="Hello from AceData.").stream_to_file("speech.mp3")
+client.audio.speech.create(
+    model="tts-1-hd", voice="nova", input="Hello from AceData."
+).stream_to_file("speech.mp3")
 ```
 
 ## 价格
