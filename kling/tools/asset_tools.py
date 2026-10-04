@@ -7,7 +7,7 @@ from core.client import client
 from core.server import mcp
 
 
-@mcp.tool()
+# Not published until its backend Document is public.
 async def kling_manage_elements(request: AssetManagementRequest) -> str:
     """List/retrieve verified preset or owned elements; presets cannot be deleted. Custom creation is unavailable."""
     result = await client.request(
@@ -16,7 +16,7 @@ async def kling_manage_elements(request: AssetManagementRequest) -> str:
     return json.dumps(result, ensure_ascii=False, indent=2)
 
 
-@mcp.tool()
+# Not published until its backend Document is public.
 async def kling_manage_voices(request: AssetManagementRequest | VoiceCreationRequest) -> str:
     """Create a voice (0.07 Credits), list/retrieve assets, or delete an owned voice. IDs are platform IDs. Poll creation with kling_get_task."""
     result = await client.request(

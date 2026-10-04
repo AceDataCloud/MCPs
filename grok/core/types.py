@@ -34,6 +34,7 @@ DEFAULT_DURATION: int = 6
 
 # Grok chat completion models
 GrokChatModel = Literal[
+    "grok-4.7",
     "grok-4.5",
     "grok-4",
     "grok-3",

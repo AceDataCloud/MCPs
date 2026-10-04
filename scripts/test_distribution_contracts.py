@@ -31,7 +31,7 @@ class DistributionContractsTest(unittest.TestCase):
 
     def test_openai_distribution_and_entry_point_are_unambiguous(self):
         project = tomllib.loads((ROOT / "openai/pyproject.toml").read_text())["project"]
-        self.assertEqual(project["name"], "mcp-openai-acedatacloud")
-        self.assertEqual(project["scripts"], {"mcp-openai-acedatacloud": "main:main"})
+        self.assertEqual(project["name"], "mcp-openai-pro")
+        self.assertEqual(project["scripts"], {"mcp-openai-pro": "main:main"})
         dockerfile = (ROOT / "openai/Dockerfile").read_text()
-        self.assertIn('CMD ["mcp-openai-acedatacloud",', dockerfile)
+        self.assertIn('CMD ["mcp-openai-pro",', dockerfile)

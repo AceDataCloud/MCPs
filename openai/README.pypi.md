@@ -7,7 +7,7 @@ A [Model Context Protocol (MCP)](https://modelcontextprotocol.io) server for Ope
 
 Interact with OpenAI models for chat completions, image generation, text embeddings, and more — directly from Claude, VS Code, or any MCP-compatible client.
 
-The AceDataCloud distribution is `mcp-openai-acedatacloud`. The unrelated
+The AceDataCloud distribution is `mcp-openai-pro`. The unrelated
 `mcp-openai` package on PyPI is not maintained by AceDataCloud. Update existing
 `uvx` configurations to the new package name; the hosted MCP URL is unchanged.
 
@@ -29,7 +29,7 @@ Get an API token from [AceDataCloud](https://platform.acedata.cloud?utm_source=p
 ### Installation
 
 ```bash
-pip install mcp-openai-acedatacloud
+pip install mcp-openai-pro
 ```
 
 ### Configuration
@@ -43,7 +43,7 @@ export ACEDATACLOUD_API_TOKEN=your_api_token_here
 ### Run
 
 ```bash
-mcp-openai-acedatacloud
+mcp-openai-pro
 ```
 
 ## Available Tools

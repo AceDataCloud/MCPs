@@ -1,5 +1,5 @@
 [project]
-name = "mcp-openai-acedatacloud"
+name = "mcp-openai-pro"
 version = "2026.4.25.1"
 description = "MCP Server for OpenAI API via AceDataCloud"
 readme = "README.pypi.md"
@@ -60,11 +60,11 @@ release = [
     "twine>=5.0.0",
 ]
 all = [
-    "mcp-openai-acedatacloud[dev,test,release]",
+    "mcp-openai-pro[dev,test,release]",
 ]
 
 [project.scripts]
-mcp-openai-acedatacloud = "main:main"
+mcp-openai-pro = "main:main"
 
 [project.urls]
 Homepage = "https://github.com/AceDataCloud/OpenAIMCP"
