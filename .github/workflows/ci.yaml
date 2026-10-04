@@ -7,6 +7,21 @@ on:
     branches: [main]
 
 jobs:
+  vscode-bundle:
+    name: VS Code MCP bundle
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: vscode-bundle/package-lock.json
+      - run: npm ci --prefix vscode-bundle
+      - run: npm test --prefix vscode-bundle
+      - run: npm run check --prefix vscode-bundle
+      - run: npm run package --prefix vscode-bundle
+
   inventory:
     name: README Inventory
     runs-on: ubuntu-latest

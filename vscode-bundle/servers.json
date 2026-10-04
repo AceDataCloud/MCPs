@@ -1,0 +1,158 @@
+[
+  {
+    "id": "acedatacloud",
+    "label": "Ace Data Cloud Account",
+    "url": "https://mcp.acedata.cloud/mcp",
+    "credential": "platform"
+  },
+  {
+    "id": "aichat",
+    "label": "AI Chat",
+    "url": "https://aichat.mcp.acedata.cloud/mcp",
+    "credential": "api"
+  },
+  {
+    "id": "face",
+    "label": "Face Transform",
+    "url": "https://face.mcp.acedata.cloud/mcp",
+    "credential": "api"
+  },
+  {
+    "id": "fish",
+    "label": "Fish Audio",
+    "url": "https://fish.mcp.acedata.cloud/mcp",
+    "credential": "api"
+  },
+  {
+    "id": "flux",
+    "label": "Flux",
+    "url": "https://flux.mcp.acedata.cloud/mcp",
+    "credential": "api"
+  },
+  {
+    "id": "glm",
+    "label": "GLM",
+    "url": "https://glm.mcp.acedata.cloud/mcp",
+    "credential": "api"
+  },
+  {
+    "id": "grok",
+    "label": "Grok Imagine",
+    "url": "https://grok.mcp.acedata.cloud/mcp",
+    "credential": "api"
+  },
+  {
+    "id": "hailuo",
+    "label": "Hailuo",
+    "url": "https://hailuo.mcp.acedata.cloud/mcp",
+    "credential": "api"
+  },
+  {
+    "id": "happyhorse",
+    "label": "HappyHorse",
+    "url": "https://happyhorse.mcp.acedata.cloud/mcp",
+    "credential": "api"
+  },
+  {
+    "id": "kling",
+    "label": "Kling",
+    "url": "https://kling.mcp.acedata.cloud/mcp",
+    "credential": "api"
+  },
+  {
+    "id": "luma",
+    "label": "Luma",
+    "url": "https://luma.mcp.acedata.cloud/mcp",
+    "credential": "api"
+  },
+  {
+    "id": "maestro",
+    "label": "Maestro",
+    "url": "https://maestro.mcp.acedata.cloud/mcp",
+    "credential": "api"
+  },
+  {
+    "id": "midjourney",
+    "label": "Midjourney",
+    "url": "https://midjourney.mcp.acedata.cloud/mcp",
+    "credential": "api"
+  },
+  {
+    "id": "minimax",
+    "label": "MiniMax",
+    "url": "https://minimax.mcp.acedata.cloud/mcp",
+    "credential": "api"
+  },
+  {
+    "id": "nanobanana",
+    "label": "NanoBanana",
+    "url": "https://nanobanana.mcp.acedata.cloud/mcp",
+    "credential": "api"
+  },
+  {
+    "id": "openai",
+    "label": "OpenAI",
+    "url": "https://openai.mcp.acedata.cloud/mcp",
+    "credential": "api"
+  },
+  {
+    "id": "producer",
+    "label": "Producer",
+    "url": "https://producer.mcp.acedata.cloud/mcp",
+    "credential": "api"
+  },
+  {
+    "id": "qwen-image",
+    "label": "Qwen Image",
+    "url": "https://qwen-image.mcp.acedata.cloud/mcp",
+    "credential": "api"
+  },
+  {
+    "id": "seedance",
+    "label": "Seedance",
+    "url": "https://seedance.mcp.acedata.cloud/mcp",
+    "credential": "api"
+  },
+  {
+    "id": "seedream",
+    "label": "Seedream",
+    "url": "https://seedream.mcp.acedata.cloud/mcp",
+    "credential": "api"
+  },
+  {
+    "id": "serp",
+    "label": "Google Search",
+    "url": "https://serp.mcp.acedata.cloud/mcp",
+    "credential": "api"
+  },
+  {
+    "id": "shorturl",
+    "label": "Short URL",
+    "url": "https://shorturl.mcp.acedata.cloud/mcp",
+    "credential": "api"
+  },
+  {
+    "id": "suno",
+    "label": "Suno",
+    "url": "https://suno.mcp.acedata.cloud/mcp",
+    "credential": "api"
+  },
+  {
+    "id": "veo",
+    "label": "Veo",
+    "url": "https://veo.mcp.acedata.cloud/mcp",
+    "credential": "api"
+  },
+  {
+    "id": "wan",
+    "label": "Wan",
+    "url": "https://wan.mcp.acedata.cloud/mcp",
+    "credential": "api"
+  },
+  {
+    "id": "webextrator",
+    "label": "Web Extractor",
+    "url": "https://webextrator.mcp.acedata.cloud/mcp",
+    "credential": "api"
+  }
+]

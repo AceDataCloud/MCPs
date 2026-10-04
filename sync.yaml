@@ -111,3 +111,5 @@ mappings:
     repo: AceDataCloud/DiscordBotMCP
     exclude:
       - .gitbooks
+  vscode-bundle:
+    repo: AceDataCloud/VSCodeMCP
