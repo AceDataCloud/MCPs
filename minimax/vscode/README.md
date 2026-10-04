@@ -18,7 +18,7 @@ Connect VS Code MCP clients to MiniMax H3 video generation through AceDataCloud.
 2. Run **MiniMax MCP: Set Ace Data Cloud API Key**.
 3. Open the MCP server picker and enable **MiniMax MCP**.
 
-The extension connects to `https://minimax.mcp.acedata.cloud/mcp`. Get a token at https://platform.acedata.cloud/console/applications.
+The extension connects to `https://minimax.mcp.acedata.cloud/mcp`. Get a token at https://platform.acedata.cloud/console/applications.?utm_source=vscode_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=minimax_mcp_vscode_api_key
 
 ## Tools
 
@@ -34,4 +34,4 @@ Public pricing is $0.057143/s for 768P and $0.091429/s for 2K. Failed tasks are 
 
 ## Documentation
 
-[Documentation](https://platform.acedata.cloud/documents/minimax-videos)
+[Documentation](https://platform.acedata.cloud/documents/minimax-videos?utm_source=vscode_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=minimax_mcp_vscode_quick_start)

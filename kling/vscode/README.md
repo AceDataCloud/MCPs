@@ -15,7 +15,7 @@ can call it directly from chat.
 ## Quick Start
 
 1. **Install this extension.** VS Code registers the `kling` MCP server automatically.
-2. **Get an API key** from [Ace Data Cloud](https://platform.acedata.cloud/console/applications) (Applications → API Key). New accounts include free trial credit.
+2. **Get an API key** from [Ace Data Cloud](https://platform.acedata.cloud/console/applications?utm_source=vscode_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=kling_mcp_vscode_api_key) (Applications → API Key). New accounts include free trial credit.
 3. **Open Copilot Chat** in agent mode and ask for a video task — the extension prompts for the API key the first time and stores it in the OS keychain via VS Code's `SecretStorage`.
 
 You can rotate or remove the API key any time from the command palette:
@@ -28,7 +28,7 @@ You can rotate or remove the API key any time from the command palette:
 
 ## VS Code Setup Guide
 
-For the full VS Code walkthrough, see [All Ace Data Cloud MCP servers in VS Code](https://platform.acedata.cloud/documents/promotion_article_mcp_all_vscode). It covers token setup, project-level and user-level `mcp.json`, Copilot Agent Mode, and using one Ace Data Cloud token across hosted MCP servers.
+For the full VS Code walkthrough, see [All Ace Data Cloud MCP servers in VS Code](https://platform.acedata.cloud/documents/promotion_article_mcp_all_vscode?utm_source=vscode_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=kling_mcp_vscode_documents_promotion_article_mcp_all_vscode). It covers token setup, project-level and user-level `mcp.json`, Copilot Agent Mode, and using one Ace Data Cloud token across hosted MCP servers.
 
 ### Example prompts
 
@@ -54,7 +54,7 @@ For the full VS Code walkthrough, see [All Ace Data Cloud MCP servers in VS Code
 
 ## Pricing
 
-From $0.20 per 5s clip. Free trial credit on sign-up. See full pricing at [https://platform.acedata.cloud/documents/kling](https://platform.acedata.cloud/documents/kling).
+From $0.20 per 5s clip. Free trial credit on sign-up. See full pricing at [https://platform.acedata.cloud/documents/kling](https://platform.acedata.cloud/documents/kling?utm_source=vscode_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=kling_mcp_vscode_quick_start).
 
 ---
 
@@ -125,8 +125,8 @@ version, install [`uv`](https://docs.astral.sh/uv/) and use:
 - **Hosted endpoint:** https://kling.mcp.acedata.cloud/mcp
 - **PyPI package:** [`mcp-kling`](https://pypi.org/project/mcp-kling/)
 - **Source repository:** https://github.com/AceDataCloud/KlingMCP
-- **Ace Data Cloud platform:** https://platform.acedata.cloud
-- **MCP documentation:** https://platform.acedata.cloud/documents/kling
+- **Ace Data Cloud platform:** https://platform.acedata.cloud?utm_source=vscode_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=kling_mcp_vscode_platform
+- **MCP documentation:** https://platform.acedata.cloud/documents/kling?utm_source=vscode_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=kling_mcp_vscode_quick_start
 
 ## License
 

@@ -5,7 +5,7 @@ AI Video Generation with [Kling](https://klingai.com) via [Model Context Protoco
 <!-- Plugin description -->
 This plugin helps you set up the MCP Kling server with JetBrains AI Assistant.
 Once configured, AI Assistant can generate, extend, and animate videos
-— all powered by [Ace Data Cloud](https://platform.acedata.cloud).
+— all powered by [Ace Data Cloud](https://platform.acedata.cloud?utm_source=jetbrains_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=kling_mcp_jetbrains_platform).
 
 **8 AI Tools** — Generate, extend, and animate videos.
 <!-- Plugin description end -->
@@ -14,7 +14,7 @@ Once configured, AI Assistant can generate, extend, and animate videos
 
 1. Install this plugin from the [JetBrains Marketplace](https://plugins.jetbrains.com/plugin/com.acedatacloud.mcp.kling)
 2. Open **Settings -> Tools -> Kling MCP**
-3. Enter your [Ace Data Cloud](https://platform.acedata.cloud) API token
+3. Enter your [Ace Data Cloud](https://platform.acedata.cloud?utm_source=jetbrains_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=kling_mcp_jetbrains_platform) API token
 4. Click **Copy Config** (STDIO or HTTP)
 5. Paste into **Settings -> Tools -> AI Assistant -> Model Context Protocol (MCP)**
 
@@ -55,8 +55,8 @@ Connects to the hosted MCP server at `kling.mcp.acedata.cloud`. No local install
 
 ## Links
 
-- [Ace Data Cloud Platform](https://platform.acedata.cloud)
-- [Documentation](https://platform.acedata.cloud/documents/kling)
+- [Ace Data Cloud Platform](https://platform.acedata.cloud?utm_source=jetbrains_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=kling_mcp_jetbrains_platform)
+- [Documentation](https://platform.acedata.cloud/documents/kling?utm_source=jetbrains_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=kling_mcp_jetbrains_quick_start)
 - [PyPI Package](https://pypi.org/project/mcp-kling/)
 - [Source Code](https://github.com/AceDataCloud/KlingMCP)
 

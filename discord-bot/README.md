@@ -1,7 +1,7 @@
 # MCP Discord Bot Server
 
 A Model Context Protocol (MCP) server that provides tools for automating Discord
-through a self-hosted [Discord Agent Proxy](https://platform.acedata.cloud) instance.
+through a self-hosted [Discord Agent Proxy](https://platform.acedata.cloud?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=discord_bot_mcp_readme_platform) instance.
 
 ## Overview
 
@@ -17,7 +17,7 @@ as MCP tools for use with Claude, Cursor, and other MCP-compatible AI clients.
 
 ## Prerequisites
 
-1. Deploy a Discord Agent Proxy at [platform.acedata.cloud](https://platform.acedata.cloud/console/applications)
+1. Deploy a Discord Agent Proxy at [platform.acedata.cloud](https://platform.acedata.cloud/console/applications?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=discord_bot_mcp_readme_api_key)
 2. Configure it with your Discord account credentials
 3. Note down the deployment URL and access token
 
@@ -89,7 +89,7 @@ mcp-discord-bot --transport http --port 8000
 ## Documentation
 
 <!-- canonical-documentation -->
-[Documentation](https://platform.acedata.cloud/documents/development_discord_bot)
+[Documentation](https://platform.acedata.cloud/documents/development_discord_bot?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=discord_bot_mcp_readme_quick_start)
 
 ## License
 

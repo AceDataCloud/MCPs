@@ -26,7 +26,7 @@ Set your AceDataCloud API token:
 export ACEDATACLOUD_API_TOKEN=your_token_here
 ```
 
-Get your token from [https://platform.acedata.cloud](https://platform.acedata.cloud).
+Get your token from [https://platform.acedata.cloud](https://platform.acedata.cloud?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=aichat_mcp_readme_platform).
 
 ## Usage
 
@@ -72,7 +72,7 @@ mcp-aichat --transport http --port 8000
 ## Documentation
 
 <!-- canonical-documentation -->
-[Documentation](https://platform.acedata.cloud/documents/aichat)
+[Documentation](https://platform.acedata.cloud/documents/aichat?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=aichat_mcp_readme_quick_start)
 
 ## License
 

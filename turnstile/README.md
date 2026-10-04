@@ -25,4 +25,4 @@ export TURNSTILE_REQUEST_TIMEOUT=120
 ## Documentation
 
 <!-- canonical-documentation -->
-[Documentation](https://platform.acedata.cloud/documents/turnstile)
+[Documentation](https://platform.acedata.cloud/documents/turnstile?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=turnstile_mcp_readme_quick_start)

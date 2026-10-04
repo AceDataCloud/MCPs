@@ -8,7 +8,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![MCP](https://img.shields.io/badge/MCP-Compatible-green.svg)](https://modelcontextprotocol.io)
 
-A [Model Context Protocol (MCP)](https://modelcontextprotocol.io) server for URL shortening using [Short URL API](https://platform.acedata.cloud/documents/shorturl) through the [AceDataCloud API](https://platform.acedata.cloud).
+A [Model Context Protocol (MCP)](https://modelcontextprotocol.io) server for URL shortening using [Short URL API](https://platform.acedata.cloud/documents/shorturl?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=shorturl_mcp_readme_documents_shorturl) through the [AceDataCloud API](https://platform.acedata.cloud?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=shorturl_mcp_readme_platform).
 
 Create short, shareable URLs directly from Claude, VS Code, or any MCP-compatible client.
 
@@ -34,8 +34,8 @@ Create short, shareable URLs directly from Claude, VS Code, or any MCP-compatibl
 
 ### 1. Get Your API Token
 
-1. Sign up at [AceDataCloud Platform](https://platform.acedata.cloud)
-2. Go to the [API documentation page](https://platform.acedata.cloud/documents/shorturl)
+1. Sign up at [AceDataCloud Platform](https://platform.acedata.cloud?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=shorturl_mcp_readme_platform)
+2. Go to the [API documentation page](https://platform.acedata.cloud/documents/shorturl?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=shorturl_mcp_readme_documents_shorturl)
 3. Click **"Acquire"** to get your API token
 4. Copy the token for use below
 
@@ -498,7 +498,7 @@ ShortURLMCP/
 
 ## API Reference
 
-This server wraps the [AceDataCloud Short URL API](https://platform.acedata.cloud/documents/shorturl):
+This server wraps the [AceDataCloud Short URL API](https://platform.acedata.cloud/documents/shorturl?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=shorturl_mcp_readme_documents_shorturl):
 
 - **Endpoint**: `POST /shorturl`
 - **Input**: `{ "content": "https://long-url.example.com/..." }`
@@ -506,12 +506,12 @@ This server wraps the [AceDataCloud Short URL API](https://platform.acedata.clou
 - **Pricing**: Free (0 credits)
 - **Auth**: Bearer token
 
-Full API documentation: [AceDataCloud Platform](https://platform.acedata.cloud/documents/shorturl)
+Full API documentation: [AceDataCloud Platform](https://platform.acedata.cloud/documents/shorturl?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=shorturl_mcp_readme_documents_shorturl)
 
 ## Documentation
 
 <!-- canonical-documentation -->
-[Documentation](https://platform.acedata.cloud/documents/short-url-mcp)
+[Documentation](https://platform.acedata.cloud/documents/short-url-mcp?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=shorturl_mcp_readme_quick_start)
 
 ## License
 

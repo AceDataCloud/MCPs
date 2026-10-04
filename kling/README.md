@@ -8,7 +8,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![MCP](https://img.shields.io/badge/MCP-Compatible-green.svg)](https://modelcontextprotocol.io)
 
-A [Model Context Protocol (MCP)](https://modelcontextprotocol.io) server for AI video generation using [Kling](https://klingai.com/) through the [AceDataCloud API](https://platform.acedata.cloud).
+A [Model Context Protocol (MCP)](https://modelcontextprotocol.io) server for AI video generation using [Kling](https://klingai.com/) through the [AceDataCloud API](https://platform.acedata.cloud?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=kling_mcp_readme_platform).
 
 Generate AI videos, extend clips, and transfer motion directly from Claude, VS Code, or any MCP-compatible client.
 
@@ -39,7 +39,7 @@ Generate AI videos, extend clips, and transfer motion directly from Claude, VS C
 
 ### 1. Get Your API Token
 
-1. Sign up at [AceDataCloud Platform](https://platform.acedata.cloud)
+1. Sign up at [AceDataCloud Platform](https://platform.acedata.cloud?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=kling_mcp_readme_platform)
 2. Go to the API documentation page
 3. Click **"Acquire"** to get your API token
 4. Copy the token for use below
@@ -458,7 +458,7 @@ Contributions are welcome! Please:
 ## Documentation
 
 <!-- canonical-documentation -->
-[Documentation](https://platform.acedata.cloud/documents/kling)
+[Documentation](https://platform.acedata.cloud/documents/kling?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=kling_mcp_readme_quick_start)
 
 ## License
 
@@ -466,14 +466,14 @@ MIT License - see [LICENSE](LICENSE) for details.
 
 ## Links
 
-- [AceDataCloud Platform](https://platform.acedata.cloud)
+- [AceDataCloud Platform](https://platform.acedata.cloud?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=kling_mcp_readme_platform)
 - [Kling AI](https://klingai.com/)
 - [Model Context Protocol](https://modelcontextprotocol.io)
 - [MCP Python SDK](https://github.com/modelcontextprotocol/python-sdk)
 
 ---
 
-Made with love by [AceDataCloud](https://platform.acedata.cloud)
+Made with love by [AceDataCloud](https://platform.acedata.cloud?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=kling_mcp_readme_platform)
 
 ## Turbo, storyboards and commerce
 

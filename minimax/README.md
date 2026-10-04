@@ -39,7 +39,7 @@ https://minimax.mcp.acedata.cloud/mcp
 
 The hosted server supports AceDataCloud OAuth. MCP clients that support remote OAuth can connect directly to this URL.
 
-Public API reference: [MiniMax H3 Videos API](https://platform.acedata.cloud/documents/minimax-videos).
+Public API reference: [MiniMax H3 Videos API](https://platform.acedata.cloud/documents/minimax-videos?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=minimax_mcp_readme_quick_start).
 
 ## Local installation
 
@@ -49,7 +49,7 @@ export ACEDATACLOUD_API_TOKEN="YOUR_API_TOKEN"
 mcp-minimax
 ```
 
-Get a token from [AceDataCloud](https://platform.acedata.cloud/console/applications).
+Get a token from [AceDataCloud](https://platform.acedata.cloud/console/applications?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=minimax_mcp_readme_api_key).
 
 ### Claude Code
 
@@ -108,7 +108,7 @@ mypy core tools
 ## Documentation
 
 <!-- canonical-documentation -->
-[Documentation](https://platform.acedata.cloud/documents/minimax-videos)
+[Documentation](https://platform.acedata.cloud/documents/minimax-videos?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=minimax_mcp_readme_quick_start)
 
 ## License
 

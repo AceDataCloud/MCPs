@@ -12,7 +12,7 @@ export ACEDATACLOUD_API_TOKEN="your-token"
 mcp-maestro
 ```
 
-Get an API token from [platform.acedata.cloud](https://platform.acedata.cloud/console/applications).
+Get an API token from [platform.acedata.cloud](https://platform.acedata.cloud/console/applications?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=maestro_mcp_readme_api_key).
 
 For a hosted connection, use `https://maestro.mcp.acedata.cloud/mcp`. It accepts a direct Ace Data Cloud Bearer token and supports OAuth sign-in.
 
@@ -76,9 +76,9 @@ mypy core tools main.py
 python -m build
 ```
 
-See the [Maestro API documentation](https://platform.acedata.cloud/documents/maestro) for billing and response details.
+See the [Maestro API documentation](https://platform.acedata.cloud/documents/maestro?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=maestro_mcp_readme_quick_start) for billing and response details.
 
 ## Documentation
 
 <!-- canonical-documentation -->
-[Documentation](https://platform.acedata.cloud/documents/maestro)
+[Documentation](https://platform.acedata.cloud/documents/maestro?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=maestro_mcp_readme_quick_start)

@@ -1,7 +1,7 @@
 # Qwen Image MCP Server
 
 <!-- canonical-documentation -->
-[Documentation](https://platform.acedata.cloud/documents/qwen-image)
+[Documentation](https://platform.acedata.cloud/documents/qwen-image?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=qwen_image_mcp_readme_quick_start)
 
 Model Context Protocol server for Qwen Image 3 generation and editing through Ace Data Cloud.
 

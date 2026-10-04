@@ -2,7 +2,7 @@
 name = "mcp-webextrator"
 version = "2026.4.25.0"
 description = "MCP Server for WebExtrator Web Render & Extract via AceDataCloud API"
-readme = "README.md"
+readme = "README.pypi.md"
 license = { text = "MIT" }
 requires-python = ">=3.10"
 authors = [
@@ -66,7 +66,7 @@ mcp-webextrator = "main:main"
 
 [project.urls]
 Homepage = "https://github.com/AceDataCloud/WebExtraterMCP"
-Documentation = "https://platform.acedata.cloud/documents/webextrator"
+Documentation = "https://platform.acedata.cloud/documents/webextrator?utm_source=pypi&utm_medium=referral&utm_campaign=evergreen&utm_content=webextrator_mcp_package_quick_start"
 Repository = "https://github.com/AceDataCloud/WebExtraterMCP"
 Issues = "https://github.com/AceDataCloud/WebExtraterMCP/issues"
 
@@ -85,6 +85,7 @@ include = [
     "tests/",
     "main.py",
     "README.md",
+    "README.pypi.md",
     "LICENSE",
     ".env.example",
 ]

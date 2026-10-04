@@ -2,7 +2,7 @@
 name = "mcp-face-transform"
 version = "2026.4.5.0"
 description = "MCP server for the AceDataCloud Face Transform API (keypoints, beautify, age/gender, swap, cartoon, liveness)"
-readme = "README.md"
+readme = "README.pypi.md"
 license = { text = "MIT" }
 requires-python = ">=3.10"
 authors = [
@@ -69,7 +69,7 @@ mcp-face-transform = "main:main"
 
 [project.urls]
 Homepage = "https://github.com/AceDataCloud/FaceTransformMCP"
-Documentation = "https://platform.acedata.cloud/services/8efa1d83-9b75-4562-b44a-af95ce563d05"
+Documentation = "https://platform.acedata.cloud/services/8efa1d83-9b75-4562-b44a-af95ce563d05?utm_source=pypi&utm_medium=referral&utm_campaign=evergreen&utm_content=face_mcp_package_quick_start"
 Repository = "https://github.com/AceDataCloud/FaceTransformMCP"
 Issues = "https://github.com/AceDataCloud/FaceTransformMCP/issues"
 Changelog = "https://github.com/AceDataCloud/FaceTransformMCP/blob/main/CHANGELOG.md"
@@ -89,6 +89,7 @@ include = [
     "tests/",
     "main.py",
     "README.md",
+    "README.pypi.md",
     "LICENSE",
     "CHANGELOG.md",
     ".env.example",

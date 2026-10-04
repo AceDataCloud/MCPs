@@ -8,7 +8,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![MCP](https://img.shields.io/badge/MCP-Compatible-green.svg)](https://modelcontextprotocol.io)
 
-A [Model Context Protocol (MCP)](https://modelcontextprotocol.io) server for Google search using [SERP API](https://platform.acedata.cloud/documents/serp-google) through the [AceDataCloud API](https://platform.acedata.cloud).
+A [Model Context Protocol (MCP)](https://modelcontextprotocol.io) server for Google search using [SERP API](https://platform.acedata.cloud/documents/serp-google?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=serp_mcp_readme_documents_serp-google) through the [AceDataCloud API](https://platform.acedata.cloud?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=serp_mcp_readme_platform).
 
 Perform Google searches and get structured results directly from Claude, VS Code, or any MCP-compatible client.
 
@@ -44,8 +44,8 @@ Perform Google searches and get structured results directly from Claude, VS Code
 
 ### 1. Get Your API Token
 
-1. Sign up at [AceDataCloud Platform](https://platform.acedata.cloud)
-2. Go to the [API documentation page](https://platform.acedata.cloud/documents/serp-google)
+1. Sign up at [AceDataCloud Platform](https://platform.acedata.cloud?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=serp_mcp_readme_platform)
+2. Go to the [API documentation page](https://platform.acedata.cloud/documents/serp-google?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=serp_mcp_readme_documents_serp-google)
 3. Click **"Acquire"** to get your API token
 4. Copy the token for use below
 
@@ -563,9 +563,9 @@ SerpMCP/
 
 ## API Reference
 
-This server wraps the [AceDataCloud Google SERP API](https://platform.acedata.cloud/documents/serp-google):
+This server wraps the [AceDataCloud Google SERP API](https://platform.acedata.cloud/documents/serp-google?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=serp_mcp_readme_documents_serp-google):
 
-- [Google SERP API Documentation](https://platform.acedata.cloud/documents/serp-google)
+- [Google SERP API Documentation](https://platform.acedata.cloud/documents/serp-google?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=serp_mcp_readme_documents_serp-google)
 
 ## Contributing
 
@@ -580,7 +580,7 @@ Contributions are welcome! Please:
 ## Documentation
 
 <!-- canonical-documentation -->
-[Documentation](https://platform.acedata.cloud/documents/serp-mcp)
+[Documentation](https://platform.acedata.cloud/documents/serp-mcp?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=serp_mcp_readme_quick_start)
 
 ## License
 
@@ -588,11 +588,11 @@ MIT License - see [LICENSE](LICENSE) for details.
 
 ## Links
 
-- [AceDataCloud Platform](https://platform.acedata.cloud)
-- [Google SERP API](https://platform.acedata.cloud/documents/serp-google)
+- [AceDataCloud Platform](https://platform.acedata.cloud?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=serp_mcp_readme_platform)
+- [Google SERP API](https://platform.acedata.cloud/documents/serp-google?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=serp_mcp_readme_documents_serp-google)
 - [Model Context Protocol](https://modelcontextprotocol.io)
 - [MCP Python SDK](https://github.com/modelcontextprotocol/python-sdk)
 
 ---
 
-Made with love by [AceDataCloud](https://platform.acedata.cloud)
+Made with love by [AceDataCloud](https://platform.acedata.cloud?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=serp_mcp_readme_platform)

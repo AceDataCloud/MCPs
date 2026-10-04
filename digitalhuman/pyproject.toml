@@ -2,7 +2,7 @@
 name = "mcp-digitalhuman"
 version = "0.1.0"
 description = "MCP server for AceDataCloud Digital Human video, voice, and task APIs"
-readme = "README.md"
+readme = "README.pypi.md"
 license = { text = "MIT" }
 requires-python = ">=3.10"
 authors = [{ name = "AceDataCloud", email = "support@acedata.cloud" }]
@@ -36,7 +36,7 @@ mcp-digitalhuman = "main:main"
 
 [project.urls]
 Homepage = "https://github.com/AceDataCloud/MCPs/tree/main/digitalhuman"
-Documentation = "https://platform.acedata.cloud/documents/digitalhuman"
+Documentation = "https://platform.acedata.cloud/documents/digitalhuman?utm_source=pypi&utm_medium=referral&utm_campaign=evergreen&utm_content=digitalhuman_mcp_package_quick_start"
 Repository = "https://github.com/AceDataCloud/MCPs"
 Issues = "https://github.com/AceDataCloud/MCPs/issues"
 
@@ -48,7 +48,7 @@ build-backend = "hatchling.build"
 packages = ["core", "tools", "prompts", "main.py"]
 
 [tool.hatch.build.targets.sdist]
-include = ["core/", "tools/", "prompts/", "tests/", "main.py", "README.md"]
+include = ["core/", "tools/", "prompts/", "tests/", "main.py", "README.md", "README.pypi.md"]
 
 [tool.mypy]
 python_version = "3.10"

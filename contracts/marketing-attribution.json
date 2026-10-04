@@ -1,75 +1,16 @@
 {
   "contract": {
-    "acquisition_model": "last_tagged_before_signup_7d",
-    "campaigns": [
-      "evergreen",
-      "2026q4_seedance_launch"
-    ],
-    "captured_at_key": "utm_captured_at",
-    "contents": {
-      "seedance_mcp_package_api_key": {
-        "destination": "https://platform.acedata.cloud/console/applications",
-        "entry": "seedance_mcp",
-        "placement": "api_key",
-        "sources": [
-          "pypi"
-        ],
-        "surface": "package"
-      },
-      "seedance_mcp_package_quick_start": {
-        "destination": "https://platform.acedata.cloud/documents/seedance-mcp",
-        "entry": "seedance_mcp",
-        "placement": "quick_start",
-        "sources": [
-          "pypi"
-        ],
-        "surface": "package"
-      },
-      "seedance_mcp_readme_api_key": {
-        "destination": "https://platform.acedata.cloud/console/applications",
-        "entry": "seedance_mcp",
-        "placement": "api_key",
-        "sources": [
-          "github"
-        ],
-        "surface": "readme"
-      },
-      "seedance_mcp_readme_quick_start": {
-        "destination": "https://platform.acedata.cloud/documents/seedance-mcp",
-        "entry": "seedance_mcp",
-        "placement": "quick_start",
-        "sources": [
-          "github"
-        ],
-        "surface": "readme"
-      },
-      "seedance_mcp_shared_readme_api_key": {
-        "destination": "https://platform.acedata.cloud/console/applications",
-        "entry": "seedance_mcp",
-        "placement": "api_key",
-        "sources": [
-          "opensource"
-        ],
-        "surface": "shared_readme"
-      },
-      "seedance_mcp_shared_readme_quick_start": {
-        "destination": "https://platform.acedata.cloud/documents/seedance-mcp",
-        "entry": "seedance_mcp",
-        "placement": "quick_start",
-        "sources": [
-          "opensource"
-        ],
-        "surface": "shared_readme"
-      }
-    },
-    "entries": {
-      "seedance_mcp": {
-        "guide": "https://platform.acedata.cloud/documents/seedance-mcp",
-        "service": "seedance"
+    "link_defaults": {
+      "campaign": "evergreen",
+      "content_template": "{entry}_{surface}_{placement}",
+      "surfaces": {
+        "github": "readme",
+        "jetbrains_marketplace": "jetbrains",
+        "pypi": "package",
+        "vscode_marketplace": "vscode"
       }
     },
     "max_tag_length": 96,
-    "observation_days": 30,
     "sources": {
       "agent_skill": "referral",
       "bilibili": "social",
@@ -110,10 +51,10 @@
       "utm_campaign",
       "utm_content"
     ],
-    "version": 2,
-    "window_seconds": 604800
+    "version": 2
   },
   "producer": "AceDataCloud/PlatformBackend",
-  "sha256": "be06bd62b1ffa38263e019fe65dc1c467888301b0c5e12f3a590493024cd7519",
-  "source_sha": "0da5f34c58c307052eb33b0d427c3c4b883fb28b"
+  "profile": "links",
+  "sha256": "de7d8b21d17c0c6251a6fa47b06c9bbc4a78280e0de89acab9a1fa502f95e558",
+  "source_sha": "5a1a5183d246c99a82e94bfde72c8b01b86c2005"
 }

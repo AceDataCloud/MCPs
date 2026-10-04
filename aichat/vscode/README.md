@@ -15,7 +15,7 @@ can call it directly from chat.
 ## Quick Start
 
 1. **Install this extension.** VS Code registers the `aichat` MCP server automatically.
-2. **Get an API token** from [Ace Data Cloud](https://platform.acedata.cloud) → *API Keys*. New accounts include free trial credit.
+2. **Get an API token** from [Ace Data Cloud](https://platform.acedata.cloud?utm_source=vscode_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=aichat_mcp_vscode_platform) → *API Keys*. New accounts include free trial credit.
 3. **Open Copilot Chat** in agent mode and call a tool — VS Code will prompt for the token the first time and store it securely.
 
 > The default config talks to the **hosted streamable-HTTP endpoint** at
@@ -23,7 +23,7 @@ can call it directly from chat.
 
 ## VS Code Setup Guide
 
-For the full VS Code walkthrough, see [All Ace Data Cloud MCP servers in VS Code](https://platform.acedata.cloud/documents/promotion_article_mcp_all_vscode). It covers token setup, project-level and user-level `mcp.json`, Copilot Agent Mode, and using one Ace Data Cloud token across hosted MCP servers.
+For the full VS Code walkthrough, see [All Ace Data Cloud MCP servers in VS Code](https://platform.acedata.cloud/documents/promotion_article_mcp_all_vscode?utm_source=vscode_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=aichat_mcp_vscode_documents_promotion_article_mcp_all_vscode). It covers token setup, project-level and user-level `mcp.json`, Copilot Agent Mode, and using one Ace Data Cloud token across hosted MCP servers.
 
 ---
 
@@ -101,8 +101,8 @@ first use (redirect URL `http://127.0.0.1:33418` or `https://vscode.dev/redirect
 - **Hosted endpoint:** https://aichat.mcp.acedata.cloud/mcp
 - **PyPI package:** [`mcp-aichat`](https://pypi.org/project/mcp-aichat/)
 - **Source repository:** https://github.com/AceDataCloud/AiChatMCP
-- **Ace Data Cloud platform:** https://platform.acedata.cloud
-- **MCP documentation:** https://platform.acedata.cloud/documents/aichat
+- **Ace Data Cloud platform:** https://platform.acedata.cloud?utm_source=vscode_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=aichat_mcp_vscode_platform
+- **MCP documentation:** https://platform.acedata.cloud/documents/aichat?utm_source=vscode_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=aichat_mcp_vscode_quick_start
 
 ## License
 

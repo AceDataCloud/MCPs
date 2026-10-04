@@ -15,7 +15,7 @@ can call it directly from chat.
 ## Quick Start
 
 1. **Install this extension.** VS Code registers the `producer` MCP server automatically.
-2. **Get an API key** from [Ace Data Cloud](https://platform.acedata.cloud/console/applications) (Applications → API Key). New accounts include free trial credit.
+2. **Get an API key** from [Ace Data Cloud](https://platform.acedata.cloud/console/applications?utm_source=vscode_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=producer_mcp_vscode_api_key) (Applications → API Key). New accounts include free trial credit.
 3. **Open Copilot Chat** in agent mode and ask for a music task — the extension prompts for the API key the first time and stores it in the OS keychain via VS Code's `SecretStorage`.
 
 You can rotate or remove the API key any time from the command palette:
@@ -28,7 +28,7 @@ You can rotate or remove the API key any time from the command palette:
 
 ## VS Code Setup Guide
 
-For the full VS Code walkthrough, see [All Ace Data Cloud MCP servers in VS Code](https://platform.acedata.cloud/documents/promotion_article_mcp_all_vscode). It covers token setup, project-level and user-level `mcp.json`, Copilot Agent Mode, and using one Ace Data Cloud token across hosted MCP servers.
+For the full VS Code walkthrough, see [All Ace Data Cloud MCP servers in VS Code](https://platform.acedata.cloud/documents/promotion_article_mcp_all_vscode?utm_source=vscode_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=producer_mcp_vscode_documents_promotion_article_mcp_all_vscode). It covers token setup, project-level and user-level `mcp.json`, Copilot Agent Mode, and using one Ace Data Cloud token across hosted MCP servers.
 
 ### Example prompts
 
@@ -68,7 +68,7 @@ For the full VS Code walkthrough, see [All Ace Data Cloud MCP servers in VS Code
 
 ## Pricing
 
-From $0.05 per song. Free trial credit on sign-up. See full pricing at [https://platform.acedata.cloud/documents/producer](https://platform.acedata.cloud/documents/producer).
+From $0.05 per song. Free trial credit on sign-up. See full pricing at [https://platform.acedata.cloud/documents/producer](https://platform.acedata.cloud/documents/producer?utm_source=vscode_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=producer_mcp_vscode_quick_start).
 
 ---
 
@@ -139,8 +139,8 @@ version, install [`uv`](https://docs.astral.sh/uv/) and use:
 - **Hosted endpoint:** https://producer.mcp.acedata.cloud/mcp
 - **PyPI package:** [`mcp-producer`](https://pypi.org/project/mcp-producer/)
 - **Source repository:** https://github.com/AceDataCloud/ProducerMCP
-- **Ace Data Cloud platform:** https://platform.acedata.cloud
-- **MCP documentation:** https://platform.acedata.cloud/documents/producer
+- **Ace Data Cloud platform:** https://platform.acedata.cloud?utm_source=vscode_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=producer_mcp_vscode_platform
+- **MCP documentation:** https://platform.acedata.cloud/documents/producer?utm_source=vscode_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=producer_mcp_vscode_quick_start
 
 ## License
 

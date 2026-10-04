@@ -8,8 +8,8 @@
 [![MCP](https://img.shields.io/badge/MCP-Compatible-green.svg)](https://modelcontextprotocol.io)
 
 A [Model Context Protocol (MCP)](https://modelcontextprotocol.io) server for
-**managing your [AceDataCloud](https://platform.acedata.cloud) account** through
-the [platform management API](https://platform.acedata.cloud/documents/platform-token).
+**managing your [AceDataCloud](https://platform.acedata.cloud?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=acedatacloud_mcp_readme_platform) account** through
+the [platform management API](https://platform.acedata.cloud/documents/platform-token?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=acedatacloud_mcp_readme_documents_platform-token).
 
 Check your balance, look up usage and spend, manage API keys, list services,
 create and pay recharge orders, manage platform tokens, list models, and use
@@ -494,7 +494,7 @@ token. The token stays valid until revoked. Mutating tools retain their
 
 ### 1. Get a platform token
 
-Create one at [platform.acedata.cloud/console/platform-tokens](https://platform.acedata.cloud/console/platform-tokens).
+Create one at [platform.acedata.cloud/console/platform-tokens](https://platform.acedata.cloud/console/platform-tokens?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=acedatacloud_mcp_readme_platform_token).
 It starts with `platform-` and never expires.
 
 > Use a **platform token**, not the per-service `api.acedata.cloud` token — the
@@ -629,7 +629,7 @@ and does not read a production .env or execute endpoint handlers.
 ## Documentation
 
 <!-- canonical-documentation -->
-[Documentation](https://platform.acedata.cloud/documents/acedatacloud-mcp)
+[Documentation](https://platform.acedata.cloud/documents/acedatacloud-mcp?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=acedatacloud_mcp_readme_quick_start)
 
 ## License
 

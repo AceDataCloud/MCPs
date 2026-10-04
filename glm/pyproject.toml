@@ -2,7 +2,7 @@
 name = "mcp-glm"
 version = "2026.4.25.0"
 description = "MCP Server for GLM via AceDataCloud API"
-readme = "README.md"
+readme = "README.pypi.md"
 license = { text = "MIT" }
 requires-python = ">=3.10"
 authors = [
@@ -67,7 +67,7 @@ mcp-glm = "main:main"
 
 [project.urls]
 Homepage = "https://github.com/AceDataCloud/GlmMCP"
-Documentation = "https://platform.acedata.cloud/documents/glm-chat-completions"
+Documentation = "https://platform.acedata.cloud/documents/glm-chat-completions?utm_source=pypi&utm_medium=referral&utm_campaign=evergreen&utm_content=glm_mcp_package_quick_start"
 Repository = "https://github.com/AceDataCloud/GlmMCP"
 Issues = "https://github.com/AceDataCloud/GlmMCP/issues"
 Changelog = "https://github.com/AceDataCloud/GlmMCP/blob/main/CHANGELOG.md"
@@ -87,6 +87,7 @@ include = [
     "tests/",
     "main.py",
     "README.md",
+    "README.pypi.md",
     "LICENSE",
     "CHANGELOG.md",
     ".env.example",

@@ -5,7 +5,7 @@ AI Video Generation with [Luma Dream Machine](https://lumalabs.ai) via [Model Co
 <!-- Plugin description -->
 This plugin helps you set up the MCP Luma Dream Machine server with JetBrains AI Assistant.
 Once configured, AI Assistant can generate and extend videos
-— all powered by [Ace Data Cloud](https://platform.acedata.cloud).
+— all powered by [Ace Data Cloud](https://platform.acedata.cloud?utm_source=jetbrains_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=luma_mcp_jetbrains_platform).
 
 **8 AI Tools** — Generate and extend videos.
 <!-- Plugin description end -->
@@ -14,7 +14,7 @@ Once configured, AI Assistant can generate and extend videos
 
 1. Install this plugin from the [JetBrains Marketplace](https://plugins.jetbrains.com/plugin/com.acedatacloud.mcp.luma)
 2. Open **Settings → Tools → Luma MCP**
-3. Enter your [Ace Data Cloud](https://platform.acedata.cloud) API token
+3. Enter your [Ace Data Cloud](https://platform.acedata.cloud?utm_source=jetbrains_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=luma_mcp_jetbrains_platform) API token
 4. Click **Copy Config** (STDIO or HTTP)
 5. Paste into **Settings → Tools → AI Assistant → Model Context Protocol (MCP)**
 
@@ -55,8 +55,8 @@ Connects to the hosted MCP server at `luma.mcp.acedata.cloud`. No local install 
 
 ## Links
 
-- [Ace Data Cloud Platform](https://platform.acedata.cloud)
-- [Documentation](https://platform.acedata.cloud/documents/luma-mcp)
+- [Ace Data Cloud Platform](https://platform.acedata.cloud?utm_source=jetbrains_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=luma_mcp_jetbrains_platform)
+- [Documentation](https://platform.acedata.cloud/documents/luma-mcp?utm_source=jetbrains_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=luma_mcp_jetbrains_quick_start)
 - [PyPI Package](https://pypi.org/project/mcp-luma/)
 - [Source Code](https://github.com/AceDataCloud/LumaMCP)
 

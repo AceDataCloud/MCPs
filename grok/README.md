@@ -6,7 +6,7 @@
 [![Python](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-A [Model Context Protocol (MCP)](https://modelcontextprotocol.io) server for **Grok** (xAI) — chat/reasoning/vision **and** Grok Imagine video generation, powered by the [AceDataCloud](https://platform.acedata.cloud) API.
+A [Model Context Protocol (MCP)](https://modelcontextprotocol.io) server for **Grok** (xAI) — chat/reasoning/vision **and** Grok Imagine video generation, powered by the [AceDataCloud](https://platform.acedata.cloud?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=grok_mcp_readme_platform) API.
 
 Chat with Grok models, or generate short AI videos from a text prompt or a still image — directly from any MCP-compatible client (Claude Desktop, Claude Code, Cursor, etc.).
 
@@ -140,7 +140,7 @@ ruff check .
 ## Documentation
 
 <!-- canonical-documentation -->
-[Documentation](https://platform.acedata.cloud/documents/grok)
+[Documentation](https://platform.acedata.cloud/documents/grok?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=grok_mcp_readme_quick_start)
 
 ## License
 

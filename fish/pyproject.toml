@@ -2,7 +2,7 @@
 name = "mcp-fish"
 version = "2026.5.10.0"
 description = "MCP Server for Fish TTS (Text-to-Speech) via AceDataCloud API"
-readme = "README.md"
+readme = "README.pypi.md"
 license = { text = "MIT" }
 requires-python = ">=3.10"
 authors = [
@@ -73,7 +73,7 @@ Repository = "https://github.com/AceDataCloud/FishMCP"
 Issues = "https://github.com/AceDataCloud/FishMCP/issues"
 Changelog = "https://github.com/AceDataCloud/FishMCP/blob/main/CHANGELOG.md"
 
-Documentation = "https://platform.acedata.cloud/documents/fish"
+Documentation = "https://platform.acedata.cloud/documents/fish?utm_source=pypi&utm_medium=referral&utm_campaign=evergreen&utm_content=fish_mcp_package_quick_start"
 [build-system]
 requires = ["hatchling>=1.21.0,<1.30.0"]
 build-backend = "hatchling.build"
@@ -89,6 +89,7 @@ include = [
     "tests/",
     "main.py",
     "README.md",
+    "README.pypi.md",
     "LICENSE",
     "CHANGELOG.md",
     ".env.example",

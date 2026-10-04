@@ -2,7 +2,7 @@
 name = "mcp-minimax"
 version = "2026.8.7.0"
 description = "MCP server for MiniMax H3 multimodal video generation via AceDataCloud"
-readme = "README.md"
+readme = "README.pypi.md"
 license = { text = "MIT" }
 requires-python = ">=3.10"
 authors = [
@@ -68,7 +68,7 @@ mcp-minimax = "main:main"
 
 [project.urls]
 Homepage = "https://github.com/AceDataCloud/MinimaxMCP"
-Documentation = "https://platform.acedata.cloud/documents/minimax-videos"
+Documentation = "https://platform.acedata.cloud/documents/minimax-videos?utm_source=pypi&utm_medium=referral&utm_campaign=evergreen&utm_content=minimax_mcp_package_quick_start"
 Repository = "https://github.com/AceDataCloud/MinimaxMCP"
 Issues = "https://github.com/AceDataCloud/MinimaxMCP/issues"
 Changelog = "https://github.com/AceDataCloud/MinimaxMCP/blob/main/CHANGELOG.md"
@@ -88,6 +88,7 @@ include = [
     "tests/",
     "main.py",
     "README.md",
+    "README.pypi.md",
     "LICENSE",
     "CHANGELOG.md",
     ".env.example",

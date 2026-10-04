@@ -2,7 +2,7 @@
 name = "mcp-hailuo"
 version = "2026.4.5.0"
 description = "MCP Server for Hailuo (MiniMax) AI Video Generation via AceDataCloud API"
-readme = "README.md"
+readme = "README.pypi.md"
 license = { text = "MIT" }
 requires-python = ">=3.10"
 authors = [
@@ -68,7 +68,7 @@ mcp-hailuo = "main:main"
 
 [project.urls]
 Homepage = "https://github.com/AceDataCloud/HailuoMCP"
-Documentation = "https://platform.acedata.cloud/documents/hailuo"
+Documentation = "https://platform.acedata.cloud/documents/hailuo?utm_source=pypi&utm_medium=referral&utm_campaign=evergreen&utm_content=hailuo_mcp_package_quick_start"
 Repository = "https://github.com/AceDataCloud/HailuoMCP"
 Issues = "https://github.com/AceDataCloud/HailuoMCP/issues"
 Changelog = "https://github.com/AceDataCloud/HailuoMCP/blob/main/CHANGELOG.md"
@@ -88,6 +88,7 @@ include = [
     "tests/",
     "main.py",
     "README.md",
+    "README.pypi.md",
     "LICENSE",
     "CHANGELOG.md",
     ".env.example",

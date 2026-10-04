@@ -28,4 +28,4 @@ export HCAPTCHA_REQUEST_TIMEOUT=120
 ## Service details
 
 <!-- canonical-documentation -->
-[Service details](https://platform.acedata.cloud/services/018c653e-4f1b-433f-82f9-732ef2767040)
+[Service details](https://platform.acedata.cloud/services/018c653e-4f1b-433f-82f9-732ef2767040?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=hcaptcha_mcp_readme_quick_start)

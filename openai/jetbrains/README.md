@@ -13,7 +13,7 @@ Once configured, AI Assistant can run OpenAI chat completions, generate embeddin
 
 1. Install this plugin from the [JetBrains Marketplace](https://plugins.jetbrains.com/plugin/com.acedatacloud.mcp.openai)
 2. Open **Settings → Tools → OpenAI MCP**
-3. Enter your [Ace Data Cloud](https://platform.acedata.cloud) API token
+3. Enter your [Ace Data Cloud](https://platform.acedata.cloud?utm_source=jetbrains_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=openai_mcp_jetbrains_platform) API token
 4. Click **Copy Config** (STDIO or HTTP)
 5. Paste into **Settings → Tools → AI Assistant → Model Context Protocol (MCP)**
 
@@ -70,8 +70,8 @@ Runs the MCP server locally. Requires [uv](https://github.com/astral-sh/uv) inst
 
 ## Links
 
-- [Ace Data Cloud Platform](https://platform.acedata.cloud)
-- [Documentation](https://platform.acedata.cloud/documents/openai)
+- [Ace Data Cloud Platform](https://platform.acedata.cloud?utm_source=jetbrains_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=openai_mcp_jetbrains_platform)
+- [Documentation](https://platform.acedata.cloud/documents/openai?utm_source=jetbrains_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=openai_mcp_jetbrains_quick_start)
 - [PyPI Package](https://pypi.org/project/mcp-openai/)
 - [Source Code](https://github.com/AceDataCloud/OpenAIMCP)
 
