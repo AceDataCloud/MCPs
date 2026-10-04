@@ -74,6 +74,10 @@ class VscodeBundleTest(unittest.TestCase):
         self.assertEqual(package["name"], "mcp-toolbox")
         self.assertEqual(package["publisher"], "acedatacloud")
         self.assertEqual(package["displayName"], "Ace Data Cloud MCP")
+        account = json.loads((ROOT / "acedatacloud/vscode/package.json").read_text())
+        self.assertEqual(account["name"], "mcp-acedatacloud")
+        self.assertEqual(account["displayName"], "Ace Data Cloud Account MCP")
+        self.assertNotEqual(account["displayName"], package["displayName"])
         self.assertIn(
             "  vscode-bundle:\n    repo: AceDataCloud/VSCodeMCP\n",
             (ROOT / "sync.yaml").read_text(),

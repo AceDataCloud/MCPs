@@ -28,7 +28,7 @@ defaults:
 
 services:
   acedatacloud:
-    display_name: Ace Data Cloud MCP
+    display_name: Ace Data Cloud Account MCP
     repo: AceDataCloudMCP
     domain: account
     # Umbrella management server is hosted at the bare apex, not <alias>.mcp...
