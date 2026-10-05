@@ -3068,13 +3068,9 @@
           "type": "string"
         },
         "category": {
-          "default": "model-news",
-          "enum": [
-            "model-news",
-            "engineering",
-            "comparison",
-            "product"
-          ],
+          "default": "tech-sharing",
+          "description": "Existing blog category slug: product-updates, tech-sharing (default), product-recommendations, industry-insights, or an administrator-defined category. Legacy aliases product, engineering, model-news and comparison remain accepted.",
+          "maxLength": 32,
           "title": "Category",
           "type": "string"
         },
@@ -3141,13 +3137,8 @@
         "category": {
           "anyOf": [
             {
-              "description": "acedatacloud_create_blogs_admin_category",
-              "enum": [
-                "model-news",
-                "engineering",
-                "comparison",
-                "product"
-              ],
+              "description": "Existing blog category slug: product-updates, tech-sharing (default), product-recommendations, industry-insights, or an administrator-defined category. Legacy aliases product, engineering, model-news and comparison remain accepted.",
+              "maxLength": 32,
               "type": "string"
             },
             {
@@ -11332,13 +11323,8 @@
         "category": {
           "anyOf": [
             {
-              "description": "acedatacloud_delete_blogs_admin_id_category",
-              "enum": [
-                "model-news",
-                "engineering",
-                "comparison",
-                "product"
-              ],
+              "description": "Existing blog category slug: product-updates, tech-sharing (default), product-recommendations, industry-insights, or an administrator-defined category. Legacy aliases product, engineering, model-news and comparison remain accepted.",
+              "maxLength": 32,
               "type": "string"
             },
             {
@@ -23548,12 +23534,8 @@
         "category": {
           "anyOf": [
             {
-              "enum": [
-                "model-news",
-                "engineering",
-                "comparison",
-                "product"
-              ],
+              "description": "Existing blog category slug: product-updates, tech-sharing (default), product-recommendations, industry-insights, or an administrator-defined category. Legacy aliases product, engineering, model-news and comparison remain accepted.",
+              "maxLength": 32,
               "type": "string"
             },
             {
@@ -23561,7 +23543,6 @@
             }
           ],
           "default": null,
-          "description": "Optional category filter.",
           "title": "Category"
         },
         "published": {
@@ -23602,12 +23583,8 @@
         "category": {
           "anyOf": [
             {
-              "enum": [
-                "model-news",
-                "engineering",
-                "comparison",
-                "product"
-              ],
+              "description": "Existing blog category slug: product-updates, tech-sharing (default), product-recommendations, industry-insights, or an administrator-defined category. Legacy aliases product, engineering, model-news and comparison remain accepted.",
+              "maxLength": 32,
               "type": "string"
             },
             {
@@ -23615,7 +23592,6 @@
             }
           ],
           "default": null,
-          "description": "Optional category filter.",
           "title": "Category"
         },
         "lang": {
@@ -23656,7 +23632,9 @@
         "category": {
           "anyOf": [
             {
-              "description": "acedatacloud_list_blogs_category"
+              "description": "Existing blog category slug: product-updates, tech-sharing (default), product-recommendations, industry-insights, or an administrator-defined category. Legacy aliases product, engineering, model-news and comparison remain accepted.",
+              "maxLength": 32,
+              "type": "string"
             },
             {
               "type": "null"
@@ -23718,7 +23696,9 @@
         "category": {
           "anyOf": [
             {
-              "description": "acedatacloud_list_blogs_admin_category"
+              "description": "Existing blog category slug: product-updates, tech-sharing (default), product-recommendations, industry-insights, or an administrator-defined category. Legacy aliases product, engineering, model-news and comparison remain accepted.",
+              "maxLength": 32,
+              "type": "string"
             },
             {
               "type": "null"
@@ -29335,13 +29315,8 @@
         "category": {
           "anyOf": [
             {
-              "description": "acedatacloud_replace_blogs_admin_id_category",
-              "enum": [
-                "model-news",
-                "engineering",
-                "comparison",
-                "product"
-              ],
+              "description": "Existing blog category slug: product-updates, tech-sharing (default), product-recommendations, industry-insights, or an administrator-defined category. Legacy aliases product, engineering, model-news and comparison remain accepted.",
+              "maxLength": 32,
               "type": "string"
             },
             {
@@ -33903,12 +33878,8 @@
         "category": {
           "anyOf": [
             {
-              "enum": [
-                "model-news",
-                "engineering",
-                "comparison",
-                "product"
-              ],
+              "description": "Existing blog category slug: product-updates, tech-sharing (default), product-recommendations, industry-insights, or an administrator-defined category. Legacy aliases product, engineering, model-news and comparison remain accepted.",
+              "maxLength": 32,
               "type": "string"
             },
             {
@@ -34009,13 +33980,8 @@
         "category": {
           "anyOf": [
             {
-              "description": "acedatacloud_update_blogs_admin_id_category",
-              "enum": [
-                "model-news",
-                "engineering",
-                "comparison",
-                "product"
-              ],
+              "description": "Existing blog category slug: product-updates, tech-sharing (default), product-recommendations, industry-insights, or an administrator-defined category. Legacy aliases product, engineering, model-news and comparison remain accepted.",
+              "maxLength": 32,
               "type": "string"
             },
             {

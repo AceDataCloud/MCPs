@@ -3174,7 +3174,10 @@
       "query_schema": {
         "type": "object",
         "properties": {
-          "category": {},
+          "category": {
+            "type": "string",
+            "maxLength": 32
+          },
           "lang": {},
           "limit": {
             "type": "integer",
@@ -3210,7 +3213,10 @@
       "query_schema": {
         "type": "object",
         "properties": {
-          "category": {},
+          "category": {
+            "type": "string",
+            "maxLength": 32
+          },
           "published": {},
           "q": {
             "type": "string"
@@ -3260,13 +3266,8 @@
             "pattern": "^[-a-zA-Z0-9_]+$"
           },
           "category": {
-            "enum": [
-              "model-news",
-              "engineering",
-              "comparison",
-              "product"
-            ],
-            "type": "string"
+            "type": "string",
+            "maxLength": 32
           },
           "author": {
             "type": "string",
@@ -3388,13 +3389,8 @@
             "pattern": "^[-a-zA-Z0-9_]+$"
           },
           "category": {
-            "enum": [
-              "model-news",
-              "engineering",
-              "comparison",
-              "product"
-            ],
-            "type": "string"
+            "type": "string",
+            "maxLength": 32
           },
           "author": {
             "type": "string",
@@ -3480,13 +3476,8 @@
             "pattern": "^[-a-zA-Z0-9_]+$"
           },
           "category": {
-            "enum": [
-              "model-news",
-              "engineering",
-              "comparison",
-              "product"
-            ],
-            "type": "string"
+            "type": "string",
+            "maxLength": 32
           },
           "author": {
             "type": "string",
@@ -3567,13 +3558,8 @@
             "pattern": "^[-a-zA-Z0-9_]+$"
           },
           "category": {
-            "enum": [
-              "model-news",
-              "engineering",
-              "comparison",
-              "product"
-            ],
-            "type": "string"
+            "type": "string",
+            "maxLength": 32
           },
           "author": {
             "type": "string",
@@ -20146,6 +20132,9 @@
     }
   ],
   "source_overrides": {
-    "admin/upstreams/{domain}/models": "4efc4f5c2f562a7ee3f02766cafb3e09620c22a6"
+    "admin/upstreams/{domain}/models": "4efc4f5c2f562a7ee3f02766cafb3e09620c22a6",
+    "blogs": "cdf8bcd878ebc07afb48941e7dd3b8a3aca3c5b7",
+    "blogs/admin": "cdf8bcd878ebc07afb48941e7dd3b8a3aca3c5b7",
+    "blogs/admin/{id}": "cdf8bcd878ebc07afb48941e7dd3b8a3aca3c5b7"
   }
 }

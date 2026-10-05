@@ -4,9 +4,12 @@ import json
 from uuid import UUID
 
 import httpx
+import pytest
 import respx
+from mcp.server.fastmcp.exceptions import ToolError
 
 from core.client import set_request_api_token
+from core.server import mcp
 from tools.blog_tools import (
     acedatacloud_approve_blog_post,
     acedatacloud_create_blog_draft,
@@ -33,13 +36,13 @@ async def test_public_blog_reads_do_not_forward_credentials():
     detail = respx.get(f"{API}/blogs/product-launch/").mock(
         return_value=httpx.Response(200, json={"content": "# 产品"})
     )
-    await acedatacloud_list_blog_posts(category="product", lang="zh-cn", limit=5, offset=2)
+    await acedatacloud_list_blog_posts(category="product-updates", lang="zh-cn", limit=5, offset=2)
     assert (
         json.loads(await acedatacloud_get_blog_post("product-launch", lang="en"))["content"]
         == "# 产品"
     )
     assert dict(listing.calls.last.request.url.params) == {
-        "category": "product",
+        "category": "product-updates",
         "lang": "zh-cn",
         "limit": "5",
         "offset": "2",
@@ -86,13 +89,107 @@ async def test_create_draft_and_preserve_markdown():
     )
     markdown = "# 新功能\n\n**博客**支持 Markdown。"
     await acedatacloud_create_blog_draft(
-        "launch", "新功能", "功能介绍", markdown, category="product", tags=["MCP"], confirm=True
+        "launch",
+        "新功能",
+        "功能介绍",
+        markdown,
+        category="product-updates",
+        tags=["MCP"],
+        confirm=True,
     )
     body = json.loads(route.calls.last.request.content)
     assert body["content"] == markdown
     assert body["published"] is False
     assert body["source_lang"] == "zh-cn"
     assert body["tags"] == ["MCP"]
+    assert body["category"] == "product-updates"
+
+
+CATEGORIES = [
+    "product-updates",
+    "tech-sharing",
+    "product-recommendations",
+    "industry-insights",
+    "community-news",
+    "product",
+    "engineering",
+    "model-news",
+    "comparison",
+]
+
+
+@respx.mock
+@pytest.mark.parametrize("category", CATEGORIES)
+async def test_mcp_category_filters_preserve_slugs_and_aliases(category):
+    public = respx.get(f"{API}/blogs/").mock(return_value=httpx.Response(200, json={}))
+    editorial = respx.get(f"{API}/blogs/admin/").mock(return_value=httpx.Response(200, json={}))
+    for name in (
+        "acedatacloud_list_blog_posts",
+        "acedatacloud_list_blog_drafts",
+        "acedatacloud_list_blogs",
+        "acedatacloud_list_blogs_admin",
+    ):
+        await mcp.call_tool(name, {"category": category})
+    assert public.calls.last.request.url.params["category"] == category
+    assert editorial.calls.last.request.url.params["category"] == category
+    assert "authorization" not in public.calls.last.request.headers
+    assert "authorization" in editorial.calls.last.request.headers
+
+
+@respx.mock
+@pytest.mark.parametrize("category", CATEGORIES)
+@pytest.mark.parametrize(
+    ("name", "method", "endpoint", "arguments"),
+    [
+        (
+            "acedatacloud_create_blog_draft",
+            "POST",
+            f"{API}/blogs/admin/",
+            {"slug": "launch", "title": "Title", "summary": "Summary", "content": "# Article"},
+        ),
+        ("acedatacloud_update_blog_post", "PATCH", DETAIL, {"blog_id": str(BLOG_ID)}),
+        (
+            "acedatacloud_create_blogs_admin",
+            "POST",
+            f"{API}/blogs/admin/",
+            {"slug": "launch", "title": "Title", "summary": "Summary", "content": "# Article"},
+        ),
+        (
+            "acedatacloud_replace_blogs_admin_id",
+            "PUT",
+            DETAIL,
+            {
+                "id": str(BLOG_ID),
+                "slug": "launch",
+                "title": "Title",
+                "summary": "Summary",
+                "content": "# Article",
+            },
+        ),
+        ("acedatacloud_update_blogs_admin_id", "PATCH", DETAIL, {"id": str(BLOG_ID)}),
+    ],
+)
+async def test_mcp_category_writes_preserve_slugs_and_aliases(
+    category, name, method, endpoint, arguments
+):
+    preview, _ = await mcp.call_tool(name, {**arguments, "category": category})
+    assert json.loads(preview[0].text)["status"] == "confirmation_required"
+    assert not respx.calls
+    route = respx.request(method, endpoint).mock(return_value=httpx.Response(200, json={}))
+    await mcp.call_tool(name, {**arguments, "category": category, "confirm": True})
+    assert json.loads(route.calls.last.request.content)["category"] == category
+
+
+@respx.mock
+async def test_mcp_draft_default_and_category_validation():
+    arguments = {"slug": "launch", "title": "Title", "summary": "Summary", "content": "# Article"}
+    content, _ = await mcp.call_tool("acedatacloud_create_blog_draft", arguments)
+    assert json.loads(content[0].text)["target"]["category"] == "tech-sharing"
+    for name in ("acedatacloud_create_blog_draft", "acedatacloud_create_blogs_admin"):
+        for category in ("x" * 33, 123, ["tech-sharing"]):
+            with pytest.raises(ToolError):
+                await mcp.call_tool(name, {**arguments, "category": category})
+    assert not respx.calls
 
 
 @respx.mock

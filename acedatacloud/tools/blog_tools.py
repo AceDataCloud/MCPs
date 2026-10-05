@@ -10,7 +10,17 @@ from core.exceptions import PlatformError
 from core.server import mcp
 from core.utils import confirmation_required, dumps, error_json
 
-Category = Literal["model-news", "engineering", "comparison", "product"]
+Category = Annotated[
+    str,
+    Field(
+        max_length=32,
+        description=(
+            "Existing blog category slug: product-updates, tech-sharing (default), "
+            "product-recommendations, industry-insights, or an administrator-defined category. "
+            "Legacy aliases product, engineering, model-news and comparison remain accepted."
+        ),
+    ),
+]
 SourceLanguage = Literal["zh-cn", "en"]
 
 
@@ -37,7 +47,7 @@ async def _write(method: str, endpoint: str, body: dict[str, Any], confirm: bool
 
 @mcp.tool()
 async def acedatacloud_list_blog_posts(
-    category: Annotated[Category | None, Field(description="Optional category filter.")] = None,
+    category: Category | None = None,
     lang: Annotated[str | None, Field(description="Requested translation language.")] = None,
     limit: Annotated[int, Field(ge=1, le=100)] = 20,
     offset: Annotated[int, Field(ge=0)] = 0,
@@ -62,7 +72,7 @@ async def acedatacloud_get_blog_post(
 @mcp.tool()
 async def acedatacloud_list_blog_drafts(
     query: Annotated[str | None, Field(description="Search title or slug.")] = None,
-    category: Annotated[Category | None, Field(description="Optional category filter.")] = None,
+    category: Category | None = None,
     published: Annotated[
         bool | None, Field(description="False for drafts, true for published, null for both.")
     ] = False,
@@ -97,7 +107,7 @@ async def acedatacloud_create_blog_draft(
     summary: Annotated[str, Field(min_length=1)],
     content: Annotated[str, Field(min_length=1, description="Article source in Markdown.")],
     source_lang: SourceLanguage = "zh-cn",
-    category: Category = "model-news",
+    category: Category = "tech-sharing",
     author: Annotated[str, Field(max_length=120)] = "Ace Data Cloud",
     cover_url: Annotated[str, Field(description="HTTPS cover URL; empty for no cover.")] = "",
     cover_alt: Annotated[str, Field(max_length=255, description="Required with a cover.")] = "",
