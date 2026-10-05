@@ -171,8 +171,12 @@ async def acedatacloud_update_blog_post(
 @mcp.tool()
 async def acedatacloud_approve_blog_post(
     blog_id: UUID,
-    expected_version: Annotated[int, Field(ge=1, description="review_version from the draft you read.")],
-    confirm: Annotated[bool, Field(description="True after reviewing this exact draft version.")] = False,
+    expected_version: Annotated[
+        int, Field(ge=1, description="review_version from the draft you read.")
+    ],
+    confirm: Annotated[
+        bool, Field(description="True after reviewing this exact draft version.")
+    ] = False,
 ) -> str:
     """Approve a draft for publication. Requires blog:read and blog:publish.
 
@@ -180,15 +184,19 @@ async def acedatacloud_approve_blog_post(
     version is rejected, and content changes revoke approval.
     """
     return await _write(
-        "POST", f"/blogs/admin/{blog_id}/approval/",
-        {"expected_version": expected_version}, confirm,
+        "POST",
+        f"/blogs/admin/{blog_id}/approval/",
+        {"expected_version": expected_version},
+        confirm,
     )
 
 
 @mcp.tool()
 async def acedatacloud_withdraw_blog_approval(
     blog_id: UUID,
-    confirm: Annotated[bool, Field(description="True to withdraw approval before publication.")] = False,
+    confirm: Annotated[
+        bool, Field(description="True to withdraw approval before publication.")
+    ] = False,
 ) -> str:
     """Withdraw a draft's approval. Requires blog:read and blog:publish; published posts must be unpublished first."""
     return await _write("DELETE", f"/blogs/admin/{blog_id}/approval/", {}, confirm)

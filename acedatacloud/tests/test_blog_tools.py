@@ -138,10 +138,17 @@ async def test_approve_and_withdraw_blog_review():
     withdraw_route = respx.delete(approval).mock(
         return_value=httpx.Response(200, json={"approved_by_id": None})
     )
-    result = json.loads(await acedatacloud_approve_blog_post(BLOG_ID, expected_version=3, confirm=True))
+    result = json.loads(
+        await acedatacloud_approve_blog_post(BLOG_ID, expected_version=3, confirm=True)
+    )
     assert result["approved_by_id"] == "peer"
     assert json.loads(approve_route.calls.last.request.content) == {"expected_version": 3}
-    assert json.loads(await acedatacloud_withdraw_blog_approval(BLOG_ID, confirm=True))["approved_by_id"] is None
+    assert (
+        json.loads(await acedatacloud_withdraw_blog_approval(BLOG_ID, confirm=True))[
+            "approved_by_id"
+        ]
+        is None
+    )
     assert withdraw_route.called
 
 
