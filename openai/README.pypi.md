@@ -74,7 +74,7 @@ mcp-openai-pro
 - GPT Image `:official` variants settle from actual text-input, image-input, and image-output tokens.
 
 ### Embedding Models
-- text-embedding-3-small, text-embedding-3-large, text-embedding-ada-002
+- text-embedding-3-small, text-embedding-3-large
 
 ### Audio Transcription Models
 - whisper-1, gpt-transcribe

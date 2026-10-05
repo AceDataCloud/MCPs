@@ -34,8 +34,7 @@ async def openai_create_embedding(
         Field(
             description=(
                 "The embedding model to use. Options: 'text-embedding-3-small' (default, "
-                "cost-efficient), 'text-embedding-3-large' (higher quality), "
-                "'text-embedding-ada-002' (legacy)."
+                "cost-efficient) or 'text-embedding-3-large' (higher quality)."
             )
         ),
     ] = DEFAULT_EMBEDDING_MODEL,
