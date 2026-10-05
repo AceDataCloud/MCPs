@@ -94,7 +94,7 @@ Audio:
 Create a 9:16 dance video guided by this audio, with cuts and motion following the beat.
 ```
 
-The HTTP API waits for completion by default, while MCP generation tools default `async` to `true` so agents receive a task ID immediately. Poll it with `minimax_get_task` until the final AceDataCloud CDN video is available. Set `async=false` only when the client can safely wait for the complete result.
+The HTTP API waits for completion by default, while MCP generation tools default `async` to `true` so agents receive a task ID immediately. Poll it with `minimax_get_task` until the status is `succeeded`, `failed`, or `cancelled`. Only use the video URL after `succeeded`; inspect the error on failure or cancellation. A task ID or HTTP 200 confirms submission, not a finished video. Set `async=false` only when the client can safely wait for the complete result.
 
 ## Development
 

@@ -1,5 +1,6 @@
-import tomllib
+import json
 import re
+import tomllib
 import unittest
 from urllib.parse import parse_qs, urlsplit
 
@@ -79,6 +80,52 @@ class MarketingReadmeTest(unittest.TestCase):
         self.assertIn("### Verify your first result", text)
         self.assertIn("https://seedance.mcp.acedata.cloud/mcp", text)
         self.assertNotIn("https://seedance.mcp.acedata.cloud/mcp?", text)
+
+    def test_remote_client_setup_examples_use_safe_client_settings(self):
+        for alias, item in load_catalog().items():
+            if item["status"] != "active":
+                continue
+            text = (ROOT / alias / "README.md").read_text()
+            for title, root_key, transport in [
+                ("Claude Code", "mcpServers", "http"),
+                ("Cline", "mcpServers", "streamableHttp"),
+                ("VS Code (Copilot)", "servers", "http"),
+            ]:
+                marker = f"#### {title}\n"
+                if marker not in text:
+                    continue
+                section = text.split(marker, 1)[1].split("\n#### ", 1)[0]
+                snippets = re.findall(r"```json\n(.*?)\n```", section, re.DOTALL)
+                with self.subTest(alias=alias, client=title):
+                    self.assertEqual(len(snippets), 1)
+                    server = json.loads(snippets[0])[root_key][alias]
+                    self.assertEqual(server["type"], transport)
+                    self.assertEqual(
+                        server["url"], f"https://{alias}.mcp.acedata.cloud/mcp"
+                    )
+                    if title == "Claude Code":
+                        self.assertEqual(
+                            server["headers"]["Authorization"],
+                            "Bearer ${ACEDATACLOUD_API_TOKEN}",
+                        )
+                        self.assertIn("--scope user", section)
+                        self.assertIn(
+                            "--header 'Authorization: Bearer ${ACEDATACLOUD_API_TOKEN}'",
+                            section,
+                        )
+                        self.assertIn("$env:ACEDATACLOUD_API_TOKEN", section)
+                        self.assertIn("Run `/mcp`", section)
+                    elif title == "Cline":
+                        self.assertIn("~/.cline/mcp.json", section)
+                        self.assertNotIn(".cline/mcp_settings.json", section)
+                        self.assertEqual(server["autoApprove"], [])
+                        self.assertIs(server["disabled"], False)
+                        self.assertIn("do not commit or share", section)
+                    else:
+                        self.assertIn("MCP: Open User Configuration", section)
+                        self.assertIn("MCP: List Servers", section)
+                        self.assertNotIn(".vscode/mcp.json", section)
+                        self.assertIn("out of version control", section)
 
     def test_generation_is_idempotent(self):
         for alias, item in load_catalog().items():
