@@ -66,6 +66,7 @@ def test_generated_business_workflows_are_not_removed_with_aliases():
     }
     assert retained <= advertised_tools()
     assert "acedatacloud_create_blog_draft" in advertised_tools()
+    assert "acedatacloud_approve_blog_post" in advertised_tools()
     assert "acedatacloud_publish_blog_post" in advertised_tools()
     assert "acedatacloud_create_platform_token" in advertised_tools()
     assert "acedatacloud_create_platform_tokens" not in advertised_tools()

@@ -8,6 +8,7 @@ import respx
 
 from core.client import set_request_api_token
 from tools.blog_tools import (
+    acedatacloud_approve_blog_post,
     acedatacloud_create_blog_draft,
     acedatacloud_delete_blog_post,
     acedatacloud_get_blog_draft,
@@ -17,6 +18,7 @@ from tools.blog_tools import (
     acedatacloud_publish_blog_post,
     acedatacloud_unpublish_blog_post,
     acedatacloud_update_blog_post,
+    acedatacloud_withdraw_blog_approval,
 )
 
 API = "https://platform.acedata.cloud/api/v1"
@@ -68,6 +70,8 @@ async def test_all_blog_mutations_preview_without_http():
         await acedatacloud_create_blog_draft("launch", "标题", "摘要", "# 正文"),
         await acedatacloud_update_blog_post(BLOG_ID, title="Changed"),
         await acedatacloud_publish_blog_post(BLOG_ID),
+        await acedatacloud_approve_blog_post(BLOG_ID, expected_version=3),
+        await acedatacloud_withdraw_blog_approval(BLOG_ID),
         await acedatacloud_unpublish_blog_post(BLOG_ID),
         await acedatacloud_delete_blog_post(BLOG_ID),
     ]
@@ -123,6 +127,29 @@ async def test_publication_actions_use_backend_permissions():
     result = json.loads(await acedatacloud_publish_blog_post(BLOG_ID, confirm=True))
     assert result["error"] == "permission_denied"
     assert "blog:publish" in result["message"]
+
+
+@respx.mock
+async def test_approve_and_withdraw_blog_review():
+    approval = f"{DETAIL}approval/"
+    approve_route = respx.post(approval).mock(
+        return_value=httpx.Response(200, json={"approved_by_id": "peer", "review_version": 3})
+    )
+    withdraw_route = respx.delete(approval).mock(
+        return_value=httpx.Response(200, json={"approved_by_id": None})
+    )
+    result = json.loads(
+        await acedatacloud_approve_blog_post(BLOG_ID, expected_version=3, confirm=True)
+    )
+    assert result["approved_by_id"] == "peer"
+    assert json.loads(approve_route.calls.last.request.content) == {"expected_version": 3}
+    assert (
+        json.loads(await acedatacloud_withdraw_blog_approval(BLOG_ID, confirm=True))[
+            "approved_by_id"
+        ]
+        is None
+    )
+    assert withdraw_route.called
 
 
 @respx.mock

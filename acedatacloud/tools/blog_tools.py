@@ -106,7 +106,7 @@ async def acedatacloud_create_blog_draft(
 ) -> str:
     """Save an unpublished blog draft. Requires blog:write; translations run automatically.
 
-    Review the preview before confirming. Publish separately with acedatacloud_publish_blog_post.
+    Another account must approve the saved draft before the author can publish it.
     """
     return await _write(
         "POST",
@@ -146,7 +146,8 @@ async def acedatacloud_update_blog_post(
     """Edit blog source fields. Requires blog:write and blog:publish for published posts.
 
     Omitted fields stay unchanged; empty cover strings or an empty tags list clear those fields.
-    Source language cannot change after publication. Updating a published post changes public content.
+    Source language cannot change after publication. Unpublish before changing public content.
+    Any source change revokes the current approval, so another person must review again.
     """
     body = {
         key: value
@@ -168,6 +169,40 @@ async def acedatacloud_update_blog_post(
 
 
 @mcp.tool()
+async def acedatacloud_approve_blog_post(
+    blog_id: UUID,
+    expected_version: Annotated[
+        int, Field(ge=1, description="review_version from the draft you read.")
+    ],
+    confirm: Annotated[
+        bool, Field(description="True after reviewing this exact draft version.")
+    ] = False,
+) -> str:
+    """Approve a draft for publication. Requires blog:read and blog:publish.
+
+    Read the full draft first. The reviewer must differ from its creator. A stale
+    version is rejected, and content changes revoke approval.
+    """
+    return await _write(
+        "POST",
+        f"/blogs/admin/{blog_id}/approval/",
+        {"expected_version": expected_version},
+        confirm,
+    )
+
+
+@mcp.tool()
+async def acedatacloud_withdraw_blog_approval(
+    blog_id: UUID,
+    confirm: Annotated[
+        bool, Field(description="True to withdraw approval before publication.")
+    ] = False,
+) -> str:
+    """Withdraw a draft's approval. Requires blog:read and blog:publish; published posts must be unpublished first."""
+    return await _write("DELETE", f"/blogs/admin/{blog_id}/approval/", {}, confirm)
+
+
+@mcp.tool()
 async def acedatacloud_publish_blog_post(
     blog_id: UUID,
     publish_at: Annotated[
@@ -180,7 +215,8 @@ async def acedatacloud_publish_blog_post(
 ) -> str:
     """Publish or schedule a blog post. Requires both blog:write and blog:publish.
 
-    A future publish_at schedules public visibility. Review the source with get_blog_draft first.
+    A future publish_at schedules public visibility. A different account must
+    have approved the current draft, and the publisher cannot be that reviewer.
     """
     body: dict[str, Any] = {"published": True}
     if publish_at is not None:
