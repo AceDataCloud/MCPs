@@ -178,9 +178,16 @@ async def test_visible_tools_follow_current_account_permissions(monkeypatch):
     names = {tool.name for tool in await list_visible_tools()}
     assert "acedatacloud_create_blog_draft" in names
     assert "acedatacloud_publish_blog_post" not in names
+    assert "acedatacloud_approve_blog_post" not in names
     assert "acedatacloud_run_email_campaigns_send" not in names
     subject["permissions"].append("blog:publish")
-    assert "acedatacloud_publish_blog_post" in {tool.name for tool in await list_visible_tools()}
+    names = {tool.name for tool in await list_visible_tools()}
+    assert "acedatacloud_publish_blog_post" in names
+    assert "acedatacloud_approve_blog_post" in names
+    subject["permissions"] = ["blog:read", "blog:publish"]
+    names = {tool.name for tool in await list_visible_tools()}
+    assert "acedatacloud_approve_blog_post" in names
+    assert "acedatacloud_publish_blog_post" not in names
     subject["permissions"] = []
     assert "acedatacloud_create_blog_draft" not in {
         tool.name for tool in await list_visible_tools()

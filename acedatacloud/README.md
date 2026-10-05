@@ -23,9 +23,9 @@ Claude, VS Code, Studio, or any MCP-compatible client.
 <!-- BEGIN GENERATED TOOL REFERENCE -->
 ## Tool Reference
 
-The default curated catalog advertises **343 tools** before
+The default curated catalog advertises **345 tools** before
 account-permission filtering, including `acedatacloud_get_usage_guide`.
-The complete compatibility registry retains **514 tools**.
+The complete compatibility registry retains **516 tools**.
 Discovery is grouped by business task, not by one tool per REST endpoint.
 
 | Not advertised by default | Count |
@@ -45,7 +45,7 @@ Discovery is grouped by business task, not by one tool per REST endpoint.
 | Usage & billing | 1 | 41 | 0 | 28 |
 | Sites & branding | 1 | 0 | 38 | 0 |
 | Community & wallet | 1 | 31 | 0 | 12 |
-| Content & announcements | 4 | 0 | 14 | 0 |
+| Content & announcements | 4 | 0 | 16 | 0 |
 | Email marketing & analytics | 0 | 0 | 0 | 37 |
 | Access control & automation | 0 | 5 | 13 | 20 |
 | Payment authorization | 0 | 10 | 0 | 0 |
@@ -292,6 +292,7 @@ Admin tools require their exact permission grants, not just an admin label.
 
 | Tool | Description | Audience | Required permissions |
 |------|-------------|----------|----------------------|
+| `acedatacloud_approve_blog_post` | Approve a saved draft version as a different account from its creator. | workspace | blog:read, blog:publish |
 | `acedatacloud_create_announcement` | Publish a platform announcement. | workspace | announcements:write |
 | `acedatacloud_create_announcements_admin_polish` | Create announcements admin polish. Backend account permissions and ownership checks apply. | workspace | announcements:write |
 | `acedatacloud_create_announcements_admin_translate` | Create announcements admin translate. Backend account permissions and ownership checks apply. | workspace | announcements:write |
@@ -306,10 +307,11 @@ Admin tools require their exact permission grants, not just an admin label.
 | `acedatacloud_list_blog_drafts` | List blog drafts and published editorial records. | workspace | blog:read |
 | `acedatacloud_list_blog_posts` | List published blog posts. | public | public |
 | `acedatacloud_list_showcases` | List showcases. Backend account permissions and ownership checks apply. | public | public |
-| `acedatacloud_publish_blog_post` | Publish now or schedule public visibility. | workspace | blog:write, blog:publish |
+| `acedatacloud_publish_blog_post` | Publish an approved draft now or schedule its public visibility. | workspace | blog:write, blog:publish |
 | `acedatacloud_unpublish_blog_post` | Return a public blog post to draft. | workspace | blog:write, blog:publish |
 | `acedatacloud_update_announcements_admin_id` | Update announcements admin id. Backend account permissions and ownership checks apply. | workspace | announcements:write |
-| `acedatacloud_update_blog_post` | Edit draft or published blog source. | workspace | blog:write |
+| `acedatacloud_update_blog_post` | Edit draft source; unpublish before changing public content. | workspace | blog:write |
+| `acedatacloud_withdraw_blog_approval` | Withdraw approval before publication. | workspace | blog:read, blog:publish |
 
 ### Email marketing & analytics
 
@@ -574,6 +576,9 @@ mcp-acedatacloud --transport http --port 8000
 - Credential rotation = delete + recreate (no in-place rotate endpoint).
 - Blog editorial tools use `blog:read`, `blog:write`, and `blog:publish` permissions.
   Direct grants and permission groups work without making the account a superuser.
+- Blog publication requires a saved draft approved by a different account with
+  `blog:read` and `blog:publish`. The publisher must also differ from the reviewer.
+  Read the draft's `review_version` before approval; content edits revoke approval.
 - Hosted OAuth resolves the signed-in account's canonical permissions dynamically.
   The consent page displays the actual scopes; accounts without blog grants receive none.
   Reconnect OAuth to review newly granted permissions. Existing durable platform tokens
