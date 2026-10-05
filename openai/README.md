@@ -74,6 +74,8 @@ mcp-openai-pro
 
 ### Embedding Models
 - text-embedding-3-small, text-embedding-3-large
+- `text-embedding-ada-002` is retired. Re-embed documents and rebuild existing indexes
+  when migrating; do not mix old-model vectors with text-embedding-3 vectors.
 
 ### Audio Transcription Models
 - whisper-1, gpt-transcribe

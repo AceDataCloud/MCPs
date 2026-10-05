@@ -541,7 +541,8 @@ pip install mcp-acedatacloud
 ## Example prompts
 
 - "Draft a Chinese product blog in Markdown, show it for review, then save it."
-- "Read blog draft `<id>` and publish it after I approve the content."
+- "As a different account from the creator, read blog draft `<id>` and approve its current `review_version`."
+- "Publish the peer-approved blog draft `<id>` from a non-reviewer account."
 - "Schedule blog `<id>` for 2026-10-10T09:00:00+08:00."
 - "How many credits do I have left?"
 - "What did I spend on Suno in the last 7 days?"
@@ -576,6 +577,13 @@ mcp-acedatacloud --transport http --port 8000
 - Credential rotation = delete + recreate (no in-place rotate endpoint).
 - Blog editorial tools use `blog:read`, `blog:write`, and `blog:publish` permissions.
   Direct grants and permission groups work without making the account a superuser.
+- Blog categories are `product-updates`, `tech-sharing` (the draft default),
+  `product-recommendations`, and `industry-insights`, or an existing administrator-defined
+  slug. Legacy aliases `product`, `engineering`, `model-news`, and `comparison` are
+  still accepted and normalized by the Backend.
+- Category changes revoke draft approval. The category migration also pauses scheduled
+  posts whose category changed; reread the draft and obtain fresh peer approval before
+  publishing or rescheduling it.
 - Blog publication requires a saved draft approved by a different account with
   `blog:read` and `blog:publish`. The publisher must also differ from the reviewer.
   Read the draft's `review_version` before approval; content edits revoke approval.
