@@ -238,11 +238,9 @@ async def openai_list_embedding_models() -> str:
 |--------------------------|------------|------------------------------------------|
 | text-embedding-3-small   | 1536       | Cost-efficient, good quality (default)   |
 | text-embedding-3-large   | 3072       | Higher quality, larger vectors           |
-| text-embedding-ada-002   | 1536       | Legacy model, widely supported           |
 
 ## Notes
 - text-embedding-3 models support custom dimensions via the `dimensions` parameter
-- text-embedding-ada-002 does not support custom dimensions
 - Larger dimensions provide better quality but cost more
 
 ## Use Cases
