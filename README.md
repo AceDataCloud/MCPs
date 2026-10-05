@@ -71,12 +71,9 @@ Versioning uses **CalVer** (`YYYY.M.D.BUILD`), auto-generated at publish time.
 
 ### Sync Pipeline
 
-PlatformBackend dispatches `platform-contracts-updated` with an exact source
-commit. `sync-from-platformbackend.yml` compiles and verifies that contract,
-resolves affected package directories, and opens a scoped parity issue. Custom
-tool adapters are updated in a normal PR with the existing CI and review gates.
-There is no second Docs-triggered code sync, PR cleanup, polling job, or admin
-merge. Published Docs remain a reference for users.
+PlatformBackend's daily ecosystem CronJob prepares incremental capability PRs
+using a pinned Backend source. Existing CI and human review gate each update.
+The previous dispatch/Copilot sync workflows are retired.
 
 After a reviewed PR lands, `sync-to-repos.yml` distributes the affected packages
 to their standalone repositories for publishing.
@@ -162,3 +159,11 @@ identifies its distribution artifact; UTM labels are not verified HTTP referrers
 CI's discovered unittest suite rejects stale generated files, wrong channels,
 and missing package README inclusion. `python3 scripts/marketing_readmes.py --check`
 can also be run directly. Package publication follows the existing release workflow.
+
+## Daily capability updates
+
+PlatformBackend `scripts/sync_ecosystem.py` is the only scheduled coordinator.
+One daily Kubernetes Job reviews Backend docs and API changes with Claude Code,
+updates existing files, and creates or updates one reviewable PR per repository.
+It never merges PRs or duplicates the Backend guide tree. Normal CI and review
+remain required; publication and sub-repository mirroring run after merge.

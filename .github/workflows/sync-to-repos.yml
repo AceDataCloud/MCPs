@@ -3,9 +3,6 @@ name: Sync to Sub-Repos
 on:
   push:
     branches: [main]
-  schedule:
-    # Weekly full re-sync (Monday 03:00 UTC) → refresh every package's CalVer
-    - cron: '0 3 * * 1'
   workflow_dispatch:
     inputs:
       sync_all:
