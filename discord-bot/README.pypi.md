@@ -18,9 +18,13 @@ as MCP tools for use with Claude, Cursor, and other MCP-compatible AI clients.
 
 ## Prerequisites
 
-1. Deploy a Discord Agent Proxy at [platform.acedata.cloud](https://platform.acedata.cloud/console/applications?utm_source=pypi&utm_medium=referral&utm_campaign=evergreen&utm_content=discord_bot_mcp_package_api_key)
-2. Configure it with your Discord account credentials
-3. Note down the deployment URL and access token
+1. Create a Discord Agent Proxy application at [platform.acedata.cloud](https://platform.acedata.cloud/console/applications?utm_source=pypi&utm_medium=referral&utm_campaign=evergreen&utm_content=discord_bot_mcp_package_api_key) and activate a subscription. Instance resources are configured automatically; no instance size selection is needed.
+2. Enter your Discord account credentials in the configuration page and deploy.
+3. In the application's **Overview** tab, confirm the account is connected and copy the MCP endpoint and access token from the Discord account card. A running container does not guarantee a connected Discord account.
+
+The **Documentation** tab lists all 14 REST operations with request parameters, response schemas, and code examples. Test `GET /api/whoami` there, or call `discord_whoami` after configuring this MCP server, to verify the connected account. Instance addresses and access tokens are filled in automatically in the console; tokens are hidden by default. Sending, editing, or deleting messages affects the real account, so confirm the target and content before testing.
+
+**Download OpenAPI (JSON)** exports the instance address without its access token. To change Discord account credentials, use **Redeploy** in **Overview**.
 
 ## Installation
 
