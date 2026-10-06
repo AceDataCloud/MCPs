@@ -1,0 +1,97 @@
+name: Publish to PyPI
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Generate CalVer
+        id: version
+        run: |
+          python - <<'PYVERSION'
+          import datetime
+          import json
+          import urllib.error
+          import urllib.request
+
+          package = "mcp-image2text"
+          today = datetime.datetime.now(datetime.timezone.utc).date()
+          prefix = f"{today.year}.{today.month}.{today.day}."
+          try:
+              with urllib.request.urlopen(
+                  f"https://pypi.org/pypi/{package}/json", timeout=10
+              ) as response:
+                  releases = json.load(response).get("releases", {})
+          except urllib.error.HTTPError as exc:
+              if exc.code != 404:
+                  raise
+              releases = {}
+          versions = [
+              int(version.removeprefix(prefix))
+              for version in releases
+              if version.startswith(prefix)
+              and version.removeprefix(prefix).isdigit()
+          ]
+          version = f"{prefix}{max(versions, default=-1) + 1}"
+          from pathlib import Path
+          import os
+
+          with Path(os.environ["GITHUB_OUTPUT"]).open("a") as output:
+              output.write(f"version={version}\n")
+          PYVERSION
+      - name: Build distributions
+        run: |
+          python - <<'PYVERSION'
+          from pathlib import Path
+          import re
+
+          path = Path("pyproject.toml")
+          source = path.read_text()
+          version = "${{ steps.version.outputs.version }}"
+          updated, count = re.subn(
+              r'(?m)^version = "[^"]+"$', f'version = "{version}"', source, count=1
+          )
+          if count != 1:
+              raise SystemExit("Expected exactly one project version")
+          path.write_text(updated)
+          PYVERSION
+          python -m pip install "build>=1.2,<2" "twine>=5,<7"
+          python -m build
+          twine check dist/*
+      - uses: actions/upload-artifact@v7
+        with:
+          name: distributions
+          path: dist/
+
+  publish-pypi:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: pypi
+      url: https://pypi.org/project/mcp-image2text/${{ needs.build.outputs.version }}/
+    steps:
+      - uses: actions/download-artifact@v8
+        with:
+          name: distributions
+          path: dist/
+      - name: Publish
+        env:
+          TWINE_USERNAME: __token__
+          TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN }}
+        run: |
+          python -m pip install "twine>=5,<7"
+          twine check dist/*
+          twine upload dist/*
