@@ -19,9 +19,12 @@ from tools.blog_tools import (
     acedatacloud_list_blog_drafts,
     acedatacloud_list_blog_posts,
     acedatacloud_publish_blog_post,
+    acedatacloud_reject_blog_post,
+    acedatacloud_submit_blog_post,
     acedatacloud_unpublish_blog_post,
     acedatacloud_update_blog_post,
     acedatacloud_withdraw_blog_approval,
+    acedatacloud_withdraw_blog_submission,
 )
 
 API = "https://platform.acedata.cloud/api/v1"
@@ -74,6 +77,9 @@ async def test_all_blog_mutations_preview_without_http():
         await acedatacloud_update_blog_post(BLOG_ID, title="Changed"),
         await acedatacloud_publish_blog_post(BLOG_ID),
         await acedatacloud_approve_blog_post(BLOG_ID, expected_version=3),
+        await acedatacloud_submit_blog_post(BLOG_ID, expected_version=3),
+        await acedatacloud_reject_blog_post(BLOG_ID, expected_version=3, comment="Needs sources"),
+        await acedatacloud_withdraw_blog_submission(BLOG_ID, expected_version=3),
         await acedatacloud_withdraw_blog_approval(BLOG_ID),
         await acedatacloud_unpublish_blog_post(BLOG_ID),
         await acedatacloud_delete_blog_post(BLOG_ID),
@@ -227,6 +233,47 @@ async def test_publication_actions_use_backend_permissions():
 
 
 @respx.mock
+async def test_review_submission_and_rejection():
+    submit = respx.post(f"{DETAIL}submit/").mock(
+        return_value=httpx.Response(200, json={"status": "pending"})
+    )
+    withdraw = respx.delete(f"{DETAIL}submit/").mock(
+        return_value=httpx.Response(200, json={"status": "draft"})
+    )
+    reject = respx.post(f"{DETAIL}reject/").mock(
+        return_value=httpx.Response(200, json={"status": "rejected"})
+    )
+
+    assert (
+        json.loads(await acedatacloud_submit_blog_post(BLOG_ID, expected_version=4, confirm=True))[
+            "status"
+        ]
+        == "pending"
+    )
+    assert json.loads(submit.calls.last.request.content) == {"expected_version": 4}
+    assert (
+        json.loads(
+            await acedatacloud_reject_blog_post(
+                BLOG_ID, expected_version=4, comment="Needs sources", confirm=True
+            )
+        )["status"]
+        == "rejected"
+    )
+    assert json.loads(reject.calls.last.request.content) == {
+        "expected_version": 4,
+        "comment": "Needs sources",
+    }
+    assert (
+        json.loads(
+            await acedatacloud_withdraw_blog_submission(BLOG_ID, expected_version=4, confirm=True)
+        )["status"]
+        == "draft"
+    )
+    assert withdraw.called
+    assert json.loads(withdraw.calls.last.request.content) == {"expected_version": 4}
+
+
+@respx.mock
 async def test_approve_and_withdraw_blog_review():
     approval = f"{DETAIL}approval/"
     approve_route = respx.post(approval).mock(
@@ -239,7 +286,10 @@ async def test_approve_and_withdraw_blog_review():
         await acedatacloud_approve_blog_post(BLOG_ID, expected_version=3, confirm=True)
     )
     assert result["approved_by_id"] == "peer"
-    assert json.loads(approve_route.calls.last.request.content) == {"expected_version": 3}
+    assert json.loads(approve_route.calls.last.request.content) == {
+        "expected_version": 3,
+        "comment": "",
+    }
     assert (
         json.loads(await acedatacloud_withdraw_blog_approval(BLOG_ID, confirm=True))[
             "approved_by_id"

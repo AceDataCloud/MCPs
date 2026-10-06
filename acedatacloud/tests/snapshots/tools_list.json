@@ -74,6 +74,13 @@
           "title": "Expected Version",
           "type": "integer"
         },
+        "comment": {
+          "default": "",
+          "description": "Optional review comment.",
+          "maxLength": 2000,
+          "title": "Comment",
+          "type": "string"
+        },
         "confirm": {
           "default": false,
           "description": "True after reviewing this exact draft version.",
@@ -23555,8 +23562,28 @@
             }
           ],
           "default": false,
-          "description": "False for drafts, true for published, null for both.",
+          "description": "False for unpublished editorial records, true for published, null for both.",
           "title": "Published"
+        },
+        "status": {
+          "anyOf": [
+            {
+              "enum": [
+                "draft",
+                "pending",
+                "rejected",
+                "approved",
+                "published"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Optional editorial status filter.",
+          "title": "Status"
         },
         "limit": {
           "default": 20,
@@ -28598,6 +28625,44 @@
     }
   },
   {
+    "name": "acedatacloud_reject_blog_post",
+    "inputSchema": {
+      "properties": {
+        "blog_id": {
+          "format": "uuid",
+          "title": "Blog Id",
+          "type": "string"
+        },
+        "expected_version": {
+          "description": "review_version from the submitted post.",
+          "minimum": 1,
+          "title": "Expected Version",
+          "type": "integer"
+        },
+        "comment": {
+          "description": "Required rejection reason.",
+          "maxLength": 2000,
+          "minLength": 1,
+          "title": "Comment",
+          "type": "string"
+        },
+        "confirm": {
+          "default": false,
+          "description": "True to reject this submitted version.",
+          "title": "Confirm",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "blog_id",
+        "expected_version",
+        "comment"
+      ],
+      "title": "acedatacloud_reject_blog_postArguments",
+      "type": "object"
+    }
+  },
+  {
     "name": "acedatacloud_replace_access_grants_id",
     "inputSchema": {
       "properties": {
@@ -32875,6 +32940,36 @@
         "expiry_ts"
       ],
       "title": "acedatacloud_setup_x402_authorizationArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "acedatacloud_submit_blog_post",
+    "inputSchema": {
+      "properties": {
+        "blog_id": {
+          "format": "uuid",
+          "title": "Blog Id",
+          "type": "string"
+        },
+        "expected_version": {
+          "description": "review_version from the draft you read.",
+          "minimum": 1,
+          "title": "Expected Version",
+          "type": "integer"
+        },
+        "confirm": {
+          "default": false,
+          "description": "True to submit this version for review.",
+          "title": "Confirm",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "blog_id",
+        "expected_version"
+      ],
+      "title": "acedatacloud_submit_blog_postArguments",
       "type": "object"
     }
   },
@@ -38090,6 +38185,36 @@
         "blog_id"
       ],
       "title": "acedatacloud_withdraw_blog_approvalArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "acedatacloud_withdraw_blog_submission",
+    "inputSchema": {
+      "properties": {
+        "blog_id": {
+          "format": "uuid",
+          "title": "Blog Id",
+          "type": "string"
+        },
+        "expected_version": {
+          "description": "review_version from the pending post.",
+          "minimum": 1,
+          "title": "Expected Version",
+          "type": "integer"
+        },
+        "confirm": {
+          "default": false,
+          "description": "True to return a pending review to draft.",
+          "title": "Confirm",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "blog_id",
+        "expected_version"
+      ],
+      "title": "acedatacloud_withdraw_blog_submissionArguments",
       "type": "object"
     }
   }
