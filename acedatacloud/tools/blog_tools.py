@@ -74,8 +74,15 @@ async def acedatacloud_list_blog_drafts(
     query: Annotated[str | None, Field(description="Search title or slug.")] = None,
     category: Category | None = None,
     published: Annotated[
-        bool | None, Field(description="False for drafts, true for published, null for both.")
+        bool | None,
+        Field(
+            description="False for unpublished editorial records, true for published, null for both."
+        ),
     ] = False,
+    status: Annotated[
+        Literal["draft", "pending", "rejected", "approved", "published"] | None,
+        Field(description="Optional editorial status filter."),
+    ] = None,
     limit: Annotated[int, Field(ge=1, le=100)] = 20,
     offset: Annotated[int, Field(ge=0)] = 0,
 ) -> str:
@@ -86,6 +93,7 @@ async def acedatacloud_list_blog_drafts(
             "q": query,
             "category": category,
             "published": None if published is None else str(published).lower(),
+            "status": status,
             "limit": limit,
             "offset": offset,
         },
@@ -116,7 +124,7 @@ async def acedatacloud_create_blog_draft(
 ) -> str:
     """Save an unpublished blog draft. Requires blog:write; translations run automatically.
 
-    Another account must approve the saved draft before the author can publish it.
+    Submit the saved draft for review before another account can approve it.
     """
     return await _write(
         "POST",
@@ -157,7 +165,7 @@ async def acedatacloud_update_blog_post(
 
     Omitted fields stay unchanged; empty cover strings or an empty tags list clear those fields.
     Source language cannot change after publication. Unpublish before changing public content.
-    Any source change revokes the current approval, so another person must review again.
+    Withdraw a pending request before editing. Any source change revokes approval.
     """
     body = {
         key: value
@@ -179,16 +187,47 @@ async def acedatacloud_update_blog_post(
 
 
 @mcp.tool()
+async def acedatacloud_submit_blog_post(
+    blog_id: UUID,
+    expected_version: Annotated[
+        int, Field(ge=1, description="review_version from the draft you read.")
+    ],
+    confirm: Annotated[bool, Field(description="True to submit this version for review.")] = False,
+) -> str:
+    """Submit a draft or rejected post for peer review. Requires blog:write."""
+    return await _write(
+        "POST", f"/blogs/admin/{blog_id}/submit/", {"expected_version": expected_version}, confirm
+    )
+
+
+@mcp.tool()
+async def acedatacloud_withdraw_blog_submission(
+    blog_id: UUID,
+    expected_version: Annotated[
+        int, Field(ge=1, description="review_version from the pending post.")
+    ],
+    confirm: Annotated[
+        bool, Field(description="True to return a pending review to draft.")
+    ] = False,
+) -> str:
+    """Withdraw a pending review request. Requires blog:write."""
+    return await _write(
+        "DELETE", f"/blogs/admin/{blog_id}/submit/", {"expected_version": expected_version}, confirm
+    )
+
+
+@mcp.tool()
 async def acedatacloud_approve_blog_post(
     blog_id: UUID,
     expected_version: Annotated[
         int, Field(ge=1, description="review_version from the draft you read.")
     ],
+    comment: Annotated[str, Field(max_length=2000, description="Optional review comment.")] = "",
     confirm: Annotated[
         bool, Field(description="True after reviewing this exact draft version.")
     ] = False,
 ) -> str:
-    """Approve a draft for publication. Requires blog:read and blog:publish.
+    """Approve a submitted post for publication. Requires blog:read and blog:publish.
 
     Read the full draft first. The reviewer must differ from its creator. A stale
     version is rejected, and content changes revoke approval.
@@ -196,7 +235,27 @@ async def acedatacloud_approve_blog_post(
     return await _write(
         "POST",
         f"/blogs/admin/{blog_id}/approval/",
-        {"expected_version": expected_version},
+        {"expected_version": expected_version, "comment": comment},
+        confirm,
+    )
+
+
+@mcp.tool()
+async def acedatacloud_reject_blog_post(
+    blog_id: UUID,
+    expected_version: Annotated[
+        int, Field(ge=1, description="review_version from the submitted post.")
+    ],
+    comment: Annotated[
+        str, Field(min_length=1, max_length=2000, description="Required rejection reason.")
+    ],
+    confirm: Annotated[bool, Field(description="True to reject this submitted version.")] = False,
+) -> str:
+    """Reject a submitted post with a reason. Requires blog:read and blog:publish."""
+    return await _write(
+        "POST",
+        f"/blogs/admin/{blog_id}/reject/",
+        {"expected_version": expected_version, "comment": comment},
         confirm,
     )
 
@@ -225,8 +284,8 @@ async def acedatacloud_publish_blog_post(
 ) -> str:
     """Publish or schedule a blog post. Requires both blog:write and blog:publish.
 
-    A future publish_at schedules public visibility. A different account must
-    have approved the current draft, and the publisher cannot be that reviewer.
+    A future publish_at schedules public visibility. The submitted version must
+    be approved by a different account, and the publisher cannot be that reviewer.
     """
     body: dict[str, Any] = {"published": True}
     if publish_at is not None:

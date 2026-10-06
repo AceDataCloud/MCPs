@@ -23,9 +23,9 @@ Claude, VS Code, Studio, or any MCP-compatible client.
 <!-- BEGIN GENERATED TOOL REFERENCE -->
 ## Tool Reference
 
-The default curated catalog advertises **345 tools** before
+The default curated catalog advertises **348 tools** before
 account-permission filtering, including `acedatacloud_get_usage_guide`.
-The complete compatibility registry retains **516 tools**.
+The complete compatibility registry retains **519 tools**.
 Discovery is grouped by business task, not by one tool per REST endpoint.
 
 | Not advertised by default | Count |
@@ -45,7 +45,7 @@ Discovery is grouped by business task, not by one tool per REST endpoint.
 | Usage & billing | 1 | 41 | 0 | 28 |
 | Sites & branding | 1 | 0 | 38 | 0 |
 | Community & wallet | 1 | 31 | 0 | 12 |
-| Content & announcements | 4 | 0 | 16 | 0 |
+| Content & announcements | 4 | 0 | 19 | 0 |
 | Email marketing & analytics | 0 | 0 | 0 | 37 |
 | Access control & automation | 0 | 5 | 13 | 20 |
 | Payment authorization | 0 | 10 | 0 | 0 |
@@ -292,7 +292,7 @@ Admin tools require their exact permission grants, not just an admin label.
 
 | Tool | Description | Audience | Required permissions |
 |------|-------------|----------|----------------------|
-| `acedatacloud_approve_blog_post` | Approve a saved draft version as a different account from its creator. | workspace | blog:read, blog:publish |
+| `acedatacloud_approve_blog_post` | Approve a submitted version as a different account from its creator. | workspace | blog:read, blog:publish |
 | `acedatacloud_create_announcement` | Publish a platform announcement. | workspace | announcements:write |
 | `acedatacloud_create_announcements_admin_polish` | Create announcements admin polish. Backend account permissions and ownership checks apply. | workspace | announcements:write |
 | `acedatacloud_create_announcements_admin_translate` | Create announcements admin translate. Backend account permissions and ownership checks apply. | workspace | announcements:write |
@@ -308,10 +308,13 @@ Admin tools require their exact permission grants, not just an admin label.
 | `acedatacloud_list_blog_posts` | List published blog posts. | public | public |
 | `acedatacloud_list_showcases` | List showcases. Backend account permissions and ownership checks apply. | public | public |
 | `acedatacloud_publish_blog_post` | Publish an approved draft now or schedule its public visibility. | workspace | blog:write, blog:publish |
+| `acedatacloud_reject_blog_post` | Reject a submitted version with a reason. | workspace | blog:read, blog:publish |
+| `acedatacloud_submit_blog_post` | Submit a draft or rejected post for review. | workspace | blog:write |
 | `acedatacloud_unpublish_blog_post` | Return a public blog post to draft. | workspace | blog:write, blog:publish |
 | `acedatacloud_update_announcements_admin_id` | Update announcements admin id. Backend account permissions and ownership checks apply. | workspace | announcements:write |
 | `acedatacloud_update_blog_post` | Edit draft source; unpublish before changing public content. | workspace | blog:write |
 | `acedatacloud_withdraw_blog_approval` | Withdraw approval before publication. | workspace | blog:read, blog:publish |
+| `acedatacloud_withdraw_blog_submission` | Withdraw a pending review request. | workspace | blog:write |
 
 ### Email marketing & analytics
 
@@ -541,7 +544,7 @@ pip install mcp-acedatacloud
 ## Example prompts
 
 - "Draft a Chinese product blog in Markdown, show it for review, then save it."
-- "As a different account from the creator, read blog draft `<id>` and approve its current `review_version`."
+- "Submit blog draft `<id>` for review, then as a different account approve or reject it with a comment."
 - "Publish the peer-approved blog draft `<id>` from a non-reviewer account."
 - "Schedule blog `<id>` for 2026-10-10T09:00:00+08:00."
 - "How many credits do I have left?"
@@ -584,9 +587,10 @@ mcp-acedatacloud --transport http --port 8000
 - Category changes revoke draft approval. The category migration also pauses scheduled
   posts whose category changed; reread the draft and obtain fresh peer approval before
   publishing or rescheduling it.
-- Blog publication requires a saved draft approved by a different account with
-  `blog:read` and `blog:publish`. The publisher must also differ from the reviewer.
-  Read the draft's `review_version` before approval; content edits revoke approval.
+- Blog publication requires a submitted draft approved by a different account with
+  `blog:read` and `blog:publish`. Rejection requires a reason; approval may include a comment.
+  The publisher must also differ from the reviewer. Read `review_version` before review;
+  content edits revoke approval, and withdrawal returns a published post to draft.
 - Hosted OAuth resolves the signed-in account's canonical permissions dynamically.
   The consent page displays the actual scopes; accounts without blog grants receive none.
   Reconnect OAuth to review newly granted permissions. Existing durable platform tokens
