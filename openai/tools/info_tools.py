@@ -99,6 +99,7 @@ async def openai_list_chat_models() -> str:
 |-----------------|------------------------------------------|
 | gpt-5.6-luna    | GPT-5.6 Luna variant                     |
 | gpt-5.6-terra   | GPT-5.6 Terra variant                    |
+| gpt-5.6-sol-fast | GPT-5.6 Sol Fast variant                |
 | gpt-5.6-sol     | GPT-5.6 Sol variant                      |
 
 ## GPT-5 Series

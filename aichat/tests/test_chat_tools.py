@@ -7,6 +7,37 @@ import pytest
 
 from core.server import mcp
 from tools.chat_tools import aichat_create_conversation_v2
+from tools.info_tools import aichat_list_models
+
+
+@pytest.mark.asyncio
+async def test_list_models_includes_sol_fast() -> None:
+    assert "gpt-5.6-sol-fast" in await aichat_list_models()
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize(
+    ("tool_name", "client_method"),
+    [
+        ("aichat_create_conversation", "create_conversation"),
+        ("aichat_create_conversation_v2", "create_conversation_v2"),
+    ],
+)
+async def test_sol_fast_dispatch_preserves_public_alias(
+    mock_conversation_response, tool_name, client_method
+) -> None:
+    tools = {tool.name: tool for tool in await mcp.list_tools()}
+    model_schema = tools[tool_name].inputSchema["properties"]["model"]
+    assert "gpt-5.6-sol-fast" in model_schema["enum"]
+    assert model_schema["default"] == "gpt-4.1"
+
+    with patch(
+        f"tools.chat_tools.client.{client_method}",
+        new=AsyncMock(return_value=mock_conversation_response),
+    ) as mock_request:
+        await mcp.call_tool(tool_name, {"question": "hello", "model": "gpt-5.6-sol-fast"})
+
+    assert mock_request.await_args.kwargs["model"] == "gpt-5.6-sol-fast"
 
 
 @pytest.mark.asyncio

@@ -5,8 +5,10 @@ import json
 import httpx
 import pytest
 import respx
+from mcp.server.fastmcp.exceptions import ToolError
 
 from core.client import set_request_api_token
+from core.server import mcp
 from tools.user.auto_recharge import (
     acedatacloud_confirm_auto_recharge_setup,
     acedatacloud_create_auto_recharge,
@@ -131,6 +133,31 @@ async def test_billing_mutation_previews_zero_calls():
     assert respx.calls.call_count == 0
     assert "transaction-secret" not in results[3]
     assert "setup-secret" not in results[10]
+
+
+@respx.mock
+@pytest.mark.asyncio
+@pytest.mark.parametrize(
+    "status", ["Pending", "Processing", "Issued", "Failed", "Rejected", "Voided", "Cancelled"]
+)
+async def test_invoice_status_filter_dispatch(status):
+    route = respx.get(f"{API}/invoices/").mock(return_value=httpx.Response(200, json={"items": []}))
+    tools = {tool.name: tool for tool in await mcp.list_tools()}
+    schema = tools["acedatacloud_list_invoices"].inputSchema["properties"]["status"]
+    assert status in schema["anyOf"][0]["enum"]
+
+    await mcp.call_tool("acedatacloud_list_invoices", {"status": status})
+
+    assert route.calls.last.request.url.params["status"] == status
+    assert "user_id" not in route.calls.last.request.url.params
+
+
+@respx.mock
+@pytest.mark.asyncio
+async def test_invoice_status_filter_rejects_unknown_status_before_http():
+    with pytest.raises(ToolError):
+        await mcp.call_tool("acedatacloud_list_invoices", {"status": "Unknown"})
+    assert not respx.calls
 
 
 @respx.mock

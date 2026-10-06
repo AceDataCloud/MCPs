@@ -11,7 +11,9 @@ from core.utils import confirmation_required, dumps, error_json
 
 Region = Literal["china", "overseas"]
 InvoiceType = Literal["general", "special"]
-InvoiceStatus = Literal["Pending", "Processing", "Issued", "Rejected", "Voided", "Cancelled"]
+InvoiceStatus = Literal[
+    "Pending", "Processing", "Issued", "Failed", "Rejected", "Voided", "Cancelled"
+]
 
 
 @mcp.tool()

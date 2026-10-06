@@ -468,6 +468,10 @@ dry-run preview and performs no HTTP request.
 
 <!-- END GENERATED TOOL REFERENCE -->
 
+### Find failed invoices
+
+Use `acedatacloud_list_invoices(status="Failed")` to find caller-owned invoices whose issuance failed. Read the returned `failure_reason` before deciding whether to apply again or contact support. `Failed` is a read filter, not an administrator status-update option.
+
 ## Connect to the account MCP
 
 This is the **management** MCP at `https://mcp.acedata.cloud/mcp`. It uses a **platform token**, not the per-service `ACEDATACLOUD_API_TOKEN` used by generation MCPs. Choose one route:
