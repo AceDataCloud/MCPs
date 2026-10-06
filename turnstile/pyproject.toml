@@ -3,7 +3,7 @@ name = "mcp-turnstile"
 version = "2026.7.30.0"
 description = "MCP server for AceDataCloud Turnstile captcha APIs"
 readme = "README.pypi.md"
-license = { text = "MIT" }
+license = "MIT"
 requires-python = ">=3.10"
 authors = [{ name = "AceDataCloud", email = "support@acedata.cloud" }]
 maintainers = [{ name = "AceDataCloud", email = "support@acedata.cloud" }]

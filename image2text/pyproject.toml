@@ -3,7 +3,7 @@ name = "mcp-image2text"
 version = "2026.7.30.0"
 description = "MCP server for AceDataCloud Image2Text captcha APIs"
 readme = "README.pypi.md"
-license = { text = "MIT" }
+license = "MIT"
 requires-python = ">=3.10"
 authors = [{ name = "AceDataCloud", email = "support@acedata.cloud" }]
 maintainers = [{ name = "AceDataCloud", email = "support@acedata.cloud" }]

@@ -3,7 +3,7 @@ name = "mcp-discord-bot"
 version = "2026.8.1.1"
 description = "MCP Server for Discord automation via Discord Agent Proxy"
 readme = "README.pypi.md"
-license = { text = "MIT" }
+license = "MIT"
 requires-python = ">=3.10"
 authors = [
     { name = "AceDataCloud", email = "support@acedata.cloud" }
