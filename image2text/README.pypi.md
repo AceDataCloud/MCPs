@@ -7,16 +7,41 @@ A Model Context Protocol (MCP) server for AceDataCloud's Image2Text captcha-solv
 - Recognize text from base64-encoded captcha or challenge images.
 - Bearer-token authentication through AceDataCloud
 
-## Installation
+## Connect locally
+
+Use the local stdio package and an AceDataCloud API token. The public hosted HTTPS endpoint could not be verified, so this README does not offer it as a connection option. The local MCP process still calls AceDataCloud's API; it does not run the underlying service offline.
+
+Get an API credential through [AceDataCloud Platform](https://platform.acedata.cloud?utm_source=pypi&utm_medium=referral&utm_campaign=evergreen&utm_content=image2text_mcp_package_platform), keep it out of committed files, and review current pricing before a billable call.
+
+### Local stdio
+
+Install the package and give the local process an API token:
+
 ```bash
-pip install mcp-image2text
+python -m pip install mcp-image2text
+export ACEDATACLOUD_API_TOKEN='YOUR_API_TOKEN'
+mcp-image2text
 ```
 
-## Configuration
-```bash
-export ACEDATACLOUD_API_TOKEN=your_token_here
-export IMAGE2TEXT_REQUEST_TIMEOUT=120
+For Claude Desktop local MCP, merge this entry into the file opened by its developer settings (`~/Library/Application Support/Claude/claude_desktop_config.json` on macOS). `uvx` requires [uv](https://docs.astral.sh/uv/) on `PATH`:
+
+```json
+{
+  "mcpServers": {
+    "image2text": {
+      "command": "uvx",
+      "args": ["mcp-image2text"],
+      "env": {"ACEDATACLOUD_API_TOKEN": "YOUR_API_TOKEN"}
+    }
+  }
+}
 ```
+
+Keep this user-level file private. Self-hosted HTTP uses `mcp-image2text --transport http --port 8000`; expose it only with suitable network and TLS controls. Local execution still calls the AceDataCloud API.
+
+### Check the connection
+
+Confirm that the MCP client loads its tools. `image2text_get_usage_guide` returns reference information; it does not prove downstream API access or balance. A real service request can be billed. If it returns 401, check the API token; if it returns 403 or an account/balance error, read that response before retrying.
 
 ## Tools
 - `image2text_recognize` — Recognize text from an image

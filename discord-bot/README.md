@@ -25,50 +25,47 @@ The **Documentation** tab lists all 14 REST operations with request parameters, 
 
 **Download OpenAPI (JSON)** exports the instance address without its access token. To change Discord account credentials, use **Redeploy** in **Overview**.
 
-## Installation
+## Connect to your Discord Agent Proxy
+
+This package connects to **your own deployed Discord Agent Proxy**, not to the shared `https://<service>.mcp.acedata.cloud/mcp` endpoint used by the generation MCPs. The proxy's URL and access token are shown in the application's **Overview** tab after you deploy and connect the Discord account. The proxy credential is `DISCORD_BOT_TOKEN`; an AceDataCloud API token or MCP OAuth/DCR setup does not replace it.
+
+Use a dedicated Discord account and follow Discord's current terms and rate limits. Sending, editing, deleting, and reacting affect that real account. [Deployment and API documentation](https://platform.acedata.cloud/documents/development_discord_bot?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=discord_bot_mcp_readme_quick_start).
+
+### Local stdio setup
 
 ```bash
-pip install mcp-discord-bot
-```
-
-## Configuration
-
-Copy `.env.example` to `.env` and fill in your values:
-
-```bash
-DISCORD_BOT_BASE_URL=https://discord-bot-xxxxxxxxxxxx.app.acedata.cloud
-DISCORD_BOT_TOKEN=your_bot_token_here
-```
-
-## Usage
-
-### stdio (for AI clients)
-
-```bash
+python -m pip install mcp-discord-bot
+export DISCORD_BOT_BASE_URL='https://discord-bot-xxxxxxxxxxxx.app.acedata.cloud'
+export DISCORD_BOT_TOKEN='YOUR_PROXY_TOKEN'
 mcp-discord-bot
 ```
 
-Add to your MCP client configuration:
+Copy the actual URL and token from your own application's Overview; the hostname above is only a shape example. Keep the token in your user's environment or secret store, never in a committed repo. For Claude Desktop, merge this entry into the local MCP file opened from its developer settings (`~/Library/Application Support/Claude/claude_desktop_config.json` on macOS):
 
 ```json
 {
   "mcpServers": {
     "discord-bot": {
-      "command": "mcp-discord-bot",
+      "command": "uvx",
+      "args": ["mcp-discord-bot"],
       "env": {
-        "DISCORD_BOT_BASE_URL": "https://discord-bot-xxxxxxxxxxxx.app.acedata.cloud",
-        "DISCORD_BOT_TOKEN": "your_bot_token_here"
+        "DISCORD_BOT_BASE_URL": "YOUR_DEPLOYED_PROXY_URL",
+        "DISCORD_BOT_TOKEN": "YOUR_PROXY_TOKEN"
       }
     }
   }
 }
 ```
 
-### HTTP Transport
+`uvx` needs [uv](https://docs.astral.sh/uv/) on `PATH`; Claude Code, Cursor and VS Code can also launch this stdio command using their own local MCP configuration formats. Do not copy this local-process JSON into a remote connector screen.
 
-```bash
-mcp-discord-bot --transport http --port 8000
-```
+### Verify before sending
+
+1. Confirm the proxy application's Overview shows the Discord account **connected**. A running container alone is insufficient.
+2. Call the read-only `discord_whoami` tool and check the account identity. Then use `discord_list_guilds` or `discord_list_channels` to inspect the intended target.
+3. Only after confirming the destination, call a mutating tool such as `discord_send_message`. Review its output and reread the message if available. Keep the destination, content, and rate within the account's permissions.
+
+If `discord_whoami` fails, check the proxy URL, proxy token and connected-account status. `mcp-discord-bot --transport http --port 8000` runs **your own** HTTP MCP wrapper; it is not the shared hosted OAuth service. Expose that wrapper only with appropriate network and authentication controls.
 
 ## Available Tools
 
