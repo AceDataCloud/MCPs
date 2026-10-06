@@ -10,6 +10,7 @@ AiChatModel = Literal[
     "gpt-6-luna",
     "gpt-5.6-luna",
     "gpt-5.6-terra",
+    "gpt-5.6-sol-fast",
     "gpt-5.6-sol",
     "gpt-5.5",
     "gpt-5.5-pro",
@@ -107,6 +108,7 @@ AiChatV2Action = Literal["chat", "retrieve", "retrieve_batch", "update", "delete
 AiChatV2ModelGroup = Literal["chatgpt", "claude", "gemini", "grok", "kimi", "glm", "deepseek"]
 
 AiChatV2Model = Literal[
+    "gpt-5.6-sol-fast",
     "gpt-6-astra",
     "gpt-6.1-sol",
     "gpt-6-sol",
