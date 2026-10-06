@@ -39,6 +39,12 @@ Monorepo for all AceDataCloud MCP (Model Context Protocol) servers.
 | `openai/` | [OpenAIMCP](https://github.com/AceDataCloud/OpenAIMCP) | [mcp-openai-pro](https://pypi.org/project/mcp-openai-pro/) | AI APIs | [Documentation](https://platform.acedata.cloud/documents/openai) |
 | `webextrator/` | [WebExtratorMCP](https://github.com/AceDataCloud/WebExtratorMCP) | [mcp-webextrator](https://pypi.org/project/mcp-webextrator/) | Web & Data | [Documentation](https://platform.acedata.cloud/documents/webextrator) |
 
+## Connect to a server
+
+Each active package README now starts with its actual connection choices. For the verified hosted servers, add the HTTPS MCP URL and use your client's OAuth flow, or use an API credential only when an explicit Bearer header is needed. Local stdio packages need an API credential even though the server process runs on your machine. [Suno](suno/README.md) shows the full music-generation flow; other READMEs use their own endpoint and tool names.
+
+Two exceptions matter: [AceDataCloudMCP](acedatacloud/README.md) manages the account and uses a **platform token**, while [DiscordBotMCP](discord-bot/README.md) connects to a user's deployed Discord Agent Proxy and uses that proxy's URL and token. Five packages—Digital Human, hCaptcha, Image2Text, reCAPTCHA and Turnstile—currently document local setup because their public hosted HTTPS endpoints could not be verified. Sora remains retired.
+
 ## Retired
 
 | Directory | Standalone Repo | PyPI Package | Status |

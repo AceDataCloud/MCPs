@@ -467,79 +467,93 @@ dry-run preview and performs no HTTP request.
 
 <!-- END GENERATED TOOL REFERENCE -->
 
-## Quick Start
+## Connect to the account MCP
 
-### Hosted OAuth
+This is the **management** MCP at `https://mcp.acedata.cloud/mcp`. It uses a **platform token**, not the per-service `ACEDATACLOUD_API_TOKEN` used by generation MCPs. Choose one route:
 
-Connect to `https://mcp.acedata.cloud/mcp` with an OAuth-capable MCP client and
-review the account capabilities shown on the authorization page:
+| Route | Use it when | Credential |
+|---|---|---|
+| Hosted OAuth | Your MCP client supports remote OAuth | Add the URL only, sign in, and review the actual account permissions on the consent screen. DCR registers the client, not an API key. |
+| Hosted platform token | Your client cannot complete OAuth or needs an explicit management credential | Send `Authorization: Bearer platform-…` in the client's HTTP header. |
+| Local stdio | Your client launches local MCP processes | Install `mcp-acedatacloud` and set `ACEDATACLOUD_PLATFORM_TOKEN` for that process. |
 
-| Tools | Requested scopes |
-|---|---|
-| Account profile, email, preferences | `profile:read`, `profile:write`, `email:read` |
-| Subscriptions, balances, deployments | `applications:read`, `applications:write` |
-| API keys | `credentials:read`, `credentials:write` |
-| Usage and spend | `usage:read` |
-| Orders, payment actions, invoices | `orders:read`, `orders:write`, `billing-profile:read` |
-| Auto recharge | `auto-recharge:read`, `auto-recharge:write` |
-| Platform tokens | `platform-tokens:read`, `platform-tokens:write` |
-| Wallet and payment authorization | `coin:read`, `coin:write` |
-| Referrals | `distribution:read` |
-| Managed sites, domains, banners and overrides | `sites:read`, `sites:write` |
+Hosted OAuth reuses or creates a durable platform token. Review the consent screen for the account capabilities being requested; the account's current backend permissions still govern individual tools, and OAuth consent does not grant administrator access. Sensitive writes require their documented confirmation steps. Platform tokens are returned in full only when created; keep them private. [Platform token documentation](https://platform.acedata.cloud/documents/platform-token?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=acedatacloud_mcp_readme_documents_platform-token).
 
-Documentation, service/pricing catalogs, API definitions and public model
-catalogs are public reads and require no OAuth scope. Administrative tools
-still require the account's existing backend roles and object/site access.
+### Hosted OAuth clients
 
-After consent, the hosted server reuses or creates a durable platform token.
-Tool calls use that token and the account's current permissions; the OAuth
-scope list describes consent and is not a scope ceiling stored on the platform
-token. The token stays valid until revoked. Mutating tools retain their
-`confirm=true` checks.
+- **Claude / Claude Desktop chat:** Add a remote custom connector in `Customize → Connectors → Add custom connector`, enter `https://mcp.acedata.cloud/mcp`, select sign-in, and choose **Register automatically** if Claude asks how to register its OAuth client. Review consent. The Desktop local JSON file is a separate local-process mechanism. [Claude connector guide](https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp).
+- **Claude Code:** `claude mcp add --transport http --scope user acedatacloud https://mcp.acedata.cloud/mcp`, then `claude mcp login acedatacloud`. Check `/mcp`. [Claude Code guide](https://code.claude.com/docs/en/mcp).
+- **Cursor:** Add `https://mcp.acedata.cloud/mcp` as a remote MCP server and finish browser sign-in. Personal config is `~/.cursor/mcp.json`; project config is `<project>/.cursor/mcp.json`. [Cursor guide](https://cursor.com/docs/mcp).
+- **VS Code / Copilot:** Run **MCP: Add Server**, select HTTP, enter the URL, finish sign-in, and check **MCP: List Servers**. The VS Code workspace format is `<project>/.vscode/mcp.json`; its newer portable format is `<project>/.mcp.json`. [VS Code guide](https://code.visualstudio.com/docs/agent-customization/mcp-servers).
+- **Codex:** `codex mcp add acedatacloud --url https://mcp.acedata.cloud/mcp`, then `codex mcp login acedatacloud`. User settings live in `~/.codex/config.toml`. [Official Codex guide](https://developers.openai.com/codex/mcp/).
 
-### 1. Get a platform token
+Cursor URL-only example:
 
-Create one at [platform.acedata.cloud/console/platform-tokens](https://platform.acedata.cloud/console/platform-tokens?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=acedatacloud_mcp_readme_platform_token).
-It starts with `platform-` and never expires.
+```json
+{"mcpServers":{"acedatacloud":{"url":"https://mcp.acedata.cloud/mcp"}}}
+```
 
-> Use a **platform token**, not the per-service `api.acedata.cloud` token — the
-> latter returns 401 against the management API.
+VS Code-specific workspace example:
 
-### 2. Install
+```json
+{"servers":{"acedatacloud":{"type":"http","url":"https://mcp.acedata.cloud/mcp"}}}
+```
+
+### Explicit platform token
+
+Create a token at [AceDataCloud Platform](https://platform.acedata.cloud/console/platform-tokens?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=acedatacloud_mcp_readme_platform_token). It begins with `platform-`. A per-service `api.acedata.cloud` token will fail against management actions. Do not paste a real token into a committed project file. An invalid fixed header will not fall back to OAuth in Claude Code.
+
+For Claude Code, the shell expands the token when adding the server, so protect the saved user config:
 
 ```bash
-pip install mcp-acedatacloud
+export ACEDATACLOUD_PLATFORM_TOKEN='YOUR_PLATFORM_TOKEN'
+claude mcp add --transport http --scope user acedatacloud https://mcp.acedata.cloud/mcp \
+  --header "Authorization: Bearer $ACEDATACLOUD_PLATFORM_TOKEN"
 ```
 
-### 3. Configure your client
-
-**Claude Desktop / VS Code (stdio):**
+For a shared Claude Code project config, merge only the variable reference into `<project>/.mcp.json`; each user sets the environment variable independently:
 
 ```json
 {
   "mcpServers": {
     "acedatacloud": {
-      "command": "mcp-acedatacloud",
-      "env": {
-        "ACEDATACLOUD_PLATFORM_TOKEN": "platform-v1-xxxxxxxx"
-      }
-    }
-  }
-}
-```
-
-**Hosted (HTTP) — token per request:**
-
-```json
-{
-  "mcpServers": {
-    "acedatacloud": {
+      "type": "http",
       "url": "https://mcp.acedata.cloud/mcp",
-      "headers": { "Authorization": "Bearer platform-v1-xxxxxxxx" }
+      "headers": {"Authorization": "Bearer ${ACEDATACLOUD_PLATFORM_TOKEN}"}
     }
   }
 }
 ```
+
+Cursor uses `${env:ACEDATACLOUD_PLATFORM_TOKEN}` in `~/.cursor/mcp.json` or an uncommitted project config. In VS Code, **MCP: Open User Configuration** supports a masked `${input:platform-token}` value in the `headers` entry; keep that input in the user/workspace format rather than portable `.mcp.json`. [Cursor config](https://cursor.com/docs/mcp) · [VS Code config](https://code.visualstudio.com/docs/agents/reference/mcp-configuration).
+
+### Local stdio
+
+```bash
+python -m pip install mcp-acedatacloud
+export ACEDATACLOUD_PLATFORM_TOKEN='YOUR_PLATFORM_TOKEN'
+mcp-acedatacloud
+```
+
+Claude Desktop's local-process config is opened from its developer settings (`~/Library/Application Support/Claude/claude_desktop_config.json` on macOS):
+
+```json
+{
+  "mcpServers": {
+    "acedatacloud": {
+      "command": "uvx",
+      "args": ["mcp-acedatacloud"],
+      "env": {"ACEDATACLOUD_PLATFORM_TOKEN": "YOUR_PLATFORM_TOKEN"}
+    }
+  }
+}
+```
+
+Keep the user-level file private. `uvx` requires [uv](https://docs.astral.sh/uv/) on `PATH`. This is a local MCP process and is separate from Claude's remote connector.
+
+### Verify permissions
+
+A healthy MCP connection and tool list show that the client discovered the server. Start with a read such as `acedatacloud_get_user_info` or `acedatacloud_get_balance` to verify your account context. Catalog tools can be public reads; seeing them does not prove your platform token can perform account writes. Follow the confirmation flow for mutations and reread the result. For 401, check the token type or OAuth session; for 403, check the account's actual permission grant. Amounts are in Credits, not USD.
 
 ## Example prompts
 
