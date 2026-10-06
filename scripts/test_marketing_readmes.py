@@ -92,6 +92,10 @@ class MarketingReadmeTest(unittest.TestCase):
                 ("VS Code (Copilot)", "servers", "http"),
             ]:
                 marker = f"#### {title}\n"
+                if alias == "suno":
+                    # Suno documents OAuth URL-only setup and API-token setup
+                    # in separate sections. Validate those paths below.
+                    continue
                 if marker not in text:
                     continue
                 section = text.split(marker, 1)[1].split("\n#### ", 1)[0]
@@ -126,6 +130,34 @@ class MarketingReadmeTest(unittest.TestCase):
                         self.assertIn("MCP: List Servers", section)
                         self.assertNotIn(".vscode/mcp.json", section)
                         self.assertIn("out of version control", section)
+
+
+    def test_suno_auth_routes_and_client_configs(self):
+        text = (ROOT / "suno/README.md").read_text()
+        self.assertIn("DCR is client registration", text)
+        self.assertIn("Claude Desktop's `claude_desktop_config.json` is for **local**", text)
+        self.assertIn("codex mcp login suno", text)
+        self.assertIn("~/.cursor/mcp.json", text)
+        self.assertIn("MCP: Open User Configuration", text)
+        self.assertIn("~/.cline/data/settings/cline_mcp_settings.json", text)
+        self.assertIn("`suno_list_models` and `suno_list_actions` return static reference data", text)
+
+        snippets = [json.loads(block) for block in re.findall(r"```json\n(.*?)\n```", text, re.DOTALL)]
+        self.assertEqual(len(snippets), 6)
+        url = "https://suno.mcp.acedata.cloud/mcp"
+        cursor_oauth = snippets[0]["mcpServers"]["suno"]
+        vscode_oauth = snippets[1]["servers"]["suno"]
+        claude_key = snippets[2]["mcpServers"]["suno"]
+        cursor_key = snippets[3]["mcpServers"]["suno"]
+        vscode_key = snippets[4]["servers"]["suno"]
+        local = snippets[5]["mcpServers"]["suno"]
+        self.assertEqual(cursor_oauth, {"url": url})
+        self.assertEqual(vscode_oauth, {"type": "http", "url": url})
+        self.assertEqual(claude_key["headers"]["Authorization"], "Bearer ${ACEDATACLOUD_API_TOKEN}")
+        self.assertEqual(cursor_key["headers"]["Authorization"], "Bearer ${env:ACEDATACLOUD_API_TOKEN}")
+        self.assertEqual(vscode_key["headers"]["Authorization"], "Bearer ${input:acedata-suno-token}")
+        self.assertEqual(local["command"], "uvx")
+        self.assertEqual(local["args"], ["mcp-suno"])
 
     def test_generation_is_idempotent(self):
         for alias, item in load_catalog().items():
