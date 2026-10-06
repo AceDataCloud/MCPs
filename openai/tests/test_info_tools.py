@@ -43,6 +43,12 @@ async def test_openai_get_realtime_connection_info_calls_realtime_endpoint(monke
 
 
 @pytest.mark.asyncio
+async def test_openai_list_chat_models_includes_sol_fast():
+    text = await info_tools.openai_list_chat_models()
+    assert "gpt-5.6-sol-fast" in text
+
+
+@pytest.mark.asyncio
 async def test_openai_list_image_models_names_all_gpt_image_2_5_variants():
     text = await info_tools.openai_list_image_models()
     assert "gpt-image-2.5-flare" in text

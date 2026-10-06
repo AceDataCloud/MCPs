@@ -156,6 +156,7 @@ For **401**, check which auth route the client used and whether the token or OAu
 ## Supported Models
 
 ### OpenAI
+- GPT-5.6 Sol Fast: `gpt-5.6-sol-fast`, supported by both `aichat_create_conversation` and `aichat_create_conversation_v2`. Existing defaults are unchanged.
 - GPT-5 series: gpt-5.5, gpt-5.4, gpt-5.2, gpt-5.1, gpt-5, gpt-5-mini, gpt-5-nano
 - GPT-4.1 series: gpt-4.1, gpt-4.1-mini, gpt-4.1-nano
 - GPT-4o series: gpt-4o, gpt-4o-mini, gpt-4o-all, gpt-4o-image

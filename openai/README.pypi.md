@@ -171,6 +171,7 @@ For **401**, check which auth route the client used and whether the token or OAu
 ## Supported Models
 
 ### Chat Completion Models
+- **GPT-5.6 Sol Fast**: `gpt-5.6-sol-fast`, supported by both `openai_chat_completion` and `openai_create_response`. Existing defaults are unchanged.
 - **GPT-5 Series**: gpt-5.5, gpt-5.5-pro, gpt-5.4, gpt-5.4-pro, gpt-5.2, gpt-5.1, gpt-5, gpt-5-mini, gpt-5-nano
 - **GPT-4 Series**: gpt-4.1, gpt-4.1-mini, gpt-4.1-nano, gpt-4o, gpt-4o-mini, gpt-4
 - **Reasoning**: o4-mini, o3, o3-mini, o3-pro, o1, o1-mini, o1-pro
