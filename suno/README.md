@@ -226,7 +226,7 @@ For Claude Desktop's **local** MCP configuration, merge this into the file opene
 
 Keep this user-level file private. On Windows, set `$env:ACEDATACLOUD_API_TOKEN = 'YOUR_API_TOKEN'` in the shell that starts local clients. `uvx` requires [uv](https://docs.astral.sh/uv/) on `PATH`; `mcp-suno` requires the package installed in the environment from which the client launches it.
 
-For self-hosted HTTP, run `mcp-suno --transport http --port 8000` or the published container with `docker run -p 8000:8000 ghcr.io/acedatacloud/mcp-suno:latest`. Clients must send their own Bearer tokens; expose the service only with suitable network and TLS controls.
+For self-hosted HTTP, run `mcp-suno --transport http --port 8000` or build this repository's Dockerfile and run the resulting image. Clients must send their own Bearer tokens; expose the service only with suitable network and TLS controls.
 
 ### Check the connection before generating
 
