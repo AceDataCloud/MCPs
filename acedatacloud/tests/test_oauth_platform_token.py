@@ -192,7 +192,9 @@ async def test_oauth_registration_callback_and_code_exchange_cross_replicas(monk
     assert parse_qs(redirected.query)["connection_id"] == ["abc"]
     assert parse_qs(redirected.query)["state"] == ["studio-state"]
     code = parse_qs(redirected.query)["code"][0]
-    assert "platform-test-token" not in await second_redis.get(f"mcp:acedatacloud:oauth:code:{code}")
+    assert "platform-test-token" not in await second_redis.get(
+        f"mcp:acedatacloud:oauth:code:{code}"
+    )
 
     loaded = await second.load_authorization_code(registered, code)
     assert loaded is not None
