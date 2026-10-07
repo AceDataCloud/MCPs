@@ -1,5 +1,95 @@
 [
   {
+    "name": "acedatacloud_add_blog_comment",
+    "inputSchema": {
+      "properties": {
+        "blog_id": {
+          "format": "uuid",
+          "title": "Blog Id",
+          "type": "string"
+        },
+        "expected_version": {
+          "description": "review_version from the saved draft.",
+          "minimum": 1,
+          "title": "Expected Version",
+          "type": "integer"
+        },
+        "body": {
+          "maxLength": 2000,
+          "minLength": 1,
+          "title": "Body",
+          "type": "string"
+        },
+        "field": {
+          "default": "overall",
+          "enum": [
+            "overall",
+            "title",
+            "summary",
+            "content"
+          ],
+          "title": "Field",
+          "type": "string"
+        },
+        "start_offset": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "UTF-16 start offset for selected source text.",
+          "title": "Start Offset"
+        },
+        "end_offset": {
+          "anyOf": [
+            {
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "UTF-16 end offset for selected source text.",
+          "title": "End Offset"
+        },
+        "quote": {
+          "anyOf": [
+            {
+              "maxLength": 2000,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Exact selected source text.",
+          "title": "Quote"
+        },
+        "confirm": {
+          "default": false,
+          "description": "True to post this review comment.",
+          "title": "Confirm",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "blog_id",
+        "expected_version",
+        "body"
+      ],
+      "title": "acedatacloud_add_blog_commentArguments",
+      "type": "object"
+    }
+  },
+  {
     "name": "acedatacloud_apply_invoice",
     "inputSchema": {
       "properties": {
@@ -23522,6 +23612,24 @@
     }
   },
   {
+    "name": "acedatacloud_list_blog_comments",
+    "inputSchema": {
+      "properties": {
+        "blog_id": {
+          "description": "Blog UUID from the editorial list.",
+          "format": "uuid",
+          "title": "Blog Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "blog_id"
+      ],
+      "title": "acedatacloud_list_blog_commentsArguments",
+      "type": "object"
+    }
+  },
+  {
     "name": "acedatacloud_list_blog_drafts",
     "inputSchema": {
       "properties": {
@@ -28641,9 +28749,9 @@
           "type": "integer"
         },
         "comment": {
-          "description": "Required rejection reason.",
+          "default": "",
+          "description": "Rejection summary. Optional when this version already has an open review comment.",
           "maxLength": 2000,
-          "minLength": 1,
           "title": "Comment",
           "type": "string"
         },
@@ -28656,8 +28764,7 @@
       },
       "required": [
         "blog_id",
-        "expected_version",
-        "comment"
+        "expected_version"
       ],
       "title": "acedatacloud_reject_blog_postArguments",
       "type": "object"
@@ -32264,6 +32371,42 @@
     }
   },
   {
+    "name": "acedatacloud_reply_blog_comment",
+    "inputSchema": {
+      "properties": {
+        "blog_id": {
+          "format": "uuid",
+          "title": "Blog Id",
+          "type": "string"
+        },
+        "comment_id": {
+          "format": "uuid",
+          "title": "Comment Id",
+          "type": "string"
+        },
+        "body": {
+          "maxLength": 2000,
+          "minLength": 1,
+          "title": "Body",
+          "type": "string"
+        },
+        "confirm": {
+          "default": false,
+          "description": "True to post this reply.",
+          "title": "Confirm",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "blog_id",
+        "comment_id",
+        "body"
+      ],
+      "title": "acedatacloud_reply_blog_commentArguments",
+      "type": "object"
+    }
+  },
+  {
     "name": "acedatacloud_report_content",
     "inputSchema": {
       "properties": {
@@ -32322,6 +32465,41 @@
         "reason"
       ],
       "title": "acedatacloud_report_contentArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "acedatacloud_resolve_blog_comment",
+    "inputSchema": {
+      "properties": {
+        "blog_id": {
+          "format": "uuid",
+          "title": "Blog Id",
+          "type": "string"
+        },
+        "comment_id": {
+          "format": "uuid",
+          "title": "Comment Id",
+          "type": "string"
+        },
+        "resolved": {
+          "description": "True to resolve the thread; false to reopen it.",
+          "title": "Resolved",
+          "type": "boolean"
+        },
+        "confirm": {
+          "default": false,
+          "description": "True to change the thread resolution state.",
+          "title": "Confirm",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "blog_id",
+        "comment_id",
+        "resolved"
+      ],
+      "title": "acedatacloud_resolve_blog_commentArguments",
       "type": "object"
     }
   },

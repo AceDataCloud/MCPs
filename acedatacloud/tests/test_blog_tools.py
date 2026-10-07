@@ -11,15 +11,19 @@ from mcp.server.fastmcp.exceptions import ToolError
 from core.client import set_request_api_token
 from core.server import mcp
 from tools.blog_tools import (
+    acedatacloud_add_blog_comment,
     acedatacloud_approve_blog_post,
     acedatacloud_create_blog_draft,
     acedatacloud_delete_blog_post,
     acedatacloud_get_blog_draft,
     acedatacloud_get_blog_post,
+    acedatacloud_list_blog_comments,
     acedatacloud_list_blog_drafts,
     acedatacloud_list_blog_posts,
     acedatacloud_publish_blog_post,
     acedatacloud_reject_blog_post,
+    acedatacloud_reply_blog_comment,
+    acedatacloud_resolve_blog_comment,
     acedatacloud_submit_blog_post,
     acedatacloud_unpublish_blog_post,
     acedatacloud_update_blog_post,
@@ -68,6 +72,51 @@ async def test_editorial_reads_and_filters():
     assert "published" not in listing.calls.last.request.url.params
     await acedatacloud_get_blog_draft(BLOG_ID)
     assert detail.called
+
+
+@respx.mock
+async def test_review_comments():
+    comment_id = UUID("1c7e95a7-04c0-47b6-9620-51b108bdfbb2")
+    base = f"{DETAIL}comments/"
+    listing = respx.get(base).mock(
+        return_value=httpx.Response(200, json=[{"id": str(comment_id), "replies": []}])
+    )
+    create = respx.post(base).mock(return_value=httpx.Response(201, json={"id": str(comment_id)}))
+    reply = respx.post(f"{base}{comment_id}/replies/").mock(
+        return_value=httpx.Response(201, json={"body": "Fixed"})
+    )
+    resolution = respx.patch(f"{base}{comment_id}/").mock(
+        return_value=httpx.Response(200, json={"resolved_at": "now"})
+    )
+    assert json.loads(await acedatacloud_list_blog_comments(BLOG_ID))[0]["id"] == str(comment_id)
+    assert listing.called
+    preview = await acedatacloud_add_blog_comment(
+        BLOG_ID, 4, "Clarify", field="content", start_offset=1, end_offset=3, quote="😀"
+    )
+    assert json.loads(preview)["status"] == "confirmation_required"
+    assert not create.called
+    await acedatacloud_add_blog_comment(
+        BLOG_ID,
+        4,
+        "Clarify",
+        field="content",
+        start_offset=1,
+        end_offset=3,
+        quote="😀",
+        confirm=True,
+    )
+    assert json.loads(create.calls.last.request.content) == {
+        "expected_version": 4,
+        "body": "Clarify",
+        "field": "content",
+        "start_offset": 1,
+        "end_offset": 3,
+        "quote": "😀",
+    }
+    await acedatacloud_reply_blog_comment(BLOG_ID, comment_id, "Fixed", confirm=True)
+    assert json.loads(reply.calls.last.request.content) == {"body": "Fixed"}
+    await acedatacloud_resolve_blog_comment(BLOG_ID, comment_id, True, confirm=True)
+    assert json.loads(resolution.calls.last.request.content) == {"resolved": True}
 
 
 @respx.mock

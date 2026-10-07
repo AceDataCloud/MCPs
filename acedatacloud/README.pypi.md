@@ -24,9 +24,9 @@ Claude, VS Code, Studio, or any MCP-compatible client.
 <!-- BEGIN GENERATED TOOL REFERENCE -->
 ## Tool Reference
 
-The default curated catalog advertises **348 tools** before
+The default curated catalog advertises **352 tools** before
 account-permission filtering, including `acedatacloud_get_usage_guide`.
-The complete compatibility registry retains **519 tools**.
+The complete compatibility registry retains **523 tools**.
 Discovery is grouped by business task, not by one tool per REST endpoint.
 
 | Not advertised by default | Count |
@@ -46,7 +46,7 @@ Discovery is grouped by business task, not by one tool per REST endpoint.
 | Usage & billing | 1 | 41 | 0 | 28 |
 | Sites & branding | 1 | 0 | 38 | 0 |
 | Community & wallet | 1 | 31 | 0 | 12 |
-| Content & announcements | 4 | 0 | 19 | 0 |
+| Content & announcements | 4 | 0 | 23 | 0 |
 | Email marketing & analytics | 0 | 0 | 0 | 37 |
 | Access control & automation | 0 | 5 | 13 | 20 |
 | Payment authorization | 0 | 10 | 0 | 0 |
@@ -293,6 +293,7 @@ Admin tools require their exact permission grants, not just an admin label.
 
 | Tool | Description | Audience | Required permissions |
 |------|-------------|----------|----------------------|
+| `acedatacloud_add_blog_comment` | Add a review comment; requires blog:read and either blog:write or blog:publish. | workspace | blog:read |
 | `acedatacloud_approve_blog_post` | Approve a submitted version as a different account from its creator. | workspace | blog:read, blog:publish |
 | `acedatacloud_create_announcement` | Publish a platform announcement. | workspace | announcements:write |
 | `acedatacloud_create_announcements_admin_polish` | Create announcements admin polish. Backend account permissions and ownership checks apply. | workspace | announcements:write |
@@ -305,11 +306,14 @@ Admin tools require their exact permission grants, not just an admin label.
 | `acedatacloud_get_blog_post` | Read a localized published blog post. | public | public |
 | `acedatacloud_list_announcements` | List published announcements. | public | public |
 | `acedatacloud_list_announcements_admin` | List announcements admin. Backend account permissions and ownership checks apply. | workspace | announcements:read |
+| `acedatacloud_list_blog_comments` | Read private review threads and replies. | workspace | blog:read |
 | `acedatacloud_list_blog_drafts` | List blog drafts and published editorial records. | workspace | blog:read |
 | `acedatacloud_list_blog_posts` | List published blog posts. | public | public |
 | `acedatacloud_list_showcases` | List showcases. Backend account permissions and ownership checks apply. | public | public |
 | `acedatacloud_publish_blog_post` | Publish an approved draft now or schedule its public visibility. | workspace | blog:write, blog:publish |
-| `acedatacloud_reject_blog_post` | Reject a submitted version with a reason. | workspace | blog:read, blog:publish |
+| `acedatacloud_reject_blog_post` | Reject a submitted version using a summary or an existing open review comment. | workspace | blog:read, blog:publish |
+| `acedatacloud_reply_blog_comment` | Reply to a review comment; requires blog:read and either blog:write or blog:publish. | workspace | blog:read |
+| `acedatacloud_resolve_blog_comment` | Resolve or reopen a review thread; requires blog:read and either blog:write or blog:publish. | workspace | blog:read |
 | `acedatacloud_submit_blog_post` | Submit a draft or rejected post for review. | workspace | blog:write |
 | `acedatacloud_unpublish_blog_post` | Return a public blog post to draft. | workspace | blog:write, blog:publish |
 | `acedatacloud_update_announcements_admin_id` | Update announcements admin id. Backend account permissions and ownership checks apply. | workspace | announcements:write |
