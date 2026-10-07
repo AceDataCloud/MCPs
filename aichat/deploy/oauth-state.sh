@@ -35,4 +35,5 @@ kubectl -n acedatacloud rollout status statefulset/mcp-acedatacloud-oauth-redis 
 mark_oauth_key_initialized() {
   kubectl -n acedatacloud annotate deployment "$oauth_deployment_name" \
     'mcp.acedata.cloud/oauth-state-key-initialized=true' --overwrite >/dev/null
+  kubectl -n acedatacloud rollout status "deployment/$oauth_deployment_name" --timeout=900s
 }

@@ -83,7 +83,7 @@ path.write_text(json.dumps(state))
             self.assertEqual(second.returncode, 0, second.stderr)
             state = json.loads(state_path.read_text())
             self.assertEqual(state["creations"], 1)
-            self.assertEqual(state["rollouts"], 2)
+            self.assertEqual(state["rollouts"], 4)
 
             state["secret"] = False
             state_path.write_text(json.dumps(state))
