@@ -1029,6 +1029,18 @@ OPERATIONS: tuple[Operation, ...] = (
         required_permissions=(),
     ),
     _covered(
+        "invoices.admin_list",
+        "GET",
+        "/invoices/admin/",
+        "Invoices",
+        "authenticated",
+        "read",
+        "List invoices across accounts.",
+        "acedatacloud_list_admin_invoices",
+        "test_billing_tools.py::test_admin_invoice_status_filter",
+        required_permissions=("invoices:read:any",),
+    ),
+    _covered(
         "invoices.apply",
         "POST",
         "/invoices/",
