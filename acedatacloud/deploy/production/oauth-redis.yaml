@@ -99,7 +99,7 @@ spec:
                 values:
                   - mcp-acedatacloud
                   - mcp-aichat
-                  - mcp-face
+                  - mcp-face-transform
                   - mcp-fish
                   - mcp-flux
                   - mcp-glm
@@ -116,7 +116,7 @@ spec:
                   - mcp-producer
                   - mcp-qwen-image
                   - mcp-seedance
-                  - mcp-seedream
+                  - mcp-seedream-pro
                   - mcp-serp
                   - mcp-shorturl
                   - mcp-suno
