@@ -10,7 +10,7 @@ from core.server import mcp
 from core.utils import _task_outcome, format_result, format_task_result
 
 
-def _compact_task(data: dict) -> dict:
+def _compact_task(data: dict, *, include_output: bool = False) -> dict:
     """Keep task discovery below the agent's tool-result budget.
 
     The API's list response includes complete briefs and progress logs. Four
@@ -21,17 +21,26 @@ def _compact_task(data: dict) -> dict:
     response = data.get("response") or {}
     variants = (response.get("data") or {}).get("variants") or []
     first_variant = variants[0] if variants and isinstance(variants[0], dict) else {}
-    return {
+    summary = {
         "id": data.get("id"),
         "status": data.get("status"),
         "created_at": data.get("created_at"),
         "finished_at": data.get("finished_at"),
         "duration": request.get("duration"),
         "aspect": request.get("aspect"),
-        "output_url": first_variant.get("output_url"),
-        "error": str(response.get("error"))[:300] if response.get("error") else None,
-        "progress": data.get("progress"),
     }
+    if include_output:
+        progress = data.get("progress") or {}
+        summary.update(
+            output_url=first_variant.get("output_url"),
+            error=str(response.get("error"))[:300] if response.get("error") else None,
+            progress={
+                "percent": progress.get("percent"),
+                "stage": progress.get("stage"),
+                "message": str(progress.get("message"))[:200] if progress.get("message") else None,
+            },
+        )
+    return summary
 
 
 @mcp.tool()
@@ -54,7 +63,7 @@ async def maestro_get_task(
     is_in_flight, _, _ = _task_outcome(data)
     if is_in_flight:
         await asyncio.sleep(5)
-    return format_task_result(_compact_task(data) if compact else data)
+    return format_task_result(_compact_task(data, include_output=True) if compact else data)
 
 
 @mcp.tool()

@@ -135,7 +135,7 @@ async def test_compact_maestro_tasks_keep_ids_and_outputs_without_large_briefs()
     assert listed["count"] == 1
     assert listed["items"][0]["id"] == "task-1"
     assert listed["items"][0]["duration"] == 27
-    assert listed["items"][0]["output_url"] == "https://example.com/video.mp4"
+    assert "output_url" not in listed["items"][0]
     assert "private brief" not in json.dumps(listed)
     with patch("tools.task_tools.client.get_task", new_callable=AsyncMock) as get_task:
         get_task.return_value = task
