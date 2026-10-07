@@ -22,6 +22,13 @@ Category = Annotated[
     ),
 ]
 SourceLanguage = Literal["zh-cn", "en"]
+ContentType = Literal["article", "video"]
+VideoURL = Annotated[
+    str,
+    Field(
+        max_length=2048, pattern=r"^(https://\S+|)$", description="HTTPS video URL; empty to clear."
+    ),
+]
 
 
 async def _read(endpoint: str, params: dict[str, Any], *, public: bool = False) -> str:
@@ -51,11 +58,18 @@ async def acedatacloud_list_blog_posts(
     lang: Annotated[str | None, Field(description="Requested translation language.")] = None,
     limit: Annotated[int, Field(ge=1, le=100)] = 20,
     offset: Annotated[int, Field(ge=0)] = 0,
+    content_type: ContentType | None = None,
 ) -> str:
-    """List published blog posts. No account or blog permission required."""
+    """List published articles or videos. No account or blog permission required."""
     return await _read(
         "/blogs/",
-        {"category": category, "lang": lang, "limit": limit, "offset": offset},
+        {
+            "category": category,
+            "lang": lang,
+            "limit": limit,
+            "offset": offset,
+            "content_type": content_type,
+        },
         public=True,
     )
 
@@ -65,7 +79,7 @@ async def acedatacloud_get_blog_post(
     slug: Annotated[str, Field(pattern=r"^[a-zA-Z0-9_-]+$", description="Public blog slug.")],
     lang: Annotated[str | None, Field(description="Requested translation language.")] = None,
 ) -> str:
-    """Read a published blog post and its localized Markdown content."""
+    """Read a published article or video with localized source fields."""
     return await _read(f"/blogs/{slug}/", {"lang": lang}, public=True)
 
 
@@ -179,7 +193,9 @@ async def acedatacloud_create_blog_draft(
     slug: Annotated[str, Field(pattern=r"^[a-zA-Z0-9_-]{1,200}$")],
     title: Annotated[str, Field(min_length=1, max_length=255)],
     summary: Annotated[str, Field(min_length=1)],
-    content: Annotated[str, Field(min_length=1, description="Article source in Markdown.")],
+    content: Annotated[
+        str, Field(description="Markdown source; required for articles, optional for videos.")
+    ] = "",
     source_lang: SourceLanguage = "zh-cn",
     category: Category = "tech-sharing",
     author: Annotated[str, Field(max_length=120)] = "Ace Data Cloud",
@@ -187,9 +203,12 @@ async def acedatacloud_create_blog_draft(
     cover_alt: Annotated[str, Field(max_length=255, description="Required with a cover.")] = "",
     tags: list[str] | None = None,
     confirm: Annotated[bool, Field(description="True to save the reviewed draft.")] = False,
+    content_type: ContentType = "article",
+    video_url: VideoURL = "",
 ) -> str:
-    """Save an unpublished blog draft. Requires blog:write; translations run automatically.
+    """Save an unpublished article or video draft. Requires blog:write; translations run automatically.
 
+    Articles require content; videos require an uploaded HTTPS video_url.
     Submit the saved draft for review before another account can approve it.
     """
     return await _write(
@@ -200,6 +219,8 @@ async def acedatacloud_create_blog_draft(
             "title": title,
             "summary": summary,
             "content": content,
+            "content_type": content_type,
+            "video_url": video_url,
             "source_lang": source_lang,
             "category": category,
             "author": author,
@@ -218,7 +239,9 @@ async def acedatacloud_update_blog_post(
     slug: Annotated[str | None, Field(pattern=r"^[a-zA-Z0-9_-]{1,200}$")] = None,
     title: Annotated[str | None, Field(min_length=1, max_length=255)] = None,
     summary: Annotated[str | None, Field(min_length=1)] = None,
-    content: Annotated[str | None, Field(min_length=1, description="Markdown source.")] = None,
+    content: Annotated[
+        str | None, Field(description="Markdown source; may be empty for videos.")
+    ] = None,
     source_lang: SourceLanguage | None = None,
     category: Category | None = None,
     author: Annotated[str | None, Field(max_length=120)] = None,
@@ -226,6 +249,8 @@ async def acedatacloud_update_blog_post(
     cover_alt: Annotated[str | None, Field(max_length=255)] = None,
     tags: list[str] | None = None,
     confirm: Annotated[bool, Field(description="True to apply the reviewed changes.")] = False,
+    content_type: ContentType | None = None,
+    video_url: VideoURL | None = None,
 ) -> str:
     """Edit blog source fields. Requires blog:write and blog:publish for published posts.
 
@@ -240,6 +265,8 @@ async def acedatacloud_update_blog_post(
             "title": title,
             "summary": summary,
             "content": content,
+            "content_type": content_type,
+            "video_url": video_url,
             "source_lang": source_lang,
             "category": category,
             "author": author,

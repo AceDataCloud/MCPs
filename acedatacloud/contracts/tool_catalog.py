@@ -82,7 +82,6 @@ CATEGORIES = {
 
 ADMIN_PERMISSIONS = {
     "access-control",
-    "ace-snapshot",
     "distribution-risk",
     "email-marketing",
     "feature-flags",

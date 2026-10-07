@@ -72,6 +72,17 @@ def test_generated_business_workflows_are_not_removed_with_aliases():
     assert "acedatacloud_create_platform_tokens" not in advertised_tools()
 
 
+@pytest.mark.parametrize("profile", ["curated", "full"])
+async def test_retired_snapshot_tools_are_absent_from_discovery_and_guide(monkeypatch, profile):
+    subject = {"id": "admin", "permissions": ["ace-snapshot:read", "ace-snapshot:publish"]}
+    monkeypatch.setattr(settings, "tool_profile", profile)
+    monkeypatch.setattr("core.visibility.get_request_subject", AsyncMock(return_value=subject))
+    assert not any("ace_snapshots" in name for name in advertised_tools(profile))
+    assert not any("ace_snapshots" in name for name in TOOL_CATALOG)
+    assert not any("ace_snapshots" in tool.name for tool in await list_visible_tools())
+    assert "ace_snapshots" not in await acedatacloud_get_usage_guide()
+
+
 def test_versioned_model_list_is_removed_from_all_registries():
     legacy = "acedatacloud_list_configuration_models_v2"
     current = "acedatacloud_list_configuration_models"

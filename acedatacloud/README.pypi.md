@@ -24,9 +24,9 @@ Claude, VS Code, Studio, or any MCP-compatible client.
 <!-- BEGIN GENERATED TOOL REFERENCE -->
 ## Tool Reference
 
-The default curated catalog advertises **353 tools** before
+The default curated catalog advertises **347 tools** before
 account-permission filtering, including `acedatacloud_get_usage_guide`.
-The complete compatibility registry retains **525 tools**.
+The complete compatibility registry retains **519 tools**.
 Discovery is grouped by business task, not by one tool per REST endpoint.
 
 | Not advertised by default | Count |
@@ -50,7 +50,7 @@ Discovery is grouped by business task, not by one tool per REST endpoint.
 | Email marketing & analytics | 0 | 0 | 0 | 37 |
 | Access control & automation | 0 | 5 | 13 | 20 |
 | Payment authorization | 0 | 10 | 0 | 0 |
-| Administration & risk | 0 | 0 | 0 | 35 |
+| Administration & risk | 0 | 0 | 0 | 29 |
 | Files & utilities | 0 | 1 | 0 | 0 |
 
 Workspace tools cover delegated editing and site/webhook management.
@@ -426,8 +426,6 @@ Admin tools require their exact permission grants, not just an admin label.
 
 | Tool | Description | Audience | Required permissions |
 |------|-------------|----------|----------------------|
-| `acedatacloud_create_admin_ace_snapshots_preview` | Create admin ace snapshots preview. Backend account permissions and ownership checks apply. | admin | ace-snapshot:read |
-| `acedatacloud_create_admin_ace_snapshots_publish` | Create admin ace snapshots publish. Backend account permissions and ownership checks apply. | admin | ace-snapshot:publish |
 | `acedatacloud_create_configuration_providers` | Create configuration providers. Backend account permissions and ownership checks apply. | admin | provider-routing:write |
 | `acedatacloud_create_configuration_providers_capabilities` | Create configuration providers capabilities. Backend account permissions and ownership checks apply. | admin | provider-routing:write |
 | `acedatacloud_create_distribution_cases_compensate` | Create distribution cases compensate. Backend account permissions and ownership checks apply. | admin | distribution-risk:write |
@@ -437,10 +435,8 @@ Admin tools require their exact permission grants, not just an admin label.
 | `acedatacloud_create_distribution_risk_bypasses` | Create distribution risk bypasses. Backend account permissions and ownership checks apply. | admin | distribution-risk:write |
 | `acedatacloud_create_distribution_risk_bypasses_revoke` | Create distribution risk bypasses revoke. Backend account permissions and ownership checks apply. | admin | distribution-risk:write |
 | `acedatacloud_create_payment_risk_holds_release` | Create payment risk holds release. Backend account permissions and ownership checks apply. | admin | orders:refund:any |
-| `acedatacloud_delete_admin_ace_snapshots_snapshot_id` | Delete admin ace snapshots snapshot id. Backend account permissions and ownership checks apply. | admin | ace-snapshot:publish |
 | `acedatacloud_delete_configuration_capabilities_capability_id` | Delete configuration capabilities capability id. Backend account permissions and ownership checks apply. | admin | provider-routing:write |
 | `acedatacloud_delete_configuration_providers_pid` | Delete configuration providers pid. Backend account permissions and ownership checks apply. | admin | provider-routing:write |
-| `acedatacloud_get_admin_ace_snapshots_snapshot_id` | Get admin ace snapshots snapshot id. Backend account permissions and ownership checks apply. | admin | ace-snapshot:read |
 | `acedatacloud_get_admin_users_analytics` | Get admin users analytics. Backend account permissions and ownership checks apply. | admin | users:read:any |
 | `acedatacloud_get_configuration_capabilities_checks` | Get configuration capabilities checks. Backend account permissions and ownership checks apply. | admin | provider-routing:read |
 | `acedatacloud_get_configuration_domains` | Get configuration domains. Backend account permissions and ownership checks apply. | admin | provider-routing:read |
@@ -452,8 +448,6 @@ Admin tools require their exact permission grants, not just an admin label.
 | `acedatacloud_get_distribution_cases_id` | Get distribution cases id. Backend account permissions and ownership checks apply. | admin | distribution-risk:read |
 | `acedatacloud_get_distribution_risk_bans_id` | Get distribution risk bans id. Backend account permissions and ownership checks apply. | admin | distribution-risk:read |
 | `acedatacloud_get_distribution_risk_bypasses_id` | Get distribution risk bypasses id. Backend account permissions and ownership checks apply. | admin | distribution-risk:read |
-| `acedatacloud_list_admin_ace_snapshots` | List admin ace snapshots. Backend account permissions and ownership checks apply. | admin | ace-snapshot:read |
-| `acedatacloud_list_admin_ace_snapshots_entries` | List admin ace snapshots entries. Backend account permissions and ownership checks apply. | admin | ace-snapshot:read |
 | `acedatacloud_list_configuration_models` | List administrative model routing and health cards, including status, active provider, latency, check statistics and provider coverage. Supports q, status and provider filters. | admin | provider-routing:read |
 | `acedatacloud_list_configuration_providers` | List configuration providers. Backend account permissions and ownership checks apply. | admin | provider-routing:read |
 | `acedatacloud_list_distribution_risk_bans` | List distribution risk bans. Backend account permissions and ownership checks apply. | admin | distribution-risk:read |
@@ -568,6 +562,7 @@ A healthy MCP connection and tool list show that the client discovered the serve
 ## Example prompts
 
 - "Draft a Chinese product blog in Markdown, show it for review, then save it."
+- "Save an unpublished video blog using my uploaded HTTPS video URL, then submit it for peer review."
 - "Submit blog draft `<id>` for review, then as a different account approve or reject it with a comment."
 - "Publish the peer-approved blog draft `<id>` from a non-reviewer account."
 - "Schedule blog `<id>` for 2026-10-10T09:00:00+08:00."
@@ -602,6 +597,11 @@ mcp-acedatacloud --transport http --port 8000
 - Newly created credential/platform tokens are returned in full **only once** —
   store them immediately.
 - Credential rotation = delete + recreate (no in-place rotate endpoint).
+- Blog drafts default to `content_type="article"` and require Markdown `content`.
+  For video posts, set `content_type="video"` and an uploaded HTTPS `video_url`;
+  Markdown is optional and can be cleared with `content=""`. Public listing accepts
+  a `content_type` filter. Video/type changes revoke approval just like source edits;
+  submit the saved version for peer review before publication.
 - Blog editorial tools use `blog:read`, `blog:write`, and `blog:publish` permissions.
   Direct grants and permission groups work without making the account a superuser.
 - Blog categories are `product-updates`, `tech-sharing` (the draft default),
@@ -620,6 +620,9 @@ mcp-acedatacloud --transport http --port 8000
   Reconnect OAuth to review newly granted permissions. Existing durable platform tokens
   follow current account permissions, including revocations, on each request.
 - Announcement tools require the corresponding account permission.
+- Recharge-card allocations accept the new `ribbon`, `blossom`, `dawn` and `confetti`
+  cover themes; omit `theme_id` to use the Backend default (`ribbon`). Legacy theme
+  IDs remain accepted, and existing cards retain their covers.
 
 ## Management API coverage
 
@@ -645,9 +648,9 @@ usage guide lists only tools visible to the current credential.
 Each advertised API tool also carries `acedatacloud/category` and
 `acedatacloud/audience` metadata in its MCP `_meta` field.
 
-Legacy names, arguments and routes remain callable for existing integrations;
-hidden aliases are **not redirected** to another implementation. The complete
-API coverage ledger and schema snapshot remain unchanged. Set
+Active legacy names, arguments and routes remain callable for existing integrations;
+hidden aliases are **not redirected** to another implementation. Retired ACE snapshot
+operations are removed from both profiles and cannot be called. Set
 `ACEDATACLOUD_TOOL_PROFILE=full` explicitly for compatibility discovery or
 diagnostics. This restores discovery only: permissions, ownership checks,
 secret redaction and `confirm=true` requirements still apply.
