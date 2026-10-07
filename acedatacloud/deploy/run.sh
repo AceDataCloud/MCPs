@@ -25,4 +25,4 @@ kubectl -n acedatacloud rollout status statefulset/mcp-acedatacloud-oauth-redis 
 sed 's/\${TAG}/'"$BUILD_NUMBER"'/g' deploy/production/deployment.yaml | kubectl apply -f -
 kubectl apply -f deploy/production/service.yaml
 kubectl apply -f deploy/production/ingress.yaml
-kubectl -n acedatacloud rollout status deployment/mcp-acedatacloud --timeout=300s
+kubectl -n acedatacloud rollout status deployment/mcp-acedatacloud --timeout=600s
