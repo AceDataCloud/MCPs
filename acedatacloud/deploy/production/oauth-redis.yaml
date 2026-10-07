@@ -1,0 +1,100 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mcp-acedatacloud-oauth-redis
+  namespace: acedatacloud
+spec:
+  serviceName: mcp-acedatacloud-oauth-redis
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mcp-acedatacloud-oauth-redis
+  template:
+    metadata:
+      labels:
+        app: mcp-acedatacloud-oauth-redis
+    spec:
+      containers:
+        - name: redis
+          image: redis:7.4-alpine
+          command: ["/bin/sh", "-ec"]
+          args:
+            - >-
+              exec redis-server --appendonly yes --appendfsync everysec
+              --maxmemory-policy noeviction --dir /data
+              --requirepass "$REDIS_PASSWORD"
+          env:
+            - name: REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mcp-acedatacloud-oauth-redis
+                  key: password
+          ports:
+            - containerPort: 6379
+              name: redis
+          readinessProbe:
+            exec:
+              command:
+                - /bin/sh
+                - -ec
+                - test "$(REDISCLI_AUTH="$REDIS_PASSWORD" redis-cli ping)" = PONG
+            periodSeconds: 5
+          livenessProbe:
+            exec:
+              command:
+                - /bin/sh
+                - -ec
+                - test "$(REDISCLI_AUTH="$REDIS_PASSWORD" redis-cli ping)" = PONG
+            periodSeconds: 15
+          resources:
+            requests:
+              cpu: 25m
+              memory: 64Mi
+            limits:
+              cpu: 250m
+              memory: 256Mi
+          volumeMounts:
+            - name: data
+              mountPath: /data
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes: [ReadWriteOnce]
+        storageClassName: cbs
+        resources:
+          requests:
+            storage: 10Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mcp-acedatacloud-oauth-redis
+  namespace: acedatacloud
+spec:
+  clusterIP: None
+  selector:
+    app: mcp-acedatacloud-oauth-redis
+  ports:
+    - name: redis
+      port: 6379
+      targetPort: redis
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: mcp-acedatacloud-oauth-redis
+  namespace: acedatacloud
+spec:
+  podSelector:
+    matchLabels:
+      app: mcp-acedatacloud-oauth-redis
+  policyTypes: [Ingress]
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              app: mcp-acedatacloud
+      ports:
+        - protocol: TCP
+          port: 6379
