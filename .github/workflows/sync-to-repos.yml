@@ -120,7 +120,8 @@ jobs:
 
           # Sync files: monorepo subdir -> target repo root
           # Delete files in target that don't exist in source (except .git and configured excludes)
-          rsync -av --delete \
+          # Git checkouts can give equal-size edits the same mtime; compare contents.
+          rsync -avc --delete \
             --exclude='.git' \
             $EXCLUDES \
             "$GITHUB_WORKSPACE/${DIR}/" /tmp/target/
