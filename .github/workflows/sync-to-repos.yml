@@ -10,6 +10,10 @@ on:
         required: false
         default: 'true'
         type: boolean
+      directories:
+        description: 'Optional space-separated directories to sync instead of all'
+        required: false
+        type: string
 
 jobs:
   detect-changes:
@@ -24,6 +28,8 @@ jobs:
 
       - name: Detect changed subdirectories
         id: changes
+        env:
+          SELECTED_DIRS: ${{ inputs.directories }}
         run: |
           SYNC_ALL="${{ github.event.inputs.sync_all }}"
 
@@ -33,12 +39,23 @@ jobs:
           fi
 
           # Read sync.yaml to get mapping keys
-          DIRS=$(grep -E '^\s+[A-Za-z0-9_-]+:$' sync.yaml | sed 's/://;s/^\s*//' | grep -v '^repo$\|^exclude$\|^mappings$')
+          DIRS=$(grep -E '^[[:space:]]+[A-Za-z0-9_-]+:$' sync.yaml | sed 's/://;s/^[[:space:]]*//' | grep -v '^repo$\|^exclude$\|^mappings$')
 
           MATRIX="[]"
           HAS_CHANGES="false"
 
-          if [ "$SYNC_ALL" = "true" ]; then
+          if [ -n "$SELECTED_DIRS" ]; then
+            # Manual repair: sync only named, configured directories.
+            for dir in $SELECTED_DIRS; do
+              if ! printf '%s\n' "$DIRS" | grep -Fxq -- "$dir"; then
+                echo "Unknown sync directory: $dir" >&2
+                exit 1
+              fi
+              REPO=$(awk "/^  ${dir}:/{found=1} found && /repo:/{print \$2; exit}" sync.yaml)
+              MATRIX=$(echo "$MATRIX" | jq -c --arg d "$dir" --arg r "$REPO" '. + [{"dir": $d, "repo": $r}]')
+              HAS_CHANGES="true"
+            done
+          elif [ "$SYNC_ALL" = "true" ]; then
             # Manual trigger: sync all directories
             for dir in $DIRS; do
               REPO=$(awk "/^  ${dir}:/{found=1} found && /repo:/{print \$2; exit}" sync.yaml)
@@ -120,7 +137,8 @@ jobs:
 
           # Sync files: monorepo subdir -> target repo root
           # Delete files in target that don't exist in source (except .git and configured excludes)
-          rsync -av --delete \
+          # Git checkouts can give equal-size edits the same mtime; compare contents.
+          rsync -avc --delete \
             --exclude='.git' \
             $EXCLUDES \
             "$GITHUB_WORKSPACE/${DIR}/" /tmp/target/
