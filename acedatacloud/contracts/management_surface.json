@@ -3014,48 +3014,6 @@
     },
     {
       "method": "GET",
-      "path": "/admin/ace-snapshots/",
-      "handler": "AceSnapshotBatchAdminListView",
-      "coverage": "covered",
-      "tool": "acedatacloud_list_admin_ace_snapshots"
-    },
-    {
-      "method": "POST",
-      "path": "/admin/ace-snapshots/preview/",
-      "handler": "AceSnapshotBatchAdminPreviewView",
-      "coverage": "covered",
-      "tool": "acedatacloud_create_admin_ace_snapshots_preview"
-    },
-    {
-      "method": "POST",
-      "path": "/admin/ace-snapshots/{snapshot_id}/publish/",
-      "handler": "AceSnapshotBatchAdminPublishView",
-      "coverage": "covered",
-      "tool": "acedatacloud_create_admin_ace_snapshots_publish"
-    },
-    {
-      "method": "GET",
-      "path": "/admin/ace-snapshots/{snapshot_id}/entries/",
-      "handler": "AceSnapshotEntryAdminListView",
-      "coverage": "covered",
-      "tool": "acedatacloud_list_admin_ace_snapshots_entries"
-    },
-    {
-      "method": "GET",
-      "path": "/admin/ace-snapshots/{snapshot_id}/",
-      "handler": "AceSnapshotBatchAdminDetailView",
-      "coverage": "covered",
-      "tool": "acedatacloud_get_admin_ace_snapshots_snapshot_id"
-    },
-    {
-      "method": "DELETE",
-      "path": "/admin/ace-snapshots/{snapshot_id}/",
-      "handler": "AceSnapshotBatchAdminDetailView",
-      "coverage": "covered",
-      "tool": "acedatacloud_delete_admin_ace_snapshots_snapshot_id"
-    },
-    {
-      "method": "GET",
       "path": "/admin/upstreams/domains/",
       "handler": "UpstreamDomainsView",
       "coverage": "covered",
@@ -3187,6 +3145,13 @@
           "offset": {
             "type": "integer",
             "minimum": 0
+          },
+          "content_type": {
+            "type": "string",
+            "enum": [
+              "article",
+              "video"
+            ]
           }
         },
         "additionalProperties": false
@@ -3297,7 +3262,8 @@
             "type": "string"
           },
           "content": {
-            "type": "string"
+            "type": "string",
+            "description": "Markdown source; required for articles, optional for videos."
           },
           "source_lang": {
             "enum": [
@@ -3312,13 +3278,25 @@
           "publish_at": {
             "type": "string",
             "format": "date-time"
+          },
+          "content_type": {
+            "type": "string",
+            "enum": [
+              "article",
+              "video"
+            ]
+          },
+          "video_url": {
+            "type": "string",
+            "format": "uri",
+            "maxLength": 2048,
+            "description": "HTTPS video URL; required for video posts."
           }
         },
         "required": [
           "slug",
           "title",
-          "summary",
-          "content"
+          "summary"
         ],
         "additionalProperties": false
       },
@@ -3420,7 +3398,8 @@
             "type": "string"
           },
           "content": {
-            "type": "string"
+            "type": "string",
+            "description": "Markdown source; required for articles, optional for videos."
           },
           "source_lang": {
             "enum": [
@@ -3435,13 +3414,25 @@
           "publish_at": {
             "type": "string",
             "format": "date-time"
+          },
+          "content_type": {
+            "type": "string",
+            "enum": [
+              "article",
+              "video"
+            ]
+          },
+          "video_url": {
+            "type": "string",
+            "format": "uri",
+            "maxLength": 2048,
+            "description": "HTTPS video URL; required for video posts."
           }
         },
         "required": [
           "slug",
           "title",
-          "summary",
-          "content"
+          "summary"
         ],
         "additionalProperties": false
       },
@@ -3507,7 +3498,8 @@
             "type": "string"
           },
           "content": {
-            "type": "string"
+            "type": "string",
+            "description": "Markdown source; required for articles, optional for videos."
           },
           "source_lang": {
             "enum": [
@@ -3522,6 +3514,19 @@
           "publish_at": {
             "type": "string",
             "format": "date-time"
+          },
+          "content_type": {
+            "type": "string",
+            "enum": [
+              "article",
+              "video"
+            ]
+          },
+          "video_url": {
+            "type": "string",
+            "format": "uri",
+            "maxLength": 2048,
+            "description": "HTTPS video URL; required for video posts."
           }
         },
         "required": [],
@@ -11852,10 +11857,14 @@
               "ocean",
               "festival",
               "garden",
-              "night"
+              "night",
+              "ribbon",
+              "blossom",
+              "dawn",
+              "confetti"
             ],
             "type": "string",
-            "default": "classic"
+            "default": "ribbon"
           },
           "cover_key": {
             "type": "string",
@@ -19326,200 +19335,6 @@
         "additionalProperties": false
       },
       "description": "Delete webhook subscriptions id. Backend account permissions and ownership checks apply.",
-      "disclose": []
-    },
-    {
-      "operation_id": "surface.list_admin_ace_snapshots",
-      "name": "acedatacloud_list_admin_ace_snapshots",
-      "method": "GET",
-      "path": "/admin/ace-snapshots/",
-      "domain": "Administration",
-      "authentication": "authenticated",
-      "required_permissions": [
-        "ace-snapshot:read"
-      ],
-      "confirm": false,
-      "path_parameters": [],
-      "query_schema": {
-        "type": "object",
-        "properties": {
-          "limit": {
-            "type": "integer",
-            "minimum": 1,
-            "maximum": 100
-          },
-          "offset": {
-            "type": "integer",
-            "minimum": 0
-          }
-        },
-        "additionalProperties": false
-      },
-      "body_schema": {
-        "type": "object",
-        "properties": {}
-      },
-      "description": "List admin ace snapshots. Backend account permissions and ownership checks apply.",
-      "disclose": []
-    },
-    {
-      "operation_id": "surface.create_admin_ace_snapshots_preview",
-      "name": "acedatacloud_create_admin_ace_snapshots_preview",
-      "method": "POST",
-      "path": "/admin/ace-snapshots/preview/",
-      "domain": "Administration",
-      "authentication": "authenticated",
-      "required_permissions": [
-        "ace-snapshot:read"
-      ],
-      "confirm": true,
-      "path_parameters": [],
-      "query_schema": {
-        "type": "object",
-        "properties": {},
-        "additionalProperties": false
-      },
-      "body_schema": {
-        "type": "object",
-        "properties": {
-          "snapshot_slot": {},
-          "observed_at": {},
-          "label": {}
-        },
-        "required": [],
-        "additionalProperties": false
-      },
-      "description": "Create admin ace snapshots preview. Backend account permissions and ownership checks apply.",
-      "disclose": []
-    },
-    {
-      "operation_id": "surface.create_admin_ace_snapshots_publish",
-      "name": "acedatacloud_create_admin_ace_snapshots_publish",
-      "method": "POST",
-      "path": "/admin/ace-snapshots/{snapshot_id}/publish/",
-      "domain": "Administration",
-      "authentication": "authenticated",
-      "required_permissions": [
-        "ace-snapshot:publish"
-      ],
-      "confirm": true,
-      "path_parameters": [
-        "snapshot_id"
-      ],
-      "query_schema": {
-        "type": "object",
-        "properties": {},
-        "additionalProperties": false
-      },
-      "body_schema": {
-        "type": "object",
-        "properties": {
-          "confirm": {}
-        },
-        "required": [],
-        "additionalProperties": false
-      },
-      "description": "Create admin ace snapshots publish. Backend account permissions and ownership checks apply.",
-      "disclose": []
-    },
-    {
-      "operation_id": "surface.list_admin_ace_snapshots_entries",
-      "name": "acedatacloud_list_admin_ace_snapshots_entries",
-      "method": "GET",
-      "path": "/admin/ace-snapshots/{snapshot_id}/entries/",
-      "domain": "Administration",
-      "authentication": "authenticated",
-      "required_permissions": [
-        "ace-snapshot:read"
-      ],
-      "confirm": false,
-      "path_parameters": [
-        "snapshot_id"
-      ],
-      "query_schema": {
-        "type": "object",
-        "properties": {
-          "ordering": {},
-          "offset": {
-            "type": "integer",
-            "minimum": 0
-          },
-          "search": {},
-          "limit": {
-            "type": "integer",
-            "minimum": 1,
-            "maximum": 100
-          }
-        },
-        "additionalProperties": false
-      },
-      "body_schema": {
-        "type": "object",
-        "properties": {}
-      },
-      "description": "List admin ace snapshots entries. Backend account permissions and ownership checks apply.",
-      "disclose": []
-    },
-    {
-      "operation_id": "surface.get_admin_ace_snapshots_snapshot_id",
-      "name": "acedatacloud_get_admin_ace_snapshots_snapshot_id",
-      "method": "GET",
-      "path": "/admin/ace-snapshots/{snapshot_id}/",
-      "domain": "Administration",
-      "authentication": "authenticated",
-      "required_permissions": [
-        "ace-snapshot:read"
-      ],
-      "confirm": false,
-      "path_parameters": [
-        "snapshot_id"
-      ],
-      "query_schema": {
-        "type": "object",
-        "properties": {
-          "limit": {
-            "type": "integer",
-            "minimum": 1,
-            "maximum": 100
-          },
-          "offset": {
-            "type": "integer",
-            "minimum": 0
-          }
-        },
-        "additionalProperties": false
-      },
-      "body_schema": {
-        "type": "object",
-        "properties": {}
-      },
-      "description": "Get admin ace snapshots snapshot id. Backend account permissions and ownership checks apply.",
-      "disclose": []
-    },
-    {
-      "operation_id": "surface.delete_admin_ace_snapshots_snapshot_id",
-      "name": "acedatacloud_delete_admin_ace_snapshots_snapshot_id",
-      "method": "DELETE",
-      "path": "/admin/ace-snapshots/{snapshot_id}/",
-      "domain": "Administration",
-      "authentication": "authenticated",
-      "required_permissions": [
-        "ace-snapshot:publish"
-      ],
-      "confirm": true,
-      "path_parameters": [
-        "snapshot_id"
-      ],
-      "query_schema": {
-        "type": "object",
-        "properties": {},
-        "additionalProperties": false
-      },
-      "body_schema": {
-        "type": "object",
-        "properties": {}
-      },
-      "description": "Delete admin ace snapshots snapshot id. Backend account permissions and ownership checks apply.",
       "disclose": []
     },
     {

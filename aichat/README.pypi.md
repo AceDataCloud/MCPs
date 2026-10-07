@@ -154,6 +154,14 @@ For **401**, check which auth route the client used and whether the token or OAu
 | `aichat_list_models` | List all available AI models |
 | `aichat_get_usage_guide` | Get API usage guide |
 
+### AiChat v2 agent iterations
+
+`aichat_create_conversation_v2` accepts `max_turns` from 1 to 500. Omit it to use
+the Backend default of 500. This limits agent iterations for one request, not
+conversation-history length; `max_turns=1` prevents tool calls. Each model call
+is billed by actual usage, and execution may end earlier due to timeouts,
+authorization or other execution conditions.
+
 ## Supported Models
 
 ### OpenAI

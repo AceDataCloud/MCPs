@@ -146,7 +146,11 @@ async def aichat_create_conversation_v2(
     ] = None,
     max_turns: Annotated[
         int | None,
-        Field(ge=1, description="Maximum number of turns for conversation history."),
+        Field(
+            ge=1,
+            le=500,
+            description="Maximum agent iterations for this request (1–500); defaults to 500 when omitted.",
+        ),
     ] = None,
     async_: Annotated[
         bool | None,

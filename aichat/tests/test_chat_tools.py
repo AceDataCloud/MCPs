@@ -4,6 +4,7 @@ import json
 from unittest.mock import AsyncMock, patch
 
 import pytest
+from mcp.server.fastmcp.exceptions import ToolError
 
 from core.server import mcp
 from tools.chat_tools import aichat_create_conversation_v2
@@ -38,6 +39,39 @@ async def test_sol_fast_dispatch_preserves_public_alias(
         await mcp.call_tool(tool_name, {"question": "hello", "model": "gpt-5.6-sol-fast"})
 
     assert mock_request.await_args.kwargs["model"] == "gpt-5.6-sol-fast"
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("max_turns", [None, 1, 500])
+async def test_v2_agent_turn_limit_dispatch(max_turns: int | None) -> None:
+    tool = next(
+        tool for tool in await mcp.list_tools() if tool.name == "aichat_create_conversation_v2"
+    )
+    schema = tool.inputSchema["properties"]["max_turns"]
+    integer_schema = next(item for item in schema["anyOf"] if item["type"] == "integer")
+    assert integer_schema["minimum"] == 1
+    assert integer_schema["maximum"] == 500
+    assert "defaults to 500" in schema["description"]
+    arguments = {} if max_turns is None else {"max_turns": max_turns}
+    with patch(
+        "tools.chat_tools.client.create_conversation_v2", new=AsyncMock(return_value={"id": "test"})
+    ) as request:
+        await mcp.call_tool("aichat_create_conversation_v2", {"question": "hello", **arguments})
+    if max_turns is None:
+        assert "max_turns" not in request.await_args.kwargs
+    else:
+        assert request.await_args.kwargs["max_turns"] == max_turns
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("max_turns", [0, 501])
+async def test_v2_rejects_out_of_range_turn_limit_without_api_call(max_turns: int) -> None:
+    with (
+        patch("tools.chat_tools.client.create_conversation_v2", new=AsyncMock()) as request,
+        pytest.raises(ToolError),
+    ):
+        await mcp.call_tool("aichat_create_conversation_v2", {"max_turns": max_turns})
+    request.assert_not_awaited()
 
 
 @pytest.mark.asyncio

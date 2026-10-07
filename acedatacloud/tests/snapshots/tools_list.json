@@ -1181,89 +1181,6 @@
     }
   },
   {
-    "name": "acedatacloud_create_admin_ace_snapshots_preview",
-    "inputSchema": {
-      "properties": {
-        "snapshot_slot": {
-          "anyOf": [
-            {
-              "description": "acedatacloud_create_admin_ace_snapshots_preview_snapshot_slot"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "title": "Snapshot Slot"
-        },
-        "observed_at": {
-          "anyOf": [
-            {
-              "description": "acedatacloud_create_admin_ace_snapshots_preview_observed_at"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "title": "Observed At"
-        },
-        "label": {
-          "anyOf": [
-            {
-              "description": "acedatacloud_create_admin_ace_snapshots_preview_label"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "title": "Label"
-        },
-        "confirm": {
-          "default": false,
-          "title": "Confirm",
-          "type": "boolean"
-        }
-      },
-      "title": "acedatacloud_create_admin_ace_snapshots_previewArguments",
-      "type": "object"
-    }
-  },
-  {
-    "name": "acedatacloud_create_admin_ace_snapshots_publish",
-    "inputSchema": {
-      "properties": {
-        "snapshot_id": {
-          "title": "Snapshot Id",
-          "type": "string"
-        },
-        "body_confirm": {
-          "anyOf": [
-            {
-              "description": "acedatacloud_create_admin_ace_snapshots_publish_body_confirm"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "title": "Body Confirm"
-        },
-        "confirm": {
-          "default": false,
-          "title": "Confirm",
-          "type": "boolean"
-        }
-      },
-      "required": [
-        "snapshot_id"
-      ],
-      "title": "acedatacloud_create_admin_ace_snapshots_publishArguments",
-      "type": "object"
-    }
-  },
-  {
     "name": "acedatacloud_create_announcement",
     "inputSchema": {
       "properties": {
@@ -3150,8 +3067,8 @@
           "type": "string"
         },
         "content": {
-          "description": "Article source in Markdown.",
-          "minLength": 1,
+          "default": "",
+          "description": "Markdown source; required for articles, optional for videos.",
           "title": "Content",
           "type": "string"
         },
@@ -3210,13 +3127,29 @@
           "description": "True to save the reviewed draft.",
           "title": "Confirm",
           "type": "boolean"
+        },
+        "content_type": {
+          "default": "article",
+          "enum": [
+            "article",
+            "video"
+          ],
+          "title": "Content Type",
+          "type": "string"
+        },
+        "video_url": {
+          "default": "",
+          "description": "HTTPS video URL; empty to clear.",
+          "maxLength": 2048,
+          "pattern": "^(https://\\S+|)$",
+          "title": "Video Url",
+          "type": "string"
         }
       },
       "required": [
         "slug",
         "title",
-        "summary",
-        "content"
+        "summary"
       ],
       "title": "acedatacloud_create_blog_draftArguments",
       "type": "object"
@@ -3310,7 +3243,15 @@
           "title": "Summary"
         },
         "content": {
-          "description": "acedatacloud_create_blogs_admin_content",
+          "anyOf": [
+            {
+              "description": "Markdown source; required for articles, optional for videos."
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
           "title": "Content"
         },
         "source_lang": {
@@ -3355,6 +3296,38 @@
           "default": null,
           "title": "Publish At"
         },
+        "content_type": {
+          "anyOf": [
+            {
+              "description": "acedatacloud_create_blogs_admin_content_type",
+              "enum": [
+                "article",
+                "video"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Content Type"
+        },
+        "video_url": {
+          "anyOf": [
+            {
+              "description": "HTTPS video URL; empty to clear.",
+              "maxLength": 2048,
+              "pattern": "^(https://\\S+|)$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Video Url"
+        },
         "confirm": {
           "default": false,
           "title": "Confirm",
@@ -3364,8 +3337,7 @@
       "required": [
         "slug",
         "title",
-        "summary",
-        "content"
+        "summary"
       ],
       "title": "acedatacloud_create_blogs_adminArguments",
       "type": "object"
@@ -7595,7 +7567,11 @@
                 "ocean",
                 "festival",
                 "garden",
-                "night"
+                "night",
+                "ribbon",
+                "blossom",
+                "dawn",
+                "confetti"
               ],
               "type": "string"
             },
@@ -11067,27 +11043,6 @@
         "id"
       ],
       "title": "acedatacloud_delete_access_requests_idArguments",
-      "type": "object"
-    }
-  },
-  {
-    "name": "acedatacloud_delete_admin_ace_snapshots_snapshot_id",
-    "inputSchema": {
-      "properties": {
-        "snapshot_id": {
-          "title": "Snapshot Id",
-          "type": "string"
-        },
-        "confirm": {
-          "default": false,
-          "title": "Confirm",
-          "type": "boolean"
-        }
-      },
-      "required": [
-        "snapshot_id"
-      ],
-      "title": "acedatacloud_delete_admin_ace_snapshots_snapshot_idArguments",
       "type": "object"
     }
   },
@@ -15129,51 +15084,6 @@
         "id"
       ],
       "title": "acedatacloud_get_access_requests_idArguments",
-      "type": "object"
-    }
-  },
-  {
-    "name": "acedatacloud_get_admin_ace_snapshots_snapshot_id",
-    "inputSchema": {
-      "properties": {
-        "snapshot_id": {
-          "title": "Snapshot Id",
-          "type": "string"
-        },
-        "limit": {
-          "anyOf": [
-            {
-              "description": "acedatacloud_get_admin_ace_snapshots_snapshot_id_limit",
-              "maximum": 100,
-              "minimum": 1,
-              "type": "integer"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "title": "Limit"
-        },
-        "offset": {
-          "anyOf": [
-            {
-              "description": "acedatacloud_get_admin_ace_snapshots_snapshot_id_offset",
-              "minimum": 0,
-              "type": "integer"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "title": "Offset"
-        }
-      },
-      "required": [
-        "snapshot_id"
-      ],
-      "title": "acedatacloud_get_admin_ace_snapshots_snapshot_idArguments",
       "type": "object"
     }
   },
@@ -22824,113 +22734,6 @@
     }
   },
   {
-    "name": "acedatacloud_list_admin_ace_snapshots",
-    "inputSchema": {
-      "properties": {
-        "limit": {
-          "anyOf": [
-            {
-              "description": "acedatacloud_list_admin_ace_snapshots_limit",
-              "maximum": 100,
-              "minimum": 1,
-              "type": "integer"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "title": "Limit"
-        },
-        "offset": {
-          "anyOf": [
-            {
-              "description": "acedatacloud_list_admin_ace_snapshots_offset",
-              "minimum": 0,
-              "type": "integer"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "title": "Offset"
-        }
-      },
-      "title": "acedatacloud_list_admin_ace_snapshotsArguments",
-      "type": "object"
-    }
-  },
-  {
-    "name": "acedatacloud_list_admin_ace_snapshots_entries",
-    "inputSchema": {
-      "properties": {
-        "snapshot_id": {
-          "title": "Snapshot Id",
-          "type": "string"
-        },
-        "ordering": {
-          "anyOf": [
-            {
-              "description": "acedatacloud_list_admin_ace_snapshots_entries_ordering"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "title": "Ordering"
-        },
-        "offset": {
-          "anyOf": [
-            {
-              "description": "acedatacloud_list_admin_ace_snapshots_entries_offset",
-              "minimum": 0,
-              "type": "integer"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "title": "Offset"
-        },
-        "search": {
-          "anyOf": [
-            {
-              "description": "acedatacloud_list_admin_ace_snapshots_entries_search"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "title": "Search"
-        },
-        "limit": {
-          "anyOf": [
-            {
-              "description": "acedatacloud_list_admin_ace_snapshots_entries_limit",
-              "maximum": 100,
-              "minimum": 1,
-              "type": "integer"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "title": "Limit"
-        }
-      },
-      "required": [
-        "snapshot_id"
-      ],
-      "title": "acedatacloud_list_admin_ace_snapshots_entriesArguments",
-      "type": "object"
-    }
-  },
-  {
     "name": "acedatacloud_list_admin_invoices",
     "inputSchema": {
       "properties": {
@@ -23843,6 +23646,22 @@
           "minimum": 0,
           "title": "Offset",
           "type": "integer"
+        },
+        "content_type": {
+          "anyOf": [
+            {
+              "enum": [
+                "article",
+                "video"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Content Type"
         }
       },
       "title": "acedatacloud_list_blog_postsArguments",
@@ -23907,6 +23726,23 @@
           ],
           "default": null,
           "title": "Offset"
+        },
+        "content_type": {
+          "anyOf": [
+            {
+              "description": "acedatacloud_list_blogs_content_type",
+              "enum": [
+                "article",
+                "video"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Content Type"
         }
       },
       "title": "acedatacloud_list_blogsArguments",
@@ -29653,7 +29489,15 @@
           "title": "Summary"
         },
         "content": {
-          "description": "acedatacloud_replace_blogs_admin_id_content",
+          "anyOf": [
+            {
+              "description": "Markdown source; required for articles, optional for videos."
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
           "title": "Content"
         },
         "source_lang": {
@@ -29698,6 +29542,38 @@
           "default": null,
           "title": "Publish At"
         },
+        "content_type": {
+          "anyOf": [
+            {
+              "description": "acedatacloud_replace_blogs_admin_id_content_type",
+              "enum": [
+                "article",
+                "video"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Content Type"
+        },
+        "video_url": {
+          "anyOf": [
+            {
+              "description": "HTTPS video URL; empty to clear.",
+              "maxLength": 2048,
+              "pattern": "^(https://\\S+|)$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Video Url"
+        },
         "confirm": {
           "default": false,
           "title": "Confirm",
@@ -29708,8 +29584,7 @@
         "id",
         "slug",
         "title",
-        "summary",
-        "content"
+        "summary"
       ],
       "title": "acedatacloud_replace_blogs_admin_idArguments",
       "type": "object"
@@ -34211,7 +34086,6 @@
         "content": {
           "anyOf": [
             {
-              "minLength": 1,
               "type": "string"
             },
             {
@@ -34219,7 +34093,7 @@
             }
           ],
           "default": null,
-          "description": "Markdown source.",
+          "description": "Markdown source; may be empty for videos.",
           "title": "Content"
         },
         "source_lang": {
@@ -34310,6 +34184,37 @@
           "description": "True to apply the reviewed changes.",
           "title": "Confirm",
           "type": "boolean"
+        },
+        "content_type": {
+          "anyOf": [
+            {
+              "enum": [
+                "article",
+                "video"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Content Type"
+        },
+        "video_url": {
+          "anyOf": [
+            {
+              "description": "HTTPS video URL; empty to clear.",
+              "maxLength": 2048,
+              "pattern": "^(https://\\S+|)$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Video Url"
         }
       },
       "required": [
@@ -34437,7 +34342,7 @@
         "content": {
           "anyOf": [
             {
-              "description": "acedatacloud_update_blogs_admin_id_content"
+              "description": "Markdown source; required for articles, optional for videos."
             },
             {
               "type": "null"
@@ -34487,6 +34392,38 @@
           ],
           "default": null,
           "title": "Publish At"
+        },
+        "content_type": {
+          "anyOf": [
+            {
+              "description": "acedatacloud_update_blogs_admin_id_content_type",
+              "enum": [
+                "article",
+                "video"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Content Type"
+        },
+        "video_url": {
+          "anyOf": [
+            {
+              "description": "HTTPS video URL; empty to clear.",
+              "maxLength": 2048,
+              "pattern": "^(https://\\S+|)$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Video Url"
         },
         "confirm": {
           "default": false,

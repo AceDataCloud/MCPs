@@ -12,7 +12,7 @@ from core.client import client, get_request_subject
 from core.exceptions import PlatformError
 from core.server import mcp
 from core.utils import confirmation_required, dumps, error_json
-from tools.blog_tools import Category
+from tools.blog_tools import Category, VideoURL
 
 
 def _type(schema: dict[str, Any], name: str) -> Any:
@@ -84,12 +84,16 @@ def build_tool(spec: dict[str, Any]) -> Any:
             )
             names.add(argument)
             mapping[key] = argument
-            kind = (
-                Category
-                if key == "category"
-                and spec["path"] in {"/blogs/", "/blogs/admin/", "/blogs/admin/{id}/"}
-                else _type(value, spec["name"] + "_" + argument)
-            )
+            if key == "category" and spec["path"] in {
+                "/blogs/",
+                "/blogs/admin/",
+                "/blogs/admin/{id}/",
+            }:
+                kind = Category
+            elif key == "video_url" and spec["path"] in {"/blogs/admin/", "/blogs/admin/{id}/"}:
+                kind = VideoURL
+            else:
+                kind = _type(value, spec["name"] + "_" + argument)
             parameters.append(
                 inspect.Parameter(
                     argument,

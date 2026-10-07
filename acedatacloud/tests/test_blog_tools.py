@@ -154,10 +154,149 @@ async def test_create_draft_and_preserve_markdown():
     )
     body = json.loads(route.calls.last.request.content)
     assert body["content"] == markdown
+    assert body["content_type"] == "article"
+    assert body["video_url"] == ""
     assert body["published"] is False
     assert body["source_lang"] == "zh-cn"
     assert body["tags"] == ["MCP"]
     assert body["category"] == "product-updates"
+
+
+@respx.mock
+@pytest.mark.parametrize("name", ["acedatacloud_list_blog_posts", "acedatacloud_list_blogs"])
+async def test_public_video_filter_preserves_unauthenticated_read(name):
+    set_request_api_token("platform-private")
+    route = respx.get(f"{API}/blogs/").mock(return_value=httpx.Response(200, json={}))
+    await mcp.call_tool(name, {"content_type": "video"})
+    assert route.calls.last.request.url.params["content_type"] == "video"
+    assert "authorization" not in route.calls.last.request.headers
+
+
+@respx.mock
+@pytest.mark.parametrize(
+    ("name", "method", "endpoint", "arguments"),
+    [
+        (
+            "acedatacloud_create_blog_draft",
+            "POST",
+            f"{API}/blogs/admin/",
+            {"slug": "video", "title": "Video", "summary": "Summary"},
+        ),
+        (
+            "acedatacloud_create_blogs_admin",
+            "POST",
+            f"{API}/blogs/admin/",
+            {"slug": "video", "title": "Video", "summary": "Summary"},
+        ),
+        (
+            "acedatacloud_replace_blogs_admin_id",
+            "PUT",
+            DETAIL,
+            {"id": str(BLOG_ID), "slug": "video", "title": "Video", "summary": "Summary"},
+        ),
+        (
+            "acedatacloud_update_blog_post",
+            "PATCH",
+            DETAIL,
+            {"blog_id": str(BLOG_ID), "content": ""},
+        ),
+        (
+            "acedatacloud_update_blogs_admin_id",
+            "PATCH",
+            DETAIL,
+            {"id": str(BLOG_ID), "content": ""},
+        ),
+    ],
+)
+async def test_video_blog_dispatch_and_confirmation(name, method, endpoint, arguments):
+    video = {"content_type": "video", "video_url": "https://example.com/uploaded.mp4"}
+    preview, _ = await mcp.call_tool(name, {**arguments, **video})
+    assert json.loads(preview[0].text)["status"] == "confirmation_required"
+    assert not respx.calls
+    route = respx.request(method, endpoint).mock(return_value=httpx.Response(200, json={}))
+    await mcp.call_tool(name, {**arguments, **video, "confirm": True})
+    payload = json.loads(route.calls.last.request.content)
+    assert payload["content_type"] == "video"
+    assert payload["video_url"] == video["video_url"]
+    assert payload.get("content", "") == ""
+    if name == "acedatacloud_create_blog_draft":
+        assert payload["published"] is False
+    assert "authorization" in route.calls.last.request.headers
+
+
+@respx.mock
+@pytest.mark.parametrize(
+    "name", ["acedatacloud_update_blog_post", "acedatacloud_update_blogs_admin_id"]
+)
+async def test_article_conversion_can_clear_video_url(name):
+    key = "blog_id" if name == "acedatacloud_update_blog_post" else "id"
+    route = respx.patch(DETAIL).mock(return_value=httpx.Response(200, json={}))
+    await mcp.call_tool(
+        name,
+        {
+            key: str(BLOG_ID),
+            "content_type": "article",
+            "video_url": "",
+            "content": "# Article",
+            "confirm": True,
+        },
+    )
+    assert json.loads(route.calls.last.request.content) == {
+        "content_type": "article",
+        "video_url": "",
+        "content": "# Article",
+    }
+
+
+@respx.mock
+@pytest.mark.parametrize(
+    "name", ["acedatacloud_create_blog_draft", "acedatacloud_create_blogs_admin"]
+)
+@pytest.mark.parametrize(
+    "invalid",
+    [
+        {"content_type": "audio"},
+        {"video_url": "http://example.com/video.mp4"},
+        {"video_url": "x" * 2049},
+    ],
+)
+async def test_invalid_video_inputs_make_no_http_calls(name, invalid):
+    with pytest.raises(ToolError):
+        await mcp.call_tool(
+            name,
+            {
+                "slug": "video",
+                "title": "Video",
+                "summary": "Summary",
+                "content_type": "video",
+                **invalid,
+                "confirm": True,
+            },
+        )
+    assert not respx.calls
+
+
+@respx.mock
+async def test_video_blog_backend_validation_and_review_conflicts_are_preserved():
+    route = respx.patch(DETAIL).mock(
+        return_value=httpx.Response(400, json={"video_url": "Upload a video with an HTTPS URL"})
+    )
+    result = json.loads(
+        await acedatacloud_update_blog_post(BLOG_ID, content_type="video", confirm=True)
+    )
+    assert result["error"] == "http_400"
+    assert "video_url" in result["message"]
+    route.mock(
+        return_value=httpx.Response(
+            400, json={"detail": "Withdraw the review request before editing this article"}
+        )
+    )
+    result = json.loads(
+        await acedatacloud_update_blog_post(
+            BLOG_ID, video_url="https://example.com/uploaded.mp4", confirm=True
+        )
+    )
+    assert "Withdraw" in result["message"]
 
 
 CATEGORIES = [

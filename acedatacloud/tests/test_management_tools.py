@@ -97,10 +97,88 @@ async def test_canonical_model_list_uses_health_contract_and_versioned_alias_is_
 
 
 @respx.mock
+async def test_retired_ace_snapshot_tools_are_not_registered_or_callable():
+    retired = {
+        "acedatacloud_list_admin_ace_snapshots",
+        "acedatacloud_create_admin_ace_snapshots_preview",
+        "acedatacloud_create_admin_ace_snapshots_publish",
+        "acedatacloud_list_admin_ace_snapshots_entries",
+        "acedatacloud_get_admin_ace_snapshots_snapshot_id",
+        "acedatacloud_delete_admin_ace_snapshots_snapshot_id",
+    }
+    assert not retired & REGISTERED_TOOLS.keys()
+    assert not retired & {tool.name for tool in await mcp.list_tools()}
+    assert not any(
+        route["path"].startswith("/admin/ace-snapshots/") for route in BACKEND_OPERATIONS
+    )
+    for name in retired:
+        with pytest.raises(ToolError, match="Unknown tool"):
+            await mcp.call_tool(name, {"snapshot_id": "test", "confirm": True})
+    assert not respx.calls
+
+
+@respx.mock
 async def test_actual_mcp_schema_validates_required_allocation_fields():
     with pytest.raises(ToolError):
         await mcp.call_tool(
             "acedatacloud_create_recharge_cards_allocations", {"quantity": 1, "confirm": True}
+        )
+    assert not respx.calls
+
+
+@respx.mock
+@pytest.mark.parametrize(
+    "theme",
+    [
+        None,
+        "ribbon",
+        "blossom",
+        "dawn",
+        "confetti",
+        "classic",
+        "aurora",
+        "ocean",
+        "festival",
+        "garden",
+        "night",
+    ],
+)
+async def test_recharge_card_cover_themes_preserve_confirmation_and_backend_default(theme):
+    arguments = {
+        "application_id": "eaa18d3a-6ed9-40dd-8e73-5d6c67e00cc0",
+        "amount_per_card": "1.000",
+        "quantity": 1,
+        "expires_at": "2026-10-10T09:00:00+08:00",
+        "idempotency_key": "cover-theme-test",
+    }
+    if theme is not None:
+        arguments["theme_id"] = theme
+    preview, _ = await mcp.call_tool("acedatacloud_create_recharge_cards_allocations", arguments)
+    assert json.loads(preview[0].text)["status"] == "confirmation_required"
+    assert not respx.calls
+    route = respx.post(f"{API}/recharge-cards/allocations/").mock(
+        return_value=httpx.Response(201, json={})
+    )
+    await mcp.call_tool(
+        "acedatacloud_create_recharge_cards_allocations", {**arguments, "confirm": True}
+    )
+    assert json.loads(route.calls.last.request.content) == arguments
+
+
+@respx.mock
+async def test_unknown_recharge_card_theme_is_rejected_before_http():
+    with pytest.raises(ToolError):
+        await mcp.call_tool(
+            "acedatacloud_create_recharge_cards_allocations",
+            {
+                "application_id": "test",
+                "amount_per_card": "1",
+                "quantity": 1,
+                "expires_at": "2026-10-10T09:00:00+08:00",
+                "idempotency_key": "cover-theme-test",
+                "theme_id": "unknown",
+                "confirm": True,
+            },
         )
     assert not respx.calls
 
