@@ -9,6 +9,11 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE = Path("shared/oauth.py")
 HEADER = "# Generated from shared/oauth.py by scripts/sync_oauth.py; do not edit.\n\n"
+STATE_SOURCE = Path("shared/oauth_state.py")
+STATE_HEADER = (
+    "# Generated from shared/oauth_state.py by scripts/sync_oauth.py; do not edit.\n\n"
+)
+DEPLOY_SOURCE = Path("shared/deploy_oauth_state.sh")
 
 SHARED_SERVERS = (
     "aichat",
@@ -48,6 +53,13 @@ LOCAL_SERVERS = {
     "happyhorse": "redirect validation and revoked-token tracking",
     "midjourney": "distinct callback/token-exchange implementation",
 }
+STATE_SERVERS = (*SHARED_SERVERS, "digitalhuman", "happyhorse", "midjourney")
+DEPLOY_SERVERS = tuple(
+    server
+    for server in STATE_SERVERS
+    if server
+    not in {"digitalhuman", "hcaptcha", "image2text", "recaptcha", "sora", "turnstile"}
+)
 
 
 def sync(root: Path = ROOT, *, check: bool = False) -> list[Path]:
@@ -62,6 +74,8 @@ def sync(root: Path = ROOT, *, check: bool = False) -> list[Path]:
         )
 
     rendered = HEADER.encode() + (root / SOURCE).read_bytes()
+    rendered_state = STATE_HEADER.encode() + (root / STATE_SOURCE).read_bytes()
+    rendered_deploy = (root / DEPLOY_SOURCE).read_bytes()
     stale = []
     for server in SHARED_SERVERS:
         relative = Path(server) / "core/oauth.py"
@@ -70,6 +84,21 @@ def sync(root: Path = ROOT, *, check: bool = False) -> list[Path]:
             stale.append(relative)
             if not check:
                 target.write_bytes(rendered)
+    for server in STATE_SERVERS:
+        relative = Path(server) / "core/oauth_state.py"
+        target = root / relative
+        if not target.exists() or target.read_bytes() != rendered_state:
+            stale.append(relative)
+            if not check:
+                target.write_bytes(rendered_state)
+    for server in DEPLOY_SERVERS:
+        relative = Path(server) / "deploy/oauth-state.sh"
+        target = root / relative
+        if not target.exists() or target.read_bytes() != rendered_deploy:
+            stale.append(relative)
+            if not check:
+                target.parent.mkdir(parents=True, exist_ok=True)
+                target.write_bytes(rendered_deploy)
     return stale
 
 
@@ -89,7 +118,7 @@ def main() -> int:
             print(f"  {path}")
         return 1
     print(
-        f"Shared OAuth: {len(SHARED_SERVERS)} packages checked; {len(stale)} copies updated"
+        f"Shared OAuth: {len(SHARED_SERVERS)} providers, {len(STATE_SERVERS)} stores, and {len(DEPLOY_SERVERS)} deploy helpers checked; {len(stale)} copies updated"
     )
     return 0
 

@@ -5,7 +5,6 @@ import hashlib
 import json
 import secrets
 import time
-from typing import Any
 from urllib.parse import urlencode
 
 import httpx
@@ -18,11 +17,13 @@ from mcp.server.auth.provider import (
     OAuthToken,
     RefreshToken,
 )
+from redis.asyncio import Redis
 from starlette.requests import Request
 from starlette.responses import JSONResponse, RedirectResponse
 
 from core.client import set_request_api_token
 from core.config import settings
+from core.oauth_state import STATE_TTL_SECONDS, OAuthStateStore
 
 MCP_ACCESS_SCOPE = "mcp:access"
 
@@ -34,21 +35,21 @@ def _normalize_scopes(scopes: list[str] | None) -> list[str]:
 class AceDataCloudOAuthProvider:
     """Delegate login to AceDataCloud and issue a durable API credential."""
 
-    def __init__(self) -> None:
-        self._clients: dict[str, OAuthClientInformationFull] = {}
-        self._auth_codes: dict[str, tuple[AuthorizationCode, str]] = {}
+    def __init__(self, redis_client: Redis | None = None, state_key: str = "") -> None:
+        self._state = OAuthStateStore(
+            settings.server_name, redis_client=redis_client, state_key=state_key
+        )
+        self._clients = self._state.clients
+        self._auth_codes = self._state.codes
         self._access_tokens: dict[str, AccessToken] = {}
-        self._revoked_tokens: set[str] = set()
-        self._pending_auth: dict[str, dict[str, Any]] = {}
+        self._revoked_tokens = self._state.revoked
+        self._pending_auth = self._state.pending
 
     async def get_client(self, client_id: str) -> OAuthClientInformationFull | None:
-        return self._clients.get(client_id)
+        return await self._state.get_client(client_id)
 
     async def register_client(self, client_info: OAuthClientInformationFull) -> None:
-        client_id = client_info.client_id
-        if not client_id:
-            raise ValueError("OAuth client_id is required")
-        self._clients[client_id] = client_info
+        await self._state.register_client(client_info)
 
     async def authorize(
         self, client: OAuthClientInformationFull, params: AuthorizationParams
@@ -61,16 +62,17 @@ class AceDataCloudOAuthProvider:
         code_verifier = secrets.token_urlsafe(48)
         digest = hashlib.sha256(code_verifier.encode("ascii")).digest()
         challenge = base64.urlsafe_b64encode(digest).rstrip(b"=").decode("ascii")
-        self._pending_auth[mcp_state] = {
+        pending = {
             "client_id": client.client_id,
             "redirect_uri": redirect_uri,
             "state": params.state,
             "code_challenge": params.code_challenge,
             "redirect_uri_provided_explicitly": params.redirect_uri_provided_explicitly,
             "scopes": _normalize_scopes(params.scopes),
-            "resource": params.resource,
+            "resource": str(params.resource) if params.resource else None,
             "auth_code_verifier": code_verifier,
         }
+        await self._state.put_pending(mcp_state, pending)
         auth_params = {
             "client_id": settings.oauth_client_id,
             "redirect_uri": f"{settings.server_url}/oauth/callback",
@@ -91,7 +93,7 @@ class AceDataCloudOAuthProvider:
         upstream_code = request.query_params.get("code")
         if not mcp_state or not upstream_code:
             return JSONResponse({"error": "Missing state or code parameter"}, status_code=400)
-        pending = self._pending_auth.pop(mcp_state, None)
+        pending = await self._state.take_pending(mcp_state)
         if not pending:
             return JSONResponse({"error": "Invalid or expired state"}, status_code=400)
         try:
@@ -117,21 +119,22 @@ class AceDataCloudOAuthProvider:
             auth_code = AuthorizationCode(
                 code=code_value,
                 scopes=_normalize_scopes(pending.get("scopes")),
-                expires_at=time.time() + 600,
+                expires_at=time.time() + STATE_TTL_SECONDS,
                 client_id=str(pending["client_id"]),
                 code_challenge=pending["code_challenge"],
                 redirect_uri=pending["redirect_uri"],
                 redirect_uri_provided_explicitly=pending["redirect_uri_provided_explicitly"],
                 resource=pending.get("resource"),
             )
-            self._auth_codes[code_value] = (auth_code, api_token)
+            await self._state.put_code(auth_code, api_token)
             redirect_params = {"code": code_value}
             if pending.get("state"):
                 redirect_params["state"] = pending["state"]
             redirect_uri = str(pending["redirect_uri"])
             separator = "&" if "?" in redirect_uri else "?"
             return RedirectResponse(
-                f"{redirect_uri}{separator}{urlencode(redirect_params)}", status_code=302
+                f"{redirect_uri}{separator}{urlencode(redirect_params)}",
+                status_code=302,
             )
         except Exception:
             logger.exception("OAuth callback failed")
@@ -142,23 +145,23 @@ class AceDataCloudOAuthProvider:
         client: OAuthClientInformationFull,  # noqa: ARG002
         authorization_code: str,
     ) -> AuthorizationCode | None:
-        data = self._auth_codes.get(authorization_code)
+        data = await self._state.get_code(authorization_code)
         if not data:
             return None
         if data[0].expires_at < time.time():
-            self._auth_codes.pop(authorization_code, None)
+            await self._state.delete_code(authorization_code)
             return None
         return data[0]
 
     async def exchange_authorization_code(
         self, client: OAuthClientInformationFull, authorization_code: AuthorizationCode
     ) -> OAuthToken:
-        data = self._auth_codes.pop(authorization_code.code, None)
+        data = await self._state.take_code(authorization_code.code)
         if not data:
             raise ValueError("Authorization code not found or already used")
         api_token = data[1]
         client_id = client.client_id or ""
-        self._revoked_tokens.discard(api_token)
+        await self._state.clear_revoked(api_token)
         self._access_tokens[api_token] = AccessToken(
             token=api_token,
             client_id=client_id,
@@ -192,7 +195,7 @@ class AceDataCloudOAuthProvider:
         )
 
     async def load_access_token(self, token: str) -> AccessToken | None:
-        if token in self._revoked_tokens:
+        if await self._state.is_revoked(token):
             return None
         access_token = self._access_tokens.get(token)
         if access_token:
@@ -204,7 +207,7 @@ class AceDataCloudOAuthProvider:
     async def revoke_token(self, token: AccessToken | RefreshToken) -> None:
         if isinstance(token, AccessToken):
             self._access_tokens.pop(token.token, None)
-            self._revoked_tokens.add(token.token)
+            await self._state.revoke(token.token)
 
     async def _exchange_code(self, code: str, code_verifier: str) -> str | None:
         try:

@@ -27,6 +27,18 @@ spec:
               value: "https://maestro.mcp.acedata.cloud"
             - name: ACEDATACLOUD_OAUTH_CLIENT_ID
               value: "pP8NMWtKF1-Q4V-1osHUk_PgYYVh5RB_il2FvgahW38"
+            - name: MCP_OAUTH_REDIS_URL
+              value: "redis://mcp-acedatacloud-oauth-redis:6379/0"
+            - name: MCP_OAUTH_REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mcp-acedatacloud-oauth-redis
+                  key: password
+            - name: MCP_OAUTH_STATE_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: mcp-maestro-oauth-state
+                  key: state_key
           resources:
             limits:
               cpu: 500m

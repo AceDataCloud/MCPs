@@ -33,6 +33,18 @@ spec:
               value: "https://minimax.mcp.acedata.cloud"
             - name: ACEDATACLOUD_OAUTH_CLIENT_ID
               value: "3CVmki1iGl5EGOzX97CQdeTJ-pxib1tu40d9A00Bj1k"
+            - name: MCP_OAUTH_REDIS_URL
+              value: "redis://mcp-acedatacloud-oauth-redis:6379/0"
+            - name: MCP_OAUTH_REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mcp-acedatacloud-oauth-redis
+                  key: password
+            - name: MCP_OAUTH_STATE_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: mcp-minimax-oauth-state
+                  key: state_key
           resources:
             limits:
               cpu: 500m
