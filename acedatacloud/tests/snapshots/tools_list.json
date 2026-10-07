@@ -22914,6 +22914,78 @@
     }
   },
   {
+    "name": "acedatacloud_list_admin_invoices",
+    "inputSchema": {
+      "properties": {
+        "status": {
+          "anyOf": [
+            {
+              "enum": [
+                "Pending",
+                "Processing",
+                "Issued",
+                "Failed",
+                "Rejected",
+                "Voided",
+                "Cancelled"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Optional invoice status.",
+          "title": "Status"
+        },
+        "user_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Optional customer user UUID.",
+          "title": "User Id"
+        },
+        "order_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Optional linked order UUID.",
+          "title": "Order Id"
+        },
+        "limit": {
+          "default": 50,
+          "description": "Max invoices to return.",
+          "maximum": 100,
+          "minimum": 1,
+          "title": "Limit",
+          "type": "integer"
+        },
+        "offset": {
+          "default": 0,
+          "description": "Pagination offset.",
+          "minimum": 0,
+          "title": "Offset",
+          "type": "integer"
+        }
+      },
+      "title": "acedatacloud_list_admin_invoicesArguments",
+      "type": "object"
+    }
+  },
+  {
     "name": "acedatacloud_list_announcements",
     "inputSchema": {
       "properties": {

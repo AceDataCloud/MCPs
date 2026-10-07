@@ -25,14 +25,14 @@ Claude, VS Code, Studio, or any MCP-compatible client.
 
 The default curated catalog advertises **352 tools** before
 account-permission filtering, including `acedatacloud_get_usage_guide`.
-The complete compatibility registry retains **523 tools**.
+The complete compatibility registry retains **524 tools**.
 Discovery is grouped by business task, not by one tool per REST endpoint.
 
 | Not advertised by default | Count |
 |---------------------------|-------|
 | alternate full-replacement update | 20 |
 | client rendering, telemetry or protocol helper | 19 |
-| duplicate native route | 128 |
+| duplicate native route | 129 |
 | prefer the task-oriented catalog reader | 4 |
 
 ### Categories
@@ -170,10 +170,10 @@ Admin tools require their exact permission grants, not just an admin label.
 | `acedatacloud_get_recharge_cards_allocations_token` | Get recharge cards allocations token. Backend account permissions and ownership checks apply. | public | applications:read |
 | `acedatacloud_get_recharge_cards_allocations_wallet` | Get recharge cards allocations wallet. Backend account permissions and ownership checks apply. | account | applications:read |
 | `acedatacloud_get_usage` | Get API usage detail. | account | usage:read |
+| `acedatacloud_list_admin_invoices` | List invoices across accounts. | admin | invoices:read:any |
 | `acedatacloud_list_auto_recharges` | List auto-recharge configs. | account | auto-recharge:read |
 | `acedatacloud_list_billing_profiles` | List billing profiles. | account | authenticated |
 | `acedatacloud_list_invoices` | List invoices. | account | authenticated |
-| `acedatacloud_list_invoices_admin` | List invoices admin. Backend account permissions and ownership checks apply. | admin | invoices:read:any |
 | `acedatacloud_list_order_discounts` | List order discounts. Backend account permissions and ownership checks apply. | admin | order-discounts:read:any |
 | `acedatacloud_list_orders` | List recharge orders. | account | orders:read |
 | `acedatacloud_list_orders_detail` | List orders. Backend account permissions and ownership checks apply. | admin | orders:read, orders:read:any |

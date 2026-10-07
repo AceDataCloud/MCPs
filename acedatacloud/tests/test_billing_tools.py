@@ -9,6 +9,7 @@ from mcp.server.fastmcp.exceptions import ToolError
 
 from core.client import set_request_api_token
 from core.server import mcp
+from tools.admin_tools import acedatacloud_list_admin_invoices
 from tools.user.auto_recharge import (
     acedatacloud_confirm_auto_recharge_setup,
     acedatacloud_create_auto_recharge,
@@ -158,6 +159,34 @@ async def test_invoice_status_filter_rejects_unknown_status_before_http():
     with pytest.raises(ToolError):
         await mcp.call_tool("acedatacloud_list_invoices", {"status": "Unknown"})
     assert not respx.calls
+
+
+@respx.mock
+@pytest.mark.asyncio
+async def test_admin_invoice_status_filter():
+    listing = respx.get(f"{API}/invoices/admin/").mock(
+        return_value=httpx.Response(
+            200, json={"count": 1, "items": [{"id": ID, "status": "Failed"}]}
+        )
+    )
+    result = json.loads(
+        await acedatacloud_list_admin_invoices(status="Failed", limit=20, offset=40)
+    )
+    assert result["items"][0]["id"] == ID
+    assert listing.calls[0].request.url.params["status"] == "Failed"
+    assert listing.calls[0].request.url.params["limit"] == "20"
+    assert listing.calls[0].request.url.params["offset"] == "40"
+    assert "user_id" not in listing.calls[0].request.url.params
+
+
+@respx.mock
+@pytest.mark.asyncio
+async def test_admin_invoice_read_preserves_permission_denied():
+    respx.get(f"{API}/invoices/admin/").mock(
+        return_value=httpx.Response(403, json={"detail": "Missing required permission"})
+    )
+    result = json.loads(await acedatacloud_list_admin_invoices())
+    assert result["error"] == "permission_denied"
 
 
 @respx.mock

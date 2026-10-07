@@ -166,6 +166,17 @@ async def test_cross_account_alias_requires_its_exact_permission_and_tracks_revo
     }
 
 
+async def test_admin_invoice_list_requires_read_permission(monkeypatch):
+    subject = {"id": "account", "permissions": []}
+    monkeypatch.setattr("core.visibility.get_request_subject", AsyncMock(return_value=subject))
+    name = "acedatacloud_list_admin_invoices"
+    assert name not in {tool.name for tool in await list_visible_tools()}
+    subject["permissions"].append("invoices:read:any")
+    assert name in {tool.name for tool in await list_visible_tools()}
+    subject["permissions"].clear()
+    assert name not in {tool.name for tool in await list_visible_tools()}
+
+
 async def test_concurrent_request_permissions_do_not_leak_between_accounts(monkeypatch):
     subjects = {
         "personal": {"id": "personal", "permissions": ["blog:read", "blog:write"]},
