@@ -165,9 +165,13 @@ async def test_invoice_status_filter_rejects_unknown_status_before_http():
 @pytest.mark.asyncio
 async def test_admin_invoice_status_filter():
     listing = respx.get(f"{API}/invoices/admin/").mock(
-        return_value=httpx.Response(200, json={"count": 1, "items": [{"id": ID, "status": "Failed"}]})
+        return_value=httpx.Response(
+            200, json={"count": 1, "items": [{"id": ID, "status": "Failed"}]}
+        )
     )
-    result = json.loads(await acedatacloud_list_admin_invoices(status="Failed", limit=20, offset=40))
+    result = json.loads(
+        await acedatacloud_list_admin_invoices(status="Failed", limit=20, offset=40)
+    )
     assert result["items"][0]["id"] == ID
     assert listing.calls[0].request.url.params["status"] == "Failed"
     assert listing.calls[0].request.url.params["limit"] == "20"
