@@ -10,6 +10,7 @@ from core.client import PlatformClient
 from tools.catalog_tools import (
     acedatacloud_get_api_spec,
     acedatacloud_get_pricing,
+    acedatacloud_get_public_usage_packages,
     acedatacloud_get_service,
     acedatacloud_list_apis,
 )
@@ -121,6 +122,53 @@ async def test_get_pricing_returns_cost():
     out = json.loads(await acedatacloud_get_pricing(service=UUID))
     assert out["unit"] == "Credit"
     assert out["cost"] == [{"x": 1}]
+
+
+@respx.mock
+@pytest.mark.asyncio
+async def test_get_public_usage_packages_returns_positive_raw_ladder():
+    respx.get(f"{API}/services/").mock(
+        return_value=httpx.Response(
+            200, json={"count": 1, "items": [{"id": UUID, "alias": "suno"}]}
+        )
+    )
+    respx.get(f"{API}/services/{UUID}/").mock(
+        return_value=httpx.Response(
+            200,
+            json={
+                "packages": [
+                    {"type": "Usage", "private": False, "amount": 10000, "price": 9.99},
+                    {"type": "Usage", "private": False, "amount": 20000, "price": 15.0},
+                    {"type": "Usage", "private": True, "amount": 50000, "price": 1.0},
+                    {"type": "Period", "private": False, "amount": 30000, "price": 10.0},
+                ]
+            },
+        )
+    )
+    out = json.loads(await acedatacloud_get_public_usage_packages(service="suno"))
+    assert out == {
+        "source": "public_service_detail",
+        "service_id": UUID,
+        "packages": [
+            {"amount": "10000", "price": "9.99"},
+            {"amount": "20000", "price": "15.0"},
+        ],
+    }
+
+
+@respx.mock
+@pytest.mark.asyncio
+async def test_get_public_usage_packages_fails_closed_on_missing_ladder():
+    respx.get(f"{API}/services/").mock(
+        return_value=httpx.Response(
+            200, json={"count": 1, "items": [{"id": UUID, "alias": "suno"}]}
+        )
+    )
+    respx.get(f"{API}/services/{UUID}/").mock(
+        return_value=httpx.Response(200, json={"packages": []})
+    )
+    out = json.loads(await acedatacloud_get_public_usage_packages(service="suno"))
+    assert out["error"] == "Unavailable"
 
 
 @respx.mock

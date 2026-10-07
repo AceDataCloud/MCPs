@@ -23,9 +23,9 @@ Claude, VS Code, Studio, or any MCP-compatible client.
 <!-- BEGIN GENERATED TOOL REFERENCE -->
 ## Tool Reference
 
-The default curated catalog advertises **352 tools** before
+The default curated catalog advertises **353 tools** before
 account-permission filtering, including `acedatacloud_get_usage_guide`.
-The complete compatibility registry retains **524 tools**.
+The complete compatibility registry retains **525 tools**.
 Discovery is grouped by business task, not by one tool per REST endpoint.
 
 | Not advertised by default | Count |
@@ -40,7 +40,7 @@ Discovery is grouped by business task, not by one tool per REST endpoint.
 | Category | Public | Account | Workspace | Admin |
 |----------|--------|---------|-----------|-------|
 | Account & API keys | 0 | 11 | 0 | 1 |
-| Catalog & documentation | 19 | 2 | 0 | 0 |
+| Catalog & documentation | 20 | 2 | 0 | 0 |
 | Applications & deployments | 0 | 13 | 0 | 4 |
 | Usage & billing | 1 | 41 | 0 | 28 |
 | Sites & branding | 1 | 0 | 38 | 0 |
@@ -86,6 +86,7 @@ Admin tools require their exact permission grants, not just an admin label.
 | `acedatacloud_get_integrations_id` | Get integrations id. Backend account permissions and ownership checks apply. | public | public |
 | `acedatacloud_get_model` | Find models by ID or name. | public | public |
 | `acedatacloud_get_pricing` | Get one service's display pricing. | public | public |
+| `acedatacloud_get_public_usage_packages` | Get a service's public Usage package amount and price for Credit-to-USD conversion. | public | public |
 | `acedatacloud_get_service` | Get one service by UUID or alias. | public | public |
 | `acedatacloud_get_services_apis` | Get services apis. Backend account permissions and ownership checks apply. | public | public |
 | `acedatacloud_get_services_proxies` | Get services proxies. Backend account permissions and ownership checks apply. | public | public |

@@ -7,6 +7,7 @@ lookup here uses the list endpoints with the filters that actually work:
 """
 
 import re
+from decimal import Decimal, InvalidOperation
 from typing import Annotated, Any
 
 from pydantic import Field
@@ -100,6 +101,57 @@ async def acedatacloud_get_pricing(
                 "free_amount": svc.get("free_amount"),
                 "cost": svc.get("cost"),
             }
+        )
+    except PlatformError as error:
+        return error_json(error.code, error.message)
+
+
+@mcp.tool()
+async def acedatacloud_get_public_usage_packages(
+    service: Annotated[
+        str,
+        Field(description="Service UUID or exact alias whose public Usage packages are needed."),
+    ],
+) -> str:
+    """Get one service's public Usage packages for Credit-to-USD pricing.
+
+    The pricing reader returns Credit cost rules, but not the package
+    amount/price pairs. Package ladders can differ between services, so the
+    generic model catalog's ladder must not be substituted for this service.
+    Fail closed if the public service detail cannot be read.
+    """
+    try:
+        svc = await _resolve_service(service)
+        if not svc:
+            return error_json("Not Found", f"No service matched '{service}'.")
+        detail = await client.get_public(f"/services/{svc['id']}/")
+        rates = detail.get("packages") if isinstance(detail, dict) else None
+        if not isinstance(rates, list):
+            return error_json(
+                "Unavailable", "This service's public Usage packages are unavailable."
+            )
+        packages = []
+        for rate in rates:
+            if (
+                not isinstance(rate, dict)
+                or rate.get("private") is True
+                or rate.get("type") != "Usage"
+            ):
+                continue
+            try:
+                amount = Decimal(str(rate["amount"]))
+                price = Decimal(str(rate["price"]))
+            except (KeyError, InvalidOperation, TypeError, ValueError):
+                continue
+            if not amount.is_finite() or not price.is_finite() or amount <= 0 or price <= 0:
+                continue
+            packages.append({"amount": str(amount), "price": str(price)})
+        if not packages:
+            return error_json(
+                "Unavailable", "No positive public Usage packages were returned for this service."
+            )
+        return dumps(
+            {"source": "public_service_detail", "service_id": svc["id"], "packages": packages}
         )
     except PlatformError as error:
         return error_json(error.code, error.message)
