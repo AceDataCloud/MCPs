@@ -20135,6 +20135,23 @@
     }
   },
   {
+    "name": "acedatacloud_get_public_usage_packages",
+    "inputSchema": {
+      "properties": {
+        "service": {
+          "description": "Service UUID or exact alias whose public Usage packages are needed.",
+          "title": "Service",
+          "type": "string"
+        }
+      },
+      "required": [
+        "service"
+      ],
+      "title": "acedatacloud_get_public_usage_packagesArguments",
+      "type": "object"
+    }
+  },
+  {
     "name": "acedatacloud_get_recharge_cards_allocations_id",
     "inputSchema": {
       "properties": {

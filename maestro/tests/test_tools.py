@@ -114,3 +114,32 @@ async def test_list_tasks_uses_public_defaults() -> None:
         await maestro_list_tasks()
 
     list_tasks.assert_awaited_once_with(20, None, None)
+
+
+async def test_compact_maestro_tasks_keep_ids_and_outputs_without_large_briefs() -> None:
+    task = {
+        "id": "task-1",
+        "status": "succeeded",
+        "created_at": 100,
+        "request": {"prompt": "private brief " * 3000, "duration": 27, "aspect": "16:9"},
+        "response": {
+            "data": {
+                "variants": [{"output_url": "https://example.com/video.mp4"}],
+                "progress": ["long"] * 1000,
+            }
+        },
+    }
+    with patch("tools.task_tools.client.list_tasks", new_callable=AsyncMock) as list_tasks:
+        list_tasks.return_value = {"count": 1, "items": [task]}
+        listed = json.loads(await maestro_list_tasks(compact=True))
+    assert listed["count"] == 1
+    assert listed["items"][0]["id"] == "task-1"
+    assert listed["items"][0]["duration"] == 27
+    assert "output_url" not in listed["items"][0]
+    assert "private brief" not in json.dumps(listed)
+    with patch("tools.task_tools.client.get_task", new_callable=AsyncMock) as get_task:
+        get_task.return_value = task
+        detail = json.loads(await maestro_get_task("task-1", compact=True))
+    assert detail["id"] == "task-1"
+    assert detail["output_url"] == "https://example.com/video.mp4"
+    assert "private brief" not in json.dumps(detail)
