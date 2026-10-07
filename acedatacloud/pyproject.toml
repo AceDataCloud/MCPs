@@ -40,6 +40,8 @@ dependencies = [
     "python-dotenv>=1.0.0",
     "pydantic>=2.0.0",
     "loguru>=0.7.0",
+    "redis>=5.0.0,<7",
+    "cryptography>=42.0.0",
 ]
 
 [project.optional-dependencies]
@@ -53,6 +55,7 @@ test = [
     "pytest-asyncio>=0.23.0",
     "pytest-cov>=5.0.0",
     "respx>=0.21.0",
+    "fakeredis>=2.25.0",
 ]
 http = [
     "uvicorn>=0.30.0",

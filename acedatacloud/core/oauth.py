@@ -23,6 +23,7 @@ import time
 from urllib.parse import urlencode
 
 import httpx
+from cryptography.fernet import Fernet
 from loguru import logger
 from mcp.server.auth.provider import (
     AccessToken,
@@ -32,7 +33,7 @@ from mcp.server.auth.provider import (
     OAuthToken,
     RefreshToken,
 )
-from pydantic import AnyUrl
+from redis.asyncio import Redis
 from starlette.requests import Request
 from starlette.responses import JSONResponse, RedirectResponse
 
@@ -42,6 +43,8 @@ from core.config import settings
 MCP_ACCESS_SCOPE = "mcp:access"
 # Stamped on platform tokens this MCP mints, so re-auth reuses one instead of piling up.
 PLATFORM_TOKEN_TAG = "mcp:acedatacloud"
+OAUTH_STATE_TTL_SECONDS = 600
+OAUTH_REDIS_PREFIX = "mcp:acedatacloud:oauth"
 
 
 def _normalize_scopes(scopes: list[str] | None) -> list[str]:
@@ -56,7 +59,22 @@ class AceDataCloudOAuthProvider:
     restarts/redeploys never force re-authorization.
     """
 
-    def __init__(self) -> None:
+    def __init__(self, redis_client: Redis | None = None, state_key: str = "") -> None:
+        # Hosted OAuth has multiple replicas. Redis is the shared source of
+        # truth; in-memory state is only for local, single-process use.
+        self._redis = redis_client
+        if self._redis is None and settings.oauth_redis_url:
+            self._redis = Redis.from_url(
+                settings.oauth_redis_url,
+                password=settings.oauth_redis_password or None,
+                decode_responses=True,
+            )
+        self._cipher = None
+        if self._redis is not None:
+            key = state_key or settings.oauth_state_key
+            if not key:
+                raise ValueError("MCP_OAUTH_STATE_KEY is required with shared OAuth state")
+            self._cipher = Fernet(base64.urlsafe_b64encode(bytes.fromhex(key)))
         self._clients: dict[str, OAuthClientInformationFull] = {}
         self._auth_codes: dict[
             str, tuple[AuthorizationCode, str]
@@ -64,28 +82,30 @@ class AceDataCloudOAuthProvider:
         self._access_tokens: dict[str, AccessToken] = {}
         self._pending_auth: dict[str, dict] = {}  # mcp_state → {client_id, params}
 
+    def _seal(self, value: str) -> str:
+        assert self._cipher is not None
+        return self._cipher.encrypt(value.encode()).decode()
+
+    def _unseal(self, value: str | bytes) -> str:
+        assert self._cipher is not None
+        return self._cipher.decrypt(value).decode()
+
     async def get_client(self, client_id: str) -> OAuthClientInformationFull | None:
-        client = self._clients.get(client_id)
-        if client:
-            return client
-        # After pod restart, registered clients are forgotten. Synthesize so
-        # token calls don't get a hard 401 — the access token is a durable
-        # platform-* token validated by platform.acedata.cloud.
-        synthetic = OAuthClientInformationFull(
-            client_id=client_id,
-            redirect_uris=[AnyUrl("https://auth.acedata.cloud/user/connections")],
-            token_endpoint_auth_method="none",
-            grant_types=["authorization_code"],
-            response_types=["code"],
-        )
-        self._clients[client_id] = synthetic
-        logger.debug(f"Synthesized client record for {client_id} (post-restart)")
-        return synthetic
+        if self._redis is None:
+            return self._clients.get(client_id)
+        raw = await self._redis.get(f"{OAUTH_REDIS_PREFIX}:client:{client_id}")
+        return OAuthClientInformationFull.model_validate_json(self._unseal(raw)) if raw else None
 
     async def register_client(self, client_info: OAuthClientInformationFull) -> None:
         client_id = client_info.client_id
         assert client_id is not None
-        self._clients[client_id] = client_info
+        if self._redis is None:
+            self._clients[client_id] = client_info
+        else:
+            await self._redis.set(
+                f"{OAUTH_REDIS_PREFIX}:client:{client_id}",
+                self._seal(client_info.model_dump_json()),
+            )
         logger.info(f"Registered OAuth client: {client_id}")
 
     async def authorize(
@@ -99,16 +119,24 @@ class AceDataCloudOAuthProvider:
         digest = hashlib.sha256(code_verifier.encode("ascii")).digest()
         auth_code_challenge = base64.urlsafe_b64encode(digest).rstrip(b"=").decode("ascii")
 
-        self._pending_auth[mcp_state] = {
+        pending = {
             "client_id": client.client_id,
             "redirect_uri": str(params.redirect_uri),
             "state": params.state,
             "code_challenge": params.code_challenge,
             "redirect_uri_provided_explicitly": params.redirect_uri_provided_explicitly,
             "scopes": _normalize_scopes(params.scopes),
-            "resource": params.resource,
+            "resource": str(params.resource) if params.resource else None,
             "auth_code_verifier": code_verifier,
         }
+        if self._redis is None:
+            self._pending_auth[mcp_state] = pending
+        else:
+            await self._redis.set(
+                f"{OAUTH_REDIS_PREFIX}:pending:{mcp_state}",
+                self._seal(json.dumps(pending)),
+                ex=OAUTH_STATE_TTL_SECONDS,
+            )
 
         callback_url = f"{settings.server_url}/oauth/callback"
 
@@ -125,7 +153,7 @@ class AceDataCloudOAuthProvider:
             "code_challenge_method": "S256",
         }
         auth_url = f"{settings.auth_base_url}/oauth2/authorize?{urlencode(auth_params)}"
-        logger.info(f"OAuth authorize: redirecting to consent page (mcp_state={mcp_state})")
+        logger.info("OAuth authorize: redirecting to consent page")
         return auth_url
 
     async def handle_callback(self, request: Request) -> RedirectResponse | JSONResponse:
@@ -134,15 +162,19 @@ class AceDataCloudOAuthProvider:
         adc_code = request.query_params.get("code")
 
         if not mcp_state or not adc_code:
-            logger.error(f"handle_callback: missing state={mcp_state} or code={adc_code}")
+            logger.error("handle_callback: missing state or code")
             return JSONResponse({"error": "Missing state or code parameter"}, status_code=400)
 
-        pending = self._pending_auth.pop(mcp_state, None)
-        if not pending:
-            logger.error(f"handle_callback: state {mcp_state} not found in pending_auth")
-            return JSONResponse({"error": "Invalid or expired state"}, status_code=400)
-
         try:
+            if self._redis is None:
+                pending = self._pending_auth.pop(mcp_state, None)
+            else:
+                raw = await self._redis.getdel(f"{OAUTH_REDIS_PREFIX}:pending:{mcp_state}")
+                pending = json.loads(self._unseal(raw)) if raw else None
+            if not pending:
+                logger.warning("handle_callback: invalid or expired state")
+                return JSONResponse({"error": "Invalid or expired state"}, status_code=400)
+
             # Exchange code for a JWT from auth.acedata.cloud
             code_verifier = pending.get("auth_code_verifier", "")
             token_data = await self._exchange_code_for_tokens(adc_code, code_verifier)
@@ -164,14 +196,28 @@ class AceDataCloudOAuthProvider:
             auth_code = AuthorizationCode(
                 code=auth_code_str,
                 scopes=_normalize_scopes(pending.get("scopes")),
-                expires_at=time.time() + 600,
+                expires_at=time.time() + OAUTH_STATE_TTL_SECONDS,
                 client_id=pending["client_id"],
                 code_challenge=pending["code_challenge"],
                 redirect_uri=pending["redirect_uri"],
                 redirect_uri_provided_explicitly=pending["redirect_uri_provided_explicitly"],
                 resource=pending.get("resource"),
             )
-            self._auth_codes[auth_code_str] = (auth_code, api_token)
+            if self._redis is None:
+                self._auth_codes[auth_code_str] = (auth_code, api_token)
+            else:
+                await self._redis.set(
+                    f"{OAUTH_REDIS_PREFIX}:code:{auth_code_str}",
+                    self._seal(
+                        json.dumps(
+                            {
+                                "authorization_code": auth_code.model_dump(mode="json"),
+                                "token": api_token,
+                            }
+                        )
+                    ),
+                    ex=OAUTH_STATE_TTL_SECONDS,
+                )
 
             # Redirect back to Claude with the MCP auth code
             redirect_uri = pending["redirect_uri"]
@@ -193,19 +239,40 @@ class AceDataCloudOAuthProvider:
         client: OAuthClientInformationFull,  # noqa: ARG002
         authorization_code: str,
     ) -> AuthorizationCode | None:
-        data = self._auth_codes.get(authorization_code)
+        if self._redis is None:
+            data = self._auth_codes.get(authorization_code)
+        else:
+            raw = await self._redis.get(f"{OAUTH_REDIS_PREFIX}:code:{authorization_code}")
+            payload = json.loads(self._unseal(raw)) if raw else None
+            data = (
+                (AuthorizationCode.model_validate(payload["authorization_code"]), payload["token"])
+                if payload
+                else None
+            )
         if not data:
             return None
         auth_code = data[0]
         if auth_code.expires_at < time.time():
-            self._auth_codes.pop(authorization_code, None)
+            if self._redis is None:
+                self._auth_codes.pop(authorization_code, None)
+            else:
+                await self._redis.delete(f"{OAUTH_REDIS_PREFIX}:code:{authorization_code}")
             return None
         return auth_code
 
     async def exchange_authorization_code(
         self, client: OAuthClientInformationFull, authorization_code: AuthorizationCode
     ) -> OAuthToken:
-        data = self._auth_codes.pop(authorization_code.code, None)
+        if self._redis is None:
+            data = self._auth_codes.pop(authorization_code.code, None)
+        else:
+            raw = await self._redis.getdel(f"{OAUTH_REDIS_PREFIX}:code:{authorization_code.code}")
+            payload = json.loads(self._unseal(raw)) if raw else None
+            data = (
+                (AuthorizationCode.model_validate(payload["authorization_code"]), payload["token"])
+                if payload
+                else None
+            )
         if not data:
             raise ValueError("Authorization code not found or already used")
         _, api_token = data

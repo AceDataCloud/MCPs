@@ -53,6 +53,11 @@ class Settings:
     oauth_client_id: str = field(
         default_factory=lambda: os.getenv("ACEDATACLOUD_OAUTH_CLIENT_ID", "")
     )
+    oauth_redis_url: str = field(default_factory=lambda: os.getenv("MCP_OAUTH_REDIS_URL", ""))
+    oauth_redis_password: str = field(
+        default_factory=lambda: os.getenv("MCP_OAUTH_REDIS_PASSWORD", "")
+    )
+    oauth_state_key: str = field(default_factory=lambda: os.getenv("MCP_OAUTH_STATE_KEY", ""))
 
     def __post_init__(self) -> None:
         if self.tool_profile not in {"curated", "full"}:
