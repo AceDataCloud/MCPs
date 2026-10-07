@@ -119,12 +119,20 @@ async def acedatacloud_list_blog_comments(
 @mcp.tool()
 async def acedatacloud_add_blog_comment(
     blog_id: UUID,
-    expected_version: Annotated[int, Field(ge=1, description="review_version from the saved draft.")],
+    expected_version: Annotated[
+        int, Field(ge=1, description="review_version from the saved draft.")
+    ],
     body: Annotated[str, Field(min_length=1, max_length=2000)],
     field: Literal["overall", "title", "summary", "content"] = "overall",
-    start_offset: Annotated[int | None, Field(ge=0, description="UTF-16 start offset for selected source text.")] = None,
-    end_offset: Annotated[int | None, Field(ge=1, description="UTF-16 end offset for selected source text.")] = None,
-    quote: Annotated[str | None, Field(max_length=2000, description="Exact selected source text.")] = None,
+    start_offset: Annotated[
+        int | None, Field(ge=0, description="UTF-16 start offset for selected source text.")
+    ] = None,
+    end_offset: Annotated[
+        int | None, Field(ge=1, description="UTF-16 end offset for selected source text.")
+    ] = None,
+    quote: Annotated[
+        str | None, Field(max_length=2000, description="Exact selected source text.")
+    ] = None,
     confirm: Annotated[bool, Field(description="True to post this review comment.")] = False,
 ) -> str:
     """Add an overall or inline review thread. Requires blog:read plus blog:write or blog:publish.
@@ -146,7 +154,9 @@ async def acedatacloud_reply_blog_comment(
     confirm: Annotated[bool, Field(description="True to post this reply.")] = False,
 ) -> str:
     """Reply to a review thread, including after rejection. Requires blog:read plus blog:write or blog:publish."""
-    return await _write("POST", f"/blogs/admin/{blog_id}/comments/{comment_id}/replies/", {"body": body}, confirm)
+    return await _write(
+        "POST", f"/blogs/admin/{blog_id}/comments/{comment_id}/replies/", {"body": body}, confirm
+    )
 
 
 @mcp.tool()
@@ -154,10 +164,14 @@ async def acedatacloud_resolve_blog_comment(
     blog_id: UUID,
     comment_id: UUID,
     resolved: Annotated[bool, Field(description="True to resolve the thread; false to reopen it.")],
-    confirm: Annotated[bool, Field(description="True to change the thread resolution state.")] = False,
+    confirm: Annotated[
+        bool, Field(description="True to change the thread resolution state.")
+    ] = False,
 ) -> str:
     """Resolve or reopen a private review thread. Requires blog:read plus blog:write or blog:publish."""
-    return await _write("PATCH", f"/blogs/admin/{blog_id}/comments/{comment_id}/", {"resolved": resolved}, confirm)
+    return await _write(
+        "PATCH", f"/blogs/admin/{blog_id}/comments/{comment_id}/", {"resolved": resolved}, confirm
+    )
 
 
 @mcp.tool()
@@ -299,7 +313,11 @@ async def acedatacloud_reject_blog_post(
         int, Field(ge=1, description="review_version from the submitted post.")
     ],
     comment: Annotated[
-        str, Field(max_length=2000, description="Rejection summary. Optional when this version already has an open review comment.")
+        str,
+        Field(
+            max_length=2000,
+            description="Rejection summary. Optional when this version already has an open review comment.",
+        ),
     ] = "",
     confirm: Annotated[bool, Field(description="True to reject this submitted version.")] = False,
 ) -> str:

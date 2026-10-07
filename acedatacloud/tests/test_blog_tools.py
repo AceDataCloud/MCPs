@@ -78,19 +78,40 @@ async def test_editorial_reads_and_filters():
 async def test_review_comments():
     comment_id = UUID("1c7e95a7-04c0-47b6-9620-51b108bdfbb2")
     base = f"{DETAIL}comments/"
-    listing = respx.get(base).mock(return_value=httpx.Response(200, json=[{"id": str(comment_id), "replies": []}]))
+    listing = respx.get(base).mock(
+        return_value=httpx.Response(200, json=[{"id": str(comment_id), "replies": []}])
+    )
     create = respx.post(base).mock(return_value=httpx.Response(201, json={"id": str(comment_id)}))
-    reply = respx.post(f"{base}{comment_id}/replies/").mock(return_value=httpx.Response(201, json={"body": "Fixed"}))
-    resolution = respx.patch(f"{base}{comment_id}/").mock(return_value=httpx.Response(200, json={"resolved_at": "now"}))
+    reply = respx.post(f"{base}{comment_id}/replies/").mock(
+        return_value=httpx.Response(201, json={"body": "Fixed"})
+    )
+    resolution = respx.patch(f"{base}{comment_id}/").mock(
+        return_value=httpx.Response(200, json={"resolved_at": "now"})
+    )
     assert json.loads(await acedatacloud_list_blog_comments(BLOG_ID))[0]["id"] == str(comment_id)
     assert listing.called
-    preview = await acedatacloud_add_blog_comment(BLOG_ID, 4, "Clarify", field="content", start_offset=1, end_offset=3, quote="😀")
+    preview = await acedatacloud_add_blog_comment(
+        BLOG_ID, 4, "Clarify", field="content", start_offset=1, end_offset=3, quote="😀"
+    )
     assert json.loads(preview)["status"] == "confirmation_required"
     assert not create.called
-    await acedatacloud_add_blog_comment(BLOG_ID, 4, "Clarify", field="content", start_offset=1, end_offset=3, quote="😀", confirm=True)
+    await acedatacloud_add_blog_comment(
+        BLOG_ID,
+        4,
+        "Clarify",
+        field="content",
+        start_offset=1,
+        end_offset=3,
+        quote="😀",
+        confirm=True,
+    )
     assert json.loads(create.calls.last.request.content) == {
-        "expected_version": 4, "body": "Clarify", "field": "content",
-        "start_offset": 1, "end_offset": 3, "quote": "😀",
+        "expected_version": 4,
+        "body": "Clarify",
+        "field": "content",
+        "start_offset": 1,
+        "end_offset": 3,
+        "quote": "😀",
     }
     await acedatacloud_reply_blog_comment(BLOG_ID, comment_id, "Fixed", confirm=True)
     assert json.loads(reply.calls.last.request.content) == {"body": "Fixed"}
