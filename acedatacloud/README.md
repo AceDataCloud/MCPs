@@ -593,6 +593,11 @@ mcp-acedatacloud --transport http --port 8000
 ## Notes
 
 - Amounts (`remaining_amount`, `used_amount`, totals) are in **Credits**, not USD.
+- For public contact-only Dataset services, `acedatacloud_get_pricing` returns
+  `pricing_mode` and any `reference_quote` from the public service catalog. Keep the
+  quote's currency, amount range, unit and `status="reference"`; these are indicative
+  quotes, not Credit billing rules or purchasable Usage packages. Contact the platform
+  to confirm the scope and final price. No quote is invented when metadata has none.
 - Newly created credential/platform tokens are returned in full **only once** —
   store them immediately.
 - Credential rotation = delete + recreate (no in-place rotate endpoint).
