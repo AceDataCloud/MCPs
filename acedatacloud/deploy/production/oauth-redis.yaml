@@ -93,8 +93,36 @@ spec:
   ingress:
     - from:
         - podSelector:
-            matchLabels:
-              app: mcp-acedatacloud
+            matchExpressions:
+              - key: app
+                operator: In
+                values:
+                  - mcp-acedatacloud
+                  - mcp-aichat
+                  - mcp-face-transform
+                  - mcp-fish
+                  - mcp-flux
+                  - mcp-glm
+                  - mcp-grok
+                  - mcp-hailuo
+                  - mcp-happyhorse
+                  - mcp-kling
+                  - mcp-luma
+                  - mcp-maestro
+                  - mcp-midjourney
+                  - mcp-minimax
+                  - mcp-nanobanana
+                  - mcp-openai
+                  - mcp-producer
+                  - mcp-qwen-image
+                  - mcp-seedance
+                  - mcp-seedream-pro
+                  - mcp-serp
+                  - mcp-shorturl
+                  - mcp-suno
+                  - mcp-veo
+                  - mcp-wan
+                  - mcp-webextrator
       ports:
         - protocol: TCP
           port: 6379
