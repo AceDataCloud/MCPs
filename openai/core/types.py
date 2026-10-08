@@ -171,6 +171,7 @@ ImageModel = Literal[
     "nano-banana",
     "nano-banana-2-lite",
     "nano-banana-2",
+    "nano-banana-2.1",
     "nano-banana-pro",
 ]
 

@@ -176,7 +176,7 @@ For **401**, check which auth route the client used and whether the token or OAu
 - **Reasoning**: o4-mini, o3, o3-mini, o3-pro, o1, o1-mini, o1-pro
 
 ### Image Models
-- gpt-image-1, gpt-image-1.5, gpt-image-2, gpt-image-2:official, gpt-image-2.5-flare, gpt-image-2.5-flare:official, gpt-image-2.5-sunburst, gpt-image-2.5-sunburst:official, dall-e-3, dall-e-2, nano-banana, nano-banana-2, nano-banana-pro
+- gpt-image-1, gpt-image-1.5, gpt-image-2, gpt-image-2:official, gpt-image-2.5-flare, gpt-image-2.5-flare:official, gpt-image-2.5-sunburst, gpt-image-2.5-sunburst:official, dall-e-3, dall-e-2, nano-banana, nano-banana-2-lite, nano-banana-2, nano-banana-2.1, nano-banana-pro
 - GPT Image `:official` variants settle from actual text-input, image-input, and image-output tokens.
 
 ### Embedding Models
