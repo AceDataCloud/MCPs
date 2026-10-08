@@ -18,3 +18,10 @@ test("only the expected validated publisher and version confirms release", () =>
   other.publisher.publisherName = "other";
   assert.equal(isValidatedVersion(other, "2026.1004.24201"), false);
 });
+
+test("chat model publication requires its own validated Marketplace entry", () => {
+  const model = { extensionName: "chat-models", publisher: { publisherName: "acedatacloud" }, versions: [{ version: "0.1.0", flags: "validated" }] };
+  assert.equal(isValidatedVersion(model, "0.1.0", "chat-models"), true);
+  assert.equal(isValidatedVersion(model, "0.1.0", "mcp-toolbox"), false);
+  assert.equal(isValidatedVersion(model, "0.1.1", "chat-models"), false);
+});

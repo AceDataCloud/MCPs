@@ -18,7 +18,7 @@ async function promptCredential(context, key, platform, label) {
     title: label,
     prompt: platform
       ? "Enter a platform token from https://platform.acedata.cloud/console/platform-tokens. Account tools use this token separately from API keys."
-      : "Enter an API key from https://platform.acedata.cloud/console/credentials. Saved securely in VS Code SecretStorage.",
+      : "Enter an API key from https://platform.acedata.cloud/console/applications. Saved securely in VS Code SecretStorage.",
     password: true,
     ignoreFocusOut: true,
   });
