@@ -33,6 +33,18 @@ spec:
               value: "https://nanobanana.mcp.acedata.cloud"
             - name: ACEDATACLOUD_OAUTH_CLIENT_ID
               value: "eLYcardtAh_fYXvydWV3wwaPpZeCrkYskmCyetsfX3c"
+            - name: MCP_OAUTH_REDIS_URL
+              value: "redis://mcp-acedatacloud-oauth-redis:6379/0"
+            - name: MCP_OAUTH_REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mcp-acedatacloud-oauth-redis
+                  key: password
+            - name: MCP_OAUTH_STATE_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: mcp-nanobanana-oauth-state
+                  key: state_key
           resources:
             limits:
               cpu: 500m

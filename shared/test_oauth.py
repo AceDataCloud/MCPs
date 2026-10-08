@@ -4,8 +4,11 @@ import base64
 import hashlib
 import json
 from types import SimpleNamespace
+from unittest.mock import AsyncMock
 from urllib.parse import parse_qs, urlsplit
 
+import fakeredis
+import fakeredis.aioredis
 import pytest
 from mcp.server.auth.provider import (
     AuthorizationParams,
@@ -24,6 +27,7 @@ def provider(monkeypatch):
         oauth,
         "settings",
         SimpleNamespace(
+            server_name="suno",
             server_url="https://mcp.example.com",
             auth_base_url="https://auth.example.com",
             platform_base_url="https://platform.example.com",
@@ -193,6 +197,43 @@ async def test_direct_credential_context_and_post_restart_client(provider, monke
     assert token.client_id == "direct"
     assert token.scopes == ["mcp:access"]
     assert captured == ["direct-credential"]
-    restored = await provider.get_client("previous-client")
-    assert restored.client_id == "previous-client"
-    assert restored.token_endpoint_auth_method == "none"
+    assert await provider.get_client("previous-client") is None
+
+
+@pytest.mark.asyncio
+async def test_oauth_flow_and_revocation_work_across_replicas(provider, client):
+    redis_server = fakeredis.FakeServer()
+    first_redis = fakeredis.aioredis.FakeRedis(
+        server=redis_server, decode_responses=True
+    )
+    second_redis = fakeredis.aioredis.FakeRedis(
+        server=redis_server, decode_responses=True
+    )
+    first = oauth.AceDataCloudOAuthProvider(first_redis, "0" * 64)
+    second = oauth.AceDataCloudOAuthProvider(second_redis, "0" * 64)
+    await first.register_client(client)
+
+    registered = await second.get_client(client.client_id)
+    assert registered.redirect_uris == client.redirect_uris
+    assert await second.get_client("unregistered") is None
+
+    upstream_url = await second.authorize(registered, params(registered))
+    state = parse_qs(urlsplit(upstream_url).query)["state"][0]
+    first._exchange_code_for_tokens = AsyncMock(return_value={"access_token": "jwt"})
+    first._get_user_credential = AsyncMock(return_value="durable-test-token")
+    response = await first.handle_callback(callback(state))
+    assert response.status_code == 302
+    redirected = parse_qs(urlsplit(response.headers["location"]).query)
+    assert redirected["existing"] == ["1"]
+    assert redirected["state"] == ["client-state"]
+    code = redirected["code"][0]
+    assert "durable-test-token" not in await second_redis.get(
+        first._state._key("code", code)
+    )
+
+    loaded = await second.load_authorization_code(registered, code)
+    token = await second.exchange_authorization_code(registered, loaded)
+    assert token.access_token == "durable-test-token"
+    assert await first.load_authorization_code(registered, code) is None
+    await first.revoke_token(await second.load_access_token(token.access_token))
+    assert await second.load_access_token(token.access_token) is None

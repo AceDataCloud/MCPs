@@ -20,7 +20,7 @@ classifiers = [
     "Topic :: Internet :: WWW/HTTP",
     "Topic :: Scientific/Engineering :: Artificial Intelligence",
 ]
-dependencies = ["mcp>=1.2.0,<2", "httpx>=0.27.0", "python-dotenv>=1.0.0", "pydantic>=2.0.0", "loguru>=0.7.0"]
+dependencies = ["mcp>=1.2.0,<2", "httpx>=0.27.0", "python-dotenv>=1.0.0", "pydantic>=2.0.0", "loguru>=0.7.0", "redis>=5.0.0,<7", "cryptography>=42.0.0"]
 
 [project.optional-dependencies]
 dev = ["ruff>=0.4.0", "mypy>=1.10.0", "pre-commit>=3.7.0"]
