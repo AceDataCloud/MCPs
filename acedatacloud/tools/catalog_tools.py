@@ -84,24 +84,38 @@ async def acedatacloud_get_pricing(
         Field(description="Service UUID or alias to price (e.g. 'suno')."),
     ],
 ) -> str:
-    """Get a service's pricing: the billing ``unit`` (Count/Token/MB/GB/Credit),
-    ``free_amount`` and the display ``cost`` rules. No token required.
+    """Get billing unit, free amount and display cost rules. Public contact-only
+    datasets also return pricing_mode and any reference_quote, not checkout prices.
+    No token required.
     """
     try:
         svc = await _resolve_service(service)
         if not svc:
             return error_json("Not Found", f"No service matched '{service}'.")
-        return dumps(
-            {
-                "service_id": svc.get("id"),
-                "alias": svc.get("alias"),
-                "title": svc.get("title"),
-                "type": svc.get("type"),
-                "unit": svc.get("unit"),
-                "free_amount": svc.get("free_amount"),
-                "cost": svc.get("cost"),
-            }
-        )
+        pricing = {
+            "service_id": svc.get("id"),
+            "alias": svc.get("alias"),
+            "title": svc.get("title"),
+            "type": svc.get("type"),
+            "unit": svc.get("unit"),
+            "free_amount": svc.get("free_amount"),
+            "cost": svc.get("cost"),
+        }
+        metadata = svc.get("metadata") or {}
+        if (
+            svc.get("type") == "Dataset"
+            and svc.get("private") is False
+            and metadata.get("pricing_mode") == "contact_only"
+        ):
+            pricing["pricing_mode"] = metadata["pricing_mode"]
+            quote = metadata.get("reference_quote")
+            if quote is not None:
+                pricing["reference_quote"] = {
+                    key: quote[key]
+                    for key in ("currency", "min_amount", "max_amount", "unit", "status")
+                    if key in quote
+                }
+        return dumps(pricing)
     except PlatformError as error:
         return error_json(error.code, error.message)
 

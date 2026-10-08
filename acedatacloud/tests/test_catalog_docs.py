@@ -122,6 +122,138 @@ async def test_get_pricing_returns_cost():
     out = json.loads(await acedatacloud_get_pricing(service=UUID))
     assert out["unit"] == "Credit"
     assert out["cost"] == [{"x": 1}]
+    assert "pricing_mode" not in out
+    assert "reference_quote" not in out
+
+
+@respx.mock
+@pytest.mark.asyncio
+@pytest.mark.parametrize(
+    "alias,min_amount,max_amount,unit",
+    [
+        ("hacker-news", 8800, 8800, "full_package"),
+        ("sketchfab-3d", 199000, 199000, "full_package"),
+        ("spotify-podcasts", 1090000, 1090000, "full_package"),
+        ("audible-audiobooks", 89000, 89000, "full_package"),
+        ("asmr", 89000, 89000, "full_package"),
+        ("youtube-video", 249, 329, "tb"),
+        ("youtube-podcasts", 249, 329, "tb"),
+        ("flickr", 189000, 189000, "full_package"),
+    ],
+)
+async def test_get_pricing_preserves_public_dataset_reference_quotes(
+    alias, min_amount, max_amount, unit
+):
+    quote = {
+        "currency": "CNY",
+        "min_amount": min_amount,
+        "max_amount": max_amount,
+        "unit": unit,
+        "status": "reference",
+    }
+    route = respx.get(f"{API}/services/").mock(
+        return_value=httpx.Response(
+            200,
+            json={
+                "count": 1,
+                "items": [
+                    {
+                        "id": UUID,
+                        "alias": alias,
+                        "type": "Dataset",
+                        "private": False,
+                        "unit": "Count",
+                        "cost": [],
+                        "packages": [],
+                        "metadata": {
+                            "pricing_mode": "contact_only",
+                            "reference_quote": {**quote, "unrelated": "not-pricing"},
+                            "unrelated": "not-pricing",
+                        },
+                    }
+                ],
+            },
+        )
+    )
+    out = json.loads(await acedatacloud_get_pricing(service=alias))
+    assert out["alias"] == alias
+    assert out["pricing_mode"] == "contact_only"
+    assert out["reference_quote"] == quote
+    assert out["unit"] == "Count"
+    assert out["cost"] == []
+    assert "packages" not in out
+    assert "metadata" not in out
+    assert "not-pricing" not in json.dumps(out)
+    assert "authorization" not in route.calls[0].request.headers
+    assert len(respx.calls) == 1
+
+
+@respx.mock
+@pytest.mark.asyncio
+async def test_get_pricing_does_not_invent_missing_dataset_quote():
+    respx.get(f"{API}/services/").mock(
+        return_value=httpx.Response(
+            200,
+            json={
+                "count": 1,
+                "items": [
+                    {
+                        "id": UUID,
+                        "type": "Dataset",
+                        "private": False,
+                        "metadata": {"pricing_mode": "contact_only"},
+                    }
+                ],
+            },
+        )
+    )
+    out = json.loads(await acedatacloud_get_pricing(service=UUID))
+    assert out["pricing_mode"] == "contact_only"
+    assert "reference_quote" not in out
+
+
+@respx.mock
+@pytest.mark.asyncio
+@pytest.mark.parametrize(
+    "service_type,private,pricing_mode",
+    [
+        ("Dataset", True, "contact_only"),
+        ("Dataset", None, "contact_only"),
+        ("Api", False, "contact_only"),
+        ("Dataset", False, "other"),
+    ],
+)
+async def test_get_pricing_only_adds_quotes_for_public_contact_datasets(
+    service_type, private, pricing_mode
+):
+    respx.get(f"{API}/services/").mock(
+        return_value=httpx.Response(
+            200,
+            json={
+                "count": 1,
+                "items": [
+                    {
+                        "id": UUID,
+                        "type": service_type,
+                        "private": private,
+                        "metadata": {
+                            "pricing_mode": pricing_mode,
+                            "reference_quote": {
+                                "currency": "CNY",
+                                "min_amount": 8800,
+                                "max_amount": 8800,
+                                "unit": "full_package",
+                                "status": "reference",
+                            },
+                        },
+                    }
+                ],
+            },
+        )
+    )
+    out = json.loads(await acedatacloud_get_pricing(service=UUID))
+    assert "pricing_mode" not in out
+    assert "reference_quote" not in out
 
 
 @respx.mock
