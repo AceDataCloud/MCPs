@@ -53,7 +53,9 @@ For screenshots, token setup, project-level and user-level `mcp.json`, and Copil
 
 ## Supported Models
 
-`nano-banana`, `nano-banana-2`, `nano-banana-pro`
+`nano-banana`, `nano-banana-2-lite`, `nano-banana-2`, `nano-banana-2.1`, `nano-banana-pro`
+
+Nano Banana 2.1 supports 1K, 2K, and 4K generation and editing. Use exactly `nano-banana-2.1`; it has no `:official` variant. The default remains `nano-banana`.
 
 ## Pricing
 
