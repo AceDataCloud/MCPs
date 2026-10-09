@@ -183,6 +183,7 @@ async def openai_list_image_models() -> str:
 | nano-banana          | Nano Banana - fast, efficient generation          |
 | nano-banana-2-lite   | Nano Banana 2 Lite - lightweight version          |
 | nano-banana-2        | Nano Banana 2 - improved version                  |
+| nano-banana-2.1      | Nano Banana 2.1 - 1K/2K/4K generation and editing |
 | nano-banana-pro      | Nano Banana Pro - highest quality                 |
 
 ## Supported Sizes
