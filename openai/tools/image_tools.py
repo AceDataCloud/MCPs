@@ -49,7 +49,7 @@ async def openai_generate_image(
                 "'gpt-image-1.5', 'gpt-image-2', 'gpt-image-2.5-flare', "
                 "'gpt-image-2.5-flare:official', 'gpt-image-2.5-sunburst', "
                 "'gpt-image-2.5-sunburst:official', 'dall-e-3', 'dall-e-2', "
-                "'nano-banana', 'nano-banana-2', 'nano-banana-pro'. GPT Image ':official' variants use actual-token billing."
+                "'nano-banana', 'nano-banana-2-lite', 'nano-banana-2', 'nano-banana-2.1', 'nano-banana-pro'. Nano Banana 2.1 has no ':official' variant. GPT Image ':official' variants use actual-token billing."
             )
         ),
     ] = DEFAULT_IMAGE_MODEL,
@@ -242,7 +242,7 @@ async def openai_edit_image(
                 "The image model to use for editing. Options: 'dall-e-3' (default), "
                 "'gpt-image-1.5', 'gpt-image-2', 'gpt-image-2.5-flare', "
                 "'gpt-image-2.5-flare:official', 'gpt-image-2.5-sunburst', "
-                "'gpt-image-2.5-sunburst:official', 'dall-e-3', and 'nano-banana' variants."
+                "'gpt-image-2.5-sunburst:official', 'dall-e-3', and 'nano-banana' variants including 'nano-banana-2.1' (no ':official' variant)."
             )
         ),
     ] = "dall-e-3",

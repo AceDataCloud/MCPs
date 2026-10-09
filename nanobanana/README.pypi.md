@@ -178,7 +178,46 @@ For **401**, check which auth route the client used and whether the token or OAu
 | `nanobanana_get_task`        | Query a single task status   |
 | `nanobanana_get_tasks_batch` | Query multiple tasks at once |
 
+## Supported Models
+
+| Model | Resolution |
+|---|---|
+| `nano-banana` (default) | 1K |
+| `nano-banana-2-lite` | 1K |
+| `nano-banana-2` | 1K, 2K, 4K |
+| `nano-banana-2.1` | 1K, 2K, 4K |
+| `nano-banana-pro` | 1K, 2K, 4K |
+
+All five models support generation and editing. The existing `nano-banana`, `nano-banana-2-lite`, `nano-banana-2`, and `nano-banana-pro` models also have `:official` variants. **Nano Banana 2.1 has no `:official` variant**; use exactly `nano-banana-2.1`. Omitting `model` still selects `nano-banana`.
+
 ## Usage Examples
+
+### Nano Banana 2.1 Generation and Editing
+
+Pass these arguments to `nanobanana_generate_image`:
+
+```json
+{
+  "prompt": "A blue ceramic vase on a cream background, soft side lighting, no text",
+  "model": "nano-banana-2.1",
+  "aspect_ratio": "1:1",
+  "resolution": "2K",
+  "count": 2
+}
+```
+
+For `nanobanana_edit_image`, supply your reference image URL:
+
+```json
+{
+  "prompt": "Change the vase to green while preserving the background and lighting",
+  "image_urls": ["https://example.com/vase.png"],
+  "model": "nano-banana-2.1",
+  "resolution": "4K"
+}
+```
+
+Generation and editing submit asynchronously. Keep the returned `task_id` and query `nanobanana_get_task` until terminal success or failure; submission alone is not a completed image. Editing without `aspect_ratio` preserves the first reference image's aspect ratio; `resolution` defaults to `1K` if omitted. Review the final image and pixel dimensions before using it.
 
 ### Generate Image from Prompt
 

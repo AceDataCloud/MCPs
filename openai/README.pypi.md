@@ -179,6 +179,7 @@ For **401**, check which auth route the client used and whether the token or OAu
 ### Image Models
 - gpt-image-1, gpt-image-1.5, gpt-image-2, gpt-image-2:official, gpt-image-2.5-flare, gpt-image-2.5-flare:official, gpt-image-2.5-sunburst, gpt-image-2.5-sunburst:official, dall-e-3, dall-e-2, nano-banana, nano-banana-2-lite, nano-banana-2, nano-banana-2.1, nano-banana-pro
 - GPT Image `:official` variants settle from actual text-input, image-input, and image-output tokens.
+- Nano Banana 2.1 supports generation and editing using exactly `nano-banana-2.1`; there is no `nano-banana-2.1:official` variant. For multiple images use `n` with the default URL response; `b64_json` requires `n=1`. These tools use OpenAI's `size` parameter, not the dedicated NanoBanana tools' `resolution` parameter.
 
 ### Embedding Models
 - text-embedding-3-small, text-embedding-3-large

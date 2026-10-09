@@ -4,6 +4,7 @@ import json
 from typing import Any
 
 import pytest
+from mcp.server.fastmcp.exceptions import ToolError
 
 from core.server import mcp
 from tools import image_tools
@@ -251,3 +252,68 @@ async def test_openai_image_tools_forward_gpt_image_2_5_models(monkeypatch, mode
     )
     assert generated["model"] == model
     assert edited["model"] == model
+
+
+def test_image_tools_expose_nano_banana_2_1_without_official_variant():
+    tools = {tool.name: tool for tool in mcp._tool_manager.list_tools()}
+    for name in ("openai_generate_image", "openai_edit_image"):
+        model = tools[name].parameters["properties"]["model"]
+        assert "nano-banana-2.1" in model["enum"]
+        assert "nano-banana-2.1:official" not in model["enum"]
+        assert "nano-banana-2.1" in model["description"]
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize(
+    ("tool_name", "endpoint", "extra_arguments"),
+    [
+        ("openai_generate_image", "/openai/images/generations", {}),
+        (
+            "openai_edit_image",
+            "/openai/images/edits",
+            {"image": ["https://example.com/base.png", "https://example.com/reference.png"]},
+        ),
+    ],
+)
+async def test_dispatch_forwards_nano_banana_2_1(monkeypatch, tool_name, endpoint, extra_arguments):
+    captured_payload: dict[str, object] = {}
+
+    async def mock_request(request_endpoint, payload):
+        assert request_endpoint == endpoint
+        captured_payload.update(payload)
+        return {"task_id": "test-task-123"}
+
+    monkeypatch.setattr(image_tools.client, "request", mock_request)
+    result = await mcp.call_tool(
+        tool_name,
+        {
+            "prompt": "test",
+            "model": "nano-banana-2.1",
+            "size": "2048x2048",
+            "n": 2,
+            **extra_arguments,
+        },
+    )
+
+    assert result
+    assert captured_payload["model"] == "nano-banana-2.1"
+    assert captured_payload["size"] == "2048x2048"
+    assert captured_payload["n"] == 2
+    assert captured_payload["response_format"] == "url"
+    assert captured_payload["async"] is True
+    if "image" in extra_arguments:
+        assert captured_payload["image"] == extra_arguments["image"]
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("tool_name", ["openai_generate_image", "openai_edit_image"])
+async def test_dispatch_rejects_nano_banana_2_1_official(monkeypatch, tool_name):
+    async def unexpected_request(*_args, **_kwargs):
+        pytest.fail("An unsupported model must not reach the API")
+
+    monkeypatch.setattr(image_tools.client, "request", unexpected_request)
+    arguments = {"prompt": "test", "model": "nano-banana-2.1:official"}
+    if tool_name == "openai_edit_image":
+        arguments["image"] = "https://example.com/base.png"
+    with pytest.raises(ToolError):
+        await mcp.call_tool(tool_name, arguments)
