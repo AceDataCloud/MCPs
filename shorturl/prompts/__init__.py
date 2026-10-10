@@ -22,7 +22,7 @@ When the user wants to shorten a URL or create short links, use the appropriate 
 - User needs a clean link for sharing
 
 **Example:** "Shorten this URL: https://example.com/very-long-path"
-→ Call `shorturl_create` with url="https://example.com/very-long-path"
+→ Call `shorturl_create` with content="https://example.com/very-long-path"
 
 ## Batch URL Shortening
 **Tool:** `shorturl_batch_create`
@@ -63,7 +63,7 @@ def shorturl_workflow_examples() -> str:
 
 ## Workflow 1: Shorten a Single Link
 1. User: "Make this link shorter: https://platform.acedata.cloud/documents/a2303356-6672-4eb8-9778-75f55c998fe9"
-2. Call `shorturl_create(url="https://platform.acedata.cloud/documents/a2303356-6672-4eb8-9778-75f55c998fe9")`
+2. Call `shorturl_create(content="https://platform.acedata.cloud/documents/a2303356-6672-4eb8-9778-75f55c998fe9")`
 3. Return the short URL: https://surl.id/abc123
 
 ## Workflow 2: Prepare Links for Social Media
