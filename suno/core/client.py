@@ -59,7 +59,7 @@ class SunoClient:
 
     def _with_async_callback(self, payload: dict[str, Any]) -> dict[str, Any]:
         """Ensure long-running media operations are submitted asynchronously."""
-        request_payload = dict(payload)
+        request_payload = {key: value for key, value in payload.items() if value is not None}
         if not request_payload.get("callback_url"):
             request_payload["async"] = True
         return request_payload

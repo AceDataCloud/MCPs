@@ -19,11 +19,11 @@ SunoModel = Literal[
 # Lyrics model versions (different from audio models)
 LyricsModel = Literal["default", "remi-v1"]
 
-# Vocal gender options (v4.5+ only)
-VocalGender = Literal["", "f", "m"]
+# Vocal gender preference (v4.5+ only)
+VocalGender = str
 
-# Variation category options (v5+ only)
-VariationCategory = Literal["high", "normal", "subtle"]
+# Variation category preference (v5+ only)
+VariationCategory = str
 
 # Replace-section response shape
 ReplaceSectionResultMode = Literal["candidates", "full_song"]
