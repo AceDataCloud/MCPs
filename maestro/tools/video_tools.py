@@ -52,10 +52,10 @@ async def maestro_create_video(
         list[str] | None,
         Field(
             description=(
-                "Output language codes, such as zh-cn, en, ja, or pt-br. Each language produces "
-                "a localized video variant."
+                "Exactly one output language code per task, such as zh-cn, en, ja, or pt-br."
             ),
-            max_length=4,
+            min_length=1,
+            max_length=1,
         ),
     ] = None,
     aspect: Annotated[
@@ -110,10 +110,12 @@ async def maestro_create_video(
     """Create a complete video or iterate on a prior Maestro video.
 
     The call returns immediately with a task_id. Use maestro_get_task to monitor progress and obtain
-    each completed language variant's output_url, captions_url, cover_url, duration, and QC score.
+    the completed video's output_url, captions_url, cover_url, duration, and QC score.
     """
     if action != "generate" and not ref_task_id:
         return f"Error: action={action} requires ref_task_id."
+    if langs is not None and len(langs) != 1:
+        return "Error: langs must contain exactly one output language."
 
     payload: dict[str, Any] = {"prompt": prompt, "action": action}
     if ref_task_id:

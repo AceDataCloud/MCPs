@@ -3,7 +3,7 @@
 
 <!-- mcp-name: io.github.AceDataCloud/mcp-maestro -->
 
-Produce complete videos from a natural-language brief with [Maestro](https://studio.acedata.cloud/maestro) through the Ace Data Cloud API. Maestro plans the script, creates or sources media, generates voiceover and music, edits, captions, renders, and returns finished video variants.
+Produce complete videos from a natural-language brief with [Maestro](https://studio.acedata.cloud/maestro) through the Ace Data Cloud API. Maestro plans the script, creates or sources media, generates voiceover and music, edits, captions, renders, and returns one finished video in the selected language.
 
 ## Connect: hosted OAuth, API token, or local stdio
 
@@ -142,7 +142,7 @@ For **401**, check which auth route the client used and whether the token or OAu
 | Tool | Purpose |
 |---|---|
 | `maestro_create_video` | Create a video or run `remix`, `edit`, or `extend` on an earlier task |
-| `maestro_get_task` | Read progress, status, and final language variants for one task |
+| `maestro_get_task` | Read progress, status, and the final video for one task |
 | `maestro_list_tasks` | List the authenticated account's recent tasks, newest first |
 
 ## Example
@@ -151,13 +151,13 @@ Ask an MCP client:
 
 > Create a 45-second 16:9 English product launch video from this product photo. Use an editorial style and a documentary voice.
 
-The tool returns a `task_id` immediately. Query that ID until `status` is `succeeded` or `failed`. Successful tasks expose videos in `response.data.variants`.
+The tool returns a `task_id` immediately. Query that ID until `status` is `succeeded` or `failed`. Successful tasks expose one video in `response.data.variants`.
 
 To inspect existing task history without creating a video, call `maestro_list_tasks`. It accepts a `limit` from 1 to 100 and optional exclusive `created_at_min` / `created_at_max` Unix timestamp bounds. The returned `items` honor those filters; `count` remains the authenticated account's total visible task count.
 
 ## Production contract
 
-Maestro provides the complete capability set on every request: all actions and scenarios, 5–300 seconds, up to 4 languages, and 1080p/30fps output. Pricing can change by scenario, duration, and output languages; check the current [Maestro pricing](https://platform.acedata.cloud/documents/maestro?utm_source=pypi&utm_medium=referral&utm_campaign=evergreen&utm_content=maestro_mcp_package_quick_start) before submitting. Task polling does not submit a new generation.
+Maestro provides the complete capability set on every request: all actions and scenarios, 5–300 seconds, one language per task, and 1080p/30fps output. Successful jobs cost 0.7 Credits per actual delivered second, with no scenario or language surcharge; check the current [Maestro pricing](https://platform.acedata.cloud/documents/maestro?utm_source=pypi&utm_medium=referral&utm_campaign=evergreen&utm_content=maestro_mcp_package_quick_start) before submitting. Task polling does not submit a new generation.
 
 To revise an existing result, call `maestro_create_video` with an iteration action and the prior task ID:
 
