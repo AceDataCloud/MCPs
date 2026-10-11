@@ -4,6 +4,11 @@ import json
 from typing import Any
 
 
+def is_task_unfinished(data: dict[str, Any]) -> bool:
+    """A null finished_at means the task is still running, even if success is false."""
+    return "finished_at" in data and data["finished_at"] is None
+
+
 def _with_submission_guidance(
     data: dict[str, Any], poll_tool: str, batch_poll_tool: str | None = None
 ) -> dict[str, Any]:
@@ -45,13 +50,14 @@ def _with_task_guidance(
     response = payload.get("response", {})
     response_success = response.get("success") if isinstance(response, dict) else None
     top_level_success = payload.get("success")
+    unfinished = is_task_unfinished(payload)
 
-    is_complete = (
+    is_complete = not unfinished and (
         state in {"complete", "completed", "succeeded", "success"}
         or response_success is True
         or top_level_success is True
     )
-    is_failed = (
+    is_failed = not unfinished and (
         state in {"failed", "error", "cancelled", "canceled"}
         or response_success is False
         or top_level_success is False

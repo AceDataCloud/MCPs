@@ -135,7 +135,7 @@ Keep this user-level file private. Self-hosted HTTP uses `mcp-qwen-image --trans
 
 1. `https://qwen-image.mcp.acedata.cloud/health` returning `{"status":"ok"}` checks endpoint reachability only.
 2. Confirm that the MCP client loads tools. `qwen_image_list_models` is a reference tool; it does not verify downstream API access or balance.
-3. Use a documented service operation for an end-to-end check after reviewing [current service documentation](https://platform.acedata.cloud/documents/qwen-image?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=qwen_image_mcp_readme_quick_start) and displayed pricing. If the result contains a task ID, call `qwen_image_get_task` on that same ID until terminal success or failure. Do not resubmit the operation just to check progress.
+3. Use a documented service operation for an end-to-end check after reviewing [current service documentation](https://platform.acedata.cloud/documents/qwen-image?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=qwen_image_mcp_readme_quick_start) and displayed pricing. If the result contains a task ID, call `qwen_image_get_task` on that same ID until terminal success or failure. A `finished_at: null` task is still running even when `response.success` is false. Do not resubmit the operation just to check progress.
 
 For **401**, check which auth route the client used and whether the token or OAuth session is valid. A **403** may mean an account permission or content moderation failure; read the returned error. Insufficient balance and downstream service failures need their own diagnosis. A listed tool or submitted task does not prove a successful result.
 
