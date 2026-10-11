@@ -16,8 +16,8 @@ can call it directly from chat.
 ## Quick Start
 
 1. **Install this extension.** VS Code registers the `acedatacloud` MCP server automatically.
-2. **Get an API key** from [Ace Data Cloud](https://platform.acedata.cloud/console/applications?utm_source=vscode_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=acedatacloud_mcp_vscode_api_key) (Applications → API Key). New accounts include free trial credit.
-3. **Open Copilot Chat** in agent mode and ask for a account task — the extension prompts for the API key the first time and stores it in the OS keychain via VS Code's `SecretStorage`.
+2. **Get an account token** from [Account Tokens](https://platform.acedata.cloud/console/platform-tokens?utm_source=vscode_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=acedatacloud_mcp_vscode_platform_token), following the steps below. This account server requires a `platform-...` token.
+3. **Open Copilot Chat** in agent mode and ask for a account task — the extension prompts for the account token the first time and stores it in the OS keychain via VS Code's `SecretStorage`.
 
 You can rotate or remove the API key any time from the command palette:
 
@@ -26,6 +26,15 @@ You can rotate or remove the API key any time from the command palette:
 
 > The default config talks to the **hosted streamable-HTTP endpoint** at
 > `https://mcp.acedata.cloud/mcp` — no Python, no `uvx`, no local install needed.
+
+### Get the account-management token
+
+<!-- BEGIN TOKEN ONBOARDING -->
+1. Sign in or register at [Ace Data Cloud → Account Tokens](https://platform.acedata.cloud/console/platform-tokens?utm_source=vscode_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=acedatacloud_mcp_vscode_platform_token).
+2. Click **Create** and copy the token with the copy button. It starts with `platform-`; it is an account-management credential, separate from an application's generation API key.
+3. Paste only the token into this account MCP's credential field, or set `ACEDATACLOUD_PLATFORM_TOKEN` for local stdio. Add `Bearer ` only when configuring an HTTP `Authorization` header yourself.
+4. Keep it private and remove it from **Account Tokens** to revoke access when no longer needed. For a client that supports hosted OAuth, you can instead use the browser sign-in flow described in this guide.
+<!-- END TOKEN ONBOARDING -->
 
 ### Example prompts
 

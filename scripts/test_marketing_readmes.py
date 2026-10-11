@@ -131,18 +131,25 @@ class MarketingReadmeTest(unittest.TestCase):
                         self.assertNotIn(".vscode/mcp.json", section)
                         self.assertIn("out of version control", section)
 
-
     def test_suno_auth_routes_and_client_configs(self):
         text = (ROOT / "suno/README.md").read_text()
         self.assertIn("DCR is client registration", text)
-        self.assertIn("Claude Desktop's `claude_desktop_config.json` is for **local**", text)
+        self.assertIn(
+            "Claude Desktop's `claude_desktop_config.json` is for **local**", text
+        )
         self.assertIn("codex mcp login suno", text)
         self.assertIn("~/.cursor/mcp.json", text)
         self.assertIn("MCP: Open User Configuration", text)
         self.assertIn("~/.cline/data/settings/cline_mcp_settings.json", text)
-        self.assertIn("`suno_list_models` and `suno_list_actions` return static reference data", text)
+        self.assertIn(
+            "`suno_list_models` and `suno_list_actions` return static reference data",
+            text,
+        )
 
-        snippets = [json.loads(block) for block in re.findall(r"```json\n(.*?)\n```", text, re.DOTALL)]
+        snippets = [
+            json.loads(block)
+            for block in re.findall(r"```json\n(.*?)\n```", text, re.DOTALL)
+        ]
         self.assertEqual(len(snippets), 6)
         url = "https://suno.mcp.acedata.cloud/mcp"
         cursor_oauth = snippets[0]["mcpServers"]["suno"]
@@ -153,9 +160,16 @@ class MarketingReadmeTest(unittest.TestCase):
         local = snippets[5]["mcpServers"]["suno"]
         self.assertEqual(cursor_oauth, {"url": url})
         self.assertEqual(vscode_oauth, {"type": "http", "url": url})
-        self.assertEqual(claude_key["headers"]["Authorization"], "Bearer ${ACEDATACLOUD_API_TOKEN}")
-        self.assertEqual(cursor_key["headers"]["Authorization"], "Bearer ${env:ACEDATACLOUD_API_TOKEN}")
-        self.assertEqual(vscode_key["headers"]["Authorization"], "Bearer ${input:acedata-suno-token}")
+        self.assertEqual(
+            claude_key["headers"]["Authorization"], "Bearer ${ACEDATACLOUD_API_TOKEN}"
+        )
+        self.assertEqual(
+            cursor_key["headers"]["Authorization"],
+            "Bearer ${env:ACEDATACLOUD_API_TOKEN}",
+        )
+        self.assertEqual(
+            vscode_key["headers"]["Authorization"], "Bearer ${input:acedata-suno-token}"
+        )
         self.assertEqual(local["command"], "uvx")
         self.assertEqual(local["args"], ["mcp-suno"])
 
@@ -166,3 +180,30 @@ class MarketingReadmeTest(unittest.TestCase):
                 self.assertEqual(
                     render(render(text, alias, "github"), alias, "github"), text
                 )
+
+
+class CredentialGuideTest(unittest.TestCase):
+    def test_account_and_service_guides_use_different_credential_pages(self):
+        from scripts.token_onboarding import refresh_token_guide
+
+        marked = "<!-- BEGIN TOKEN ONBOARDING -->stale<!-- END TOKEN ONBOARDING -->"
+        account = render(marked, "acedatacloud", "vscode_marketplace")
+        service = render(marked, "suno", "pypi")
+        self.assertIn("/console/platform-tokens?utm_source=vscode_marketplace", account)
+        self.assertNotIn("/console/applications", account)
+        self.assertIn("/console/applications?utm_source=pypi", service)
+        self.assertIn("Initialize General Application", service)
+        self.assertEqual(render(account, "acedatacloud", "vscode_marketplace"), account)
+        self.assertEqual(
+            refresh_token_guide("no managed block", "suno"), "no managed block"
+        )
+
+    def test_bundle_readmes_have_marketplace_attribution(self):
+        for name in ("README.md", "README.zh-CN.md"):
+            text = (ROOT / "vscode-bundle" / name).read_text()
+            for url in re.findall(
+                r"\]\((https://platform\.acedata\.cloud[^)]+)\)", text
+            ):
+                query = parse_qs(urlsplit(url).query)
+                self.assertEqual(query["utm_source"], ["vscode_marketplace"])
+                self.assertIn("vscode_bundle_mcp_vscode_", query["utm_content"][0])

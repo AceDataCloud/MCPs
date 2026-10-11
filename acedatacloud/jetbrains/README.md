@@ -18,6 +18,15 @@ and orders, and list services and models — all powered by [Ace Data Cloud](htt
 4. Click **Copy Config** (STDIO or HTTP)
 5. Paste into **Settings → Tools → AI Assistant → Model Context Protocol (MCP)**
 
+### Get the account-management token
+
+<!-- BEGIN TOKEN ONBOARDING -->
+1. Sign in or register at [Ace Data Cloud → Account Tokens](https://platform.acedata.cloud/console/platform-tokens?utm_source=jetbrains_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=acedatacloud_mcp_jetbrains_platform_token).
+2. Click **Create** and copy the token with the copy button. It starts with `platform-`; it is an account-management credential, separate from an application's generation API key.
+3. Paste only the token into this account MCP's credential field, or set `ACEDATACLOUD_PLATFORM_TOKEN` for local stdio. Add `Bearer ` only when configuring an HTTP `Authorization` header yourself.
+4. Keep it private and remove it from **Account Tokens** to revoke access when no longer needed. For a client that supports hosted OAuth, you can instead use the browser sign-in flow described in this guide.
+<!-- END TOKEN ONBOARDING -->
+
 ### STDIO Mode (Local)
 
 Runs the MCP server locally. Requires [uv](https://github.com/astral-sh/uv) installed.

@@ -28,9 +28,9 @@ from dataclasses import dataclass
 from pathlib import Path
 
 import yaml
-
-from mcp_catalog import documentation_target, load_catalog
 from marketing_readmes import render as render_marketing_readme
+from mcp_catalog import documentation_target, load_catalog
+from token_onboarding import token_guide
 
 ROOT = Path(__file__).resolve().parent.parent
 CONFIG = ROOT / "scripts" / "vscode_extensions.yaml"
@@ -359,6 +359,15 @@ def render_readme(svc: Service, tools: list[tuple[str, str]]) -> str:
         else ""
     )
 
+    credential_step = (
+        "**Get an account token** from [Account Tokens](https://platform.acedata.cloud/console/platform-tokens). This server requires a `platform-...` token."
+        if svc.token_env == "ACEDATACLOUD_PLATFORM_TOKEN"
+        else "**Get an application API key** using the detailed steps below. Check service access and your current balance before the first request."
+    )
+    guide = token_guide(svc.alias)
+    credential_label = (
+        "account token" if svc.token_env == "ACEDATACLOUD_PLATFORM_TOKEN" else "API key"
+    )
     content = f"""# {svc.display_name}
 
 {svc.tagline}
@@ -377,8 +386,8 @@ can call it directly from chat.
 ## Quick Start
 
 1. **Install this extension.** VS Code registers the `{svc.alias}` MCP server automatically.
-2. **Get an API key** from [Ace Data Cloud]({svc.signup_url}/console/applications) (Applications → API Key). New accounts include free trial credit.
-3. **Open Copilot Chat** in agent mode and ask for a {svc.domain} task — the extension prompts for the API key the first time and stores it in the OS keychain via VS Code's `SecretStorage`.
+2. {credential_step}
+3. **Open Copilot Chat** in agent mode and ask for a {svc.domain} task — the extension prompts for the {credential_label} the first time and stores it in the OS keychain via VS Code's `SecretStorage`.
 
 You can rotate or remove the API key any time from the command palette:
 
@@ -387,6 +396,11 @@ You can rotate or remove the API key any time from the command palette:
 
 > The default config talks to the **hosted streamable-HTTP endpoint** at
 > `{svc.hosted_url}` — no Python, no `uvx`, no local install needed.
+
+### Get your credential
+
+<!-- BEGIN TOKEN ONBOARDING -->
+{guide}<!-- END TOKEN ONBOARDING -->
 
 ### Example prompts
 

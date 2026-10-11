@@ -61,7 +61,7 @@ def main() -> int:
             r"^  ([a-z0-9_-]+):\s*$", (ROOT / "sync.yaml").read_text(), re.MULTILINE
         )
     )
-    root_readme = (ROOT / "README.md").read_text()
+    root_readme = without_utm((ROOT / "README.md").read_text())
     active_listed = set(
         re.findall(
             r"^\| `([^/`]+)/`.*\| \[(?:Documentation|Service details)\]\(",
