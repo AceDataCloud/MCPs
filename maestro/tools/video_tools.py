@@ -109,6 +109,10 @@ async def maestro_create_video(
 ) -> str:
     """Create a complete video or iterate on a prior Maestro video.
 
+    One task delivers one video in one language. Successful jobs cost 0.7 Credits per actual
+    delivered second, never above the requested duration, with no scenario or language surcharge.
+    Failed jobs and task polling are free.
+
     The call returns immediately with a task_id. Use maestro_get_task to monitor progress and obtain
     the completed video's output_url, captions_url, cover_url, duration, and QC score.
     """
