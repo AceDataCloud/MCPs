@@ -14,7 +14,7 @@ async def test_create_video_builds_complete_payload() -> None:
             prompt="Launch video for a new camera",
             action="generate",
             file_urls=["https://example.com/camera.jpg"],
-            langs=["en", "pt-br"],
+            langs=["en"],
             aspect="16:9",
             duration=45,
             scenario="captions",
@@ -27,7 +27,7 @@ async def test_create_video_builds_complete_payload() -> None:
             "prompt": "Launch video for a new camera",
             "action": "generate",
             "file_urls": ["https://example.com/camera.jpg"],
-            "langs": ["en", "pt-br"],
+            "langs": ["en"],
             "aspect": "16:9",
             "duration": 45,
             "scenario": "captions",
@@ -42,6 +42,14 @@ async def test_iteration_requires_reference_task() -> None:
     result = await maestro_create_video(prompt="Make it faster", action="remix")
 
     assert result == "Error: action=remix requires ref_task_id."
+
+
+async def test_create_video_rejects_multiple_languages_before_submission() -> None:
+    with patch("tools.video_tools.client.create_video", new_callable=AsyncMock) as create:
+        result = await maestro_create_video(prompt="A quick explainer", langs=["en", "pt-br"])
+
+    assert result == "Error: langs must contain exactly one output language."
+    create.assert_not_awaited()
 
 
 async def test_generate_omits_unset_optional_fields() -> None:
