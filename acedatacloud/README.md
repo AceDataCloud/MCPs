@@ -470,6 +470,24 @@ dry-run preview and performs no HTTP request.
 
 Use `acedatacloud_list_invoices(status="Failed")` to find caller-owned invoices whose issuance failed. Read the returned `failure_reason` before deciding whether to apply again or contact support. `Failed` is a read filter, not an administrator status-update option.
 
+### Bank-transfer payments
+
+For a caller-owned order, first call `acedatacloud_get_orders_payment_options(id=...)` to read the available transfer routes and amount thresholds. Both personal and business accounts can use `BankTransfer` without business verification, but domestic CNY and international USD transfers require an order amount of at least USD 300. Use the CNY amount displayed at payment time; availability also depends on collection-channel configuration and package eligibility.
+
+Review the order, amount, and payment route, then call `acedatacloud_pay_order(order_id=..., pay_way="BankTransfer", confirm=true)` only after confirmation. Bank transfers require the authenticated order owner and are not available anonymously.
+
+### Invoice red-flush and reapplication
+
+Call `acedatacloud_get_order_invoice(order_id=...)` to read the active invoice. An automatic red-flush request leaves the invoice `Issued`; `red_state` tracks progress. Submission is not completion: do not apply again while confirmation, red-invoice issuance, or archiving is pending. Only after the red invoice is issued and archived does the original become `Voided` and the order become eligible for reapplication. Use `acedatacloud_list_invoices(order_id=...)` for invoice history.
+
+Failed or uncertain red-flush results require finance review and do not release the invoice restriction early. Manually issued invoices must first be voided or red-flushed in the tax/invoicing system, then confirmed by finance on the platform.
+
+### Diagnose x402 order failures
+
+Read `acedatacloud_get_order` or `acedatacloud_list_orders` and inspect `metadata.x402.last_error` / `metadata.x402.errors`. They preserve the public `code`, `stage`, `retryable`, `charged`, and `params`, with public explanation in `reason` and event time in `timestamp`. Re-reading the order preserves specific codes such as `insufficient_token_balance` (insufficient USDC on the selected network) and `invalid_signature` rather than replacing them with `payment_failed`.
+
+Treat `charged` as three-state: explicit `false` means rejection before settlement; a missing field means the charge state is unknown, not that no charge occurred. A `Failed` order cannot be retried in place; resolve the wallet issue and create a new order. For support, share only the order ID and public error code, never full payment signatures, wallet signatures, authorization payloads, or raw facilitator/RPC diagnostics.
+
 ## Connect to the account MCP
 
 This is the **management** MCP at `https://mcp.acedata.cloud/mcp`. It uses a **platform token**, not the per-service `ACEDATACLOUD_API_TOKEN` used by generation MCPs. Choose one route:

@@ -157,7 +157,7 @@ To inspect existing task history without creating a video, call `maestro_list_ta
 
 ## Production contract
 
-Maestro provides the complete capability set on every request: all actions and scenarios, 5–300 seconds, one language per task, and 1080p/30fps output. Successful jobs cost 0.7 Credits per actual delivered second, with no scenario or language surcharge; check the current [Maestro pricing](https://platform.acedata.cloud/documents/maestro?utm_source=pypi&utm_medium=referral&utm_campaign=evergreen&utm_content=maestro_mcp_package_quick_start) before submitting. Task polling does not submit a new generation.
+Maestro provides the complete capability set on every request: all actions and scenarios, 5–300 seconds, one language per task, and 1080p/30fps output. Successful jobs cost 0.7 Credits per actual delivered second, with no scenario or language surcharge; check the current [Maestro pricing](https://platform.acedata.cloud/documents/maestro?utm_source=pypi&utm_medium=referral&utm_campaign=evergreen&utm_content=maestro_mcp_package_quick_start) before submitting. Billing never exceeds the requested duration; failed jobs and task polling are free. Task polling does not submit a new generation.
 
 To revise an existing result, call `maestro_create_video` with an iteration action and the prior task ID:
 
