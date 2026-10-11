@@ -1,6 +1,6 @@
 # Face Transform MCP — JetBrains Plugin
 
-Face analysis & transformation via the [Ace Data Cloud Face API](https://acedata.cloud), exposed through [Model Context Protocol (MCP)](https://modelcontextprotocol.io/) for JetBrains IDEs.
+Face analysis & transformation via the [Ace Data Cloud Face API](https://platform.acedata.cloud?utm_source=jetbrains_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=face_mcp_jetbrains_platform), exposed through [Model Context Protocol (MCP)](https://modelcontextprotocol.io/) for JetBrains IDEs.
 
 <!-- Plugin description -->
 This plugin sets up the MCP Face Transform server for JetBrains AI Assistant.

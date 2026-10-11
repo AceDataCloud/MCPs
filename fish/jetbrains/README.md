@@ -1,6 +1,6 @@
 # Fish Audio MCP — JetBrains Plugin
 
-Text-to-speech via the [Fish Audio](https://acedata.cloud) API, exposed through [Model Context Protocol (MCP)](https://modelcontextprotocol.io/) for JetBrains IDEs.
+Text-to-speech via the [Fish Audio](https://platform.acedata.cloud?utm_source=jetbrains_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=fish_mcp_jetbrains_platform) API, exposed through [Model Context Protocol (MCP)](https://modelcontextprotocol.io/) for JetBrains IDEs.
 
 <!-- Plugin description -->
 This plugin sets up the MCP Fish Audio server for JetBrains AI Assistant.
