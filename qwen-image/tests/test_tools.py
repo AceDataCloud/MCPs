@@ -1,8 +1,10 @@
+import json
 from unittest.mock import AsyncMock, patch
 
 import pytest
 
 from core.server import mcp
+from core.utils import format_task_result
 from tools import task_tools
 from tools.image_tools import qwen_image_edit, qwen_image_generate
 
@@ -60,3 +62,35 @@ async def test_batch_task_result_preserves_json_shape(monkeypatch) -> None:
     assert '"items"' in result
     assert '"count": 1' in result
     assert '"extra": "preserved"' in result
+
+
+@pytest.mark.parametrize(
+    ("finished_at", "should_poll", "is_failed"),
+    [(None, True, False), (1234567890, False, True)],
+)
+def test_false_success_needs_finished_at_for_terminal_failure(
+    finished_at: int | None, should_poll: bool, is_failed: bool
+) -> None:
+    result = json.loads(
+        format_task_result(
+            {"id": "task-1", "finished_at": finished_at, "response": {"success": False}}
+        )
+    )
+    guidance = result["mcp_task_polling"]
+    assert guidance["should_poll"] is should_poll
+    assert guidance["is_failed"] is is_failed
+    assert guidance["terminal_state_reached"] is not should_poll
+
+
+@pytest.mark.asyncio
+async def test_pending_false_success_throttles_polling(monkeypatch) -> None:
+    result = {"id": "task-1", "finished_at": None, "response": {"success": False}}
+    query = AsyncMock(return_value=result)
+    sleep = AsyncMock()
+    monkeypatch.setattr(task_tools.client, "query_task", query)
+    monkeypatch.setattr(task_tools.asyncio, "sleep", sleep)
+
+    formatted = json.loads(await task_tools.qwen_image_get_task("task-1"))
+
+    sleep.assert_awaited_once_with(5)
+    assert formatted["mcp_task_polling"]["recommended_action"] == "poll"
