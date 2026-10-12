@@ -7,6 +7,7 @@ Protocol URLs, code examples, retired packages and non-platform URLs are untouch
 
 import argparse
 import hashlib
+import html
 import json
 import re
 from pathlib import Path
@@ -14,10 +15,10 @@ from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
 
 try:
     from .mcp_catalog import documentation_target, load_catalog
-    from .token_onboarding import refresh_token_guide
+    from .token_onboarding import refresh_token_guide, token_guide_html
 except ImportError:
     from mcp_catalog import documentation_target, load_catalog
-    from token_onboarding import refresh_token_guide
+    from token_onboarding import refresh_token_guide, token_guide_html
 
 ROOT = Path(__file__).resolve().parents[1]
 GENERATED = (
@@ -131,6 +132,50 @@ def render(text, alias, source, rules=None, catalog=None):
     return "".join(output)
 
 
+def render_jetbrains_description(text, alias, rules, catalog):
+    """Update the descriptor actually uploaded to Marketplace, not only README."""
+    pattern = r"(<description>\s*<!\[CDATA\[)(.*?)(\]\]>\s*</description>)"
+
+    def update(match):
+        body = re.sub(
+            r"\n?<!-- BEGIN TOKEN ONBOARDING -->.*?<!-- END TOKEN ONBOARDING -->\n?",
+            "\n",
+            match[2],
+            flags=re.DOTALL,
+        )
+        body = body.replace(
+            'href="https://acedata.cloud"', 'href="https://platform.acedata.cloud"'
+        )
+        mapper = lambda url: tagged_url(
+            url, alias, "jetbrains_marketplace", rules, catalog
+        )
+        body = re.sub(
+            r'href="(https://(?:platform|studio)\.acedata\.cloud[^"]*)"',
+            lambda m: (
+                'href="' + html.escape(mapper(html.unescape(m[1])), quote=True) + '"'
+            ),
+            body,
+        )
+        title = (
+            "Get your account-management token"
+            if alias == "acedatacloud"
+            else "Get your Ace Data Cloud API key"
+        )
+        guide = (
+            "\n<!-- BEGIN TOKEN ONBOARDING -->\n<h3>"
+            + title
+            + "</h3>\n"
+            + token_guide_html(alias, mapper)
+            + "\n<!-- END TOKEN ONBOARDING -->\n"
+        )
+        return match[1] + body.rstrip() + guide + match[3]
+
+    result, count = re.subn(pattern, update, text, flags=re.DOTALL)
+    if count != 1:
+        raise ValueError(f"Expected one JetBrains description for {alias}")
+    return result
+
+
 def outputs():
     rules, catalog = contract(), load_catalog()
     for alias, entry in catalog.items():
@@ -165,6 +210,15 @@ def outputs():
             path = ROOT / alias / directory / "README.md"
             if path.exists():
                 yield path, render(path.read_text(), alias, channel, rules, catalog)
+
+        descriptor = ROOT / alias / "jetbrains/src/main/resources/META-INF/plugin.xml"
+        if descriptor.exists():
+            yield (
+                descriptor,
+                render_jetbrains_description(
+                    descriptor.read_text(), alias, rules, catalog
+                ),
+            )
 
     bundle_catalog = {
         **catalog,

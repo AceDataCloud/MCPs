@@ -1,5 +1,6 @@
 """Shared credential instructions for generated MCP distribution READMEs."""
 
+import html
 import re
 
 API_GUIDE = """1. Open [Ace Data Cloud → Applications](https://platform.acedata.cloud/console/applications). Sign in, or register an account first.
@@ -24,6 +25,50 @@ ACCOUNT_GUIDE = """1. Sign in or register at [Ace Data Cloud → Account Tokens]
 
 def token_guide(alias):
     return ACCOUNT_GUIDE if alias == "acedatacloud" else API_GUIDE
+
+
+def token_guide_html(alias, format_url):
+    """Render the controlled shared guide for JetBrains' HTML description."""
+
+    def inline(text):
+        text = html.escape(text)
+        text = re.sub(r"`([^`]+)`", r"<code>\1</code>", text)
+        text = re.sub(r"\*\*([^*]+)\*\*", r"<b>\1</b>", text)
+        return re.sub(
+            r"\[([^\]]+)\]\((https://[^)]+)\)",
+            lambda m: (
+                '<a href="'
+                + html.escape(format_url(html.unescape(m[2])), quote=True)
+                + '">'
+                + m[1]
+                + "</a>"
+            ),
+            text,
+        )
+
+    output = []
+    for paragraph in token_guide(alias).strip().split("\n\n"):
+        lines = paragraph.splitlines()
+        if all(re.match(r"^\d+\. ", line) for line in lines):
+            output.append(
+                "<ol>"
+                + "".join(
+                    "<li>" + inline(re.sub(r"^\d+\. ", "", line)) + "</li>"
+                    for line in lines
+                )
+                + "</ol>"
+            )
+        elif image := re.fullmatch(r"!\[([^\]]+)\]\((https://[^)]+)\)", paragraph):
+            output.append(
+                '<p><img alt="'
+                + html.escape(image[1], quote=True)
+                + '" src="'
+                + html.escape(image[2], quote=True)
+                + '" /></p>'
+            )
+        else:
+            output.append("<p>" + inline(paragraph) + "</p>")
+    return "\n".join(output)
 
 
 def refresh_token_guide(text, alias):

@@ -207,3 +207,47 @@ class CredentialGuideTest(unittest.TestCase):
                 query = parse_qs(urlsplit(url).query)
                 self.assertEqual(query["utm_source"], ["vscode_marketplace"])
                 self.assertIn("vscode_bundle_mcp_vscode_", query["utm_content"][0])
+
+
+class JetBrainsDescriptionTest(unittest.TestCase):
+    def test_uploaded_descriptors_include_the_right_credential_guide(self):
+        import html
+        import xml.etree.ElementTree as ET
+
+        for alias, entry in load_catalog().items():
+            path = ROOT / alias / "jetbrains/src/main/resources/META-INF/plugin.xml"
+            if entry["status"] != "active" or not path.exists():
+                continue
+            description = ET.parse(path).getroot().findtext("description")
+            with self.subTest(alias=alias):
+                self.assertEqual(
+                    description.count("<!-- BEGIN TOKEN ONBOARDING -->"), 1
+                )
+                if alias == "acedatacloud":
+                    self.assertIn("/console/platform-tokens?", description)
+                    self.assertNotIn("/console/applications", description)
+                else:
+                    self.assertIn("Initialize General Application", description)
+                    self.assertIn("Manage Keys", description)
+                    self.assertIn("<img ", description)
+                for url in re.findall(
+                    r'href="(https://(?:platform|studio)\.acedata\.cloud[^"]*)"',
+                    description,
+                ):
+                    query = parse_qs(urlsplit(html.unescape(url)).query)
+                    self.assertEqual(query["utm_source"], ["jetbrains_marketplace"])
+                    self.assertEqual(query["utm_medium"], ["referral"])
+                    self.assertIn("utm_content", query)
+
+    def test_description_update_preserves_identity_and_is_idempotent(self):
+        from scripts.marketing_readmes import render_jetbrains_description
+
+        path = ROOT / "suno/jetbrains/src/main/resources/META-INF/plugin.xml"
+        text = path.read_text()
+        rendered = render_jetbrains_description(
+            text, "suno", contract(), load_catalog()
+        )
+        self.assertEqual(rendered, text)
+        self.assertIn("<id>com.acedatacloud.mcp.suno</id>", rendered)
+        self.assertIn("<extensions", rendered)
+        self.assertIn("<change-notes>", rendered)
