@@ -1,20 +1,10 @@
 {
   "schema_version": 1,
   "exceptions": {
-    "registry_missing:happyhorse": {
-      "owner": "ecosystem",
-      "expires_on": "2026-09-30",
-      "action": "Publish the existing HappyHorse server manifest or mark the local catalog entry non-public."
-    },
-    "registry_missing:openai": {
-      "owner": "ecosystem",
-      "expires_on": "2026-09-30",
-      "action": "Publish the existing OpenAI server manifest or mark the local catalog entry non-public."
-    },
     "retired_registry_active:sora": {
       "owner": "ecosystem",
       "expires_on": "2026-09-30",
-      "action": "Decide whether Sora is active; then restore the local catalog entry or retire the Registry listing."
+      "action": "Deprecate the retired Sora Registry listing; do not restore or republish the retired capability."
     }
   }
 }

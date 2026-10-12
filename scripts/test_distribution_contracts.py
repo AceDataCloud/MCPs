@@ -10,6 +10,15 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 class DistributionContractsTest(unittest.TestCase):
+    def test_retired_sora_cannot_publish_or_redeploy_on_source_sync(self):
+        for workflow, job in (("publish.yml", "build"), ("deploy.yaml", "run")):
+            with self.subTest(workflow=workflow):
+                content = (ROOT / "sora/.github/workflows" / workflow).read_text()
+                self.assertRegex(
+                    content,
+                    rf"(?m)^  {job}:\n(?:    #.*\n)*    if: \$\{{\{{ false \}}\}}$",
+                )
+
     def test_registry_packages_have_matching_identity_and_ownership_marker(self):
         catalog = json.loads((ROOT / "scripts/mcp_catalog.json").read_text())[
             "services"

@@ -17,6 +17,8 @@ REGISTRY_URL = (
     "https://registry.modelcontextprotocol.io/v0.1/servers"
     "?search=io.github.AceDataCloud&limit=100&version=latest"
 )
+NAMESPACE = "io.github.AceDataCloud/"
+OFFICIAL_META = "io.modelcontextprotocol.registry/official"
 EXCEPTIONS_PATH = Path(__file__).with_name("registry_health_exceptions.json")
 CATALOG_PATH = Path(__file__).with_name("mcp_catalog.json")
 
@@ -28,6 +30,7 @@ class Surface:
     package: str
     remote: str
     status: str
+    package_version: str = ""
 
 
 @dataclass(frozen=True)
@@ -56,6 +59,8 @@ def local_surfaces() -> dict[str, Surface]:
         remotes = data.get("remotes") or []
         if len(packages) != 1 or len(remotes) != 1:
             raise RuntimeError(f"{alias}: expected exactly one package and remote")
+        if data["name"] in surfaces:
+            raise RuntimeError(f"duplicate local Registry name: {data['name']}")
         surfaces[data["name"]] = Surface(
             alias=alias,
             name=data["name"],
@@ -70,6 +75,16 @@ def registry_surfaces(payload: dict[str, Any]) -> dict[str, Surface]:
     surfaces: dict[str, Surface] = {}
     for item in payload.get("servers") or []:
         data = item["server"]
+        if not data["name"].startswith(NAMESPACE):
+            continue
+        official = item.get("_meta", {}).get(OFFICIAL_META, {})
+        status = official.get("status")
+        if status not in {"active", "deprecated", "deleted"}:
+            raise RuntimeError(f"{data['name']}: missing or invalid official status")
+        if official.get("isLatest") is not True:
+            raise RuntimeError(f"{data['name']}: response is not latest")
+        if data["name"] in surfaces:
+            raise RuntimeError(f"duplicate latest Registry name: {data['name']}")
         packages = data.get("packages") or []
         remotes = data.get("remotes") or []
         package = packages[0]["identifier"] if len(packages) == 1 else ""
@@ -79,9 +94,29 @@ def registry_surfaces(payload: dict[str, Any]) -> dict[str, Surface]:
             name=data["name"],
             package=package,
             remote=remote,
-            status="active",
+            status=status,
+            package_version=packages[0].get("version", "")
+            if len(packages) == 1
+            else "",
         )
     return surfaces
+
+
+def load_registry() -> dict[str, Any]:
+    """Read every latest page; never silently truncate a namespace audit."""
+    servers: list[dict[str, Any]] = []
+    url = REGISTRY_URL
+    seen: set[str] = set()
+    while True:
+        payload = load_json_url(url)
+        servers.extend(payload.get("servers") or [])
+        cursor = payload.get("metadata", {}).get("nextCursor")
+        if not cursor:
+            return {"servers": servers}
+        if cursor in seen:
+            raise RuntimeError("Registry returned a repeated pagination cursor")
+        seen.add(cursor)
+        url = REGISTRY_URL + "&" + urllib.parse.urlencode({"cursor": cursor})
 
 
 def compare_surfaces(
@@ -90,7 +125,9 @@ def compare_surfaces(
     findings: list[Finding] = []
     for name, surface in local.items():
         published = registry.get(name)
-        if surface.status == "active" and not published:
+        if surface.status == "active" and (
+            not published or published.status != "active"
+        ):
             findings.append(
                 Finding(
                     f"registry_missing:{surface.alias}",
@@ -99,7 +136,7 @@ def compare_surfaces(
                     name,
                 )
             )
-        if surface.status == "retired" and published:
+        if surface.status == "retired" and published and published.status == "active":
             findings.append(
                 Finding(
                     f"retired_registry_active:{surface.alias}",
@@ -108,7 +145,7 @@ def compare_surfaces(
                     name,
                 )
             )
-        if not published:
+        if not published or surface.status == "retired":
             continue
         if surface.package != published.package:
             findings.append(
@@ -140,13 +177,27 @@ def health_url(remote: str) -> str:
     )
 
 
-def live_findings(local: dict[str, Surface]) -> list[Finding]:
+def live_findings(
+    local: dict[str, Surface], registry: dict[str, Surface]
+) -> list[Finding]:
     findings: list[Finding] = []
     for surface in local.values():
         if surface.status != "active":
             continue
+        published = registry.get(surface.name)
+        if not published or published.status != "active":
+            continue
         try:
-            load_json_url(f"https://pypi.org/pypi/{surface.package}/json")
+            if not published.package_version:
+                raise ValueError("Registry package version is missing")
+            package = urllib.parse.quote(published.package, safe="")
+            version = urllib.parse.quote(published.package_version, safe="")
+            release = load_json_url(f"https://pypi.org/pypi/{package}/{version}/json")
+            files = release.get("urls") or []
+            if not any(not file.get("yanked", False) for file in files):
+                raise ValueError(
+                    "Registry package version has no installable artifacts"
+                )
         except (OSError, ValueError, urllib.error.HTTPError) as exc:
             findings.append(
                 Finding(
@@ -203,20 +254,40 @@ def main() -> int:
     )
     parser.add_argument("--output", type=Path)
     parser.add_argument("--skip-live", action="store_true")
+    parser.add_argument(
+        "--local-only",
+        action="store_true",
+        help="Validate source manifests without reading any external service",
+    )
     args = parser.parse_args()
 
     local = local_surfaces()
-    registry = registry_surfaces(load_json_url(REGISTRY_URL))
-    findings = compare_surfaces(local, registry)
-    if not args.skip_live:
-        findings.extend(live_findings(local))
+    registry = {} if args.local_only else registry_surfaces(load_registry())
+    findings = [] if args.local_only else compare_surfaces(local, registry)
+    if not args.skip_live and not args.local_only:
+        findings.extend(live_findings(local, registry))
     exceptions = json.loads(EXCEPTIONS_PATH.read_text())["exceptions"]
     active, blocking = classify(findings, exceptions, date.today())
+    catalog = json.loads(CATALOG_PATH.read_text())["services"]
+    manifest_aliases = {surface.alias for surface in local.values()}
     report = {
-        "schema_version": 1,
+        "schema_version": 2,
         "checked_on": date.today().isoformat(),
+        "mode": "local"
+        if args.local_only
+        else "contract"
+        if args.skip_live
+        else "live",
         "local_manifests": len(local),
-        "registry_latest": len(registry),
+        "registry_latest": None if args.local_only else len(registry),
+        "registry_active": None
+        if args.local_only
+        else sum(s.status == "active" for s in registry.values()),
+        "active_without_manifest": sorted(
+            alias
+            for alias, entry in catalog.items()
+            if entry["status"] == "active" and alias not in manifest_aliases
+        ),
         "findings": active,
         "blocking": blocking,
     }

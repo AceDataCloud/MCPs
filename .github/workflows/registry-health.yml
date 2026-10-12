@@ -26,9 +26,11 @@ jobs:
       - uses: actions/setup-python@v6
         with:
           python-version: "3.12"
-      - run: python3 scripts/test_registry_health.py
-      - run: python3 scripts/registry_health.py --skip-live --output registry-health.json
-      - uses: actions/upload-artifact@v4
+      - run: python3 -m unittest scripts.test_registry_health
+      # PR correctness is deterministic; external policy/availability is audited below.
+      - run: python3 scripts/registry_health.py --local-only --output registry-health.json
+      - uses: actions/upload-artifact@v7
+        if: always()
         with:
           name: registry-contract-health
           path: registry-health.json
@@ -43,7 +45,7 @@ jobs:
         with:
           python-version: "3.12"
       - run: python3 scripts/registry_health.py --output registry-health.json
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: always()
         with:
           name: registry-live-health
