@@ -157,7 +157,7 @@ Each MCP package keeps its existing `pytest` test-discovery configuration.
 
 ## Marketing links
 
-The shared key-creation steps live in `scripts/token_onboarding.py`; marked sections are refreshed for each distribution channel, including the VS Code bundle. Edit the surrounding package tutorial in `README.md`, then run `python3 scripts/marketing_readmes.py`.
+The shared key-creation steps live in `scripts/token_onboarding.py`; marked sections are refreshed for each distribution channel, including the VS Code bundle. The same guide is rendered into each JetBrains `plugin.xml` description because Marketplace displays that descriptor rather than the repository README. Edit the surrounding package tutorial in `README.md`, then run `python3 scripts/marketing_readmes.py`.
 The same source generates `README.pypi.md`; the package metadata selects that file.
 All active entries in `scripts/mcp_catalog.json` participate, including available
 VS Code and JetBrains READMEs. Sora remains retired. Code examples and MCP/API
