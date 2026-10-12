@@ -522,7 +522,12 @@ VS Code-specific workspace example:
 
 ### Explicit platform token
 
-Create a token at [AceDataCloud Platform](https://platform.acedata.cloud/console/platform-tokens?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=acedatacloud_mcp_readme_platform_token). It begins with `platform-`. A per-service `api.acedata.cloud` token will fail against management actions. Do not paste a real token into a committed project file. An invalid fixed header will not fall back to OAuth in Claude Code.
+<!-- BEGIN TOKEN ONBOARDING -->
+1. Sign in or register at [Ace Data Cloud → Account Tokens](https://platform.acedata.cloud/console/platform-tokens?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=acedatacloud_mcp_readme_platform_token).
+2. Click **Create** and copy the token with the copy button. It starts with `platform-`; it is an account-management credential, separate from an application's generation API key.
+3. Paste only the token into this account MCP's credential field, or set `ACEDATACLOUD_PLATFORM_TOKEN` for local stdio. Add `Bearer ` only when configuring an HTTP `Authorization` header yourself.
+4. Keep it private and remove it from **Account Tokens** to revoke access when no longer needed. For a client that supports hosted OAuth, you can instead use the browser sign-in flow described in this guide.
+<!-- END TOKEN ONBOARDING -->
 
 For Claude Code, the shell expands the token when adding the server, so protect the saved user config:
 

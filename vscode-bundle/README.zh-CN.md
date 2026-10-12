@@ -1,6 +1,6 @@
 # Ace Data Cloud MCP：VS Code 手把手教程
 
-一个扩展可接入 26 个托管 MCP 服务，包括图片、视频、音乐、搜索和账号管理。按需选择服务，无需安装 Python 或运行本地 MCP 进程。[English guide](README.md) · [模型与实时价格](https://platform.acedata.cloud/models)
+一个扩展可接入 26 个托管 MCP 服务，包括图片、视频、音乐、搜索和账号管理。按需选择服务，无需安装 Python 或运行本地 MCP 进程。[English guide](README.md) · [模型与实时价格](https://platform.acedata.cloud/models?utm_source=vscode_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=vscode_bundle_mcp_vscode_models)
 
 ## 第一次生成图片：在 VS Code 使用 GPT Image
 
@@ -14,7 +14,9 @@
 
 ### 2. 获取正确的 API Key
 
-1. 登录 [Ace Data Cloud → Applications](https://platform.acedata.cloud/console/applications)。
+首次使用请先注册并登录；如果还没有通用应用，点击 **初始化通用应用（Initialize General Application）**。创建独立密钥时填写便于识别的名称，并检查有效期、额度和 API 限制后保存。
+
+1. 登录 [Ace Data Cloud → Applications](https://platform.acedata.cloud/console/applications?utm_source=vscode_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=vscode_bundle_mcp_vscode_api_key)。
 2. 打开 **General application**，复制其 API Key；也可以选择 **Manage Keys → Create** 为 VS Code 单独创建。提交任务前确认 OpenAI 图片生成权限、当前价格和余额。
 3. 如果启用了 **Allowed APIs**，生成和查任务两个接口都需要允许：`/openai/images/generations`、`/openai/tasks`。只复制 Token 本身，不要加 `Bearer ` 或引号。`platform-...` 平台管理 Token 用于可选的账号 MCP，不是此图片工具的 Key。
 
@@ -66,7 +68,7 @@ Use openai_get_task only for task ID TASK_ID. Do not call openai_generate_image.
 
 ### 7. 打开图片并核对账单
 
-点击 **View the generated image**。我们的实测链接返回 HTTP 200、1024 × 1024 PNG。到 [Ace Data Cloud Usage](https://platform.acedata.cloud/console/usage) 用**唯一生成任务 ID**核对 Credits；查询任务不应再次产生图片生成费用。价格和套餐换算率会变化，请查看当前显示，而不要照搬示例金额。
+点击 **View the generated image**。我们的实测链接返回 HTTP 200、1024 × 1024 PNG。到 [Ace Data Cloud Usage](https://platform.acedata.cloud/console/usage?utm_source=vscode_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=vscode_bundle_mcp_vscode_console_usage) 用**唯一生成任务 ID**核对 Credits；查询任务不应再次产生图片生成费用。价格和套餐换算率会变化，请查看当前显示，而不要照搬示例金额。
 
 | 现象 | 处理方式 |
 | --- | --- |
