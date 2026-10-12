@@ -56,7 +56,7 @@ The hosted service advertises OAuth metadata and Dynamic Client Registration (DC
 ### Hosted OAuth examples
 
 - **Claude and Claude Desktop chat:** Add a remote custom connector in `Customize → Connectors → Add custom connector`, enter `https://serp.mcp.acedata.cloud/mcp`, select sign-in, and choose **Register automatically** if Claude asks how to register its OAuth client. Complete consent. Claude Desktop's local `claude_desktop_config.json` is a separate setup. [Claude connector guide](https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp).
-- **Claude Code:** `claude mcp add --transport http --scope user serp https://serp.mcp.acedata.cloud/mcp`, then `claude mcp login serp`. Check `/mcp`. [Claude Code MCP guide](https://code.claude.com/docs/en/mcp).
+- **Claude Code:** `claude mcp add --transport http --scope user serp https://serp.mcp.acedata.cloud/mcp`, then start `claude`, open `/mcp`, and authenticate the Serp server. [Claude Code MCP guide](https://code.claude.com/docs/en/mcp).
 - **Cursor:** Add a remote server with only `https://serp.mcp.acedata.cloud/mcp`. For a project, merge the entry below into `<project>/.cursor/mcp.json`; for personal use, use `~/.cursor/mcp.json`. [Cursor MCP guide](https://cursor.com/docs/mcp).
 - **VS Code / Copilot:** Run **MCP: Add Server**, select HTTP, enter `https://serp.mcp.acedata.cloud/mcp`, then finish the browser sign-in. New portable workspace configs use `<project>/.mcp.json`; the VS Code-specific format below uses `<project>/.vscode/mcp.json` or the user profile. Check **MCP: List Servers**. [VS Code MCP setup](https://code.visualstudio.com/docs/agent-customization/mcp-servers).
 - **Codex:** `codex mcp add serp --url https://serp.mcp.acedata.cloud/mcp`, then `codex mcp login serp`. Its user settings are in `~/.codex/config.toml`. [Official Codex MCP guide](https://developers.openai.com/codex/mcp/).
@@ -182,7 +182,7 @@ Keep this user-level file private. Self-hosted HTTP uses `mcp-serp --transport h
 ### Check before using the service
 
 1. `https://serp.mcp.acedata.cloud/health` returning `{"status":"ok"}` checks endpoint reachability only.
-2. Confirm that the MCP client loads tools. `serp_get_usage_guide` is a reference tool; it does not verify downstream API access or balance.
+2. Confirm that the MCP client loads tools. `serp_list_search_types` and `serp_get_usage_guide` are local reference tools with no search API charge; they do not verify downstream API access or balance. Search tools are read-only but consume Credits, and repeating a search can incur another charge.
 3. If you need a full API check, call `serp_google_search` with your own valid input after reviewing [current service documentation](https://platform.acedata.cloud/documents/serp-mcp?utm_source=pypi&utm_medium=referral&utm_campaign=evergreen&utm_content=serp_mcp_package_quick_start) and displayed pricing.
 
 For **401**, check which auth route the client used and whether the token or OAuth session is valid. A **403** may mean an account permission or content moderation failure; read the returned error. Insufficient balance and downstream service failures need their own diagnosis. A listed tool or submitted task does not prove a successful result.
