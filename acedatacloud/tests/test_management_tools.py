@@ -184,6 +184,82 @@ async def test_unknown_recharge_card_theme_is_rejected_before_http():
 
 
 @respx.mock
+@pytest.mark.parametrize(
+    "name,method,path,arguments",
+    [
+        (
+            "acedatacloud_create_site_home_sections",
+            "POST",
+            "/site-home-sections/",
+            {"site": "site-1", "kind": "website", "title": "Website", "body": API},
+        ),
+        (
+            "acedatacloud_replace_site_home_sections_id",
+            "PUT",
+            "/site-home-sections/section-1/",
+            {"id": "section-1", "kind": "website", "title": "Website", "body": API},
+        ),
+        (
+            "acedatacloud_update_site_home_sections_id",
+            "PATCH",
+            "/site-home-sections/section-1/",
+            {"id": "section-1"},
+        ),
+    ],
+)
+@pytest.mark.parametrize(
+    "presentation", [None, {}, {"open_external": False}, {"open_external": True}]
+)
+async def test_home_section_presentation_preserves_confirmation_and_exact_body(
+    name, method, path, arguments, presentation
+):
+    if presentation is not None:
+        arguments = {**arguments, "presentation": presentation}
+    preview, _ = await mcp.call_tool(name, arguments)
+    target = json.loads(preview[0].text)
+    assert target["status"] == "confirmation_required"
+    expected_body = {key: value for key, value in arguments.items() if key != "id"}
+    assert target["target"]["body"] == expected_body
+    assert not respx.calls
+
+    route = respx.request(method, f"{API}{path}").mock(return_value=httpx.Response(200, json={}))
+    await mcp.call_tool(name, {**arguments, "confirm": True})
+    assert json.loads(route.calls.last.request.content) == expected_body
+
+
+@respx.mock
+@pytest.mark.parametrize(
+    "presentation", [[], "invalid", {"future_flag": True}, {"open_external": "invalid"}]
+)
+async def test_home_section_presentation_rejects_invalid_inputs_before_http(presentation):
+    with pytest.raises(ToolError):
+        await mcp.call_tool(
+            "acedatacloud_update_site_home_sections_id",
+            {"id": "section-1", "presentation": presentation, "confirm": True},
+        )
+    assert not respx.calls
+
+
+@respx.mock
+@pytest.mark.parametrize("public", [False, True])
+async def test_home_section_reads_preserve_presentation(public):
+    section = {"id": "section-1", "kind": "website", "presentation": {"open_external": False}}
+    path = "/site-home-sections/public/" if public else "/site-home-sections/section-1/"
+    payload = [section] if public else section
+    route = respx.get(f"{API}{path}").mock(return_value=httpx.Response(200, json=payload))
+    name = (
+        "acedatacloud_list_site_home_sections_public"
+        if public
+        else "acedatacloud_get_site_home_sections_id"
+    )
+    arguments = {} if public else {"id": "section-1"}
+    content, _ = await mcp.call_tool(name, arguments)
+    assert json.loads(content[0].text) == payload
+    if public:
+        assert "authorization" not in route.calls.last.request.headers
+
+
+@respx.mock
 async def test_generated_public_reads_do_not_forward_credentials():
     set_request_api_token("platform-private")
     route = respx.get(f"{API}/showcases/").mock(

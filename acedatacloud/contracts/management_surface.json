@@ -10268,6 +10268,17 @@
       "body_schema": {
         "type": "object",
         "properties": {
+          "presentation": {
+            "type": "object",
+            "description": "Website presentation options.",
+            "properties": {
+              "open_external": {
+                "type": "boolean",
+                "description": "External-open option for website sections only."
+              }
+            },
+            "additionalProperties": false
+          },
           "site": {
             "type": "string"
           },
@@ -10395,6 +10406,17 @@
       "body_schema": {
         "type": "object",
         "properties": {
+          "presentation": {
+            "type": "object",
+            "description": "Website presentation options.",
+            "properties": {
+              "open_external": {
+                "type": "boolean",
+                "description": "External-open option for website sections only."
+              }
+            },
+            "additionalProperties": false
+          },
           "kind": {
             "enum": [
               "markdown",
@@ -10470,6 +10492,17 @@
       "body_schema": {
         "type": "object",
         "properties": {
+          "presentation": {
+            "type": "object",
+            "description": "Website presentation options; PATCH merges supplied keys.",
+            "properties": {
+              "open_external": {
+                "type": "boolean",
+                "description": "External-open option for website sections only."
+              }
+            },
+            "additionalProperties": false
+          },
           "kind": {
             "enum": [
               "markdown",

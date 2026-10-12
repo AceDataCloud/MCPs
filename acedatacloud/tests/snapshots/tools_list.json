@@ -8451,7 +8451,41 @@
   {
     "name": "acedatacloud_create_site_home_sections",
     "inputSchema": {
+      "$defs": {
+        "acedatacloud_create_site_home_sections_presentation": {
+          "additionalProperties": false,
+          "properties": {
+            "open_external": {
+              "anyOf": [
+                {
+                  "description": "External-open option for website sections only.",
+                  "type": "boolean"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Open External"
+            }
+          },
+          "title": "acedatacloud_create_site_home_sections_presentation",
+          "type": "object"
+        }
+      },
       "properties": {
+        "presentation": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/acedatacloud_create_site_home_sections_presentation",
+              "description": "Website presentation options."
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
         "site": {
           "description": "acedatacloud_create_site_home_sections_site",
           "title": "Site"
@@ -31069,10 +31103,44 @@
   {
     "name": "acedatacloud_replace_site_home_sections_id",
     "inputSchema": {
+      "$defs": {
+        "acedatacloud_replace_site_home_sections_id_presentation": {
+          "additionalProperties": false,
+          "properties": {
+            "open_external": {
+              "anyOf": [
+                {
+                  "description": "External-open option for website sections only.",
+                  "type": "boolean"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Open External"
+            }
+          },
+          "title": "acedatacloud_replace_site_home_sections_id_presentation",
+          "type": "object"
+        }
+      },
       "properties": {
         "id": {
           "title": "Id",
           "type": "string"
+        },
+        "presentation": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/acedatacloud_replace_site_home_sections_id_presentation",
+              "description": "Website presentation options."
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
         },
         "kind": {
           "description": "acedatacloud_replace_site_home_sections_id_kind",
@@ -36950,10 +37018,44 @@
   {
     "name": "acedatacloud_update_site_home_sections_id",
     "inputSchema": {
+      "$defs": {
+        "acedatacloud_update_site_home_sections_id_presentation": {
+          "additionalProperties": false,
+          "properties": {
+            "open_external": {
+              "anyOf": [
+                {
+                  "description": "External-open option for website sections only.",
+                  "type": "boolean"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Open External"
+            }
+          },
+          "title": "acedatacloud_update_site_home_sections_id_presentation",
+          "type": "object"
+        }
+      },
       "properties": {
         "id": {
           "title": "Id",
           "type": "string"
+        },
+        "presentation": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/acedatacloud_update_site_home_sections_id_presentation",
+              "description": "Website presentation options; PATCH merges supplied keys."
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
         },
         "kind": {
           "anyOf": [

@@ -482,6 +482,18 @@ Call `acedatacloud_get_order_invoice(order_id=...)` to read the active invoice. 
 
 Failed or uncertain red-flush results require finance review and do not release the invoice restriction early. Manually issued invoices must first be voided or red-flushed in the tax/invoicing system, then confirmed by finance on the platform.
 
+### Website homepage presentation
+
+For a website section, pass `presentation={"open_external": false}` to `acedatacloud_create_site_home_sections` or `acedatacloud_update_site_home_sections_id` to disable external opening; use `true` to enable it. Read the current section first and review the write preview before calling again with `confirm=true`. Website sections still render in an iframe; `open_external` is not supported for Markdown or HTML sections.
+
+Omitting `presentation` uses Backend defaults on creation and preserves current options on PATCH. PATCH merges supplied presentation keys, so an empty object does not clear existing options. Read back the section with `acedatacloud_get_site_home_sections_id`; visible sections also return presentation through `acedatacloud_list_site_home_sections_public` without account credentials.
+
+### Check x402 ACE buyback and burn
+
+When the policy is enabled, eligible Base mainnet Circle USDC and Solana mainnet USDC receipts allocate 3% to buying and burning ACE without an extra wallet charge. Recharge is counted once; later API calls using those Credits are not counted again. Historical discounted orders and old-policy orders are not automatically included.
+
+Call `acedatacloud_get_order(order_id=...)` and inspect `ace_burn`. `settlement_network` and `settlement_transaction` identify the original payment, while `execution_network` identifies execution on Solana. `Pending` or `Processing` is not proof of a burn; only `Completed` indicates verified final proof, including public `swap_signature` and `burn_signature` transaction identifiers. A Base payment awaiting finality can delay the buyback without blocking already credited Credits. A null `ace_burn` is not evidence of a completed burn. Wallet/payment signatures and authorization payloads remain confidential.
+
 ### Diagnose x402 order failures
 
 Read `acedatacloud_get_order` or `acedatacloud_list_orders` and inspect `metadata.x402.last_error` / `metadata.x402.errors`. They preserve the public `code`, `stage`, `retryable`, `charged`, and `params`, with public explanation in `reason` and event time in `timestamp`. Re-reading the order preserves specific codes such as `insufficient_token_balance` (insufficient USDC on the selected network) and `invalid_signature` rather than replacing them with `payment_failed`.
