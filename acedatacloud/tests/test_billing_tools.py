@@ -143,6 +143,52 @@ async def test_order_reads_preserve_public_x402_errors(code, stage, retryable, c
 
 @respx.mock
 @pytest.mark.asyncio
+@pytest.mark.parametrize("state", [None, "Pending", "Processing", "Review", "Completed"])
+@pytest.mark.parametrize("network", ["eip155:8453", "solana:mainnet"])
+async def test_order_detail_preserves_public_burn_proof_and_masks_other_signatures(state, network):
+    burn = None
+    if state is not None:
+        burn = {
+            "state": state,
+            "settled_usdc_atomic": "300",
+            "burn_rate_bps": 300,
+            "operation_id": None if state == "Pending" else "operation-1",
+            "settlement_network": network,
+            "settlement_transaction": "base-tx" if network == "eip155:8453" else "sol-tx",
+            "execution_network": None if state == "Pending" else "solana:mainnet",
+        }
+        if state == "Completed":
+            burn.update(
+                burned_ace_atomic="900",
+                swap_signature="swap-tx",
+                burn_signature="burn-tx",
+                completed_at="finished",
+            )
+    respx.get(f"{API}/orders/{ID}").mock(
+        return_value=httpx.Response(
+            200,
+            json={
+                "id": ID,
+                "ace_burn": burn,
+                "signature": "wallet-signature-secret",
+                "metadata": {
+                    "swap_signature": "unrelated-signature-secret",
+                    "ace_burn": {"burn_signature": "nested-signature-secret"},
+                    "authorization": "authorization-secret",
+                },
+            },
+        )
+    )
+    result = json.loads(await acedatacloud_get_order(ID))
+    assert result["ace_burn"] == burn
+    assert result["signature"] != "wallet-signature-secret"
+    assert result["metadata"]["swap_signature"] != "unrelated-signature-secret"
+    assert result["metadata"]["ace_burn"]["burn_signature"] != "nested-signature-secret"
+    assert result["metadata"]["authorization"] != "authorization-secret"
+
+
+@respx.mock
+@pytest.mark.asyncio
 @pytest.mark.parametrize("red_state", ["ready", "manual_takeover"])
 async def test_order_invoice_preserves_red_flush_status(red_state):
     invoice = {"id": ID, "status": "Issued", "red_state": red_state}
