@@ -26,8 +26,10 @@ import tomllib
 from collections.abc import Iterable
 from dataclasses import dataclass
 from pathlib import Path
+from urllib.parse import urlencode, urlsplit, urlunsplit
 
 import yaml
+from marketing_readmes import contract as attribution_contract
 from marketing_readmes import render as render_marketing_readme
 from mcp_catalog import documentation_target, load_catalog
 from token_onboarding import token_guide
@@ -64,6 +66,40 @@ class Service:
     @property
     def hosted_url(self) -> str:
         return self.hosted_url_override or f"https://{self.alias}.mcp.acedata.cloud/mcp"
+
+    @property
+    def credential_label(self) -> str:
+        return (
+            "Platform Token"
+            if self.token_env == "ACEDATACLOUD_PLATFORM_TOKEN"
+            else "API Key"
+        )
+
+    @property
+    def credential_url(self) -> str:
+        rules = attribution_contract()
+        account = self.token_env == "ACEDATACLOUD_PLATFORM_TOKEN"
+        parts = urlsplit(self.signup_url)
+        path = "/console/platform-tokens" if account else "/console/applications"
+        placement = "platform_token" if account else "api_key"
+        content = rules["link_defaults"]["content_template"].format(
+            entry=self.alias.replace("-", "_") + "_mcp",
+            surface="extension",
+            placement=placement,
+        )
+        tags = {
+            "utm_source": "vscode",
+            "utm_medium": rules["sources"]["vscode"],
+            "utm_campaign": rules["link_defaults"]["campaign"],
+            "utm_content": content,
+        }
+        if any(
+            len(value) > rules["max_tag_length"]
+            or not re.fullmatch(rules["tag_pattern"], value)
+            for value in tags.values()
+        ):
+            raise ValueError("Invalid VS Code credential attribution")
+        return urlunsplit((parts.scheme, parts.netloc, path, urlencode(tags), ""))
 
     @property
     def provider_id(self) -> str:
@@ -203,12 +239,12 @@ def render_package_json(svc: Service) -> str:
             "commands": [
                 {
                     "command": svc.set_token_cmd,
-                    "title": f"{svc.display_name}: Set Ace Data Cloud API Key",
+                    "title": f"{svc.display_name}: Set Ace Data Cloud {svc.credential_label}",
                     "category": "MCP",
                 },
                 {
                     "command": svc.clear_token_cmd,
-                    "title": f"{svc.display_name}: Clear Ace Data Cloud API Key",
+                    "title": f"{svc.display_name}: Clear Ace Data Cloud {svc.credential_label}",
                     "category": "MCP",
                 },
             ],
@@ -242,7 +278,7 @@ const CLEAR_TOKEN_CMD = "{svc.clear_token_cmd}";
 // Per-extension SecretStorage namespace; we keep one key per service so
 // rotating one API key doesn't affect siblings.
 const SECRET_KEY = "{svc.alias}.apiToken";
-const SIGNUP_URL = "{svc.signup_url}";
+const CREDENTIAL_URL = "{svc.credential_url}";
 
 async function readToken(context) {{
   const env = process.env.{svc.token_env};
@@ -253,9 +289,9 @@ async function readToken(context) {{
 
 async function promptForToken(context) {{
   const token = await vscode.window.showInputBox({{
-    title: `${{SERVER_LABEL}} — Ace Data Cloud API key`,
-        prompt: `Paste an API key from ${{SIGNUP_URL}}/console/applications (Applications -> API Key). Stored in the OS keychain.`,
-        placeHolder: "API key from /console/applications",
+    title: `${{SERVER_LABEL}} — Ace Data Cloud {svc.credential_label.lower()}`,
+        prompt: `Paste an Ace Data Cloud {svc.credential_label.lower()} from ${{CREDENTIAL_URL}}. Stored in VS Code SecretStorage.`,
+        placeHolder: "{svc.credential_label} from {urlsplit(svc.credential_url).path}",
     password: true,
     ignoreFocusOut: true,
   }});
@@ -274,13 +310,13 @@ function activate(context) {{
     vscode.commands.registerCommand(SET_TOKEN_CMD, async () => {{
       const t = await promptForToken(context);
       if (t) {{
-        vscode.window.showInformationMessage(`${{SERVER_LABEL}}: API key saved.`);
+        vscode.window.showInformationMessage(`${{SERVER_LABEL}}: {svc.credential_label.lower()} saved.`);
         onDidChange.fire();
       }}
     }}),
     vscode.commands.registerCommand(CLEAR_TOKEN_CMD, async () => {{
       await context.secrets.delete(SECRET_KEY);
-    vscode.window.showInformationMessage(`${{SERVER_LABEL}}: API key cleared.`);
+    vscode.window.showInformationMessage(`${{SERVER_LABEL}}: {svc.credential_label.lower()} cleared.`);
       onDidChange.fire();
     }}),
     context.secrets.onDidChange((e) => {{
@@ -296,8 +332,8 @@ function activate(context) {{
         if (!token) token = await promptForToken(context);
         if (!token) {{
           throw new Error(
-                        `${{SERVER_LABEL}} needs an Ace Data Cloud API key. ` +
-                            `Run "${{SERVER_LABEL}}: Set Ace Data Cloud API Key" from the command palette.`
+                        `${{SERVER_LABEL}} needs an Ace Data Cloud {svc.credential_label.lower()}. ` +
+                            `Run "${{SERVER_LABEL}}: Set Ace Data Cloud {svc.credential_label}" from the command palette.`
           );
         }}
         return new vscode.McpHttpServerDefinition(server.label, server.uri, {{
@@ -391,10 +427,10 @@ can call it directly from chat.
 4. **Enable this server's tools.** Open **Chat → Agent → Configure Tools** and select only the tools you need under **{svc.display_name}**. If the list is empty, choose **Update Tools**. The extension prompts for the {credential_label} on first use and saves it in VS Code's `SecretStorage`. Disable another copy of the same server from the Ace MCP bundle or manual `mcp.json` to avoid duplicate tools.
 5. **Verify one result.** Check the Tool Reference below and current pricing before running a request. If you already have a task ID, enable its task-query tool and query that same ID first. An accepted generation is not a completed result: poll the original task until it reaches a successful terminal state, open the returned media, and match the task ID in [Usage](https://platform.acedata.cloud/console/usage). Do not resubmit generation to poll. Model Chat and background utility calls can add separate charges to the service request.
 
-You can rotate or remove the API key any time from the command palette:
+You can rotate or remove the {credential_label} any time from the command palette:
 
-- **{svc.display_name}: Set Ace Data Cloud API Key**
-- **{svc.display_name}: Clear Ace Data Cloud API Key**
+- **{svc.display_name}: Set Ace Data Cloud {svc.credential_label}**
+- **{svc.display_name}: Clear Ace Data Cloud {svc.credential_label}**
 
 > The default config talks to the **hosted streamable-HTTP endpoint** at
 > `{svc.hosted_url}` — no Python, no `uvx`, no local install needed.
@@ -432,7 +468,7 @@ Provider id : {svc.provider_id}
 Server label: {svc.display_name}
 Server URL  : {svc.hosted_url}
 Transport   : Streamable HTTP
-Auth        : Bearer API key from VS Code SecretStorage (or ${svc.token_env})
+Auth        : Bearer {credential_label} from VS Code SecretStorage (or ${svc.token_env})
 ```
 
 You don't need to edit `mcp.json` — the extension handles registration and
