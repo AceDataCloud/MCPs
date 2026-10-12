@@ -262,9 +262,21 @@ def main() -> int:
     args = parser.parse_args()
 
     local = local_surfaces()
-    registry = {} if args.local_only else registry_surfaces(load_registry())
-    findings = [] if args.local_only else compare_surfaces(local, registry)
-    if not args.skip_live and not args.local_only:
+    registry: dict[str, Surface] = {}
+    registry_checked = False
+    findings: list[Finding] = []
+    if not args.local_only:
+        try:
+            registry = registry_surfaces(load_registry())
+            registry_checked = True
+            findings = compare_surfaces(local, registry)
+        except (OSError, ValueError, RuntimeError) as exc:
+            findings.append(
+                Finding(
+                    "registry_unavailable", "registry_unavailable", NAMESPACE, str(exc)
+                )
+            )
+    if not args.skip_live and registry_checked:
         findings.extend(live_findings(local, registry))
     exceptions = json.loads(EXCEPTIONS_PATH.read_text())["exceptions"]
     active, blocking = classify(findings, exceptions, date.today())
@@ -279,9 +291,10 @@ def main() -> int:
         if args.skip_live
         else "live",
         "local_manifests": len(local),
-        "registry_latest": None if args.local_only else len(registry),
+        "registry_checked": registry_checked,
+        "registry_latest": len(registry) if registry_checked else None,
         "registry_active": None
-        if args.local_only
+        if not registry_checked
         else sum(s.status == "active" for s in registry.values()),
         "active_without_manifest": sorted(
             alias

@@ -1,7 +1,10 @@
 #!/usr/bin/env python3
 from __future__ import annotations
 
+import io
+import json
 import unittest
+from contextlib import redirect_stdout
 from datetime import date
 from unittest.mock import MagicMock, patch
 
@@ -16,6 +19,7 @@ from scripts.registry_health import (
     live_findings,
     load_registry,
     local_surfaces,
+    main,
     registry_surfaces,
 )
 
@@ -160,6 +164,21 @@ class RegistryHealthTest(unittest.TestCase):
         self.assertTrue(surfaces)
         self.assertTrue(
             all(surface.name.startswith(NAMESPACE) for surface in surfaces.values())
+        )
+
+    @patch("scripts.registry_health.load_registry", side_effect=TimeoutError("timeout"))
+    @patch("sys.argv", ["registry_health.py", "--skip-live"])
+    def test_registry_outage_emits_failure_report_without_false_missing_entries(
+        self, load
+    ) -> None:
+        output = io.StringIO()
+        with redirect_stdout(output):
+            self.assertEqual(main(), 1)
+        report = json.loads(output.getvalue())
+        self.assertFalse(report["registry_checked"])
+        self.assertIsNone(report["registry_latest"])
+        self.assertEqual(
+            [row["kind"] for row in report["blocking"]], ["registry_unavailable"]
         )
 
 
