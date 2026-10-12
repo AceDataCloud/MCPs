@@ -1,6 +1,7 @@
 """Prevent publishing packages that fail registry ownership or install another project."""
 
 import json
+import re
 import unittest
 from pathlib import Path
 
@@ -10,6 +11,25 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 class DistributionContractsTest(unittest.TestCase):
+    def test_jetbrains_plugins_do_not_overwrite_each_others_installation(self):
+        catalog = json.loads((ROOT / "scripts/mcp_catalog.json").read_text())[
+            "services"
+        ]
+        install_directories = {}
+        for alias, entry in catalog.items():
+            settings = ROOT / alias / "jetbrains/settings.gradle.kts"
+            if entry["status"] != "active" or not settings.exists():
+                continue
+            with self.subTest(alias=alias):
+                match = re.search(
+                    r'rootProject.name\s*=\s*"([^"]+)"', settings.read_text()
+                )
+                self.assertIsNotNone(match)
+                directory = match[1]
+                self.assertNotIn(directory, install_directories)
+                self.assertEqual(directory, f"mcp-{alias}")
+                install_directories[directory] = alias
+
     def test_registry_packages_have_matching_identity_and_ownership_marker(self):
         catalog = json.loads((ROOT / "scripts/mcp_catalog.json").read_text())[
             "services"
