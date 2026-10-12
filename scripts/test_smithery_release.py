@@ -55,7 +55,8 @@ class SmitheryReleaseTest(unittest.TestCase):
         ]:
             with self.subTest(status=status), self.assertRaises(RuntimeError):
                 wait_for_release(
-                    RELEASE_ID, lambda _: {"id": RELEASE_ID, "status": status}
+                    RELEASE_ID,
+                    lambda _, status=status: {"id": RELEASE_ID, "status": status},
                 )
 
     def test_an_older_successful_release_does_not_pass(self):
@@ -80,14 +81,10 @@ class SmitheryReleaseTest(unittest.TestCase):
             with self.subTest(path=target):
                 self.assertEqual(target.read_text(), SOURCE.read_text())
                 workflow = (target.parent.parent / "workflows/publish.yml").read_text()
-                section = workflow.split("  publish-smithery:\n", 1)[1].split(
-                    "\n  publish-", 1
-                )[0]
+                section = workflow.split("  publish-smithery:\n", 1)[1].split("\n  publish-", 1)[0]
                 self.assertNotIn("|| echo", section)
                 self.assertIn("set -euo pipefail", section)
-                self.assertIn(
-                    "python3 .github/scripts/verify_smithery_release.py", section
-                )
+                self.assertIn("python3 .github/scripts/verify_smithery_release.py", section)
 
 
 if __name__ == "__main__":

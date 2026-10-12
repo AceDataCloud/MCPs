@@ -12,9 +12,12 @@ def targets():
     catalog = json.loads((ROOT / "scripts/mcp_catalog.json").read_text())["services"]
     for alias, entry in catalog.items():
         workflow = ROOT / alias / ".github/workflows/publish.yml"
-        if entry["status"] == "active" and workflow.exists():
-            if "publish-smithery:" in workflow.read_text():
-                yield ROOT / alias / ".github/scripts/verify_smithery_release.py"
+        if (
+            entry["status"] == "active"
+            and workflow.exists()
+            and "publish-smithery:" in workflow.read_text()
+        ):
+            yield ROOT / alias / ".github/scripts/verify_smithery_release.py"
 
 
 def main():
