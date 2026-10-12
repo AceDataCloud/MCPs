@@ -55,9 +55,7 @@ def wait_for_release(
         if status not in {"PENDING", "QUEUED", "WORKING"}:
             raise RuntimeError(f"Smithery release did not succeed: {status}")
         sleep(max(0, min(interval, deadline - clock())))
-    raise TimeoutError(
-        "Smithery release is still pending; inspect it before retrying publish"
-    )
+    raise TimeoutError("Release still pending; inspect it before publishing again")
 
 
 def main():
@@ -69,9 +67,8 @@ def main():
     url = f"https://api.smithery.ai/servers/{quote(qualified_name, safe='/')}/releases/{release_id}"
 
     def fetch(timeout):
-        request = urllib.request.Request(
-            url, headers={"Authorization": f"Bearer {key}"}
-        )
+        headers = {"Authorization": f"Bearer {key}"}
+        request = urllib.request.Request(url, headers=headers)
         with urllib.request.urlopen(request, timeout=timeout) as response:
             return json.load(response)
 
