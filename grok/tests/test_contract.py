@@ -5,7 +5,7 @@ from typing import get_args
 from core.types import DEFAULT_CHAT_MODEL, GrokChatModel, ReasoningEffort, ServiceTier
 
 # Mirrors the `model` / `reasoning_effort` / `service_tier` enums in the Grok chat OpenAPI spec.
-SPEC_CHAT_MODELS = {"grok-4.5", "grok-4", "grok-3"}
+SPEC_CHAT_MODELS = {"grok-4.7", "grok-4.5", "grok-4", "grok-3"}
 SPEC_REASONING_EFFORT = {"minimal", "low", "medium", "high"}
 SPEC_SERVICE_TIER = {"auto", "default", "flex", "scale", "priority"}
 

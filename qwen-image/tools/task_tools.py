@@ -7,7 +7,7 @@ from pydantic import Field
 
 from core.client import client
 from core.server import mcp
-from core.utils import format_batch_task_result, format_task_result
+from core.utils import format_batch_task_result, format_task_result, is_task_unfinished
 
 
 @mcp.tool()
@@ -48,7 +48,7 @@ async def qwen_image_get_task(
         "cancelled",
         "canceled",
     }
-    if not is_complete and not is_failed:
+    if is_task_unfinished(result) or (not is_complete and not is_failed):
         await asyncio.sleep(5)
     return format_task_result(result)
 

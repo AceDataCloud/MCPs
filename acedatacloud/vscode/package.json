@@ -1,6 +1,6 @@
 {
   "name": "mcp-acedatacloud",
-  "displayName": "Ace Data Cloud MCP",
+  "displayName": "Ace Data Cloud Account MCP",
   "description": "Manage your Ace Data Cloud account — balance, usage, API keys, orders, and tokens.",
   "version": "0.3.0",
   "publisher": "acedatacloud",
@@ -44,18 +44,18 @@
     "mcpServerDefinitionProviders": [
       {
         "id": "acedatacloud.acedatacloud",
-        "label": "Ace Data Cloud MCP"
+        "label": "Ace Data Cloud Account MCP"
       }
     ],
     "commands": [
       {
         "command": "acedatacloud.acedatacloud.setApiToken",
-        "title": "Ace Data Cloud MCP: Set Ace Data Cloud API Key",
+        "title": "Ace Data Cloud Account MCP: Set Ace Data Cloud API Key",
         "category": "MCP"
       },
       {
         "command": "acedatacloud.acedatacloud.clearApiToken",
-        "title": "Ace Data Cloud MCP: Clear Ace Data Cloud API Key",
+        "title": "Ace Data Cloud Account MCP: Clear Ace Data Cloud API Key",
         "category": "MCP"
       }
     ]

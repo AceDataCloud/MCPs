@@ -7,6 +7,7 @@ import pytest
 
 from core.client import DiscordBotClient
 from core.exceptions import DiscordBotAPIError, DiscordBotAuthError, DiscordBotTimeoutError
+from tools.info_tools import discord_get_usage_guide
 
 
 @pytest.fixture
@@ -16,6 +17,20 @@ def bot_client():
         bot_token="test-token",
         base_url="https://discord-bot-test.app.acedata.cloud",
     )
+
+
+@pytest.mark.asyncio
+async def test_usage_guide_explains_deployment_and_connection_verification():
+    guide = await discord_get_usage_guide()
+
+    assert "activate a subscription" in guide
+    assert "no instance size selection" in guide
+    assert "A running container does not guarantee" in " ".join(guide.split())
+    assert "GET /api/whoami" in guide
+    assert "all 14 REST operations" in guide
+    assert "confirm the target and content" in guide
+    assert "not the access token" in guide
+    assert "Redeploy in Overview" in guide
 
 
 class TestDiscordBotClient:

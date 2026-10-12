@@ -1,10 +1,12 @@
 """Unit tests for embedding tools."""
 
 import json
+from typing import get_args
 
 import pytest
 
 from core.server import mcp
+from core.types import EmbeddingModel
 from tools import embedding_tools
 
 
@@ -65,3 +67,7 @@ async def test_openai_embedding_forwards_array_inputs(monkeypatch, embedding_inp
 
     assert captured_payload["input"] == embedding_input
     assert json.loads(response) == {"data": [{"embedding": [0.1]}, {"embedding": [0.2]}]}
+
+
+def test_retired_ada_embedding_is_not_a_tool_option():
+    assert "text-embedding-ada-002" not in get_args(EmbeddingModel)

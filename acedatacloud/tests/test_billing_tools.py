@@ -5,8 +5,11 @@ import json
 import httpx
 import pytest
 import respx
+from mcp.server.fastmcp.exceptions import ToolError
 
 from core.client import set_request_api_token
+from core.server import mcp
+from tools.admin_tools import acedatacloud_list_admin_invoices
 from tools.user.auto_recharge import (
     acedatacloud_confirm_auto_recharge_setup,
     acedatacloud_create_auto_recharge,
@@ -33,6 +36,7 @@ from tools.user.orders import (
     acedatacloud_export_orders,
     acedatacloud_get_order,
     acedatacloud_get_order_summary,
+    acedatacloud_list_orders,
     acedatacloud_pay_order,
     acedatacloud_refresh_order,
     acedatacloud_verify_apple_order,
@@ -96,6 +100,95 @@ async def test_billing_read_routes():
     assert proxy_list.calls[0].request.url.params["user_id"] == "user-1"
 
 
+@respx.mock
+@pytest.mark.asyncio
+@pytest.mark.parametrize(
+    "code,stage,retryable,charged",
+    [
+        ("insufficient_token_balance", "verify", True, False),
+        ("invalid_signature", "verify", True, False),
+        ("settlement_pending", "settle", True, None),
+        ("settlement_failed", "settle", False, None),
+    ],
+)
+async def test_order_reads_preserve_public_x402_errors(code, stage, retryable, charged):
+    error = {
+        "code": code,
+        "stage": stage,
+        "retryable": retryable,
+        "params": {"network": "eip155:8453"},
+        "reason": "Public payment explanation.",
+        "timestamp": "2026-10-11T08:41:03Z",
+    }
+    if charged is not None:
+        error["charged"] = charged
+    metadata = {"x402": {"last_error": error, "errors": [error]}}
+    order = {"id": ID, "state": "Failed", "metadata": metadata}
+    respx.get(f"{API}/platform-tokens/me/").mock(
+        return_value=httpx.Response(200, json={"id": "user-1"})
+    )
+    respx.get(f"{API}/orders/{ID}").mock(return_value=httpx.Response(200, json=order))
+    respx.get(f"{API}/orders/").mock(
+        return_value=httpx.Response(200, json={"count": 1, "items": [order]})
+    )
+    set_request_api_token("platform-token")
+    try:
+        detail = json.loads(await acedatacloud_get_order(ID))
+        listing = json.loads(await acedatacloud_list_orders(state="Failed"))
+    finally:
+        set_request_api_token(None)
+    assert detail["metadata"] == metadata
+    assert listing["items"][0]["metadata"] == metadata
+
+
+@respx.mock
+@pytest.mark.asyncio
+@pytest.mark.parametrize("red_state", ["ready", "manual_takeover"])
+async def test_order_invoice_preserves_red_flush_status(red_state):
+    invoice = {"id": ID, "status": "Issued", "red_state": red_state}
+    route = respx.get(f"{API}/orders/{ID}/invoice/").mock(
+        return_value=httpx.Response(200, json=invoice)
+    )
+    assert json.loads(await acedatacloud_get_order_invoice(ID)) == invoice
+    assert route.call_count == 1
+
+
+@respx.mock
+@pytest.mark.asyncio
+async def test_voided_invoice_is_read_from_history_not_current_order_invoice():
+    invoice = {"id": ID, "status": "Voided", "red_state": "completed"}
+    respx.get(f"{API}/orders/{ID}/invoice/").mock(
+        return_value=httpx.Response(404, json={"detail": "no invoice"})
+    )
+    history = respx.get(f"{API}/invoices/").mock(
+        return_value=httpx.Response(200, json={"count": 1, "items": [invoice]})
+    )
+    current = json.loads(await acedatacloud_get_order_invoice(ID))
+    assert current["error"] == "http_404"
+    result = json.loads(await acedatacloud_list_invoices(order_id=ID))
+    assert result["items"] == [invoice]
+    assert history.calls[0].request.url.params["order_id"] == ID
+
+
+@respx.mock
+@pytest.mark.asyncio
+async def test_bank_transfer_payment_requires_confirmation():
+    preview = json.loads(await acedatacloud_pay_order(ID, pay_way="BankTransfer"))
+    assert preview["status"] == "confirmation_required"
+    assert preview["target"]["pay_way"] == "BankTransfer"
+    assert not respx.calls
+
+    route = respx.post(f"{API}/orders/{ID}/pay/").mock(
+        return_value=httpx.Response(200, json={"id": ID, "pay_way": "BankTransfer"})
+    )
+    result = json.loads(await acedatacloud_pay_order(ID, pay_way="BankTransfer", confirm=True))
+    assert result["pay_way"] == "BankTransfer"
+    assert json.loads(route.calls[0].request.content) == {
+        "pay_way": "BankTransfer",
+        "surface": "pc",
+    }
+
+
 @pytest.mark.asyncio
 async def test_order_modes_validate_before_http():
     both = json.loads(
@@ -131,6 +224,59 @@ async def test_billing_mutation_previews_zero_calls():
     assert respx.calls.call_count == 0
     assert "transaction-secret" not in results[3]
     assert "setup-secret" not in results[10]
+
+
+@respx.mock
+@pytest.mark.asyncio
+@pytest.mark.parametrize(
+    "status", ["Pending", "Processing", "Issued", "Failed", "Rejected", "Voided", "Cancelled"]
+)
+async def test_invoice_status_filter_dispatch(status):
+    route = respx.get(f"{API}/invoices/").mock(return_value=httpx.Response(200, json={"items": []}))
+    tools = {tool.name: tool for tool in await mcp.list_tools()}
+    schema = tools["acedatacloud_list_invoices"].inputSchema["properties"]["status"]
+    assert status in schema["anyOf"][0]["enum"]
+
+    await mcp.call_tool("acedatacloud_list_invoices", {"status": status})
+
+    assert route.calls.last.request.url.params["status"] == status
+    assert "user_id" not in route.calls.last.request.url.params
+
+
+@respx.mock
+@pytest.mark.asyncio
+async def test_invoice_status_filter_rejects_unknown_status_before_http():
+    with pytest.raises(ToolError):
+        await mcp.call_tool("acedatacloud_list_invoices", {"status": "Unknown"})
+    assert not respx.calls
+
+
+@respx.mock
+@pytest.mark.asyncio
+async def test_admin_invoice_status_filter():
+    listing = respx.get(f"{API}/invoices/admin/").mock(
+        return_value=httpx.Response(
+            200, json={"count": 1, "items": [{"id": ID, "status": "Failed"}]}
+        )
+    )
+    result = json.loads(
+        await acedatacloud_list_admin_invoices(status="Failed", limit=20, offset=40)
+    )
+    assert result["items"][0]["id"] == ID
+    assert listing.calls[0].request.url.params["status"] == "Failed"
+    assert listing.calls[0].request.url.params["limit"] == "20"
+    assert listing.calls[0].request.url.params["offset"] == "40"
+    assert "user_id" not in listing.calls[0].request.url.params
+
+
+@respx.mock
+@pytest.mark.asyncio
+async def test_admin_invoice_read_preserves_permission_denied():
+    respx.get(f"{API}/invoices/admin/").mock(
+        return_value=httpx.Response(403, json={"detail": "Missing required permission"})
+    )
+    result = json.loads(await acedatacloud_list_admin_invoices())
+    assert result["error"] == "permission_denied"
 
 
 @respx.mock

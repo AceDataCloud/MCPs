@@ -6,16 +6,54 @@ A Model Context Protocol (MCP) server for AceDataCloud's reCAPTCHA captcha-solvi
 - Solve reCAPTCHA image challenges and obtain reCAPTCHA v2/v3 tokens.
 - Bearer-token authentication through AceDataCloud
 
-## Installation
+## Connect locally
+
+Use the local stdio package and an AceDataCloud API token. The public hosted HTTPS endpoint could not be verified, so this README does not offer it as a connection option. The local MCP process still calls AceDataCloud's API; it does not run the underlying service offline.
+
+<!-- BEGIN TOKEN ONBOARDING -->
+1. Open [Ace Data Cloud → Applications](https://platform.acedata.cloud/console/applications?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=recaptcha_mcp_readme_api_key). Sign in, or register an account first.
+2. Find **General application**. If it has not been created, choose **Initialize General Application**. A general key can use the services available to your account; a dedicated application's key is limited to its service. Check the required service/model access and [current pricing](https://platform.acedata.cloud/models?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=recaptcha_mcp_readme_models).
+3. Copy the **API Key** from the application card, or open **Keys / Manage Keys → Create** to create a separate key for this integration. Give it a recognizable name so you can revoke or rotate it independently.
+4. When creating a key, review **Expiration Time**, **Set Usage Limitation**, and **Allowed APIs**. Enable only the restrictions you need, allow the operations you will call, then click **Create** and copy the token from the key list. Task lookup does not grant permission to submit a generation. Confirm the application's balance can cover your first request; any trial allowance is whatever your account currently displays.
+5. Copy only the token value, without quotation marks, spaces, or `Bearer `. An API Key / API Token field expects this raw value; only a manually configured HTTP `Authorization` header needs the `Bearer ` prefix. A `platform-...` account-management token cannot replace a generation API key.
+
+![Copy an application API key or open Manage Keys](https://raw.githubusercontent.com/AceDataCloud/NanoBananaDify/2522b2f57210597af2db866445319334a1677a23/_assets/tutorial/get-api-key-en.png)
+
+![Create a separately named key with optional restrictions](https://raw.githubusercontent.com/AceDataCloud/NanoBananaDify/2522b2f57210597af2db866445319334a1677a23/_assets/tutorial/create-api-key-en.png)
+
+Save the key in the client's credential store or the environment variable shown below. Never put it in a prompt, shared workflow, screenshot, or Git commit. If authentication fails, check the full copied value, application/service access, expiration, usage limit, and balance before creating another key.
+<!-- END TOKEN ONBOARDING -->
+
+
+### Local stdio
+
+Install the package and give the local process an API token:
+
 ```bash
-pip install mcp-recaptcha
+python -m pip install mcp-recaptcha
+export ACEDATACLOUD_API_TOKEN='YOUR_API_TOKEN'
+mcp-recaptcha
 ```
 
-## Configuration
-```bash
-export ACEDATACLOUD_API_TOKEN=your_token_here
-export RECAPTCHA_REQUEST_TIMEOUT=120
+For Claude Desktop local MCP, merge this entry into the file opened by its developer settings (`~/Library/Application Support/Claude/claude_desktop_config.json` on macOS). `uvx` requires [uv](https://docs.astral.sh/uv/) on `PATH`:
+
+```json
+{
+  "mcpServers": {
+    "recaptcha": {
+      "command": "uvx",
+      "args": ["mcp-recaptcha"],
+      "env": {"ACEDATACLOUD_API_TOKEN": "YOUR_API_TOKEN"}
+    }
+  }
+}
 ```
+
+Keep this user-level file private. Self-hosted HTTP uses `mcp-recaptcha --transport http --port 8000`; expose it only with suitable network and TLS controls. Local execution still calls the AceDataCloud API.
+
+### Check the connection
+
+Confirm that the MCP client loads its tools. `recaptcha_get_usage_guide` returns reference information; it does not prove downstream API access or balance. A real service request can be billed. If it returns 401, check the API token; if it returns 403 or an account/balance error, read that response before retrying.
 
 ## Tools
 - `recaptcha2_recognize` — Recognize a reCAPTCHA v2 image challenge
@@ -27,4 +65,4 @@ export RECAPTCHA_REQUEST_TIMEOUT=120
 ## Service details
 
 <!-- canonical-documentation -->
-[Service details](https://platform.acedata.cloud/services/485cc5ca-7f1e-48e5-944e-1fe82b4637e8)
+[Service details](https://platform.acedata.cloud/services/485cc5ca-7f1e-48e5-944e-1fe82b4637e8?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=recaptcha_mcp_readme_quick_start)

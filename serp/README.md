@@ -8,7 +8,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![MCP](https://img.shields.io/badge/MCP-Compatible-green.svg)](https://modelcontextprotocol.io)
 
-A [Model Context Protocol (MCP)](https://modelcontextprotocol.io) server for Google search using [SERP API](https://platform.acedata.cloud/documents/serp-google) through the [AceDataCloud API](https://platform.acedata.cloud).
+A [Model Context Protocol (MCP)](https://modelcontextprotocol.io) server for Google search using [SERP API](https://platform.acedata.cloud/documents/serp-google?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=serp_mcp_readme_documents_serp-google) through the [AceDataCloud API](https://platform.acedata.cloud?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=serp_mcp_readme_platform).
 
 Perform Google searches and get structured results directly from Claude, VS Code, or any MCP-compatible client.
 
@@ -40,254 +40,129 @@ Perform Google searches and get structured results directly from Claude, VS Code
 | `serp_list_time_ranges` | List available time range filters for Google search. |
 | `serp_get_usage_guide` | Get a comprehensive guide for using the Google SERP tools. |
 
-## Quick Start
+## Connect: hosted OAuth, API token, or local stdio
 
-### 1. Get Your API Token
+The hosted endpoint is `https://serp.mcp.acedata.cloud/mcp`. Choose one route for the MCP client:
 
-1. Sign up at [AceDataCloud Platform](https://platform.acedata.cloud)
-2. Go to the [API documentation page](https://platform.acedata.cloud/documents/serp-google)
-3. Click **"Acquire"** to get your API token
-4. Copy the token for use below
+| Route | When to use it | Credential setup |
+|---|---|---|
+| Hosted OAuth | The client supports remote MCP OAuth | Add only the URL, then sign in to AceDataCloud and approve access. No token needs to be pasted into client configuration. |
+| Hosted API token | The client cannot finish OAuth, or you need an explicit integration credential | Send an AceDataCloud API token in the `Authorization: Bearer …` header. Keep it in a local secret store or environment variable. |
+| Local stdio | The client runs a local MCP process | Install `mcp-serp` and pass `ACEDATACLOUD_API_TOKEN` to that process. It still calls the AceDataCloud API. |
 
-### 2. Use the Hosted Server (Recommended)
+The hosted service advertises OAuth metadata and Dynamic Client Registration (DCR). **DCR registers the client application; it is not an API key.** OAuth signs you in and the client sends the resulting Bearer token; it may reuse or create an API credential for the account. Browser sign-in still requires an AceDataCloud account. The hosted service can be metered: review [current service documentation](https://platform.acedata.cloud/documents/serp-mcp?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=serp_mcp_readme_quick_start) and displayed pricing before a real operation. Do not configure both an OAuth login and a fixed `Authorization` header for the same server.
 
-AceDataCloud hosts a managed MCP server — **no local installation required**.
+### Hosted OAuth examples
 
-**Endpoint:** `https://serp.mcp.acedata.cloud/mcp`
+- **Claude and Claude Desktop chat:** Add a remote custom connector in `Customize → Connectors → Add custom connector`, enter `https://serp.mcp.acedata.cloud/mcp`, select sign-in, and choose **Register automatically** if Claude asks how to register its OAuth client. Complete consent. Claude Desktop's local `claude_desktop_config.json` is a separate setup. [Claude connector guide](https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp).
+- **Claude Code:** `claude mcp add --transport http --scope user serp https://serp.mcp.acedata.cloud/mcp`, then `claude mcp login serp`. Check `/mcp`. [Claude Code MCP guide](https://code.claude.com/docs/en/mcp).
+- **Cursor:** Add a remote server with only `https://serp.mcp.acedata.cloud/mcp`. For a project, merge the entry below into `<project>/.cursor/mcp.json`; for personal use, use `~/.cursor/mcp.json`. [Cursor MCP guide](https://cursor.com/docs/mcp).
+- **VS Code / Copilot:** Run **MCP: Add Server**, select HTTP, enter `https://serp.mcp.acedata.cloud/mcp`, then finish the browser sign-in. New portable workspace configs use `<project>/.mcp.json`; the VS Code-specific format below uses `<project>/.vscode/mcp.json` or the user profile. Check **MCP: List Servers**. [VS Code MCP setup](https://code.visualstudio.com/docs/agent-customization/mcp-servers).
+- **Codex:** `codex mcp add serp --url https://serp.mcp.acedata.cloud/mcp`, then `codex mcp login serp`. Its user settings are in `~/.codex/config.toml`. [Official Codex MCP guide](https://developers.openai.com/codex/mcp/).
 
-All requests require a Bearer token. Use the API token from Step 1.
-
-#### Claude.ai
-
-Connect directly on [Claude.ai](https://claude.ai) with OAuth — **no API token needed**:
-
-1. Go to Claude.ai **Settings → Integrations → Add More**
-2. Enter the server URL: `https://serp.mcp.acedata.cloud/mcp`
-3. Complete the OAuth login flow
-4. Start using the tools in your conversation
-
-#### Claude Desktop
-
-Add to your config (`~/Library/Application Support/Claude/claude_desktop_config.json` on macOS):
+Cursor project config (OAuth):
 
 ```json
 {
   "mcpServers": {
-    "serp": {
-      "type": "streamable-http",
-      "url": "https://serp.mcp.acedata.cloud/mcp",
-      "headers": {
-        "Authorization": "Bearer YOUR_API_TOKEN"
-      }
-    }
+    "serp": {"url": "https://serp.mcp.acedata.cloud/mcp"}
   }
 }
 ```
 
-#### Cursor / Windsurf
-
-Add to your MCP config (`.cursor/mcp.json` or `.windsurf/mcp.json`):
-
-```json
-{
-  "mcpServers": {
-    "serp": {
-      "type": "streamable-http",
-      "url": "https://serp.mcp.acedata.cloud/mcp",
-      "headers": {
-        "Authorization": "Bearer YOUR_API_TOKEN"
-      }
-    }
-  }
-}
-```
-
-#### VS Code (Copilot)
-
-Add to your VS Code MCP config (`.vscode/mcp.json`):
+VS Code-specific workspace config (OAuth):
 
 ```json
 {
   "servers": {
-    "serp": {
-      "type": "streamable-http",
-      "url": "https://serp.mcp.acedata.cloud/mcp",
-      "headers": {
-        "Authorization": "Bearer YOUR_API_TOKEN"
-      }
-    }
+    "serp": {"type": "http", "url": "https://serp.mcp.acedata.cloud/mcp"}
   }
 }
 ```
 
-Or install the [Ace Data Cloud MCP extension](https://marketplace.visualstudio.com/items?itemName=acedatacloud.acedatacloud-mcp) for VS Code, which registers the hosted MCP servers with one-click setup.
+### Hosted API token
 
-#### JetBrains IDEs
+<!-- BEGIN TOKEN ONBOARDING -->
+1. Open [Ace Data Cloud → Applications](https://platform.acedata.cloud/console/applications?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=serp_mcp_readme_api_key). Sign in, or register an account first.
+2. Find **General application**. If it has not been created, choose **Initialize General Application**. A general key can use the services available to your account; a dedicated application's key is limited to its service. Check the required service/model access and [current pricing](https://platform.acedata.cloud/models?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=serp_mcp_readme_models).
+3. Copy the **API Key** from the application card, or open **Keys / Manage Keys → Create** to create a separate key for this integration. Give it a recognizable name so you can revoke or rotate it independently.
+4. When creating a key, review **Expiration Time**, **Set Usage Limitation**, and **Allowed APIs**. Enable only the restrictions you need, allow the operations you will call, then click **Create** and copy the token from the key list. Task lookup does not grant permission to submit a generation. Confirm the application's balance can cover your first request; any trial allowance is whatever your account currently displays.
+5. Copy only the token value, without quotation marks, spaces, or `Bearer `. An API Key / API Token field expects this raw value; only a manually configured HTTP `Authorization` header needs the `Bearer ` prefix. A `platform-...` account-management token cannot replace a generation API key.
 
-1. Go to **Settings → Tools → AI Assistant → Model Context Protocol (MCP)**
-2. Click **Add** → **HTTP**
-3. Paste:
+![Copy an application API key or open Manage Keys](https://raw.githubusercontent.com/AceDataCloud/NanoBananaDify/2522b2f57210597af2db866445319334a1677a23/_assets/tutorial/get-api-key-en.png)
 
-```json
-{
-  "mcpServers": {
-    "serp": {
-      "url": "https://serp.mcp.acedata.cloud/mcp",
-      "headers": {
-        "Authorization": "Bearer YOUR_API_TOKEN"
-      }
-    }
-  }
-}
-```
+![Create a separately named key with optional restrictions](https://raw.githubusercontent.com/AceDataCloud/NanoBananaDify/2522b2f57210597af2db866445319334a1677a23/_assets/tutorial/create-api-key-en.png)
 
+Save the key in the client's credential store or the environment variable shown below. Never put it in a prompt, shared workflow, screenshot, or Git commit. If authentication fails, check the full copied value, application/service access, expiration, usage limit, and balance before creating another key.
+<!-- END TOKEN ONBOARDING -->
 
-#### Claude Code
+A fixed Bearer header bypasses OAuth. If the header is invalid, remove it before trying browser sign-in; keep the saved credential private.
 
-Claude Code supports MCP servers natively:
+For Claude Code, the shell expands the token when you add the server; treat the saved user MCP config as a secret:
 
 ```bash
-claude mcp add serp --transport http https://serp.mcp.acedata.cloud/mcp \
-  -h "Authorization: Bearer YOUR_API_TOKEN"
+export ACEDATACLOUD_API_TOKEN='YOUR_API_TOKEN'
+claude mcp add --transport http --scope user serp https://serp.mcp.acedata.cloud/mcp \
+  --header "Authorization: Bearer $ACEDATACLOUD_API_TOKEN"
 ```
 
-Or add to your project's `.mcp.json`:
+For a Claude Code project config, put a variable reference in `<project>/.mcp.json` and set that variable in the environment that launches Claude Code:
 
 ```json
 {
   "mcpServers": {
     "serp": {
-      "type": "streamable-http",
+      "type": "http",
       "url": "https://serp.mcp.acedata.cloud/mcp",
-      "headers": {
-        "Authorization": "Bearer YOUR_API_TOKEN"
-      }
+      "headers": {"Authorization": "Bearer ${ACEDATACLOUD_API_TOKEN}"}
     }
   }
 }
 ```
 
-#### Cline
-
-Add to Cline's MCP settings (`.cline/mcp_settings.json`):
+Cursor uses a different environment-variable syntax in `~/.cursor/mcp.json` or an uncommitted project config:
 
 ```json
 {
   "mcpServers": {
     "serp": {
-      "type": "streamable-http",
       "url": "https://serp.mcp.acedata.cloud/mcp",
-      "headers": {
-        "Authorization": "Bearer YOUR_API_TOKEN"
-      }
+      "headers": {"Authorization": "Bearer ${env:ACEDATACLOUD_API_TOKEN}"}
     }
   }
 }
 ```
 
-#### Amazon Q Developer
-
-Add to your MCP configuration:
+In VS Code, run **MCP: Open User Configuration** and merge this server plus its masked input; `${input:...}` is for VS Code's user/workspace format and is not portable to the Agent Host `.mcp.json` format:
 
 ```json
 {
-  "mcpServers": {
+  "inputs": [
+    {"id": "acedata-serp-token", "type": "promptString", "description": "AceDataCloud API token", "password": true}
+  ],
+  "servers": {
     "serp": {
-      "type": "streamable-http",
+      "type": "http",
       "url": "https://serp.mcp.acedata.cloud/mcp",
-      "headers": {
-        "Authorization": "Bearer YOUR_API_TOKEN"
-      }
+      "headers": {"Authorization": "Bearer ${input:acedata-serp-token}"}
     }
   }
 }
 ```
 
-#### Roo Code
+For **Cline**, use its MCP configuration UI or CLI file `~/.cline/data/settings/cline_mcp_settings.json`; its remote transport value is `streamableHttp`. For **JetBrains AI Assistant**, add a remote URL from **Settings → Tools → AI Assistant → Model Context Protocol (MCP)**. For **Zed**, use a `context_servers` entry with the URL only for OAuth or add a local Bearer header. These clients have different configuration schemas; follow their current UI rather than copying another client's JSON. [Cline](https://docs.cline.bot/mcp/mcp-overview) · [JetBrains](https://www.jetbrains.com/help/ai-assistant/mcp.html) · [Zed](https://zed.dev/docs/ai/mcp).
 
-Add to Roo Code MCP settings:
+### Local stdio
 
-```json
-{
-  "mcpServers": {
-    "serp": {
-      "type": "streamable-http",
-      "url": "https://serp.mcp.acedata.cloud/mcp",
-      "headers": {
-        "Authorization": "Bearer YOUR_API_TOKEN"
-      }
-    }
-  }
-}
-```
-
-#### Continue.dev
-
-Add to `.continue/config.yaml`:
-
-```yaml
-mcpServers:
-  - name: serp
-    type: streamable-http
-    url: https://serp.mcp.acedata.cloud/mcp
-    headers:
-      Authorization: "Bearer YOUR_API_TOKEN"
-```
-
-#### Zed
-
-Add to Zed's settings (`~/.config/zed/settings.json`):
-
-```json
-{
-  "language_models": {
-    "mcp_servers": {
-      "serp": {
-        "url": "https://serp.mcp.acedata.cloud/mcp",
-        "headers": {
-          "Authorization": "Bearer YOUR_API_TOKEN"
-        }
-      }
-    }
-  }
-}
-```
-
-#### cURL Test
+Install the package and give the local process an API token:
 
 ```bash
-# Health check (no auth required)
-curl https://serp.mcp.acedata.cloud/health
-
-# MCP initialize
-curl -X POST https://serp.mcp.acedata.cloud/mcp \
-  -H "Content-Type: application/json" \
-  -H "Accept: application/json" \
-  -H "Authorization: Bearer YOUR_API_TOKEN" \
-  -d '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2025-03-26","capabilities":{},"clientInfo":{"name":"test","version":"1.0"}}}'
-```
-
-### 3. Or Run Locally (Alternative)
-
-If you prefer to run the server on your own machine:
-
-```bash
-# Install from PyPI
-pip install mcp-serp
-# or
-uvx mcp-serp
-
-# Set your API token
-export ACEDATACLOUD_API_TOKEN="your_token_here"
-
-# Run (stdio mode for Claude Desktop / local clients)
+python -m pip install mcp-serp
+export ACEDATACLOUD_API_TOKEN='YOUR_API_TOKEN'
 mcp-serp
-
-# Run (HTTP mode for remote access)
-mcp-serp --transport http --port 8000
 ```
 
-#### Claude Desktop (Local)
+For Claude Desktop local MCP, merge this entry into the file opened by its developer settings (`~/Library/Application Support/Claude/claude_desktop_config.json` on macOS). `uvx` requires [uv](https://docs.astral.sh/uv/) on `PATH`:
 
 ```json
 {
@@ -295,22 +170,21 @@ mcp-serp --transport http --port 8000
     "serp": {
       "command": "uvx",
       "args": ["mcp-serp"],
-      "env": {
-        "ACEDATACLOUD_API_TOKEN": "your_token_here"
-      }
+      "env": {"ACEDATACLOUD_API_TOKEN": "YOUR_API_TOKEN"}
     }
   }
 }
 ```
 
-#### Docker (Self-Hosting)
+Keep this user-level file private. Self-hosted HTTP uses `mcp-serp --transport http --port 8000`; expose it only with suitable network and TLS controls. Local execution still calls the AceDataCloud API.
 
-```bash
-docker pull ghcr.io/acedatacloud/mcp-serp:latest
-docker run -p 8000:8000 ghcr.io/acedatacloud/mcp-serp:latest
-```
+### Check before using the service
 
-Clients connect with their own Bearer token — the server extracts the token from each request's `Authorization` header.
+1. `https://serp.mcp.acedata.cloud/health` returning `{"status":"ok"}` checks endpoint reachability only.
+2. Confirm that the MCP client loads tools. `serp_get_usage_guide` is a reference tool; it does not verify downstream API access or balance.
+3. If you need a full API check, call `serp_google_search` with your own valid input after reviewing [current service documentation](https://platform.acedata.cloud/documents/serp-mcp?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=serp_mcp_readme_quick_start) and displayed pricing.
+
+For **401**, check which auth route the client used and whether the token or OAuth session is valid. A **403** may mean an account permission or content moderation failure; read the returned error. Insufficient balance and downstream service failures need their own diagnosis. A listed tool or submitted task does not prove a successful result.
 
 ## Available Tools
 
@@ -563,9 +437,9 @@ SerpMCP/
 
 ## API Reference
 
-This server wraps the [AceDataCloud Google SERP API](https://platform.acedata.cloud/documents/serp-google):
+This server wraps the [AceDataCloud Google SERP API](https://platform.acedata.cloud/documents/serp-google?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=serp_mcp_readme_documents_serp-google):
 
-- [Google SERP API Documentation](https://platform.acedata.cloud/documents/serp-google)
+- [Google SERP API Documentation](https://platform.acedata.cloud/documents/serp-google?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=serp_mcp_readme_documents_serp-google)
 
 ## Contributing
 
@@ -580,7 +454,7 @@ Contributions are welcome! Please:
 ## Documentation
 
 <!-- canonical-documentation -->
-[Documentation](https://platform.acedata.cloud/documents/serp-mcp)
+[Documentation](https://platform.acedata.cloud/documents/serp-mcp?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=serp_mcp_readme_quick_start)
 
 ## License
 
@@ -588,11 +462,11 @@ MIT License - see [LICENSE](LICENSE) for details.
 
 ## Links
 
-- [AceDataCloud Platform](https://platform.acedata.cloud)
-- [Google SERP API](https://platform.acedata.cloud/documents/serp-google)
+- [AceDataCloud Platform](https://platform.acedata.cloud?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=serp_mcp_readme_platform)
+- [Google SERP API](https://platform.acedata.cloud/documents/serp-google?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=serp_mcp_readme_documents_serp-google)
 - [Model Context Protocol](https://modelcontextprotocol.io)
 - [MCP Python SDK](https://github.com/modelcontextprotocol/python-sdk)
 
 ---
 
-Made with love by [AceDataCloud](https://platform.acedata.cloud)
+Made with love by [AceDataCloud](https://platform.acedata.cloud?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=serp_mcp_readme_platform)

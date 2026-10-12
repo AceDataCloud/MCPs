@@ -22,6 +22,7 @@ async def aichat_list_models() -> str:
 ## OpenAI GPT-5.6 Series
 - gpt-5.6-luna
 - gpt-5.6-terra
+- gpt-5.6-sol-fast
 - gpt-5.6-sol
 
 ## OpenAI GPT-5 Series

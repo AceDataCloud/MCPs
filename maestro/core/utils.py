@@ -4,7 +4,7 @@ import json
 from typing import Any
 
 POLL_TOOL = "maestro_get_task"
-# The API only exposes single-task retrieval, so there is no batch poll tool.
+# History listing is not a task-ID batch polling operation.
 BATCH_POLL_TOOL = None
 
 _POLLING_INTERVAL_SECONDS = 30

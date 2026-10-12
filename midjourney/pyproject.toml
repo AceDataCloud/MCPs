@@ -2,7 +2,7 @@
 name = "mcp-midjourney"
 version = "2026.4.5.0"
 description = "MCP Server for Midjourney AI Image Generation via AceDataCloud API"
-readme = "README.md"
+readme = "README.pypi.md"
 license = { text = "MIT" }
 requires-python = ">=3.10"
 authors = [
@@ -41,6 +41,8 @@ dependencies = [
     "python-dotenv>=1.0.0",
     "pydantic>=2.0.0",
     "loguru>=0.7.0",
+    "redis>=5.0.0,<7",
+    "cryptography>=42.0.0",
 ]
 
 [project.optional-dependencies]
@@ -54,6 +56,7 @@ test = [
     "pytest-asyncio>=0.23.0",
     "pytest-cov>=5.0.0",
     "respx>=0.21.0",
+    "fakeredis>=2.25.0",
 ]
 release = [
     "build>=1.2.0",
@@ -68,7 +71,7 @@ mcp-midjourney = "main:main"
 
 [project.urls]
 Homepage = "https://github.com/AceDataCloud/MidjourneyMCP"
-Documentation = "https://platform.acedata.cloud/services/d87e5e99-b797-4ade-9e73-b896896b0461"
+Documentation = "https://platform.acedata.cloud/services/d87e5e99-b797-4ade-9e73-b896896b0461?utm_source=pypi&utm_medium=referral&utm_campaign=evergreen&utm_content=midjourney_mcp_package_quick_start"
 Repository = "https://github.com/AceDataCloud/MidjourneyMCP"
 Issues = "https://github.com/AceDataCloud/MidjourneyMCP/issues"
 Changelog = "https://github.com/AceDataCloud/MidjourneyMCP/blob/main/CHANGELOG.md"
@@ -88,6 +91,7 @@ include = [
     "tests/",
     "main.py",
     "README.md",
+    "README.pypi.md",
     "LICENSE",
     "CHANGELOG.md",
     ".env.example",

@@ -14,7 +14,7 @@
 const vscode = require("vscode");
 
 const PROVIDER_ID = "acedatacloud.acedatacloud";
-const SERVER_LABEL = "Ace Data Cloud MCP";
+const SERVER_LABEL = "Ace Data Cloud Account MCP";
 const SERVER_URL = "https://mcp.acedata.cloud/mcp";
 const SET_TOKEN_CMD = "acedatacloud.acedatacloud.setApiToken";
 const CLEAR_TOKEN_CMD = "acedatacloud.acedatacloud.clearApiToken";

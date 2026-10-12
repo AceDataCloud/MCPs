@@ -6,15 +6,19 @@ from pydantic import Field
 
 # Chat completion model options
 ChatModel = Literal[
+    "gpt-6.1-sol",
+    "gpt-6-sol",
+    "gpt-6-luna",
+    "gpt-6-astra",
     "gpt-oss:free",
     "gpt-5.5:free",
     "gpt-5:free",
     "gpt-4.1:free",
     "gpt-4o:free",
     "gpt-4o-mini:free",
-    "gpt-6-astra",
     "gpt-5.6-luna",
     "gpt-5.6-terra",
+    "gpt-5.6-sol-fast",
     "gpt-5.6-sol",
     "gpt-5.5",
     "gpt-5.5-pro",
@@ -26,6 +30,7 @@ ChatModel = Literal[
     "gpt-5.1",
     "gpt-5.1-all",
     "gpt-5",
+    "gpt-5-pro",
     "gpt-5-mini",
     "gpt-5-nano",
     "gpt-4",
@@ -49,9 +54,13 @@ ChatModel = Literal[
 
 # Responses API model options
 ResponsesModel = Literal[
+    "gpt-6.1-sol",
+    "gpt-6-sol",
+    "gpt-6-luna",
     "gpt-6-astra",
     "gpt-5.6-luna",
     "gpt-5.6-terra",
+    "gpt-5.6-sol-fast",
     "gpt-5.6-sol",
     "gpt-5.5",
     "gpt-5.5-pro",
@@ -60,8 +69,10 @@ ResponsesModel = Literal[
     "gpt-5.4-nano",
     "gpt-5.4-pro",
     "gpt-5.1",
+    "gpt-5.2",
     "gpt-5.1-all",
     "gpt-5",
+    "gpt-5-pro",
     "gpt-5-mini",
     "gpt-5-nano",
     "gpt-4",
@@ -127,7 +138,6 @@ ResponsesModel = Literal[
 EmbeddingModel = Literal[
     "text-embedding-3-small",
     "text-embedding-3-large",
-    "text-embedding-ada-002",
 ]
 
 # Embedding encoding format options
@@ -152,20 +162,24 @@ ImageModel = Literal[
     "gpt-image-1",
     "gpt-image-1.5",
     "gpt-image-2",
+    "gpt-image-2.5-flare",
+    "gpt-image-2.5-flare:official",
+    "gpt-image-2.5-sunburst",
+    "gpt-image-2.5-sunburst:official",
     "gpt-image-2:reverse",
     "gpt-image-2:official",
     "nano-banana",
     "nano-banana-2-lite",
     "nano-banana-2",
+    "nano-banana-2.1",
     "nano-banana-pro",
 ]
 
 # Image size options — free-form "WIDTHxHEIGHT" string or "auto".
-# gpt-image-2 accepts any custom dimensions (multiples of 16, longer side ≤ 3840,
-# total pixels ≤ 8,294,400); common presets include 1024x1024, 1536x1024, 1024x1536,
+# GPT Image 2 and 2.5 models accept custom dimensions (multiples of 16, longer side ≤ 3840,
+# total pixels 655,360–8,294,400, aspect ratio ≤ 3:1); common presets include 1024x1024, 1536x1024, 1024x1536,
 # 1792x1024, 1024x1792 (1K tier), 2048x2048, 2048x1536, 1536x2048, 2048x1152, 1152x2048
-# (2K tier, 1.5× rate), 2880x2880, 3264x2448, 2448x3264, 3840x2160, 2160x3840 (4K tier,
-# 1.5× rate). dall-e-2: 256x256, 512x512, 1024x1024. dall-e-3: 1024x1024, 1792x1024,
+# (2K tier), 2880x2880, 3264x2448, 2448x3264, 3840x2160, 2160x3840 (4K tier). dall-e-2: 256x256, 512x512, 1024x1024. dall-e-3: 1024x1024, 1792x1024,
 # 1024x1792. Pass "auto" to let the model choose.
 ImageSize = str
 

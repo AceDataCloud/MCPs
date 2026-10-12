@@ -12,3 +12,24 @@ async def test_create_video_schema_matches_openapi_body() -> None:
     assert "task_id" not in schema["properties"]
     assert "quality" not in schema["properties"]
     assert schema["properties"]["file_urls"]["anyOf"][0]["maxItems"] == 20
+    assert schema["properties"]["langs"]["anyOf"][0]["minItems"] == 1
+    assert schema["properties"]["langs"]["anyOf"][0]["maxItems"] == 1
+    assert "One task delivers one video in one language" in tool.description
+    assert "0.7 Credits per actual" in tool.description
+    assert "never above the requested duration" in tool.description
+    assert "no scenario or language surcharge" in tool.description
+    assert "Failed jobs and task polling are free" in tool.description
+
+
+async def test_list_tasks_schema_matches_history_contract() -> None:
+    tool = next(tool for tool in await mcp.list_tools() if tool.name == "maestro_list_tasks")
+    schema = tool.inputSchema
+
+    assert schema["properties"]["limit"]["default"] == 20
+    assert schema["properties"]["limit"]["minimum"] == 1
+    assert schema["properties"]["limit"]["maximum"] == 100
+    assert "created_at_min" in schema["properties"]
+    assert "created_at_max" in schema["properties"]
+    assert "strictly after" in schema["properties"]["created_at_min"]["description"]
+    assert "strictly before" in schema["properties"]["created_at_max"]["description"]
+    assert not schema.get("required")

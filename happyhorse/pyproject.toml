@@ -2,7 +2,7 @@
 name = "mcp-happyhorse"
 version = "0.1.0"
 description = "MCP server for Happy Horse AI video generation and editing via AceDataCloud"
-readme = "README.md"
+readme = "README.pypi.md"
 license = { text = "MIT" }
 requires-python = ">=3.10"
 authors = [{ name = "AceDataCloud", email = "support@acedata.cloud" }]
@@ -22,11 +22,13 @@ dependencies = [
     "python-dotenv>=1.0.0",
     "pydantic>=2.0.0",
     "loguru>=0.7.0",
+    "redis>=5.0.0,<7",
+    "cryptography>=42.0.0",
 ]
 
 [project.optional-dependencies]
 dev = ["ruff>=0.4.0", "mypy>=1.10.0"]
-test = ["pytest>=8.0.0", "pytest-asyncio>=0.23.0", "pytest-cov>=5.0.0", "respx>=0.21.0"]
+test = ["pytest>=8.0.0", "pytest-asyncio>=0.23.0", "pytest-cov>=5.0.0", "respx>=0.21.0", "fakeredis>=2.25.0"]
 release = ["build>=1.2.0", "twine>=5.0.0"]
 all = ["mcp-happyhorse[dev,test,release]"]
 
@@ -35,7 +37,7 @@ mcp-happyhorse = "main:main"
 
 [project.urls]
 Homepage = "https://github.com/AceDataCloud/HappyHorseMCP"
-Documentation = "https://platform.acedata.cloud/documents/happyhorse"
+Documentation = "https://platform.acedata.cloud/documents/happyhorse?utm_source=pypi&utm_medium=referral&utm_campaign=evergreen&utm_content=happyhorse_mcp_package_quick_start"
 Repository = "https://github.com/AceDataCloud/HappyHorseMCP"
 Issues = "https://github.com/AceDataCloud/HappyHorseMCP/issues"
 
@@ -47,7 +49,7 @@ build-backend = "hatchling.build"
 packages = ["core", "tools", "prompts", "main.py"]
 
 [tool.hatch.build.targets.sdist]
-include = ["core/", "tools/", "prompts/", "tests/", "main.py", "README.md", "LICENSE"]
+include = ["core/", "tools/", "prompts/", "tests/", "main.py", "README.md", "README.pypi.md", "LICENSE"]
 
 [tool.mypy]
 python_version = "3.10"

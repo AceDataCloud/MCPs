@@ -6,7 +6,7 @@ from __future__ import annotations
 import ast
 import unittest
 
-from check_mcp_tool_parameter_aliases import (
+from scripts.check_mcp_tool_parameter_aliases import (
     field_aliases,
     imported_field_names,
     parameter_expressions,

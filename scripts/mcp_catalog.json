@@ -3,12 +3,20 @@
     "acedatacloud": {
       "status": "active",
       "type": "document",
-      "alias": "acedatacloud-mcp"
+      "alias": "acedatacloud-mcp",
+      "vscode_bundle": {
+        "label": "Ace Data Cloud Account",
+        "default": false
+      }
     },
     "aichat": {
       "status": "active",
       "type": "document",
-      "alias": "aichat"
+      "alias": "aichat",
+      "vscode_bundle": {
+        "label": "AI Chat",
+        "default": false
+      }
     },
     "digitalhuman": {
       "status": "active",
@@ -24,37 +32,65 @@
       "status": "active",
       "type": "service",
       "id": "8efa1d83-9b75-4562-b44a-af95ce563d05",
-      "note": "The dedicated documentation is private; use the service page."
+      "note": "The dedicated documentation is private; use the service page.",
+      "vscode_bundle": {
+        "label": "Face Transform",
+        "default": false
+      }
     },
     "fish": {
       "status": "active",
       "type": "document",
-      "alias": "fish"
+      "alias": "fish",
+      "vscode_bundle": {
+        "label": "Fish Audio",
+        "default": false
+      }
     },
     "flux": {
       "status": "active",
       "type": "document",
-      "alias": "flux-mcp"
+      "alias": "flux-mcp",
+      "vscode_bundle": {
+        "label": "Flux",
+        "default": true
+      }
     },
     "glm": {
       "status": "active",
       "type": "document",
-      "alias": "glm-chat-completions"
+      "alias": "glm-chat-completions",
+      "vscode_bundle": {
+        "label": "GLM",
+        "default": false
+      }
     },
     "grok": {
       "status": "active",
       "type": "document",
-      "alias": "grok"
+      "alias": "grok",
+      "vscode_bundle": {
+        "label": "Grok Imagine",
+        "default": false
+      }
     },
     "hailuo": {
       "status": "active",
       "type": "document",
-      "alias": "hailuo"
+      "alias": "hailuo",
+      "vscode_bundle": {
+        "label": "Hailuo",
+        "default": false
+      }
     },
     "happyhorse": {
       "status": "active",
       "type": "document",
-      "alias": "happyhorse"
+      "alias": "happyhorse",
+      "vscode_bundle": {
+        "label": "HappyHorse",
+        "default": false
+      }
     },
     "hcaptcha": {
       "status": "active",
@@ -69,48 +105,84 @@
     "kling": {
       "status": "active",
       "type": "document",
-      "alias": "kling"
+      "alias": "kling",
+      "vscode_bundle": {
+        "label": "Kling",
+        "default": false
+      }
     },
     "luma": {
       "status": "active",
       "type": "document",
-      "alias": "luma-mcp"
+      "alias": "luma-mcp",
+      "vscode_bundle": {
+        "label": "Luma",
+        "default": true
+      }
     },
     "maestro": {
       "status": "active",
       "type": "document",
-      "alias": "maestro"
+      "alias": "maestro",
+      "vscode_bundle": {
+        "label": "Maestro",
+        "default": false
+      }
     },
     "midjourney": {
       "status": "active",
       "type": "service",
       "id": "d87e5e99-b797-4ade-9e73-b896896b0461",
-      "note": "The dedicated documentation is private; use the service page."
+      "note": "The dedicated documentation is private; use the service page.",
+      "vscode_bundle": {
+        "label": "Midjourney",
+        "default": true
+      }
     },
     "minimax": {
       "status": "active",
       "type": "document",
-      "alias": "minimax-videos"
+      "alias": "minimax-videos",
+      "vscode_bundle": {
+        "label": "MiniMax",
+        "default": false
+      }
     },
     "nanobanana": {
       "status": "active",
       "type": "document",
-      "alias": "nano-banana-mcp"
+      "alias": "nano-banana-mcp",
+      "vscode_bundle": {
+        "label": "NanoBanana",
+        "default": true
+      }
     },
     "openai": {
       "status": "active",
       "type": "document",
-      "alias": "openai"
+      "alias": "openai",
+      "vscode_bundle": {
+        "label": "OpenAI",
+        "default": false
+      }
     },
     "producer": {
       "status": "active",
       "type": "document",
-      "alias": "producer"
+      "alias": "producer",
+      "vscode_bundle": {
+        "label": "Producer",
+        "default": false
+      }
     },
     "qwen-image": {
       "status": "active",
       "type": "document",
-      "alias": "qwen-image"
+      "alias": "qwen-image",
+      "vscode_bundle": {
+        "label": "Qwen Image",
+        "default": false
+      }
     },
     "recaptcha": {
       "status": "active",
@@ -120,22 +192,38 @@
     "seedance": {
       "status": "active",
       "type": "document",
-      "alias": "seedance-mcp"
+      "alias": "seedance-mcp",
+      "vscode_bundle": {
+        "label": "Seedance",
+        "default": true
+      }
     },
     "seedream": {
       "status": "active",
       "type": "document",
-      "alias": "seedream-mcp"
+      "alias": "seedream-mcp",
+      "vscode_bundle": {
+        "label": "Seedream",
+        "default": true
+      }
     },
     "serp": {
       "status": "active",
       "type": "document",
-      "alias": "serp-mcp"
+      "alias": "serp-mcp",
+      "vscode_bundle": {
+        "label": "Google Search",
+        "default": true
+      }
     },
     "shorturl": {
       "status": "active",
       "type": "document",
-      "alias": "short-url-mcp"
+      "alias": "short-url-mcp",
+      "vscode_bundle": {
+        "label": "Short URL",
+        "default": true
+      }
     },
     "sora": {
       "status": "retired"
@@ -143,7 +231,11 @@
     "suno": {
       "status": "active",
       "type": "document",
-      "alias": "suno-mcp"
+      "alias": "suno-mcp",
+      "vscode_bundle": {
+        "label": "Suno",
+        "default": true
+      }
     },
     "turnstile": {
       "status": "active",
@@ -153,17 +245,29 @@
     "veo": {
       "status": "active",
       "type": "document",
-      "alias": "veo-mcp"
+      "alias": "veo-mcp",
+      "vscode_bundle": {
+        "label": "Veo",
+        "default": true
+      }
     },
     "wan": {
       "status": "active",
       "type": "document",
-      "alias": "wan"
+      "alias": "wan",
+      "vscode_bundle": {
+        "label": "Wan",
+        "default": false
+      }
     },
     "webextrator": {
       "status": "active",
       "type": "document",
-      "alias": "webextrator"
+      "alias": "webextrator",
+      "vscode_bundle": {
+        "label": "Web Extractor",
+        "default": false
+      }
     }
   }
 }

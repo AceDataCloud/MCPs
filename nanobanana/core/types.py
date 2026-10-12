@@ -13,6 +13,7 @@ NanoBananaModel = Literal[
     "nano-banana",
     "nano-banana-2-lite",
     "nano-banana-2",
+    "nano-banana-2.1",
     "nano-banana-pro",
     "nano-banana:official",
     "nano-banana-2-lite:official",

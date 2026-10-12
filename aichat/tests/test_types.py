@@ -22,7 +22,15 @@ def test_claude_fable_models_are_available_once_in_aichat_v2() -> None:
 def test_flagship_models_are_available_in_aichat_v2() -> None:
     models = set(get_args(AiChatV2Model))
 
+    assert "gpt-5.6-sol-fast" in models
     assert "gpt-5.2-pro" in models
+    assert {
+        "gpt-6.1-sol",
+        "gpt-6-sol",
+        "gpt-6-luna",
+        "grok-4.7",
+        "gemini-3.8-flash",
+    } <= models
     assert "grok-4.5" in models
     assert "glm-5.3" in models
     assert "gemini-3.1-pro-preview" in models

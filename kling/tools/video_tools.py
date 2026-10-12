@@ -34,7 +34,7 @@ def _validate_video_request(
     model: KlingModel,
     mode: Mode,
     duration: Duration,
-    generate_audio: bool,
+    generate_audio: bool | None,
     negative_prompt: str | None,
     cfg_scale: float | None,
     camera_control: KlingCameraControl | None,
@@ -44,9 +44,20 @@ def _validate_video_request(
     end_image_url: str | None = None,
 ) -> str | None:
     has_references = bool(image_list or video_list)
-    uses_omni = model == "kling-o1" or has_references
+    uses_omni = model in ("kling-o1", "kling-v3-omni") or has_references
 
-    if model == "kling-o1":
+    if model == "kling-v3-turbo":
+        if not 3 <= duration <= 15 or mode not in ("std", "pro"):
+            return "Error: Turbo supports std/pro and integer durations 3–15."
+        if generate_audio is False:
+            return "Error: Turbo includes native audio with no off switch."
+        if (
+            has_references
+            or end_image_url
+            or any(value is not None for value in (negative_prompt, cfg_scale, camera_control))
+        ):
+            return "Error: Turbo does not support Omni references, tail frames, negative_prompt, cfg_scale or camera_control."
+    elif model == "kling-o1":
         if duration != 5:
             return "Error: kling-o1 supports duration=5 only."
         if mode not in ("std", "pro"):
@@ -129,11 +140,11 @@ async def kling_generate_video(
         ),
     ] = DEFAULT_DURATION,
     generate_audio: Annotated[
-        bool,
+        bool | None,
         Field(
-            description="Whether to generate audio synchronously. Supported by kling-v3, kling-v3-omni, and kling-v2-6 (pro mode only). Default is false."
+            description="Whether to generate audio synchronously. Supported by kling-v3, kling-v3-omni, and kling-v2-6 (pro mode only). Omit for the model default. Turbo always includes native audio."
         ),
-    ] = False,
+    ] = None,
     negative_prompt: Annotated[
         str | None,
         Field(
@@ -211,8 +222,8 @@ async def kling_generate_video(
 
     if callback_url:
         payload["callback_url"] = callback_url
-    if generate_audio:
-        payload["generate_audio"] = True
+    if generate_audio is not None:
+        payload["generate_audio"] = generate_audio
     if negative_prompt:
         payload["negative_prompt"] = negative_prompt
     if cfg_scale is not None:
@@ -269,11 +280,11 @@ async def kling_generate_video_from_image(
         ),
     ] = DEFAULT_DURATION,
     generate_audio: Annotated[
-        bool,
+        bool | None,
         Field(
             description="Whether to generate audio synchronously. Supported by kling-v3, kling-v3-omni, and kling-v2-6 (pro mode only)."
         ),
-    ] = False,
+    ] = None,
     negative_prompt: Annotated[
         str | None,
         Field(description="Things to avoid in the video."),
@@ -354,8 +365,8 @@ async def kling_generate_video_from_image(
         payload["start_image_url"] = start_image_url
     if end_image_url:
         payload["end_image_url"] = end_image_url
-    if generate_audio:
-        payload["generate_audio"] = True
+    if generate_audio is not None:
+        payload["generate_audio"] = generate_audio
     if negative_prompt:
         payload["negative_prompt"] = negative_prompt
     if cfg_scale is not None:

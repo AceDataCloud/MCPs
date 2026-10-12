@@ -8,7 +8,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![MCP](https://img.shields.io/badge/MCP-Compatible-green.svg)](https://modelcontextprotocol.io)
 
-A [Model Context Protocol (MCP)](https://modelcontextprotocol.io) server for AI music generation using [Suno](https://suno.ai) through the [AceDataCloud API](https://platform.acedata.cloud).
+A [Model Context Protocol (MCP)](https://modelcontextprotocol.io) server for AI music generation using [Suno](https://suno.ai) through the [AceDataCloud API](https://platform.acedata.cloud?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=suno_mcp_readme_platform).
 
 Generate AI music, lyrics, and manage audio projects directly from Claude, VS Code, or any MCP-compatible client.
 
@@ -62,254 +62,167 @@ Generate AI music, lyrics, and manage audio projects directly from Claude, VS Co
 | `suno_list_actions` | List all available Suno API actions and corresponding tools. |
 | `suno_get_lyric_format_guide` | Get guidance on formatting lyrics for Suno music generation. |
 
-## Quick Start
+## Connect in minutes
 
-### 1. Get Your API Token
+The hosted server is `https://suno.mcp.acedata.cloud/mcp`. Choose **one** authentication route before following a client example:
 
-1. Sign up at [AceDataCloud Platform](https://platform.acedata.cloud)
-2. Go to the [API documentation page](https://platform.acedata.cloud/documents/suno-audios)
-3. Click **"Acquire"** to get your API token
-4. Copy the token for use below
+| Route | Use it when | What you provide |
+|---|---|---|
+| Browser sign-in (OAuth) | Your MCP client supports remote OAuth; use DCR if the client requires automatic registration | The server URL; sign in to AceDataCloud and approve access in the browser. No key needs to be pasted into the MCP config. |
+| API token | Your client cannot complete the remote OAuth flow, or you need an explicit credential for an integration | An AceDataCloud API token in the client's Bearer header. Keep it in a user-level secret store or environment variable. |
+| Local stdio | You want the MCP process to run on your machine | Install `mcp-suno` and pass `ACEDATACLOUD_API_TOKEN` to that process. |
 
-### 2. Use the Hosted Server (Recommended)
+The hosted server always receives a Bearer token: with OAuth, the client obtains and sends it after sign-in; with API-token setup, you supply it. **DCR is client registration, not a separate AceDataCloud API key.** After consent, the hosted service currently reuses or creates an API credential for your account; it may fail if the account cannot obtain one. Some clients offer a published client identity or manual client ID; those are client-specific alternatives, not a second API-token requirement. Browser sign-in does not remove the need for an AceDataCloud account. Music generation uses your AceDataCloud account and may incur usage charges. Review [current Suno pricing and limits](https://platform.acedata.cloud/documents/suno-audios?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=suno_mcp_readme_documents_suno-audios) before generating.
 
-AceDataCloud hosts a managed MCP server — **no local installation required**.
+### Browser sign-in: hosted server
 
-**Endpoint:** `https://suno.mcp.acedata.cloud/mcp`
+Use this path for clients with remote MCP OAuth support. Add **only the URL** first; do not also set an `Authorization` header. If a client cannot complete discovery or registration, use the API-token route below.
 
-All requests require a Bearer token. Use the API token from Step 1.
+#### Claude and Claude Desktop chat
 
-#### Claude.ai
+Use Claude's **remote custom connector** in `Customize → Connectors → Add custom connector` (or your organization's connector settings). Enter the hosted URL, choose sign-in, and select **Register automatically** for the OAuth client if Claude asks. Complete the AceDataCloud login and consent flow, then enable the connector in your conversation. Claude Desktop's `claude_desktop_config.json` is for **local** MCP processes; it is not where Claude's remote custom connectors are installed. [Claude's connector guide](https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp).
 
-Connect directly on [Claude.ai](https://claude.ai) with OAuth — **no API token needed**:
+#### Claude Code
 
-1. Go to Claude.ai **Settings → Integrations → Add More**
-2. Enter the server URL: `https://suno.mcp.acedata.cloud/mcp`
-3. Complete the OAuth login flow
-4. Start using the tools in your conversation
+```bash
+claude mcp add --transport http --scope user suno https://suno.mcp.acedata.cloud/mcp
+claude mcp login suno
+```
 
-#### Claude Desktop
+In Claude Code, `/mcp` shows the connection and available tools. For project scope, merge `{"mcpServers":{"suno":{"type":"http","url":"https://suno.mcp.acedata.cloud/mcp"}}}` into `<project>/.mcp.json`; keep existing entries when merging. Claude Code and Claude Desktop chat have separate MCP configuration. [Claude Code MCP guide](https://code.claude.com/docs/en/mcp).
 
-Add to your config (`~/Library/Application Support/Claude/claude_desktop_config.json` on macOS):
+#### Cursor
+
+In Cursor's MCP settings, add a remote server with the hosted URL and complete the OAuth prompt. For project scope, merge this into `<project>/.cursor/mcp.json`; for your own machines, use `~/.cursor/mcp.json`:
 
 ```json
 {
   "mcpServers": {
     "suno": {
-      "type": "streamable-http",
-      "url": "https://suno.mcp.acedata.cloud/mcp",
-      "headers": {
-        "Authorization": "Bearer YOUR_API_TOKEN"
-      }
+      "url": "https://suno.mcp.acedata.cloud/mcp"
     }
   }
 }
 ```
 
-#### Cursor / Windsurf
+The URL-only project config contains no token. Do not commit a project config if you later add a real token. [Cursor MCP guide](https://cursor.com/docs/mcp).
 
-Add to your MCP config (`.cursor/mcp.json` or `.windsurf/mcp.json`):
+#### VS Code with GitHub Copilot
 
-```json
-{
-  "mcpServers": {
-    "suno": {
-      "type": "streamable-http",
-      "url": "https://suno.mcp.acedata.cloud/mcp",
-      "headers": {
-        "Authorization": "Bearer YOUR_API_TOKEN"
-      }
-    }
-  }
-}
-```
-
-#### VS Code (Copilot)
-
-Add to your VS Code MCP config (`.vscode/mcp.json`):
+Run **MCP: Add Server**, choose HTTP, and enter the hosted URL. Save to the user profile for personal use or to a workspace config for a team; approve the server and complete sign-in when prompted. New workspace configs use `<project>/.mcp.json`; VS Code also reads its `.vscode/mcp.json` format. This is the VS Code format for a local workspace:
 
 ```json
 {
   "servers": {
     "suno": {
-      "type": "streamable-http",
-      "url": "https://suno.mcp.acedata.cloud/mcp",
-      "headers": {
-        "Authorization": "Bearer YOUR_API_TOKEN"
-      }
+      "type": "http",
+      "url": "https://suno.mcp.acedata.cloud/mcp"
     }
   }
 }
 ```
 
-Or install the [Ace Data Cloud MCP extension](https://marketplace.visualstudio.com/items?itemName=acedatacloud.acedatacloud-mcp) for VS Code, which registers the hosted MCP servers with one-click setup.
+Run **MCP: List Servers** to check connection and tool loading. [VS Code MCP setup](https://code.visualstudio.com/docs/agent-customization/mcp-servers) and [configuration reference](https://code.visualstudio.com/docs/agents/reference/mcp-configuration).
 
-#### JetBrains IDEs
-
-1. Go to **Settings → Tools → AI Assistant → Model Context Protocol (MCP)**
-2. Click **Add** → **HTTP**
-3. Paste:
-
-```json
-{
-  "mcpServers": {
-    "suno": {
-      "url": "https://suno.mcp.acedata.cloud/mcp",
-      "headers": {
-        "Authorization": "Bearer YOUR_API_TOKEN"
-      }
-    }
-  }
-}
-```
-
-
-#### Claude Code
-
-Claude Code supports MCP servers natively:
+#### Codex CLI or Codex app
 
 ```bash
-claude mcp add suno --transport http https://suno.mcp.acedata.cloud/mcp \
-  -h "Authorization: Bearer YOUR_API_TOKEN"
+codex mcp add suno --url https://suno.mcp.acedata.cloud/mcp
+codex mcp login suno
 ```
 
-Or add to your project's `.mcp.json`:
+Codex keeps user MCP settings in `~/.codex/config.toml` and can show the server in `/mcp`. [Official Codex MCP guide](https://developers.openai.com/codex/mcp/).
 
-```json
-{
-  "mcpServers": {
-    "suno": {
-      "type": "streamable-http",
-      "url": "https://suno.mcp.acedata.cloud/mcp",
-      "headers": {
-        "Authorization": "Bearer YOUR_API_TOKEN"
-      }
-    }
-  }
-}
-```
+### API token: hosted server
 
-#### Cline
+<!-- BEGIN TOKEN ONBOARDING -->
+1. Open [Ace Data Cloud → Applications](https://platform.acedata.cloud/console/applications?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=suno_mcp_readme_api_key). Sign in, or register an account first.
+2. Find **General application**. If it has not been created, choose **Initialize General Application**. A general key can use the services available to your account; a dedicated application's key is limited to its service. Check the required service/model access and [current pricing](https://platform.acedata.cloud/models?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=suno_mcp_readme_models).
+3. Copy the **API Key** from the application card, or open **Keys / Manage Keys → Create** to create a separate key for this integration. Give it a recognizable name so you can revoke or rotate it independently.
+4. When creating a key, review **Expiration Time**, **Set Usage Limitation**, and **Allowed APIs**. Enable only the restrictions you need, allow the operations you will call, then click **Create** and copy the token from the key list. Task lookup does not grant permission to submit a generation. Confirm the application's balance can cover your first request; any trial allowance is whatever your account currently displays.
+5. Copy only the token value, without quotation marks, spaces, or `Bearer `. An API Key / API Token field expects this raw value; only a manually configured HTTP `Authorization` header needs the `Bearer ` prefix. A `platform-...` account-management token cannot replace a generation API key.
 
-Add to Cline's MCP settings (`.cline/mcp_settings.json`):
+![Copy an application API key or open Manage Keys](https://raw.githubusercontent.com/AceDataCloud/NanoBananaDify/2522b2f57210597af2db866445319334a1677a23/_assets/tutorial/get-api-key-en.png)
 
-```json
-{
-  "mcpServers": {
-    "suno": {
-      "type": "streamable-http",
-      "url": "https://suno.mcp.acedata.cloud/mcp",
-      "headers": {
-        "Authorization": "Bearer YOUR_API_TOKEN"
-      }
-    }
-  }
-}
-```
+![Create a separately named key with optional restrictions](https://raw.githubusercontent.com/AceDataCloud/NanoBananaDify/2522b2f57210597af2db866445319334a1677a23/_assets/tutorial/create-api-key-en.png)
 
-#### Amazon Q Developer
+Save the key in the client's credential store or the environment variable shown below. Never put it in a prompt, shared workflow, screenshot, or Git commit. If authentication fails, check the full copied value, application/service access, expiration, usage limit, and balance before creating another key.
+<!-- END TOKEN ONBOARDING -->
 
-Add to your MCP configuration:
+Use this route when you need a fixed credential or your client does not complete OAuth. An invalid fixed header does not automatically fall back to browser sign-in.
 
-```json
-{
-  "mcpServers": {
-    "suno": {
-      "type": "streamable-http",
-      "url": "https://suno.mcp.acedata.cloud/mcp",
-      "headers": {
-        "Authorization": "Bearer YOUR_API_TOKEN"
-      }
-    }
-  }
-}
-```
-
-#### Roo Code
-
-Add to Roo Code MCP settings:
-
-```json
-{
-  "mcpServers": {
-    "suno": {
-      "type": "streamable-http",
-      "url": "https://suno.mcp.acedata.cloud/mcp",
-      "headers": {
-        "Authorization": "Bearer YOUR_API_TOKEN"
-      }
-    }
-  }
-}
-```
-
-#### Continue.dev
-
-Add to `.continue/config.yaml`:
-
-```yaml
-mcpServers:
-  - name: suno
-    type: streamable-http
-    url: https://suno.mcp.acedata.cloud/mcp
-    headers:
-      Authorization: "Bearer YOUR_API_TOKEN"
-```
-
-#### Zed
-
-Add to Zed's settings (`~/.config/zed/settings.json`):
-
-```json
-{
-  "language_models": {
-    "mcp_servers": {
-      "suno": {
-        "url": "https://suno.mcp.acedata.cloud/mcp",
-        "headers": {
-          "Authorization": "Bearer YOUR_API_TOKEN"
-        }
-      }
-    }
-  }
-}
-```
-
-#### cURL Test
+For **Claude Code**, set the variable in the environment that starts Claude Code, then add the server. The shell expands the token when you add the server, so treat the saved user-level MCP config as a secret; use browser sign-in above if you do not want a key in client config:
 
 ```bash
-# Health check (no auth required)
-curl https://suno.mcp.acedata.cloud/health
-
-# MCP initialize
-curl -X POST https://suno.mcp.acedata.cloud/mcp \
-  -H "Content-Type: application/json" \
-  -H "Accept: application/json" \
-  -H "Authorization: Bearer YOUR_API_TOKEN" \
-  -d '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2025-03-26","capabilities":{},"clientInfo":{"name":"test","version":"1.0"}}}'
+export ACEDATACLOUD_API_TOKEN='YOUR_API_TOKEN'
+claude mcp add --transport http --scope user suno https://suno.mcp.acedata.cloud/mcp \
+  --header "Authorization: Bearer $ACEDATACLOUD_API_TOKEN"
 ```
 
-### 3. Or Run Locally (Alternative)
+For a shared project config, put only the variable reference in `<project>/.mcp.json` and keep the token in each user's environment. Unlike the CLI example above, Claude Code expands `${ACEDATACLOUD_API_TOKEN}` when it reads `.mcp.json`. Merge this entry with existing servers:
 
-If you prefer to run the server on your own machine:
+```json
+{
+  "mcpServers": {
+    "suno": {
+      "type": "http",
+      "url": "https://suno.mcp.acedata.cloud/mcp",
+      "headers": {
+        "Authorization": "Bearer ${ACEDATACLOUD_API_TOKEN}"
+      }
+    }
+  }
+}
+```
+
+For **Cursor**, use its `${env:ACEDATACLOUD_API_TOKEN}` syntax in a user-level `~/.cursor/mcp.json` (or an uncommitted project config):
+
+```json
+{
+  "mcpServers": {
+    "suno": {
+      "url": "https://suno.mcp.acedata.cloud/mcp",
+      "headers": {
+        "Authorization": "Bearer ${env:ACEDATACLOUD_API_TOKEN}"
+      }
+    }
+  }
+}
+```
+
+For **VS Code**, prefer a user-profile MCP config and a masked input instead of putting the token in the JSON. Merge these fields into the file opened by **MCP: Open User Configuration**:
+
+```json
+{
+  "inputs": [
+    {"id": "acedata-suno-token", "type": "promptString", "description": "AceDataCloud API token", "password": true}
+  ],
+  "servers": {
+    "suno": {
+      "type": "http",
+      "url": "https://suno.mcp.acedata.cloud/mcp",
+      "headers": {"Authorization": "Bearer ${input:acedata-suno-token}"}
+    }
+  }
+}
+```
+
+This interactive input is specific to VS Code's user/workspace format; do not copy it into `.mcp.json` for Agent Host. VS Code prompts once and stores the value securely for later use. [VS Code configuration reference](https://code.visualstudio.com/docs/agents/reference/mcp-configuration).
+
+Other clients use different schemas. For **Cline**, open **MCP Servers → Configure → Configure MCP Servers** (Cline CLI: `~/.cline/data/settings/cline_mcp_settings.json`) and use `type: "streamableHttp"` under `mcpServers`; [Cline's guide](https://docs.cline.bot/mcp/mcp-overview) has the full shape. For **JetBrains AI Assistant**, go to **Settings → Tools → AI Assistant → Model Context Protocol (MCP)** and add a remote server using the hosted URL; check its connection status and use the API-token route if your version does not complete OAuth. [JetBrains' guide](https://www.jetbrains.com/help/ai-assistant/mcp.html). For **Zed**, use `context_servers` with the hosted URL in its settings; omitting `Authorization` starts its OAuth flow. [Zed's guide](https://zed.dev/docs/ai/mcp).
+
+### Local stdio server
+
+Local mode needs an API token. Use it when your client only supports local processes or you want the MCP process on your machine; it still calls the AceDataCloud API and does not run Suno locally.
 
 ```bash
-# Install from PyPI
-pip install mcp-suno
-# or
-uvx mcp-suno
-
-# Set your API token
-export ACEDATACLOUD_API_TOKEN="your_token_here"
-
-# Run (stdio mode for Claude Desktop / local clients)
+# Install once, then run the local stdio server
+python -m pip install mcp-suno
+export ACEDATACLOUD_API_TOKEN='YOUR_API_TOKEN'
 mcp-suno
-
-# Run (HTTP mode for remote access)
-mcp-suno --transport http --port 8000
 ```
 
-#### Claude Desktop (Local)
+For Claude Desktop's **local** MCP configuration, merge this into the file opened by its developer settings (`~/Library/Application Support/Claude/claude_desktop_config.json` on macOS). This is a local `uvx` process; it is separate from the remote custom connector above:
 
 ```json
 {
@@ -318,126 +231,47 @@ mcp-suno --transport http --port 8000
       "command": "uvx",
       "args": ["mcp-suno"],
       "env": {
-        "ACEDATACLOUD_API_TOKEN": "your_token_here"
+        "ACEDATACLOUD_API_TOKEN": "YOUR_API_TOKEN"
       }
     }
   }
 }
 ```
 
-#### Docker (Self-Hosting)
+Keep this user-level file private. On Windows, set `$env:ACEDATACLOUD_API_TOKEN = 'YOUR_API_TOKEN'` in the shell that starts local clients. `uvx` requires [uv](https://docs.astral.sh/uv/) on `PATH`; `mcp-suno` requires the package installed in the environment from which the client launches it.
 
-```bash
-docker pull ghcr.io/acedatacloud/mcp-suno:latest
-docker run -p 8000:8000 ghcr.io/acedatacloud/mcp-suno:latest
-```
+For self-hosted HTTP, run `mcp-suno --transport http --port 8000` or build this repository's Dockerfile and run the resulting image. Clients must send their own Bearer tokens; expose the service only with suitable network and TLS controls.
 
-Clients connect with their own Bearer token — the server extracts the token from each request's `Authorization` header.
+### Check the connection before generating
 
-## Available Tools
+1. `https://suno.mcp.acedata.cloud/health` returning `{"status":"ok"}` checks reachability only, not authentication.
+2. Use the client's MCP server list to confirm Suno tools appear. `suno_list_models` and `suno_list_actions` return static reference data; they confirm tool loading, **not** that your downstream API credential or balance works.
+3. When ready, ask the client to call `suno_generate_music` with a short prompt. Save the returned task ID, then call `suno_get_task` until it completes. This is the first end-to-end API check and can be billed. Check the current [Suno service limits and pricing](https://platform.acedata.cloud/documents/suno-audios?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=suno_mcp_readme_documents_suno-audios) before this step.
 
-### Music Generation
+If you see **401**, check whether the client completed OAuth or sent a valid token, and do not configure both paths at once. If OAuth redirects but fails, retry from the same client session; if the account cannot create or retrieve a credential, resolve that in AceDataCloud Platform. A tool list can load while an API call fails for balance, permissions, or service availability, so check the returned error rather than assuming the connection failed.
 
-| Tool                    | Description                                                |
-| ----------------------- | ---------------------------------------------------------- |
-| `generate_music`        | Generate music from a text prompt (Inspiration Mode)       |
-| `generate_custom_music` | Generate with custom lyrics, title, and style              |
-| `extend_music`          | Extend an existing song from a timestamp                   |
-| `cover_music`           | Create a cover/remix version                               |
-| `concat_music`          | Merge extended segments into complete audio                |
-| `generate_with_persona` | Generate using a saved voice style                         |
-| `remaster_music`        | Remaster an existing song to improve audio quality         |
-| `stems_music`           | Separate a song into individual stems (vocals/instruments) |
-| `replace_section`       | Replace a specific time range with new generated content   |
-| `upload_extend`         | Extend uploaded audio with new AI-generated content        |
-| `upload_cover`          | Create an AI cover of uploaded audio                       |
-| `mashup_music`          | Create a mashup by blending multiple songs together        |
+## Use the tools
 
-### Lyrics
+Tool names in the client include the `suno_` prefix. Start with `suno_list_models` or `suno_list_actions` to confirm the connection. For generation, use `suno_generate_music` for a prompt or `suno_generate_custom_music` for your own lyrics and style. Advanced operations, media conversion, personas, and custom models are listed in the [tool reference](#tool-reference) and exposed by the MCP server.
 
-| Tool              | Description                                                |
-| ----------------- | ---------------------------------------------------------- |
-| `generate_lyrics` | Generate song lyrics from a prompt                         |
-| `mashup_lyrics`   | Generate mashup lyrics by combining two sets of lyrics     |
-| `optimize_style`  | Optimize a style description for better generation results |
+Generation and edits return a **task ID**, not a finished song. Query `suno_get_task` (or `suno_get_tasks_batch` for multiple IDs) until the task reports success and final media URLs. An intermediate audio URL may be only a preview; a failed task should stop polling. Do not repeat the generation call to check progress, because it may submit and bill another task.
 
-### Media Conversion
+Example request to your MCP client:
 
-| Tool             | Description                                       |
-| ---------------- | ------------------------------------------------- |
-| `get_mp4`        | Get an MP4 video version of a generated song      |
-| `get_wav`        | Get lossless WAV format of a generated song       |
-| `get_mp3`        | Get compressed MP3 format of a generated song     |
-| `get_midi`       | Get MIDI data extracted from a generated song     |
-| `get_timing`     | Get timing and subtitle data for a generated song |
-| `extract_vocals` | Extract the vocal track from a generated song     |
+> Use `suno_generate_music` to create a short upbeat acoustic birthday song. Give me the task ID, check it with `suno_get_task`, and share the final audio only after the task completes.
 
-### Persona
+For custom lyrics:
 
-| Tool             | Description                  |
-| ---------------- | ---------------------------- |
-| `create_persona` | Save a voice style for reuse |
-
-### Upload
-
-| Tool                    | Description                                                    |
-| ----------------------- | -------------------------------------------------------------- |
-| `upload_audio`          | Upload external audio in standard or enhanced mode for subsequent operations |
-
-### Tasks
-
-| Tool              | Description                  |
-| ----------------- | ---------------------------- |
-| `get_task`        | Query a single task status   |
-| `get_tasks_batch` | Query multiple tasks at once |
-
-### Information
-
-| Tool                     | Description                 |
-| ------------------------ | --------------------------- |
-| `list_models`            | List available Suno models  |
-| `list_actions`           | List available API actions  |
-| `get_lyric_format_guide` | Get lyrics formatting guide |
-
-## Usage Examples
-
-### Generate Music from Prompt
-
-```
-User: Create a happy birthday song
-
-Claude: I'll generate a birthday song for you.
-[Calls generate_music with prompt="A happy birthday celebration song"]
-```
-
-### Generate with Custom Lyrics
-
-```
-User: Create a rock song with these lyrics:
-[Verse]
-Thunder in the night
-Electric soul ignite
-[Chorus]
-We are the storm
-
-Claude: I'll create a rock song with your lyrics.
-[Calls generate_custom_music with lyrics, title="Storm", style="rock, powerful"]
-```
-
-### Extend a Song
-
-```
-User: Continue this song from the 2-minute mark with a bridge section
-
-Claude: I'll extend the song with a bridge.
-[Calls extend_music with audio_id, continue_at=120, lyric="[Bridge]..."]
-```
+> Use `suno_generate_custom_music` with title “Storm”, style “energetic rock”, and these lyrics: `[Verse] Thunder in the night [Chorus] We are the storm`. Then follow the returned task ID to completion.
 
 ## Available Models
 
 | Model             | Version | Max Duration | Features             |
 | ----------------- | ------- | ------------ | -------------------- |
-| `chirp-v5-5`      | V5.5    | 8 minutes    | Latest, best quality |
+| `chirp-v6`        | V6      | API-defined  | Current v6 model     |
+| `chirp-v6-wild`   | V6 Wild | API-defined  | v6 Wild model        |
+| `chirp-v6-mini`   | V6 Mini | API-defined  | v6 Mini model        |
+| `chirp-v5-5`      | V5.5    | 8 minutes    | Previous model name  |
 | `chirp-v5`        | V5      | 8 minutes    | High quality         |
 | `chirp-v4-5-plus` | V4.5+   | 8 minutes    | Enhanced quality     |
 | `chirp-v4-5`      | V4.5    | 4 minutes    | Vocal gender control |
@@ -456,7 +290,7 @@ Claude: I'll extend the song with a bridge.
 
 | Variable                    | Description                  | Default                     |
 | --------------------------- | ---------------------------- | --------------------------- |
-| `ACEDATACLOUD_API_TOKEN`    | API token from AceDataCloud  | **Required**                |
+| `ACEDATACLOUD_API_TOKEN`    | Local stdio token; hosted requests provide it via OAuth or Bearer header | Required for local stdio |
 | `ACEDATACLOUD_API_BASE_URL` | API base URL                 | `https://api.acedata.cloud` |
 | `ACEDATACLOUD_OAUTH_CLIENT_ID`  | OAuth client ID (hosted mode) | —                           |
 | `ACEDATACLOUD_PLATFORM_BASE_URL` | Platform base URL            | `https://platform.acedata.cloud` |
@@ -575,12 +409,12 @@ SunoMCP/
 
 ## API Reference
 
-This server wraps the [AceDataCloud Suno API](https://platform.acedata.cloud/documents/suno-audios):
+This server wraps the [AceDataCloud Suno API](https://platform.acedata.cloud/documents/suno-audios?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=suno_mcp_readme_documents_suno-audios):
 
-- [Suno Audios API](https://platform.acedata.cloud/documents/suno-audios) - Music generation
-- [Suno Lyrics API](https://platform.acedata.cloud/documents/suno-lyrics) - Lyrics generation
-- [Suno Tasks API](https://platform.acedata.cloud/documents/suno-tasks) - Task queries
-- [Suno Persona API](https://platform.acedata.cloud/documents/suno-persona) - Persona management
+- [Suno Audios API](https://platform.acedata.cloud/documents/suno-audios?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=suno_mcp_readme_documents_suno-audios) - Music generation
+- [Suno Lyrics API](https://platform.acedata.cloud/documents/suno-lyrics?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=suno_mcp_readme_documents_suno-lyrics) - Lyrics generation
+- [Suno Tasks API](https://platform.acedata.cloud/documents/suno-tasks?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=suno_mcp_readme_documents_suno-tasks) - Task queries
+- [Suno Persona API](https://platform.acedata.cloud/documents/suno-persona?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=suno_mcp_readme_documents_suno-persona) - Persona management
 
 ## Contributing
 
@@ -595,7 +429,7 @@ Contributions are welcome! Please:
 ## Documentation
 
 <!-- canonical-documentation -->
-[Documentation](https://platform.acedata.cloud/documents/suno-mcp)
+[Documentation](https://platform.acedata.cloud/documents/suno-mcp?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=suno_mcp_readme_quick_start)
 
 ## License
 
@@ -603,11 +437,11 @@ MIT License - see [LICENSE](LICENSE) for details.
 
 ## Links
 
-- [AceDataCloud Platform](https://platform.acedata.cloud)
+- [AceDataCloud Platform](https://platform.acedata.cloud?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=suno_mcp_readme_platform)
 - [Suno Official](https://suno.ai)
 - [Model Context Protocol](https://modelcontextprotocol.io)
 - [MCP Python SDK](https://github.com/modelcontextprotocol/python-sdk)
 
 ---
 
-Made with love by [AceDataCloud](https://platform.acedata.cloud)
+Made with love by [AceDataCloud](https://platform.acedata.cloud?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=suno_mcp_readme_platform)

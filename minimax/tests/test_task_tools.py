@@ -25,12 +25,19 @@ async def test_list_tasks_passes_documented_filters(monkeypatch):
 
 
 @pytest.mark.asyncio
-async def test_get_succeeded_task_does_not_sleep(monkeypatch):
-    query = AsyncMock(return_value={"task": {"id": "task-1", "status": "succeeded"}})
+@pytest.mark.parametrize("status", ["succeeded", "failed", "cancelled"])
+async def test_get_terminal_task_stops_polling(monkeypatch, status):
+    query = AsyncMock(return_value={"task": {"id": "task-1", "status": status}})
     sleep = AsyncMock()
     monkeypatch.setattr(task_tools.client, "query_task", query)
     monkeypatch.setattr(asyncio, "sleep", sleep)
 
-    await task_tools.minimax_get_task("task-1")
+    result = json.loads(await task_tools.minimax_get_task("task-1"))
 
     sleep.assert_not_awaited()
+    query.assert_awaited_once_with(id="task-1", action="retrieve")
+    guidance = result["mcp_task_polling"]
+    assert guidance["should_poll"] is False
+    assert guidance["terminal_state_reached"] is True
+    assert guidance["is_complete"] is (status == "succeeded")
+    assert guidance["is_failed"] is (status != "succeeded")

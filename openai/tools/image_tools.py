@@ -46,8 +46,10 @@ async def openai_generate_image(
         Field(
             description=(
                 "The image model to use. Options: 'gpt-image-1' (default, versatile), "
-                "'gpt-image-1.5', 'gpt-image-2', 'dall-e-3', 'dall-e-2', 'nano-banana', "
-                "'nano-banana-2', 'nano-banana-pro'."
+                "'gpt-image-1.5', 'gpt-image-2', 'gpt-image-2.5-flare', "
+                "'gpt-image-2.5-flare:official', 'gpt-image-2.5-sunburst', "
+                "'gpt-image-2.5-sunburst:official', 'dall-e-3', 'dall-e-2', "
+                "'nano-banana', 'nano-banana-2-lite', 'nano-banana-2', 'nano-banana-2.1', 'nano-banana-pro'. Nano Banana 2.1 has no ':official' variant. GPT Image ':official' variants use actual-token billing."
             )
         ),
     ] = DEFAULT_IMAGE_MODEL,
@@ -56,11 +58,12 @@ async def openai_generate_image(
         Field(
             description=(
                 "Image dimensions as 'WIDTHxHEIGHT' or 'auto' (default). "
-                "gpt-image-2 accepts any custom dimensions matching the format "
-                "(multiples of 16, longer side ≤ 3840, total pixels ≤ 8,294,400). "
+                "GPT Image 2 and 2.5 models accept custom dimensions matching the format "
+                "(multiples of 16, longer side ≤ 3840, total pixels 655,360–8,294,400, "
+                "aspect ratio ≤ 3:1). "
                 "Common presets — 1K: '1024x1024', '1536x1024', '1024x1536', "
-                "'1792x1024', '1024x1792'; 2K (1.5× rate): '2048x2048', '2048x1536', "
-                "'1536x2048', '2048x1152', '1152x2048'; 4K (1.5× rate): '2880x2880', "
+                "'1792x1024', '1024x1792'; 2K: '2048x2048', '2048x1536', "
+                "'1536x2048', '2048x1152', '1152x2048'; 4K: '2880x2880', "
                 "'3264x2448', '2448x3264', '3840x2160', '2160x3840'. "
                 "dall-e-2: '256x256', '512x512', '1024x1024'. "
                 "dall-e-3: '1024x1024', '1792x1024', '1024x1792'."
@@ -237,7 +240,9 @@ async def openai_edit_image(
         Field(
             description=(
                 "The image model to use for editing. Options: 'dall-e-3' (default), "
-                "'gpt-image-1.5', 'gpt-image-2', 'dall-e-3', 'nano-banana' variants."
+                "'gpt-image-1.5', 'gpt-image-2', 'gpt-image-2.5-flare', "
+                "'gpt-image-2.5-flare:official', 'gpt-image-2.5-sunburst', "
+                "'gpt-image-2.5-sunburst:official', 'dall-e-3', and 'nano-banana' variants including 'nano-banana-2.1' (no ':official' variant)."
             )
         ),
     ] = "dall-e-3",
@@ -246,10 +251,10 @@ async def openai_edit_image(
         Field(
             description=(
                 "Output image dimensions as 'WIDTHxHEIGHT' or 'auto'. Default is 'auto'. "
-                "gpt-image-2 accepts any custom dimensions (multiples of 16, longer side ≤ 3840, "
-                "total pixels ≤ 8,294,400). Common presets — 1K: '1024x1024', '1536x1024', "
-                "'1024x1536', '1792x1024', '1024x1792'; 2K (1.5× rate): '2048x2048', "
-                "'2048x1536', '1536x2048', '2048x1152', '1152x2048'; 4K (1.5× rate): "
+                "GPT Image 2 and 2.5 models accept custom dimensions (multiples of 16, longer side ≤ 3840, "
+                "total pixels 655,360–8,294,400, aspect ratio ≤ 3:1). Common presets — 1K: '1024x1024', '1536x1024', "
+                "'1024x1536', '1792x1024', '1024x1792'; 2K: '2048x2048', "
+                "'2048x1536', '1536x2048', '2048x1152', '1152x2048'; 4K: "
                 "'2880x2880', '3264x2448', '2448x3264', '3840x2160', '2160x3840'. "
                 "dall-e-2: '256x256', '512x512', '1024x1024'."
             )

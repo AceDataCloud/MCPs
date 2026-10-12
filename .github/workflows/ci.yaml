@@ -7,15 +7,51 @@ on:
     branches: [main]
 
 jobs:
+  vscode-bundle:
+    name: VS Code MCP bundle
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: vscode-bundle/package-lock.json
+      - run: npm ci --prefix vscode-bundle
+      - run: npm test --prefix vscode-bundle
+      - run: npm run check --prefix vscode-bundle
+      - run: npm run package --prefix vscode-bundle
+
   inventory:
     name: README Inventory
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
       - run: python3 scripts/check_readme_inventory.py
+      - run: python3 scripts/sync_oauth.py --check
+      - run: python3 -m unittest
       - run: python3 scripts/check_oauth_contract.py
-      - run: python3 scripts/test_check_mcp_tool_parameter_aliases.py
       - run: python3 scripts/check_mcp_tool_parameter_aliases.py
+
+  shared-oauth:
+    name: Shared OAuth behavior
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - run: pip install './suno[test,dev]'
+      # Generated core/oauth.py files use each server's existing lint job/config.
+      - run: ruff check --config suno/pyproject.toml shared/test_oauth.py scripts/sync_oauth.py scripts/test_sync_oauth.py
+      - run: pytest
+
+  platform-contract:
+    name: Platform contract resolver
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - run: python3 -m unittest
 
   detect-changes:
     runs-on: ubuntu-latest

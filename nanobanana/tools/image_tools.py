@@ -21,7 +21,7 @@ async def nanobanana_generate_image(
     model: Annotated[
         NanoBananaModel,
         Field(
-            description="Model to use for generation. 'nano-banana' (default, alias of gemini-2.5-flash-image) is faster. 'nano-banana-2-lite' is a lightweight variant. 'nano-banana-2' (alias of gemini-3.1-flash-image) offers pro-level quality at flash speed. 'nano-banana-pro' (alias of gemini-3-pro-image) offers highest quality and supports resolution parameter. Append ':official' suffix to any model name to use the official tier."
+            description="Model to use for generation. 'nano-banana' (default, alias of gemini-2.5-flash-image) is faster. 'nano-banana-2-lite' is a lightweight variant. 'nano-banana-2' (alias of gemini-3.1-flash-image) offers pro-level quality at flash speed. 'nano-banana-2.1' supports 1K/2K/4K generation and editing. 'nano-banana-pro' (alias of gemini-3-pro-image) offers highest quality and supports resolution parameter. The existing nano-banana, 2-lite, 2, and pro models have ':official' variants; 2.1 does not."
         ),
     ] = "nano-banana",
     aspect_ratio: Annotated[
@@ -33,7 +33,7 @@ async def nanobanana_generate_image(
     resolution: Annotated[
         Resolution | None,
         Field(
-            description="Resolution of the generated image. Options: '1K' (default), '2K', '4K'. Only works with 'nano-banana-pro' model."
+            description="Resolution of the generated image. Options: '1K' (default), '2K', '4K'. Supported by nano-banana-2, nano-banana-2.1, and nano-banana-pro."
         ),
     ] = None,
     count: Annotated[
@@ -97,7 +97,7 @@ async def nanobanana_edit_image(
     model: Annotated[
         NanoBananaModel,
         Field(
-            description="Model to use for editing. 'nano-banana' (default, alias of gemini-2.5-flash-image) is faster. 'nano-banana-2-lite' is a lightweight variant. 'nano-banana-2' (alias of gemini-3.1-flash-image) offers pro-level quality at flash speed. 'nano-banana-pro' (alias of gemini-3-pro-image) offers highest quality. Append ':official' suffix to any model name to use the official tier."
+            description="Model to use for editing. 'nano-banana' (default, alias of gemini-2.5-flash-image) is faster. 'nano-banana-2-lite' is a lightweight variant. 'nano-banana-2' (alias of gemini-3.1-flash-image) offers pro-level quality at flash speed. 'nano-banana-2.1' supports 1K/2K/4K generation and editing. 'nano-banana-pro' (alias of gemini-3-pro-image) offers highest quality. The existing nano-banana, 2-lite, 2, and pro models have ':official' variants; 2.1 does not."
         ),
     ] = "nano-banana",
     aspect_ratio: Annotated[
@@ -109,7 +109,7 @@ async def nanobanana_edit_image(
     resolution: Annotated[
         Resolution | None,
         Field(
-            description="Resolution of the edited image. Options: '1K', '2K', '4K'. Only works with 'nano-banana-pro' model."
+            description="Resolution of the edited image. Options: '1K', '2K', '4K'. Supported by nano-banana-2, nano-banana-2.1, and nano-banana-pro."
         ),
     ] = None,
     count: Annotated[

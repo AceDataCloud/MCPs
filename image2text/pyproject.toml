@@ -2,8 +2,8 @@
 name = "mcp-image2text"
 version = "2026.7.30.0"
 description = "MCP server for AceDataCloud Image2Text captcha APIs"
-readme = "README.md"
-license = { text = "MIT" }
+readme = "README.pypi.md"
+license = "MIT"
 requires-python = ">=3.10"
 authors = [{ name = "AceDataCloud", email = "support@acedata.cloud" }]
 maintainers = [{ name = "AceDataCloud", email = "support@acedata.cloud" }]
@@ -20,7 +20,7 @@ classifiers = [
     "Topic :: Internet :: WWW/HTTP",
     "Topic :: Scientific/Engineering :: Artificial Intelligence",
 ]
-dependencies = ["mcp>=1.2.0,<2", "httpx>=0.27.0", "python-dotenv>=1.0.0", "pydantic>=2.0.0", "loguru>=0.7.0"]
+dependencies = ["mcp>=1.2.0,<2", "httpx>=0.27.0", "python-dotenv>=1.0.0", "pydantic>=2.0.0", "loguru>=0.7.0", "redis>=5.0.0,<7", "cryptography>=42.0.0"]
 
 [project.optional-dependencies]
 dev = ["ruff>=0.4.0", "mypy>=1.10.0", "pre-commit>=3.7.0"]
@@ -33,7 +33,7 @@ mcp-image2text = "main:main"
 
 [project.urls]
 Homepage = "https://github.com/AceDataCloud/MCPs"
-Documentation = "https://platform.acedata.cloud/services/2aaa7faf-099e-410e-82f3-8d78170f25bb"
+Documentation = "https://platform.acedata.cloud/services/2aaa7faf-099e-410e-82f3-8d78170f25bb?utm_source=pypi&utm_medium=referral&utm_campaign=evergreen&utm_content=image2text_mcp_package_quick_start"
 Repository = "https://github.com/AceDataCloud/MCPs"
 Issues = "https://github.com/AceDataCloud/MCPs/issues"
 
@@ -45,7 +45,7 @@ build-backend = "hatchling.build"
 packages = ["core", "tools", "prompts", "main.py"]
 
 [tool.hatch.build.targets.sdist]
-include = ["core/", "tools/", "prompts/", "tests/", "main.py", "README.md", "LICENSE", ".env.example"]
+include = ["core/", "tools/", "prompts/", "tests/", "main.py", "README.md", "README.pypi.md", "LICENSE", ".env.example"]
 
 [tool.mypy]
 python_version = "3.10"
