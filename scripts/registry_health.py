@@ -6,6 +6,7 @@ import json
 import urllib.error
 import urllib.parse
 import urllib.request
+from concurrent.futures import ThreadPoolExecutor
 from dataclasses import asdict, dataclass
 from datetime import date
 from pathlib import Path
@@ -31,6 +32,7 @@ class Surface:
     remote: str
     status: str
     package_version: str = ""
+    website: str = ""
 
 
 @dataclass(frozen=True)
@@ -67,6 +69,7 @@ def local_surfaces() -> dict[str, Surface]:
             package=packages[0]["identifier"],
             remote=remotes[0]["url"],
             status=statuses[alias]["status"],
+            website=data.get("websiteUrl", ""),
         )
     return surfaces
 
@@ -95,6 +98,7 @@ def registry_surfaces(payload: dict[str, Any]) -> dict[str, Surface]:
             package=package,
             remote=remote,
             status=status,
+            website=data.get("websiteUrl", ""),
             package_version=packages[0].get("version", "")
             if len(packages) == 1
             else "",
@@ -165,6 +169,15 @@ def compare_surfaces(
                     f"{surface.remote} != {published.remote}",
                 )
             )
+        if surface.website and surface.website != published.website:
+            findings.append(
+                Finding(
+                    f"website_mismatch:{surface.alias}",
+                    "website_mismatch",
+                    surface.alias,
+                    f"{surface.website} != {published.website}",
+                )
+            )
     for name in sorted(set(registry) - set(local)):
         findings.append(Finding(f"local_missing:{name}", "local_missing", name, name))
     return findings
@@ -180,46 +193,58 @@ def health_url(remote: str) -> str:
 def live_findings(
     local: dict[str, Surface], registry: dict[str, Surface]
 ) -> list[Finding]:
+    pairs = [
+        (surface, registry[surface.name])
+        for surface in local.values()
+        if surface.status == "active"
+        and surface.name in registry
+        and registry[surface.name].status == "active"
+    ]
+    # Bound network time so a daily run can still upload its failure report.
+    with ThreadPoolExecutor(max_workers=8) as executor:
+        results = executor.map(lambda pair: surface_live_findings(*pair), pairs)
+        return [finding for findings in results for finding in findings]
+
+
+def surface_live_findings(surface: Surface, published: Surface) -> list[Finding]:
     findings: list[Finding] = []
-    for surface in local.values():
-        if surface.status != "active":
-            continue
-        published = registry.get(surface.name)
-        if not published or published.status != "active":
-            continue
-        try:
-            if not published.package_version:
-                raise ValueError("Registry package version is missing")
-            package = urllib.parse.quote(published.package, safe="")
-            version = urllib.parse.quote(published.package_version, safe="")
-            release = load_json_url(f"https://pypi.org/pypi/{package}/{version}/json")
-            files = release.get("urls") or []
-            if not any(not file.get("yanked", False) for file in files):
-                raise ValueError(
-                    "Registry package version has no installable artifacts"
-                )
-        except (OSError, ValueError, urllib.error.HTTPError) as exc:
-            findings.append(
-                Finding(
-                    f"pypi_unhealthy:{surface.alias}",
-                    "pypi_unhealthy",
-                    surface.alias,
-                    str(exc),
-                )
+    try:
+        if not published.package_version:
+            raise ValueError("Registry package version is missing")
+        package = urllib.parse.quote(published.package, safe="")
+        version = urllib.parse.quote(published.package_version, safe="")
+        release = load_json_url(f"https://pypi.org/pypi/{package}/{version}/json")
+        files = release.get("urls") or []
+        if not any(not file.get("yanked", False) for file in files):
+            raise ValueError("Registry package version has no installable artifacts")
+    except (OSError, ValueError, urllib.error.HTTPError) as exc:
+        findings.append(
+            Finding(
+                f"pypi_unhealthy:{surface.alias}",
+                "pypi_unhealthy",
+                surface.alias,
+                str(exc),
             )
+        )
+    for kind, url in (
+        ("remote_unhealthy", health_url(published.remote)),
+        ("website_unhealthy", published.website),
+    ):
         try:
+            if not url:
+                raise ValueError("Registry URL is missing")
             request = urllib.request.Request(
-                health_url(surface.remote),
+                url,
                 headers={"User-Agent": "acedatacloud-registry-health"},
             )
             with urllib.request.urlopen(request, timeout=20) as response:
                 if response.status != 200:
                     raise RuntimeError(f"HTTP {response.status}")
-        except (OSError, RuntimeError, urllib.error.HTTPError) as exc:
+        except (OSError, ValueError, RuntimeError, urllib.error.HTTPError) as exc:
             findings.append(
                 Finding(
-                    f"remote_unhealthy:{surface.alias}",
-                    "remote_unhealthy",
+                    f"{kind}:{surface.alias}",
+                    kind,
                     surface.alias,
                     str(exc),
                 )

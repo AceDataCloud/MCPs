@@ -30,6 +30,7 @@ def registry_row(status="active", name=NAMESPACE + "one"):
             "name": name,
             "packages": [{"identifier": "pkg", "version": "2026.10.12.1"}],
             "remotes": [{"url": "https://one.example/mcp"}],
+            "websiteUrl": "https://platform.example/guide",
         },
         "_meta": {OFFICIAL_META: {"status": status, "isLatest": True}},
     }
@@ -165,6 +166,20 @@ class RegistryHealthTest(unittest.TestCase):
         self.assertTrue(
             all(surface.name.startswith(NAMESPACE) for surface in surfaces.values())
         )
+
+    @patch("scripts.registry_health.urllib.request.urlopen")
+    @patch("scripts.registry_health.load_json_url")
+    def test_healthy_remote_does_not_hide_broken_website(self, load, urlopen) -> None:
+        active = Surface(
+            "one", NAMESPACE + "one", "pkg", "https://one.example/mcp", "active"
+        )
+        registry = registry_surfaces({"servers": [registry_row()]})
+        load.return_value = {"urls": [{"yanked": False}]}
+        response = MagicMock()
+        response.__enter__.return_value.status = 200
+        urlopen.side_effect = [response, OSError("HTTP 404")]
+        findings = live_findings({active.name: active}, registry)
+        self.assertEqual([finding.kind for finding in findings], ["website_unhealthy"])
 
     @patch("scripts.registry_health.load_registry", side_effect=TimeoutError("timeout"))
     @patch("sys.argv", ["registry_health.py", "--skip-live"])
