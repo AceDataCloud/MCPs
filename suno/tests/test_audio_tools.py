@@ -267,3 +267,16 @@ class TestReplaceSectionResultMode:
             )
 
         assert mock_generate.await_args.kwargs["replace_section_result_mode"] == "full_song"
+
+    @pytest.mark.asyncio
+    async def test_custom_vocal_gender_is_forwarded(self, mock_audio_response):
+        with patch(
+            "tools.audio_tools.client.generate_audio",
+            new=AsyncMock(return_value=mock_audio_response),
+        ) as mock_generate:
+            await suno_generate_custom_music(
+                lyric="[Verse]\nhello",
+                vocal_gender="nonbinary",
+            )
+
+        assert mock_generate.await_args.kwargs["vocal_gender"] == "nonbinary"
