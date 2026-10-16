@@ -659,9 +659,9 @@ mcp-acedatacloud --transport http --port 8000
   Reconnect OAuth to review newly granted permissions. Existing durable platform tokens
   follow current account permissions, including revocations, on each request.
 - Announcement tools require the corresponding account permission.
-- Recharge-card allocations accept the new `ribbon`, `blossom`, `dawn` and `confetti`
-  cover themes; omit `theme_id` to use the Backend default (`ribbon`). Legacy theme
-  IDs remain accepted, and existing cards retain their covers.
+- New recharge-card allocations accept only `ribbon`, `blossom`, `dawn` and `confetti`
+  cover themes; omit `theme_id` to use the Backend default (`ribbon`). Creation rejects
+  legacy theme IDs; existing cards retain their original covers.
 
 ## Management API coverage
 
