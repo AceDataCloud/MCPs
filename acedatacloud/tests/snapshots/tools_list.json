@@ -7562,12 +7562,6 @@
             {
               "description": "acedatacloud_create_recharge_cards_allocations_theme_id",
               "enum": [
-                "classic",
-                "aurora",
-                "ocean",
-                "festival",
-                "garden",
-                "night",
                 "ribbon",
                 "blossom",
                 "dawn",

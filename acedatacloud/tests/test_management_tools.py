@@ -127,23 +127,10 @@ async def test_actual_mcp_schema_validates_required_allocation_fields():
 
 
 @respx.mock
-@pytest.mark.parametrize(
-    "theme",
-    [
-        None,
-        "ribbon",
-        "blossom",
-        "dawn",
-        "confetti",
-        "classic",
-        "aurora",
-        "ocean",
-        "festival",
-        "garden",
-        "night",
-    ],
-)
-async def test_recharge_card_cover_themes_preserve_confirmation_and_backend_default(theme):
+@pytest.mark.parametrize("theme", [None, "ribbon", "blossom", "dawn", "confetti"])
+async def test_recharge_card_cover_themes_preserve_confirmation_and_backend_default(
+    theme,
+):
     arguments = {
         "application_id": "eaa18d3a-6ed9-40dd-8e73-5d6c67e00cc0",
         "amount_per_card": "1.000",
@@ -154,7 +141,9 @@ async def test_recharge_card_cover_themes_preserve_confirmation_and_backend_defa
     if theme is not None:
         arguments["theme_id"] = theme
     preview, _ = await mcp.call_tool("acedatacloud_create_recharge_cards_allocations", arguments)
-    assert json.loads(preview[0].text)["status"] == "confirmation_required"
+    target = json.loads(preview[0].text)
+    assert target["status"] == "confirmation_required"
+    assert target["target"]["body"] == arguments
     assert not respx.calls
     route = respx.post(f"{API}/recharge-cards/allocations/").mock(
         return_value=httpx.Response(201, json={})
@@ -166,7 +155,11 @@ async def test_recharge_card_cover_themes_preserve_confirmation_and_backend_defa
 
 
 @respx.mock
-async def test_unknown_recharge_card_theme_is_rejected_before_http():
+@pytest.mark.parametrize(
+    "theme", ["classic", "aurora", "ocean", "festival", "garden", "night", "unknown"]
+)
+@pytest.mark.parametrize("confirm", [False, True])
+async def test_retired_or_unknown_recharge_card_theme_is_rejected_before_http(theme, confirm):
     with pytest.raises(ToolError):
         await mcp.call_tool(
             "acedatacloud_create_recharge_cards_allocations",
@@ -176,11 +169,63 @@ async def test_unknown_recharge_card_theme_is_rejected_before_http():
                 "quantity": 1,
                 "expires_at": "2026-10-10T09:00:00+08:00",
                 "idempotency_key": "cover-theme-test",
-                "theme_id": "unknown",
-                "confirm": True,
+                "theme_id": theme,
+                "confirm": confirm,
             },
         )
     assert not respx.calls
+
+
+async def test_recharge_card_creation_schema_advertises_only_creatable_themes():
+    spec = next(
+        item
+        for item in SURFACE_TOOLS
+        if item["name"] == "acedatacloud_create_recharge_cards_allocations"
+    )
+    theme = spec["body_schema"]["properties"]["theme_id"]
+    assert theme["default"] == "ribbon"
+    assert "theme_id" not in spec["body_schema"]["required"]
+    tool = next(
+        item
+        for item in await mcp.list_tools()
+        if item.name == "acedatacloud_create_recharge_cards_allocations"
+    )
+    choices = tool.inputSchema["properties"]["theme_id"]["anyOf"]
+    assert (
+        next(item["enum"] for item in choices if "enum" in item)
+        == theme["enum"]
+        == ["ribbon", "blossom", "dawn", "confetti"]
+    )
+
+
+@respx.mock
+@pytest.mark.parametrize("theme", ["classic", "aurora", "ocean", "festival", "garden", "night"])
+@pytest.mark.parametrize("view", ["list", "owner", "share"])
+async def test_existing_recharge_card_reads_preserve_legacy_cover_theme(theme, view):
+    paths = {
+        "list": ("acedatacloud_list_recharge_cards_allocations", "/", {}),
+        "owner": (
+            "acedatacloud_get_recharge_cards_allocations_id",
+            "/card-1/",
+            {"id": "card-1"},
+        ),
+        "share": (
+            "acedatacloud_get_recharge_cards_allocations_token",
+            "/card-1/share-token/",
+            {"id": "card-1", "token": "share-token"},
+        ),
+    }
+    name, suffix, arguments = paths[view]
+    allocation = {"theme_id": theme}
+    payload = [allocation] if view == "list" else allocation
+    route = respx.get(f"{API}/recharge-cards/allocations{suffix}").mock(
+        return_value=httpx.Response(200, json=payload)
+    )
+    content, _ = await mcp.call_tool(name, arguments)
+    assert json.loads(content[0].text) == payload
+    assert route.call_count == 1
+    if view == "share":
+        assert "authorization" not in route.calls.last.request.headers
 
 
 @respx.mock
