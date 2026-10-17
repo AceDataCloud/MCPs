@@ -14,7 +14,7 @@
 const vscode = require("vscode");
 
 const PROVIDER_ID = "acedatacloud.nanobanana";
-const SERVER_LABEL = "NanoBanana MCP";
+const SERVER_LABEL = "Nano Banana by Ace Data Cloud";
 const SERVER_URL = "https://nanobanana.mcp.acedata.cloud/mcp";
 const SET_TOKEN_CMD = "acedatacloud.nanobanana.setApiToken";
 const CLEAR_TOKEN_CMD = "acedatacloud.nanobanana.clearApiToken";

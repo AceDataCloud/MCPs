@@ -189,7 +189,7 @@ def load_services() -> list[Service]:
 
 
 TOOL_TABLE_RE = re.compile(
-    r"^## Tool Reference\s*\n+\| Tool \| Description \|\s*\n\|[^\n]+\|\s*\n((?:\|[^\n]+\|\s*\n)+)",
+    r"^## (?:Tool Reference|Available Tools|Tools)\s*\n+\| Tool \| (?:Description|Purpose) \|\s*\n\|[^\n]+\|\s*\n((?:\|[^\n]+\|\s*\n)+)",
     re.MULTILINE,
 )
 
@@ -353,8 +353,8 @@ module.exports = {{ activate, deactivate }};
 def render_readme(svc: Service, tools: list[tuple[str, str]]) -> str:
     badge_line = (
         f"[![VS Code Marketplace]"
-        f"(https://img.shields.io/visual-studio-marketplace/v/{svc.publisher}.{svc.pypi_pkg}?label=VS%20Code)]"
-        f"(https://marketplace.visualstudio.com/items?itemName={svc.publisher}.{svc.pypi_pkg}) "
+        f"(https://img.shields.io/visual-studio-marketplace/v/{svc.publisher}.{svc.ext_name}?label=VS%20Code)]"
+        f"(https://marketplace.visualstudio.com/items?itemName={svc.publisher}.{svc.ext_name}) "
         f"[![PyPI]"
         f"(https://img.shields.io/pypi/v/{svc.pypi_pkg}.svg?label=PyPI)]"
         f"({svc.pypi_url}) "
@@ -404,10 +404,21 @@ def render_readme(svc: Service, tools: list[tuple[str, str]]) -> str:
     credential_label = (
         "account token" if svc.token_env == "ACEDATACLOUD_PLATFORM_TOKEN" else "API key"
     )
+    brand_note = ""
+    if svc.alias in {"suno", "seedance", "happyhorse", "openai", "nanobanana"}:
+        brand_note = (
+            f"[简体中文]({svc.repo_url}/blob/main/vscode/README.zh-CN.md)\n\n"
+            "This integration is published and operated by **Ace Data Cloud**. "
+            "It is not an official extension from the model or service owner. "
+            "An Ace Data Cloud application API key is required; a key from another provider is not interchangeable.\n\n"
+            "**First, verify without generating:** use the read-only tool in the "
+            "first-use section below. Generation and your Chat model may be billed separately.\n"
+        )
+
     content = f"""# {svc.display_name}
 
 {svc.tagline}
-{lifecycle_notice}
+{brand_note}{lifecycle_notice}
 
 {badge_line}
 
@@ -532,7 +543,129 @@ version, install [`uv`](https://docs.astral.sh/uv/) and use:
 MIT — see [LICENSE](LICENSE).
 """
 
+    if svc.alias in BRAND_TOOLS:
+        content += first_use(svc)
     return render_marketing_readme(content, svc.alias, "vscode_marketplace")
+
+
+BRAND_TOOLS = {
+    "suno": ("suno_list_models", "suno_get_task"),
+    "seedance": ("seedance_list_models", "seedance_get_task"),
+    "happyhorse": ("happyhorse_list_models", "happyhorse_get_task"),
+    "openai": ("openai_list_image_models", "openai_get_task"),
+    "nanobanana": (None, "nanobanana_get_task"),
+}
+
+
+def first_use(svc: Service) -> str:
+    reference, query = BRAND_TOOLS[svc.alias]
+    prompt = (
+        f"Call {reference} only. Show supported models/actions. Do not generate anything."
+        if reference
+        else f"Use {query} only for my existing task TASK_ID. Do not generate another image."
+    )
+    note = (
+        "The model-list tool returns reference information without generating media. It does not prove that your key has generation access."
+        if reference
+        else "Replace TASK_ID with a task already completed by your own application. If you have no task, stop after tool discovery; do not invent a task ID or generate just to test installation."
+    )
+    text = f"""
+## First use: discover, then read an existing result
+
+1. Install [{svc.display_name}](https://marketplace.visualstudio.com/items?itemName={svc.publisher}.{svc.ext_name}). This is an independent service extension; the Ace toolbox is optional. Do not enable two copies of the same server.
+2. Complete the application-key steps above. Run **{svc.display_name}: Set Ace Data Cloud API Key** and paste only the token. No workspace configuration file is needed.
+3. In **Chat: Manage Language Models**, show and select a tool-capable model. If you use the separate Ace Chat Models extension, follow its [model setup](https://github.com/AceDataCloud/VSCodeModelProvider#4-show-the-model-in-chat). Then open **Chat → Agent → Configure Tools** and enable only `{reference or query}` for this first check.
+4. Send the prompt below and inspect the confirmation's tool name and arguments. Your Chat model and background requests may be billed even when the service tool is read-only.
+
+```text
+{prompt}
+```
+
+{note}
+
+For an existing media task, enable only `{query}`, replace `TASK_ID` with your original task ID, and query that same ID until terminal success or failure. Open the returned media link and match the original generation task to its charge in [Usage](https://platform.acedata.cloud/console/usage). An accepted task or green Chat turn alone is not a completed artifact. Never resubmit generation just to check progress.
+
+### Real VS Code reference screenshots
+
+![Manage Models in the Ace Chat Models extension](https://raw.githubusercontent.com/AceDataCloud/VSCodeModelProvider/667593eb14bf15d434a1c41d47ef1f39199f7d68/assets/tutorial/02-manage-models.png)
+
+![Tool selection in the GPT Image MCP example](https://raw.githubusercontent.com/AceDataCloud/MCPs/537d5767aea410db930e4b01faf5dd14580c8ba7/vscode-bundle/assets/tutorial/04-tools.png)
+
+Historical real VS Code 1.141 screenshots, included in tutorials on 2026-10-09 (Asia/Shanghai). The tool-selection image uses the OpenAI server as a reference: choose this extension's server and the exact tool named above. These images do not show a newly published version or prove this independent service was called.
+
+### Troubleshooting your first call
+
+| Symptom | Check |
+| --- | --- |
+| Model missing / sign-in prompt | Complete Manage Language Models and the model extension's setup; respect organizational BYOK policy. |
+| Tools missing | Update Tools, check workspace/server trust, and disable duplicate bundle or manual registrations. |
+| 401 / 403 | Check application/service access, expiry, Allowed APIs, usage limit and balance. Use an application key rather than a platform management token. |
+| Pending task | Query the same original ID; do not submit generation again. |
+| 429 / 5xx | Preserve task/trace ID, inspect original task and Usage, and do not automatically retry a paid operation. |
+"""
+    return text
+
+
+def render_chinese_readme(svc: Service) -> str:
+    reference, query = BRAND_TOOLS[svc.alias]
+    prompt = (
+        f"只调用 {reference}，显示模型/动作说明，不要生成任何媒体。"
+        if reference
+        else f"只用 {query} 查询我已有的任务 TASK_ID，不要提交新的图片生成。"
+    )
+    text = f"""# {svc.display_name} · VS Code 中文教程
+
+[English]({svc.repo_url}/blob/main/vscode/README.md) · [官方扩展市场安装](https://marketplace.visualstudio.com/items?itemName={svc.publisher}.{svc.ext_name})
+
+本扩展由 **Ace Data Cloud** 提供和运营，接入对应模型/服务；不是模型或服务品牌方的官方扩展。使用 Ace 的应用 API Token，不能用其他供应方的 Key 替代。安装本服务独立扩展即可注册工具，合集只作可选补充；仍需选择支持工具调用的聊天模型并配置凭据。
+
+## 1. 安装和找到入口
+
+在 VS Code 扩展市场搜索本服务名称，确认发布者为 `acedatacloud`，打开上述安装入口并点击 Install。要求 VS Code 1.101+。安装后不必手写 `mcp.json`。停用合集或手工配置中的同一服务副本，避免工具重复。
+
+## 2. 注册并复制应用 API Token
+
+1. 打开 [Ace Applications](https://platform.acedata.cloud/console/applications)，先注册或登录 Ace。
+2. 找到 **General application（通用应用）**；若不存在，先点 **Initialize General Application**。可复制卡片上的 API Key，或进入 **Keys / Manage Keys → Create** 创建本扩展专用 Key。
+3. 创建时检查有效期、使用限额、Allowed APIs。只开放需要的生成/查询接口，确认服务权限、[当前价格](https://platform.acedata.cloud/models)及余额。生成和任务查询是两个操作，允许查询不等于允许生成。
+4. 复制裸 token，不加引号或 `Bearer `。`platform-...` 是账号管理令牌，不能替代图片、视频或音乐服务的应用 Key。
+
+![通用应用的API Key复制入口，真实界面参考](https://raw.githubusercontent.com/AceDataCloud/SunoDify/8d3d03570e73324220f111f7fe343da0792a8071/_assets/tutorial/get-api-key-en.png)
+
+![创建独立Key和可选权限限制，真实界面参考](https://raw.githubusercontent.com/AceDataCloud/SunoDify/8d3d03570e73324220f111f7fe343da0792a8071/_assets/tutorial/create-api-key-en.png)
+
+上图来自 Ace SunoDify 已有真实平台截图，固定到原始提交；界面标签为英文，仅说明取 Key，不证明本扩展已发布。不要把真实 Key 放到截图、提示词或Git提交。
+
+## 3. 粘贴到VS Code并选工具
+
+运行命令 **{svc.display_name}: Set Ace Data Cloud API Key**，粘贴应用 Token；保存于 VS Code SecretStorage。服务器地址为 `{svc.hosted_url}`。若要求信任服务器，先核对地址。
+
+打开 **Chat: Manage Language Models**，使所选模型可见，再在 Chat 选择它；可安装独立的 [Ace Chat Models](https://marketplace.visualstudio.com/items?itemName=acedatacloud.chat-models)。打开 **Agent → Configure Tools**，只勾选 `{reference or query}`，列表为空时先 Update Tools。组织禁用 BYOK 时遵守管理员政策。
+
+![真实VS Code模型管理界面参考](https://raw.githubusercontent.com/AceDataCloud/VSCodeModelProvider/667593eb14bf15d434a1c41d47ef1f39199f7d68/assets/tutorial/02-manage-models.png)
+
+![真实VS Code工具选择界面参考](https://raw.githubusercontent.com/AceDataCloud/MCPs/537d5767aea410db930e4b01faf5dd14580c8ba7/vscode-bundle/assets/tutorial/04-tools.png)
+
+VS Code 1.141历史真实截图于2026-10-09收入教程；工具图以OpenAI为例，实际选择本服务和上面指定的工具。不是当前新版本截图，也不能当作本独立卡片已经实测。完整模型设置见 [Ace模型教程](https://github.com/AceDataCloud/VSCodeModelProvider#4-show-the-model-in-chat)。
+
+## 4. 首次验证与同ID结果查询
+
+```text
+{prompt}
+```
+
+模型说明工具不生成媒体，也不证明生成权限；没有已完成任务时，图片服务停在工具发现，不要为验安装新发生成。聊天模型和辅助请求仍可能收费，先查模型价格。已有任务只用 `{query}` 查询同一个原ID（将 `TASK_ID` 替换为自己的原任务ID），直至成功或失败；打开结果媒体，并在 [Usage](https://platform.acedata.cloud/console/usage) 对应原生成任务及Credits账单。accepted、绿色聊天回合都不等于最终媒体成功，不要重新生成来轮询。
+
+## 5. 常见问题
+
+- 看不到模型：先完成 Manage Language Models 和模型扩展设置；不要绕过组织政策。
+- 看不到工具：Update Tools、确认工作区和服务器信任，停用重复的合集/手工副本。
+- 401/403：查Key完整性、应用/服务访问权限、有效期、限额、Allowed APIs与余额。
+- 任务未完成：保留原ID继续查；429或5xx先核原任务和Usage，不自动付费重试。
+
+更多服务说明见 [{svc.docs_label}]({svc.docs_url})。支持排查时提供task/trace ID，不提供Key。
+"""
+    return render_marketing_readme(text, svc.alias, "vscode_marketplace")
 
 
 VSCODEIGNORE = """.vscode/**
@@ -574,6 +707,10 @@ def process(svc: Service, *, dry_run: bool) -> list[str]:
         changes.append(f"  {svc.alias}/vscode/extension.js")
     if write_if_changed(vscode_dir / "README.md", readme_text, dry_run=dry_run):
         changes.append(f"  {svc.alias}/vscode/README.md")
+    if svc.alias in BRAND_TOOLS and write_if_changed(
+        vscode_dir / "README.zh-CN.md", render_chinese_readme(svc), dry_run=dry_run
+    ):
+        changes.append(f"  {svc.alias}/vscode/README.zh-CN.md")
     if write_if_changed(vscode_dir / ".vscodeignore", VSCODEIGNORE, dry_run=dry_run):
         changes.append(f"  {svc.alias}/vscode/.vscodeignore")
     return changes

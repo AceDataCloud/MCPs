@@ -1,0 +1,77 @@
+name: Publish independent Ace service extensions
+
+on:
+  workflow_dispatch:
+    inputs:
+      service:
+        description: Service card to publish from MCPs main
+        type: choice
+        required: true
+        options: [all, suno, seedance, happyhorse, gpt-image, nanobanana]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: vscode-independent-services-publish
+  cancel-in-progress: false
+
+jobs:
+  select:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    outputs:
+      services: ${{ steps.matrix.outputs.services }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: main
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+      - id: matrix
+        env:
+          SERVICE: ${{ inputs.service }}
+        run: echo "services=$(node scripts/publish-service-extensions.js matrix "$SERVICE")" >> "$GITHUB_OUTPUT"
+
+  publish:
+    needs: select
+    strategy:
+      fail-fast: false
+      matrix:
+        service: ${{ fromJSON(needs.select.outputs.services) }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: main
+      - uses: actions/checkout@v6
+        with:
+          repository: AceDataCloud/MCPs
+          ref: main
+          path: service-source
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: node --test test/service-publish.test.js
+      - name: Prepare trusted service package version
+        id: prepare
+        env:
+          SERVICE: ${{ matrix.service }}
+        run: node scripts/publish-service-extensions.js prepare "$SERVICE" "$GITHUB_WORKSPACE/service-source"
+      - name: Package service extension
+        working-directory: ${{ steps.prepare.outputs.directory }}
+        run: '"$GITHUB_WORKSPACE/node_modules/.bin/vsce" package --no-dependencies --out "$GITHUB_WORKSPACE/service.vsix"'
+      - name: Publish with the existing publisher credential
+        env:
+          VSCE_PAT: ${{ secrets.VSCE_PAT }}
+        run: |
+          test -n "$VSCE_PAT"
+          npx vsce publish --packagePath service.vsix
+      - name: Verify public validated version
+        env:
+          SERVICE: ${{ matrix.service }}
+          VERSION: ${{ steps.prepare.outputs.version }}
+        run: node scripts/publish-service-extensions.js verify "$SERVICE" "$VERSION"

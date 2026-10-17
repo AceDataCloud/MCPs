@@ -5,7 +5,7 @@ const test = require('node:test');
 const vm = require('node:vm');
 
 const root = path.resolve(__dirname, '..');
-const services = ['acedatacloud', 'face', 'fish', 'flux', 'grok', 'hailuo', 'kling', 'luma', 'midjourney', 'nanobanana', 'producer', 'seedance', 'seedream', 'serp', 'shorturl', 'suno', 'veo', 'wan'];
+const services = ['acedatacloud', 'face', 'fish', 'flux', 'grok', 'happyhorse', 'openai', 'hailuo', 'kling', 'luma', 'midjourney', 'nanobanana', 'producer', 'seedance', 'seedream', 'serp', 'shorturl', 'suno', 'veo', 'wan'];
 
 function load(alias, { input, env = {}, stored } = {}) {
   const state = { prompts: [], commands: new Map(), secrets: new Map(), provider: undefined };

@@ -48,10 +48,10 @@ services:
     pricing_note: "Free — management API calls are not billed. Recharges use your existing balance."
 
   suno:
-    display_name: Suno MCP
+    display_name: Suno by Ace Data Cloud
     repo: SunoMCP
     domain: music
-    tagline: "AI music generation with Suno — songs, lyrics, covers, stems, and more."
+    tagline: "Suno music generation by Ace Data Cloud — songs, lyrics, covers and task results in VS Code Chat."
     description: >
       Connect VS Code's AI agents to Suno through Ace Data Cloud. Generate songs from
       text prompts, write custom lyrics with full musical control, extend tracks,
@@ -62,7 +62,7 @@ services:
       - 'Write lyrics for a punk song about deadline pressure, then turn them into a song.'
       - 'Cover the song with task id <id> in a jazz piano style.'
     models: ["v3.5", "v4", "v4.5", "v5"]
-    pricing_note: "From $0.05 per song. New users get free trial credit at sign-up."
+    pricing_note: "Music generation is metered. Check current pricing and the trial allowance displayed in your own account."
 
   midjourney:
     display_name: Midjourney MCP
@@ -113,11 +113,11 @@ services:
     pricing_note: "From $0.02 per image. Free trial credit on sign-up."
 
   nanobanana:
-    display_name: NanoBanana MCP
+    display_name: Nano Banana by Ace Data Cloud
     repo: NanoBananaMCP
     pypi_override: mcp-nanobanana-pro
     domain: image
-    tagline: "Gemini-powered NanoBanana — generate and edit images via natural language."
+    tagline: "Nano Banana image generation and editing by Ace Data Cloud — create images and retrieve task results in VS Code Chat."
     description: >
       Image generation and edit-by-instruction using NanoBanana, NanoBanana 2,
       and NanoBanana Pro (built on Gemini).
@@ -126,7 +126,7 @@ services:
       - 'Generate a watercolor postcard of Kyoto in cherry-blossom season. Use nanobanana pro.'
       - 'Edit https://example.com/desk.jpg — clear the desk and add a single houseplant.'
     models: ["nano-banana", "nano-banana-2", "nano-banana-pro"]
-    pricing_note: "From $0.015 per image. Free trial credit on sign-up."
+    pricing_note: "Image generation is metered. Check current model pricing and the balance displayed in your own account."
 
   luma:
     display_name: Luma MCP
@@ -231,10 +231,10 @@ services:
     pricing_note: "From $0.18 per clip. Free trial credit on sign-up."
 
   seedance:
-    display_name: Seedance MCP
+    display_name: Seedance by Ace Data Cloud
     repo: SeedanceMCP
     domain: video
-    tagline: "ByteDance Seedance — dance and motion video generation from text or image."
+    tagline: "Seedance video generation by Ace Data Cloud — text, image and existing task results in VS Code Chat."
     description: >
       Generate Seedance AI dance/motion videos. Configurable resolution, aspect
       ratio, duration, and optional audio.
@@ -242,7 +242,7 @@ services:
     examples:
       - 'Generate a Seedance video of a stylized robot dancing breakdance on a rooftop.'
       - 'Animate https://example.com/character.png into a Seedance clip, vertical 9:16, 8 seconds.'
-    pricing_note: "From $0.15 per clip. Free trial credit on sign-up."
+    pricing_note: "Video generation is metered. Check current model, duration, resolution pricing and your account balance."
 
   producer:
     display_name: Producer MCP
@@ -323,3 +323,34 @@ services:
       - 'List 10 Fish voice models and show their language, gender, and any tags.'
       - 'Check the status of Fish task <id>.'
     pricing_note: "Per-character billing. Free trial credit on sign-up."
+
+  happyhorse:
+    display_name: HappyHorse by Ace Data Cloud
+    repo: HappyHorseMCP
+    domain: video
+    tagline: "HappyHorse video generation by Ace Data Cloud — text, image, references, editing and task results in VS Code Chat."
+    description: >
+      Use HappyHorse (Happy Horse) through the Ace Data Cloud integration in VS Code
+      Chat. Generate or edit videos, browse supported models, and retrieve the
+      original task result without resubmitting a generation.
+    keywords: [happyhorse, happy horse, video generation, image to video, video editing]
+    examples:
+      - 'Call happyhorse_list_models only and show the supported actions. Do not generate a video.'
+      - 'Query the existing HappyHorse task TASK_ID with happyhorse_get_task. Do not submit another generation.'
+    pricing_note: "Video generation is metered. Check current model pricing and your account balance before submitting."
+
+  openai:
+    display_name: GPT Image by Ace Data Cloud
+    ext_name: mcp-gpt-image
+    repo: OpenAIMCP
+    domain: image
+    tagline: "GPT Image generation and editing by Ace Data Cloud — GPT Image 2, image tasks and results in VS Code Chat."
+    description: >
+      Use GPT Image through the Ace Data Cloud integration in VS Code Chat.
+      Generate and edit images, then retrieve the same task ID until the result is
+      ready. This image-focused extension connects to the existing OpenAI MCP
+      server; enable only image generation, editing and task-query tools.
+    keywords: [gpt image, gpt-image, gpt image 2, image generation, image editing]
+    examples:
+      - 'Use openai_get_task only for my existing image task TASK_ID. Do not generate another image.'
+    pricing_note: "Image generation is metered. Check the exact model, quality, count, pricing and account balance before submitting."
