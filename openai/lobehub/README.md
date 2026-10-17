@@ -70,3 +70,7 @@ Use **`mcp-openai-pro`**, maintained by AceDataCloud. The similarly named `mcp-o
 The owner declaration contains actual `tools/list` schemas from the public package, not invented tool names. It is not a package release or live marketplace receipt. With an existing authorized publisher identity, inspect auth/GitHub state and `plugin list`, then claim the exact existing identifier if necessary and `plugin update --dir /absolute/path/to/this/directory`. Do not `plugin publish` a duplicate or automatically register an M2M identity. Human login/GitHub authorization and any new terms remain human steps. Read [official publisher rules](https://lobehub.com/publish-mcp/skill.md).
 
 Attribution uses the current allowed `opensource/referral/evergreen` contract plus a service-specific `*_lobehub_*` content tag. A source label is not a proven referrer, install, registration or purchase. No global attribution rule changes are made.
+
+## Focused GPT Image adapter
+
+The independent [GPTImageLobeHub](https://github.com/AceDataCloud/GPTImageLobeHub) source exposes only GPT Image generation/editing, task lookup and a schema guide, reusing this server as a pinned dependency. It is not published to PyPI or the LobeHub market yet. This directory remains the broader existing OpenAIMCP owner-update material and must not be mistaken for the independent focused card.

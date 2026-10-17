@@ -45,3 +45,7 @@
 发布者应使用已有身份确认 `plugin list`，认领现有 `acedatacloud-openaimcp` 后 update；不得重复 publish。manifest 来自已发包 `2026.10.17.0` 的真实 schema，远程版本一致性需发布前认证核实。当前未登录 publisher，不能声称认领或认证已完成。归因采用后端认可的 opensource/referral/evergreen 四项标签，以 `gpt-image_lobehub_*` 区分具体入口，不宣称带来注册/收入。
 
 **包身份：必须用 `mcp-openai-pro`。PyPI 的 `mcp-openai` 属于其他作者。现有 OpenAIMCP 同时含聊天、嵌入等工具，名称强调 GPT Image 首要发现用途，不伪称新建的纯图片后台。**
+
+## 纯 GPT Image 独立适配层
+
+[GPTImageLobeHub](https://github.com/AceDataCloud/GPTImageLobeHub) 已准备纯图片工具源码，只保留 GPT Image 生成/编辑、任务查询与 schema 指引，固定依赖现有服务；尚未发布 PyPI/官方市场。本目录是既有通用 OpenAIMCP 的改名/发现材料，不能代替新的纯 GPT Image 卡片。
