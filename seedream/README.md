@@ -201,6 +201,7 @@ For **401**, check which auth route the client used and whether the token or OAu
 | -------------------------- | --------------------------------------------- |
 | `seedream_generate_image`  | Generate an image from a text prompt           |
 | `seedream_edit_image`      | Edit or modify existing images with AI         |
+| `seedream_decompose_image` | Split an image into positioned layers          |
 
 ### Task Management
 

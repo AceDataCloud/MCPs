@@ -30,6 +30,8 @@ Generate AI videos, extend clips, and transfer motion directly from Claude, VS C
 | `kling_generate_video_from_image` | Generate AI video using reference images as start and/or end frames. |
 | `kling_extend_video` | Extend an existing video with additional content. |
 | `kling_generate_motion` | Transfer motion from a reference video to a character image. |
+| `kling_lip_sync` | Synchronize speech from text or audio to a video. |
+| `kling_talking_photo` | Animate a portrait from text or audio. |
 | `kling_get_task` | Query the status and result of a video generation task. |
 | `kling_get_tasks_batch` | Query multiple video generation tasks at once. |
 | `kling_list_models` | List all available Kling models for video generation. |

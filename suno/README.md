@@ -40,6 +40,11 @@ Generate AI music, lyrics, and manage audio projects directly from Claude, VS Co
 | `suno_upload_cover` | Create an AI cover of an uploaded audio (your own music). |
 | `suno_mashup_music` | Blend exactly two songs using a required creative-direction prompt. |
 | `suno_all_stems_music` | Return two distinct 12-stem candidate sets, labeled `stem_set` 1 and 2 in task results. |
+| `suno_generate_with_persona_vox` | Generate music with a persona while preserving the supplied vocal audio. |
+| `suno_underpainting` | Fill or regenerate a selected interval within an existing song. |
+| `suno_overpainting` | Add generated material over a selected interval of an existing song. |
+| `suno_samples_music` | Generate music variations from authorized sample audio. |
+| `suno_generate_inspo` | Generate music from an inspiration clip and creative direction. |
 | `suno_generate_lyrics` | Generate song lyrics from a text prompt. |
 | `suno_get_mp4` | Get an MP4 video version of a generated song. |
 | `suno_get_timing` | Get timing and subtitle data for a generated song. |
@@ -48,12 +53,15 @@ Generate AI music, lyrics, and manage audio projects directly from Claude, VS Co
 | `suno_get_mp3` | Get the compressed MP3 format of a generated song. |
 | `suno_get_midi` | Get MIDI data extracted from a generated song. |
 | `suno_create_persona` | Create a new artist persona from an existing audio's vocal style. |
+| `suno_list_personas` | List reusable artist personas available to the current application. |
+| `suno_delete_persona` | Delete a reusable artist persona. |
 | `suno_create_custom_model` | Create a reusable custom music model from 6 to 24 authorized audio URLs. |
 | `suno_get_custom_model` | Retrieve one custom music model by ID. |
 | `suno_list_custom_models` | List custom music models for the current Suno application. |
 | `suno_generate_with_custom_model` | Generate a song using a ready custom music model. |
-| `suno_delete_custom_model` | Archive a custom music model so it can no longer be used. |
+| `suno_archive_custom_model` | Archive a custom music model so it can no longer be used. |
 | `suno_optimize_style` | Optimize a music style description for better generation results. |
+| `suno_create_voice` | Create a reusable voice from authorized audio. |
 | `suno_mashup_lyrics` | Generate mashup lyrics by combining two sets of lyrics. |
 | `suno_upload_audio` | Upload external audio in standard or enhanced mode for subsequent operations. |
 | `suno_get_task` | Query the status and result of a music generation task. |
