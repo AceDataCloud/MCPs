@@ -13,6 +13,7 @@ import javax.swing.JComponent
 class McpSunoSettingsConfigurable : Configurable {
 
     private var myPanel: DialogPanel? = null
+    private var nativePanel: AceServicePanel? = null
     private var apiToken: String = ""
 
     override fun getDisplayName(): String = "Suno MCP"
@@ -104,7 +105,11 @@ class McpSunoSettingsConfigurable : Configurable {
             }
         }
 
-        return myPanel!!
+        nativePanel = AceServicePanel()
+        return javax.swing.JTabbedPane().apply {
+            addTab("Suno", nativePanel)
+            addTab("AI Assistant MCP (optional)", myPanel)
+        }
     }
 
     override fun isModified(): Boolean {
@@ -124,6 +129,8 @@ class McpSunoSettingsConfigurable : Configurable {
     }
 
     override fun disposeUIResources() {
+        nativePanel?.dispose()
+        nativePanel = null
         myPanel = null
     }
 

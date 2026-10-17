@@ -13,9 +13,10 @@ import javax.swing.JComponent
 class McpSettingsConfigurable : Configurable {
 
     private var myPanel: DialogPanel? = null
+    private var nativePanel: AceServicePanel? = null
     private var apiToken: String = ""
 
-    override fun getDisplayName(): String = "NanoBanana MCP"
+    override fun getDisplayName(): String = "Nano Banana MCP"
 
     override fun createComponent(): JComponent {
         val settings = McpSettings.getInstance()
@@ -104,7 +105,11 @@ class McpSettingsConfigurable : Configurable {
             }
         }
 
-        return myPanel!!
+        nativePanel = AceServicePanel()
+        return javax.swing.JTabbedPane().apply {
+            addTab("Nano Banana", nativePanel)
+            addTab("AI Assistant MCP (optional)", myPanel)
+        }
     }
 
     override fun isModified(): Boolean {
@@ -124,6 +129,8 @@ class McpSettingsConfigurable : Configurable {
     }
 
     override fun disposeUIResources() {
+        nativePanel?.dispose()
+        nativePanel = null
         myPanel = null
     }
 
