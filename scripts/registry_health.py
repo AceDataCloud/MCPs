@@ -54,21 +54,38 @@ def load_json_url(url: str, timeout: int = 30) -> Any:
 def local_surfaces() -> dict[str, Surface]:
     statuses = json.loads(CATALOG_PATH.read_text())["services"]
     surfaces: dict[str, Surface] = {}
-    for path in sorted(ROOT.glob("*/server.json")):
-        alias = path.parent.name
+    manifests = [
+        (path, path.parent.name, True) for path in sorted(ROOT.glob("*/server.json"))
+    ]
+    for alias, entry in statuses.items():
+        for profile in entry.get("registry_profiles", []):
+            manifests.append(
+                (
+                    ROOT / alias / profile["manifest"],
+                    alias + ":" + Path(profile["manifest"]).stem,
+                    False,
+                )
+            )
+    for path, alias, require_remote in manifests:
         data = json.loads(path.read_text())
         packages = data.get("packages") or []
         remotes = data.get("remotes") or []
-        if len(packages) != 1 or len(remotes) != 1:
-            raise RuntimeError(f"{alias}: expected exactly one package and remote")
+        if (
+            len(packages) != 1
+            or len(remotes) > 1
+            or (require_remote and len(remotes) != 1)
+        ):
+            raise RuntimeError(
+                f"{alias}: expected one package and at most one remote; root manifests require a remote"
+            )
         if data["name"] in surfaces:
             raise RuntimeError(f"duplicate local Registry name: {data['name']}")
         surfaces[data["name"]] = Surface(
             alias=alias,
             name=data["name"],
             package=packages[0]["identifier"],
-            remote=remotes[0]["url"],
-            status=statuses[alias]["status"],
+            remote=remotes[0]["url"] if remotes else "",
+            status=statuses[path.parent.name]["status"],
             website=data.get("websiteUrl", ""),
         )
     return surfaces
@@ -226,10 +243,10 @@ def surface_live_findings(surface: Surface, published: Surface) -> list[Finding]
                 str(exc),
             )
         )
-    for kind, url in (
-        ("remote_unhealthy", health_url(published.remote)),
-        ("website_unhealthy", published.website),
-    ):
+    urls = [("website_unhealthy", published.website)]
+    if published.remote:
+        urls.insert(0, ("remote_unhealthy", health_url(published.remote)))
+    for kind, url in urls:
         try:
             if not url:
                 raise ValueError("Registry URL is missing")

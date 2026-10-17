@@ -6,6 +6,8 @@ import json
 import unittest
 from contextlib import redirect_stdout
 from datetime import date
+from pathlib import Path
+from tempfile import TemporaryDirectory
 from unittest.mock import MagicMock, patch
 
 from scripts.registry_health import (
@@ -21,6 +23,7 @@ from scripts.registry_health import (
     local_surfaces,
     main,
     registry_surfaces,
+    surface_live_findings,
 )
 
 
@@ -37,6 +40,59 @@ def registry_row(status="active", name=NAMESPACE + "one"):
 
 
 class RegistryHealthTest(unittest.TestCase):
+    def test_explicit_package_only_profile_is_loaded_without_duplicate_remote(self):
+        with TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "openai").mkdir()
+            catalog = root / "catalog.json"
+            catalog.write_text(
+                json.dumps(
+                    {
+                        "services": {
+                            "openai": {
+                                "status": "active",
+                                "registry_profiles": [
+                                    {"manifest": "gpt-image.server.json"}
+                                ],
+                            }
+                        }
+                    }
+                )
+            )
+            profile = registry_row()["server"]
+            profile.pop("remotes")
+            (root / "openai/gpt-image.server.json").write_text(json.dumps(profile))
+            with (
+                patch("scripts.registry_health.ROOT", root),
+                patch("scripts.registry_health.CATALOG_PATH", catalog),
+            ):
+                result = local_surfaces()
+            self.assertEqual(len(result), 1)
+            self.assertEqual(result[profile["name"]].remote, "")
+            self.assertEqual(result[profile["name"]].alias, "openai:gpt-image.server")
+
+    @patch("scripts.registry_health.urllib.request.urlopen")
+    @patch("scripts.registry_health.load_json_url")
+    def test_package_only_entry_checks_package_and_website_without_health_request(
+        self, load, urlopen
+    ):
+        load.return_value = {"urls": [{"yanked": False}]}
+        response = MagicMock()
+        response.__enter__.return_value.status = 200
+        urlopen.return_value = response
+        surface = Surface(
+            "profile",
+            NAMESPACE + "profile",
+            "pkg",
+            "",
+            "active",
+            "2026.10.18.0",
+            "https://example.test/guide",
+        )
+        self.assertEqual(surface_live_findings(surface, surface), [])
+        self.assertEqual(urlopen.call_count, 1)
+        self.assertEqual(urlopen.call_args.args[0].full_url, surface.website)
+
     def test_detects_missing_retired_and_contract_drift(self) -> None:
         local = {
             "active": Surface(
