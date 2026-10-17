@@ -93,7 +93,8 @@
       "repo": "OpenAIMCP",
       "pypi": "mcp-openai-pro",
       "listing": null,
-      "docs": "https://platform.acedata.cloud/documents/openai"
+      "docs": "https://platform.acedata.cloud/documents/openai",
+      "model_prefix": "gpt-image-"
     }
   ]
 }

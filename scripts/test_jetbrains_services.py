@@ -79,6 +79,9 @@ class JetBrainsServiceTest(unittest.TestCase):
             configurable = (directory / (service["configurable"] + ".kt")).read_text()
             self.assertIn("AceServicePanel()", configurable)
             self.assertIn("nativePanel?.dispose()", configurable)
+            if service["alias"] == "gpt-image":
+                self.assertEqual(service["model_prefix"], "gpt-image-")
+                self.assertIn('startsWith("gpt-image-")', panel)
 
     def test_package_guides_have_real_sourced_images_key_flow_and_channel_tags(self):
         for service in SERVICES:

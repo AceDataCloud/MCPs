@@ -77,6 +77,7 @@ def generate():
             "__BRAND__": service["brand"],
             "__KIND__": service["kind"],
             "__MODEL_TOOL__": service["model_tool"],
+            "__MODEL_PREFIX__": service.get("model_prefix", ""),
             "__GENERATE_TOOL__": service["generate_tool"],
             "__TASK_TOOL__": service["task_tool"],
             "__TASK_ARG__": service["task_arg"],

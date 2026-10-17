@@ -32,6 +32,9 @@ class AceServicePanel : JPanel(BorderLayout(8, 8)) {
         buttons.add(button("List models", "__MODEL_TOOL__") { JsonObject() })
         buttons.add(button("Generate __KIND__", "__GENERATE_TOOL__", billable = true) {
             require(model.text.isNotBlank()) { "List models, check current pricing and enter a model explicitly." }
+            require("__MODEL_PREFIX__".isEmpty() || model.text.trim().startsWith("__MODEL_PREFIX__")) {
+                "This independent __BRAND__ entry only accepts __MODEL_PREFIX__ models. Use the matching service plugin for another model."
+            }
             require(prompt.text.isNotBlank()) { "Enter a prompt." }
             JsonObject().apply { addProperty("model", model.text.trim()); addProperty("prompt", prompt.text.trim()) }
         })

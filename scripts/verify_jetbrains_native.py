@@ -76,7 +76,7 @@ def main():
                     "content": [
                         {
                             "type": "text",
-                            "text": '{"task_id":"LOCAL_EXISTING_TASK","status":"pending"}',
+                            "text": '{"task_id":"LOCAL_EXISTING_TASK","status":"pending","model":"gpt-image-LOCAL_TEST"}',
                         }
                     ],
                     "isError": mode["tool_error"],

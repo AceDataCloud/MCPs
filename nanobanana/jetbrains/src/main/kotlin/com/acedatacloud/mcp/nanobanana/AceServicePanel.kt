@@ -32,6 +32,9 @@ class AceServicePanel : JPanel(BorderLayout(8, 8)) {
         buttons.add(button("List models", "@schema:nanobanana_generate_image") { JsonObject() })
         buttons.add(button("Generate image", "nanobanana_generate_image", billable = true) {
             require(model.text.isNotBlank()) { "List models, check current pricing and enter a model explicitly." }
+            require("".isEmpty() || model.text.trim().startsWith("")) {
+                "This independent Nano Banana entry only accepts  models. Use the matching service plugin for another model."
+            }
             require(prompt.text.isNotBlank()) { "Enter a prompt." }
             JsonObject().apply { addProperty("model", model.text.trim()); addProperty("prompt", prompt.text.trim()) }
         })

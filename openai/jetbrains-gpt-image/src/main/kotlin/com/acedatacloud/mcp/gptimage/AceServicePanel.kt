@@ -32,6 +32,9 @@ class AceServicePanel : JPanel(BorderLayout(8, 8)) {
         buttons.add(button("List models", "openai_list_image_models") { JsonObject() })
         buttons.add(button("Generate image", "openai_generate_image", billable = true) {
             require(model.text.isNotBlank()) { "List models, check current pricing and enter a model explicitly." }
+            require("gpt-image-".isEmpty() || model.text.trim().startsWith("gpt-image-")) {
+                "This independent GPT Image entry only accepts gpt-image- models. Use the matching service plugin for another model."
+            }
             require(prompt.text.isNotBlank()) { "Enter a prompt." }
             JsonObject().apply { addProperty("model", model.text.trim()); addProperty("prompt", prompt.text.trim()) }
         })
