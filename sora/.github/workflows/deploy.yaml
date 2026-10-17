@@ -11,6 +11,8 @@ on:
       - ".github/ISSUE_TEMPLATE/**"
 jobs:
   run:
+    # Retired capability: source/mirror sync must not restart the service.
+    if: ${{ false }}
     runs-on: ubuntu-latest
     steps:
       - name: Generate Build Number
