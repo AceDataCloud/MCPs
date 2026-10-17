@@ -90,6 +90,14 @@
       "vscode_bundle": {
         "label": "HappyHorse",
         "default": false
+      },
+      "registry": {
+        "title": "HappyHorse by Ace Data Cloud",
+        "description": "Generate and edit HappyHorse videos with Ace Data Cloud; retrieve the original task for results.",
+        "icon": {
+          "src": "https://cdn.acedata.cloud/2841e8c719.png",
+          "mimeType": "image/png"
+        }
       }
     },
     "hcaptcha": {
@@ -155,6 +163,14 @@
       "vscode_bundle": {
         "label": "NanoBanana",
         "default": true
+      },
+      "registry": {
+        "title": "Nano Banana by Ace Data Cloud",
+        "description": "Generate and edit Nano Banana images with Ace Data Cloud; retrieve the same task for results.",
+        "icon": {
+          "src": "https://cdn.acedata.cloud/859plc.jpg",
+          "mimeType": "image/jpeg"
+        }
       }
     },
     "openai": {
@@ -164,7 +180,27 @@
       "vscode_bundle": {
         "label": "OpenAI",
         "default": false
-      }
+      },
+      "registry_profiles": [
+        {
+          "manifest": "gpt-image.server.json",
+          "name": "io.github.AceDataCloud/mcp-gpt-image",
+          "title": "GPT Image by Ace Data Cloud",
+          "description": "Generate and edit GPT Image pictures with Ace Data Cloud; query the original image task.",
+          "guide": "GPT_IMAGE.md",
+          "package_arguments": [
+            {
+              "type": "named",
+              "name": "--profile",
+              "value": "gpt-image"
+            }
+          ],
+          "icon": {
+            "src": "https://cdn.acedata.cloud/2870040497.png",
+            "mimeType": "image/png"
+          }
+        }
+      ]
     },
     "producer": {
       "status": "active",
@@ -196,6 +232,14 @@
       "vscode_bundle": {
         "label": "Seedance",
         "default": true
+      },
+      "registry": {
+        "title": "Seedance by Ace Data Cloud",
+        "description": "Generate Seedance videos with Ace Data Cloud; retrieve the original task for finished video.",
+        "icon": {
+          "src": "https://cdn.acedata.cloud/9q90dl.png",
+          "mimeType": "image/png"
+        }
       }
     },
     "seedream": {
@@ -235,6 +279,14 @@
       "vscode_bundle": {
         "label": "Suno",
         "default": true
+      },
+      "registry": {
+        "title": "Suno by Ace Data Cloud",
+        "description": "Create Suno music, lyrics and covers with Ace Data Cloud; retrieve the same task for results.",
+        "icon": {
+          "src": "https://cdn.acedata.cloud/l3ffw7.jpg",
+          "mimeType": "image/jpeg"
+        }
       }
     },
     "turnstile": {
