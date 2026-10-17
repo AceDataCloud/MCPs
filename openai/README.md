@@ -1,6 +1,7 @@
 # OpenAIMCP
 
 <!-- mcp-name: io.github.AceDataCloud/mcp-openai -->
+<!-- mcp-name: io.github.AceDataCloud/mcp-gpt-image -->
 
 A [Model Context Protocol (MCP)](https://modelcontextprotocol.io) server for OpenAI API access using [AceDataCloud](https://platform.acedata.cloud?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=openai_mcp_readme_platform).
 
@@ -9,6 +10,11 @@ Interact with OpenAI models for chat completions, image generation, text embeddi
 The AceDataCloud distribution is `mcp-openai-pro`. The unrelated
 `mcp-openai` package on PyPI is not maintained by AceDataCloud. Update existing
 `uvx` configurations to the new package name; the hosted MCP URL is unchanged.
+
+## GPT Image service profile
+
+Use [GPT Image by Ace Data Cloud](https://github.com/AceDataCloud/OpenAIMCP/blob/main/GPT_IMAGE.md) when you only need image generation, editing and task retrieval. It runs `mcp-openai-pro --profile gpt-image`, exposes five image/task tools, requires an explicit GPT Image model, and shares this package's maintained API client. The general OpenAI server remains unchanged. The separate `mcp-gpt-image` Registry manifest is prepared for publication after the matching package release; it is not yet a public listing.
+
 
 ## Features
 

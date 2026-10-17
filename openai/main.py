@@ -78,17 +78,27 @@ Environment Variables:
         help="Transport mode (default: stdio)",
     )
     parser.add_argument(
+        "--profile",
+        choices=["all", "gpt-image"],
+        default="all",
+        help="Use the separate GPT Image-only tool surface (stdio only)",
+    )
+    parser.add_argument(
         "--port",
         type=int,
         default=8000,
         help="Port for HTTP transport (default: 8000)",
     )
     args = parser.parse_args()
+    if args.profile == "gpt-image" and args.transport != "stdio":
+        parser.error("The GPT Image profile is stdio-only; it has no separate hosted remote")
 
     # Print startup banner
     safe_print("")
     safe_print("=" * 50)
-    safe_print("  MCP OpenAI Server")
+    safe_print(
+        "  GPT Image by Ace Data Cloud" if args.profile == "gpt-image" else "  MCP OpenAI Server"
+    )
     safe_print("=" * 50)
     safe_print("")
     safe_print(f"  Version:   {get_version()}")
@@ -117,17 +127,21 @@ Environment Variables:
     safe_print("  [OK] Tools and prompts loaded")
     safe_print("")
     safe_print("  Available tools:")
-    safe_print("    - openai_chat_completion")
-    safe_print("    - openai_create_response")
-    safe_print("    - openai_generate_image")
-    safe_print("    - openai_edit_image")
-    safe_print("    - openai_create_embedding")
-    safe_print("    - openai_get_task")
-    safe_print("    - openai_list_tasks")
-    safe_print("    - openai_list_chat_models")
-    safe_print("    - openai_list_image_models")
-    safe_print("    - openai_list_embedding_models")
-    safe_print("    - openai_get_usage_guide")
+    if args.profile == "gpt-image":
+        for tool in ("generate", "edit", "get_task", "list_tasks", "list_models"):
+            safe_print(f"    - gpt_image_{tool}")
+    else:
+        safe_print("    - openai_chat_completion")
+        safe_print("    - openai_create_response")
+        safe_print("    - openai_generate_image")
+        safe_print("    - openai_edit_image")
+        safe_print("    - openai_create_embedding")
+        safe_print("    - openai_get_task")
+        safe_print("    - openai_list_tasks")
+        safe_print("    - openai_list_chat_models")
+        safe_print("    - openai_list_image_models")
+        safe_print("    - openai_list_embedding_models")
+        safe_print("    - openai_get_usage_guide")
     safe_print("")
     safe_print("=" * 50)
     safe_print("  Ready for MCP connections")
@@ -195,7 +209,12 @@ Environment Variables:
             app = Starlette(routes=routes, lifespan=lifespan)
             uvicorn.run(app, host="0.0.0.0", port=args.port)
         else:
-            mcp.run(transport="stdio")
+            if args.profile == "gpt-image":
+                from gpt_image_tools import create_server
+
+                create_server().run(transport="stdio")
+            else:
+                mcp.run(transport="stdio")
     except KeyboardInterrupt:
         safe_print("\nShutdown requested")
         sys.exit(0)
