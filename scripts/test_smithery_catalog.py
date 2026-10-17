@@ -98,6 +98,15 @@ class SmitheryCatalogTest(unittest.TestCase):
                 if service["status"] == "candidate":
                     self.assertTrue("candidate" in text or "候选" in text)
 
+    def test_real_suno_screenshot_has_recorded_provenance(self):
+        import hashlib
+
+        folder = ROOT / "suno/smithery/assets"
+        provenance = json.loads((folder / "source.json").read_text())
+        image = folder / provenance["image"]
+        self.assertTrue(image.read_bytes().startswith(b"\xff\xd8"))
+        self.assertEqual(hashlib.sha256(image.read_bytes()).hexdigest(), provenance["sha256"])
+
 
 if __name__ == "__main__":
     unittest.main()
