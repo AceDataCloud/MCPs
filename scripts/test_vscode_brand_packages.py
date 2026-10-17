@@ -54,6 +54,11 @@ class BrandPackagesTest(unittest.TestCase):
                 )
                 self.assertTrue((directory / "icon.png").is_file())
                 self.assertTrue((directory / "LICENSE").is_file())
+                if svc.alias == "openai":
+                    text = (directory / "README.md").read_text()
+                    self.assertIn("does not filter its schema", text)
+                    self.assertIn("| `openai_get_task` |", text)
+                    self.assertNotIn("**11 tools** available", text)
                 for filename in ["README.md", "README.zh-CN.md"]:
                     text = (directory / filename).read_text()
                     self.assertIn("SecretStorage", text)

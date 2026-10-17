@@ -58,21 +58,15 @@ Save the key in the client's credential store or the environment variable shown 
 
 ## Tool Reference
 
-**11 tools** available via this server.
+**Image/task tools to enable for this card.** The existing hosted server also advertises chat/audio tools; this extension does not filter its schema.
 
 | Tool | Description |
 | --- | --- |
-| `openai_chat_completion` | Create chat completions using OpenAI models |
-| `openai_create_response` | Create responses using the Responses API |
-| `openai_generate_image` | Generate images from text descriptions |
-| `openai_edit_image` | Edit existing images with AI |
-| `openai_create_embedding` | Create text embedding vectors |
-| `openai_text_to_speech` | Convert text to spoken audio |
-| `openai_transcribe_audio` | Transcribe audio from a URL |
-| `openai_list_chat_models` | List available chat/completion models |
-| `openai_list_image_models` | List available image models |
-| `openai_list_embedding_models` | List available embedding models |
-| `openai_get_usage_guide` | Get comprehensive usage guide |
+| `openai_list_image_models` | Read image-model reference information without generating an image. |
+| `openai_generate_image` | Submit one image-generation task after reviewing model, quality, count and price. |
+| `openai_edit_image` | Submit an image-editing task after reviewing the request and price. |
+| `openai_get_task` | Read the status and result of the same original task ID. |
+| `openai_get_tasks_batch` | Read several existing task IDs without generating new images. |
 
 ## Pricing
 

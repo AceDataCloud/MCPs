@@ -365,12 +365,43 @@ def render_readme(svc: Service, tools: list[tuple[str, str]]) -> str:
         "\n".join(f'- "{ex}"' for ex in svc.examples) or "_(see Tool Reference below)_"
     )
 
+    if svc.alias == "openai":
+        # The hosted server also has chat/audio tools; this card documents only
+        # the image/task subset and must not claim it filters the remote schema.
+        tools = [
+            (
+                "openai_list_image_models",
+                "Read image-model reference information without generating an image.",
+            ),
+            (
+                "openai_generate_image",
+                "Submit one image-generation task after reviewing model, quality, count and price.",
+            ),
+            (
+                "openai_edit_image",
+                "Submit an image-editing task after reviewing the request and price.",
+            ),
+            (
+                "openai_get_task",
+                "Read the status and result of the same original task ID.",
+            ),
+            (
+                "openai_get_tasks_batch",
+                "Read several existing task IDs without generating new images.",
+            ),
+        ]
+
     if tools:
         tool_table = ["| Tool | Description |", "| --- | --- |"]
         for name, desc in tools:
             tool_table.append(f"| `{name}` | {desc} |")
         tool_table_md = "\n".join(tool_table)
-        tool_count_line = f"**{len(tools)} tools** available via this server."
+        tool_count_line = (
+            "**Image/task tools to enable for this card.** The existing hosted server "
+            "also advertises chat/audio tools; this extension does not filter its schema."
+            if svc.alias == "openai"
+            else f"**{len(tools)} tools** available via this server."
+        )
     else:
         tool_table_md = "_Tool list is dynamically loaded from the server. Run a query to discover available tools._"
         tool_count_line = ""
