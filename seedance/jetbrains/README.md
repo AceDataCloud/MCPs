@@ -1,24 +1,18 @@
-# Seedance MCP — JetBrains Plugin
+# Seedance by Ace Data Cloud
 
-AI Video Generation with [ByteDance Seedance](https://www.volcengine.com) via [Model Context Protocol (MCP)](https://modelcontextprotocol.io/) for JetBrains IDEs.
+Independent Seedance video integration provided by Ace Data Cloud for JetBrains IDEs. Not an official Seedance or JetBrains product.
 
-<!-- Plugin description -->
-This plugin helps you set up the MCP ByteDance Seedance server with JetBrains AI Assistant.
-Once configured, AI Assistant can generate videos from text and images
-— all powered by [Ace Data Cloud](https://platform.acedata.cloud?utm_source=jetbrains_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=seedance_mcp_jetbrains_platform).
+## Install from Marketplace
 
-**7 AI Tools** — Generate videos from text and images.
-<!-- Plugin description end -->
+[Open the official installation entry](https://plugins.jetbrains.com/plugin/30790-seedance-mcp), or search **Seedance** in **Settings → Plugins → Marketplace** and check publisher **AceDataCloud**. Official Marketplace entry exists; new panel awaits an approved release.
 
-## Quick Start
+The new native panel is under **Settings → Tools → Seedance MCP → Seedance**. It provides model discovery, an explicit model field, prompt submission, existing-task lookup and the raw service result. It does not require AI Assistant. Plugin installation is free; API operations use your Ace application's permissions and balance.
 
-1. Install this plugin from the [JetBrains Marketplace](https://plugins.jetbrains.com/plugin/com.acedatacloud.mcp.seedance)
-2. Open **Settings → Tools → Seedance MCP**
-3. Enter your [Ace Data Cloud](https://platform.acedata.cloud?utm_source=jetbrains_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=seedance_mcp_jetbrains_platform) API token
-4. Click **Copy Config** (STDIO or HTTP)
-5. Paste into **Settings → Tools → AI Assistant → Model Context Protocol (MCP)**
+![Official JetBrains Marketplace installation screen](_assets/marketplace-official.png)
 
-### Get your API key
+Source: [JetBrains installation documentation](https://www.jetbrains.com/help/idea/managing-plugins.html), official 2026.2 documentation image downloaded 2026-10-18. It shows another plugin, not an Ace installation or runtime result.
+
+## Get an application API key
 
 <!-- BEGIN TOKEN ONBOARDING -->
 1. Open [Ace Data Cloud → Applications](https://platform.acedata.cloud/console/applications?utm_source=jetbrains_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=seedance_mcp_jetbrains_api_key). Sign in, or register an account first.
@@ -34,48 +28,42 @@ Once configured, AI Assistant can generate videos from text and images
 Save the key in the client's credential store or the environment variable shown below. Never put it in a prompt, shared workflow, screenshot, or Git commit. If authentication fails, check the full copied value, application/service access, expiration, usage limit, and balance before creating another key.
 <!-- END TOKEN ONBOARDING -->
 
-### STDIO Mode (Local)
+The new native panel keeps its key in memory and clears it when the settings page closes. Paste the raw key into **Application API Key** in the Seedance tab. The older optional MCP helper stores its separate settings key locally; do not put credentials in shared project files.
 
-Runs the MCP server locally. Requires [uv](https://github.com/astral-sh/uv) installed.
+## First use and existing task lookup
 
-```json
-{
-  "mcpServers": {
-    "seedance": {
-      "command": "uvx",
-      "args": ["mcp-seedance"],
-      "env": {
-        "ACEDATACLOUD_API_TOKEN": "your-token"
-      }
-    }
-  }
-}
-```
+1. Click **List models**. Review [current pricing](https://platform.acedata.cloud/models?utm_source=jetbrains_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=seedance_mcp_jetbrains_models), then enter the exact model ID you want. The plugin does not silently select a substitute.
+2. Enter a prompt and click **Generate video**. Review the one-request charge confirmation. Cancel if the model, access or balance is unclear. No automatic generation or retry runs.
+3. Copy the returned `task_id` to **Existing task ID** if it is not filled automatically. Click **Check existing task** on that same ID until the response reports a terminal state. Keep the result/URL and verify it opens before calling the job successful. A pending response or accepted request is not completed media.
+4. If a submission times out, do not submit again blindly. Find the original task in your Ace account first to avoid duplicate charges. A failed/content-restricted/rate-limited result must remain distinct.
 
-### HTTP Mode (Remote)
+Read-only first-use tool: `seedance_list_models`. Generation tool: `seedance_generate_video`. Same-task query: `seedance_get_task(task_id="EXISTING_TASK_ID")`. This guide contains no proof of a newly paid generation or revenue.
 
-Connects to the hosted MCP server at `seedance.mcp.acedata.cloud`. No local install needed.
+## Optional AI Assistant tools
+
+If you use AI Assistant, the second tab can still copy the HTTP/STDIO configuration. Paste it into **Settings → Tools → AI Assistant → Model Context Protocol → HTTP**, then Apply and review the available tools. This optional route is separate from an LLM provider.
+
+![Official AI Assistant HTTP MCP dialog](_assets/mcp-http-official.png)
+
+Source: [JetBrains MCP documentation](https://www.jetbrains.com/help/ai-assistant/mcp.html), official 2026.2 image downloaded 2026-10-18. Empty official dialog, not a screenshot of Ace connected. No fabricated screenshot of the new panel is included; real panel screenshots remain a release acceptance item.
 
 ```json
-{
-  "mcpServers": {
-    "seedance": {
-      "url": "https://seedance.mcp.acedata.cloud/mcp",
-      "headers": {
-        "Authorization": "Bearer your-token"
-      }
-    }
-  }
-}
+{"mcpServers": {"seedance": {"url": "https://seedance.mcp.acedata.cloud/mcp", "headers": {"Authorization": "Bearer YOUR_API_KEY"}}}}
 ```
 
-## Links
+## Troubleshooting
 
-- [Ace Data Cloud Platform](https://platform.acedata.cloud?utm_source=jetbrains_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=seedance_mcp_jetbrains_platform)
-- [Documentation](https://platform.acedata.cloud/documents/seedance-mcp?utm_source=jetbrains_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=seedance_mcp_jetbrains_quick_start)
-- [PyPI Package](https://pypi.org/project/mcp-seedance/)
-- [Source Code](https://github.com/AceDataCloud/SeedanceMCP)
+- **401:** check raw copied key, expiration and Allowed APIs. A `platform-` management token cannot replace an application API key.
+- **403:** check service access or content restrictions. Do not change to another model without choosing and pricing it explicitly.
+- **429:** wait before a later manual attempt; the plugin does not retry generation.
+- **Pending task:** query the same ID. Never treat HTTP 200 or an accepted task as completed media.
+- **Plugin missing from search:** only approved public versions can be installed normally. Source, local ZIPs and uploaded review candidates are separate stages.
+- **Want an Ace model in AI Assistant's provider dropdown?** This is a service plugin, not a default LLM preset. JetBrains currently documents a separate [third-party model setup](https://www.jetbrains.com/help/ai-assistant/use-custom-models.html).
 
-## License
+## 中文上手
 
-MIT
+在官方 Marketplace 搜索 **Seedance** 并确认发布者 AceDataCloud；待新版本批准后，打开 **Tools → Seedance MCP → Seedance**。先注册/登录 [Ace Applications](https://platform.acedata.cloud/console/applications?utm_source=jetbrains_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=seedance_mcp_jetbrains_api_key)，初始化 General application，复制或创建专用 API Token，并检查 Allowed APIs、过期、余额和当前价。把原始 Key 粘到原生面板；点击 List models，明确选择模型再填提示词，提交前确认只发一次收费请求。返回任务 ID 后在 Existing task ID 查询同一个任务直到终态，再核媒体 URL。401 查 Key/权限，429 等待；不因超时重复生成。可选 AI Assistant 页仍需复制配置；它不是默认 LLM Provider。原生新面板尚待正式发版与真实界面验收，本文不把官方参考图当已运行截图。
+
+## Source and support
+
+[Source repository](https://github.com/AceDataCloud/SeedanceMCP) · [Service documentation](https://platform.acedata.cloud/documents/seedance-mcp?utm_source=jetbrains_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=seedance_mcp_jetbrains_quick_start) · [Current pricing](https://platform.acedata.cloud/models?utm_source=jetbrains_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=seedance_mcp_jetbrains_models). Source of truth: [AceDataCloud/MCPs](https://github.com/AceDataCloud/MCPs). Existing MCP server and billing are reused. MIT.
