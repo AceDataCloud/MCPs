@@ -40,7 +40,8 @@
       "price_path": "/documents/suno-audios",
       "generation_tool": "suno_generate_music",
       "first_prompt": "List the Suno models available through this integration. Do not generate music.",
-      "first_prompt_zh": "列出本集成可用的 Suno 模型，不生成音乐。"
+      "first_prompt_zh": "列出本集成可用的 Suno 模型，不生成音乐。",
+      "icon_url": "https://raw.githubusercontent.com/AceDataCloud/MCPs/bbb7502332f71abb74a0a9aa5f234b16efa7ae49/suno/vscode/icon.png"
     },
     {
       "alias": "seedance",
@@ -68,7 +69,8 @@
       "price_path": "/documents/seedance-mcp",
       "generation_tool": "seedance_generate_video",
       "first_prompt": "List the Seedance models available through this integration. Do not generate a video.",
-      "first_prompt_zh": "列出本集成可用的 Seedance 模型，不生成视频。"
+      "first_prompt_zh": "列出本集成可用的 Seedance 模型，不生成视频。",
+      "icon_url": "https://raw.githubusercontent.com/AceDataCloud/MCPs/bbb7502332f71abb74a0a9aa5f234b16efa7ae49/seedance/vscode/icon.png"
     },
     {
       "alias": "happyhorse",
@@ -96,7 +98,8 @@
       "price_path": "/documents/happyhorse",
       "generation_tool": "happyhorse_generate_video",
       "first_prompt": "List the HappyHorse models available through this integration. Do not generate a video.",
-      "first_prompt_zh": "列出本集成可用的 HappyHorse 模型，不生成视频。"
+      "first_prompt_zh": "列出本集成可用的 HappyHorse 模型，不生成视频。",
+      "icon_url": "https://cdn.acedata.cloud/2841e8c719.png"
     },
     {
       "alias": "openai",
@@ -106,7 +109,7 @@
       "package": "mcp-openai-pro",
       "endpoint": "https://openai.mcp.acedata.cloud/mcp",
       "status": "candidate",
-      "summary": "Generate and edit GPT Image images, then retrieve the same image task through Ace Data Cloud.",
+      "summary": "Generate and edit images with GPT Image, then retrieve the same image task through Ace Data Cloud.",
       "summary_zh": "通过 Ace Data Cloud 使用 GPT Image 生成、编辑图像，再查询同一个任务。",
       "category": "image",
       "search_terms": [
@@ -125,7 +128,8 @@
       "price_path": "/documents/openai",
       "generation_tool": "openai_generate_image",
       "first_prompt": "List the GPT Image models available through this integration. Do not generate an image.",
-      "first_prompt_zh": "列出本集成可用的 GPT Image 模型，不生成图片。"
+      "first_prompt_zh": "列出本集成可用的 GPT Image 模型，不生成图片。",
+      "icon_url": "https://cdn.acedata.cloud/2870040497.png"
     },
     {
       "alias": "nanobanana",
@@ -153,7 +157,8 @@
       "price_path": "/documents/nano-banana-mcp",
       "generation_tool": "nanobanana_generate_image",
       "first_prompt": "Show the Nano Banana tools and their input schemas. Do not call a generation tool.",
-      "first_prompt_zh": "展示 Nano Banana 工具及其输入参数，不调用生成工具。"
+      "first_prompt_zh": "展示 Nano Banana 工具及其输入参数，不调用生成工具。",
+      "icon_url": "https://raw.githubusercontent.com/AceDataCloud/MCPs/bbb7502332f71abb74a0a9aa5f234b16efa7ae49/nanobanana/vscode/icon.png"
     }
   ]
 }

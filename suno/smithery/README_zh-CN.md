@@ -43,6 +43,10 @@ npx -y smithery mcp add acedatacloud-mcp/mcp-suno
 
 Read-only tool: `suno_list_models`.
 
+![Actual Ace Smithery listing, 2026-10-17](assets/listing-20261017.jpg)
+
+Historical real page screenshot, before the brand-first title update on 2026-10-18. It proves the listing and Try now entry existed, not a successful connection or generation. Capture provenance: [source.json](assets/source.json).
+
 ## 5. 生成与查询必须分开
 
 确认模型、参数、价格和当次额度后，才允许调用 `suno_generate_music`。保存返回的 `task_id`；accepted/pending 不是成功。后续仅调用 `suno_get_task`，把同一个值填到 `task_id`，直到服务的终态成功且有可访问媒体。失败或pending时不要重跑生成。

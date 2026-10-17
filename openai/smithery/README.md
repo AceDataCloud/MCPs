@@ -2,7 +2,7 @@
 
 [简体中文](README_zh-CN.md) · [API and current pricing](https://platform.acedata.cloud/documents/openai?utm_source=opensource&utm_medium=referral&utm_campaign=evergreen&utm_content=openai_smithery_pricing)
 
-Generate and edit GPT Image images, then retrieve the same image task through Ace Data Cloud. This is an independent Ace Data Cloud integration, not an official integration from the model vendor. This is a publication candidate; normal installation from the directory has not been verified. Check the listing's release status first.
+Generate and edit images with GPT Image, then retrieve the same image task through Ace Data Cloud. This is an independent Ace Data Cloud integration, not an official integration from the model vendor. This is a publication candidate; normal installation from the directory has not been verified. Check the listing's release status first.
 
 ## 1. Install from the official directory
 

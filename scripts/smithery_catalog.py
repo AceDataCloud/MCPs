@@ -71,6 +71,7 @@ def metadata(service):
         "homepage": tagged_url(service["price_path"], service["alias"], "listing"),
         "repositoryUrl": "https://github.com/AceDataCloud/" + service["repository"],
         "license": "MIT",
+        "iconUrl": service["icon_url"],
     }
 
 
@@ -190,6 +191,13 @@ Ask the client: **{service["first_prompt"]}**
         text += (
             "This directory entry reuses OpenAI MCP: it also exposes chat/audio tools. "
             "Choose GPT Image tools explicitly; it is not an image-only runtime.\n\n"
+        )
+    if alias == "suno":
+        text += (
+            "![Actual Ace Smithery listing, 2026-10-17](assets/listing-20261017.jpg)\n\n"
+            "Historical real page screenshot, before the brand-first title update on "
+            "2026-10-18. It proves the listing and Try now entry existed, not a successful "
+            "connection or generation. Capture provenance: [source.json](assets/source.json).\n\n"
         )
     if zh:
         text += f"""## 5. 生成与查询必须分开

@@ -43,6 +43,10 @@ Ask the client: **List the Suno models available through this integration. Do no
 
 Read-only tool: `suno_list_models`.
 
+![Actual Ace Smithery listing, 2026-10-17](assets/listing-20261017.jpg)
+
+Historical real page screenshot, before the brand-first title update on 2026-10-18. It proves the listing and Try now entry existed, not a successful connection or generation. Capture provenance: [source.json](assets/source.json).
+
 ## 5. Separate generation from task lookup
 
 Only call `suno_generate_music` after reviewing the model, parameters, current price, and your budget. Save the returned `task_id`; accepted/pending is not completion. Query `suno_get_task` using that same value in `task_id` until the service reaches a successful terminal state and returns accessible media. Never rerun generation because a task is pending or failed.
