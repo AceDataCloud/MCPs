@@ -8,7 +8,7 @@ import httpx
 from pydantic import Field
 
 from core.client import client
-from core.exceptions import OpenAIAPIError, OpenAIAuthError
+from core.exceptions import format_tool_error
 from core.server import mcp
 from core.types import (
     DEFAULT_AUDIO_SPEECH_MODEL,
@@ -109,12 +109,8 @@ async def openai_text_to_speech(
             }
         )
 
-    except OpenAIAuthError as e:
-        return json.dumps({"error": "Authentication Error", "message": e.message})
-    except OpenAIAPIError as e:
-        return json.dumps({"error": "API Error", "message": e.message})
     except Exception as e:
-        return json.dumps({"error": "Error generating speech", "message": str(e)})
+        return format_tool_error(e, "Error generating speech")
 
 
 @mcp.tool()
@@ -262,11 +258,7 @@ async def openai_transcribe_audio(
 
         return json.dumps(result, ensure_ascii=False, indent=2)
 
-    except OpenAIAuthError as e:
-        return json.dumps({"error": "Authentication Error", "message": e.message})
-    except OpenAIAPIError as e:
-        return json.dumps({"error": "API Error", "message": e.message})
     except httpx.HTTPStatusError as e:
-        return json.dumps({"error": "Failed to download audio file", "message": str(e)})
+        return format_tool_error(e, "Failed to download audio file")
     except Exception as e:
-        return json.dumps({"error": "Error transcribing audio", "message": str(e)})
+        return format_tool_error(e, "Error transcribing audio")

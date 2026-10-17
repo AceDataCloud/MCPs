@@ -10268,6 +10268,17 @@
       "body_schema": {
         "type": "object",
         "properties": {
+          "presentation": {
+            "type": "object",
+            "description": "Website presentation options.",
+            "properties": {
+              "open_external": {
+                "type": "boolean",
+                "description": "External-open option for website sections only."
+              }
+            },
+            "additionalProperties": false
+          },
           "site": {
             "type": "string"
           },
@@ -10395,6 +10406,17 @@
       "body_schema": {
         "type": "object",
         "properties": {
+          "presentation": {
+            "type": "object",
+            "description": "Website presentation options.",
+            "properties": {
+              "open_external": {
+                "type": "boolean",
+                "description": "External-open option for website sections only."
+              }
+            },
+            "additionalProperties": false
+          },
           "kind": {
             "enum": [
               "markdown",
@@ -10470,6 +10492,17 @@
       "body_schema": {
         "type": "object",
         "properties": {
+          "presentation": {
+            "type": "object",
+            "description": "Website presentation options; PATCH merges supplied keys.",
+            "properties": {
+              "open_external": {
+                "type": "boolean",
+                "description": "External-open option for website sections only."
+              }
+            },
+            "additionalProperties": false
+          },
           "kind": {
             "enum": [
               "markdown",
@@ -11852,12 +11885,6 @@
           },
           "theme_id": {
             "enum": [
-              "classic",
-              "aurora",
-              "ocean",
-              "festival",
-              "garden",
-              "night",
               "ribbon",
               "blossom",
               "dawn",
@@ -19950,6 +19977,7 @@
     "admin/upstreams/{domain}/models": "4efc4f5c2f562a7ee3f02766cafb3e09620c22a6",
     "blogs": "cdf8bcd878ebc07afb48941e7dd3b8a3aca3c5b7",
     "blogs/admin": "cdf8bcd878ebc07afb48941e7dd3b8a3aca3c5b7",
-    "blogs/admin/{id}": "cdf8bcd878ebc07afb48941e7dd3b8a3aca3c5b7"
+    "blogs/admin/{id}": "cdf8bcd878ebc07afb48941e7dd3b8a3aca3c5b7",
+    "recharge-cards/allocations": "b00da5d2ee28006adacfa0960020fdf08265c5ce"
   }
 }
