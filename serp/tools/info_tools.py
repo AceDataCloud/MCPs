@@ -1,9 +1,19 @@
 """Informational tools for SERP API."""
 
+from mcp.types import ToolAnnotations
+
 from core.server import mcp
 
 
-@mcp.tool()
+@mcp.tool(
+    title="List Google search types",
+    annotations=ToolAnnotations(
+        readOnlyHint=True,
+        destructiveHint=False,
+        idempotentHint=True,
+        openWorldHint=False,
+    ),
+)
 async def serp_list_search_types() -> str:
     """List all available Google search types.
 
@@ -34,7 +44,15 @@ Example Usage:
 """
 
 
-@mcp.tool()
+@mcp.tool(
+    title="List search country codes",
+    annotations=ToolAnnotations(
+        readOnlyHint=True,
+        destructiveHint=False,
+        idempotentHint=True,
+        openWorldHint=False,
+    ),
+)
 async def serp_list_countries() -> str:
     """List commonly used country codes for Google search.
 
@@ -64,7 +82,15 @@ Example: serp_google_search(query="news", country="uk")
 """
 
 
-@mcp.tool()
+@mcp.tool(
+    title="List search language codes",
+    annotations=ToolAnnotations(
+        readOnlyHint=True,
+        destructiveHint=False,
+        idempotentHint=True,
+        openWorldHint=False,
+    ),
+)
 async def serp_list_languages() -> str:
     """List commonly used language codes for Google search.
 
@@ -93,7 +119,15 @@ Example: serp_google_search(query="news", language="zh-cn")
 """
 
 
-@mcp.tool()
+@mcp.tool(
+    title="List search time filters",
+    annotations=ToolAnnotations(
+        readOnlyHint=True,
+        destructiveHint=False,
+        idempotentHint=True,
+        openWorldHint=False,
+    ),
+)
 async def serp_list_time_ranges() -> str:
     """List available time range filters for Google search.
 
@@ -129,7 +163,15 @@ Note: Time range is most useful for:
 """
 
 
-@mcp.tool()
+@mcp.tool(
+    title="Get Google search usage guide",
+    annotations=ToolAnnotations(
+        readOnlyHint=True,
+        destructiveHint=False,
+        idempotentHint=True,
+        openWorldHint=False,
+    ),
+)
 async def serp_get_usage_guide() -> str:
     """Get a comprehensive guide for using the Google SERP tools.
 
