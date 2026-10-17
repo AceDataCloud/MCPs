@@ -8,6 +8,10 @@ Music generation, lyrics and audio editing, provided by **Ace Data Cloud**. This
 
 ## 1. Install the service
 
+![Official LobeHub MCP marketplace screenshot; historical documentation reference](https://lobehub.com/img/hub/blog/assetsb811f2aae8e8346aef16793d6bd10f88.webp)
+
+This is an unchanged [official documentation image](https://github.com/lobehub/lobehub/blob/43578a9bcc37dbf0ec9beb5f5ab1dcd5ba09daf7/docs/usage/community/mcp-market.mdx), present in the 2026-03-03 documentation commit; its capture date/version is unknown. It illustrates the real search field and service cards, not an Ace install or current card ranking. Reference checked 2026-10-18.
+
 Open the [official Suno card](https://lobehub.com/mcp/acedatacloud-mcpsuno), review source and installation details, then select Install. Search terms are `Suno`, `Suno`, and `Ace Data Cloud`; exact ranking is not promised. If there are multiple historical cards, use the identifier above rather than creating another one.
 
 If the card's automatic configuration is incomplete, add this single HTTP connector in **Settings → Connectors**, then configure authentication separately:

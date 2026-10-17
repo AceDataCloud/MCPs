@@ -6,6 +6,10 @@
 
 ## 1. 安装
 
+![LobeHub 官方 MCP 市场真实历史截图](https://lobehub.com/img/hub/blog/assetsb811f2aae8e8346aef16793d6bd10f88.webp)
+
+原图来自 [2026-03-03 的官方文档源码](https://github.com/lobehub/lobehub/blob/43578a9bcc37dbf0ec9beb5f5ab1dcd5ba09daf7/docs/usage/community/mcp-market.mdx)，拍摄时间/产品版本未知；2026-10-18 引用核验。它只说明真实搜索框、分类与卡片位置，不是 Ace 已安装、当前排名或调用成功证据。
+
 打开上面的单服务市场入口，查看源码、安装与认证要求后安装。搜索 `GPT Image` 或 `Ace Data Cloud`；不保证排名。同名历史卡片以精确 identifier 区分，不另发重复项。
 
 也可在 **设置 → 连接器** 导入本目录 [单项 HTTP 配置](install-http.json)。稳定版 v2.2.19 一次只读取第一项，而且不保留 HTTP headers/auth；导入后必须在界面单独填写认证。桌面端可用 [STDIO 配置](install-stdio.json)，并安装 uvx。
