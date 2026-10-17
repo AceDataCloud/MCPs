@@ -7,7 +7,7 @@ from typing import Annotated, Any, Literal
 from pydantic import Field
 
 from core.client import client
-from core.exceptions import OpenAIAPIError, OpenAIAuthError
+from core.exceptions import format_tool_error
 from core.server import mcp
 from core.utils import _task_outcome, format_task_result
 
@@ -93,12 +93,8 @@ async def openai_get_task(
 
         return format_task_result(result)
 
-    except OpenAIAuthError as e:
-        return json.dumps({"error": "Authentication Error", "message": e.message})
-    except OpenAIAPIError as e:
-        return json.dumps({"error": "API Error", "message": e.message})
     except Exception as e:
-        return json.dumps({"error": "Error retrieving task", "message": str(e)})
+        return format_tool_error(e, "Error retrieving task")
 
 
 @mcp.tool()
@@ -188,9 +184,5 @@ async def openai_list_tasks(
 
         return json.dumps(result, ensure_ascii=False, indent=2)
 
-    except OpenAIAuthError as e:
-        return json.dumps({"error": "Authentication Error", "message": e.message})
-    except OpenAIAPIError as e:
-        return json.dumps({"error": "API Error", "message": e.message})
     except Exception as e:
-        return json.dumps({"error": "Error listing tasks", "message": str(e)})
+        return format_tool_error(e, "Error listing tasks")

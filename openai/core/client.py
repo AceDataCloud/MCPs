@@ -1,7 +1,6 @@
 """HTTP client for OpenAI API via AceDataCloud."""
 
 import contextvars
-import json
 from typing import Any
 from urllib.parse import urlencode
 
@@ -9,7 +8,14 @@ import httpx
 from loguru import logger
 
 from core.config import settings
-from core.exceptions import OpenAIAPIError, OpenAIAuthError, OpenAIError, OpenAITimeoutError
+from core.exceptions import (
+    OpenAIAPIError,
+    OpenAIAuthError,
+    OpenAIError,
+    OpenAINetworkError,
+    OpenAITimeoutError,
+    error_from_response,
+)
 
 # Context variable for per-request API token (used in HTTP/remote mode)
 _request_api_token: contextvars.ContextVar[str | None] = contextvars.ContextVar(
@@ -41,7 +47,7 @@ class OpenAIClient:
         self.base_url = base_url or settings.api_base_url
         self.timeout = settings.request_timeout
 
-        logger.info(f"OpenAIClient initialized with base_url: {self.base_url}")
+        logger.info("OpenAIClient initialized")
         logger.debug(f"API token configured: {'Yes' if self.api_token else 'No'}")
         logger.debug(f"Request timeout: {self.timeout}s")
 
@@ -64,23 +70,9 @@ class OpenAIClient:
         The AceDataCloud API returns errors in the format:
             {"error": {"code": "...", "message": "..."}}
         """
-        status = response.status_code
-        try:
-            body = response.json()
-        except Exception:
-            body = {}
-
-        error_obj = body.get("error", {})
-        code = error_obj.get("code", f"http_{status}")
-        message = (
-            error_obj.get("message") or body.get("detail") or response.text or f"HTTP {status}"
-        )
-
-        logger.error(f"API error {status} [{code}]: {message}")
-
-        if status in (401, 403):
-            raise OpenAIAuthError(message)
-        raise OpenAIAPIError(message=message, code=code, status_code=status)
+        error = error_from_response(response, (self.api_token, get_request_api_token() or ""))
+        logger.error("API request rejected: status={} code={}", error.status_code, error.code)
+        raise error
 
     async def request(
         self,
@@ -106,8 +98,7 @@ class OpenAIClient:
         url = f"{self.base_url}{endpoint}"
         request_timeout = timeout or self.timeout
 
-        logger.info(f"POST {url}")
-        logger.debug(f"Request payload: {json.dumps(payload, ensure_ascii=False, indent=2)}")
+        logger.info("Sending API request")
         logger.debug(f"Timeout: {request_timeout}s")
 
         async with httpx.AsyncClient() as http_client:
@@ -130,17 +121,21 @@ class OpenAIClient:
                 return result  # type: ignore[no-any-return]
 
             except httpx.TimeoutException as e:
-                logger.error(f"Request timeout after {request_timeout}s: {e}")
-                raise OpenAITimeoutError(
-                    f"Request to {endpoint} timed out after {request_timeout}s"
-                ) from e
+                logger.error("API request timed out")
+                raise OpenAITimeoutError() from e
+
+            except httpx.RequestError as e:
+                logger.error("API transport failure")
+                raise OpenAINetworkError() from e
 
             except OpenAIError:
                 raise
 
             except Exception as e:
-                logger.error(f"Request error: {e}")
-                raise OpenAIAPIError(message=str(e)) from e
+                logger.error("API response could not be processed")
+                raise OpenAIAPIError(
+                    message="The API response could not be processed.", code="invalid_response"
+                ) from e
 
     async def request_get(
         self,
@@ -152,7 +147,7 @@ class OpenAIClient:
         url = f"{self.base_url}{endpoint}"
         request_timeout = timeout or self.timeout
 
-        logger.info(f"GET {url}")
+        logger.info("Sending API GET request")
 
         async with httpx.AsyncClient() as http_client:
             try:
@@ -174,17 +169,21 @@ class OpenAIClient:
                 return result  # type: ignore[no-any-return]
 
             except httpx.TimeoutException as e:
-                logger.error(f"Request timeout after {request_timeout}s: {e}")
-                raise OpenAITimeoutError(
-                    f"Request to {endpoint} timed out after {request_timeout}s"
-                ) from e
+                logger.error("API request timed out")
+                raise OpenAITimeoutError() from e
+
+            except httpx.RequestError as e:
+                logger.error("API transport failure")
+                raise OpenAINetworkError() from e
 
             except OpenAIError:
                 raise
 
             except Exception as e:
-                logger.error(f"Request error: {e}")
-                raise OpenAIAPIError(message=str(e)) from e
+                logger.error("API response could not be processed")
+                raise OpenAIAPIError(
+                    message="The API response could not be processed.", code="invalid_response"
+                ) from e
 
     async def chat_completions(self, **kwargs: Any) -> dict[str, Any]:
         """Create a chat completion."""
@@ -265,8 +264,7 @@ class OpenAIClient:
         url = f"{self.base_url}{endpoint}"
         request_timeout = timeout or self.timeout
 
-        logger.info(f"POST {url} (binary response)")
-        logger.debug(f"Request payload: {json.dumps(payload, ensure_ascii=False, indent=2)}")
+        logger.info("Sending binary API request")
 
         async with httpx.AsyncClient() as http_client:
             try:
@@ -286,17 +284,21 @@ class OpenAIClient:
                 return response.content
 
             except httpx.TimeoutException as e:
-                logger.error(f"Request timeout after {request_timeout}s: {e}")
-                raise OpenAITimeoutError(
-                    f"Request to {endpoint} timed out after {request_timeout}s"
-                ) from e
+                logger.error("API request timed out")
+                raise OpenAITimeoutError() from e
+
+            except httpx.RequestError as e:
+                logger.error("API transport failure")
+                raise OpenAINetworkError() from e
 
             except OpenAIError:
                 raise
 
             except Exception as e:
-                logger.error(f"Request error: {e}")
-                raise OpenAIAPIError(message=str(e)) from e
+                logger.error("API response could not be processed")
+                raise OpenAIAPIError(
+                    message="The API response could not be processed.", code="invalid_response"
+                ) from e
 
     async def audio_speech(self, **kwargs: Any) -> bytes:
         """Generate speech audio from text."""
@@ -329,7 +331,7 @@ class OpenAIClient:
         url = f"{self.base_url}{endpoint}"
         request_timeout = timeout or self.timeout
 
-        logger.info(f"POST {url} (multipart/form-data)")
+        logger.info("Sending multipart API request")
         logger.debug(f"Timeout: {request_timeout}s")
 
         files: list[tuple[str, Any]] = []
@@ -377,17 +379,21 @@ class OpenAIClient:
                 return result  # type: ignore[no-any-return]
 
             except httpx.TimeoutException as e:
-                logger.error(f"Request timeout after {request_timeout}s: {e}")
-                raise OpenAITimeoutError(
-                    f"Request to {endpoint} timed out after {request_timeout}s"
-                ) from e
+                logger.error("API request timed out")
+                raise OpenAITimeoutError() from e
+
+            except httpx.RequestError as e:
+                logger.error("API transport failure")
+                raise OpenAINetworkError() from e
 
             except OpenAIError:
                 raise
 
             except Exception as e:
-                logger.error(f"Request error: {e}")
-                raise OpenAIAPIError(message=str(e)) from e
+                logger.error("API response could not be processed")
+                raise OpenAIAPIError(
+                    message="The API response could not be processed.", code="invalid_response"
+                ) from e
 
     async def audio_transcriptions(self, audio_bytes: bytes, **kwargs: Any) -> dict[str, Any]:
         """Transcribe audio to text using the Whisper model."""

@@ -117,7 +117,7 @@ async def test_openai_text_to_speech_handles_auth_error(monkeypatch):
     response = await audio_tools.openai_text_to_speech(input="Hello")
     result = json.loads(response)
     assert result["error"] == "Authentication Error"
-    assert "Invalid token" in result["message"]
+    assert "API authentication failed" in result["message"]
 
 
 @pytest.mark.asyncio
@@ -133,7 +133,7 @@ async def test_openai_text_to_speech_handles_api_error(monkeypatch):
     response = await audio_tools.openai_text_to_speech(input="Hello")
     result = json.loads(response)
     assert result["error"] == "API Error"
-    assert "Service unavailable" in result["message"]
+    assert result["message"] == "The API request failed."
 
 
 # ---------------------------------------------------------------------------
@@ -350,7 +350,7 @@ async def test_openai_transcribe_audio_handles_auth_error(monkeypatch):
     response = await audio_tools.openai_transcribe_audio(url="https://example.com/audio.mp3")
     result = json.loads(response)
     assert result["error"] == "Authentication Error"
-    assert "Invalid token" in result["message"]
+    assert "API authentication failed" in result["message"]
 
 
 @pytest.mark.asyncio
@@ -384,4 +384,4 @@ async def test_openai_transcribe_audio_handles_api_error(monkeypatch):
     response = await audio_tools.openai_transcribe_audio(url="https://example.com/audio.mp3")
     result = json.loads(response)
     assert result["error"] == "API Error"
-    assert "Transcription failed" in result["message"]
+    assert result["message"] == "The API request failed."
