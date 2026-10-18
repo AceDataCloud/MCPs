@@ -1,0 +1,650 @@
+{
+  "identifier": "acedatacloud-happyhorsemcp",
+  "name": "HappyHorse by Ace Data Cloud",
+  "version": "2026.10.12.0",
+  "author": "Ace Data Cloud",
+  "authorUrl": "https://github.com/AceDataCloud",
+  "homepage": "https://platform.acedata.cloud/documents/happyhorse-videos?utm_source=opensource&utm_medium=referral&utm_campaign=evergreen&utm_content=happyhorse_lobehub_market_pricing",
+  "description": "Video generation, references and editing through Ace Data Cloud. Requires an Ace service API token; generation is billed to your Ace account.",
+  "cloudEndpoint": "https://happyhorse.mcp.acedata.cloud/mcp",
+  "tags": [
+    "happyhorse",
+    "happy horse",
+    "video",
+    "video-editing",
+    "acedatacloud"
+  ],
+  "tools": [
+    {
+      "name": "happyhorse_list_models",
+      "title": null,
+      "description": "List Happy Horse actions, compatible models, and defaults.",
+      "inputSchema": {
+        "properties": {},
+        "title": "happyhorse_list_modelsArguments",
+        "type": "object"
+      },
+      "outputSchema": {
+        "properties": {
+          "result": {
+            "title": "Result",
+            "type": "string"
+          }
+        },
+        "required": [
+          "result"
+        ],
+        "title": "happyhorse_list_modelsOutput",
+        "type": "object"
+      },
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "happyhorse_get_task",
+      "title": null,
+      "description": "Get the status and final video URL for one Happy Horse task.",
+      "inputSchema": {
+        "properties": {
+          "task_id": {
+            "description": "Task ID returned by a Happy Horse generation or edit tool.",
+            "title": "Task Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "task_id"
+        ],
+        "title": "happyhorse_get_taskArguments",
+        "type": "object"
+      },
+      "outputSchema": {
+        "properties": {
+          "result": {
+            "title": "Result",
+            "type": "string"
+          }
+        },
+        "required": [
+          "result"
+        ],
+        "title": "happyhorse_get_taskOutput",
+        "type": "object"
+      },
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "happyhorse_get_tasks_batch",
+      "title": null,
+      "description": "Get multiple Happy Horse tasks in one request.",
+      "inputSchema": {
+        "properties": {
+          "task_ids": {
+            "description": "One to fifty Happy Horse task IDs.",
+            "items": {
+              "type": "string"
+            },
+            "maxItems": 50,
+            "minItems": 1,
+            "title": "Task Ids",
+            "type": "array"
+          }
+        },
+        "required": [
+          "task_ids"
+        ],
+        "title": "happyhorse_get_tasks_batchArguments",
+        "type": "object"
+      },
+      "outputSchema": {
+        "properties": {
+          "result": {
+            "title": "Result",
+            "type": "string"
+          }
+        },
+        "required": [
+          "result"
+        ],
+        "title": "happyhorse_get_tasks_batchOutput",
+        "type": "object"
+      },
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "happyhorse_generate_video",
+      "title": null,
+      "description": "Generate a video from a text prompt with Happy Horse.",
+      "inputSchema": {
+        "properties": {
+          "prompt": {
+            "description": "Detailed text-to-video prompt describing subject, motion, camera, lighting, style, and mood.",
+            "minLength": 1,
+            "title": "Prompt",
+            "type": "string"
+          },
+          "model": {
+            "default": "happyhorse-1.1-t2v",
+            "description": "Text-to-video model: happyhorse-1.0-t2v or happyhorse-1.1-t2v.",
+            "enum": [
+              "happyhorse-1.0-t2v",
+              "happyhorse-1.1-t2v"
+            ],
+            "title": "Model",
+            "type": "string"
+          },
+          "resolution": {
+            "default": "1080P",
+            "description": "Output resolution: 720P or 1080P.",
+            "enum": [
+              "720P",
+              "1080P"
+            ],
+            "title": "Resolution",
+            "type": "string"
+          },
+          "ratio": {
+            "default": "16:9",
+            "description": "Output aspect ratio: 16:9, 9:16, 1:1, 4:3, or 3:4.",
+            "enum": [
+              "16:9",
+              "9:16",
+              "1:1",
+              "4:3",
+              "3:4"
+            ],
+            "title": "Ratio",
+            "type": "string"
+          },
+          "duration": {
+            "default": 5,
+            "description": "Output duration in seconds, from 3 through 15.",
+            "maximum": 15,
+            "minimum": 3,
+            "title": "Duration",
+            "type": "integer"
+          },
+          "watermark": {
+            "default": false,
+            "description": "Whether to add a Happy Horse watermark.",
+            "title": "Watermark",
+            "type": "boolean"
+          },
+          "seed": {
+            "anyOf": [
+              {
+                "maximum": 2147483647,
+                "minimum": 0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Optional reproducibility seed.",
+            "title": "Seed"
+          },
+          "callback_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Optional webhook URL. Omit it to receive a task ID for polling.",
+            "title": "Callback Url"
+          }
+        },
+        "required": [
+          "prompt"
+        ],
+        "title": "happyhorse_generate_videoArguments",
+        "type": "object"
+      },
+      "outputSchema": {
+        "properties": {
+          "result": {
+            "title": "Result",
+            "type": "string"
+          }
+        },
+        "required": [
+          "result"
+        ],
+        "title": "happyhorse_generate_videoOutput",
+        "type": "object"
+      },
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "happyhorse_generate_video_from_image",
+      "title": null,
+      "description": "Animate a first-frame image with Happy Horse.",
+      "inputSchema": {
+        "properties": {
+          "image_url": {
+            "description": "Public URL of the image to use as the first frame.",
+            "minLength": 1,
+            "title": "Image Url",
+            "type": "string"
+          },
+          "prompt": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Optional motion and camera instructions for animating the image.",
+            "title": "Prompt"
+          },
+          "model": {
+            "default": "happyhorse-1.1-i2v",
+            "description": "Image-to-video model: happyhorse-1.0-i2v or happyhorse-1.1-i2v.",
+            "enum": [
+              "happyhorse-1.0-i2v",
+              "happyhorse-1.1-i2v"
+            ],
+            "title": "Model",
+            "type": "string"
+          },
+          "resolution": {
+            "default": "1080P",
+            "description": "Output resolution: 720P or 1080P.",
+            "enum": [
+              "720P",
+              "1080P"
+            ],
+            "title": "Resolution",
+            "type": "string"
+          },
+          "ratio": {
+            "default": "16:9",
+            "description": "Output aspect ratio: 16:9, 9:16, 1:1, 4:3, or 3:4.",
+            "enum": [
+              "16:9",
+              "9:16",
+              "1:1",
+              "4:3",
+              "3:4"
+            ],
+            "title": "Ratio",
+            "type": "string"
+          },
+          "duration": {
+            "default": 5,
+            "description": "Output duration in seconds, from 3 through 15.",
+            "maximum": 15,
+            "minimum": 3,
+            "title": "Duration",
+            "type": "integer"
+          },
+          "watermark": {
+            "default": false,
+            "description": "Whether to add a Happy Horse watermark.",
+            "title": "Watermark",
+            "type": "boolean"
+          },
+          "seed": {
+            "anyOf": [
+              {
+                "maximum": 2147483647,
+                "minimum": 0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Optional reproducibility seed.",
+            "title": "Seed"
+          },
+          "callback_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Optional webhook URL. Omit it to receive a task ID for polling.",
+            "title": "Callback Url"
+          }
+        },
+        "required": [
+          "image_url"
+        ],
+        "title": "happyhorse_generate_video_from_imageArguments",
+        "type": "object"
+      },
+      "outputSchema": {
+        "properties": {
+          "result": {
+            "title": "Result",
+            "type": "string"
+          }
+        },
+        "required": [
+          "result"
+        ],
+        "title": "happyhorse_generate_video_from_imageOutput",
+        "type": "object"
+      },
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "happyhorse_generate_video_from_references",
+      "title": null,
+      "description": "Generate a video guided by one or more reference images.",
+      "inputSchema": {
+        "properties": {
+          "prompt": {
+            "description": "Video prompt. Refer to supplied images as character1, character2, and so on in list order.",
+            "minLength": 1,
+            "title": "Prompt",
+            "type": "string"
+          },
+          "image_urls": {
+            "description": "One to nine public reference image URLs.",
+            "items": {
+              "type": "string"
+            },
+            "maxItems": 9,
+            "minItems": 1,
+            "title": "Image Urls",
+            "type": "array"
+          },
+          "model": {
+            "default": "happyhorse-1.1-r2v",
+            "description": "Reference model: happyhorse-1.0-r2v or happyhorse-1.1-r2v.",
+            "enum": [
+              "happyhorse-1.0-r2v",
+              "happyhorse-1.1-r2v"
+            ],
+            "title": "Model",
+            "type": "string"
+          },
+          "resolution": {
+            "default": "1080P",
+            "description": "Output resolution: 720P or 1080P.",
+            "enum": [
+              "720P",
+              "1080P"
+            ],
+            "title": "Resolution",
+            "type": "string"
+          },
+          "ratio": {
+            "default": "16:9",
+            "description": "Output aspect ratio: 16:9, 9:16, 1:1, 4:3, or 3:4.",
+            "enum": [
+              "16:9",
+              "9:16",
+              "1:1",
+              "4:3",
+              "3:4"
+            ],
+            "title": "Ratio",
+            "type": "string"
+          },
+          "duration": {
+            "default": 5,
+            "description": "Output duration in seconds, from 3 through 15.",
+            "maximum": 15,
+            "minimum": 3,
+            "title": "Duration",
+            "type": "integer"
+          },
+          "watermark": {
+            "default": false,
+            "description": "Whether to add a Happy Horse watermark.",
+            "title": "Watermark",
+            "type": "boolean"
+          },
+          "seed": {
+            "anyOf": [
+              {
+                "maximum": 2147483647,
+                "minimum": 0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Optional reproducibility seed.",
+            "title": "Seed"
+          },
+          "callback_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Optional webhook URL. Omit it to receive a task ID for polling.",
+            "title": "Callback Url"
+          }
+        },
+        "required": [
+          "prompt",
+          "image_urls"
+        ],
+        "title": "happyhorse_generate_video_from_referencesArguments",
+        "type": "object"
+      },
+      "outputSchema": {
+        "properties": {
+          "result": {
+            "title": "Result",
+            "type": "string"
+          }
+        },
+        "required": [
+          "result"
+        ],
+        "title": "happyhorse_generate_video_from_referencesOutput",
+        "type": "object"
+      },
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "happyhorse_edit_video",
+      "title": null,
+      "description": "Edit a source video using text and optional reference images.",
+      "inputSchema": {
+        "properties": {
+          "prompt": {
+            "description": "Instructions describing the desired changes.",
+            "minLength": 1,
+            "title": "Prompt",
+            "type": "string"
+          },
+          "video_url": {
+            "description": "Public URL of the source video to edit.",
+            "minLength": 1,
+            "title": "Video Url",
+            "type": "string"
+          },
+          "image_urls": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "maxItems": 5,
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Optional style or subject reference images, up to five.",
+            "title": "Image Urls"
+          },
+          "model": {
+            "const": "happyhorse-1.0-video-edit",
+            "default": "happyhorse-1.0-video-edit",
+            "description": "Video-edit model. Currently happyhorse-1.0-video-edit.",
+            "title": "Model",
+            "type": "string"
+          },
+          "resolution": {
+            "default": "1080P",
+            "description": "Output resolution: 720P or 1080P.",
+            "enum": [
+              "720P",
+              "1080P"
+            ],
+            "title": "Resolution",
+            "type": "string"
+          },
+          "ratio": {
+            "default": "16:9",
+            "description": "Output aspect ratio: 16:9, 9:16, 1:1, 4:3, or 3:4.",
+            "enum": [
+              "16:9",
+              "9:16",
+              "1:1",
+              "4:3",
+              "3:4"
+            ],
+            "title": "Ratio",
+            "type": "string"
+          },
+          "duration": {
+            "default": 5,
+            "description": "Output duration in seconds, from 3 through 15.",
+            "maximum": 15,
+            "minimum": 3,
+            "title": "Duration",
+            "type": "integer"
+          },
+          "audio_setting": {
+            "default": "auto",
+            "description": "Audio policy: auto, or origin to preserve the source audio.",
+            "enum": [
+              "auto",
+              "origin"
+            ],
+            "title": "Audio Setting",
+            "type": "string"
+          },
+          "watermark": {
+            "default": false,
+            "description": "Whether to add a Happy Horse watermark.",
+            "title": "Watermark",
+            "type": "boolean"
+          },
+          "seed": {
+            "anyOf": [
+              {
+                "maximum": 2147483647,
+                "minimum": 0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Optional reproducibility seed.",
+            "title": "Seed"
+          },
+          "callback_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Optional webhook URL. Omit it to receive a task ID for polling.",
+            "title": "Callback Url"
+          }
+        },
+        "required": [
+          "prompt",
+          "video_url"
+        ],
+        "title": "happyhorse_edit_videoArguments",
+        "type": "object"
+      },
+      "outputSchema": {
+        "properties": {
+          "result": {
+            "title": "Result",
+            "type": "string"
+          }
+        },
+        "required": [
+          "result"
+        ],
+        "title": "happyhorse_edit_videoOutput",
+        "type": "object"
+      },
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    }
+  ],
+  "prompts": [
+    {
+      "name": "happyhorse_video_workflow",
+      "title": null,
+      "description": "Explain the recommended Happy Horse workflow.",
+      "arguments": [],
+      "icons": null,
+      "meta": null
+    }
+  ],
+  "localizations": [
+    {
+      "locale": "zh-CN",
+      "name": "HappyHorse（Ace Data Cloud 提供）",
+      "description": "通过 Ace Data Cloud 使用 HappyHorse，需要 Ace 服务 API Token；生成按当前服务价格计费。",
+      "tags": [
+        "happyhorse",
+        "happy horse",
+        "video",
+        "video-editing",
+        "acedatacloud"
+      ]
+    }
+  ]
+}

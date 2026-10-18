@@ -1,0 +1,2042 @@
+{
+  "identifier": "acedatacloud-openaimcp",
+  "name": "GPT Image by Ace Data Cloud",
+  "version": "2026.10.17.0",
+  "author": "Ace Data Cloud",
+  "authorUrl": "https://github.com/AceDataCloud",
+  "homepage": "https://platform.acedata.cloud/documents/openai-images-generations?utm_source=opensource&utm_medium=referral&utm_campaign=evergreen&utm_content=gpt-image_lobehub_market_pricing",
+  "description": "GPT Image generation and editing, plus OpenAI-compatible tools through Ace Data Cloud. Requires an Ace service API token; generation is billed to your Ace account. This existing MCP also exposes chat, embedding and other OpenAI-compatible tools.",
+  "cloudEndpoint": "https://openai.mcp.acedata.cloud/mcp",
+  "tags": [
+    "gpt image",
+    "gpt-image",
+    "image-generation",
+    "image-editing",
+    "openai",
+    "acedatacloud"
+  ],
+  "tools": [
+    {
+      "name": "openai_text_to_speech",
+      "title": null,
+      "description": "Generate speech audio from text using OpenAI TTS models via AceDataCloud.\n\n    Converts text to natural-sounding speech using OpenAI's text-to-speech models.\n\n    Use this when:\n    - You need to convert text to spoken audio\n    - You want to generate voiceovers or narration\n    - You need audio output from text content\n\n    Returns:\n        JSON response containing base64-encoded audio data and format information.\n        Decode the 'audio' field with base64 to get the raw audio bytes.\n    ",
+      "inputSchema": {
+        "properties": {
+          "input": {
+            "description": "The text to synthesize into speech. Example: 'Hello, welcome to our service!'",
+            "title": "Input",
+            "type": "string"
+          },
+          "model": {
+            "default": "tts-1-hd",
+            "description": "The TTS model to use. Options: 'tts-1-hd' (default, higher quality), 'tts-1' (faster, lower latency).",
+            "enum": [
+              "tts-1",
+              "tts-1-hd"
+            ],
+            "title": "Model",
+            "type": "string"
+          },
+          "voice": {
+            "default": "alloy",
+            "description": "The voice to use for synthesis. Options: 'alloy' (default), 'echo', 'fable', 'onyx', 'nova', 'shimmer'.",
+            "enum": [
+              "alloy",
+              "echo",
+              "fable",
+              "onyx",
+              "nova",
+              "shimmer"
+            ],
+            "title": "Voice",
+            "type": "string"
+          },
+          "response_format": {
+            "default": "mp3",
+            "description": "Audio output format. Options: 'mp3' (default), 'opus', 'aac', 'flac', 'wav', 'pcm'.",
+            "enum": [
+              "mp3",
+              "opus",
+              "aac",
+              "flac",
+              "wav",
+              "pcm"
+            ],
+            "title": "Response Format",
+            "type": "string"
+          },
+          "speed": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Speaking speed multiplier. Range: 0.25 to 4.0. Default is 1.0 (normal speed).",
+            "title": "Speed"
+          }
+        },
+        "required": [
+          "input"
+        ],
+        "title": "openai_text_to_speechArguments",
+        "type": "object"
+      },
+      "outputSchema": {
+        "properties": {
+          "result": {
+            "title": "Result",
+            "type": "string"
+          }
+        },
+        "required": [
+          "result"
+        ],
+        "title": "openai_text_to_speechOutput",
+        "type": "object"
+      },
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "openai_transcribe_audio",
+      "title": null,
+      "description": "Transcribe audio to text using OpenAI transcription models via AceDataCloud.\n\n    Downloads audio from the given URL and sends it to an OpenAI transcription model.\n    Supports a wide range of audio formats and optional language hints.\n\n    Use this when:\n    - You need to convert spoken audio to text\n    - You want subtitles or captions from a video/audio file\n    - You need timestamped transcripts for processing\n\n    Returns:\n        JSON response containing the transcribed text (and timestamps if verbose_json).\n        For 'text', 'srt', and 'vtt' formats the raw string is returned in a\n        {\"text\": \"...\"} wrapper for consistent handling.\n    ",
+      "inputSchema": {
+        "properties": {
+          "url": {
+            "description": "URL of the audio file to transcribe. The file will be downloaded and sent to the Whisper model. Supported formats: flac, mp3, mp4, mpeg, mpga, m4a, ogg, wav, webm. Maximum file size: 25 MB.",
+            "title": "Url",
+            "type": "string"
+          },
+          "model": {
+            "default": "whisper-1",
+            "description": "The transcription model to use. Options: 'whisper-1' (default) or 'gpt-transcribe'.",
+            "enum": [
+              "whisper-1",
+              "gpt-transcribe"
+            ],
+            "title": "Model",
+            "type": "string"
+          },
+          "language": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "The language of the audio in ISO-639-1 format (e.g. 'en', 'fr', 'de'). Providing this improves accuracy and latency. If omitted, Whisper auto-detects.",
+            "title": "Language"
+          },
+          "prompt": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Optional text to guide the model's style or continue a previous audio segment. The prompt should match the audio language.",
+            "title": "Prompt"
+          },
+          "languages": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Optional list of language codes to constrain transcription to specific languages. Use ISO-639-1 values like ['en', 'fr'].",
+            "title": "Languages"
+          },
+          "keywords": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Optional list of keywords or phrases to bias the transcription toward important domain-specific terms.",
+            "title": "Keywords"
+          },
+          "response_format": {
+            "default": "json",
+            "description": "Format of the transcription output. Options: 'json' (default, returns structured JSON with 'text' field), 'text' (plain text), 'srt' (SubRip subtitle format), 'verbose_json' (detailed JSON with timestamps and segments), 'vtt' (WebVTT subtitle format).",
+            "enum": [
+              "json",
+              "text",
+              "srt",
+              "verbose_json",
+              "vtt"
+            ],
+            "title": "Response Format",
+            "type": "string"
+          },
+          "temperature": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Sampling temperature between 0 and 1. Higher values produce more creative but potentially less accurate output. Default is 0 (deterministic).",
+            "title": "Temperature"
+          },
+          "timestamp_granularities": {
+            "anyOf": [
+              {
+                "items": {
+                  "enum": [
+                    "word",
+                    "segment"
+                  ],
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Granularity of timestamps in verbose_json output. Options: 'word' (word-level timestamps), 'segment' (segment-level timestamps). Only used when response_format is 'verbose_json'.",
+            "title": "Timestamp Granularities"
+          },
+          "stream": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Whether to stream the transcription response. Note: whisper-1 does not support streaming; this parameter will be ignored and the complete result will be returned.",
+            "title": "Stream"
+          }
+        },
+        "required": [
+          "url"
+        ],
+        "title": "openai_transcribe_audioArguments",
+        "type": "object"
+      },
+      "outputSchema": {
+        "properties": {
+          "result": {
+            "title": "Result",
+            "type": "string"
+          }
+        },
+        "required": [
+          "result"
+        ],
+        "title": "openai_transcribe_audioOutput",
+        "type": "object"
+      },
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "openai_chat_completion",
+      "title": null,
+      "description": "Create a chat completion using OpenAI models via AceDataCloud.\n\n    Sends a conversation to the specified model and returns the generated response.\n    Supports all major GPT and o-series models.\n\n    Use this when:\n    - You need to have a conversation with an AI model\n    - You want to generate text responses based on a prompt\n    - You need structured JSON output from a model\n\n    Returns:\n        JSON response containing the model's reply and usage information.\n    ",
+      "inputSchema": {
+        "properties": {
+          "messages": {
+            "description": "A list of messages comprising the conversation. Each message must have a 'role' ('system', 'user', or 'assistant') and 'content' field. Example: [{'role': 'user', 'content': 'Hello!'}]",
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "title": "Messages",
+            "type": "array"
+          },
+          "model": {
+            "default": "gpt-4.1",
+            "description": "The model to use for chat completion. Options include gpt-4.1, gpt-4o, gpt-5, o1, o3, o4-mini, and many more. Default is gpt-4.1.",
+            "enum": [
+              "gpt-6.1-sol",
+              "gpt-6-sol",
+              "gpt-6-luna",
+              "gpt-6-astra",
+              "gpt-oss:free",
+              "gpt-5.5:free",
+              "gpt-5:free",
+              "gpt-4.1:free",
+              "gpt-4o:free",
+              "gpt-4o-mini:free",
+              "gpt-5.6-luna",
+              "gpt-5.6-terra",
+              "gpt-5.6-sol-fast",
+              "gpt-5.6-sol",
+              "gpt-5.5",
+              "gpt-5.5-pro",
+              "gpt-5.4",
+              "gpt-5.4-mini",
+              "gpt-5.4-nano",
+              "gpt-5.4-pro",
+              "gpt-5.2",
+              "gpt-5.1",
+              "gpt-5.1-all",
+              "gpt-5",
+              "gpt-5-pro",
+              "gpt-5-mini",
+              "gpt-5-nano",
+              "gpt-4",
+              "gpt-4.1",
+              "gpt-4.1-mini",
+              "gpt-4.1-nano",
+              "gpt-4o",
+              "gpt-4o-2024-05-13",
+              "gpt-4o-all",
+              "gpt-4o-image",
+              "gpt-4o-mini",
+              "gpt-35-turbo-16k",
+              "o1",
+              "o1-mini",
+              "o1-pro",
+              "o3",
+              "o3-mini",
+              "o3-pro",
+              "o4-mini"
+            ],
+            "title": "Model",
+            "type": "string"
+          },
+          "max_tokens": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "The maximum number of tokens to generate. If not specified, the model uses its default limit.",
+            "title": "Max Tokens"
+          },
+          "temperature": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Sampling temperature between 0 and 2. Higher values (e.g. 0.8) make output more random, lower values (e.g. 0.2) make it more focused. Default is 1.",
+            "title": "Temperature"
+          },
+          "n": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "How many chat completion choices to generate for each input. Default is 1.",
+            "title": "N"
+          },
+          "reasoning_effort": {
+            "anyOf": [
+              {
+                "enum": [
+                  "minimal",
+                  "low",
+                  "medium",
+                  "high"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Constrains effort on reasoning for reasoning models. Options: 'minimal', 'low', 'medium', 'high'. Default is 'medium'.",
+            "title": "Reasoning Effort"
+          },
+          "service_tier": {
+            "anyOf": [
+              {
+                "enum": [
+                  "auto",
+                  "default",
+                  "flex",
+                  "scale",
+                  "priority"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Specifies the processing tier. Options: 'auto' (default), 'default', 'flex', 'scale', 'priority'.",
+            "title": "Service Tier"
+          },
+          "stream": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Whether to stream partial message deltas. Default is false.",
+            "title": "Stream"
+          },
+          "response_format": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Response format specification, such as {\"type\": \"json_object\"}.",
+            "title": "Response Format"
+          },
+          "tools": {
+            "anyOf": [
+              {
+                "items": {
+                  "additionalProperties": true,
+                  "type": "object"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Tools/functions the model may call.",
+            "title": "Tools"
+          },
+          "tool_choice": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Controls tool calling: 'none', 'auto', 'required', or a tool choice object.",
+            "title": "Tool Choice"
+          },
+          "top_p": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Nucleus sampling probability mass. Default is 1.",
+            "title": "Top P"
+          },
+          "frequency_penalty": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Frequency penalty between -2.0 and 2.0.",
+            "title": "Frequency Penalty"
+          },
+          "presence_penalty": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Presence penalty between -2.0 and 2.0.",
+            "title": "Presence Penalty"
+          },
+          "seed": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Random seed for best-effort deterministic sampling.",
+            "title": "Seed"
+          },
+          "stop": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Stop sequences where the API will stop generating tokens.",
+            "title": "Stop"
+          },
+          "max_completion_tokens": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Upper bound for tokens generated for a completion.",
+            "title": "Max Completion Tokens"
+          },
+          "logprobs": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Whether to return log probabilities of output tokens.",
+            "title": "Logprobs"
+          },
+          "top_logprobs": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Number of most likely tokens to return at each token position.",
+            "title": "Top Logprobs"
+          },
+          "stream_options": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Options for streaming responses.",
+            "title": "Stream Options"
+          },
+          "parallel_tool_calls": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Whether to enable parallel tool calls. Default is true.",
+            "title": "Parallel Tool Calls"
+          },
+          "user": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "End-user identifier for abuse monitoring.",
+            "title": "User"
+          },
+          "store": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Whether to store the output of this chat completion. Default is false.",
+            "title": "Store"
+          },
+          "metadata": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Developer-defined metadata attached to the request.",
+            "title": "Metadata"
+          },
+          "logit_bias": {
+            "anyOf": [
+              {
+                "additionalProperties": {
+                  "type": "integer"
+                },
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Token logit bias map.",
+            "title": "Logit Bias"
+          },
+          "modalities": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Output modalities requested for this response.",
+            "title": "Modalities"
+          },
+          "audio": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Audio output configuration when requesting audio modality.",
+            "title": "Audio"
+          },
+          "prediction": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Static predicted output content to improve latency.",
+            "title": "Prediction"
+          },
+          "web_search_options": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Web search configuration for search-capable models.",
+            "title": "Web Search Options"
+          }
+        },
+        "required": [
+          "messages"
+        ],
+        "title": "openai_chat_completionArguments",
+        "type": "object"
+      },
+      "outputSchema": {
+        "properties": {
+          "result": {
+            "title": "Result",
+            "type": "string"
+          }
+        },
+        "required": [
+          "result"
+        ],
+        "title": "openai_chat_completionOutput",
+        "type": "object"
+      },
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "openai_create_embedding",
+      "title": null,
+      "description": "Create text embeddings using OpenAI embedding models via AceDataCloud.\n\n    Converts text into numerical vector representations that can be used for\n    semantic search, text similarity, clustering, and other ML tasks.\n\n    Use this when:\n    - You need to compare semantic similarity between texts\n    - You want to build a semantic search system\n    - You need vector representations for machine learning\n\n    Returns:\n        JSON response containing the embedding vectors and usage information.\n    ",
+      "inputSchema": {
+        "properties": {
+          "input": {
+            "anyOf": [
+              {
+                "minLength": 1,
+                "type": "string"
+              },
+              {
+                "items": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "maxItems": 2048,
+                "minItems": 1,
+                "type": "array"
+              },
+              {
+                "items": {
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                "minItems": 1,
+                "type": "array"
+              },
+              {
+                "items": {
+                  "items": {
+                    "minimum": 0,
+                    "type": "integer"
+                  },
+                  "minItems": 1,
+                  "type": "array"
+                },
+                "maxItems": 2048,
+                "minItems": 1,
+                "type": "array"
+              }
+            ],
+            "description": "Input to embed. Pass one text as a string, multiple texts as a real JSON array of strings, one token sequence as an integer array, or multiple token sequences as an array of integer arrays. Never JSON-stringify an array.",
+            "title": "Input"
+          },
+          "model": {
+            "default": "text-embedding-3-small",
+            "description": "The embedding model to use. Options: 'text-embedding-3-small' (default, cost-efficient) or 'text-embedding-3-large' (higher quality).",
+            "enum": [
+              "text-embedding-3-small",
+              "text-embedding-3-large"
+            ],
+            "title": "Model",
+            "type": "string"
+          },
+          "encoding_format": {
+            "default": "float",
+            "description": "The format of the returned embeddings. 'float' returns floating-point numbers (default), 'base64' returns base64-encoded data.",
+            "enum": [
+              "float",
+              "base64"
+            ],
+            "title": "Encoding Format",
+            "type": "string"
+          },
+          "dimensions": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Optional output embedding size. Supported by text-embedding-3 models. Reduces the embedding dimensions while maintaining quality.",
+            "title": "Dimensions"
+          }
+        },
+        "required": [
+          "input"
+        ],
+        "title": "openai_create_embeddingArguments",
+        "type": "object"
+      },
+      "outputSchema": {
+        "properties": {
+          "result": {
+            "title": "Result",
+            "type": "string"
+          }
+        },
+        "required": [
+          "result"
+        ],
+        "title": "openai_create_embeddingOutput",
+        "type": "object"
+      },
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "openai_generate_image",
+      "title": null,
+      "description": "Generate images using OpenAI image models via AceDataCloud.\n\n    Creates AI-generated images from text descriptions using models like\n    gpt-image-1, dall-e-3, and nano-banana variants.\n\n    Use this when:\n    - You want to create an image from a text description\n    - You need AI-generated artwork or illustrations\n    - You want to generate product mockups or visual concepts\n\n    Returns:\n        JSON with a `task_id`. Generation runs asynchronously — poll\n        `openai_get_task` with that id until it reports `finished_at`, then\n        read the image URLs from its `response`. When `callback_url` is set the\n        result is POSTed there instead.\n    ",
+      "inputSchema": {
+        "properties": {
+          "prompt": {
+            "description": "A text description of the desired image(s). Be descriptive about the subject, style, lighting, and composition. Example: 'A serene mountain landscape at sunset with golden light'",
+            "title": "Prompt",
+            "type": "string"
+          },
+          "model": {
+            "default": "gpt-image-1",
+            "description": "The image model to use. Options: 'gpt-image-1' (default, versatile), 'gpt-image-1.5', 'gpt-image-2', 'gpt-image-2.5-flare', 'gpt-image-2.5-flare:official', 'gpt-image-2.5-sunburst', 'gpt-image-2.5-sunburst:official', 'dall-e-3', 'dall-e-2', 'nano-banana', 'nano-banana-2-lite', 'nano-banana-2', 'nano-banana-2.1', 'nano-banana-pro'. Nano Banana 2.1 has no ':official' variant. GPT Image ':official' variants use actual-token billing.",
+            "enum": [
+              "dall-e-2",
+              "dall-e-3",
+              "gpt-image-1",
+              "gpt-image-1.5",
+              "gpt-image-2",
+              "gpt-image-2.5-flare",
+              "gpt-image-2.5-flare:official",
+              "gpt-image-2.5-sunburst",
+              "gpt-image-2.5-sunburst:official",
+              "gpt-image-2:reverse",
+              "gpt-image-2:official",
+              "nano-banana",
+              "nano-banana-2-lite",
+              "nano-banana-2",
+              "nano-banana-2.1",
+              "nano-banana-pro"
+            ],
+            "title": "Model",
+            "type": "string"
+          },
+          "size": {
+            "default": "auto",
+            "description": "Image dimensions as 'WIDTHxHEIGHT' or 'auto' (default). GPT Image 2 and 2.5 models accept custom dimensions matching the format (multiples of 16, longer side ≤ 3840, total pixels 655,360–8,294,400, aspect ratio ≤ 3:1). Common presets — 1K: '1024x1024', '1536x1024', '1024x1536', '1792x1024', '1024x1792'; 2K: '2048x2048', '2048x1536', '1536x2048', '2048x1152', '1152x2048'; 4K: '2880x2880', '3264x2448', '2448x3264', '3840x2160', '2160x3840'. dall-e-2: '256x256', '512x512', '1024x1024'. dall-e-3: '1024x1024', '1792x1024', '1024x1792'.",
+            "title": "Size",
+            "type": "string"
+          },
+          "quality": {
+            "default": "auto",
+            "description": "Image quality. Options: 'auto' (default), 'high', 'medium', 'low', 'hd' (dall-e-3 high detail), 'standard' (dall-e-3 standard).",
+            "enum": [
+              "auto",
+              "high",
+              "medium",
+              "low",
+              "hd",
+              "standard"
+            ],
+            "title": "Quality",
+            "type": "string"
+          },
+          "n": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Number of images to generate (1-10). Default is 1.",
+            "title": "N"
+          },
+          "output_format": {
+            "default": "png",
+            "description": "Output file format. Options: 'png' (default), 'jpeg', 'webp'.",
+            "enum": [
+              "png",
+              "jpeg",
+              "webp"
+            ],
+            "title": "Output Format",
+            "type": "string"
+          },
+          "response_format": {
+            "default": "url",
+            "description": "How to return the image. 'url' (default) returns a URL, 'b64_json' returns base64-encoded image data.",
+            "enum": [
+              "url",
+              "b64_json"
+            ],
+            "title": "Response Format",
+            "type": "string"
+          },
+          "style": {
+            "anyOf": [
+              {
+                "enum": [
+                  "vivid",
+                  "natural"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Image style for dall-e-3. 'vivid' generates hyper-real and dramatic images, 'natural' produces more natural, less hyper-real looking images.",
+            "title": "Style"
+          },
+          "background": {
+            "anyOf": [
+              {
+                "enum": [
+                  "transparent",
+                  "opaque",
+                  "auto"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Background type for gpt-image models. 'transparent' removes the background, 'opaque' keeps it, 'auto' decides automatically.",
+            "title": "Background"
+          },
+          "moderation": {
+            "anyOf": [
+              {
+                "enum": [
+                  "low",
+                  "auto"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Content moderation level. 'auto' uses default moderation, 'low' applies less strict filtering.",
+            "title": "Moderation"
+          },
+          "output_compression": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Compression level (0-100%) for jpeg/webp output formats. Default is 100.",
+            "title": "Output Compression"
+          },
+          "partial_images": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Number of partial images to emit during streaming (0-3). 0 returns the final image in one event.",
+            "title": "Partial Images"
+          },
+          "callback_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Optional webhook URL. When provided, the API returns a task_id immediately and POSTs the result to this URL when generation completes.",
+            "title": "Callback Url"
+          },
+          "async": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Whether to process the request asynchronously.",
+            "title": "Async"
+          }
+        },
+        "required": [
+          "prompt"
+        ],
+        "title": "openai_generate_imageArguments",
+        "type": "object"
+      },
+      "outputSchema": {
+        "properties": {
+          "result": {
+            "title": "Result",
+            "type": "string"
+          }
+        },
+        "required": [
+          "result"
+        ],
+        "title": "openai_generate_imageOutput",
+        "type": "object"
+      },
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "openai_edit_image",
+      "title": null,
+      "description": "Edit or modify existing images using OpenAI image models via AceDataCloud.\n\n    Applies AI-powered edits to existing images based on text descriptions.\n    Can modify, extend, or transform images while preserving desired elements.\n\n    Use this when:\n    - You want to modify an existing image\n    - You need to add, remove, or change elements in an image\n    - You want to apply a specific style or transformation to an image\n\n    Returns:\n        JSON with a `task_id`. Editing runs asynchronously — poll\n        `openai_get_task` with that id until it reports `finished_at`, then\n        read the image URLs from its `response`. When `callback_url` is set the\n        result is POSTed there instead.\n    ",
+      "inputSchema": {
+        "properties": {
+          "image": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "items": {
+                  "type": "string"
+                },
+                "maxItems": 16,
+                "minItems": 1,
+                "type": "array"
+              }
+            ],
+            "description": "Reference image URL(s). Pass one URL as a string, or multiple URLs as a real JSON array of strings (maximum 16) in the intended reference order. For example: [\"https://example.com/base.png\", \"https://example.com/logo.png\"]. Never join multiple URLs with commas and never JSON-stringify the array. The first image should normally be the base image; describe the role of later references in prompt.",
+            "title": "Image"
+          },
+          "prompt": {
+            "description": "Text description of the desired edit. Max 1000 characters for gpt-image models. Describe what you want to change or add to the image.",
+            "title": "Prompt",
+            "type": "string"
+          },
+          "model": {
+            "default": "dall-e-3",
+            "description": "The image model to use for editing. Options: 'dall-e-3' (default), 'gpt-image-1.5', 'gpt-image-2', 'gpt-image-2.5-flare', 'gpt-image-2.5-flare:official', 'gpt-image-2.5-sunburst', 'gpt-image-2.5-sunburst:official', 'dall-e-3', and 'nano-banana' variants including 'nano-banana-2.1' (no ':official' variant).",
+            "enum": [
+              "dall-e-2",
+              "dall-e-3",
+              "gpt-image-1",
+              "gpt-image-1.5",
+              "gpt-image-2",
+              "gpt-image-2.5-flare",
+              "gpt-image-2.5-flare:official",
+              "gpt-image-2.5-sunburst",
+              "gpt-image-2.5-sunburst:official",
+              "gpt-image-2:reverse",
+              "gpt-image-2:official",
+              "nano-banana",
+              "nano-banana-2-lite",
+              "nano-banana-2",
+              "nano-banana-2.1",
+              "nano-banana-pro"
+            ],
+            "title": "Model",
+            "type": "string"
+          },
+          "size": {
+            "default": "auto",
+            "description": "Output image dimensions as 'WIDTHxHEIGHT' or 'auto'. Default is 'auto'. GPT Image 2 and 2.5 models accept custom dimensions (multiples of 16, longer side ≤ 3840, total pixels 655,360–8,294,400, aspect ratio ≤ 3:1). Common presets — 1K: '1024x1024', '1536x1024', '1024x1536', '1792x1024', '1024x1792'; 2K: '2048x2048', '2048x1536', '1536x2048', '2048x1152', '1152x2048'; 4K: '2880x2880', '3264x2448', '2448x3264', '3840x2160', '2160x3840'. dall-e-2: '256x256', '512x512', '1024x1024'.",
+            "title": "Size",
+            "type": "string"
+          },
+          "quality": {
+            "default": "auto",
+            "description": "Output quality. Options: 'auto' (default), 'high', 'medium', 'low', 'standard'.",
+            "enum": [
+              "auto",
+              "high",
+              "medium",
+              "low",
+              "standard"
+            ],
+            "title": "Quality",
+            "type": "string"
+          },
+          "n": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Number of images to generate (1-10). Default is 1.",
+            "title": "N"
+          },
+          "background": {
+            "anyOf": [
+              {
+                "enum": [
+                  "transparent",
+                  "opaque",
+                  "auto"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Background handling. 'transparent' removes background, 'opaque' keeps it, 'auto' decides automatically.",
+            "title": "Background"
+          },
+          "input_fidelity": {
+            "anyOf": [
+              {
+                "enum": [
+                  "high",
+                  "low"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "How closely to follow the reference image. 'high' preserves more detail, 'low' allows more creative freedom.",
+            "title": "Input Fidelity"
+          },
+          "output_format": {
+            "default": "png",
+            "description": "Output file format. Options: 'png' (default), 'jpeg', 'webp'.",
+            "enum": [
+              "png",
+              "jpeg",
+              "webp"
+            ],
+            "title": "Output Format",
+            "type": "string"
+          },
+          "response_format": {
+            "default": "url",
+            "description": "How to return the image. 'url' (default) returns a URL, 'b64_json' returns base64-encoded image data.",
+            "enum": [
+              "url",
+              "b64_json"
+            ],
+            "title": "Response Format",
+            "type": "string"
+          },
+          "output_compression": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Compression level (0-100%) for jpeg/webp output. Default is 100.",
+            "title": "Output Compression"
+          },
+          "callback_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Optional webhook URL. When provided, returns task_id immediately and POSTs result to this URL when complete.",
+            "title": "Callback Url"
+          },
+          "async": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Whether to process the request asynchronously.",
+            "title": "Async"
+          }
+        },
+        "required": [
+          "image",
+          "prompt"
+        ],
+        "title": "openai_edit_imageArguments",
+        "type": "object"
+      },
+      "outputSchema": {
+        "properties": {
+          "result": {
+            "title": "Result",
+            "type": "string"
+          }
+        },
+        "required": [
+          "result"
+        ],
+        "title": "openai_edit_imageOutput",
+        "type": "object"
+      },
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "openai_get_models",
+      "title": null,
+      "description": "List models from the OpenAI-compatible models endpoint.\n\n    Returns:\n        JSON response from GET /openai/models.\n    ",
+      "inputSchema": {
+        "properties": {},
+        "title": "openai_get_modelsArguments",
+        "type": "object"
+      },
+      "outputSchema": {
+        "properties": {
+          "result": {
+            "title": "Result",
+            "type": "string"
+          }
+        },
+        "required": [
+          "result"
+        ],
+        "title": "openai_get_modelsOutput",
+        "type": "object"
+      },
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "openai_get_realtime_connection_info",
+      "title": null,
+      "description": "Get realtime connection information from GET /v1/realtime.",
+      "inputSchema": {
+        "properties": {
+          "model": {
+            "default": "gpt-realtime-2.1",
+            "description": "Realtime model to use. Use gpt-realtime-2.1 for best quality or gpt-realtime-2.1-mini for lower cost.",
+            "enum": [
+              "gpt-realtime-2.1",
+              "gpt-realtime-2.1-mini",
+              "gpt-realtime-2",
+              "gpt-realtime",
+              "gpt-realtime-mini"
+            ],
+            "title": "Model",
+            "type": "string"
+          },
+          "voice": {
+            "default": "alloy",
+            "description": "Output voice selected when the connection is established.",
+            "enum": [
+              "alloy",
+              "ash",
+              "ballad",
+              "coral",
+              "echo",
+              "sage",
+              "shimmer",
+              "verse",
+              "marin",
+              "cedar"
+            ],
+            "title": "Voice",
+            "type": "string"
+          }
+        },
+        "title": "openai_get_realtime_connection_infoArguments",
+        "type": "object"
+      },
+      "outputSchema": {
+        "properties": {
+          "result": {
+            "title": "Result",
+            "type": "string"
+          }
+        },
+        "required": [
+          "result"
+        ],
+        "title": "openai_get_realtime_connection_infoOutput",
+        "type": "object"
+      },
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "openai_list_chat_models",
+      "title": null,
+      "description": "List all available chat completion models.\n\n    Shows all models available for the chat completions and responses endpoints,\n    including GPT-4, GPT-4o, GPT-5, and o-series models.\n\n    Returns:\n        Table of all chat models with descriptions.\n    ",
+      "inputSchema": {
+        "properties": {},
+        "title": "openai_list_chat_modelsArguments",
+        "type": "object"
+      },
+      "outputSchema": {
+        "properties": {
+          "result": {
+            "title": "Result",
+            "type": "string"
+          }
+        },
+        "required": [
+          "result"
+        ],
+        "title": "openai_list_chat_modelsOutput",
+        "type": "object"
+      },
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "openai_list_image_models",
+      "title": null,
+      "description": "List all available image generation and editing models.\n\n    Shows all models available for the images/generations and images/edits endpoints.\n\n    Returns:\n        Table of all image models with descriptions.\n    ",
+      "inputSchema": {
+        "properties": {},
+        "title": "openai_list_image_modelsArguments",
+        "type": "object"
+      },
+      "outputSchema": {
+        "properties": {
+          "result": {
+            "title": "Result",
+            "type": "string"
+          }
+        },
+        "required": [
+          "result"
+        ],
+        "title": "openai_list_image_modelsOutput",
+        "type": "object"
+      },
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "openai_list_embedding_models",
+      "title": null,
+      "description": "List all available text embedding models.\n\n    Shows all models available for the embeddings endpoint.\n\n    Returns:\n        Table of all embedding models with descriptions.\n    ",
+      "inputSchema": {
+        "properties": {},
+        "title": "openai_list_embedding_modelsArguments",
+        "type": "object"
+      },
+      "outputSchema": {
+        "properties": {
+          "result": {
+            "title": "Result",
+            "type": "string"
+          }
+        },
+        "required": [
+          "result"
+        ],
+        "title": "openai_list_embedding_modelsOutput",
+        "type": "object"
+      },
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "openai_get_usage_guide",
+      "title": null,
+      "description": "Get a comprehensive guide for using the OpenAI tools.\n\n    Provides detailed information on how to use all available OpenAI tools\n    effectively, including examples and best practices.\n\n    Returns:\n        Complete usage guide for OpenAI tools.\n    ",
+      "inputSchema": {
+        "properties": {},
+        "title": "openai_get_usage_guideArguments",
+        "type": "object"
+      },
+      "outputSchema": {
+        "properties": {
+          "result": {
+            "title": "Result",
+            "type": "string"
+          }
+        },
+        "required": [
+          "result"
+        ],
+        "title": "openai_get_usage_guideOutput",
+        "type": "object"
+      },
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "openai_create_response",
+      "title": null,
+      "description": "Create a response using the OpenAI Responses API via AceDataCloud.\n\n    The Responses API is an alternative to the Chat Completions API with support\n    for a wider range of model variants and additional features like background processing.\n\n    Use this when:\n    - You need access to model-specific dated variants (e.g., o3-2025-04-16)\n    - You want background processing with a task ID\n    - You need access to search-preview models\n\n    Returns:\n        JSON response containing the model's output and usage information.\n    ",
+      "inputSchema": {
+        "properties": {
+          "input": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "items": {
+                  "additionalProperties": true,
+                  "type": "object"
+                },
+                "type": "array"
+              }
+            ],
+            "description": "A text prompt or a list of messages comprising the conversation. Each message must have a 'role' ('system', 'user', or 'assistant') and 'content' field. Example: [{'role': 'user', 'content': 'Explain quantum computing'}]",
+            "title": "Input"
+          },
+          "model": {
+            "default": "gpt-4.1",
+            "description": "The model to use. Supports a wide range of GPT-4, GPT-4o, GPT-5, and o-series models including their dated variants. Default is gpt-4.1.",
+            "enum": [
+              "gpt-6.1-sol",
+              "gpt-6-sol",
+              "gpt-6-luna",
+              "gpt-6-astra",
+              "gpt-5.6-luna",
+              "gpt-5.6-terra",
+              "gpt-5.6-sol-fast",
+              "gpt-5.6-sol",
+              "gpt-5.5",
+              "gpt-5.5-pro",
+              "gpt-5.4",
+              "gpt-5.4-mini",
+              "gpt-5.4-nano",
+              "gpt-5.4-pro",
+              "gpt-5.1",
+              "gpt-5.2",
+              "gpt-5.1-all",
+              "gpt-5",
+              "gpt-5-pro",
+              "gpt-5-mini",
+              "gpt-5-nano",
+              "gpt-4",
+              "gpt-4-all",
+              "gpt-4-turbo",
+              "gpt-4-turbo-preview",
+              "gpt-4-vision-preview",
+              "gpt-4.1",
+              "gpt-4.1-2025-04-14",
+              "gpt-4.1-mini",
+              "gpt-4.1-mini-2025-04-14",
+              "gpt-4.1-nano",
+              "gpt-4.1-nano-2025-04-14",
+              "gpt-4.5-preview",
+              "gpt-4.5-preview-2025-02-27",
+              "gpt-4o",
+              "gpt-4o-2024-05-13",
+              "gpt-4o-2024-08-06",
+              "gpt-4o-2024-11-20",
+              "gpt-4o-all",
+              "gpt-4o-image",
+              "gpt-4o-mini",
+              "gpt-4o-mini-2024-07-18",
+              "gpt-4o-mini-search-preview",
+              "gpt-4o-mini-search-preview-2025-03-11",
+              "gpt-4o-search-preview",
+              "gpt-4o-search-preview-2025-03-11",
+              "gpt-35-turbo-16k",
+              "o1",
+              "o1-2024-12-17",
+              "o1-all",
+              "o1-mini",
+              "o1-mini-2024-09-12",
+              "o1-mini-all",
+              "o1-preview",
+              "o1-preview-2024-09-12",
+              "o1-preview-all",
+              "o1-pro",
+              "o1-pro-2025-03-19",
+              "o1-pro-all",
+              "o3",
+              "o3-2025-04-16",
+              "o3-all",
+              "o3-mini",
+              "o3-mini-2025-01-31",
+              "o3-mini-2025-01-31-high",
+              "o3-mini-2025-01-31-low",
+              "o3-mini-2025-01-31-medium",
+              "o3-mini-all",
+              "o3-mini-high",
+              "o3-mini-high-all",
+              "o3-mini-low",
+              "o3-mini-medium",
+              "o3-pro",
+              "o3-pro-2025-06-10",
+              "o4-mini",
+              "o4-mini-2025-04-16",
+              "o4-mini-all",
+              "o4-mini-high-all"
+            ],
+            "title": "Model",
+            "type": "string"
+          },
+          "max_tokens": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "The maximum number of tokens to generate in the response. If not specified, the model uses its default limit.",
+            "title": "Max Tokens"
+          },
+          "temperature": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Sampling temperature between 0 and 2. Higher values produce more creative output; lower values produce more deterministic output. Default is 1.",
+            "title": "Temperature"
+          },
+          "n": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Number of response choices to generate. Default is 1.",
+            "title": "N"
+          },
+          "background": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Whether to run the model response in the background. When True, returns immediately with a task ID.",
+            "title": "Background"
+          },
+          "response_format": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Response format specification, such as {\"type\": \"json_object\"}.",
+            "title": "Response Format"
+          },
+          "stream": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Whether to stream partial response output. Default is false.",
+            "title": "Stream"
+          },
+          "tools": {
+            "anyOf": [
+              {
+                "items": {
+                  "additionalProperties": true,
+                  "type": "object"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Tools the model may call while creating the response.",
+            "title": "Tools"
+          },
+          "tool_choice": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Controls tool calling: 'none', 'auto', 'required', or a tool object.",
+            "title": "Tool Choice"
+          },
+          "parallel_tool_calls": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Whether to enable parallel tool calls. Default is true.",
+            "title": "Parallel Tool Calls"
+          },
+          "include": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Additional response payload sections to include.",
+            "title": "Include"
+          },
+          "reasoning": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Reasoning configuration options.",
+            "title": "Reasoning"
+          },
+          "text": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Text output configuration options.",
+            "title": "Text"
+          },
+          "max_output_tokens": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Upper bound for tokens generated in the response output.",
+            "title": "Max Output Tokens"
+          },
+          "store": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Whether to store the output of this response.",
+            "title": "Store"
+          },
+          "stream_options": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Options for streaming responses.",
+            "title": "Stream Options"
+          }
+        },
+        "required": [
+          "input"
+        ],
+        "title": "openai_create_responseArguments",
+        "type": "object"
+      },
+      "outputSchema": {
+        "properties": {
+          "result": {
+            "title": "Result",
+            "type": "string"
+          }
+        },
+        "required": [
+          "result"
+        ],
+        "title": "openai_create_responseOutput",
+        "type": "object"
+      },
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "openai_get_task",
+      "title": null,
+      "description": "Retrieve a single async image task by its task ID or custom trace ID.\n\n    Image generation and editing requests are submitted asynchronously and\n    return a task_id immediately. Use this tool to poll until the task\n    finishes and to retrieve the final image URLs.\n\n    A task is complete once it carries a `finished_at` timestamp. While it is\n    still running this tool waits ~5s before returning, so repeated calls\n    poll at a sane rate.\n\n    Use this when:\n    - You called openai_generate_image or openai_edit_image and got a task_id\n    - You want to check the status of an async image task\n\n    Returns:\n        JSON object with task details (id, trace_id, type, request, response,\n        created_at, started_at, finished_at, elapsed) or an empty object if not found.\n    ",
+      "inputSchema": {
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Task ID returned by the original image request (e.g. from openai_generate_image or openai_edit_image). At least one of 'id' or 'trace_id' must be provided.",
+            "title": "Id"
+          },
+          "trace_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Custom trace ID supplied via the 'trace_id' field on the original image request. When both 'id' and 'trace_id' are given, 'trace_id' takes precedence.",
+            "title": "Trace Id"
+          }
+        },
+        "title": "openai_get_taskArguments",
+        "type": "object"
+      },
+      "outputSchema": {
+        "properties": {
+          "result": {
+            "title": "Result",
+            "type": "string"
+          }
+        },
+        "required": [
+          "result"
+        ],
+        "title": "openai_get_taskOutput",
+        "type": "object"
+      },
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "openai_list_tasks",
+      "title": null,
+      "description": "List async image tasks using batch query filters.\n\n    Returns a paginated list of async image task records. You must provide at\n    least one filter: ids, trace_ids, application_id, user_id, or a\n    created_at_min / created_at_max time window.\n\n    Every image generation and edit produces a task record, so this lists\n    recent image work regardless of whether a callback_url was used.\n\n    Use this when:\n    - You want to list multiple tasks at once\n    - You want to see all tasks for an application or user\n\n    Returns:\n        JSON object with 'items' array and 'count' field.\n    ",
+      "inputSchema": {
+        "properties": {
+          "ids": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "List of task IDs to retrieve.",
+            "title": "Ids"
+          },
+          "trace_ids": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "List of custom trace IDs to retrieve.",
+            "title": "Trace Ids"
+          },
+          "application_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "List all tasks belonging to the specified application.",
+            "title": "Application Id"
+          },
+          "user_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "List all tasks belonging to the specified end user.",
+            "title": "User Id"
+          },
+          "type": {
+            "anyOf": [
+              {
+                "enum": [
+                  "images",
+                  "images_generations",
+                  "images_edits"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Filter by upstream type. Options: 'images', 'images_generations', 'images_edits'.",
+            "title": "Type"
+          },
+          "offset": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Pagination offset. Default is 0.",
+            "title": "Offset"
+          },
+          "limit": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Number of tasks per page. Default is 12.",
+            "title": "Limit"
+          },
+          "created_at_min": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Earliest task creation timestamp (Unix seconds, inclusive).",
+            "title": "Created At Min"
+          },
+          "created_at_max": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Latest task creation timestamp (Unix seconds, inclusive).",
+            "title": "Created At Max"
+          }
+        },
+        "title": "openai_list_tasksArguments",
+        "type": "object"
+      },
+      "outputSchema": {
+        "properties": {
+          "result": {
+            "title": "Result",
+            "type": "string"
+          }
+        },
+        "required": [
+          "result"
+        ],
+        "title": "openai_list_tasksOutput",
+        "type": "object"
+      },
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    }
+  ],
+  "prompts": [],
+  "localizations": [
+    {
+      "locale": "zh-CN",
+      "name": "GPT Image（Ace Data Cloud 提供）",
+      "description": "通过 Ace Data Cloud 使用 GPT Image，需要 Ace 服务 API Token；生成按当前服务价格计费。此既有 MCP 同时提供聊天、嵌入等 OpenAI 兼容工具。",
+      "tags": [
+        "gpt image",
+        "gpt-image",
+        "image-generation",
+        "image-editing",
+        "openai",
+        "acedatacloud"
+      ]
+    }
+  ]
+}

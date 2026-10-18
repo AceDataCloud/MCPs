@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "ace-nanobanana": {
+      "type": "http",
+      "url": "https://nanobanana.mcp.acedata.cloud/mcp"
+    }
+  }
+}
