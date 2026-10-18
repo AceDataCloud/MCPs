@@ -328,6 +328,9 @@ function activate(context) {{
         new vscode.McpHttpServerDefinition(SERVER_LABEL, vscode.Uri.parse(SERVER_URL)),
       ],
       resolveMcpServerDefinition: async (server) => {{
+        if (!server?.uri || server.uri.toString() !== SERVER_URL) {{
+          throw new Error("Unexpected MCP server endpoint.");
+        }}
         let token = await readToken(context);
         if (!token) token = await promptForToken(context);
         if (!token) {{

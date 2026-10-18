@@ -105,6 +105,43 @@ class BrandPackagesTest(unittest.TestCase):
         self.assertIn("secrets.VSCE_PAT", workflow)
         self.assertNotIn("inputs.repository", workflow)
         self.assertNotIn("inputs.ref", workflow)
+        self.assertIn("inputs.confirm_marketplace_requirements", workflow)
+        self.assertIn("verify-mirror", workflow)
+        self.assertIn("repository: ${{ matrix.mirror }}", workflow)
+
+    def test_new_marketplace_gates_remain_opt_in_and_independent(self):
+        import yaml
+
+        for alias, job in [
+            ("happyhorse", "publish-jetbrains"),
+            ("openai", "publish-gpt-image-jetbrains"),
+        ]:
+            config = yaml.safe_load(
+                (ROOT / alias / ".github/workflows/publish.yml").read_text()
+            )
+            events = config.get("on", config.get(True))
+            self.assertIs(
+                events["workflow_dispatch"]["inputs"]["publish_service_plugin"][
+                    "default"
+                ],
+                False,
+            )
+            self.assertEqual(
+                config["jobs"][job]["if"],
+                "github.event_name == 'workflow_dispatch' && inputs.publish_service_plugin",
+            )
+        config = yaml.safe_load(
+            (
+                ROOT / "vscode-bundle/.github/workflows/publish-service-extensions.yml"
+            ).read_text()
+        )
+        events = config.get("on", config.get(True))
+        self.assertIs(
+            events["workflow_dispatch"]["inputs"]["confirm_marketplace_requirements"][
+                "default"
+            ],
+            False,
+        )
 
 
 if __name__ == "__main__":

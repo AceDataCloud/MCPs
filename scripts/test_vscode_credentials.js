@@ -7,8 +7,8 @@ const vm = require('node:vm');
 const root = path.resolve(__dirname, '..');
 const services = ['acedatacloud', 'face', 'fish', 'flux', 'grok', 'happyhorse', 'openai', 'hailuo', 'kling', 'luma', 'midjourney', 'nanobanana', 'producer', 'seedance', 'seedream', 'serp', 'shorturl', 'suno', 'veo', 'wan'];
 
-function load(alias, { input, env = {}, stored } = {}) {
-  const state = { prompts: [], commands: new Map(), secrets: new Map(), provider: undefined };
+function load(alias, { input, env = {}, stored, inputError, storeError } = {}) {
+  const state = { prompts: [], commands: new Map(), secrets: new Map(), provider: undefined, secretReads: 0, information: [] };
   if (stored) state.secrets.set(`${alias}.apiToken`, stored);
   const vscode = {
     EventEmitter: class { event() {} fire() {} },
@@ -18,16 +18,16 @@ function load(alias, { input, env = {}, stored } = {}) {
     },
     commands: { registerCommand: (id, action) => { state.commands.set(id, action); return {}; } },
     window: {
-      showInputBox: async options => { state.prompts.push(options); return input; },
-      showInformationMessage: () => {},
+      showInputBox: async options => { state.prompts.push(options); if (inputError) throw inputError; return input; },
+      showInformationMessage: message => state.information.push(message),
     },
     lm: { registerMcpServerDefinitionProvider: (_, provider) => { state.provider = provider; return {}; } },
   };
   const context = {
     subscriptions: [],
     secrets: {
-      get: async key => state.secrets.get(key),
-      store: async (key, value) => state.secrets.set(key, value),
+      get: async key => { state.secretReads += 1; return state.secrets.get(key); },
+      store: async (key, value) => { if (storeError) throw storeError; state.secrets.set(key, value); },
       delete: async key => state.secrets.delete(key),
       onDidChange: () => ({}),
     },
@@ -88,4 +88,54 @@ test('account command labels match its prompted credential', () => {
   assert.equal(pkg.contributes.commands[0].command, 'acedatacloud.acedatacloud.setApiToken');
   assert.match(pkg.contributes.commands[0].title, /Set Ace Data Cloud Platform Token$/);
   assert.match(pkg.contributes.commands[1].title, /Clear Ace Data Cloud Platform Token$/);
+});
+
+
+test('all service resolvers reject a different endpoint before reading or prompting for a credential', async t => {
+  for (const alias of services) await t.test(alias, async () => {
+    const state = load(alias, { stored: 'synthetic-saved-token' });
+    for (const target of [undefined, { uri: new URL('https://example.com/mcp') },
+      { uri: new URL(state.provider.provideMcpServerDefinitions()[0].uri.href + '?redirect=elsewhere') }]) {
+      await assert.rejects(state.provider.resolveMcpServerDefinition(target), /Unexpected MCP server endpoint/);
+    }
+    assert.equal(state.secretReads, 0);
+    assert.equal(state.prompts.length, 0);
+    assert.equal(state.secrets.get(`${alias}.apiToken`), 'synthetic-saved-token');
+  });
+});
+
+test('all service prompts cancel or reject blank input without saving a credential', async t => {
+  for (const alias of services) await t.test(alias, async () => {
+    for (const input of [undefined, '', '   ']) {
+      const state = load(alias, { input });
+      await assert.rejects(state.resolve(), /needs an Ace Data Cloud/);
+      assert.equal(state.prompts.length, 1);
+      assert.equal(state.prompts[0].password, true);
+      assert.equal(state.secrets.size, 0);
+      assert.equal(state.information.length, 0);
+    }
+  });
+});
+
+test('stored credentials resolve without prompting or adding a second Bearer prefix', async () => {
+  for (const alias of ['suno', 'happyhorse', 'openai', 'acedatacloud']) {
+    const state = load(alias, { stored: '  synthetic-stored-token  ' });
+    const definition = await state.resolve();
+    assert.equal(definition.headers.Authorization, 'Bearer synthetic-stored-token');
+    assert.equal(state.prompts.length, 0);
+  }
+});
+
+
+test('prompt and credential-store failures propagate without reporting a saved key', async () => {
+  for (const alias of ['suno', 'seedance', 'happyhorse', 'openai', 'nanobanana']) {
+    const promptFailure = load(alias, { inputError: new Error('synthetic input unavailable') });
+    await assert.rejects(promptFailure.resolve(), /synthetic input unavailable/);
+    assert.equal(promptFailure.secrets.size, 0);
+    assert.equal(promptFailure.information.length, 0);
+    const storeFailure = load(alias, { input: 'synthetic-test-key', storeError: new Error('synthetic credential store unavailable') });
+    await assert.rejects(storeFailure.commands.get(`acedatacloud.${alias}.setApiToken`)(), /synthetic credential store unavailable/);
+    assert.equal(storeFailure.secrets.size, 0);
+    assert.equal(storeFailure.information.length, 0);
+  }
 });
