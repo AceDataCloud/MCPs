@@ -4,7 +4,7 @@
 
 This is the GPT Image-only MCP profile maintained in the existing OpenAIMCP package. It exposes image creation, editing, the same task's retrieval, task lookup and model information. Chat, audio, embeddings, DALL-E and Nano Banana are excluded from this profile. It is an Ace Data Cloud integration, not an OpenAI-endorsed application.
 
-The `io.github.AceDataCloud/mcp-gpt-image` [official Registry entry](https://registry.modelcontextprotocol.io/?q=io.github.AceDataCloud%2Fmcp-gpt-image) is **prepared for publication, not yet listed**. Once the matching package and metadata are published, a catalog-consuming client can install its PyPI package with the manifest's `--profile gpt-image` arguments. Until then, use the existing general OpenAI entry or a reviewed local build; a local build is not an official catalog installation.
+The `io.github.AceDataCloud/mcp-gpt-image` [official Registry entry](https://registry.modelcontextprotocol.io/?q=io.github.AceDataCloud%2Fmcp-gpt-image) is **active at 2026.10.18.2**, matching the public `mcp-openai-pro` package (read back 2026-10-19). A catalog-consuming client should install that package with the manifest's `--profile gpt-image` arguments. Source and public release artifacts were verified separately; normal GUI catalog installation is still an independent client check, not implied by Registry presence.
 
 ## 1. Get a token with image and task permissions
 
@@ -20,7 +20,7 @@ These are existing Ace platform screenshots from the pinned SunoDify tutorial so
 
 ## 2. Install the service profile
 
-After a package version containing this profile is released, install the exact version advertised by the Registry. The package remains `mcp-openai-pro`; the profile is selected explicitly:
+Install the exact package version advertised by the Registry; the first verified profile release is `2026.10.18.2`. The package remains `mcp-openai-pro`; the profile is selected explicitly:
 
 ```json
 {
@@ -50,7 +50,7 @@ No paid generation was performed for this guide. Local protocol tests use mocked
 
 | Symptom | Action |
 |---|---|
-| Entry not found | The profile manifest is still awaiting package and Registry publication. Do not count a local install as catalog availability. |
+| Entry not found | Search the exact `io.github.AceDataCloud/mcp-gpt-image` name in the official Registry. A downstream catalog may not have ingested the entry; do not count manual import as downstream listing. |
 | Unknown `--profile` option | The installed package predates this profile; wait for or select the version advertised in the published manifest. |
 | Authentication / 403 | Verify raw application token, service/model access, expiration and Allowed APIs; check task-query permission separately. |
 | Chat or Nano Banana requested | Use the existing general OpenAI or Nano Banana integration; this profile intentionally excludes them. |
@@ -59,6 +59,6 @@ No paid generation was performed for this guide. Local protocol tests use mocked
 
 ## 中文说明
 
-这是 Ace Data Cloud 提供的 GPT Image 独立工具入口，复用现有 OpenAIMCP 的接口、错误与任务查询实现，不是把通用服务器换个名字重复上架。公开目录尚待匹配包版本发布；当前不能声称已收录。
+这是 Ace Data Cloud 提供的 GPT Image 独立工具入口，复用现有 OpenAIMCP 的接口、错误与任务查询实现，不是把通用服务器换个名字重复上架。2026-10-19已从官方目录和公开PyPI读回匹配版本2026.10.18.2；目录已收录不代表所有客户端普通安装或收费结果都已验证。
 
 进入 **Applications → General application** 复制或创建专用 API Token，核对权限、余额及当前价格。目录客户端按包字段安装；手动客户端使用上面的 `--profile gpt-image`，将原始 Token 放进 `ACEDATACLOUD_API_TOKEN`。先调用免费本地模型说明；收费生成需要明确选择模型和预算。拿到 `task_id` 后只查同一 ID 到终态，不为轮询重复生成。
