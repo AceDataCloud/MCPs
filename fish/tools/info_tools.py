@@ -36,8 +36,13 @@ async def fish_get_usage_guide() -> str:
 ### Model Discovery
 **fish_list_models** - List available voice models
 - page_size, page_number: Pagination controls (optional)
-- title, tag, language, title_language: Filters (optional)
-- self, author_id, sort_by: Ownership and sort filters (optional)
+- title, tag, language, author_id: Filters (optional)
+- self: Only voices created and saved through this platform by the calling account,
+  including voices created with other API tokens for that account. This filters
+  the list only; saved voices remain public and usable by others.
+- title_language: Public library filter; not supported with self=true
+- sort_by: With self=true, supports created_at and task_count
+- has_more: Boolean with self=true; may be null for public library queries
 
 **fish_get_model** - Get details of a single model
 - model_id: The model ID from fish_list_models (required)
@@ -114,7 +119,10 @@ async def fish_list_models(
         bool | None,
         Field(
             validation_alias="self",
-            description="When true, only return models owned by the calling account.",
+            description=(
+                "When true, only list voices created and saved through this platform by the "
+                "calling account, across its API tokens. This does not restrict public use."
+            ),
         ),
     ] = None,
     author_id: Annotated[
@@ -127,18 +135,21 @@ async def fish_list_models(
     ] = None,
     title_language: Annotated[
         str | None,
-        Field(description="Filter by title language."),
+        Field(description="Filter the public voice library by title language; not with self=true."),
     ] = None,
     sort_by: Annotated[
         str | None,
-        Field(description="Sort by field accepted by upstream (e.g. created_at, task_count)."),
+        Field(description="Sort field; self=true supports created_at and task_count."),
     ] = None,
 ) -> str:
-    """List available Fish voice models from the API.
-
-    Returns:
-        JSON response from /fish/model.
-    """
+    """List Fish voices; has_more is boolean for self=true, otherwise possibly null."""
+    if self_ and title_language is not None:
+        return json.dumps(
+            {
+                "error": "Validation Error",
+                "message": "title_language is not supported with self=true; query the public library.",
+            }
+        )
     try:
         params: dict[str, int | str | bool] = {}
         if page_size is not None:
