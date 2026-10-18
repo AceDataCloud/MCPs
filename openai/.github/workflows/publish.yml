@@ -164,6 +164,19 @@ jobs:
               f.write('\n')
           "
 
+          python3 - <<'PYPROFILE'
+          import json
+          from pathlib import Path
+
+          path = Path("gpt-image.server.json")
+          data = json.loads(path.read_text())
+          version = "${{ needs.build.outputs.version }}"
+          data["version"] = version
+          for package in data["packages"]:
+              package["version"] = version
+          path.write_text(json.dumps(data, indent=2) + "\n")
+          PYPROFILE
+
       - name: Install mcp-publisher
         run: |
           curl -L "https://github.com/modelcontextprotocol/registry/releases/latest/download/mcp-publisher_$(uname -s | tr '[:upper:]' '[:lower:]')_$(uname -m | sed 's/x86_64/amd64/;s/aarch64/arm64/').tar.gz" | tar xz mcp-publisher
@@ -172,7 +185,9 @@ jobs:
         run: ./mcp-publisher login github-oidc
 
       - name: Publish to MCP Registry
-        run: ./mcp-publisher publish
+        run: |
+          ./mcp-publisher publish
+          ./mcp-publisher publish gpt-image.server.json
 
   publish-gpt-image-jetbrains:
     name: Publish JetBrains Plugin

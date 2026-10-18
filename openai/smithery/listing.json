@@ -1,0 +1,8 @@
+{
+  "displayName": "GPT Image by Ace Data Cloud",
+  "description": "Generate and edit images with GPT Image, then retrieve the same image task through Ace Data Cloud. Independently provided by Ace Data Cloud; not the model vendor's official integration. This entry reuses OpenAI MCP, which also exposes chat and audio tools.\n\n1. Install this server from Smithery in your client.\n2. Register or sign in to [Ace Data Cloud Applications](https://platform.acedata.cloud/console/applications?utm_source=opensource&utm_medium=referral&utm_campaign=evergreen&utm_content=openai_smithery_api_key). Initialize General application if needed, then copy its API Key or create a dedicated key. Check service access, expiry, limits and balance.\n3. In the connection's apiKey / API Token field, paste only the token, without Bearer. Complete sign-in when prompted.\n4. Query openai_get_task with an existing task's id; do not submit generation again while pending.\n\nGeneration is metered; see [current pricing](https://platform.acedata.cloud/documents/openai?utm_source=opensource&utm_medium=referral&utm_campaign=evergreen&utm_content=openai_smithery_pricing). A platform- account token cannot replace the application API Key.",
+  "homepage": "https://platform.acedata.cloud/documents/openai?utm_source=opensource&utm_medium=referral&utm_campaign=evergreen&utm_content=openai_smithery_listing",
+  "repositoryUrl": "https://github.com/AceDataCloud/OpenAIMCP",
+  "license": "MIT",
+  "iconUrl": "https://cdn.acedata.cloud/2870040497.png"
+}
