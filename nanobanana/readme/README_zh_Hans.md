@@ -43,7 +43,7 @@ Registry 是目录，不是运行工具的聊天软件，也没有统一的“�
   "mcpServers": {
     "nanobanana-by-ace": {
       "command": "uvx",
-      "args": ["mcp-nanobanana"],
+      "args": ["mcp-nanobanana-pro"],
       "env": {"ACEDATACLOUD_API_TOKEN": "YOUR_ACE_APPLICATION_TOKEN"}
     }
   }
