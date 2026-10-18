@@ -1,5 +1,7 @@
 # Ace Data Cloud model preset for goose
 
+[简体中文](README_zh_Hans.md)
+
 This is a shareable, independently installed preset for goose 1.55.0+, not an official built-in provider. The target remains **Ace Data Cloud in the default provider picker**. Upstream [provider policy](https://github.com/aaif-goose/goose/blob/bfcc6ee6f1ee18d0c4c852a65c49b25f87ee40dc/CONTRIBUTING.md#llm-provider-integrations) currently recommends custom JSON for third-party services and only occasionally accepts exceptions. External preset PRs need an issue marked Ready; the current contributor guide asks the human contributor to write that issue. No upstream PR or built-in release is claimed here.
 
 ## Key and installation
