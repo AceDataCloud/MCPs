@@ -1,4 +1,4 @@
-# OpenAIMCP
+# GPT Image and OpenAI tools by Ace Data Cloud
 
 <!-- mcp-name: io.github.AceDataCloud/mcp-openai -->
 
@@ -9,6 +9,10 @@ Interact with OpenAI models for chat completions, image generation, text embeddi
 The AceDataCloud distribution is `mcp-openai-pro`. The unrelated
 `mcp-openai` package on PyPI is not maintained by AceDataCloud. Update existing
 `uvx` configurations to the new package name; the hosted MCP URL is unchanged.
+
+## Use GPT Image in Glama
+
+Find this Ace-provided integration in the [Glama service listing](https://glama.ai/mcp/servers/AceDataCloud/OpenAIMCP) or [remote connector](https://glama.ai/mcp/connectors/io.github.AceDataCloud/mcp-openai). Follow the [Glama installation, API key, and first-use guide](https://github.com/AceDataCloud/OpenAIMCP/blob/main/readme/GLAMA.md) before running a paid request. This is an Ace Data Cloud integration, not a claim of official endorsement by the model developer.
 
 ## Features
 
@@ -241,6 +245,40 @@ openai_create_embedding(
 | `OPENAI_REQUEST_TIMEOUT` | Request timeout in seconds | `60` |
 | `MCP_SERVER_NAME` | MCP server name | `openai` |
 | `LOG_LEVEL` | Logging level | `INFO` |
+
+## Error results
+
+API-backed tools keep their existing JSON `error` and `message` fields. On failure
+these tools also return `status_code`, `code`, and `request_id`:
+
+```json
+{
+  "error": "API Error",
+  "message": "API rate or usage limit exceeded. Check limits before retrying.",
+  "status_code": 429,
+  "code": "rate_limit_exceeded",
+  "request_id": "req_example"
+}
+```
+
+Use `status_code` to distinguish authentication (401), permission or content
+restrictions (403), rate/usage limits (429), and server failures (5xx). Both 401
+and 403 retain the legacy `Authentication Error` label for existing clients; their
+status and safe messages remain distinct. Known public error codes are preserved;
+unknown or private codes become `http_<status>`. A safe `x-request-id` is retained
+for support correlation, otherwise `request_id` is null.
+
+Transport timeouts use `code: "timeout_error"` and connection/read failures use
+`code: "network_error"`. Both have null HTTP status and request ID because no HTTP
+error response was received. Unexpected local failures use `internal_error`.
+Tools do not retry automatically at this layer.
+
+Error messages are safe summaries. Raw response bodies, private diagnostics,
+request URLs and credentials are not returned. A tool call can complete at the
+MCP transport layer while its JSON contains `error`; check that field before
+accepting the operation as successful. Local validation and async task-result
+payloads keep their existing formats. A returned task ID still requires a
+separate task lookup before media completion can be claimed.
 
 ## Development
 

@@ -1,12 +1,24 @@
 [project]
 name = "mcp-happyhorse"
 version = "0.1.0"
-description = "MCP server for Happy Horse AI video generation and editing via AceDataCloud"
+description = "HappyHorse (Happy Horse) video generation and editing by Ace Data Cloud via MCP"
 readme = "README.pypi.md"
 license = { text = "MIT" }
 requires-python = ">=3.10"
 authors = [{ name = "AceDataCloud", email = "support@acedata.cloud" }]
-keywords = ["mcp", "happyhorse", "ai", "video", "generation", "editing", "acedatacloud"]
+keywords = [
+    "mcp",
+    "happyhorse",
+    "ai",
+    "video",
+    "generation",
+    "editing",
+    "acedatacloud",
+    "happy-horse",
+    "happy horse",
+    "video-generation",
+    "video-editing",
+]
 classifiers = [
     "Development Status :: 4 - Beta",
     "License :: OSI Approved :: MIT License",

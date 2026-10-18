@@ -1,7 +1,7 @@
 [project]
 name = "mcp-suno"
 version = "2026.1.22.6"
-description = "MCP Server for Suno AI Music Generation via AceDataCloud API"
+description = "Suno music generation, lyrics, and covers by Ace Data Cloud via MCP"
 readme = "README.pypi.md"
 license = { text = "MIT" }
 requires-python = ">=3.10"
@@ -22,6 +22,10 @@ keywords = [
     "acedata",
     "llm",
     "claude",
+    "suno-music",
+    "music-generation",
+    "lyrics",
+    "acedatacloud",
 ]
 classifiers = [
     "Development Status :: 4 - Beta",

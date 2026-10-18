@@ -1,7 +1,7 @@
 [project]
 name = "mcp-openai-pro"
 version = "2026.4.25.1"
-description = "MCP Server for OpenAI API via AceDataCloud"
+description = "GPT Image generation and editing plus OpenAI tools by Ace Data Cloud via MCP"
 readme = "README.pypi.md"
 license = { text = "MIT" }
 requires-python = ">=3.10"
@@ -23,6 +23,11 @@ keywords = [
     "acedata",
     "llm",
     "claude",
+    "gpt-image",
+    "gpt image",
+    "image-generation",
+    "image-editing",
+    "acedatacloud",
 ]
 classifiers = [
     "Development Status :: 4 - Beta",

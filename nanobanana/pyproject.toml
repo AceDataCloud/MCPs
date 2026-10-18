@@ -1,7 +1,7 @@
 [project]
 name = "mcp-nanobanana-pro"
 version = "2026.4.5.0"
-description = "MCP Server for NanoBanana AI Image Generation via AceDataCloud API"
+description = "Nano Banana (NanoBanana) image generation and editing by Ace Data Cloud via MCP"
 readme = "README.pypi.md"
 license = { text = "MIT" }
 requires-python = ">=3.10"
@@ -24,6 +24,10 @@ keywords = [
     "llm",
     "claude",
     "google",
+    "nano banana",
+    "image-generation",
+    "image-editing",
+    "acedatacloud",
 ]
 classifiers = [
     "Development Status :: 4 - Beta",

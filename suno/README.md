@@ -1,4 +1,4 @@
-# SunoMCP
+# Suno by Ace Data Cloud
 
 <!-- mcp-name: io.github.AceDataCloud/mcp-suno -->
 
@@ -11,6 +11,10 @@
 A [Model Context Protocol (MCP)](https://modelcontextprotocol.io) server for AI music generation using [Suno](https://suno.ai) through the [AceDataCloud API](https://platform.acedata.cloud?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=suno_mcp_readme_platform).
 
 Generate AI music, lyrics, and manage audio projects directly from Claude, VS Code, or any MCP-compatible client.
+
+## Use Suno in Glama
+
+Find this Ace-provided integration in the [Glama service listing](https://glama.ai/mcp/servers/AceDataCloud/SunoMCP) or [remote connector](https://glama.ai/mcp/connectors/io.github.AceDataCloud/mcp-suno). Follow the [Glama installation, API key, and first-use guide](https://github.com/AceDataCloud/SunoMCP/blob/main/readme/GLAMA.md) before running a paid request. This is an Ace Data Cloud integration, not a claim of official endorsement by the model developer.
 
 ## Features
 
