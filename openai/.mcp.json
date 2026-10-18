@@ -1,0 +1,16 @@
+{
+  "mcpServers": {
+    "gpt-image": {
+      "command": "uv",
+      "args": [
+        "run",
+        "--no-project",
+        "--with",
+        "mcp==1.30.0",
+        "--python",
+        "3.11",
+        "${PLUGIN_ROOT}/goose/filtered_server.py"
+      ]
+    }
+  }
+}

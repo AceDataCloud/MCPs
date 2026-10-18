@@ -11,6 +11,10 @@ The AceDataCloud distribution is `mcp-openai-pro`. The unrelated
 `mcp-openai` package on PyPI is not maintained by AceDataCloud. Update existing
 `uvx` configurations to the new package name; the hosted MCP URL is unchanged.
 
+## GPT Image in goose
+
+Use the independent **GPT Image by Ace Data Cloud** native goose plugin: [install and API Token guide](goose/README.md) · [简体中文](goose/README_zh_Hans.md). It reuses this MCP server and does not imply goose Marketplace or default-provider inclusion.
+
 ## Features
 
 - **Chat Completions** — Access GPT-4, GPT-4o, GPT-5, o1, o3, o4-mini, and many more models

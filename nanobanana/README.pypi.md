@@ -13,6 +13,10 @@ A [Model Context Protocol (MCP)](https://modelcontextprotocol.io) server for AI 
 
 Generate and edit AI images directly from Claude, VS Code, or any MCP-compatible client.
 
+## Nano Banana in goose
+
+Use the independent **Nano Banana by Ace Data Cloud** native goose plugin: [install and API Token guide](goose/README.md) · [简体中文](goose/README_zh_Hans.md). It reuses this MCP server and does not imply goose Marketplace or default-provider inclusion.
+
 ## Features
 
 - **Image Generation** - Create high-quality images from text prompts

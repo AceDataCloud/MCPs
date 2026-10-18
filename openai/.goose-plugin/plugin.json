@@ -1,0 +1,28 @@
+{
+  "name": "gpt-image-by-acedatacloud",
+  "version": "0.1.0",
+  "description": "GPT Image by Ace Data Cloud: GPT Image generation and image editing. Independent goose MCP and Skill plugin.",
+  "author": {
+    "name": "Ace Data Cloud"
+  },
+  "homepage": "https://github.com/AceDataCloud/OpenAIMCP/blob/main/goose/README.md",
+  "repository": "https://github.com/AceDataCloud/OpenAIMCP",
+  "license": "MIT",
+  "keywords": [
+    "gpt-image",
+    "goose",
+    "acedatacloud"
+  ],
+  "skills": {
+    "paths": [
+      "./goose/skills"
+    ],
+    "exclusive": true
+  },
+  "mcpServers": {
+    "paths": [
+      "./.mcp.json"
+    ],
+    "exclusive": true
+  }
+}

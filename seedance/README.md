@@ -13,6 +13,10 @@ A [Model Context Protocol (MCP)](https://modelcontextprotocol.io) server for AI 
 Generate AI videos directly from Claude, VS Code, or any MCP-compatible client.
 
 
+## Seedance in goose
+
+Use the independent **Seedance by Ace Data Cloud** native goose plugin: [install and API Token guide](goose/README.md) · [简体中文](goose/README_zh_Hans.md). It reuses this MCP server and does not imply goose Marketplace or default-provider inclusion.
+
 ## Connect: hosted OAuth, API token, or local stdio
 
 The hosted endpoint is `https://seedance.mcp.acedata.cloud/mcp`. Choose one route for the MCP client:
