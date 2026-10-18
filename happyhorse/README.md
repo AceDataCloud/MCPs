@@ -1,4 +1,6 @@
-# Happy Horse MCP Server
+# HappyHorse by Ace Data Cloud
+
+[简体中文安装与首用指南](https://github.com/AceDataCloud/HappyHorseMCP/blob/main/readme/README_zh_Hans.md)
 
 <!-- mcp-name: io.github.AceDataCloud/mcp-happyhorse -->
 
@@ -8,6 +10,13 @@
 
 Model Context Protocol server for Happy Horse AI video generation and editing through the
 [Ace Data Cloud](https://platform.acedata.cloud/documents/happyhorse?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=happyhorse_mcp_readme_quick_start) API.
+
+## Find the HappyHorse integration in the official MCP Registry
+
+Open [HappyHorse in the official MCP Registry](https://registry.modelcontextprotocol.io/?q=io.github.AceDataCloud%2Fmcp-happyhorse), expand the matching `io.github.AceDataCloud` entry, and use its **Packages** or **Remotes** installation information in a client that consumes MCP catalogs. This is the HappyHorse integration provided by Ace Data Cloud; it is not an endorsement by the model vendor. The Registry is a directory, not the app that runs a tool.
+
+Search for `mcp-happyhorse` (or `io.github.AceDataCloud/mcp-happyhorse`) to locate the exact entry. The official Registry search currently matches server names; spaces in a display title do not create extra search aliases. If your client does not consume the catalog, use the client-specific connection instructions below and check **Applications → General application** for your token, service permissions, balance and current price. Keep the original task ID when checking asynchronous results.
+
 
 ## Capabilities
 
