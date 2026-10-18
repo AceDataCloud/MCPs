@@ -23,11 +23,19 @@ class McpSettingsConfigurable : Configurable {
 
         myPanel = panel {
             group("API Configuration") {
+                // BEGIN TOKEN ONBOARDING
+                row {
+                    browserLink("Get an API key", "https://platform.acedata.cloud/console/applications?utm_source=jetbrains_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=face_mcp_jetbrains_api_key")
+                }
+                row {
+                    comment("Sign in, initialize General Application if needed, then copy an API key.")
+                }
+                // END TOKEN ONBOARDING
                 row("API Token:") {
                     passwordField()
                         .bindText(::apiToken)
                         .align(AlignX.FILL)
-                        .comment("Get your token at <a href=\"https://platform.acedata.cloud\">platform.acedata.cloud</a>")
+                        .comment("Paste the raw token without Bearer. Click Apply before copying a configuration.")
                 }
             }
 
@@ -82,10 +90,10 @@ class McpSettingsConfigurable : Configurable {
 
             group("Links") {
                 row {
-                    browserLink("Ace Data Cloud Platform", "https://platform.acedata.cloud")
+                    browserLink("Ace Data Cloud Platform", "https://platform.acedata.cloud?utm_source=jetbrains_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=face_mcp_jetbrains_platform")
                 }
                 row {
-                    browserLink("Service details", "https://platform.acedata.cloud/services/8efa1d83-9b75-4562-b44a-af95ce563d05")
+                    browserLink("Service details", "https://platform.acedata.cloud/services/8efa1d83-9b75-4562-b44a-af95ce563d05?utm_source=jetbrains_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=face_mcp_jetbrains_quick_start")
                 }
                 row {
                     browserLink("Source Code", "https://github.com/AceDataCloud/FaceTransformMCP")

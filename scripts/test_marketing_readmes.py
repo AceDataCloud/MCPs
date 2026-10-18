@@ -210,6 +210,41 @@ class CredentialGuideTest(unittest.TestCase):
 
 
 class JetBrainsDescriptionTest(unittest.TestCase):
+    def test_installed_settings_use_correct_credential_page_and_attribution(self):
+        from scripts.marketing_readmes import render_jetbrains_settings
+
+        for alias, entry in load_catalog().items():
+            if entry["status"] != "active":
+                continue
+            for path in (ROOT / alias / "jetbrains/src/main/kotlin").glob(
+                "**/*SettingsConfigurable.kt"
+            ):
+                with self.subTest(alias=alias):
+                    text = path.read_text()
+                    self.assertEqual(text.count("// BEGIN TOKEN ONBOARDING"), 1)
+                    credential = (
+                        "/console/platform-tokens"
+                        if alias == "acedatacloud"
+                        else "/console/applications"
+                    )
+                    self.assertIn(
+                        credential + "?utm_source=jetbrains_marketplace", text
+                    )
+                    self.assertIn("Click Apply before copying", text)
+                    for url in re.findall(
+                        r'"(https://(?:platform|studio)\.acedata\.cloud[^"\\]*)"',
+                        text,
+                    ):
+                        query = parse_qs(urlsplit(url).query)
+                        self.assertEqual(query["utm_source"], ["jetbrains_marketplace"])
+                        self.assertEqual(query["utm_medium"], ["referral"])
+                    self.assertEqual(
+                        render_jetbrains_settings(
+                            text, alias, contract(), load_catalog()
+                        ),
+                        text,
+                    )
+
     def test_uploaded_descriptors_include_the_right_credential_guide(self):
         import html
         import xml.etree.ElementTree as ET

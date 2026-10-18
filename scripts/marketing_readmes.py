@@ -146,9 +146,10 @@ def render_jetbrains_description(text, alias, rules, catalog):
         body = body.replace(
             'href="https://acedata.cloud"', 'href="https://platform.acedata.cloud"'
         )
-        mapper = lambda url: tagged_url(
-            url, alias, "jetbrains_marketplace", rules, catalog
-        )
+
+        def mapper(url):
+            return tagged_url(url, alias, "jetbrains_marketplace", rules, catalog)
+
         body = re.sub(
             r'href="(https://(?:platform|studio)\.acedata\.cloud[^"]*)"',
             lambda m: (
@@ -174,6 +175,52 @@ def render_jetbrains_description(text, alias, rules, catalog):
     if count != 1:
         raise ValueError(f"Expected one JetBrains description for {alias}")
     return result
+
+
+def render_jetbrains_settings(text, alias, rules, catalog):
+    """Keep installed settings links aligned with the credential guide."""
+    text = re.sub(
+        r"\n\s*// BEGIN TOKEN ONBOARDING.*?// END TOKEN ONBOARDING\n",
+        "\n",
+        text,
+        flags=re.DOTALL,
+    )
+    account = alias == "acedatacloud"
+    target = "/console/platform-tokens" if account else "/console/applications"
+    label = "Get an account-management token" if account else "Get an API key"
+    hint = (
+        "Create a platform token with only the account permissions you need."
+        if account
+        else "Sign in, initialize General Application if needed, then copy an API key."
+    )
+    guide = (
+        "\n                // BEGIN TOKEN ONBOARDING\n"
+        "                row {\n"
+        f'                    browserLink("{label}", "https://platform.acedata.cloud{target}")\n'
+        "                }\n"
+        "                row {\n"
+        f'                    comment("{hint}")\n'
+        "                }\n"
+        "                // END TOKEN ONBOARDING\n"
+    )
+    anchor = '            group("API Configuration") {\n'
+    if text.count(anchor) != 1:
+        raise ValueError(f"Expected one JetBrains API configuration group for {alias}")
+    text = text.replace(anchor, anchor.rstrip() + guide, 1)
+    text = re.sub(
+        r'\s*\.comment\("Get your token at [^\n]+\)',
+        '\n                        .comment("Paste the raw token without Bearer. Click Apply before copying a configuration.")',
+        text,
+    )
+    return re.sub(
+        r'"(https://(?:platform|studio)\.acedata\.cloud[^"\\]*)"',
+        lambda match: (
+            '"'
+            + tagged_url(match[1], alias, "jetbrains_marketplace", rules, catalog)
+            + '"'
+        ),
+        text,
+    )
 
 
 def outputs():
@@ -218,6 +265,16 @@ def outputs():
                 render_jetbrains_description(
                     descriptor.read_text(), alias, rules, catalog
                 ),
+            )
+
+        for settings in sorted(
+            (ROOT / alias / "jetbrains/src/main/kotlin").glob(
+                "**/*SettingsConfigurable.kt"
+            )
+        ):
+            yield (
+                settings,
+                render_jetbrains_settings(settings.read_text(), alias, rules, catalog),
             )
 
     bundle_catalog = {
