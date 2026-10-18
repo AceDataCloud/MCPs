@@ -4,13 +4,13 @@
 
 本集成由 **Ace Data Cloud** 提供，基于现有 OpenAIMCP 包中的独立 GPT Image 配置。它只暴露生成、编辑、同任务查询、批量任务查询和本地模型说明五个工具；不包括聊天、音频、嵌入、DALL-E 或 Nano Banana，也不是 OpenAI 官方出品或背书。
 
-更新日期：2026-10-18。独立配置已在本地源码和构建包中通过协议检查，但 [PR #983](https://github.com/AceDataCloud/MCPs/pull/983) 尚未合并，**新配置尚未公开发包或在 Registry 收录**。不要把旧线上 `mcp-openai-pro` 包或本地导入当成新的公开目录安装成功。
+更新日期：2026-10-19。[PR #983](https://github.com/AceDataCloud/MCPs/pull/983) 已合并，官方独立条目与匹配 `mcp-openai-pro` 包已读回 `2026.10.18.2`。正式 wheel 的哈希与公开 PyPI 相同，并完成五工具本地协议会话；本机普通文件 CDN 下载受网络限制，因此还不能把替代产物路径写成所有用户普通目录安装已完成。
 
-## 1. 官方安装入口与当前候选状态
+## 1. 官方安装入口与发布状态
 
-候选条目为 [io.github.AceDataCloud/mcp-gpt-image](https://registry.modelcontextprotocol.io/?q=io.github.AceDataCloud%2Fmcp-gpt-image)。目前搜 `gpt-image` 没有 Ace 的独立条目；它仍需要源码合并、镜像同步、匹配包发行及官方元数据发布。官方目录按名称搜索，改通用 OpenAI 的描述不能补这个缺口。
+官方条目为 [io.github.AceDataCloud/mcp-gpt-image](https://registry.modelcontextprotocol.io/?q=io.github.AceDataCloud%2Fmcp-gpt-image)。2026-10-19搜索 `gpt-image` 已返回 Ace 独立条目，Active版本 `2026.10.18.2`。官方目录按名称搜索，改通用 OpenAI 的描述不能补这个缺口。
 
-发布后，在支持 MCP Registry 的客户端从该条目导入 **Packages**。目录会使用原有 `mcp-openai-pro` 包以及 **`--profile gpt-image`** 参数。若客户端忽略这个参数，就会变成通用 OpenAI 工具集，应停止并检查配置；不能当作正确安装。
+在支持 MCP Registry 的客户端从该条目导入 **Packages**。目录会使用原有 `mcp-openai-pro` 包以及 **`--profile gpt-image`** 参数。若客户端忽略这个参数，就会变成通用 OpenAI 工具集，应停止并检查配置；不能当作正确安装。
 
 本配置没有独立远程 URL。`https://openai.mcp.acedata.cloud/mcp` 是通用 OpenAI 远程服务，不是这个五工具配置。Registry 本身是目录，没有统一聊天、Token 填写或运行按钮；具体安装界面由客户端提供。
 
@@ -43,7 +43,7 @@
 }
 ```
 
-仅在匹配新配置的包真实发布后使用；安装准确版本应以公开条目为准。将原始 Token 填进 `ACEDATACLOUD_API_TOKEN`，不加 `Bearer `。优先客户端安全凭据存储；用户级配置若含 Key 就是秘密，不能共享或提交。需要 `uv` 在 PATH 中，以及满足包要求的 Python。
+当前可用起点为公开匹配版本 `2026.10.18.2`；实际安装准确版本仍以条目为准。将原始 Token 填进 `ACEDATACLOUD_API_TOKEN`，不加 `Bearer `。优先客户端安全凭据存储；用户级配置若含 Key 就是秘密，不能共享或提交。需要 `uv` 在 PATH 中，以及满足包要求的 Python。
 
 该配置的客户端目录安装/填写 UI 还没有真实验收截图，本文不以假界面或旧客户端原图代替。当前只有本地协议执行证据，不能据此声称所有普通用户安装成功。
 
@@ -81,7 +81,7 @@
 
 | 现象 | 排查 |
 |---|---|
-| 官方目录搜不到 Ace GPT Image | 新条目仍是候选，等匹配包与元数据正式发布；不要把手动导入当官方收录。 |
+| 官方目录搜不到 Ace GPT Image | 使用完整官方名称查询；下游客户端可能尚未同步，不能把手动导入当下游已收录。 |
 | `--profile` 不认识 | 旧包不含新配置，核实际安装版本与发布状态。 |
 | 出现聊天/音频或15个通用工具 | 参数没生效或误连通用remote；应是五工具本地配置。 |
 | 模型缺失/不支持 | 从 `gpt_image_list_models` 选受限枚举，明确填模型，核账户权限和当前价。 |
