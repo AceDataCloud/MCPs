@@ -2,6 +2,8 @@
 
 Independent Suno music integration provided by Ace Data Cloud for JetBrains IDEs. Not an official Suno or JetBrains product.
 
+[中文完整教程](README.zh-CN.md)
+
 ## Install from Marketplace
 
 [Open the official installation entry](https://plugins.jetbrains.com/plugin/30782-suno-mcp), or search **Suno** in **Settings → Plugins → Marketplace** and check publisher **AceDataCloud**. Official Marketplace entry exists; new panel awaits an approved release.
@@ -62,7 +64,7 @@ Source: [JetBrains MCP documentation](https://www.jetbrains.com/help/ai-assistan
 
 ## 中文上手
 
-在官方 Marketplace 搜索 **Suno** 并确认发布者 AceDataCloud；待新版本批准后，打开 **Tools → Suno MCP → Suno**。先注册/登录 [Ace Applications](https://platform.acedata.cloud/console/applications?utm_source=jetbrains_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=suno_mcp_jetbrains_api_key)，初始化 General application，复制或创建专用 API Token，并检查 Allowed APIs、过期、余额和当前价。把原始 Key 粘到原生面板；点击 List models，明确选择模型再填提示词，提交前确认只发一次收费请求。返回任务 ID 后在 Existing task ID 查询同一个任务直到终态，再核媒体 URL。401 查 Key/权限，429 等待；不因超时重复生成。可选 AI Assistant 页仍需复制配置；它不是默认 LLM Provider。原生新面板尚待正式发版与真实界面验收，本文不把官方参考图当已运行截图。
+请参阅[中文完整教程](README.zh-CN.md)：包含注册、专用 Key 图文步骤、本平台填写位置、首用与同 ID 查询、结果和排错。新原生面板仍待正式发版与真实界面验收；下方官方参考图不代表 Ace 已连接。
 
 ## Source and support
 
