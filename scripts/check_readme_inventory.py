@@ -130,7 +130,7 @@ def main() -> int:
         for path in (
             jetbrains.glob("**/*SettingsConfigurable.kt") if jetbrains.exists() else []
         ):
-            text = path.read_text()
+            text = without_utm(path.read_text())
             if url and f'browserLink("{label}", "{url}")' not in text:
                 fail(
                     errors, f"{path.relative_to(ROOT)}: missing canonical browser link"

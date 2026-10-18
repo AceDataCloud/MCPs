@@ -23,11 +23,19 @@ class McpAcedatacloudSettingsConfigurable : Configurable {
 
         myPanel = panel {
             group("API Configuration") {
+                // BEGIN TOKEN ONBOARDING
+                row {
+                    browserLink("Get an account-management token", "https://platform.acedata.cloud/console/platform-tokens?utm_source=jetbrains_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=acedatacloud_mcp_jetbrains_platform_token")
+                }
+                row {
+                    comment("Create a platform token with only the account permissions you need.")
+                }
+                // END TOKEN ONBOARDING
                 row("API Token:") {
                     passwordField()
                         .bindText(::apiToken)
                         .align(AlignX.FILL)
-                        .comment("Get your token at <a href=\"https://platform.acedata.cloud\">platform.acedata.cloud</a>")
+                        .comment("Paste the raw token without Bearer. Click Apply before copying a configuration.")
                 }
             }
 
@@ -82,10 +90,10 @@ class McpAcedatacloudSettingsConfigurable : Configurable {
 
             group("Links") {
                 row {
-                    browserLink("Ace Data Cloud Platform", "https://platform.acedata.cloud")
+                    browserLink("Ace Data Cloud Platform", "https://platform.acedata.cloud?utm_source=jetbrains_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=acedatacloud_mcp_jetbrains_platform")
                 }
                 row {
-                    browserLink("Documentation", "https://platform.acedata.cloud/documents/acedatacloud-mcp")
+                    browserLink("Documentation", "https://platform.acedata.cloud/documents/acedatacloud-mcp?utm_source=jetbrains_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=acedatacloud_mcp_jetbrains_quick_start")
                 }
                 row {
                     browserLink("Source Code", "https://github.com/AceDataCloud/AceDataCloudMCP")
