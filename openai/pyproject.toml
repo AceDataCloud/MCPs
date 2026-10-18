@@ -92,6 +92,7 @@ include = [
     "gpt_image_tools.py",
     "gpt-image.server.json",
     "GPT_IMAGE.md",
+    "readme/",
     "README.md",
     "README.pypi.md",
     "LICENSE",

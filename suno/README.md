@@ -1,5 +1,7 @@
 # Suno by Ace Data Cloud
 
+[简体中文安装与首用指南](https://github.com/AceDataCloud/SunoMCP/blob/main/readme/README_zh_Hans.md)
+
 <!-- mcp-name: io.github.AceDataCloud/mcp-suno -->
 
 [![PyPI version](https://img.shields.io/pypi/v/mcp-suno.svg)](https://pypi.org/project/mcp-suno/)

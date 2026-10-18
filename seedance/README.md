@@ -1,5 +1,7 @@
 # Seedance by Ace Data Cloud
 
+[简体中文安装与首用指南](https://github.com/AceDataCloud/SeedanceMCP/blob/main/readme/README_zh_Hans.md)
+
 <!-- mcp-name: io.github.AceDataCloud/mcp-seedance -->
 
 [![PyPI version](https://img.shields.io/pypi/v/mcp-seedance.svg)](https://pypi.org/project/mcp-seedance/)

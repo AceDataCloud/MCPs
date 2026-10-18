@@ -1,5 +1,7 @@
 # GPT Image by Ace Data Cloud
 
+[简体中文完整安装与首用指南](https://github.com/AceDataCloud/OpenAIMCP/blob/main/readme/GPT_IMAGE_zh_Hans.md)
+
 This is the GPT Image-only MCP profile maintained in the existing OpenAIMCP package. It exposes image creation, editing, the same task's retrieval, task lookup and model information. Chat, audio, embeddings, DALL-E and Nano Banana are excluded from this profile. It is an Ace Data Cloud integration, not an OpenAI-endorsed application.
 
 The `io.github.AceDataCloud/mcp-gpt-image` [official Registry entry](https://registry.modelcontextprotocol.io/?q=io.github.AceDataCloud%2Fmcp-gpt-image) is **prepared for publication, not yet listed**. Once the matching package and metadata are published, a catalog-consuming client can install its PyPI package with the manifest's `--profile gpt-image` arguments. Until then, use the existing general OpenAI entry or a reviewed local build; a local build is not an official catalog installation.

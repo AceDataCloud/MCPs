@@ -1,5 +1,7 @@
 # HappyHorse by Ace Data Cloud
 
+[简体中文安装与首用指南](https://github.com/AceDataCloud/HappyHorseMCP/blob/main/readme/README_zh_Hans.md)
+
 <!-- mcp-name: io.github.AceDataCloud/mcp-happyhorse -->
 
 [![PyPI](https://img.shields.io/pypi/v/mcp-happyhorse.svg)](https://pypi.org/project/mcp-happyhorse/)

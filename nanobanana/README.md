@@ -1,5 +1,7 @@
 # Nano Banana by Ace Data Cloud
 
+[简体中文安装与首用指南](https://github.com/AceDataCloud/NanoBananaMCP/blob/main/readme/README_zh_Hans.md)
+
 <!-- mcp-name: io.github.AceDataCloud/mcp-nanobanana-pro -->
 
 [![PyPI version](https://img.shields.io/pypi/v/mcp-nanobanana-pro.svg)](https://pypi.org/project/mcp-nanobanana-pro/)
