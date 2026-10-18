@@ -88,7 +88,84 @@ The MCP integration is free to install; the server receives your selected prompt
 
 ## 中文步骤
 
-1. 在 Cline Marketplace 搜索 **Suno**，核对标题 **Suno by Ace Data Cloud** 和作者。2026-10-18 仍在投稿准备/审核流程，未收录时用第 1 节的命令，不把手动安装当成官方上架。
-2. [注册/登录 Ace 并打开 Applications](https://platform.acedata.cloud/console/applications?utm_source=cli&utm_medium=referral&utm_campaign=evergreen&utm_content=cline_suno_api_key_zh)，进入或初始化 **General application**；复制 API Key，或 **Manage Keys → Create** 创建专用 Token。检查该服务权限、余额、有效期和生成/查询 API 限制。上方两张脱敏控制台图仅说明 Ace 的取 Key 步骤。
-3. Cline **MCP Servers → Configure → Configure MCP Servers**，把第 3 节 JSON 合并到用户设置，仅替换 `YOUR_API_TOKEN`；`Authorization` 是 `Bearer ` 加 Token。不要把 MCP URL 填到模型 Provider，也不要把密钥提交 Git。
-4. 先看工具 schema 或只读参考列表，验证加载；真正生成前看当前价格并确认额度。保存返回的 **同一个 task_id**，用 `suno_get_task` 查到终态和媒体链接；pending 时不重复生成。模型/工具配置成功不等于付费任务、账单或增长已验收。
+这是 **Suno by Ace Data Cloud** 的 Cline 接入指南：服务能力由 Ace Data Cloud 提供，不是 Suno 或 Cline 第一方官方插件。
+
+### 1. 查找并安装正确的条目
+
+在 Cline **Marketplace** 搜索 **Suno**，核对标题 **Suno by Ace Data Cloud**、作者 **Ace Data Cloud**、[源仓 AceDataCloud/SunoMCP](https://github.com/AceDataCloud/SunoMCP)。
+
+**2026-10-18 状态：官方目录投稿仍待审核，尚未收录。** 若搜索不到卡片，可在审核期间使用以下手动等效配置；不要把这条命令视为官方上架证明：
+
+```bash
+cline mcp add suno-acedatacloud https://suno.mcp.acedata.cloud/mcp --transport http --yes
+```
+
+此命令只添加这一个命名服务，不安装 Ace 全合集、不创建账号、不填 Token、不发送生成请求。参见 [Cline 官方 MCP 说明](https://docs.cline.bot/mcp/mcp-overview)。
+
+### 2. 注册登录并获取专用 API Token
+
+1. 打开 [Ace Data Cloud → Applications](https://platform.acedata.cloud/console/applications?utm_source=cli&utm_medium=referral&utm_campaign=evergreen&utm_content=cline_suno_api_key_zh)，新用户先注册并登录。
+2. 进入 **General application**；尚未创建时先点 **Initialize General Application**。通用应用的 Key 能访问账号已开通服务；专用应用的 Key 受对应服务限制。确认 **Suno** 权限、[当前模型和价格](https://platform.acedata.cloud/models?utm_source=cli&utm_medium=referral&utm_campaign=evergreen&utm_content=cline_suno_pricing_zh)及余额，不假定有固定免费额度。
+3. 点应用卡片的复制按钮取得现有 API Key，或 **Manage Keys → Create** 创建名为 `Cline Suno` 的独立 Key，方便撤销和轮换。
+
+![复制已有 API Key 或打开 Manage Keys](https://raw.githubusercontent.com/AceDataCloud/SunoDify/8d3d03570e73324220f111f7fe343da0792a8071/_assets/tutorial/get-api-key-en.png)
+
+4. 检查 **Expiration Time**、**Set Usage Limitation** 和 **Allowed APIs**。只设置所需限制，同时允许本服务的生成和任务查询 API（/suno/audios and /suno/tasks）；创建后返回 Key 列表复制完整值。允许任务查询不代表允许提交生成。
+
+![创建专用 Key 并按需设置有效期、额度和 API 限制](https://raw.githubusercontent.com/AceDataCloud/SunoDify/8d3d03570e73324220f111f7fe343da0792a8071/_assets/tutorial/create-api-key-en.png)
+
+两张图来自固定版本的脱敏 Ace 控制台截图，2026-10-18 复用于同一取 Key 流程；不是 Cline 内授权完成图，也不套用 Dify 安装步骤。复制原始 Token 字符串，不含引号、空格、`Bearer ` 或图片中的遮挡字符。`platform-...` 账号管理令牌不能替代这里的服务 API Key。
+
+### 3. 在 Cline 填写 Token
+
+在 Cline 面板点 **MCP Servers → Configure → Configure MCP Servers**，把以下服务合并到打开的**用户配置文件**，保留已有其他服务：
+
+```json
+{
+  "mcpServers": {
+    "suno-acedatacloud": {
+      "type": "streamableHttp",
+      "url": "https://suno.mcp.acedata.cloud/mcp",
+      "headers": {
+        "Authorization": "Bearer YOUR_API_TOKEN"
+      },
+      "disabled": false,
+      "autoApprove": []
+    }
+  }
+}
+```
+
+只把 `YOUR_API_TOKEN` 替换为刚复制的原始值；`Authorization` 中只加一次 `Bearer `。文件内有明文密钥，不要提交 Git、放进提示词/共享工作流或截图。CLI 默认使用 `~/.cline/data/settings/cline_mcp_settings.json`，设置 `CLINE_MCP_SETTINGS_PATH` 时使用指定文件；项目 `.cline/` 规则目录不是项目 MCP 设置入口。保存后重连，检查工具列表。
+
+若改用浏览器 OAuth，先移除整个固定 `headers` 属性，再从 `cline mcp` 向导点 **Authorize OAuth**。此服务公开 OAuth 元数据，但仍需在你的 Cline 版本完成真实账号授权；不要给同一服务同时配置固定 Bearer header 与 OAuth。授权成功也不代表 API 调用免费。
+
+![Cline 官方设置原图参考](https://raw.githubusercontent.com/cline/cline/b549ceb4bb4247284c975f6d6ca0979decec097c/docs/assets/free-models/free-models-vscode-cline-provider.png)
+
+**官方原始参考图，非 Ace 实测。** 图中仍为 Cline Usage-Billing 与其自己的模型列表，采集日期 2026-10-17，原拍摄日期和精确版本不详（Nightly）；它只展示 Cline 面板，不是 MCP 授权界面或 Ace 成功连接截图。本服务工具应进入 **MCP Servers**，不要把 `https://suno.mcp.acedata.cloud/mcp` 填到模型 Provider。
+
+模型需要独立配置：已有模型可继续使用；Ace 聊天接入用现有 **OpenAI Compatible**，Base URL `https://api.acedata.cloud/v1`，自己的 Key 和支持 Chat Completions/工具调用的模型 ID，不追加 `/chat/completions`。这个 MCP 条目不会新增命名 Ace 模型服务商。
+
+### 4. 首用、同 ID 查询与结果
+
+免费安装检查先调用只读的 `suno_list_models`，查看静态参考列表。静态列表或 schema 只证明工具加载，不证明有效密钥、余额或收费业务成功。IDE 保持 `autoApprove` 为空并检查全局自动批准；CLI 无界面任务可能自动批准，需要逐次确认时使用 `cline --tui --auto-approve false`。
+
+真正生成前先查看 [本服务当前接口和计费](https://platform.acedata.cloud/documents/suno-mcp?utm_source=cli&utm_medium=referral&utm_campaign=evergreen&utm_content=cline_suno_first_use_zh) 并确认本次额度，然后让 Cline 调用 `suno_generate_music` 一次，参数/模型以当前工具 schema 为准。该动作可能收费。保存返回的 **task_id**，使用 `suno_get_task(task_id="<原 task_id>")` 持续查询同一个任务到终态；pending 时不要再次生成、不要打开自动付费重试。
+
+按实际工具返回检查成功/失败状态、错误与媒体字段；成功后打开返回的真实音频/视频/图片链接。GPT Image 查询以 `finished_at` 判断已结束，再看 `response` 的成功或错误，不能只凭时间戳当成功；其他服务按自己的 schema 判断。聊天回合结束、绿色工具卡或可播放预览都不等于任务完成。媒体字段为空时不编造 URL、不拿别人的任务替代。
+
+到 [使用历史](https://platform.acedata.cloud/console/usages?utm_source=cli&utm_medium=referral&utm_campaign=evergreen&utm_content=cline_suno_usage_zh) 核对原请求和扣费；查询/安装日志不能当真实生成或唯一账单证明。本指南未声称已在 Cline 生成 Suno 媒体或带来付费用户。
+
+### 5. 常见问题与隐私
+
+| 现象 | 处理 |
+| --- | --- |
+| 市场搜不到 | 当前投稿仍待审；使用上方手动命名服务配置，不安装同名但来源不符的集成。 |
+| 无工具/连接超时 | 核 URL、`streamableHttp`、实际保存文件和重连；本地 `uvx` 首次启动可设单服务 timeout 如 30 秒。 |
+| 401 / 403 | 核完整 Token、一个 Bearer 前缀、服务权限、有效期、Allowed APIs、额度上限与余额；切 OAuth 前移除旧固定 header。 |
+| 400 参数错误 | 按当前 schema/模型枚举，别混用其他服务参数或过时示例。 |
+| pending | 只查询同一个 task_id，不重复提交生成。 |
+| 429 | 等待、降低并发，检查服务限额。 |
+| 5xx / 失败 / 链接不可用 | 先查原任务、终态错误、使用历史及返回媒体地址；保留 task/trace ID，支持排查时不要发密钥。 |
+
+安装本集成本身免费，服务 API 按当前账号/套餐计费；选定提示词、媒体和认证会交给托管服务并调用 Ace API。只提交有权处理的内容。密钥留在用户私有设置，正式目录收录、真实安装/授权、终态媒体、账单和增长分别验收。
