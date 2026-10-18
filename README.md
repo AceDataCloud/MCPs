@@ -78,7 +78,7 @@ Each MCP is published to multiple channels automatically on every push to `main`
 |---|---|
 | [PyPI](https://pypi.org/) | Active servers published |
 | [VS Code Marketplace](https://marketplace.visualstudio.com/) | Active extensions published |
-| [JetBrains Marketplace](https://plugins.jetbrains.com/) | Active plugins published |
+| [JetBrains Marketplace](https://plugins.jetbrains.com/vendor/acedatacloud) | Per-plugin upload and approval; source sync does not imply public availability |
 | [Smithery](https://smithery.ai/) | Active servers published |
 | [MCP Registry](https://registry.modelcontextprotocol.io/) | Active servers published |
 
