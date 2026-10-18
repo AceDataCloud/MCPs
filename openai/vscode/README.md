@@ -1,10 +1,16 @@
-# OpenAI MCP
+# GPT Image by Ace Data Cloud
 
-OpenAI models via Ace Data Cloud — chat completions, embeddings, image generation and editing, Responses API, async tasks.
+GPT Image generation and editing by Ace Data Cloud — GPT Image 2, image tasks and results in VS Code Chat.
+[简体中文](https://github.com/AceDataCloud/OpenAIMCP/blob/main/vscode/README.zh-CN.md)
 
-[![VS Code Marketplace](https://img.shields.io/badge/VS%20Code-Marketplace-blue?logo=visualstudiocode&logoColor=white)](https://marketplace.visualstudio.com/items?itemName=acedatacloud.mcp-openai) [![PyPI](https://img.shields.io/pypi/v/mcp-openai-pro.svg?label=PyPI)](https://pypi.org/project/mcp-openai-pro/) [![Hosted MCP](https://img.shields.io/badge/hosted-mcp-blue)](https://openai.mcp.acedata.cloud/mcp)
+This integration is published and operated by **Ace Data Cloud**. It is not an official extension from the model or service owner. An Ace Data Cloud application API key is required; a key from another provider is not interchangeable.
 
-Connect VS Code's AI agents to the **OpenAI models via Ace Data Cloud** service. Once configured, AI Assistant can run OpenAI chat completions, generate embeddings, create or edit images, and orchestrate the Responses API — all routed through Ace Data Cloud.
+**First, verify without generating:** use the read-only tool in the first-use section below. Generation and your Chat model may be billed separately.
+
+
+[![VS Code Marketplace](https://img.shields.io/visual-studio-marketplace/v/acedatacloud.mcp-gpt-image?label=VS%20Code)](https://marketplace.visualstudio.com/items?itemName=acedatacloud.mcp-gpt-image) [![PyPI](https://img.shields.io/pypi/v/mcp-openai-pro.svg?label=PyPI)](https://pypi.org/project/mcp-openai-pro/) [![Hosted MCP](https://img.shields.io/badge/hosted-mcp-blue)](https://openai.mcp.acedata.cloud/mcp)
+
+Use GPT Image through the Ace Data Cloud integration in VS Code Chat. Generate and edit images, then retrieve the same task ID until the result is ready. This image-focused extension connects to the existing OpenAI MCP server; enable only image generation, editing and task-query tools.
 
 This extension registers the **openai** MCP server with VS Code so GitHub
 Copilot and any other agent that speaks the [Model Context Protocol](https://modelcontextprotocol.io/)
@@ -15,13 +21,20 @@ can call it directly from chat.
 ## Quick Start
 
 1. **Install this extension.** VS Code registers the `openai` MCP server automatically.
-2. **Get an API token** from [Ace Data Cloud](https://platform.acedata.cloud?utm_source=vscode_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=openai_mcp_vscode_platform) → *API Keys*. New accounts include free trial credit.
-3. **Open Copilot Chat** in agent mode and call a tool — VS Code will prompt for the token the first time and store it securely.
+2. **Get an application API key** using the detailed steps below. Check service access and your current balance before the first request.
+3. **Select a model with tool calling in VS Code Chat.** You can use your existing model, or install [Ace Data Cloud Chat Models](https://marketplace.visualstudio.com/items?itemName=acedatacloud.chat-models). For the Ace model, first follow its [setup guide](https://github.com/AceDataCloud/VSCodeModelProvider#4-show-the-model-in-chat), open **Chat: Manage Language Models**, make the model visible, and select it in Chat. BYOK Chat does not require GitHub sign-in or a Copilot plan; organization policies still apply.
+4. **Enable this server's tools.** Open **Chat → Agent → Configure Tools** and select only the tools you need under **GPT Image by Ace Data Cloud**. If the list is empty, choose **Update Tools**. The extension prompts for the API key on first use and saves it in VS Code's `SecretStorage`. Disable another copy of the same server from the Ace MCP bundle or manual `mcp.json` to avoid duplicate tools.
+5. **Verify one result.** Check the Tool Reference below and current pricing before running a request. If you already have a task ID, enable its task-query tool and query that same ID first. An accepted generation is not a completed result: poll the original task until it reaches a successful terminal state, open the returned media, and match the task ID in [Usage](https://platform.acedata.cloud/console/usage?utm_source=vscode_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=openai_mcp_vscode_console_usage). Do not resubmit generation to poll. Model Chat and background utility calls can add separate charges to the service request.
+
+You can rotate or remove the API key any time from the command palette:
+
+- **GPT Image by Ace Data Cloud: Set Ace Data Cloud API Key**
+- **GPT Image by Ace Data Cloud: Clear Ace Data Cloud API Key**
 
 > The default config talks to the **hosted streamable-HTTP endpoint** at
 > `https://openai.mcp.acedata.cloud/mcp` — no Python, no `uvx`, no local install needed.
 
-### Get your API key
+### Get your credential
 
 <!-- BEGIN TOKEN ONBOARDING -->
 1. Open [Ace Data Cloud → Applications](https://platform.acedata.cloud/console/applications?utm_source=vscode_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=openai_mcp_vscode_api_key). Sign in, or register an account first.
@@ -37,35 +50,49 @@ can call it directly from chat.
 Save the key in the client's credential store or the environment variable shown below. Never put it in a prompt, shared workflow, screenshot, or Git commit. If authentication fails, check the full copied value, application/service access, expiration, usage limit, and balance before creating another key.
 <!-- END TOKEN ONBOARDING -->
 
-## VS Code Setup Guide
+### Example prompts
 
-For the full VS Code walkthrough, see [All Ace Data Cloud MCP servers in VS Code](https://platform.acedata.cloud/documents/promotion_article_mcp_all_vscode?utm_source=vscode_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=openai_mcp_vscode_documents_promotion_article_mcp_all_vscode). It covers token setup, project-level and user-level `mcp.json`, Copilot Agent Mode, and using one Ace Data Cloud token across hosted MCP servers.
+- "Use openai_get_task only for my existing image task TASK_ID. Do not generate another image."
 
 ---
 
 ## Tool Reference
 
-**11 tools** available via this server.
+**Image/task tools to enable for this card.** The existing hosted server also advertises chat/audio tools; this extension does not filter its schema.
 
 | Tool | Description |
 | --- | --- |
-| `openai_chat_completion` | Create a chat completion using OpenAI models via AceDataCloud. |
-| `openai_create_embedding` | Create text embeddings using OpenAI embedding models via AceDataCloud. |
-| `openai_generate_image` | Generate images using OpenAI image models via AceDataCloud. |
-| `openai_edit_image` | Edit or modify existing images using OpenAI image models via AceDataCloud. |
-| `openai_create_response` | Create a response using the OpenAI Responses API via AceDataCloud. |
-| `openai_get_task` | Retrieve a single async image task by its task ID or custom trace ID. |
-| `openai_list_tasks` | List async image tasks using batch query filters. |
-| `openai_list_chat_models` | List all available chat completion models. |
-| `openai_list_image_models` | List all available image generation and editing models. |
-| `openai_list_embedding_models` | List all available text embedding models. |
-| `openai_get_usage_guide` | Get a comprehensive guide for using the OpenAI tools. |
+| `openai_list_image_models` | Read image-model reference information without generating an image. |
+| `openai_generate_image` | Submit one image-generation task after reviewing model, quality, count and price. |
+| `openai_edit_image` | Submit an image-editing task after reviewing the request and price. |
+| `openai_get_task` | Read the status and result of the same original task ID. |
+| `openai_get_tasks_batch` | Read several existing task IDs without generating new images. |
+
+## Pricing
+
+Image generation is metered. Check the exact model, quality, count, pricing and account balance before submitting. See [Documentation](https://platform.acedata.cloud/documents/openai?utm_source=vscode_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=openai_mcp_vscode_quick_start).
 
 ---
 
 ## Configuration
 
-This extension contributes the following entry to your VS Code MCP config:
+This extension implements the `mcpServerDefinitionProviders` contribution point
+and registers a single hosted server with VS Code:
+
+```text
+Provider id : acedatacloud.openai
+Server label: GPT Image by Ace Data Cloud
+Server URL  : https://openai.mcp.acedata.cloud/mcp
+Transport   : Streamable HTTP
+Auth        : Bearer API key from VS Code SecretStorage (or $ACEDATACLOUD_API_TOKEN)
+```
+
+You don't need to edit `mcp.json` — the extension handles registration and
+token handling automatically. If you'd rather configure things by hand, the
+sections below show equivalent `mcp.json` snippets you can use **instead of**
+this extension.
+
+### Alternative: manual `mcp.json` (hosted)
 
 ```jsonc
 {
@@ -80,21 +107,17 @@ This extension contributes the following entry to your VS Code MCP config:
     {
       "type": "promptString",
       "id": "acedatacloud_api_token",
-      "description": "Ace Data Cloud API token",
+            "description": "Ace Data Cloud API key",
       "password": true
     }
   ]
 }
 ```
 
-VS Code will prompt for the token on first use and persist it in the OS
-secret store (Keychain / Credential Manager / libsecret).
-
 ### Alternative: local stdio (no network roundtrip)
 
-If you prefer running the server locally — for offline dev, air-gapped
-environments, or to pin to a specific PyPI version — install
-[`uv`](https://docs.astral.sh/uv/) and replace your `mcp.json` entry with:
+For offline dev, air-gapped environments, or pinning to a specific PyPI
+version, install [`uv`](https://docs.astral.sh/uv/) and use:
 
 ```jsonc
 {
@@ -111,12 +134,6 @@ environments, or to pin to a specific PyPI version — install
 
 `uvx` will download and run the latest [`mcp-openai-pro`](https://pypi.org/project/mcp-openai-pro/) on demand.
 
-### Alternative: OAuth via Dynamic Client Registration
-
-The hosted endpoint also accepts OAuth 2.1 with [DCR](https://datatracker.ietf.org/doc/html/rfc7591).
-Drop the `headers` and `inputs` blocks and VS Code will run the auth flow on
-first use (redirect URL `http://127.0.0.1:33418` or `https://vscode.dev/redirect`).
-
 ---
 
 ## Links
@@ -125,8 +142,41 @@ first use (redirect URL `http://127.0.0.1:33418` or `https://vscode.dev/redirect
 - **PyPI package:** [`mcp-openai-pro`](https://pypi.org/project/mcp-openai-pro/)
 - **Source repository:** https://github.com/AceDataCloud/OpenAIMCP
 - **Ace Data Cloud platform:** https://platform.acedata.cloud?utm_source=vscode_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=openai_mcp_vscode_platform
-- **MCP documentation:** https://platform.acedata.cloud/documents/openai?utm_source=vscode_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=openai_mcp_vscode_quick_start
+- **Documentation:** https://platform.acedata.cloud/documents/openai?utm_source=vscode_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=openai_mcp_vscode_quick_start
 
 ## License
 
 MIT — see [LICENSE](LICENSE).
+
+## First use: discover, then read an existing result
+
+1. Install [GPT Image by Ace Data Cloud](https://marketplace.visualstudio.com/items?itemName=acedatacloud.mcp-gpt-image). This is an independent service extension; the Ace toolbox is optional. Do not enable two copies of the same server.
+2. Complete the application-key steps above. Run **GPT Image by Ace Data Cloud: Set Ace Data Cloud API Key** and paste only the token. No workspace configuration file is needed.
+3. In **Chat: Manage Language Models**, show and select a tool-capable model. If you use the separate Ace Chat Models extension, follow its [model setup](https://github.com/AceDataCloud/VSCodeModelProvider#4-show-the-model-in-chat). Then open **Chat → Agent → Configure Tools** and enable only `openai_list_image_models` for this first check.
+4. Send the prompt below and inspect the confirmation's tool name and arguments. Your Chat model and background requests may be billed even when the service tool is read-only.
+
+```text
+Call openai_list_image_models only. Show supported models/actions. Do not generate anything.
+```
+
+The model-list tool returns reference information without generating media. It does not prove that your key has generation access.
+
+For an existing media task, enable only `openai_get_task`, replace `TASK_ID` with your original task ID, and query that same ID until terminal success or failure. Open the returned media link and match the original generation task to its charge in [Usage](https://platform.acedata.cloud/console/usage?utm_source=vscode_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=openai_mcp_vscode_console_usage). An accepted task or green Chat turn alone is not a completed artifact. Never resubmit generation just to check progress.
+
+### Real VS Code reference screenshots
+
+![Manage Models in the Ace Chat Models extension](https://raw.githubusercontent.com/AceDataCloud/VSCodeModelProvider/667593eb14bf15d434a1c41d47ef1f39199f7d68/assets/tutorial/02-manage-models.png)
+
+![Tool selection in the GPT Image MCP example](https://raw.githubusercontent.com/AceDataCloud/MCPs/537d5767aea410db930e4b01faf5dd14580c8ba7/vscode-bundle/assets/tutorial/04-tools.png)
+
+Historical real VS Code 1.141 screenshots, included in tutorials on 2026-10-09 (Asia/Shanghai). The tool-selection image uses the OpenAI server as a reference: choose this extension's server and the exact tool named above. These images do not show a newly published version or prove this independent service was called.
+
+### Troubleshooting your first call
+
+| Symptom | Check |
+| --- | --- |
+| Model missing / sign-in prompt | Complete Manage Language Models and the model extension's setup; respect organizational BYOK policy. |
+| Tools missing | Update Tools, check workspace/server trust, and disable duplicate bundle or manual registrations. |
+| 401 / 403 | Check application/service access, expiry, Allowed APIs, usage limit and balance. Use an application key rather than a platform management token. |
+| Pending task | Query the same original ID; do not submit generation again. |
+| 429 / 5xx | Preserve task/trace ID, inspect original task and Usage, and do not automatically retry a paid operation. |
