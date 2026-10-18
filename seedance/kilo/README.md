@@ -1,5 +1,7 @@
 # Seedance by Ace Data Cloud for Kilo
 
+[简体中文](README_zh_Hans.md)
+
 Use Seedance from Kilo through your own Ace Data Cloud account. This integration is provided and maintained by **Ace Data Cloud**; it is not an official Seedance plugin or an endorsement by the model owner.
 
 ## 1. Find and install the service

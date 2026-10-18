@@ -1,5 +1,7 @@
 # GPT Image by Ace Data Cloud for Kilo
 
+[简体中文](README_zh_Hans.md)
+
 Use GPT Image from Kilo through your own Ace Data Cloud account. This integration is provided and maintained by **Ace Data Cloud**; it is not an official GPT Image plugin or an endorsement by the model owner.
 
 This image-focused listing deliberately reuses **OpenAIMCP** (`mcp-openai-pro`): it also exposes chat, embeddings and audio tools. It is not an image-only runtime. Use only the image/list/task tools needed for this workflow; installing does not authorize unrelated calls.
