@@ -87,8 +87,10 @@ Each MCP is published to multiple channels automatically on every push to `main`
 | [PyPI](https://pypi.org/) | Active servers published |
 | [VS Code Marketplace](https://marketplace.visualstudio.com/) | Active extensions published |
 | [JetBrains Marketplace](https://plugins.jetbrains.com/vendor/acedatacloud) | Per-plugin upload and approval; source sync does not imply public availability |
-| [Smithery](https://smithery.ai/) | Active servers published |
+| [Smithery](https://smithery.ai/) | Existing URL publishers verify each accepted release; listing and installation require separate checks |
 | [MCP Registry](https://registry.modelcontextprotocol.io/) | Active servers published |
+
+Smithery CLI returns a pending receipt in CI. Existing Smithery publishing jobs wait for that exact release to reach `SUCCESS`; failure, authorization required, and timeout fail the job. Keep `shared/smithery_release.py` and the standalone distribution copies in sync with `python3 scripts/sync_smithery_release.py` (`--check` verifies them). A successful release does not prove a new user can install, authorize, or complete a paid tool call.
 
 Versioning uses **CalVer** (`YYYY.M.D.BUILD`), auto-generated at publish time.
 
