@@ -35,10 +35,10 @@ def without_icons(source):
 
 
 class RuntimeMetadataTest(unittest.TestCase):
-    def test_only_four_explicit_services_are_projected_and_copies_are_current(self):
+    def test_only_explicit_services_are_projected_and_copies_are_current(self):
         self.assertEqual(
             set(runtime_icons(load_catalog())),
-            {"seedance", "nanobanana", "happyhorse", "openai"},
+            {"aichat", "seedance", "nanobanana", "happyhorse", "openai"},
         )
         self.assertEqual(sync(check=True), [])
         for alias, icon in runtime_icons(load_catalog()).items():
