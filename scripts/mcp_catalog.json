@@ -85,6 +85,7 @@
     },
     "happyhorse": {
       "status": "active",
+      "runtime_icon": "registry",
       "type": "document",
       "alias": "happyhorse",
       "vscode_bundle": {
@@ -158,6 +159,7 @@
     },
     "nanobanana": {
       "status": "active",
+      "runtime_icon": "registry",
       "type": "document",
       "alias": "nano-banana-mcp",
       "vscode_bundle": {
@@ -180,6 +182,10 @@
       "vscode_bundle": {
         "label": "OpenAI",
         "default": false
+      },
+      "runtime_icon": {
+        "src": "https://cdn.acedata.cloud/2870040497.png",
+        "mimeType": "image/png"
       },
       "registry_profiles": [
         {
@@ -227,6 +233,7 @@
     },
     "seedance": {
       "status": "active",
+      "runtime_icon": "registry",
       "type": "document",
       "alias": "seedance-mcp",
       "vscode_bundle": {
