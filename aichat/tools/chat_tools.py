@@ -29,7 +29,7 @@ async def aichat_create_conversation(
         Field(
             description=(
                 "The model to use for generating the answer. Options include gpt-4.1, gpt-4o, "
-                "gpt-5, o1, o3, o4-mini, deepseek-r1, deepseek-v3, grok-3, glm-4.7, and many "
+                "gpt-5, o1, o3, o4-mini, deepseek-v4-pro, deepseek-v4.1-flash, grok-3, glm-4.7, and many "
                 "more. Default is gpt-4.1."
             )
         ),

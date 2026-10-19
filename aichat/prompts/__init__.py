@@ -36,7 +36,7 @@ Use `o3-mini`, `o3`, `o4-mini`, or `o1` — reasoning-optimized models
 Use `gpt-5`, `gpt-5.5` — most advanced models
 
 ### For DeepSeek models
-Use `deepseek-r1` for reasoning, `deepseek-v3` for general tasks
+Use `deepseek-v4-pro` for complex reasoning, `deepseek-v4.1-flash` for general tasks
 
 ### For Grok
 Use `grok-3` for xAI's model

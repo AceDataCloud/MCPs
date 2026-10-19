@@ -107,13 +107,9 @@ async def aichat_list_models() -> str:
 - o4-mini-high-all
 
 ## DeepSeek
-- deepseek-r1
-- deepseek-r1-0528
-- deepseek-v3
-- deepseek-v3-250324
+- deepseek-v4.1-flash
 - deepseek-v4-pro
 - deepseek-v4-flash
-- deepseek-v4-pro
 
 ## xAI Grok
 - grok-3
@@ -216,7 +212,7 @@ aichat_create_conversation(
 ```
 aichat_create_conversation(
     question="Explain quantum entanglement.",
-    model="deepseek-r1"
+    model="deepseek-v4-pro"
 )
 ```
 
