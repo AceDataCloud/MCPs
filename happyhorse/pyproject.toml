@@ -49,7 +49,7 @@ build-backend = "hatchling.build"
 packages = ["core", "tools", "prompts", "main.py"]
 
 [tool.hatch.build.targets.sdist]
-include = ["core/", "tools/", "prompts/", "tests/", "main.py", "README.md", "README.pypi.md", "readme/", "LICENSE"]
+include = ["core/", "tools/", "prompts/", "tests/", "main.py", "README.md", "README.pypi.md", "readme/", "kilo/", "LICENSE"]
 
 [tool.mypy]
 python_version = "3.10"
