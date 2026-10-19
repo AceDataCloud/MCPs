@@ -23,6 +23,11 @@ keywords = [
     "acedata",
     "llm",
     "claude",
+    "gpt-image",
+    "gpt image",
+    "image-generation",
+    "image-editing",
+    "acedatacloud",
 ]
 classifiers = [
     "Development Status :: 4 - Beta",

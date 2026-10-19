@@ -11,6 +11,10 @@
 Model Context Protocol server for Happy Horse AI video generation and editing through the
 [Ace Data Cloud](https://platform.acedata.cloud/documents/happyhorse?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=happyhorse_mcp_readme_quick_start) API.
 
+## Use HappyHorse in Glama
+
+Find the Ace-provided [HappyHorse source listing](https://glama.ai/mcp/servers/AceDataCloud/HappyHorseMCP) or [remote connector](https://glama.ai/mcp/connectors/io.github.AceDataCloud/mcp-happyhorse). Follow the [Glama installation, API Token and first-use guide](https://github.com/AceDataCloud/HappyHorseMCP/blob/main/readme/GLAMA.md). Public discovery and a successful personal connection are separate checks; generation uses your Ace account balance.
+
 ## HappyHorse in goose
 
 Use the independent **HappyHorse by Ace Data Cloud** native goose plugin: [install and API Token guide](goose/README.md) · [简体中文](goose/README_zh_Hans.md). It reuses this MCP server and does not imply goose Marketplace or default-provider inclusion.

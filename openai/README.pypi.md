@@ -12,6 +12,10 @@ The AceDataCloud distribution is `mcp-openai-pro`. The unrelated
 `mcp-openai` package on PyPI is not maintained by AceDataCloud. Update existing
 `uvx` configurations to the new package name; the hosted MCP URL is unchanged.
 
+## Use GPT Image in Glama
+
+The [GPT Image-only Glama guide](https://github.com/AceDataCloud/OpenAIMCP/blob/main/readme/GLAMA.md) uses the published `mcp-openai-pro --profile gpt-image` package and its five image/task tools. The [existing OpenAIMCP source listing](https://glama.ai/mcp/servers/AceDataCloud/OpenAIMCP) is the general server; it is **not** a dedicated GPT Image Connector. A separate Glama profile listing and ordinary install flow remain unverified.
+
 ## GPT Image in goose
 
 Use the independent **GPT Image by Ace Data Cloud** native goose plugin: [install and API Token guide](goose/README.md) · [简体中文](goose/README_zh_Hans.md). It reuses this MCP server and does not imply goose Marketplace or default-provider inclusion.
