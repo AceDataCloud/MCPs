@@ -84,6 +84,7 @@ packages = ["core", "tools", "prompts", "main.py"]
 
 [tool.hatch.build.targets.sdist]
 include = [
+    "goose/",
     "core/",
     "tools/",
     "prompts/",

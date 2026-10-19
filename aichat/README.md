@@ -5,6 +5,10 @@
 A Model Context Protocol (MCP) server for AI dialogue via the AceDataCloud platform.
 Supports a wide range of models including GPT-4/5, o-series, DeepSeek, Grok, and GLM.
 
+## Ace Data Cloud in goose
+
+[Named provider preset and upstream acceptance status](goose/README.md). This independently installed preset is not an official built-in provider.
+
 ## Features
 
 - **Multi-model support**: GPT-4.1, GPT-4o, GPT-5, o1, o3, o4-mini, DeepSeek, Grok, GLM, and more

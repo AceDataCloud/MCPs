@@ -11,6 +11,10 @@
 Model Context Protocol server for Happy Horse AI video generation and editing through the
 [Ace Data Cloud](https://platform.acedata.cloud/documents/happyhorse?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=happyhorse_mcp_readme_quick_start) API.
 
+## HappyHorse in goose
+
+Use the independent **HappyHorse by Ace Data Cloud** native goose plugin: [install and API Token guide](goose/README.md) · [简体中文](goose/README_zh_Hans.md). It reuses this MCP server and does not imply goose Marketplace or default-provider inclusion.
+
 ## Find the HappyHorse integration in the official MCP Registry
 
 Open [HappyHorse in the official MCP Registry](https://registry.modelcontextprotocol.io/?q=io.github.AceDataCloud%2Fmcp-happyhorse), expand the matching `io.github.AceDataCloud` entry, and use its **Packages** or **Remotes** installation information in a client that consumes MCP catalogs. This is the HappyHorse integration provided by Ace Data Cloud; it is not an endorsement by the model vendor. The Registry is a directory, not the app that runs a tool.

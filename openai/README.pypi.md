@@ -12,6 +12,10 @@ The AceDataCloud distribution is `mcp-openai-pro`. The unrelated
 `mcp-openai` package on PyPI is not maintained by AceDataCloud. Update existing
 `uvx` configurations to the new package name; the hosted MCP URL is unchanged.
 
+## GPT Image in goose
+
+Use the independent **GPT Image by Ace Data Cloud** native goose plugin: [install and API Token guide](goose/README.md) · [简体中文](goose/README_zh_Hans.md). It reuses this MCP server and does not imply goose Marketplace or default-provider inclusion.
+
 ## GPT Image service profile
 
 Use [GPT Image by Ace Data Cloud](https://github.com/AceDataCloud/OpenAIMCP/blob/main/GPT_IMAGE.md) when you only need image generation, editing and task retrieval. It runs `mcp-openai-pro --profile gpt-image`, exposes five image/task tools, requires an explicit GPT Image model, and shares this package's maintained API client. The general OpenAI server remains unchanged. The separate `mcp-gpt-image` Registry entry is active at `2026.10.18.2` (read back 2026-10-19), matching the public package. A catalog client must preserve `--profile gpt-image`; do not substitute the generic remote or infer that every client install has been verified.

@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "happyhorse": {
+      "command": "uvx",
+      "args": [
+        "--from",
+        "mcp-happyhorse==2026.10.19.3",
+        "mcp-happyhorse"
+      ]
+    }
+  }
+}
