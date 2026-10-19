@@ -65,6 +65,15 @@ GPT Image has a separate image-only profile in the existing `openai/` source: [`
 
 The official Registry is a metadata directory, not a default LLM provider selector. Its current search matches server names; a display title does not add spaced search aliases. Downstream catalogs may render titles/icons and provide richer search, but their ingestion and actual client installation must be checked separately.
 
+Runtime `initialize.serverInfo.icons` is a separate projection. Only catalog
+entries with `runtime_icon` opt in: `"registry"` reuses that service's canonical
+Registry asset, while an explicit icon supports a generic server without
+borrowing a profile's identity. Run `python3 -m scripts.runtime_metadata`
+(`--check` checks drift) and commit the generated `core/server.py` icon edits.
+This changes neither server names/tools nor Registry manifests, Smithery server
+cards or listing metadata. Valid protocol metadata does not prove that a client
+has fetched or rendered the image.
+
 ## Publishing
 
 The combined [Ace Data Cloud MCP extension](https://marketplace.visualstudio.com/items?itemName=acedatacloud.mcp-toolbox)
