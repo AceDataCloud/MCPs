@@ -16,9 +16,11 @@ Connect VS Code MCP clients to MiniMax H3 video generation through AceDataCloud.
 
 1. Install the extension.
 2. Run **MiniMax MCP: Set Ace Data Cloud API Key**.
-3. Open the MCP server picker and enable **MiniMax MCP**.
+3. **Select a model with tool calling in VS Code Chat.** You can use your existing model, or install [Ace Data Cloud Chat Models](https://marketplace.visualstudio.com/items?itemName=acedatacloud.chat-models). For the Ace model, first follow its [setup guide](https://github.com/AceDataCloud/VSCodeModelProvider#4-show-the-model-in-chat), open **Chat: Manage Language Models**, make the model visible, and select it in Chat. BYOK Chat does not require GitHub sign-in or a Copilot plan; organization policies still apply.
+4. **Enable this server's tools.** Open **Chat → Agent → Configure Tools** and select only the tools you need under **MiniMax MCP**. If the list is empty, choose **Update Tools**. The extension prompts for the API key on first use and saves it in VS Code's `SecretStorage`. Disable another copy of the same server from the Ace MCP bundle or manual `mcp.json` to avoid duplicate tools.
+5. **Verify one result.** Check the Tool Reference below and current pricing before running a request. If you already have a task ID, enable its task-query tool and query that same ID first. An accepted generation is not a completed result: poll the original task until it reaches a successful terminal state, open the returned media, and match the task ID in [Usage](https://platform.acedata.cloud/console/usage?utm_source=vscode_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=minimax_mcp_vscode_console_usage). Do not resubmit generation to poll. Model Chat and background utility calls can add separate charges to the service request.
 
-The extension connects to `https://minimax.mcp.acedata.cloud/mcp`. Get a token at https://platform.acedata.cloud/console/applications.?utm_source=vscode_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=minimax_mcp_vscode_api_key
+The extension connects to `https://minimax.mcp.acedata.cloud/mcp`. Get an application API key using the instructions below.
 
 ### Get your API key
 

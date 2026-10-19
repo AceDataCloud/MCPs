@@ -40,6 +40,15 @@ class GoosePluginContracts(unittest.TestCase):
                     len(list((root / "goose/skills").glob("*/SKILL.md"))), 1
                 )
 
+    def test_gpt_image_uses_published_narrow_profile_without_another_adapter(self):
+        servers = json.loads((ROOT / "openai/.mcp.json").read_text())["mcpServers"]
+        server = servers["gpt-image"]
+        self.assertEqual(server["command"], "uvx")
+        self.assertEqual(
+            server["args"][-3:], ["mcp-openai-pro", "--profile", "gpt-image"]
+        )
+        self.assertFalse((ROOT / "openai/goose/filtered_server.py").exists())
+
     def test_acquisition_links_have_four_existing_attribution_fields(self):
         for service in SERVICES:
             text = (ROOT / service / "goose/README.md").read_text()

@@ -1,15 +1,13 @@
 {
   "mcpServers": {
     "gpt-image": {
-      "command": "uv",
+      "command": "uvx",
       "args": [
-        "run",
-        "--no-project",
-        "--with",
-        "mcp==1.30.0",
-        "--python",
-        "3.11",
-        "${PLUGIN_ROOT}/goose/filtered_server.py"
+        "--from",
+        "mcp-openai-pro==2026.10.19.3",
+        "mcp-openai-pro",
+        "--profile",
+        "gpt-image"
       ]
     }
   }

@@ -80,15 +80,20 @@ requires = ["hatchling>=1.21.0,<1.30.0"]
 build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
-packages = ["core", "tools", "prompts", "main.py"]
+packages = ["core", "tools", "prompts", "main.py", "gpt_image_tools.py"]
 
 [tool.hatch.build.targets.sdist]
 include = [
+    "kilo/",
     "core/",
     "tools/",
     "prompts/",
     "tests/",
     "main.py",
+    "gpt_image_tools.py",
+    "gpt-image.server.json",
+    "GPT_IMAGE.md",
+    "readme/",
     "README.md",
     "README.pypi.md",
     "LICENSE",

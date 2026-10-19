@@ -6,7 +6,7 @@ An independent **Suno** plugin maintained by **Ace Data Cloud**. It installs the
 
 ## 1. Install the independent plugin
 
-Requirements: goose **1.55.0+**, Python 3.10+ (3.11 for the filtered GPT Image launcher), and [uv](https://docs.astral.sh/uv/) on PATH. Close any duplicate manual configuration of the same MCP server so tools do not appear twice.
+Requirements: goose **1.55.0+**, Python 3.10+, and [uv](https://docs.astral.sh/uv/) on PATH. Close any duplicate manual configuration of the same MCP server so tools do not appear twice.
 
 ```sh
 goose plugin install https://github.com/AceDataCloud/SunoMCP.git
@@ -63,6 +63,16 @@ For a real request, ask for the desired suno music, lyrics and covers and explic
 
 ## Scope and verification
 
-The source of truth is `AceDataCloud/MCPs/suno/`; this repository is a distribution mirror. It reuses `mcp-suno==2026.10.12.1` and does not fork the API implementation. This plugin exposes only the corresponding service MCP server. No automatic model fallback, analytics, hooks or permission expansion is added. Installing does not generate media. goose's inference model may incur separate charges.
+The source of truth is `AceDataCloud/MCPs/suno/`; this repository is a distribution mirror. It reuses `mcp-suno==2026.10.19.2` and does not fork the API implementation. This plugin exposes only the corresponding service MCP server. No automatic model fallback, analytics, hooks or permission expansion is added. Installing does not generate media. goose's inference model may incur separate charges.
 
-Validated on 2026-10-18 with goose 1.55.0: the five plugins were installed by the real `goose plugin install` command from isolated local Git review snapshots, coexisted, and automatically exposed 64 service tools (42 Suno, 7 Seedance, 7 HappyHorse, 4 GPT Image, 4 Nano Banana). Four static reference calls completed with all business API traffic directed at a local rejecting endpoint. Nano Banana was verified by schema discovery only. A local deterministic model fixture was used; there was no real model inference or paid media generation. Public mirror installation remains pending source merge and sync. Registry publication, official discovery, default-provider inclusion, terminal media and billing are separate unverified stages.
+Historical 2026-10-18 check with goose 1.55.0 (previous package pins and four-tool image adapter; superseded by the 2026-10-19 check below): the five plugins were installed by the real `goose plugin install` command from isolated local Git review snapshots, coexisted, and automatically exposed 64 service tools (42 Suno, 7 Seedance, 7 HappyHorse, 4 GPT Image, 4 Nano Banana). Four static reference calls completed with all business API traffic directed at a local rejecting endpoint. Nano Banana was verified by schema discovery only. A local deterministic model fixture was used; there was no real model inference or paid media generation. Public mirror installation remains pending source merge and sync. Registry publication, official discovery, default-provider inclusion, terminal media and billing are separate unverified stages.
+
+## Official discovery record and current package
+
+The [official MCP Registry record](https://registry.modelcontextprotocol.io/v0.1/servers/io.github.AceDataCloud%2Fmcp-suno/versions/latest) is **Suno by Ace Data Cloud**, active at `2026.10.19.2` (read back 2026-10-19). Use the matching AceDataCloud namespace, not another publisher with a similar service name. This is a cross-client directory record, not proof of goose in-app brand search, default installation or featured status. goose's legacy directory no longer accepts new entries. The native git plugin command above is the supported install mechanism for this candidate after merge/sync; [official plugin instructions](https://goose-docs.ai/docs/guides/context-engineering/plugins/) describe the host behavior.
+
+## Current 2026-10-19 verification
+
+After integrating MCPs main `00ad4314a9f05f474ef936317ed3f16fe42ecfda`, real goose **1.55.0** installed all five independent local Git review snapshots and automatically loaded **65 service tools** (Suno 42, Seedance 7, HappyHorse 7, GPT Image 5, Nano Banana 4). Four static reference tools returned to a deterministic local model fixture; Nano Banana was discovery-only. No business API request or paid model/media call was made. The published GPT Image profile, not another local adapter, rejects non-GPT Image and missing explicit model inputs before API dispatch. Mirror-downloaded wheels match public PyPI SHA-256; the test explicitly used a mirror because default file-host connectivity was unreliable.
+
+Registry brand-query endpoints timed out in this environment; exact-ID records succeeded. No ranking or service-word search result is asserted. Public default-branch plugin installation remains to be verified after the shared source PR is merged/synced. The named model Provider preset remains a separate install, not a bundled/default provider.

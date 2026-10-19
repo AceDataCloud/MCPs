@@ -1,6 +1,6 @@
 # goose 的 HappyHorse by Ace Data Cloud 插件
 
-这是 **Ace Data Cloud 维护的 HappyHorse 独立集成**，不是 HappyHorse 品牌官方插件，也未内置于 goose。底层复用公开 `mcp-happyhorse==2026.10.12.0`；不会安装其它媒体服务。默认分支尚未同步本 PR 前，以下安装入口是待发布候选，不能宣称已上线。
+这是 **Ace Data Cloud 维护的 HappyHorse 独立集成**，不是 HappyHorse 品牌官方插件，也未内置于 goose。底层复用公开 `mcp-happyhorse==2026.10.19.3`；不会安装其它媒体服务。默认分支尚未同步本 PR 前，以下安装入口是待发布候选，不能宣称已上线。
 
 ## 1. 安装
 
@@ -42,3 +42,11 @@ goose session
 明确需要且授权费用后，使用 `happyhorse_generate_video` 生成/编辑，保存返回的 task ID，用 `happyhorse_get_task` 查询同一个 ID 到成功/失败。pending、预览或工具卡片不代表完成；用真实返回媒体 URL 查看结果，不为轮询重复生成。Goose 聊天模型费用另计。
 
 认证失败时核完整 Key、服务权限、过期、Allowed APIs；余额不足/限流保持错误含义。无工具时检查 uv/PyPI 网络、进程环境与新会话；不要更改全局索引或扩权来绕过问题。完整设置与限制见 [English guide](README.md)。
+
+## 官方发现记录与本轮验收
+
+[官方 MCP Registry 精确记录](https://registry.modelcontextprotocol.io/v0.1/servers/io.github.AceDataCloud%2Fmcp-happyhorse/versions/latest)于2026-10-19回读为 active、`2026.10.19.3`。请核对 AceDataCloud 命名空间和服务名称。 Registry是跨宿主目录，不表示goose内部服务词搜索、默认安装或精选已完成；旧goose目录不收新增，本候选采用官方原生git插件安装入口。
+
+2026-10-19集成当前main后，真实goose1.55.0原生命令安装五个本地Git审查快照，自动共存65服务工具（Suno42、Seedance7、HappyHorse7、GPT Image5、Nano Banana4），四个静态参考返回到本地模拟模型；Nano Banana只验schema。未发业务API、付费推理或媒体请求。GPT Image直接复用已发布专用profile，不再额外转发；非法/缺少明确模型会在API前拒绝。
+
+精确ID回读成功，但Registry服务词搜索接口本机超时，结果保留unknown，不宣称排名或搜索完成。镜像wheel与公共PyPI校验相同；不把镜像验证当默认文件域网络成功。源PR合并sync后仍需公开主分支普通安装验收；Ace模型预设仍为独立安装，不能当默认内置。

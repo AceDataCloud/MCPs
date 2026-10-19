@@ -26,6 +26,22 @@ fish_generate_audio(
 
 Use `reference_id` for saved or public voices, and the one-shot reference fields for a temporary voice. Do not combine them. Reference audio supports MP3/WAV and should be 10–270 seconds. Billing remains based on the target text's UTF-8 byte count.
 
+### Find saved voices
+
+Call `fish_list_models` with `self=true` to list voices created and saved through
+AceDataCloud by the calling account, including those created with its other API
+tokens. This is a list filter, not a privacy setting: saved voices are public and
+may be searched and used by others. The voice-creation API's `visibility` input
+does not make them private or unlisted; this MCP does not expose voice creation.
+
+Use `page_size` and the 1-based `page_number` for pagination. With `self=true`,
+`sort_by` supports `created_at` and `task_count`, and `author_id` further filters
+those saved voices. `title_language` is only supported for public library queries,
+not with `self=true`. The returned `has_more` is a boolean for account-created
+voices but may be `null` for public library queries; use `total` and `page_size`
+for pagination in that case. Pass a returned voice ID as `reference_id` to
+`fish_generate_audio`.
+
 ## Connect: hosted OAuth, API token, or local stdio
 
 The hosted endpoint is `https://fish.mcp.acedata.cloud/mcp`. Choose one route for the MCP client:

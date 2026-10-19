@@ -26,7 +26,7 @@
       ]
     }
   ],
-  "websiteUrl": "https://glm.mcp.acedata.cloud",
+  "websiteUrl": "https://platform.acedata.cloud/documents/glm-chat-completions?utm_source=mcp_registry&utm_medium=referral&utm_campaign=evergreen&utm_content=glm_mcp_listing_guide",
   "remotes": [
     {
       "type": "streamable-http",

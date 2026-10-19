@@ -50,12 +50,12 @@
     "commands": [
       {
         "command": "acedatacloud.acedatacloud.setApiToken",
-        "title": "Ace Data Cloud Account MCP: Set Ace Data Cloud API Key",
+        "title": "Ace Data Cloud Account MCP: Set Ace Data Cloud Platform Token",
         "category": "MCP"
       },
       {
         "command": "acedatacloud.acedatacloud.clearApiToken",
-        "title": "Ace Data Cloud Account MCP: Clear Ace Data Cloud API Key",
+        "title": "Ace Data Cloud Account MCP: Clear Ace Data Cloud Platform Token",
         "category": "MCP"
       }
     ]

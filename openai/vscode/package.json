@@ -1,13 +1,13 @@
 {
-  "name": "mcp-openai",
-  "displayName": "OpenAI MCP",
-  "description": "OpenAI models via Ace Data Cloud \u2014 chat completions, embeddings, image generation and editing, Responses API, async tasks.",
-  "version": "0.1.0",
+  "name": "mcp-gpt-image",
+  "displayName": "GPT Image by Ace Data Cloud",
+  "description": "GPT Image generation and editing by Ace Data Cloud — GPT Image 2, image tasks and results in VS Code Chat.",
+  "version": "0.3.0",
   "publisher": "acedatacloud",
   "icon": "icon.png",
   "license": "MIT",
   "engines": {
-    "vscode": "^1.99.0"
+    "vscode": "^1.101.0"
   },
   "categories": [
     "AI",
@@ -19,14 +19,11 @@
     "ai",
     "copilot",
     "ace data cloud",
-    "openai",
-    "gpt",
-    "chat completion",
-    "embedding",
-    "image generation",
+    "gpt image",
     "gpt-image",
-    "dall-e",
-    "responses api"
+    "gpt image 2",
+    "image generation",
+    "image editing"
   ],
   "galleryBanner": {
     "color": "#0E1117",
@@ -40,22 +37,25 @@
   "bugs": {
     "url": "https://github.com/AceDataCloud/OpenAIMCP/issues"
   },
+  "activationEvents": [],
+  "main": "./extension.js",
   "contributes": {
-    "mcpServers": {
-      "openai": {
-        "type": "http",
-        "url": "https://openai.mcp.acedata.cloud/mcp",
-        "headers": {
-          "Authorization": "Bearer ${input:acedatacloud_api_token}"
-        }
-      }
-    },
-    "inputs": [
+    "mcpServerDefinitionProviders": [
       {
-        "type": "promptString",
-        "id": "acedatacloud_api_token",
-        "description": "Ace Data Cloud API token. Sign in at https://platform.acedata.cloud and create a token in 'API Keys'. Stored securely by VS Code.",
-        "password": true
+        "id": "acedatacloud.openai",
+        "label": "GPT Image by Ace Data Cloud"
+      }
+    ],
+    "commands": [
+      {
+        "command": "acedatacloud.openai.setApiToken",
+        "title": "GPT Image by Ace Data Cloud: Set Ace Data Cloud API Key",
+        "category": "MCP"
+      },
+      {
+        "command": "acedatacloud.openai.clearApiToken",
+        "title": "GPT Image by Ace Data Cloud: Clear Ace Data Cloud API Key",
+        "category": "MCP"
       }
     ]
   }

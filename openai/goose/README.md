@@ -6,7 +6,7 @@ An independent **GPT Image** plugin maintained by **Ace Data Cloud**. It install
 
 ## 1. Install the independent plugin
 
-Requirements: goose **1.55.0+**, Python 3.10+ (3.11 for the filtered GPT Image launcher), and [uv](https://docs.astral.sh/uv/) on PATH. Close any duplicate manual configuration of the same MCP server so tools do not appear twice.
+Requirements: goose **1.55.0+**, Python 3.10+, and [uv](https://docs.astral.sh/uv/) on PATH. Close any duplicate manual configuration of the same MCP server so tools do not appear twice.
 
 ```sh
 goose plugin install https://github.com/AceDataCloud/OpenAIMCP.git
@@ -42,13 +42,13 @@ Use a Bash terminal for the snippet. For the desktop app, the variable must be i
 
 ## 4. First connection and workflow
 
-Ask goose to list available tools. The plugin's tools are namespaced under `gpt-image-by-acedatacloud`. Then ask it to call `openai_list_image_models` only: this is a local reference check, not media generation.
+Ask goose to list available tools. The plugin's tools are namespaced under `gpt-image-by-acedatacloud`. Then ask it to call `gpt_image_list_models` only: this is a local reference check, not media generation.
 
 ![Official goose UI reference: asking for available extension tools](https://raw.githubusercontent.com/aaif-goose/goose/cd643d2126fffab4c6a6186905211ba868d6a657/documentation/docs/assets/guides/custom-extension-tools.png)
 
 Official original screenshot from the goose 1.54.0 documentation snapshot; original capture date and actual client version are not stated. It shows **wiki/developer**, not an Ace run. It illustrates where tools are discussed, not a new button, public listing or verified media result.
 
-For a real request, ask for the desired gpt image generation and image editing and explicitly authorize the current cost. The workflow uses `openai_generate_image`, `openai_edit_image` and `openai_get_task`. Keep the same returned task ID until success or failure. A preview, a tool-call card or a pending state is not a final result. When complete, use the media URLs actually returned. Never rerun a full generation just to check progress.
+For a real request, ask for the desired gpt image generation and image editing and explicitly authorize the current cost. The workflow uses `gpt_image_generate`, `gpt_image_edit` and `gpt_image_get_task`; `gpt_image_list_tasks` is available for bounded history lookup. Keep the same returned task ID until success or failure. A preview, a tool-call card or a pending state is not a final result. When complete, use the media URLs actually returned. Never rerun a full generation just to check progress.
 
 ## Troubleshooting
 
@@ -58,11 +58,21 @@ For a real request, ask for the desired gpt image generation and image editing a
 | 401/403 | Copy the full raw service key, check service access, expiration and Allowed APIs. |
 | Insufficient credits / rate limit | Check account balance/current price; preserve the error and retry only as allowed. |
 | Package download fails | Check access to PyPI and its file host. A mirror is an explicit administrator/user choice; the plugin does not change global package indexes. |
-| Pending task | Query `openai_get_task` with the same ID. Do not resubmit generation. |
+| Pending task | Query `gpt_image_get_task` with the same ID. Do not resubmit generation. |
 | Duplicate tools | Remove the duplicate manual MCP entry for this service; keep unrelated integrations. |
 
 ## Scope and verification
 
-The source of truth is `AceDataCloud/MCPs/openai/`; this repository is a distribution mirror. It reuses `mcp-openai-pro==2026.10.17.0` and does not fork the API implementation. GPT Image exposes only generation, edit, same-ID task retrieval and static image-model reference, through a small MCP forwarding allowlist; chat/audio/embedding tools are unavailable. No automatic model fallback, analytics, hooks or permission expansion is added. Installing does not generate media. goose's inference model may incur separate charges.
+The source of truth is `AceDataCloud/MCPs/openai/`; this repository is a distribution mirror. It reuses `mcp-openai-pro==2026.10.19.3` and does not fork the API implementation. GPT Image directly uses the published `--profile gpt-image` surface: generate, edit, same-ID task retrieval, bounded task listing and static image-model reference. It shares the canonical package implementation; no extra forwarding server, chat, audio or embedding tool is added. No automatic model fallback, analytics, hooks or permission expansion is added. Installing does not generate media. goose's inference model may incur separate charges.
 
-Validated on 2026-10-18 with goose 1.55.0: the five plugins were installed by the real `goose plugin install` command from isolated local Git review snapshots, coexisted, and automatically exposed 64 service tools (42 Suno, 7 Seedance, 7 HappyHorse, 4 GPT Image, 4 Nano Banana). Four static reference calls completed with all business API traffic directed at a local rejecting endpoint. Nano Banana was verified by schema discovery only. A local deterministic model fixture was used; there was no real model inference or paid media generation. Public mirror installation remains pending source merge and sync. Registry publication, official discovery, default-provider inclusion, terminal media and billing are separate unverified stages.
+Historical 2026-10-18 check with goose 1.55.0 (previous package pins and four-tool image adapter; superseded by the 2026-10-19 check below): the five plugins were installed by the real `goose plugin install` command from isolated local Git review snapshots, coexisted, and automatically exposed 64 service tools (42 Suno, 7 Seedance, 7 HappyHorse, 4 GPT Image, 4 Nano Banana). Four static reference calls completed with all business API traffic directed at a local rejecting endpoint. Nano Banana was verified by schema discovery only. A local deterministic model fixture was used; there was no real model inference or paid media generation. Public mirror installation remains pending source merge and sync. Registry publication, official discovery, default-provider inclusion, terminal media and billing are separate unverified stages.
+
+## Official discovery record and current package
+
+The [official MCP Registry record](https://registry.modelcontextprotocol.io/v0.1/servers/io.github.AceDataCloud%2Fmcp-gpt-image/versions/latest) is **GPT Image by Ace Data Cloud**, active at `2026.10.19.3` (read back 2026-10-19). The independent GPT Image record selects `--profile gpt-image`; it is not the generic OpenAI remote. This is a cross-client directory record, not proof of goose in-app brand search, default installation or featured status. goose's legacy directory no longer accepts new entries. The native git plugin command above is the supported install mechanism for this candidate after merge/sync; [official plugin instructions](https://goose-docs.ai/docs/guides/context-engineering/plugins/) describe the host behavior.
+
+## Current 2026-10-19 verification
+
+After integrating MCPs main `00ad4314a9f05f474ef936317ed3f16fe42ecfda`, real goose **1.55.0** installed all five independent local Git review snapshots and automatically loaded **65 service tools** (Suno 42, Seedance 7, HappyHorse 7, GPT Image 5, Nano Banana 4). Four static reference tools returned to a deterministic local model fixture; Nano Banana was discovery-only. No business API request or paid model/media call was made. The published GPT Image profile, not another local adapter, rejects non-GPT Image and missing explicit model inputs before API dispatch. Mirror-downloaded wheels match public PyPI SHA-256; the test explicitly used a mirror because default file-host connectivity was unreliable.
+
+Registry brand-query endpoints timed out in this environment; exact-ID records succeeded. No ranking or service-word search result is asserted. Public default-branch plugin installation remains to be verified after the shared source PR is merged/synced. The named model Provider preset remains a separate install, not a bundled/default provider.

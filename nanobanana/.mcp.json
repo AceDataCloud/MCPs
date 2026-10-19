@@ -4,7 +4,7 @@
       "command": "uvx",
       "args": [
         "--from",
-        "mcp-nanobanana-pro==2026.10.12.1",
+        "mcp-nanobanana-pro==2026.10.19.3",
         "mcp-nanobanana-pro"
       ]
     }

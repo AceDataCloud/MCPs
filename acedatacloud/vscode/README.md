@@ -19,10 +19,10 @@ can call it directly from chat.
 2. **Get an account token** from [Account Tokens](https://platform.acedata.cloud/console/platform-tokens?utm_source=vscode_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=acedatacloud_mcp_vscode_platform_token), following the steps below. This account server requires a `platform-...` token.
 3. **Open Copilot Chat** in agent mode and ask for a account task — the extension prompts for the account token the first time and stores it in the OS keychain via VS Code's `SecretStorage`.
 
-You can rotate or remove the API key any time from the command palette:
+You can rotate or remove the account token any time from the command palette:
 
-- **Ace Data Cloud Account MCP: Set Ace Data Cloud API Key**
-- **Ace Data Cloud Account MCP: Clear Ace Data Cloud API Key**
+- **Ace Data Cloud Account MCP: Set Ace Data Cloud Platform Token**
+- **Ace Data Cloud Account MCP: Clear Ace Data Cloud Platform Token**
 
 > The default config talks to the **hosted streamable-HTTP endpoint** at
 > `https://mcp.acedata.cloud/mcp` — no Python, no `uvx`, no local install needed.
@@ -66,7 +66,7 @@ Provider id : acedatacloud.acedatacloud
 Server label: Ace Data Cloud Account MCP
 Server URL  : https://mcp.acedata.cloud/mcp
 Transport   : Streamable HTTP
-Auth        : Bearer API key from VS Code SecretStorage (or $ACEDATACLOUD_PLATFORM_TOKEN)
+Auth        : Bearer account token from VS Code SecretStorage (or $ACEDATACLOUD_PLATFORM_TOKEN)
 ```
 
 You don't need to edit `mcp.json` — the extension handles registration and

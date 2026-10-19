@@ -9,9 +9,11 @@ license: MIT
 Use the MCP tools installed by this plugin. Match tools by their suffix because goose namespaces them with `gpt-image-by-acedatacloud`.
 
 - Read `../../README.md` for installation and credential setup. The service API key belongs in `ACEDATACLOUD_API_TOKEN` in the environment that starts goose; never ask the user to paste it into chat.
-- A free connection/reference check uses `openai_list_image_models`. Static reference success is not a paid generation or a billing result. For Nano Banana, tool-schema discovery is the free check.
-- For an explicitly requested generation/edit, inspect the installed tool schema first. Use `openai_generate_image`, `openai_edit_image` as applicable. Do not invent model defaults or silently substitute another model/service.
+- A free connection/reference check uses `gpt_image_list_models`. Static reference success is not a paid generation or a billing result.
+- For an explicitly requested generation/edit, inspect the installed tool schema first. Use `gpt_image_generate`, `gpt_image_edit` as applicable. Do not invent model defaults or silently substitute another model/service.
 - Confirm current account access, balance and price; preserve any user spending cap. Do not generate merely to test installation or check progress.
-- After one submission, retain the returned task ID. Use `openai_get_task` to query that same ID, with the exact ID argument name from the schema. A pending result is not success; stop at terminal failure and preserve upstream meaning. Do not submit another generation to poll.
+- After one submission, retain the returned task ID. Use `gpt_image_get_task` to query that same ID, with the exact ID argument name from the schema. A pending result is not success; stop at terminal failure and preserve upstream meaning. Do not submit another generation to poll.
 - Report complete only with an explicit successful terminal status and returned media URLs. Never fabricate audio/image/video URLs or claim a unique billing record without checking the account's actual usage.
 - When using GPT Image, choose a public `gpt-image-*` model explicitly. This image plugin does not offer chat, embeddings, audio or Nano Banana as automatic fallbacks.
+
+The installed server is the canonical published `--profile gpt-image` surface, including `gpt_image_list_tasks` for bounded history lookup. Model must be explicitly supplied for generate/edit; inspect its enum rather than inventing an alias.
