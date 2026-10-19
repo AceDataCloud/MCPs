@@ -1,0 +1,164 @@
+{
+  "version": 1,
+  "as_of": "2026-10-18",
+  "source_policy": "Reuse MCPs service implementations and existing publisher namespace. Existing entries retain their qualified names. Candidate entries require successful publishing and normal user authorization before being called available.",
+  "attribution": {
+    "producer": "AceDataCloud/PlatformBackend",
+    "source_sha": "f288eb461f15d057e9f5cedd634ce1e5c4959552",
+    "config_url": "https://github.com/AceDataCloud/PlatformBackend/blob/f288eb461f15d057e9f5cedd634ce1e5c4959552/config/marketing_attribution.json",
+    "source": "opensource",
+    "reason": "Current producer contract has no smithery source. Use its recognized opensource/referral source and encode smithery in utm_content without modifying global rules."
+  },
+  "token_images": [
+    "https://raw.githubusercontent.com/AceDataCloud/SunoDify/8d3d03570e73324220f111f7fe343da0792a8071/_assets/tutorial/get-api-key-en.png",
+    "https://raw.githubusercontent.com/AceDataCloud/SunoDify/8d3d03570e73324220f111f7fe343da0792a8071/_assets/tutorial/create-api-key-en.png"
+  ],
+  "services": [
+    {
+      "alias": "suno",
+      "service": "Suno",
+      "qualified_name": "acedatacloud-mcp/mcp-suno",
+      "repository": "SunoMCP",
+      "package": "mcp-suno",
+      "endpoint": "https://suno.mcp.acedata.cloud/mcp",
+      "status": "existing",
+      "summary": "Generate Suno music and lyrics, then retrieve the same audio task through Ace Data Cloud.",
+      "summary_zh": "通过 Ace Data Cloud 生成 Suno 音乐、歌词，再查询同一个音频任务。",
+      "category": "music",
+      "search_terms": [
+        "suno",
+        "suno music",
+        "suno mcp"
+      ],
+      "read_tool": "suno_list_models",
+      "task_tool": "suno_get_task",
+      "task_field": "task_id",
+      "api_paths": [
+        "/suno/audios",
+        "/suno/tasks"
+      ],
+      "price_path": "/documents/suno-audios",
+      "generation_tool": "suno_generate_music",
+      "first_prompt": "List the Suno models available through this integration. Do not generate music.",
+      "first_prompt_zh": "列出本集成可用的 Suno 模型，不生成音乐。",
+      "icon_url": "https://raw.githubusercontent.com/AceDataCloud/MCPs/bbb7502332f71abb74a0a9aa5f234b16efa7ae49/suno/vscode/icon.png"
+    },
+    {
+      "alias": "seedance",
+      "service": "Seedance",
+      "qualified_name": "acedatacloud-mcp/mcp-seedance",
+      "repository": "SeedanceMCP",
+      "package": "mcp-seedance",
+      "endpoint": "https://seedance.mcp.acedata.cloud/mcp",
+      "status": "existing",
+      "summary": "Generate Seedance videos from text or images, then retrieve the same video task through Ace Data Cloud.",
+      "summary_zh": "通过 Ace Data Cloud 使用文字或图片生成 Seedance 视频，再查询同一个任务。",
+      "category": "video",
+      "search_terms": [
+        "seedance",
+        "seedance video",
+        "seedance mcp"
+      ],
+      "read_tool": "seedance_list_models",
+      "task_tool": "seedance_get_task",
+      "task_field": "task_id",
+      "api_paths": [
+        "/seedance/videos",
+        "/seedance/tasks"
+      ],
+      "price_path": "/documents/seedance-mcp",
+      "generation_tool": "seedance_generate_video",
+      "first_prompt": "List the Seedance models available through this integration. Do not generate a video.",
+      "first_prompt_zh": "列出本集成可用的 Seedance 模型，不生成视频。",
+      "icon_url": "https://raw.githubusercontent.com/AceDataCloud/MCPs/bbb7502332f71abb74a0a9aa5f234b16efa7ae49/seedance/vscode/icon.png"
+    },
+    {
+      "alias": "happyhorse",
+      "service": "HappyHorse",
+      "qualified_name": "acedatacloud-mcp/mcp-happyhorse",
+      "repository": "HappyHorseMCP",
+      "package": "mcp-happyhorse",
+      "endpoint": "https://happyhorse.mcp.acedata.cloud/mcp",
+      "status": "candidate",
+      "summary": "Generate and edit HappyHorse videos, then retrieve the same video task through Ace Data Cloud.",
+      "summary_zh": "通过 Ace Data Cloud 生成、编辑 HappyHorse 视频，再查询同一个任务。",
+      "category": "video",
+      "search_terms": [
+        "happyhorse",
+        "happy horse",
+        "happyhorse video"
+      ],
+      "read_tool": "happyhorse_list_models",
+      "task_tool": "happyhorse_get_task",
+      "task_field": "task_id",
+      "api_paths": [
+        "/happyhorse/videos",
+        "/happyhorse/tasks"
+      ],
+      "price_path": "/documents/happyhorse",
+      "generation_tool": "happyhorse_generate_video",
+      "first_prompt": "List the HappyHorse models available through this integration. Do not generate a video.",
+      "first_prompt_zh": "列出本集成可用的 HappyHorse 模型，不生成视频。",
+      "icon_url": "https://cdn.acedata.cloud/2841e8c719.png"
+    },
+    {
+      "alias": "openai",
+      "service": "GPT Image",
+      "qualified_name": "acedatacloud-mcp/gpt-image",
+      "repository": "OpenAIMCP",
+      "package": "mcp-openai-pro",
+      "endpoint": "https://openai.mcp.acedata.cloud/mcp",
+      "status": "candidate",
+      "summary": "Generate and edit images with GPT Image, then retrieve the same image task through Ace Data Cloud.",
+      "summary_zh": "通过 Ace Data Cloud 使用 GPT Image 生成、编辑图像，再查询同一个任务。",
+      "category": "image",
+      "search_terms": [
+        "gpt image",
+        "gpt-image",
+        "gpt image generation"
+      ],
+      "read_tool": "openai_list_image_models",
+      "task_tool": "openai_get_task",
+      "task_field": "id",
+      "api_paths": [
+        "/openai/images/generations",
+        "/openai/images/edits",
+        "/openai/tasks"
+      ],
+      "price_path": "/documents/openai",
+      "generation_tool": "openai_generate_image",
+      "first_prompt": "List the GPT Image models available through this integration. Do not generate an image.",
+      "first_prompt_zh": "列出本集成可用的 GPT Image 模型，不生成图片。",
+      "icon_url": "https://cdn.acedata.cloud/2870040497.png"
+    },
+    {
+      "alias": "nanobanana",
+      "service": "Nano Banana",
+      "qualified_name": "acedatacloud-mcp/mcp-nanobanana-pro",
+      "repository": "NanoBananaMCP",
+      "package": "mcp-nanobanana-pro",
+      "endpoint": "https://nanobanana.mcp.acedata.cloud/mcp",
+      "status": "existing",
+      "summary": "Generate and edit Nano Banana images, then retrieve the same image task through Ace Data Cloud.",
+      "summary_zh": "通过 Ace Data Cloud 使用 Nano Banana 生成、编辑图像，再查询同一个任务。",
+      "category": "image",
+      "search_terms": [
+        "nano banana",
+        "nanobanana",
+        "nano banana image"
+      ],
+      "read_tool": null,
+      "task_tool": "nanobanana_get_task",
+      "task_field": "task_id",
+      "api_paths": [
+        "/nano-banana/images",
+        "/nano-banana/tasks"
+      ],
+      "price_path": "/documents/nano-banana-mcp",
+      "generation_tool": "nanobanana_generate_image",
+      "first_prompt": "Show the Nano Banana tools and their input schemas. Do not call a generation tool.",
+      "first_prompt_zh": "展示 Nano Banana 工具及其输入参数，不调用生成工具。",
+      "icon_url": "https://raw.githubusercontent.com/AceDataCloud/MCPs/bbb7502332f71abb74a0a9aa5f234b16efa7ae49/nanobanana/vscode/icon.png"
+    }
+  ]
+}

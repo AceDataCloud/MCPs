@@ -57,6 +57,23 @@ The account-management server uses [Account Tokens](https://platform.acedata.clo
 |---|---|---|---|
 | `sora/` | [SoraMCP](https://github.com/AceDataCloud/SoraMCP) | [mcp-sora](https://pypi.org/project/mcp-sora/) | Retired; retained for historical reference |
 
+## Service discovery in the official MCP Registry
+
+Suno, Seedance, HappyHorse and Nano Banana keep their existing independent Registry entries and packages. Display titles identify them as integrations **by Ace Data Cloud**; namespace and package identities remain stable. The canonical `scripts/mcp_catalog.json` supplies Registry titles, descriptions, icons and profile metadata. Run `python3 -m scripts.registry_metadata --check` to check the projection, or omit `--check` to refresh it. Website destinations use the existing documentation catalog and current marketing link contract.
+
+GPT Image has a separate image-only profile in the existing `openai/` source: [`openai/GPT_IMAGE.md`](openai/GPT_IMAGE.md). Its published `mcp-gpt-image` manifest selects `mcp-openai-pro --profile gpt-image` and exposes five image/task tools, excluding the general OpenAI tool set and remote. The official `io.github.AceDataCloud/mcp-gpt-image` listing and matching `mcp-openai-pro` package were read back at version `2026.10.18.2` on 2026-10-19. The profile reuses maintained image/task code rather than duplicating a provider implementation or renaming the general server.
+
+The official Registry is a metadata directory, not a default LLM provider selector. Its current search matches server names; a display title does not add spaced search aliases. Downstream catalogs may render titles/icons and provide richer search, but their ingestion and actual client installation must be checked separately.
+
+Runtime `initialize.serverInfo.icons` is a separate projection. Only catalog
+entries with `runtime_icon` opt in: `"registry"` reuses that service's canonical
+Registry asset, while an explicit icon supports a generic server without
+borrowing a profile's identity. Run `python3 -m scripts.runtime_metadata`
+(`--check` checks drift) and commit the generated `core/server.py` icon edits.
+This changes neither server names/tools nor Registry manifests, Smithery server
+cards or listing metadata. Valid protocol metadata does not prove that a client
+has fetched or rendered the image.
+
 ## Publishing
 
 The combined [Ace Data Cloud MCP extension](https://marketplace.visualstudio.com/items?itemName=acedatacloud.mcp-toolbox)
@@ -78,9 +95,11 @@ Each MCP is published to multiple channels automatically on every push to `main`
 |---|---|
 | [PyPI](https://pypi.org/) | Active servers published |
 | [VS Code Marketplace](https://marketplace.visualstudio.com/) | Active extensions published |
-| [JetBrains Marketplace](https://plugins.jetbrains.com/) | Active plugins published |
-| [Smithery](https://smithery.ai/) | Active servers published |
+| [JetBrains Marketplace](https://plugins.jetbrains.com/vendor/acedatacloud) | Per-plugin upload and approval; source sync does not imply public availability |
+| [Smithery](https://smithery.ai/) | Existing URL publishers verify each accepted release; listing and installation require separate checks |
 | [MCP Registry](https://registry.modelcontextprotocol.io/) | Active servers published |
+
+Smithery CLI returns a pending receipt in CI. Existing Smithery publishing jobs wait for that exact release to reach `SUCCESS`; failure, authorization required, and timeout fail the job. Keep `shared/smithery_release.py` and the standalone distribution copies in sync with `python3 scripts/sync_smithery_release.py` (`--check` verifies them). A successful release does not prove a new user can install, authorize, or complete a paid tool call.
 
 Versioning uses **CalVer** (`YYYY.M.D.BUILD`), auto-generated at publish time.
 

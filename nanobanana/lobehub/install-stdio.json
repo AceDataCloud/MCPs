@@ -1,0 +1,16 @@
+{
+  "mcpServers": {
+    "ace-nanobanana": {
+      "type": "stdio",
+      "command": "uvx",
+      "args": [
+        "--from",
+        "mcp-nanobanana-pro==2026.10.12.1",
+        "mcp-nanobanana-pro"
+      ],
+      "env": {
+        "ACEDATACLOUD_API_TOKEN": "YOUR_API_TOKEN"
+      }
+    }
+  }
+}

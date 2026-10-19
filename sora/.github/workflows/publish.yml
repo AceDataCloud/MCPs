@@ -7,6 +7,8 @@ on:
 
 jobs:
   build:
+    # Retired capability: retain release history without publishing new artifacts.
+    if: ${{ false }}
     name: Build distribution
     runs-on: ubuntu-latest
     outputs:

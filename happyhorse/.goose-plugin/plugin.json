@@ -1,0 +1,28 @@
+{
+  "name": "happyhorse-by-acedatacloud",
+  "version": "0.1.0",
+  "description": "HappyHorse by Ace Data Cloud: HappyHorse text/image/reference video and editing. Independent goose MCP and Skill plugin.",
+  "author": {
+    "name": "Ace Data Cloud"
+  },
+  "homepage": "https://github.com/AceDataCloud/HappyHorseMCP/blob/main/goose/README.md",
+  "repository": "https://github.com/AceDataCloud/HappyHorseMCP",
+  "license": "MIT",
+  "keywords": [
+    "happyhorse",
+    "goose",
+    "acedatacloud"
+  ],
+  "skills": {
+    "paths": [
+      "./goose/skills"
+    ],
+    "exclusive": true
+  },
+  "mcpServers": {
+    "paths": [
+      "./.mcp.json"
+    ],
+    "exclusive": true
+  }
+}

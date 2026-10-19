@@ -1,5 +1,7 @@
 # Nano Banana by Ace Data Cloud
 
+[简体中文安装与首用指南](https://github.com/AceDataCloud/NanoBananaMCP/blob/main/readme/README_zh_Hans.md)
+
 <!-- mcp-name: io.github.AceDataCloud/mcp-nanobanana-pro -->
 
 [![PyPI version](https://img.shields.io/pypi/v/mcp-nanobanana-pro.svg)](https://pypi.org/project/mcp-nanobanana-pro/)
@@ -12,9 +14,20 @@ A [Model Context Protocol (MCP)](https://modelcontextprotocol.io) server for AI 
 
 Generate and edit AI images directly from Claude, VS Code, or any MCP-compatible client.
 
-## Use Nano Banana (NanoBanana) in Glama
+## Use Nano Banana in Glama
 
-Find this Ace-provided integration in the [Glama service listing](https://glama.ai/mcp/servers/AceDataCloud/NanoBananaMCP) or [remote connector](https://glama.ai/mcp/connectors/io.github.AceDataCloud/mcp-nanobanana-pro). Follow the [Glama installation, API key, and first-use guide](https://github.com/AceDataCloud/NanoBananaMCP/blob/main/readme/GLAMA.md) before running a paid request. This is an Ace Data Cloud integration, not a claim of official endorsement by the model developer.
+Find the Ace-provided [Nano Banana source listing](https://glama.ai/mcp/servers/AceDataCloud/NanoBananaMCP) or [remote connector](https://glama.ai/mcp/connectors/io.github.AceDataCloud/mcp-nanobanana-pro). Follow the [Glama installation, API Token and first-use guide](https://github.com/AceDataCloud/NanoBananaMCP/blob/main/readme/GLAMA.md). Public discovery and a successful personal connection are separate checks; generation uses your Ace account balance.
+
+## Nano Banana in goose
+
+Use the independent **Nano Banana by Ace Data Cloud** native goose plugin: [install and API Token guide](goose/README.md) · [简体中文](goose/README_zh_Hans.md). It reuses this MCP server and does not imply goose Marketplace or default-provider inclusion.
+
+## Find the Nano Banana integration in the official MCP Registry
+
+Open [Nano Banana in the official MCP Registry](https://registry.modelcontextprotocol.io/?q=io.github.AceDataCloud%2Fmcp-nanobanana-pro), expand the matching `io.github.AceDataCloud` entry, and use its **Packages** or **Remotes** installation information in a client that consumes MCP catalogs. This is the Nano Banana integration provided by Ace Data Cloud; it is not an endorsement by the model vendor. The Registry is a directory, not the app that runs a tool.
+
+Search for `mcp-nanobanana-pro` (or `io.github.AceDataCloud/mcp-nanobanana-pro`) to locate the exact entry. The official Registry search currently matches server names; spaces in a display title do not create extra search aliases. If your client does not consume the catalog, use the client-specific connection instructions below and check **Applications → General application** for your token, service permissions, balance and current price. Keep the original task ID when checking asynchronous results.
+
 
 ## Features
 
@@ -442,3 +455,7 @@ MIT License - see [LICENSE](LICENSE) for details.
 ---
 
 Made with love by [AceDataCloud](https://platform.acedata.cloud?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=nanobanana_mcp_readme_platform)
+
+## Cline setup / Cline 图文接入
+
+[Nano Banana by Ace Data Cloud — English guide](https://github.com/AceDataCloud/MCPs/blob/4a2fb4e17d322bc22c5742ab3a5bd48b24ec5bdc/nanobanana/docs/cline.md) · [完整中文图文步骤](https://github.com/AceDataCloud/MCPs/blob/4a2fb4e17d322bc22c5742ab3a5bd48b24ec5bdc/nanobanana/docs/cline.md#中文步骤). The Cline marketplace submission is pending review as of 2026-10-18; the guide labels the manual fallback separately. / Cline 官方目录投稿仍待审核，手动接入不等于已上架。

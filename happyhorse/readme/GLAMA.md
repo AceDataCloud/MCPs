@@ -12,7 +12,7 @@ The screenshot below is a **real Suno listing captured on 2026-10-17**, supplied
 
 ![Real Glama Suno listing: Try in Browser and Deploy Server](images/glama-suno-20261017.jpg)
 
-On the source listing, **Try in Browser** starts the browser test flow; **Deploy Server** is a separate hosting action. For the existing Ace-hosted endpoint, use the remote connector's **Connect / Add Connector** path, or **Install in Client** to use another client. Avoid deploying a new server just to connect to the existing one.
+On the source listing, **Try in Browser** starts the browser test flow (its signed-in destination still needs verification); **Deploy Server** is a separate hosting action. For the existing Ace-hosted endpoint, use the remote connector's **Connect / Add Connector** path, or **Install in Client** to use another client. Avoid deploying a new server just to connect to the existing one.
 
 The public connector was marked **Unhealthy** during the 2026-10-18 audit. That is Glama's test result and can reflect missing test authentication. It is not proof of a successful connection, nor a reason to remove authentication. If your own connection fails, inspect its error before running a paid request.
 

@@ -1,7 +1,7 @@
 {
   "service": "openai",
-  "title": "GPT Image and OpenAI tools by Ace Data Cloud",
-  "checked_on": "2026-10-18",
+  "title": "GPT Image by Ace Data Cloud",
+  "checked_on": "2026-10-19",
   "images": [
     {
       "path": "images/glama-suno-20261017.jpg",
@@ -23,5 +23,7 @@
       "kind": "real Ace platform screenshot; Dify example name remains",
       "checked_on": "2026-10-18"
     }
-  ]
+  ],
+  "profile": "gpt-image",
+  "general_remote_is_not_profile": true
 }

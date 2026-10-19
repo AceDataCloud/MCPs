@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "ace-happyhorse": {
+      "type": "http",
+      "url": "https://happyhorse.mcp.acedata.cloud/mcp"
+    }
+  }
+}

@@ -1,0 +1,378 @@
+{
+  "identifier": "acedatacloud-nanobananamcp",
+  "name": "Nano Banana by Ace Data Cloud",
+  "version": "2026.10.12.1",
+  "author": "Ace Data Cloud",
+  "authorUrl": "https://github.com/AceDataCloud",
+  "homepage": "https://platform.acedata.cloud/documents/nano-banana?utm_source=opensource&utm_medium=referral&utm_campaign=evergreen&utm_content=nanobanana_lobehub_market_pricing",
+  "description": "Nano Banana image generation and editing through Ace Data Cloud. Requires an Ace service API token; generation is billed to your Ace account.",
+  "cloudEndpoint": "https://nanobanana.mcp.acedata.cloud/mcp",
+  "tags": [
+    "nano banana",
+    "nanobanana",
+    "image-generation",
+    "image-editing",
+    "acedatacloud"
+  ],
+  "tools": [
+    {
+      "name": "nanobanana_generate_image",
+      "title": null,
+      "description": "Generate an AI image from a text prompt using Google's Nano Banana model.\n\n    This creates high-quality images from detailed text descriptions. The more\n    descriptive your prompt, the better the results.\n\n    Use this when:\n    - You want to generate a new image from scratch\n    - You have a detailed description of the desired image\n    - You need photorealistic or artistic image generation\n\n    Prompt writing tips:\n    - Include: Main subject + Atmosphere + Lighting + Camera/Lens + Quality keywords\n    - Example: \"Urban career woman, backlit sunlight, film grain, orange-gold tones, hopeful dawn\"\n\n    Returns:\n        Task ID, trace ID, and generated image URL.\n    ",
+      "inputSchema": {
+        "properties": {
+          "prompt": {
+            "description": "Description of the image to generate. Be descriptive about subject, atmosphere, lighting, camera/lens, and quality. Example: 'A photorealistic close-up portrait of an elderly Japanese ceramicist with deep wrinkles and a warm smile, soft golden hour light, 85mm portrait lens, bokeh background'",
+            "title": "Prompt",
+            "type": "string"
+          },
+          "model": {
+            "default": "nano-banana",
+            "description": "Model to use for generation. 'nano-banana' (default, alias of gemini-2.5-flash-image) is faster. 'nano-banana-2-lite' is a lightweight variant. 'nano-banana-2' (alias of gemini-3.1-flash-image) offers pro-level quality at flash speed. 'nano-banana-2.1' supports 1K/2K/4K generation and editing. 'nano-banana-pro' (alias of gemini-3-pro-image) offers highest quality and supports resolution parameter. The existing nano-banana, 2-lite, 2, and pro models have ':official' variants; 2.1 does not.",
+            "enum": [
+              "nano-banana",
+              "nano-banana-2-lite",
+              "nano-banana-2",
+              "nano-banana-2.1",
+              "nano-banana-pro",
+              "nano-banana:official",
+              "nano-banana-2-lite:official",
+              "nano-banana-2:official",
+              "nano-banana-pro:official"
+            ],
+            "title": "Model",
+            "type": "string"
+          },
+          "aspect_ratio": {
+            "default": "1:1",
+            "description": "Aspect ratio of the generated image. Options: '1:1' (square, default), '3:2', '2:3', '16:9' (landscape), '9:16' (portrait), '4:3', '3:4'.",
+            "enum": [
+              "1:1",
+              "3:2",
+              "2:3",
+              "16:9",
+              "9:16",
+              "4:3",
+              "3:4"
+            ],
+            "title": "Aspect Ratio",
+            "type": "string"
+          },
+          "resolution": {
+            "anyOf": [
+              {
+                "enum": [
+                  "1K",
+                  "2K",
+                  "4K"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Resolution of the generated image. Options: '1K' (default), '2K', '4K'. Supported by nano-banana-2, nano-banana-2.1, and nano-banana-pro.",
+            "title": "Resolution"
+          },
+          "count": {
+            "anyOf": [
+              {
+                "maximum": 4,
+                "minimum": 1,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Number of images to generate. Default is 1.",
+            "title": "Count"
+          },
+          "callback_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Optional callback URL to receive the result asynchronously.",
+            "title": "Callback Url"
+          }
+        },
+        "required": [
+          "prompt"
+        ],
+        "title": "nanobanana_generate_imageArguments",
+        "type": "object"
+      },
+      "outputSchema": {
+        "properties": {
+          "result": {
+            "title": "Result",
+            "type": "string"
+          }
+        },
+        "required": [
+          "result"
+        ],
+        "title": "nanobanana_generate_imageOutput",
+        "type": "object"
+      },
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "nanobanana_edit_image",
+      "title": null,
+      "description": "Edit or combine images using AI based on a text prompt.\n\n    This allows you to modify existing images or combine multiple images together.\n    Perfect for virtual try-on, product placement, image enhancement, and more.\n\n    Use this when:\n    - You want to combine multiple images (e.g., person + clothing)\n    - You want to modify an existing image\n    - You need virtual try-on (putting clothes on a person)\n    - You want to place products in different scenes\n    - You need to change attributes (materials, colors, styles)\n\n    Common use cases:\n    - Portrait replacement: Try different clothing on same person\n    - Product scene composition: Place products in realistic environments\n    - Attribute replacement: Change materials, colors, or variants\n    - Poster editing: Rapidly change styles or themes\n    - 2D to 3D conversion: Convert images to 3D product mockups\n    - Image restoration: Restore old or damaged photos\n\n    Returns:\n        Task ID, trace ID, and edited image URL.\n    ",
+      "inputSchema": {
+        "properties": {
+          "prompt": {
+            "description": "Description of the edit to perform. Describe how the images should be combined or modified. Example: 'let this person wear this T-shirt', 'place this product in a modern kitchen scene'",
+            "title": "Prompt",
+            "type": "string"
+          },
+          "image_urls": {
+            "description": "List of image URLs to edit. Can be HTTP/HTTPS URLs (publicly accessible) or Base64-encoded images (data:image/png;base64,...). When combining multiple images, describe their relationship in the prompt.",
+            "items": {
+              "type": "string"
+            },
+            "title": "Image Urls",
+            "type": "array"
+          },
+          "model": {
+            "default": "nano-banana",
+            "description": "Model to use for editing. 'nano-banana' (default, alias of gemini-2.5-flash-image) is faster. 'nano-banana-2-lite' is a lightweight variant. 'nano-banana-2' (alias of gemini-3.1-flash-image) offers pro-level quality at flash speed. 'nano-banana-2.1' supports 1K/2K/4K generation and editing. 'nano-banana-pro' (alias of gemini-3-pro-image) offers highest quality. The existing nano-banana, 2-lite, 2, and pro models have ':official' variants; 2.1 does not.",
+            "enum": [
+              "nano-banana",
+              "nano-banana-2-lite",
+              "nano-banana-2",
+              "nano-banana-2.1",
+              "nano-banana-pro",
+              "nano-banana:official",
+              "nano-banana-2-lite:official",
+              "nano-banana-2:official",
+              "nano-banana-pro:official"
+            ],
+            "title": "Model",
+            "type": "string"
+          },
+          "aspect_ratio": {
+            "anyOf": [
+              {
+                "enum": [
+                  "1:1",
+                  "3:2",
+                  "2:3",
+                  "16:9",
+                  "9:16",
+                  "4:3",
+                  "3:4"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Aspect ratio of the edited image. Options: '1:1', '3:2', '2:3', '16:9', '9:16', '4:3', '3:4'. If omitted, the model infers it from the input images.",
+            "title": "Aspect Ratio"
+          },
+          "resolution": {
+            "anyOf": [
+              {
+                "enum": [
+                  "1K",
+                  "2K",
+                  "4K"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Resolution of the edited image. Options: '1K', '2K', '4K'. Supported by nano-banana-2, nano-banana-2.1, and nano-banana-pro.",
+            "title": "Resolution"
+          },
+          "count": {
+            "anyOf": [
+              {
+                "maximum": 4,
+                "minimum": 1,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Number of edited images to generate. Default is 1.",
+            "title": "Count"
+          },
+          "callback_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Optional callback URL to receive the result asynchronously.",
+            "title": "Callback Url"
+          }
+        },
+        "required": [
+          "prompt",
+          "image_urls"
+        ],
+        "title": "nanobanana_edit_imageArguments",
+        "type": "object"
+      },
+      "outputSchema": {
+        "properties": {
+          "result": {
+            "title": "Result",
+            "type": "string"
+          }
+        },
+        "required": [
+          "result"
+        ],
+        "title": "nanobanana_edit_imageOutput",
+        "type": "object"
+      },
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "nanobanana_get_task",
+      "title": null,
+      "description": "Query the status and result of an image generation or edit task.\n\n    Use this to check if a generation/edit is complete and retrieve the resulting\n    image URLs and metadata.\n\n    Use this when:\n    - You want to check if an image generation has completed\n    - You need to retrieve image URLs from a previous generation\n    - You want to get the full details of a generated/edited image\n\n    Returns:\n        Task status and image information including URLs and prompts.\n    ",
+      "inputSchema": {
+        "properties": {
+          "task_id": {
+            "description": "The task ID returned from a generation or edit request. This is the 'task_id' field from any nanobanana_generate_image or nanobanana_edit_image tool response.",
+            "title": "Task Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "task_id"
+        ],
+        "title": "nanobanana_get_taskArguments",
+        "type": "object"
+      },
+      "outputSchema": {
+        "properties": {
+          "result": {
+            "title": "Result",
+            "type": "string"
+          }
+        },
+        "required": [
+          "result"
+        ],
+        "title": "nanobanana_get_taskOutput",
+        "type": "object"
+      },
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "nanobanana_get_tasks_batch",
+      "title": null,
+      "description": "Query multiple image generation/edit tasks at once.\n\n    Efficiently check the status of multiple tasks in a single request.\n    More efficient than calling nanobanana_get_task multiple times.\n\n    Use this when:\n    - You have multiple pending generations to check\n    - You want to get status of several images at once\n    - You're tracking a batch of generations\n\n    Returns:\n        Status and image information for all queried tasks.\n    ",
+      "inputSchema": {
+        "properties": {
+          "task_ids": {
+            "description": "List of task IDs to query. Allows querying multiple tasks at once.",
+            "items": {
+              "type": "string"
+            },
+            "title": "Task Ids",
+            "type": "array"
+          }
+        },
+        "required": [
+          "task_ids"
+        ],
+        "title": "nanobanana_get_tasks_batchArguments",
+        "type": "object"
+      },
+      "outputSchema": {
+        "properties": {
+          "result": {
+            "title": "Result",
+            "type": "string"
+          }
+        },
+        "required": [
+          "result"
+        ],
+        "title": "nanobanana_get_tasks_batchOutput",
+        "type": "object"
+      },
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    }
+  ],
+  "prompts": [
+    {
+      "name": "nanobanana_image_generation_guide",
+      "title": null,
+      "description": "Guide for choosing the right NanoBanana tool for image tasks.",
+      "arguments": [],
+      "icons": null,
+      "meta": null
+    },
+    {
+      "name": "nanobanana_prompt_writing_guide",
+      "title": null,
+      "description": "Guide for writing effective image generation prompts.",
+      "arguments": [],
+      "icons": null,
+      "meta": null
+    },
+    {
+      "name": "nanobanana_workflow_examples",
+      "title": null,
+      "description": "Common workflow examples for NanoBanana image generation.",
+      "arguments": [],
+      "icons": null,
+      "meta": null
+    }
+  ],
+  "localizations": [
+    {
+      "locale": "zh-CN",
+      "name": "Nano Banana（Ace Data Cloud 提供）",
+      "description": "通过 Ace Data Cloud 使用 Nano Banana，需要 Ace 服务 API Token；生成按当前服务价格计费。",
+      "tags": [
+        "nano banana",
+        "nanobanana",
+        "image-generation",
+        "image-editing",
+        "acedatacloud"
+      ]
+    }
+  ]
+}

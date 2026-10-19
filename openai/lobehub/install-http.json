@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "ace-gpt-image": {
+      "type": "http",
+      "url": "https://openai.mcp.acedata.cloud/mcp"
+    }
+  }
+}

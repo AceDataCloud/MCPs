@@ -1,74 +1,85 @@
-# GPT Image in Glama — by Ace Data Cloud
+# GPT Image by Ace Data Cloud in Glama
 
-[简体中文](#中文操作指南) · [Open the service listing](https://glama.ai/mcp/servers/AceDataCloud/OpenAIMCP) · [Current access and pricing](https://platform.acedata.cloud/models?utm_source=glama&utm_medium=referral&utm_campaign=evergreen&utm_content=openai_mcp_glama_pricing)
+[简体中文](#中文操作指南) · [GPT Image profile source](../GPT_IMAGE.md) · [Current models and price](https://platform.acedata.cloud/models?utm_source=glama&utm_medium=referral&utm_campaign=evergreen&utm_content=gpt_image_mcp_glama_pricing)
 
-Use **GPT Image by Ace Data Cloud** for GPT Image generation/editing and image task results; this existing server also exposes chat, Responses, audio, and embedding tools. Ace provides this integration and bills its API usage; this is not a model developer's official Glama app. It reuses the existing `mcp-openai-pro` server, rather than asking you to install an unrelated Ace bundle.
+Use the **GPT Image-only profile**, not the generic OpenAI remote server. The published `mcp-openai-pro` package accepts `--profile gpt-image` and exposes exactly five tools: `gpt_image_generate`, `gpt_image_edit`, `gpt_image_get_task`, `gpt_image_list_tasks`, and `gpt_image_list_models`. It reuses the maintained Ace client and task/error handling. This integration is provided by Ace Data Cloud, not endorsed by OpenAI.
 
-## 1. Open the correct official Glama entry
+## 1. Find the correct entry and distinguish publication stages
 
-Open [the existing service listing](https://glama.ai/mcp/servers/AceDataCloud/OpenAIMCP) and check the author is **AceDataCloud**. The title can still use `OpenAIMCP` while directory metadata is being refreshed. The [remote connector](https://glama.ai/mcp/connectors/io.github.AceDataCloud/mcp-openai) is a separate record for the hosted endpoint.
+The [official MCP Registry entry](https://registry.modelcontextprotocol.io/?q=io.github.AceDataCloud%2Fmcp-gpt-image) is the dedicated `io.github.AceDataCloud/mcp-gpt-image` profile. Its manifest installs `mcp-openai-pro` with `--profile gpt-image`; use the package version actually shown there.
 
-The screenshot below is a **real Suno listing captured on 2026-10-17**, supplied as a Glama navigation reference. It does not show GPT Image connected or a successful generation. For other services, use the exact entry above. Buttons and account screens can change.
+Glama can ingest Registry and source-repository metadata, but that does not prove it has indexed this dedicated profile. Search Glama for [GPT Image](https://glama.ai/mcp/servers?query=GPT%20Image), verify the author is **AceDataCloud**, and inspect the advertised tools and package arguments. A dedicated GPT Image Glama listing and ordinary installation remain **unverified** as of 2026-10-19. Do not interpret a missing search result as permission to install an unrelated provider.
 
-![Real Glama Suno listing: Try in Browser and Deploy Server](images/glama-suno-20261017.jpg)
+The existing [OpenAIMCP Glama page](https://glama.ai/mcp/servers/AceDataCloud/OpenAIMCP) and its remote connector describe the general server, which includes chat/audio/embedding and other image tools. They are not a dedicated GPT Image install. There is **no separate hosted GPT Image URL** in this release; do not invent one or point a profile-only configuration at `openai.mcp.acedata.cloud/mcp`.
 
-On the source listing, **Try in Browser** starts the browser test flow; **Deploy Server** is a separate hosting action. For the existing Ace-hosted endpoint, use the remote connector's **Connect / Add Connector** path, or **Install in Client** to use another client. Avoid deploying a new server just to connect to the existing one.
+This real **2026-10-17 Suno page** illustrates Glama's directory navigation only. It is not a GPT Image listing, authorization screen or successful image result. Glama may change its controls.
 
-The public connector was marked **Unhealthy** during the 2026-10-18 audit. That is Glama's test result and can reflect missing test authentication. It is not proof of a successful connection, nor a reason to remove authentication. If your own connection fails, inspect its error before running a paid request.
+![Real Glama Suno listing used only as a directory navigation reference](images/glama-suno-20261017.jpg)
 
-## 2. Register/sign in and obtain the right API Token
+## 2. Obtain an application API Token
 
-1. [Register or sign in to Ace Data Cloud](https://platform.acedata.cloud/?utm_source=glama&utm_medium=referral&utm_campaign=evergreen&utm_content=openai_mcp_glama_signup) and open [Applications](https://platform.acedata.cloud/console/applications?utm_source=glama&utm_medium=referral&utm_campaign=evergreen&utm_content=openai_mcp_glama_api_key). If there is no General application, choose **Initialize General Application**.
-2. Open **General application**. Check access to GPT Image, the current model/operation price, balance, expiration and usage limits. No fixed trial balance is promised.
-3. Copy an existing API Key using **①**, or choose **② Manage Keys → Create** for a dedicated key named `Glama openai`. The screenshot's values are redacted.
+1. [Register/sign in to Ace Data Cloud](https://platform.acedata.cloud/?utm_source=glama&utm_medium=referral&utm_campaign=evergreen&utm_content=gpt_image_mcp_glama_signup), then open [Applications](https://platform.acedata.cloud/console/applications?utm_source=glama&utm_medium=referral&utm_campaign=evergreen&utm_content=gpt_image_mcp_glama_api_key).
+2. Open **General application**, or choose **Initialize General Application** if it is absent. Check GPT Image model access, the chosen API, expiration, usage limit, current balance and price. No fixed trial allowance is promised.
+3. Copy an existing API Key using **①**, or choose **② Manage Keys → Create** to create a separate `Glama GPT Image` key. Values in the source image are redacted.
 
-![Ace Applications: copy API Key or manage keys](https://raw.githubusercontent.com/AceDataCloud/SunoDify/8d3d03570e73324220f111f7fe343da0792a8071/_assets/tutorial/get-api-key-en.png)
+![Real Ace Applications screenshot: copy an API Key or open Manage Keys](https://raw.githubusercontent.com/AceDataCloud/SunoDify/8d3d03570e73324220f111f7fe343da0792a8071/_assets/tutorial/get-api-key-en.png)
 
-4. If creating a key, use a recognizable name and review expiration, usage limit and Allowed APIs. For this service, check the exact operations you intend to use, including generation **and** task lookup: `/openai/images/generations, /openai/images/edits, /openai/tasks`. Copy the token after creation. Do not reuse the example name `Dify tutorial` shown in the source image as a requirement.
+4. When using **Allowed APIs**, allow the image operation you actually need (`/openai/images/generations` or `/openai/images/edits`) and `/openai/tasks` to retrieve the same task. Creation and task-query permission are separate. Copy the token after creation.
 
-![Ace Create New Credential: optional dedicated key](https://raw.githubusercontent.com/AceDataCloud/SunoDify/8d3d03570e73324220f111f7fe343da0792a8071/_assets/tutorial/create-api-key-en.png)
+![Real optional dedicated-key creation screen](https://raw.githubusercontent.com/AceDataCloud/SunoDify/8d3d03570e73324220f111f7fe343da0792a8071/_assets/tutorial/create-api-key-en.png)
 
-These unchanged Ace Platform screenshots are reused from the [SunoDify guide at commit 8d3d0357](https://github.com/AceDataCloud/SunoDify/blob/8d3d03570e73324220f111f7fe343da0792a8071/README.md), checked 2026-10-18. They show Ace key acquisition, not Glama authorization. Never copy redaction blocks or use a platform-management token as the generation API Token.
+These unchanged screenshots come from the [SunoDify source pinned at 8d3d0357](https://github.com/AceDataCloud/SunoDify/blob/8d3d03570e73324220f111f7fe343da0792a8071/README.md), visually checked 2026-10-18. The source example name `Dify tutorial` is not a required Glama name. They show Ace key acquisition, not Glama authorization. Use the raw application API Token; do not copy redaction blocks, prefix it with `Bearer ` in the environment variable, or substitute an account-management platform token.
 
-## 3. Connect in Glama using one authentication path
+## 3. Install the five-tool profile
 
-Endpoint: `https://openai.mcp.acedata.cloud/mcp` (Streamable HTTP).
+A Glama catalog install is ready only when its **package** configuration supports the profile arguments and per-user environment variable below. If a dedicated profile record appears, check these exact fields before installing. The following local stdio configuration is also usable by compatible external clients; manually importing it is **not** evidence of a Glama catalog install:
 
-- **OAuth:** choose the remote connector, use its browser sign-in and complete the Ace login. Do not also paste a fixed Authorization header. OAuth uses the account/service access you approve; it does not make generation free.
-- **API Token:** if the current Glama/Inspector client offers a Bearer-token field, paste the token string there. If it offers raw HTTP headers instead, set `Authorization` to `Bearer YOUR_API_TOKEN`. Do not put the token in the server URL, prompt, screenshot, or exported config. Glama's public pages do not establish which credential controls your signed-in version offers; if no suitable field exists, use the listed OAuth path or another supported client from the [main README](../README.md).
-- **Local package:** `mcp-openai-pro` is for a local stdio client. Installing that package alone does not add a connection to Glama's cloud workspace.
+```json
+{
+  "mcpServers": {
+    "gpt-image-by-ace": {
+      "command": "uvx",
+      "args": ["mcp-openai-pro", "--profile", "gpt-image"],
+      "env": {"ACEDATACLOUD_API_TOKEN": "YOUR_ACE_APPLICATION_TOKEN"}
+    }
+  }
+}
+```
 
-Glama's [connector guide](https://glama.ai/blog/2025-10-22-what-are-mcp-connectors) describes one connection reused across Chat, Automations and Gateway. Its directory **Test Profile** belongs to the listing author and is separate from your personal connection; users should not try to repair directory checks by sharing their API key with the maintainer.
+`uvx` requires uv on the machine running the process. A Glama-hosted package deployment is a separate action: confirm the actual UI supports these arguments and secret environment storage, and check its terms or cost before deployment. This guide does not assume a new cloud deployment, accept its agreement, or claim that a signed-in package form has been verified.
 
-## 4. Check tool loading before a paid request
+Keep the token in that client's private credential/environment storage. Do not put it in a prompt, URL, public configuration or screenshot. The dedicated profile does not use a generic remote connector's OAuth configuration; using the generic URL would expose the wrong tool set.
 
-Confirm the connected server advertises `openai_generate_image` and `openai_get_task`. Call `openai_list_image_models` with empty arguments to read static reference information. This checks tool loading; it does not verify a downstream balance or authorize generation.
+## 4. Free check, then one deliberate generation
 
-When you deliberately authorize a first request, choose the model and fields from the currently advertised tool schema and review [current service access and pricing](https://platform.acedata.cloud/models?utm_source=glama&utm_medium=referral&utm_campaign=evergreen&utm_content=openai_mcp_glama_first_run_price). Call `openai_generate_image` **once**. Generation/editing can be billed; do not enable automatic retries just to obtain a result.
+Read the connected server's tool list. It must contain the five `gpt_image_*` tools above and exclude general chat, audio, embeddings, DALL-E and Nano Banana. Call `gpt_image_list_models` with empty arguments; it reads static metadata without submitting generation. This proves loading, not the downstream credential, model availability or account balance.
 
-## 5. Follow the original task to its final result
+Only after choosing an explicit GPT Image model and approving its [current price](https://platform.acedata.cloud/models?utm_source=glama&utm_medium=referral&utm_campaign=evergreen&utm_content=gpt_image_mcp_glama_first_run_price), call `gpt_image_generate` once with your prompt and selected model. Editing uses `gpt_image_edit` with the schema's ordered image URL list. Do not enable automatic paid retries. No paid generation was performed for this guide.
 
-Keep the returned task ID. If the response is pending, use `openai_get_task` with that **same ID** until success or failure. An accepted submission, a preview URL or a green client step is not a completed media result. A failed task should stop polling; check its recorded error before deciding whether to submit another request. Only share the final returned media after terminal success. For this server the task argument is `id` (or the original `trace_id`), not a new generation prompt.
+## 5. Query the original task and inspect the final image
 
-## Troubleshooting and privacy
+Save the returned `task_id`. Call `gpt_image_get_task` with that same `id` until terminal success or failure; `gpt_image_list_tasks` looks up tasks using its advertised filter fields; use `gpt_image_get_task` for the original ID. A pending task, preview URL, accepted request or green client step is not a finished image. On terminal success, inspect the returned final media in the task response. On failure, stop polling and preserve its safe task/trace ID and error before considering a fresh submission. Never repeat generation merely to poll.
 
-| What you see | What to check |
+## Troubleshooting
+
+| Symptom | Action |
 |---|---|
-| Directory says Unhealthy | The author must inspect its own authenticated test profile; check your personal connection independently. |
-| 401 / OAuth failure | Use one auth route; check full token, expiration and whether browser sign-in completed. |
-| 403 / moderation or access denial | Read the exact returned reason; a new key does not bypass service restrictions or content policy. |
-| Missing tools | Reconnect/refresh the selected server; distinguish the source directory from the live connection's tool list. |
-| Pending / preview only | Query the original task ID; do not regenerate to poll. |
-| 429 / timeout / failed | Reduce requests and inspect the original task; no automatic paid retry. |
+| Dedicated entry missing in Glama | Search the exact profile name and check the official Registry. Downstream ingestion/claim is a separate review; do not call the generic OpenAI record a dedicated listing. |
+| Unexpected chat/audio tools | Preserve `--profile gpt-image`; remove a mistaken generic remote configuration. |
+| Unknown profile flag | Check the installed package version against the public manifest; an old package may predate the profile. |
+| 401 / 403 | Check the raw application Token, model/API access, expiration, limits and balance. Do not bypass a moderation/access denial with a new key. |
+| No model supplied | Choose a GPT Image model explicitly after reviewing price; there is no hidden fallback. |
+| Pending / missing image | Query the original ID. Do not regenerate for progress. |
+| 429 / timeout / failure | Reduce requests and inspect the original task; no automatic paid retry. |
 
-Your chosen input and API credential are used by the connection to reach Ace's API. Glama controls its own credential storage and logs. Keep secrets private. [API documentation](https://platform.acedata.cloud/documents/openai?utm_source=glama&utm_medium=referral&utm_campaign=evergreen&utm_content=openai_mcp_glama_api_docs) · [Source and support](https://github.com/AceDataCloud/OpenAIMCP/issues).
+[API reference](https://platform.acedata.cloud/documents/openai?utm_source=glama&utm_medium=referral&utm_campaign=evergreen&utm_content=gpt_image_mcp_glama_api_docs) · [Source/support](https://github.com/AceDataCloud/OpenAIMCP/issues).
 
 ## 中文操作指南
 
-1. 打开上方 **Glama 服务条目／远程 Connector**，确认作者 **AceDataCloud**。这是 Ace 提供的 GPT Image 集成，不冒充模型厂商官方插件。目录、个人连接和作者检测是三个不同状态；目前不能把 Unhealthy 写成已安装成功。
-2. [注册或登录 Ace](https://platform.acedata.cloud/?utm_source=glama&utm_medium=referral&utm_campaign=evergreen&utm_content=openai_mcp_glama_signup_zh) → [Applications／我的应用](https://platform.acedata.cloud/console/applications?utm_source=glama&utm_medium=referral&utm_campaign=evergreen&utm_content=openai_mcp_glama_api_key_zh) → **General application／通用应用**。没有时先初始化。核对服务权限、余额、有效期、用量限制和[当前价格](https://platform.acedata.cloud/models?utm_source=glama&utm_medium=referral&utm_campaign=evergreen&utm_content=openai_mcp_glama_pricing_zh)。
-3. 按真实图中的①复制已有 Key；或② **Manage Keys／管理密钥 → Create／创建**，给 Glama 建可独立撤销的专用 Token。启用 API 限制时同时允许所需生成和查询接口。图中值已遮挡，`Dify tutorial`只是原图例名；不要抄遮挡字符，不要用平台管理 Token 代替 API Token。
-4. 在 Glama 远程连接选择 OAuth 时完成 Ace 登录；选择 API Token 时按实际界面填入 Bearer token，若是原始 Header 表则使用 `Authorization: Bearer ...`。不要在提示词、URL、截图或共享配置里放 Key；实际登录后的字段尚待逐项截图验收，不能虚构按钮位置。
-5. 先检查工具列表，免费调用 `openai_list_image_models`。确认首用费用后才调用一次 `openai_generate_image`；保存任务 ID，只用 `openai_get_task`查同一任务直到终态。中间预览不是成功结果，不能重复生成来查询进度。
+1. 搜索 Glama 的 **GPT Image** 并核对作者 AceDataCloud、独立五个 `gpt_image_*` 工具和 `--profile gpt-image` 参数。官方 MCP Registry 已有独立配置，不等于 Glama 已导入；截至2026-10-19普通 Glama 搜索、安装和授权仍未完成验收。现有 OpenAIMCP 页面是通用服务，不能冒充独立影像入口。
+2. [注册或登录 Ace](https://platform.acedata.cloud/?utm_source=glama&utm_medium=referral&utm_campaign=evergreen&utm_content=gpt_image_mcp_glama_signup_zh) → [Applications／我的应用](https://platform.acedata.cloud/console/applications?utm_source=glama&utm_medium=referral&utm_campaign=evergreen&utm_content=gpt_image_mcp_glama_api_key_zh) → **General application／通用应用**。缺少时先初始化；核对模型/API权限、有效期、用量、余额和当前价格。
+3. 用图中①复制已有Key，或② **Manage Keys → Create**建立专用Token。API限制要同时允许所需图片操作和`/openai/tasks`。图片已打码，原图Dify示例名不要求照抄；不要用平台管理Token代替应用API Token。
+4. 包配置必须保留上方stdio命令的`--profile gpt-image`，原始Token放在私密`ACEDATACLOUD_API_TOKEN`环境变量中，不加Bearer。没有独立GPT Image远程URL；不能用genericOpenAI远程地址代替。Glama托管包的具体参数/密钥表单尚待真实登录核验，不虚构按钮或部署成功。
+5. 先检查五工具并调用免费`gpt_image_list_models`；确认实际价格和预算后才提交一次生成/编辑，保存任务ID，之后只查同一ID到终态再展示最终图片。未跑收费示例，没有Glama终态、媒体或账单成功截图。
 
-图源及日期：Glama Suno 实拍 2026-10-17；Ace 应用 Key 真图来自上方固定 SunoDify 提交，2026-10-18 核验、未重画。它们不能代替本条目的 Glama 登录、实际生成、终态媒体或账单证据。
+图源：真实Glama Suno入口图2026-10-17；Ace应用Key图来自固定SunoDify提交，2026-10-18核验、未重画。两者只作对应步骤参考，不证明GPT Image已在Glama上线。

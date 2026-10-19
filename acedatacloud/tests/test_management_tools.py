@@ -358,16 +358,48 @@ async def test_csv_and_wallet_artifacts_are_bounded_downloads():
 
 
 @respx.mock
-async def test_multipart_upload_requires_confirmation_and_uses_file_field():
-    route = respx.post(f"{API}/files/").mock(
-        return_value=httpx.Response(200, json={"file_id": "file-1"})
+@pytest.mark.parametrize("content_type", [None, "application/octet-stream", "image/jpeg"])
+async def test_multipart_upload_requires_confirmation_and_uses_file_field(content_type):
+    payload = {
+        "file_url": "https://cdn.acedata.cloud/uploads/550e8400-e29b-41d4-a716-446655440000.jpg",
+        "mime": "image/jpeg",
+    }
+    route = respx.post(f"{API}/files/").mock(return_value=httpx.Response(200, json=payload))
+    args = {
+        "filename": "photo.jpg",
+        "content_base64": base64.b64encode(b"jpeg").decode(),
+    }
+    if content_type is not None:
+        args["content_type"] = content_type
+    tool = REGISTERED_TOOLS["acedatacloud_create_files"]
+
+    preview = json.loads(await tool(**args))
+    assert preview["status"] == "confirmation_required"
+    assert not route.called
+
+    result = json.loads(await tool(**args, confirm=True))
+
+    assert result == payload
+    assert route.call_count == 1
+    request = route.calls.last.request
+    assert "multipart/form-data" in request.headers["content-type"]
+    assert b'name="file"; filename="photo.jpg"' in request.content
+    assert f"Content-Type: {content_type or 'application/octet-stream'}".encode() in request.content
+    assert b"jpeg" in request.content
+
+
+@respx.mock
+async def test_upload_still_enforces_mcp_size_limit():
+    result = json.loads(
+        await REGISTERED_TOOLS["acedatacloud_create_files"](
+            filename="photo.jpg",
+            content_base64=base64.b64encode(b"x" * (2 * 1024 * 1024 + 1)).decode(),
+            confirm=True,
+        )
     )
-    result = await REGISTERED_TOOLS["acedatacloud_create_files"](
-        filename="article.png", content_base64=base64.b64encode(b"png").decode(), confirm=True
-    )
-    assert json.loads(result)["file_id"] == "file-1"
-    assert "multipart/form-data" in route.calls.last.request.headers["content-type"]
-    assert b'name="file"' in route.calls.last.request.content
+
+    assert result["error"] == "request_too_large"
+    assert not respx.calls
 
 
 async def test_visible_tools_follow_current_account_permissions(monkeypatch):

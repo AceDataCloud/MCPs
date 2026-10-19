@@ -491,7 +491,7 @@ Omitting `presentation` uses Backend defaults on creation and preserves current 
 
 ### Check x402 ACE buyback and burn
 
-When the policy is enabled, eligible Base mainnet Circle USDC and Solana mainnet USDC receipts allocate 3% to buying and burning ACE without an extra wallet charge. Recharge is counted once; later API calls using those Credits are not counted again. Historical discounted orders and old-policy orders are not automatically included.
+When the policy is enabled, eligible Base mainnet Circle USDC and Solana mainnet USDC receipts allocate exactly 3% of the received amount to buying and burning ACE without an extra wallet charge. There is no fixed per-operation or daily USDC buyback cap; available funds, market quotes and chain finality can still affect completion time. Recharge is counted once; later API calls using those Credits are not counted again. Historical discounted orders and old-policy orders are not automatically included.
 
 Call `acedatacloud_get_order(order_id=...)` and inspect `ace_burn`. `settlement_network` and `settlement_transaction` identify the original payment, while `execution_network` identifies execution on Solana. `Pending` or `Processing` is not proof of a burn; only `Completed` indicates verified final proof, including public `swap_signature` and `burn_signature` transaction identifiers. A Base payment awaiting finality can delay the buyback without blocking already credited Credits. A null `ace_burn` is not evidence of a completed burn. Wallet/payment signatures and authorization payloads remain confidential.
 
@@ -677,6 +677,17 @@ Hosted `tools/list` is filtered using the current platform credential's effectiv
 permissions from `/platform-tokens/me/`. Deploy the Backend subject response and
 the Auth consent changes before this MCP. File upload inputs and binary outputs
 are Base64 artifacts bounded to 2 MiB; signed download links are returned directly.
+
+For `acedatacloud_create_files`, provide `filename` and `content_base64`, review
+the preview, then repeat with `confirm=true` to upload. The result's `file_url`
+is publicly accessible: do not upload confidential material. Backend chooses a
+unique `uploads/<uuid>` path and preserves a safe filename extension. Supply
+`content_type` matching the actual bytes; if omitted or `application/octet-stream`,
+Backend infers it from the filename. Neither the extension nor MIME inference
+converts the file. The returned `mime` is the stored MIME type. Reuse the returned
+`file_url` for other APIs rather than constructing a URL or treating CDN hosting
+as a permanent archive. The MCP's 2 MiB limit still applies even though Backend
+accepts larger files.
 
 ### Discovery and compatibility
 

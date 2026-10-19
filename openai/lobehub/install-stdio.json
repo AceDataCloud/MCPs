@@ -1,0 +1,16 @@
+{
+  "mcpServers": {
+    "ace-gpt-image": {
+      "type": "stdio",
+      "command": "uvx",
+      "args": [
+        "--from",
+        "mcp-openai-pro==2026.10.17.0",
+        "mcp-openai-pro"
+      ],
+      "env": {
+        "ACEDATACLOUD_API_TOKEN": "YOUR_API_TOKEN"
+      }
+    }
+  }
+}

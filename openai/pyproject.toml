@@ -1,7 +1,7 @@
 [project]
 name = "mcp-openai-pro"
 version = "2026.4.25.1"
-description = "GPT Image generation and editing plus OpenAI tools by Ace Data Cloud via MCP"
+description = "MCP Server for OpenAI API via AceDataCloud"
 readme = "README.pypi.md"
 license = { text = "MIT" }
 requires-python = ">=3.10"
@@ -85,15 +85,23 @@ requires = ["hatchling>=1.21.0,<1.30.0"]
 build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
-packages = ["core", "tools", "prompts", "main.py"]
+packages = ["core", "tools", "prompts", "main.py", "gpt_image_tools.py"]
 
 [tool.hatch.build.targets.sdist]
 include = [
+    "goose/",
+    ".goose-plugin/",
+    ".mcp.json",
+    "kilo/",
     "core/",
     "tools/",
     "prompts/",
     "tests/",
     "main.py",
+    "gpt_image_tools.py",
+    "gpt-image.server.json",
+    "GPT_IMAGE.md",
+    "readme/",
     "README.md",
     "README.pypi.md",
     "LICENSE",
