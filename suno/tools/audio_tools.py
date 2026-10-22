@@ -192,7 +192,7 @@ async def suno_generate_custom_music(
         payload["style"] = style
     if negative_tags:
         payload["negative_tags"] = negative_tags
-    if vocal_gender and vocal_gender in ("f", "m"):
+    if vocal_gender:
         payload["vocal_gender"] = vocal_gender
     if variation_category:
         payload["variation_category"] = variation_category
