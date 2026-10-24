@@ -172,7 +172,7 @@ async def kling_generate_video(
     video_list: Annotated[
         list[KlingReferenceVideo] | None,
         Field(
-            description="One Omni reference video for kling-o1 or kling-v3-omni. Cite it as <<<video_1>>>. Use refer_type='feature' to reference it or 'base' to edit it."
+            description="One Omni reference video for kling-o1 or kling-v3-omni. Cite it as <<<video_1>>>. Use refer_type='feature' to reference it or 'base' (default) to edit it. Reference video pricing is separate: base bills actual output duration rounded to integer seconds; feature uses the requested duration. Read final billed seconds from usage.reference_video_seconds. Reference images alone do not trigger this tier; generate_audio must not be true."
         ),
     ] = None,
     callback_url: Annotated[
@@ -309,7 +309,9 @@ async def kling_generate_video_from_image(
     ] = None,
     video_list: Annotated[
         list[KlingReferenceVideo] | None,
-        Field(description="One Omni reference video for kling-o1 or kling-v3-omni."),
+        Field(
+            description="One Omni reference video for kling-o1 or kling-v3-omni. Reference video pricing is separate: base (default) bills actual output duration rounded to integer seconds; feature uses the requested duration. Read final billed seconds from usage.reference_video_seconds. Reference images alone do not trigger this tier; generate_audio must not be true."
+        ),
     ] = None,
     callback_url: Annotated[
         str | None,
