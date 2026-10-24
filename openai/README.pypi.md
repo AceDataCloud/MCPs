@@ -25,6 +25,10 @@ Use the independent **GPT Image by Ace Data Cloud** native goose plugin: [instal
 Use [GPT Image by Ace Data Cloud](https://github.com/AceDataCloud/OpenAIMCP/blob/main/GPT_IMAGE.md) when you only need image generation, editing and task retrieval. It runs `mcp-openai-pro --profile gpt-image`, exposes five image/task tools, requires an explicit GPT Image model, and shares this package's maintained API client. The general OpenAI server remains unchanged. The separate `mcp-gpt-image` Registry entry is active at `2026.10.18.2` (read back 2026-10-19), matching the public package. A catalog client must preserve `--profile gpt-image`; do not substitute the generic remote or infer that every client install has been verified.
 
 
+## Regional catalog visibility
+
+The Platform catalog hides OpenAI image API/model entries and companion image guides in mainland China (`cn`). This is catalog presentation metadata, not a new MCP-side API restriction or removal of the global image tools. Check the current Platform catalog and account access before submitting; a local model list does not verify regional availability. The package remains `mcp-openai-pro`.
+
 ## Features
 
 - **Chat Completions** — Access GPT-4, GPT-4o, GPT-5, o1, o3, o4-mini, and many more models

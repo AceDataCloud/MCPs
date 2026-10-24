@@ -361,4 +361,17 @@ Public commerce tools are `kling_goods_studio` and `kling_video_commerce`. Both 
 
 ## Reference inputs
 
+For `kling-o1` or `kling-v3-omni`, supply one reference video through `video_list` and cite it as `<<<video_1>>>` in the prompt. Do not combine a reference video with `generate_audio=true`. Reference images (`image_list`, start or end frames) alone do not trigger reference-video pricing.
+
+Successful reference-video requests use a separate billing tier: **1.202 Credits/second** in `std` or **1.602 Credits/second** in `pro`. With `refer_type="base"` (the default), editing can follow the reference video's length; actual output duration is rounded to integer seconds for billing (5.708 seconds bills as 6; 5.041 bills as 5). With `refer_type="feature"`, billing uses the requested `duration`. Check the returned `usage.reference_video_seconds` for final billed seconds rather than treating the submission estimate as the final charge.
+
+For a 5-second `kling-o1` result, current Credits are:
+
+| Mode | Without reference video | With reference video (5 billed seconds) |
+|---|---:|---:|
+| `std` | 4.005 | 6.010 |
+| `pro` | 5.340 | 8.010 |
+
+Confirm current account pricing and balance before submitting; poll the original task ID instead of generating again to check progress.
+
 Use `element_list` and `voice_list` only with already valid platform references and the supported model combinations in the current backend guide. Standalone asset creation and management are not published.

@@ -24,6 +24,13 @@ class TestFormatVideoResult:
         assert "video_url" in data
         assert data["mcp_async_submission"]["poll_tool"] == "kling_get_task"
 
+    def test_preserves_reference_video_billing_usage(self, mock_video_response):
+        mock_video_response["usage"] = {"reference_video_seconds": 6}
+
+        data = json.loads(format_video_result(mock_video_response))
+
+        assert data["usage"] == mock_video_response["usage"]
+
     def test_format_error(self, mock_error_response):
         """Test formatting error response."""
         result = format_video_result(mock_error_response)
@@ -66,6 +73,13 @@ class TestFormatTaskResult:
         assert data["response"]["success"] is True
         assert data["response"]["video_id"] == "video-456"
         assert data["mcp_task_polling"]["poll_tool"] == "kling_get_task"
+
+    def test_preserves_reference_video_billing_usage(self, mock_task_response):
+        mock_task_response["response"]["usage"] = {"reference_video_seconds": 6}
+
+        data = json.loads(format_task_result(mock_task_response))
+
+        assert data["response"]["usage"] == mock_task_response["response"]["usage"]
 
     def test_format_error(self):
         """Test formatting error response."""

@@ -20,6 +20,26 @@ def mock_client_generate_video(mock_video_response):
         yield mock_client
 
 
+@pytest.mark.asyncio
+async def test_reference_video_schemas_describe_final_billing():
+    from core.server import mcp
+    from tools import video_tools
+
+    tools = {tool.name: tool for tool in await mcp.list_tools()}
+    for function in (
+        video_tools.kling_generate_video,
+        video_tools.kling_generate_video_from_image,
+    ):
+        properties = tools[function.__name__].inputSchema["properties"]
+        description = properties["video_list"]["description"]
+        assert "base" in description
+        assert "actual output duration rounded to integer seconds" in description
+        assert "feature uses the requested duration" in description
+        assert "usage.reference_video_seconds" in description
+        assert "Reference images alone do not trigger this tier" in description
+        assert "reference_video_seconds" not in properties
+
+
 class TestKlingGenerateVideo:
     """Tests for kling_generate_video tool."""
 
