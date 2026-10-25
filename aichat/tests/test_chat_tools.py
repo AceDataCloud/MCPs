@@ -8,7 +8,7 @@ from mcp.server.fastmcp.exceptions import ToolError
 
 from core.server import mcp
 from tools.chat_tools import aichat_create_conversation_v2
-from tools.info_tools import aichat_list_models
+from tools.info_tools import aichat_get_usage_guide, aichat_list_models
 
 
 @pytest.mark.asyncio
@@ -39,6 +39,58 @@ async def test_sol_fast_dispatch_preserves_public_alias(
         await mcp.call_tool(tool_name, {"question": "hello", "model": "gpt-5.6-sol-fast"})
 
     assert mock_request.await_args.kwargs["model"] == "gpt-5.6-sol-fast"
+
+
+@pytest.mark.asyncio
+async def test_kimi_discovery_identifies_v2_tool_and_keeps_k3_alias() -> None:
+    listing = await aichat_list_models()
+    guide = await aichat_get_usage_guide()
+    assert "Kimi (AiChat v2 only)" in listing
+    for model in ("kimi-k3.1-pro", "kimi-k3"):
+        assert model in listing
+        assert model in guide
+    assert "aichat_create_conversation_v2" in listing
+    assert "does not expose `reasoning_effort`" in guide
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("model", ["kimi-k3.1-pro", "kimi-k3", "kimi-k2.6"])
+async def test_kimi_v2_dispatch_preserves_public_alias(model: str) -> None:
+    tools = {tool.name: tool for tool in await mcp.list_tools()}
+    properties = tools["aichat_create_conversation_v2"].inputSchema["properties"]
+    assert model in properties["model"]["enum"]
+    assert properties["model"]["default"] == "gpt-4.1"
+    assert "reasoning_effort" not in properties
+    assert (
+        model not in tools["aichat_create_conversation"].inputSchema["properties"]["model"]["enum"]
+    )
+    with patch(
+        "tools.chat_tools.client.create_conversation_v2", new=AsyncMock(return_value={"id": "test"})
+    ) as request:
+        await mcp.call_tool("aichat_create_conversation_v2", {"question": "hello", "model": model})
+    assert request.await_args.kwargs["model"] == model
+    assert "reasoning_effort" not in request.await_args.kwargs
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("model", ["kimi-k3.1-pro", "kimi-k2-0905-preview"])
+async def test_v1_rejects_kimi_without_api_call(model: str) -> None:
+    with (
+        patch("tools.chat_tools.client.create_conversation", new=AsyncMock()) as request,
+        pytest.raises(ToolError),
+    ):
+        await mcp.call_tool("aichat_create_conversation", {"question": "hello", "model": model})
+    request.assert_not_awaited()
+
+
+@pytest.mark.asyncio
+async def test_v2_rejects_retired_kimi_without_api_call() -> None:
+    with (
+        patch("tools.chat_tools.client.create_conversation_v2", new=AsyncMock()) as request,
+        pytest.raises(ToolError),
+    ):
+        await mcp.call_tool("aichat_create_conversation_v2", {"model": "kimi-k2-0905-preview"})
+    request.assert_not_awaited()
 
 
 @pytest.mark.asyncio

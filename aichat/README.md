@@ -198,6 +198,20 @@ authorization or other execution conditions.
 ### Zhipu AI
 - glm-5.1, glm-4.7, glm-4.6, glm-3-turbo
 
+### Kimi (AiChat v2 only)
+
+Use `aichat_create_conversation_v2` with `model="kimi-k3.1-pro"`, the recommended
+Kimi model. `kimi-k3` and existing v2 Kimi aliases remain supported; the default
+model is still `gpt-4.1`. These models are not available through the v1 tool.
+
+```json
+{"model":"kimi-k3.1-pro","question":"Review this code and identify its key risks."}
+```
+
+Pass these arguments to `aichat_create_conversation_v2`. The tool calls
+`/aichat2/conversations`, not `/kimi/chat/completions`, and does not expose the
+latter endpoint's `reasoning_effort` control.
+
 ## Documentation
 
 <!-- canonical-documentation -->

@@ -628,6 +628,10 @@ mcp-acedatacloud --transport http --port 8000
 ## Notes
 
 - Amounts (`remaining_amount`, `used_amount`, totals) are in **Credits**, not USD.
+- The compatibility tool `acedatacloud_get_config` returns `features` and an IP-detected
+  lowercase `region` (or `null` when unknown). It does not accept `country` or `region`
+  overrides. `features` overrides remain subject to Backend permissions; a frontend
+  region selection is local display state, not a server-region override.
 - For public contact-only Dataset services, `acedatacloud_get_pricing` returns
   `pricing_mode` and any `reference_quote` from the public service catalog. Keep the
   quote's currency, amount range, unit and `status="reference"`; these are indicative

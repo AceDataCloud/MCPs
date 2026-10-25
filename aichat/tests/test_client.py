@@ -186,6 +186,26 @@ class TestAiChatClient:
             assert call_args[1]["json"]["question"] == "Hello"
 
     @pytest.mark.asyncio
+    @pytest.mark.parametrize("model", ["kimi-k3.1-pro", "kimi-k3"])
+    async def test_create_conversation_v2_preserves_kimi_alias(
+        self, client, mock_conversation_response, model
+    ):
+        mock_response = MagicMock()
+        mock_response.status_code = 200
+        mock_response.json.return_value = mock_conversation_response
+        with patch("httpx.AsyncClient") as mock_http_client:
+            mock_instance = AsyncMock()
+            mock_instance.post.return_value = mock_response
+            mock_http_client.return_value.__aenter__.return_value = mock_instance
+            await client.create_conversation_v2(model=model, question="hello")
+        mock_instance.post.assert_awaited_once_with(
+            "https://api.test.com/aichat2/conversations",
+            json={"model": model, "question": "hello"},
+            headers=client._get_headers(),
+            timeout=client.timeout,
+        )
+
+    @pytest.mark.asyncio
     async def test_create_conversation_v2_timeout(self, client):
         """Test aichat2 timeout handling."""
         with patch("httpx.AsyncClient") as mock_http_client:
