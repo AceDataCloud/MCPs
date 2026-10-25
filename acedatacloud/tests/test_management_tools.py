@@ -316,6 +316,30 @@ async def test_generated_public_reads_do_not_forward_credentials():
 
 
 @respx.mock
+@pytest.mark.parametrize("region", ["us", None])
+async def test_config_preserves_ip_region_and_only_forwards_feature_overrides(region):
+    payload = {"features": {"AUTO_RECHARGE_ENABLED": False}, "region": region}
+    route = respx.get(f"{API}/config/").mock(return_value=httpx.Response(200, json=payload))
+    tool = next(item for item in await mcp.list_tools() if item.name == "acedatacloud_get_config")
+    assert "country" not in tool.inputSchema["properties"]
+    assert "region" not in tool.inputSchema["properties"]
+    content, _ = await mcp.call_tool("acedatacloud_get_config", {"features": "TEST_FLAG=true"})
+    assert json.loads(content[0].text) == payload
+    assert dict(route.calls.last.request.url.params) == {"features": "TEST_FLAG=true"}
+    assert "authorization" not in route.calls.last.request.headers
+
+
+@respx.mock
+@pytest.mark.parametrize("override", [{"country": "GB"}, {"region": "gb"}])
+async def test_config_does_not_forward_region_overrides(override):
+    payload = {"features": {}, "region": "us"}
+    route = respx.get(f"{API}/config/").mock(return_value=httpx.Response(200, json=payload))
+    content, _ = await mcp.call_tool("acedatacloud_get_config", override)
+    assert json.loads(content[0].text) == payload
+    assert not route.calls.last.request.url.params
+
+
+@respx.mock
 async def test_generated_tool_preserves_backend_permission_denial():
     respx.post(f"{API}/email-marketing/admin/campaigns/test-id/send/").mock(
         return_value=httpx.Response(

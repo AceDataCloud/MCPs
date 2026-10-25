@@ -16103,18 +16103,6 @@
     "name": "acedatacloud_get_config",
     "inputSchema": {
       "properties": {
-        "country": {
-          "anyOf": [
-            {
-              "description": "acedatacloud_get_config_country"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "title": "Country"
-        },
         "features": {
           "anyOf": [
             {

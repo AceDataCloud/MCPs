@@ -119,6 +119,13 @@ async def aichat_list_models() -> str:
 - grok-3
 - grok-4.5
 
+## Kimi (AiChat v2 only)
+- kimi-k3.1-pro (recommended Kimi model)
+- kimi-k3 (still supported)
+
+Use `aichat_create_conversation_v2` for these models; they are not supported by
+`aichat_create_conversation`. The default model remains `gpt-4.1`.
+
 ## Zhipu GLM
 - glm-5.3
 - glm-5.2
@@ -219,6 +226,17 @@ aichat_create_conversation(
     model="deepseek-r1"
 )
 ```
+
+### Use Kimi with AiChat v2
+```
+aichat_create_conversation_v2(
+    question="Review this code and identify its key risks.",
+    model="kimi-k3.1-pro"
+)
+```
+
+`kimi-k3` remains supported by v2. This tool uses `/aichat2/conversations`,
+not `/kimi/chat/completions`; it does not expose `reasoning_effort`.
 
 ## Response Structure
 
