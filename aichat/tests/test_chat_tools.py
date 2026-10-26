@@ -46,6 +46,9 @@ async def test_kimi_discovery_identifies_v2_tool_and_keeps_k3_alias() -> None:
     listing = await aichat_list_models()
     guide = await aichat_get_usage_guide()
     assert "Kimi (AiChat v2 only)" in listing
+    assert "recommended" not in next(
+        line for line in listing.splitlines() if line.startswith("- kimi-k3.1-pro")
+    )
     for model in ("kimi-k3.1-pro", "kimi-k3"):
         assert model in listing
         assert model in guide

@@ -201,8 +201,8 @@ authorization or other execution conditions.
 
 ### Kimi (AiChat v2 only)
 
-Use `aichat_create_conversation_v2` with `model="kimi-k3.1-pro"`, the recommended
-Kimi model. `kimi-k3` and existing v2 Kimi aliases remain supported; the default
+Use `aichat_create_conversation_v2` with `model="kimi-k3.1-pro"` to use Kimi
+K3.1 Pro. `kimi-k3` and existing v2 Kimi aliases remain supported; the default
 model is still `gpt-4.1`. These models are not available through the v1 tool.
 
 ```json
