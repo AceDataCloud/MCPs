@@ -37,6 +37,10 @@ The Platform catalog hides OpenAI image API/model entries and companion image gu
 - **Text Embeddings** — Generate vector representations with text-embedding-3 models
 - **Audio** — Convert text to speech and transcribe audio with whisper-1 or gpt-transcribe
 
+## Chat and Responses billing
+
+Accepted compatible-model requests are billed by the selected model's input, output and cache usage, not a fixed fee per request or interface format. Chat Completions `prompt_tokens` and the Responses input total include reported cached tokens; the cached portion is charged at the corresponding cache price. Current model prices and the response's `usage.cost` are authoritative. Billing support does not expand the MCP tools' published model lists or grant account access.
+
 ## Connect: hosted OAuth, API token, or local stdio
 
 The hosted endpoint is `https://openai.mcp.acedata.cloud/mcp`. Choose one route for the MCP client:
