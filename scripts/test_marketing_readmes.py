@@ -146,9 +146,12 @@ class MarketingReadmeTest(unittest.TestCase):
             text,
         )
 
+        connection_text = text.split("## Connect in minutes\n", 1)[1].split(
+            "## Use the tools\n", 1
+        )[0]
         snippets = [
             json.loads(block)
-            for block in re.findall(r"```json\n(.*?)\n```", text, re.DOTALL)
+            for block in re.findall(r"```json\n(.*?)\n```", connection_text, re.DOTALL)
         ]
         self.assertEqual(len(snippets), 6)
         url = "https://suno.mcp.acedata.cloud/mcp"

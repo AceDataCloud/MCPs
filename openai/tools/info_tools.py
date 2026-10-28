@@ -274,6 +274,13 @@ async def openai_get_usage_guide() -> str:
 - model: Model to use (default: gpt-4.1)
 - background: Run in background mode
 
+### Chat and Responses Billing
+Accepted compatible-model requests are billed by model input, output and cache usage,
+not a fixed fee per request or interface format. Chat Completions prompt_tokens and
+the Responses input total include reported cached tokens; the cached portion uses
+the corresponding cache price. Check current model prices and response usage.cost.
+Billing support does not expand the tools' published model lists or grant access.
+
 ### Image Generation
 **openai_generate_image** - Create images from text descriptions (async: returns a task_id, poll openai_get_task)
 - prompt: Image description (required)

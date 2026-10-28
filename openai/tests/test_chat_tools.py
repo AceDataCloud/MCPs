@@ -5,7 +5,17 @@ import json
 import pytest
 
 from core.server import mcp
-from tools import chat_tools
+from tools import chat_tools, info_tools
+
+
+@pytest.mark.asyncio
+async def test_usage_guide_explains_token_and_cache_billing():
+    guide = await info_tools.openai_get_usage_guide()
+    assert "billed by model input, output and cache usage" in guide
+    assert "not a fixed fee per request or interface format" in guide
+    assert "Responses input total include reported cached tokens" in guide
+    assert "current model prices and response usage.cost" in guide
+    assert "does not expand the tools' published model lists" in guide
 
 
 @pytest.mark.asyncio

@@ -119,8 +119,14 @@ async def aichat_list_models() -> str:
 - grok-3
 - grok-4.5
 
+## Google Gemini (AiChat v2 only)
+- gemini-4-argon
+
+Use `aichat_create_conversation_v2` with this exact model ID. The v1 tool does not
+support it; the default remains `gpt-4.1`.
+
 ## Kimi (AiChat v2 only)
-- kimi-k3.1-pro (recommended Kimi model)
+- kimi-k3.1-pro
 - kimi-k3 (still supported)
 
 Use `aichat_create_conversation_v2` for these models; they are not supported by
@@ -226,6 +232,18 @@ aichat_create_conversation(
     model="deepseek-r1"
 )
 ```
+
+### Use Gemini 4 Argon with AiChat v2
+```
+aichat_create_conversation_v2(
+    question="Review this code and identify its key risks.",
+    model="gemini-4-argon"
+)
+```
+
+This uses `/aichat2/conversations`, not native Gemini Generate Content or Google
+Interactions. It does not expose `max_tokens`, thinking-level or explicit-cache
+controls. The v1 tool does not accept this model; the default remains `gpt-4.1`.
 
 ### Use Kimi with AiChat v2
 ```

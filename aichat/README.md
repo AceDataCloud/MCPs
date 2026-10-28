@@ -198,10 +198,25 @@ authorization or other execution conditions.
 ### Zhipu AI
 - glm-5.1, glm-4.7, glm-4.6, glm-3-turbo
 
+### Google Gemini (AiChat v2 only)
+
+Use `aichat_create_conversation_v2` with `model="gemini-4-argon"` for Gemini 4
+Argon. It is not available through the v1 tool; the default remains `gpt-4.1`.
+
+```json
+{"model":"gemini-4-argon","question":"Review this code and identify its key risks."}
+```
+
+Pass these arguments to `aichat_create_conversation_v2`. This uses
+`/aichat2/conversations`, not native Gemini Generate Content or Google
+Interactions. The MCP tool does not expose `max_tokens`, thinking-level or
+explicit-cache controls; native endpoint capabilities do not imply those controls
+are available through this conversation wrapper.
+
 ### Kimi (AiChat v2 only)
 
-Use `aichat_create_conversation_v2` with `model="kimi-k3.1-pro"`, the recommended
-Kimi model. `kimi-k3` and existing v2 Kimi aliases remain supported; the default
+Use `aichat_create_conversation_v2` with `model="kimi-k3.1-pro"` to use Kimi
+K3.1 Pro. `kimi-k3` and existing v2 Kimi aliases remain supported; the default
 model is still `gpt-4.1`. These models are not available through the v1 tool.
 
 ```json
