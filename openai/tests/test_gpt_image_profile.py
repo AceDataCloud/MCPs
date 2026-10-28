@@ -4,9 +4,9 @@ import json
 from unittest.mock import AsyncMock, patch
 
 import pytest
-from gpt_image_tools import GPT_IMAGE_MODELS, create_server
 from mcp.server.fastmcp.exceptions import ToolError
 
+from gpt_image_tools import GPT_IMAGE_MODELS, create_server
 from tools import image_tools, tasks_tools
 
 
