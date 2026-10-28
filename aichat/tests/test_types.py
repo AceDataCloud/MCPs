@@ -30,6 +30,7 @@ def test_flagship_models_are_available_in_aichat_v2() -> None:
         "gpt-6-sol",
         "gpt-6-luna",
         "grok-4.7",
+        "gemini-4-argon",
         "gemini-3.8-flash",
     } <= models
     assert "grok-4.5" in models

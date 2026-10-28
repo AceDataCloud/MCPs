@@ -96,6 +96,7 @@ def test_v2_offers_claude_spec_models():
 
 def test_v2_offers_gemini_spec_models():
     spec_models = {
+        "gemini-4-argon",
         "gemini-3.8-flash",
         "gemini-3.7-flash",
         "gemini-3.6-flash",
