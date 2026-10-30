@@ -208,11 +208,15 @@ async def openai_list_image_models() -> str:
 | Quality   | Description                                    |
 |-----------|------------------------------------------------|
 | auto      | Model chooses quality (default)                |
-| high      | Maximum quality                                |
+| high      | High quality                                   |
+| xhigh     | GPT Image 2.5 Flare/Sunburst only (including :official) |
+| max       | GPT Image 2.5 Flare/Sunburst only (including :official) |
 | medium    | Balanced quality/speed                         |
 | low       | Faster, lower quality                          |
 | hd        | High detail (dall-e-3 only)                    |
-| standard  | Standard detail (dall-e-3 only)                |
+| standard  | Standard detail (DALL-E; only option for dall-e-2) |
+
+GPT Image official variants bill actual token usage.
 """
 
 

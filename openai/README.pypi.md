@@ -38,6 +38,10 @@ The Platform catalog hides OpenAI image API/model entries and companion image gu
 - **Text Embeddings** — Generate vector representations with text-embedding-3 models
 - **Audio** — Convert text to speech and transcribe audio with whisper-1 or gpt-transcribe
 
+## Image quality
+
+For generation and editing, GPT Image models accept `quality: "auto"`, `"low"`, `"medium"` or `"high"`. Only `gpt-image-2.5-flare` and `gpt-image-2.5-sunburst`, including their `:official` variants, additionally accept `"xhigh"` and `"max"`. Official variants bill actual token usage; check current pricing and usage rather than treating a pre-request estimate as the final charge. DALL-E 3 generation accepts `"hd"` or `"standard"`; DALL-E 2 accepts only `"standard"`.
+
 ## Chat and Responses billing
 
 Accepted compatible-model requests are billed by the selected model's input, output and cache usage, not a fixed fee per request or interface format. Chat Completions `prompt_tokens` and the Responses input total include reported cached tokens; the cached portion is charged at the corresponding cache price. Current model prices and the response's `usage.cost` are authoritative. Billing support does not expand the MCP tools' published model lists or grant account access.
