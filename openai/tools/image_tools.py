@@ -74,8 +74,10 @@ async def openai_generate_image(
         ImageQuality,
         Field(
             description=(
-                "Image quality. Options: 'auto' (default), 'high', 'medium', 'low', "
-                "'hd' (dall-e-3 high detail), 'standard' (dall-e-3 standard)."
+                "Image quality. GPT Image: 'auto' (default), 'high', 'medium', 'low'. "
+                "Only 'gpt-image-2.5-flare' and 'gpt-image-2.5-sunburst' (including ':official') "
+                "also support 'xhigh' and 'max'. Official variants bill actual token usage. "
+                "dall-e-3: 'hd' or 'standard'; dall-e-2: 'standard' only."
             )
         ),
     ] = DEFAULT_IMAGE_QUALITY,
@@ -260,7 +262,10 @@ async def openai_edit_image(
         ImageEditQuality,
         Field(
             description=(
-                "Output quality. Options: 'auto' (default), 'high', 'medium', 'low', 'standard'."
+                "Output quality. GPT Image: 'auto' (default), 'high', 'medium', 'low'. "
+                "Only 'gpt-image-2.5-flare' and 'gpt-image-2.5-sunburst' (including ':official') "
+                "also support 'xhigh' and 'max'. Official variants bill actual token usage. "
+                "dall-e-2: 'standard' only."
             )
         ),
     ] = "auto",

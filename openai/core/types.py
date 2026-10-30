@@ -187,10 +187,10 @@ ImageSize = str
 ImageEditSize = str
 
 # Image quality options
-ImageQuality = Literal["auto", "high", "medium", "low", "hd", "standard"]
+ImageQuality = Literal["auto", "high", "medium", "low", "xhigh", "max", "hd", "standard"]
 
 # Image edit quality options
-ImageEditQuality = Literal["auto", "high", "medium", "low", "standard"]
+ImageEditQuality = Literal["auto", "high", "medium", "low", "xhigh", "max", "standard"]
 
 # Image output format options
 ImageOutputFormat = Literal["png", "jpeg", "webp"]

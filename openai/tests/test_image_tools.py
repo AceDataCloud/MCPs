@@ -205,6 +205,45 @@ async def test_openai_generate_image_preserves_explicit_sync(monkeypatch):
     assert captured_payload["async"] is False
 
 
+@pytest.mark.asyncio
+@pytest.mark.parametrize("quality", ["xhigh", "max"])
+@pytest.mark.parametrize(
+    "model",
+    [
+        "gpt-image-2.5-flare",
+        "gpt-image-2.5-flare:official",
+        "gpt-image-2.5-sunburst",
+        "gpt-image-2.5-sunburst:official",
+    ],
+)
+@pytest.mark.parametrize("tool_name", ["openai_generate_image", "openai_edit_image"])
+async def test_image_quality_schema_and_dispatch(monkeypatch, tool_name, model, quality):
+    captured = {}
+
+    async def mock_request(endpoint, payload):
+        expected_endpoint = (
+            "/openai/images/generations"
+            if tool_name == "openai_generate_image"
+            else "/openai/images/edits"
+        )
+        assert endpoint == expected_endpoint
+        captured.update(payload)
+        return {"task_id": "test-task-123"}
+
+    monkeypatch.setattr(image_tools.client, "request", mock_request)
+    tool = next(tool for tool in await mcp.list_tools() if tool.name == tool_name)
+    schema = tool.inputSchema["properties"]["quality"]
+    assert {"auto", "high", "medium", "low", "xhigh", "max", "standard"} <= set(schema["enum"])
+    assert ("hd" in schema["enum"]) == (tool_name == "openai_generate_image")
+    assert "Only 'gpt-image-2.5-flare' and 'gpt-image-2.5-sunburst'" in schema["description"]
+    arguments = {"prompt": "test", "model": model, "quality": quality}
+    if tool_name == "openai_edit_image":
+        arguments["image"] = "https://example.com/base.png"
+    await mcp.call_tool(tool_name, arguments)
+    assert captured["model"] == model
+    assert captured["quality"] == quality
+
+
 def test_openai_image_tool_schemas_expose_exact_gpt_image_2_5_models():
     tools = {tool.name: tool for tool in mcp._tool_manager.list_tools()}
     expected = {

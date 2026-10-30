@@ -42,6 +42,8 @@ The original `mcp-openai-pro` command without `--profile` keeps its general Open
 
 Start with `gpt_image_list_models`; it reads local metadata and sends no generation request. Choose a listed model explicitly before a paid generation. For example, after approving the current price and budget, ask the client to call `gpt_image_generate` with `prompt`, `model: "gpt-image-2"` and `async: true`. Editing uses `gpt_image_edit` with an ordered URL list in `image`.
 
+For generation and editing, GPT Image models accept `quality: "auto"`, `"low"`, `"medium"` or `"high"`. Use `"xhigh"` or `"max"` only with `gpt-image-2.5-flare` or `gpt-image-2.5-sunburst`, including their `:official` variants. Official variants bill actual token usage, not the pre-request estimate.
+
 Save the returned `task_id`. Call `gpt_image_get_task` with that same `id` until a terminal result is present; inspect the returned `response`/media links and error if any. A `pending` task or a green client message is not a completed image. Never rerun generation merely to poll. Querying another task ID does not grant generation permission.
 
 No paid generation was performed for this guide. Local protocol tests use mocked image responses; they verify profile dispatch and task handling, not production media or billing.

@@ -43,6 +43,27 @@ async def test_dispatch_preserves_model_async_and_task_submission():
 
 
 @pytest.mark.asyncio
+@pytest.mark.parametrize("quality", ["xhigh", "max"])
+@pytest.mark.parametrize(
+    ("tool_name", "client_method"),
+    [("gpt_image_generate", "images_generations_async"), ("gpt_image_edit", "images_edits_async")],
+)
+async def test_profile_preserves_extended_quality(tool_name, client_method, quality):
+    server = create_server()
+    tool = next(tool for tool in await server.list_tools() if tool.name == tool_name)
+    assert {"xhigh", "max"} <= set(tool.inputSchema["properties"]["quality"]["enum"])
+    arguments = {"prompt": "fixture", "model": "gpt-image-2.5-flare:official", "quality": quality}
+    if tool_name == "gpt_image_edit":
+        arguments["image"] = "https://example.test/base.png"
+    with patch.object(
+        image_tools.client, client_method, new=AsyncMock(return_value={"task_id": "same-id"})
+    ) as call:
+        await server.call_tool(tool_name, arguments)
+    assert call.call_args.kwargs["quality"] == quality
+    assert call.call_args.kwargs["model"] == arguments["model"]
+
+
+@pytest.mark.asyncio
 async def test_other_models_and_missing_model_fail_before_api():
     with patch.object(image_tools.client, "images_generations_async", new=AsyncMock()) as call:
         for arguments in ({"prompt": "fixture", "model": "nano-banana"}, {"prompt": "fixture"}):
