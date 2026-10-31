@@ -409,7 +409,9 @@ class AceDataCloudOAuthProvider:
         """
         headers = {"Authorization": f"Bearer {jwt_token}"}
         endpoint = f"{settings.api_base_url.rstrip('/')}/api/v1/platform-tokens/"
-        user_id = (self._decode_jwt_payload(jwt_token) or {}).get("user_id")
+        claims = self._decode_jwt_payload(jwt_token) or {}
+        user_id = claims.get("user_id")
+        auth_epoch = claims.get("auth_epoch", 0)
         try:
             async with httpx.AsyncClient(timeout=30) as client:
                 # Reuse an existing tagged token if the user already has one.
@@ -422,7 +424,7 @@ class AceDataCloudOAuthProvider:
                         params={"user_id": user_id, "tag": PLATFORM_TOKEN_TAG},
                     )
                     if resp.status_code == 200:
-                        existing = self._extract_token(resp.json())
+                        existing = self._extract_token(resp.json(), auth_epoch=auth_epoch)
                         if existing:
                             logger.info("OAuth: reusing existing platform token")
                             return existing
@@ -447,7 +449,7 @@ class AceDataCloudOAuthProvider:
         return None
 
     @staticmethod
-    def _extract_token(payload: object) -> str | None:
+    def _extract_token(payload: object, auth_epoch: int = 0) -> str | None:
         """Pull the first token from a list or paginated platform-tokens response."""
         results = (
             payload.get("items", payload.get("results", payload))
@@ -456,6 +458,10 @@ class AceDataCloudOAuthProvider:
         )
         if isinstance(results, list):
             for item in results:
-                if isinstance(item, dict) and item.get("token"):
+                if (
+                    isinstance(item, dict)
+                    and item.get("token")
+                    and item.get("auth_epoch", 0) == auth_epoch
+                ):
                     return str(item["token"])
         return None
