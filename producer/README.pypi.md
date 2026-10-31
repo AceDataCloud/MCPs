@@ -454,3 +454,10 @@ MIT License - see [LICENSE](LICENSE) for details.
 ---
 
 Made with love by [AceDataCloud](https://platform.acedata.cloud?utm_source=pypi&utm_medium=referral&utm_campaign=evergreen&utm_content=producer_mcp_package_platform)
+
+### Lyrics in extensions and replacements
+
+`producer_extend_music` uses supplied `lyric` in custom mode. Lyrics are required
+unless `instrumental=true`; `continue_at` must be greater than zero.
+`producer_replace_section` also selects custom mode when `lyric` is supplied.
+Both operations preserve an explicit `async=false` and optional callback settings.

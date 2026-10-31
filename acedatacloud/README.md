@@ -23,16 +23,16 @@ Claude, VS Code, Studio, or any MCP-compatible client.
 <!-- BEGIN GENERATED TOOL REFERENCE -->
 ## Tool Reference
 
-The default curated catalog advertises **347 tools** before
+The default curated catalog advertises **359 tools** before
 account-permission filtering, including `acedatacloud_get_usage_guide`.
-The complete compatibility registry retains **519 tools**.
+The complete compatibility registry retains **530 tools**.
 Discovery is grouped by business task, not by one tool per REST endpoint.
 
 | Not advertised by default | Count |
 |---------------------------|-------|
-| alternate full-replacement update | 20 |
+| alternate full-replacement update | 21 |
 | client rendering, telemetry or protocol helper | 19 |
-| duplicate native route | 129 |
+| duplicate native route | 127 |
 | prefer the task-oriented catalog reader | 4 |
 
 ### Categories
@@ -41,15 +41,15 @@ Discovery is grouped by business task, not by one tool per REST endpoint.
 |----------|--------|---------|-----------|-------|
 | Account & API keys | 0 | 11 | 0 | 1 |
 | Catalog & documentation | 20 | 2 | 0 | 0 |
-| Applications & deployments | 0 | 13 | 0 | 4 |
-| Usage & billing | 1 | 41 | 0 | 28 |
+| Applications & deployments | 0 | 14 | 0 | 4 |
+| Usage & billing | 1 | 41 | 0 | 31 |
 | Sites & branding | 1 | 0 | 38 | 0 |
 | Community & wallet | 1 | 31 | 0 | 12 |
-| Content & announcements | 4 | 0 | 23 | 0 |
-| Email marketing & analytics | 0 | 0 | 0 | 37 |
+| Content & announcements | 5 | 0 | 28 | 0 |
+| Email marketing & analytics | 0 | 0 | 0 | 36 |
 | Access control & automation | 0 | 5 | 13 | 20 |
 | Payment authorization | 0 | 10 | 0 | 0 |
-| Administration & risk | 0 | 0 | 0 | 29 |
+| Administration & risk | 0 | 0 | 0 | 32 |
 | Files & utilities | 0 | 1 | 0 | 0 |
 
 Workspace tools cover delegated editing and site/webhook management.
@@ -103,13 +103,14 @@ Admin tools require their exact permission grants, not just an admin label.
 
 | Tool | Description | Audience | Required permissions |
 |------|-------------|----------|----------------------|
-| `acedatacloud_control_deployment` | Start a stopped deployment. | account | applications:write |
+| `acedatacloud_control_deployment` | Restart a deployment. | account | applications:write |
 | `acedatacloud_create_application` | Create an application subscription. | account | applications:write |
 | `acedatacloud_create_applications_sponsor` | Create applications sponsor. Backend account permissions and ownership checks apply. | admin | applications:write:any |
 | `acedatacloud_create_applications_update_disabled` | Create applications update disabled. Backend account permissions and ownership checks apply. | admin | applications:write:any |
 | `acedatacloud_create_applications_update_remaining_amount` | Create applications update remaining amount. Backend account permissions and ownership checks apply. | admin | credits:write:any |
 | `acedatacloud_deploy_application` | Start or redeploy an application workload. | account | applications:write |
 | `acedatacloud_get_application` | Get one application and service details. | account | applications:read |
+| `acedatacloud_get_applications_agent_setup` | Get applications agent setup. Backend account permissions and ownership checks apply. | account | applications:read |
 | `acedatacloud_get_applications_recharge_card_eligibility` | Get applications recharge card eligibility. Backend account permissions and ownership checks apply. | account | authenticated |
 | `acedatacloud_get_balance` | Summarize remaining Credits. | account | applications:read |
 | `acedatacloud_get_deployment_events` | Get deployment scheduling events. | account | applications:read |
@@ -132,6 +133,7 @@ Admin tools require their exact permission grants, not just an admin label.
 | `acedatacloud_create_auto_recharge_configs_cancel_setup` | Create auto recharge configs cancel setup. Backend account permissions and ownership checks apply. | account | auto-recharge:write |
 | `acedatacloud_create_card_fingerprints_action_name` | Create card fingerprints action name. Backend account permissions and ownership checks apply. | admin | orders:write:any |
 | `acedatacloud_create_invoices_admin_file` | Create invoices admin file. Backend account permissions and ownership checks apply. | admin | invoices:write:any |
+| `acedatacloud_create_invoices_admin_orders_manual` | Create invoices admin orders manual. Backend account permissions and ownership checks apply. | admin | invoices:write:any |
 | `acedatacloud_create_invoices_admin_upload_link` | Create invoices admin upload link. Backend account permissions and ownership checks apply. | admin | invoices:write:any |
 | `acedatacloud_create_order` | Create a recharge order. | account | orders:write |
 | `acedatacloud_create_order_discounts` | Create order discounts. Backend account permissions and ownership checks apply. | admin | order-discounts:write:any |
@@ -157,6 +159,7 @@ Admin tools require their exact permission grants, not just an admin label.
 | `acedatacloud_get_invoice_download` | Get a signed invoice URL. | account | authenticated |
 | `acedatacloud_get_invoices_admin_download` | Get invoices admin download. Backend account permissions and ownership checks apply. | admin | invoices:read:any |
 | `acedatacloud_get_invoices_admin_id` | Get invoices admin id. Backend account permissions and ownership checks apply. | admin | invoices:read:any |
+| `acedatacloud_get_invoices_admin_orders_manual` | Get invoices admin orders manual. Backend account permissions and ownership checks apply. | admin | invoices:write:any |
 | `acedatacloud_get_invoices_admin_stats` | Get invoices admin stats. Backend account permissions and ownership checks apply. | admin | invoices:read:any |
 | `acedatacloud_get_order` | Get one order. | account | orders:read |
 | `acedatacloud_get_order_discounts_id` | Get order discounts id. Backend account permissions and ownership checks apply. | admin | order-discounts:read:any |
@@ -164,6 +167,7 @@ Admin tools require their exact permission grants, not just an admin label.
 | `acedatacloud_get_order_summary` | Summarize caller orders. | account | orders:read |
 | `acedatacloud_get_orders_admin_context` | Get orders admin context. Backend account permissions and ownership checks apply. | admin | orders:read:any |
 | `acedatacloud_get_orders_payment_options` | Get orders payment options. Backend account permissions and ownership checks apply. | account | orders:read |
+| `acedatacloud_get_orders_revenue_customers` | Get orders revenue customers. Backend account permissions and ownership checks apply. | admin | revenue:read |
 | `acedatacloud_get_orders_revenue_summary` | Get orders revenue summary. Backend account permissions and ownership checks apply. | admin | revenue:read |
 | `acedatacloud_get_orders_revenue_trend` | Get orders revenue trend. Backend account permissions and ownership checks apply. | admin | revenue:read |
 | `acedatacloud_get_proxy_usage` | Get proxy usage detail. | account | usage:read |
@@ -299,16 +303,21 @@ Admin tools require their exact permission grants, not just an admin label.
 | `acedatacloud_create_announcements_admin_polish` | Create announcements admin polish. Backend account permissions and ownership checks apply. | workspace | announcements:write |
 | `acedatacloud_create_announcements_admin_translate` | Create announcements admin translate. Backend account permissions and ownership checks apply. | workspace | announcements:write |
 | `acedatacloud_create_blog_draft` | Save an unpublished blog draft. | workspace | blog:write |
+| `acedatacloud_create_blogs_admin_categories` | Create blogs admin categories. Backend account permissions and ownership checks apply. | workspace | blog:publish |
 | `acedatacloud_delete_announcements_admin_id` | Delete announcements admin id. Backend account permissions and ownership checks apply. | workspace | announcements:write |
 | `acedatacloud_delete_blog_post` | Delete a blog and its translations. | workspace | blog:write |
+| `acedatacloud_delete_blogs_admin_categories_slug` | Delete blogs admin categories slug. Backend account permissions and ownership checks apply. | workspace | blog:publish |
 | `acedatacloud_get_announcements_admin_id` | Get announcements admin id. Backend account permissions and ownership checks apply. | workspace | announcements:read |
 | `acedatacloud_get_blog_draft` | Read full editable blog source. | workspace | blog:read |
 | `acedatacloud_get_blog_post` | Read a localized published blog post. | public | public |
+| `acedatacloud_get_blogs_admin_categories_slug` | Get blogs admin categories slug. Backend account permissions and ownership checks apply. | workspace | blog:read |
 | `acedatacloud_list_announcements` | List published announcements. | public | public |
 | `acedatacloud_list_announcements_admin` | List announcements admin. Backend account permissions and ownership checks apply. | workspace | announcements:read |
 | `acedatacloud_list_blog_comments` | Read private review threads and replies. | workspace | blog:read |
 | `acedatacloud_list_blog_drafts` | List blog drafts and published editorial records. | workspace | blog:read |
 | `acedatacloud_list_blog_posts` | List published blog posts. | public | public |
+| `acedatacloud_list_blogs_admin_categories` | List blogs admin categories. Backend account permissions and ownership checks apply. | workspace | blog:read |
+| `acedatacloud_list_blogs_categories` | List blogs categories. Backend account permissions and ownership checks apply. | public | public |
 | `acedatacloud_list_showcases` | List showcases. Backend account permissions and ownership checks apply. | public | public |
 | `acedatacloud_publish_blog_post` | Publish an approved draft now or schedule its public visibility. | workspace | blog:write, blog:publish |
 | `acedatacloud_reject_blog_post` | Reject a submitted version using a summary or an existing open review comment. | workspace | blog:read, blog:publish |
@@ -318,6 +327,7 @@ Admin tools require their exact permission grants, not just an admin label.
 | `acedatacloud_unpublish_blog_post` | Return a public blog post to draft. | workspace | blog:write, blog:publish |
 | `acedatacloud_update_announcements_admin_id` | Update announcements admin id. Backend account permissions and ownership checks apply. | workspace | announcements:write |
 | `acedatacloud_update_blog_post` | Edit draft source; unpublish before changing public content. | workspace | blog:write |
+| `acedatacloud_update_blogs_admin_categories_slug` | Update blogs admin categories slug. Backend account permissions and ownership checks apply. | workspace | blog:publish |
 | `acedatacloud_withdraw_blog_approval` | Withdraw approval before publication. | workspace | blog:read, blog:publish |
 | `acedatacloud_withdraw_blog_submission` | Withdraw a pending review request. | workspace | blog:write |
 
@@ -335,12 +345,16 @@ Admin tools require their exact permission grants, not just an admin label.
 | `acedatacloud_delete_email_campaigns_id` | Delete email campaigns id. Backend account permissions and ownership checks apply. | admin | email-marketing:write |
 | `acedatacloud_get_email_audiences_profiles_user_id` | Get email audiences profiles user id. Backend account permissions and ownership checks apply. | admin | email-marketing:read |
 | `acedatacloud_get_email_audiences_summary` | Get email audiences summary. Backend account permissions and ownership checks apply. | admin | email-marketing:read |
+| `acedatacloud_get_email_campaigns_analytics` | Get email campaigns analytics. Backend account permissions and ownership checks apply. | admin | email-marketing:read |
 | `acedatacloud_get_email_campaigns_audience_candidates` | Get email campaigns audience candidates. Backend account permissions and ownership checks apply. | admin | email-marketing:read |
+| `acedatacloud_get_email_campaigns_conversions` | Get email campaigns conversions. Backend account permissions and ownership checks apply. | admin | email-marketing:read |
+| `acedatacloud_get_email_campaigns_delivery_plan` | Get email campaigns delivery plan. Backend account permissions and ownership checks apply. | admin | email-marketing:read |
 | `acedatacloud_get_email_campaigns_id` | Get email campaigns id. Backend account permissions and ownership checks apply. | admin | email-marketing:read |
 | `acedatacloud_get_email_campaigns_preview` | Get email campaigns preview. Backend account permissions and ownership checks apply. | admin | email-marketing:read |
 | `acedatacloud_get_email_campaigns_report` | Get email campaigns report. Backend account permissions and ownership checks apply. | admin | email-marketing:read |
 | `acedatacloud_get_email_overview` | Get email overview. Backend account permissions and ownership checks apply. | admin | email-marketing:read |
 | `acedatacloud_get_email_provider_health` | Get email provider health. Backend account permissions and ownership checks apply. | admin | email-marketing:read |
+| `acedatacloud_get_email_sender_quotas` | Get email sender quotas. Backend account permissions and ownership checks apply. | admin | email-marketing:read |
 | `acedatacloud_get_marketing_attribution_active_users` | Get marketing attribution active users. Backend account permissions and ownership checks apply. | admin | marketing-attribution:read |
 | `acedatacloud_get_marketing_attribution_analytics` | Get marketing attribution analytics. Backend account permissions and ownership checks apply. | admin | marketing-attribution:read |
 | `acedatacloud_get_marketing_attribution_summary` | Get marketing attribution summary. Backend account permissions and ownership checks apply. | admin | marketing-attribution:read |
@@ -349,14 +363,9 @@ Admin tools require their exact permission grants, not just an admin label.
 | `acedatacloud_list_email_events` | List email events. Backend account permissions and ownership checks apply. | admin | email-marketing:read |
 | `acedatacloud_list_email_subscriptions` | List email subscriptions. Backend account permissions and ownership checks apply. | admin | email-marketing:read |
 | `acedatacloud_list_email_suppressions` | List email suppressions. Backend account permissions and ownership checks apply. | admin | email-marketing:read |
-| `acedatacloud_run_email_campaigns_activate` | Run email campaigns activate. Backend account permissions and ownership checks apply. | admin | email-marketing:send |
 | `acedatacloud_run_email_campaigns_cancel` | Run email campaigns cancel. Backend account permissions and ownership checks apply. | admin | email-marketing:send |
-| `acedatacloud_run_email_campaigns_create_carryover` | Run email campaigns create carryover. Backend account permissions and ownership checks apply. | admin | email-marketing:write |
 | `acedatacloud_run_email_campaigns_pause` | Run email campaigns pause. Backend account permissions and ownership checks apply. | admin | email-marketing:send |
-| `acedatacloud_run_email_campaigns_prepare` | Run email campaigns prepare. Backend account permissions and ownership checks apply. | admin | email-marketing:write |
-| `acedatacloud_run_email_campaigns_prepare_carryover` | Run email campaigns prepare carryover. Backend account permissions and ownership checks apply. | admin | email-marketing:write |
 | `acedatacloud_run_email_campaigns_preview_audience` | Run email campaigns preview audience. Backend account permissions and ownership checks apply. | admin | email-marketing:write |
-| `acedatacloud_run_email_campaigns_release_next_wave` | Run email campaigns release next wave. Backend account permissions and ownership checks apply. | admin | email-marketing:send |
 | `acedatacloud_run_email_campaigns_resume` | Run email campaigns resume. Backend account permissions and ownership checks apply. | admin | email-marketing:send |
 | `acedatacloud_run_email_campaigns_retry_failed` | Run email campaigns retry failed. Backend account permissions and ownership checks apply. | admin | email-marketing:send |
 | `acedatacloud_run_email_campaigns_revise` | Run email campaigns revise. Backend account permissions and ownership checks apply. | admin | email-marketing:write |
@@ -436,6 +445,9 @@ Admin tools require their exact permission grants, not just an admin label.
 | `acedatacloud_create_payment_risk_holds_release` | Create payment risk holds release. Backend account permissions and ownership checks apply. | admin | orders:refund:any |
 | `acedatacloud_delete_configuration_capabilities_capability_id` | Delete configuration capabilities capability id. Backend account permissions and ownership checks apply. | admin | provider-routing:write |
 | `acedatacloud_delete_configuration_providers_pid` | Delete configuration providers pid. Backend account permissions and ownership checks apply. | admin | provider-routing:write |
+| `acedatacloud_get_admin_health_domain` | Get admin health domain. Backend account permissions and ownership checks apply. Requires a superuser account with a platform token. | admin | authenticated |
+| `acedatacloud_get_admin_health_summary` | Get admin health summary. Backend account permissions and ownership checks apply. Requires a superuser account with a platform token. | admin | authenticated |
+| `acedatacloud_get_admin_health_traffic` | Get admin health traffic. Backend account permissions and ownership checks apply. Requires a superuser account with a platform token. | admin | authenticated |
 | `acedatacloud_get_admin_users_analytics` | Get admin users analytics. Backend account permissions and ownership checks apply. | admin | users:read:any |
 | `acedatacloud_get_configuration_capabilities_checks` | Get configuration capabilities checks. Backend account permissions and ownership checks apply. | admin | provider-routing:read |
 | `acedatacloud_get_configuration_domains` | Get configuration domains. Backend account permissions and ownership checks apply. | admin | provider-routing:read |

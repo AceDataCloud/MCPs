@@ -2,6 +2,7 @@
 
 from mcp.types import Tool
 
+from contracts.management_surface import SURFACE_TOOLS
 from contracts.platform_operations import OPERATIONS
 from contracts.tool_catalog import (
     CROSS_ACCOUNT_TOOLS,
@@ -48,7 +49,10 @@ async def list_visible_tools() -> list[Tool]:
     granted = set(subject.get("permissions", []))
     by_tool = {operation.tool: operation for operation in OPERATIONS if operation.tool}
     visible = []
+    superuser_tools = {spec["name"] for spec in SURFACE_TOOLS if spec.get("requires_admin_health")}
     for tool in tools:
+        if tool.name in superuser_tools and (subject.get("can_read_admin_health") is not True):
+            continue
         operation = by_tool.get(tool.name)
         if (
             tool.name == INFO_TOOL

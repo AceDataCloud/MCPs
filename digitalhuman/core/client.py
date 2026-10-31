@@ -103,11 +103,13 @@ class DigitalHumanClient:
         return await self.request("/digital-human/tasks", payload)
 
     async def get_tasks_batch(self, task_ids: list[str]) -> dict[str, Any]:
-        """Retrieve multiple tasks."""
-        return await self.request(
-            "/digital-human/tasks",
-            {"task_id": task_ids, "action": "retrieve_batch"},
-        )
+        """Retrieve exactly the requested tasks, preserving their order.
+
+        The API's retrieve_batch action lists recent history and does not filter
+        by task IDs. Use authenticated single-task requests for this operation.
+        """
+        items = [await self.get_task(task_id, action="retrieve") for task_id in task_ids]
+        return {"count": len(items), "items": items}
 
     async def delete_task(self, task_id: str) -> dict[str, Any]:
         """Delete one task."""

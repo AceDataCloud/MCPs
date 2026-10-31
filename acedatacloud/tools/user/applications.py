@@ -12,7 +12,7 @@ from core.utils import confirmation_required, dumps, error_json
 ApplicationType = Literal["Usage", "Period"]
 ApplicationScope = Literal["Individual", "Global"]
 Affiliation = Literal["owner", "granted"]
-DeploymentAction = Literal["start", "stop", "restart"]
+DeploymentAction = Literal["restart"]
 
 
 def _body(**values: Any) -> dict[str, Any]:
@@ -144,10 +144,18 @@ async def acedatacloud_deploy_application(
     helm_overrides: Annotated[
         dict[str, Any] | None, Field(description="Flat, service-supported Helm value overrides.")
     ] = None,
+    secrets: Annotated[
+        dict[str, str] | None,
+        Field(
+            description="Deployment secrets, such as access_password; never saved in draft config."
+        ),
+    ] = None,
     confirm: Annotated[bool, Field(description="Must be true to start deployment.")] = False,
 ) -> str:
     """Start or redeploy an application workload. Requires ``confirm=true``."""
     body = {"config": config or {}, "helm_overrides": helm_overrides or {}}
+    if secrets is not None:
+        body["secrets"] = secrets
     endpoint = f"/applications/{application_id}/deployment-deploy/"
     if not confirm:
         return confirmation_required(f"POST {endpoint}", body)
@@ -171,12 +179,13 @@ async def acedatacloud_get_deployment_status(
 @mcp.tool()
 async def acedatacloud_control_deployment(
     application_id: Annotated[str, Field(description="Deployment application UUID.")],
-    action: Annotated[
-        DeploymentAction, Field(description="Power action: start, stop, or restart.")
-    ],
+    action: Annotated[DeploymentAction, Field(description="Supported power action: restart.")],
     confirm: Annotated[bool, Field(description="Must be true to perform the action.")] = False,
 ) -> str:
-    """Start, stop, or restart a deployment. Requires ``confirm=true``."""
+    """Restart a deployment. Requires ``confirm=true``.
+
+    The API no longer supports start/stop; use deploy or teardown explicitly.
+    """
     endpoint = f"/applications/{application_id}/deployment-{action}/"
     if not confirm:
         return confirmation_required(f"POST {endpoint}", {"action": action})

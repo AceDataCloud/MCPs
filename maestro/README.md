@@ -215,3 +215,7 @@ See the [Maestro API documentation](https://platform.acedata.cloud/documents/mae
 
 <!-- canonical-documentation -->
 [Documentation](https://platform.acedata.cloud/documents/maestro?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=maestro_mcp_readme_quick_start)
+
+## API parameter behavior
+
+`style` accepts a named preset or free text as a soft visual hint. `voice` accepts a named preset or a 32-character hexadecimal voice reference ID; arbitrary voice strings are rejected.

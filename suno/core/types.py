@@ -33,3 +33,22 @@ DEFAULT_MODEL: SunoModel = "chirp-v5-5"
 
 # Default lyrics model
 DEFAULT_LYRICS_MODEL: LyricsModel = "default"
+
+# Public audio controls and stem selection.
+SunoVariety = Literal["off", "normal", "high", "extra", "max"]
+SunoStemType = Literal[
+    "vocals",
+    "backing_vocals",
+    "drums",
+    "bass",
+    "guitar",
+    "keyboard",
+    "percussion",
+    "strings",
+    "synth",
+    "fx",
+    "brass",
+    "woodwinds",
+]
+SunoSoundType = Literal["one-shot", "loop"]
+SunoAudioFormat = Literal["mp3"]

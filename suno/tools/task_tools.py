@@ -1,6 +1,7 @@
 """Task query tools for Suno API."""
 
 import asyncio
+import json
 from typing import Annotated
 
 from pydantic import Field
@@ -48,14 +49,20 @@ async def suno_get_task(
     )
     # Throttle polling: sleep 5s for incomplete tasks so LLM clients
     # don't burn through poll attempts in seconds.
-    response = result.get("response", {})
-    is_complete = response.get("success", False)
-    is_failed = response.get("success") is False or str(result.get("state", "")).lower() in {
-        "failed",
-        "error",
-        "cancelled",
-        "canceled",
-    }
+    raw_response = result.get("response")
+    response = raw_response if isinstance(raw_response, dict) else {}
+    unfinished = "finished_at" in result and result["finished_at"] is None
+    is_complete = not unfinished and response.get("success") is True
+    is_failed = not unfinished and (
+        response.get("success") is False
+        or str(result.get("state", "")).lower()
+        in {
+            "failed",
+            "error",
+            "cancelled",
+            "canceled",
+        }
+    )
     if not is_complete and not is_failed:
         await asyncio.sleep(5)
     return format_task_result(result)
@@ -89,47 +96,8 @@ async def suno_get_tasks_batch(
         action="retrieve_batch",
     )
 
-    if "error" in result:
-        error = result.get("error", {})
-        return f"Error: {error.get('code', 'unknown')} - {error.get('message', 'Unknown error')}"
-
-    lines = [f"Total Tasks: {result.get('count', 0)}", ""]
-
-    for item in result.get("items", []):
-        response_info = item.get("response", {})
-        state = item.get("state", "")
-        success = response_info.get("success", False)
-        is_complete = response_info.get("success") is True
-        is_failed = response_info.get("success") is False or str(state).lower() in {
-            "failed",
-            "error",
-            "cancelled",
-            "canceled",
-        }
-        effective_state = (
-            "complete" if is_complete else state or ("failed" if is_failed else "pending")
-        )
-        lines.extend(
-            [
-                f"=== Task: {item.get('id', 'N/A')} ===",
-                f"State: {effective_state}",
-                f"Created At: {item.get('created_at', 'N/A')}",
-                f"Success: {success}",
-            ]
-        )
-
-        if is_complete:
-            for audio in response_info.get("data", []):
-                lines.append(
-                    f"  - {audio.get('title', 'Untitled')}: {audio.get('audio_url', 'N/A')}"
-                )
-        elif is_failed:
-            lines.append(f"  Error: {response_info.get('error', 'Unknown error')}")
-        else:
-            lines.append(
-                f"  ⏳ Still {effective_state} — keep polling. Any audio_url values are intermediate previews."
-            )
-
-        lines.append("")
-
-    return "\n".join(lines)
+    # Keep every result shape: projects and trained models return objects, while
+    # music/MIDI/media tasks return lists or other endpoint-specific fields.
+    payload = dict(result)
+    payload["items"] = [json.loads(format_task_result(item)) for item in result.get("items", [])]
+    return json.dumps(payload, ensure_ascii=False, indent=2)

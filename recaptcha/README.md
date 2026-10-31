@@ -56,6 +56,8 @@ Keep this user-level file private. Self-hosted HTTP uses `mcp-recaptcha --transp
 Confirm that the MCP client loads its tools. `recaptcha_get_usage_guide` returns reference information; it does not prove downstream API access or balance. A real service request can be billed. If it returns 401, check the API token; if it returns 403 or an account/balance error, read that response before retrying.
 
 ## Tools
+
+- `recaptcha_get_task` — Retrieve an asynchronous result or terminal error
 - `recaptcha2_recognize` — Recognize a reCAPTCHA v2 image challenge
 - `recaptcha2_get_token` — Get a reCAPTCHA v2 token
 - `recaptcha3_get_token` — Get a reCAPTCHA v3 token
@@ -66,3 +68,11 @@ Confirm that the MCP client loads its tools. `recaptcha_get_usage_guide` returns
 
 <!-- canonical-documentation -->
 [Service details](https://platform.acedata.cloud/services/485cc5ca-7f1e-48e5-944e-1fe82b4637e8?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=recaptcha_mcp_readme_quick_start)
+
+### Asynchronous results
+
+Set `async: true` to submit without waiting. If the response includes `task_id`, use
+`recaptcha_get_task` with that ID every 3–5 seconds until it returns `status: ready`
+or a terminal error. A task ID is an acceptance receipt, not a completed result.
+The query preserves terminal timeout details; do not create a replacement task while
+the original is processing. Some recognition requests return a ready result inline.

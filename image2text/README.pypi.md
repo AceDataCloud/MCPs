@@ -57,6 +57,8 @@ Keep this user-level file private. Self-hosted HTTP uses `mcp-image2text --trans
 Confirm that the MCP client loads its tools. `image2text_get_usage_guide` returns reference information; it does not prove downstream API access or balance. A real service request can be billed. If it returns 401, check the API token; if it returns 403 or an account/balance error, read that response before retrying.
 
 ## Tools
+
+- `image2text_get_task` — Retrieve an asynchronous result or terminal error
 - `image2text_recognize` — Recognize text from an image
 - `image2text_get_usage_guide` — Get image2text usage guide
 - `image2text_get_api_info` — Get image2text API information
@@ -65,3 +67,11 @@ Confirm that the MCP client loads its tools. `image2text_get_usage_guide` return
 
 <!-- canonical-documentation -->
 [Service details](https://platform.acedata.cloud/services/2aaa7faf-099e-410e-82f3-8d78170f25bb?utm_source=pypi&utm_medium=referral&utm_campaign=evergreen&utm_content=image2text_mcp_package_quick_start)
+
+### Asynchronous results
+
+Set `async: true` to submit without waiting. If the response includes `task_id`, use
+`image2text_get_task` with that ID every 3–5 seconds until it returns `status: ready`
+or a terminal error. A task ID is an acceptance receipt, not a completed result.
+The query preserves terminal timeout details; do not create a replacement task while
+the original is processing. Some recognition requests return a ready result inline.

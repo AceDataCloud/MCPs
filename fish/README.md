@@ -207,3 +207,16 @@ For **401**, check which auth route the client used and whether the token or OAu
 ## License
 
 MIT — see [LICENSE](../LICENSE) at the repository root.
+
+## Create a reusable public voice
+
+`fish_create_model(title="My voice", voices="https://example.com/authorized-voice.wav")`
+creates a saved public voice. Use only audio you have permission to process and
+publish; other users may discover and use the resulting voice. No private or
+unlisted option is supported. Optional inputs are `description`, `cover_image`,
+`tags`, `texts`, `enhance_audio_quality`, and `generate_sample`.
+
+A successful create returns a voice `_id`; pass it as `reference_id` to
+`fish_generate_audio`. `fish_list_models(self=true)` lists your saved voices.
+For one-shot reference conditioning without saving a reusable voice, use
+`fish_generate_audio(references=...)` instead.

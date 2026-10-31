@@ -9,6 +9,9 @@ async def recaptcha_get_usage_guide() -> str:
     return """# reCAPTCHA Usage Guide
 
 Use `recaptcha2_recognize` for image grids, `recaptcha2_get_token` for v2 tokens, and `recaptcha3_get_token` for v3 tokens.
+
+If submission returns task_id, call `recaptcha_get_task(task_id=...)` every 3-5 seconds
+until status is ready or a terminal error is returned. Do not resubmit while processing.
 """
 
 
@@ -22,4 +25,5 @@ Endpoints:
 - `POST /captcha/recognition/recaptcha2` with `image`, `question`, `async?`
 - `POST /captcha/token/recaptcha2` with `website_key`, `website_url`, `proxy?`, `async?`
 - `POST /captcha/token/recaptcha3` with `page_action`, `website_key`, `website_url`, `async?`
+- `POST /captcha/tasks` with `task_id`
 """

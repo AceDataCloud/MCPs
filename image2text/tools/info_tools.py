@@ -10,6 +10,9 @@ async def image2text_get_usage_guide() -> str:
 
 Use `image2text_recognize` with a base64 image. The tool supports the documented
 sync/async submission mode for `/captcha/recognition/image2text`.
+
+If submission returns task_id, call `image2text_get_task(task_id=...)` every 3-5 seconds
+until status is ready or a terminal error is returned. Do not resubmit while processing.
 """
 
 

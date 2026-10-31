@@ -147,6 +147,9 @@ for row in rows:
             )
             if row.get("ordering"):
                 queries.setdefault("ordering", {"type": "string"})
+        if method == "GET" and actual == "orders/revenue-customers":
+            for field in ("start_date", "end_date"):
+                queries[field] = {"type": "string", "format": "date", "description": "Completed-day window in YYYY-MM-DD format."}
         parameters = re.findall(r"\{(\w+)\}", actual)
         for p in parameters:
             queries.pop(p, None)
@@ -189,7 +192,7 @@ for row in rows:
             disclosure = ["/token"]
         if actual.endswith("/pay") and method == "POST":
             disclosure = ["/pay_url"]
-        if actual.endswith("/setup/") or actual.endswith("/setup"):
+        if actual.endswith(("/setup/", "/setup")):
             disclosure = ["/setup_token"]
         spec = {
             "operation_id": "surface." + name.removeprefix("acedatacloud_"),
@@ -213,10 +216,14 @@ for row in rows:
             + ". Backend account permissions and ownership checks apply.",
             "disclose": disclosure,
         }
+        if "IsHealthAdmin" in row["permissions"]:
+            spec["requires_admin_health"] = True
+            spec["description"] += " Requires a superuser account with a platform token."
         if (
             actual == "files"
             or actual.startswith("logo-assets/")
             or actual == "invoices/admin/{id}/file"
+            or (method == "POST" and actual == "invoices/admin/orders/{order_id}/manual")
         ):
             spec["encoding"] = "multipart"
             spec["body_schema"] = {
@@ -261,6 +268,18 @@ if args.paths:
             for row in output[section]
             if norm(row["path"]) in selected
         }
+        # Serializer JSON fields cannot recover manually audited nested constraints.
+        # Preserve these refinements while refreshing newly added top-level fields.
+        for row in previous[section]:
+            replacement = replacements.get((row["method"], norm(row["path"])))
+            if not replacement:
+                continue
+            for schema_name in ("body_schema", "query_schema"):
+                old_props = row.get(schema_name, {}).get("properties", {})
+                new_props = replacement.get(schema_name, {}).get("properties", {})
+                for name, value in new_props.items():
+                    if value == {"type": "object"} and old_props.get(name, {}).get("properties"):
+                        new_props[name] = old_props[name]
         previous[section] = [
             replacements.pop((row["method"], norm(row["path"])), row)
             if norm(row["path"]) in selected else row

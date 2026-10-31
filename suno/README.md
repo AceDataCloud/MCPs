@@ -506,3 +506,44 @@ Made with love by [AceDataCloud](https://platform.acedata.cloud?utm_source=githu
 ## Cline setup / Cline 图文接入
 
 [Suno by Ace Data Cloud — English guide](https://github.com/AceDataCloud/MCPs/blob/4a2fb4e17d322bc22c5742ab3a5bd48b24ec5bdc/suno/docs/cline.md) · [完整中文图文步骤](https://github.com/AceDataCloud/MCPs/blob/4a2fb4e17d322bc22c5742ab3a5bd48b24ec5bdc/suno/docs/cline.md#中文步骤). The Cline marketplace submission is pending review as of 2026-10-18; the guide labels the manual fallback separately. / Cline 官方目录投稿仍待审核，手动接入不等于已上架。
+
+## Additional audio operations and controls
+
+- `suno_add_stem`: generate a selected voice/instrument stem with optional style,
+  influence controls, `variety`, and explicitly opted-in `max_mode`.
+- `suno_extract_stem`: extract a selected stem and complementary remainder.
+- `suno_generate_sound`: create `one-shot` or `loop` sound effects with optional
+  BPM, musical key, and MP3 output selection.
+- `suno_adjust_speed`: change playback speed from 0.25 to 4, optionally preserving pitch.
+
+Prompt generation accepts `variety`; custom generation also accepts `max_mode`
+and `audio_weight`. Enhanced `max_mode` has a higher API price and remains off
+unless explicitly requested. Existing model defaults are unchanged.
+
+`suno_generate_with_custom_model` accepts instrumental generation or `lyric_prompt`
+in place of supplied lyrics, plus `negative_tags`, `vocal_gender`, `weirdness`,
+`style_influence`, `duration`, and `callback_url`. Title and style are optional.
+
+## Studio projects (Beta)
+
+`suno_manage_project(request=..., idempotency_key=...)` covers `create`, `retrieve`,
+`save`, `upload`, `add_track`, `generate_track`, `replace_section`,
+`commit_candidate`, `remove_track`, and `render`. Its action-specific schema
+requires only the fields applicable to that operation.
+
+1. Create a project, then retrieve and retain its complete state and latest `version_id`.
+2. Save complete state, upload material, or add tracks using the current version.
+3. For generation, supply a source audio ID and a completed project render audio ID.
+   Source ranges use seconds; project timeline ranges use beats.
+4. Poll accepted task IDs with `suno_get_task` until `finished_at` is set and
+   inspect `response.success`. Generating candidates does not modify the project.
+5. Choose a candidate and explicitly commit it to a track, then render with the
+   latest version. Candidate playback alone does not prove a project is renderable.
+
+Every write requires a caller-selected `idempotency_key`. Retry an uncertain
+submission with the same key and identical request, or poll its original task ID;
+never automatically generate a new key and resubmit a billable operation. On a
+version conflict, retrieve the current project and re-plan the change.
+
+`suno_get_tasks_batch` returns full JSON task records with polling guidance,
+preserving model objects, project state/candidates, and media fields such as MIDI.

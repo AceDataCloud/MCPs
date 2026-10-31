@@ -49,7 +49,6 @@ async def test_image_to_video_prompt_is_optional() -> None:
             "model": "happyhorse-1.1-i2v",
             "image_url": "https://example.com/frame.jpg",
             "prompt": None,
-            "ratio": "16:9",
             "resolution": "1080P",
             "duration": 5,
             "watermark": False,
@@ -74,6 +73,8 @@ async def test_video_edit_omits_ignored_generation_fields() -> None:
             "https://example.com/source.mp4",
             image_urls=["https://example.com/style.jpg"],
             audio_setting="origin",
+            duration=3,
+            ratio="9:16",
         )
 
     generate.assert_awaited_once_with(
@@ -83,8 +84,6 @@ async def test_video_edit_omits_ignored_generation_fields() -> None:
             "prompt": "Keep the camera motion and change the costume",
             "video_url": "https://example.com/source.mp4",
             "resolution": "1080P",
-            "ratio": "16:9",
-            "duration": 5,
             "audio_setting": "origin",
             "watermark": False,
             "image_urls": ["https://example.com/style.jpg"],
@@ -104,3 +103,13 @@ async def test_task_tools_delegate_to_client() -> None:
 
     get_task.assert_awaited_once_with("task-1")
     get_batch.assert_awaited_once_with(["task-1", "task-2"])
+
+
+async def test_edit_schema_explains_inherited_controls():
+    from core.server import mcp
+
+    tool = next(t for t in await mcp.list_tools() if t.name == "happyhorse_edit_video")
+    for key in ("duration", "ratio"):
+        assert tool.inputSchema["properties"][key]["deprecated"] is True
+        assert "inherits" in tool.inputSchema["properties"][key]["description"]
+    assert "combined input and output" in tool.description
