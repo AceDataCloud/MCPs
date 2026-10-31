@@ -10,6 +10,7 @@ from tools import chat_tools
 V1_REQUIRED = {
     "gpt-6-astra",
     "gpt-6.1-sol",
+    "gpt-6.1-terra",
     "gpt-6-sol",
     "gpt-6-luna",
     "gpt-5.6-luna",
@@ -55,6 +56,7 @@ def test_v2_offers_new_chat_compatible_models():
     assert {
         "gpt-6-astra",
         "gpt-6.1-sol",
+        "gpt-6.1-terra",
         "gpt-6-sol",
         "gpt-6-luna",
         "grok-4.7",
