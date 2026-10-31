@@ -107,7 +107,9 @@ DEFAULT_MODEL: AiChatModel = "gpt-4.1"
 
 AiChatV2Action = Literal["chat", "retrieve", "retrieve_batch", "update", "delete"]
 
-AiChatV2ModelGroup = Literal["chatgpt", "claude", "gemini", "grok", "kimi", "glm", "mimo", "deepseek"]
+AiChatV2ModelGroup = Literal[
+    "chatgpt", "claude", "gemini", "grok", "kimi", "glm", "mimo", "deepseek"
+]
 
 AiChatV2Model = Literal[
     "mimo-v2.6-pro",
