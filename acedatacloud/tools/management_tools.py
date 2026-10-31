@@ -5,6 +5,7 @@ import inspect
 from typing import Annotated, Any, Literal
 from urllib.parse import quote
 
+from mcp.server.fastmcp.utilities.func_metadata import ArgModelBase
 from pydantic import BaseModel, ConfigDict, Field, create_model
 
 from contracts.management_surface import SURFACE_TOOLS
@@ -218,14 +219,18 @@ def build_tool(spec: dict[str, Any]) -> Any:
     return invoke
 
 
-def _supplied_arguments(model: BaseModel) -> dict[str, Any]:
+def _supplied_arguments(self: ArgModelBase) -> dict[str, Any]:
     """Keep omitted defaults distinct from explicit null through FastMCP dispatch."""
-    return {name: getattr(model, name) for name in model.model_fields_set}
+    return {
+        self.__class__.model_fields[name].alias or name: getattr(self, name)
+        for name in self.model_fields_set
+    }
 
 
 REGISTERED_TOOLS = {spec["name"]: build_tool(spec) for spec in SURFACE_TOOLS}
 for function in REGISTERED_TOOLS.values():
     mcp.add_tool(function)
     registered = mcp._tool_manager.get_tool(function.__name__)
-    # Only these **kwargs tools need presence information; native tools keep defaults.
-    registered.fn_metadata.arg_model.model_dump_one_level = _supplied_arguments
+    assert registered is not None
+    # This per-tool SDK adapter preserves aliases and input presence; native tools keep defaults.
+    registered.fn_metadata.arg_model.model_dump_one_level = _supplied_arguments  # type: ignore[method-assign]

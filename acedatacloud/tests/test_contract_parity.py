@@ -203,3 +203,30 @@ async def test_revenue_customer_dates_reach_the_backend():
         "start_date": "2026-10-01",
         "end_date": "2026-10-15",
     }
+
+
+@respx.mock
+@pytest.mark.parametrize(
+    "name,method,path",
+    [
+        ("acedatacloud_create_surveys_admin_templates", "POST", "/surveys/admin/templates/"),
+        (
+            "acedatacloud_replace_surveys_admin_templates_id",
+            "PUT",
+            "/surveys/admin/templates/survey-1",
+        ),
+        (
+            "acedatacloud_update_surveys_admin_templates_id",
+            "PATCH",
+            "/surveys/admin/templates/survey-1",
+        ),
+    ],
+)
+async def test_supplied_arguments_preserve_sdk_aliases_for_schema_field(name, method, path):
+    arguments = {"alias": "survey", "name": "Survey", "schema": {"questions": []}}
+    if method != "POST":
+        arguments["id"] = "survey-1"
+    route = respx.request(method, f"{API}{path}").respond(200, json={})
+    await call(name, {**arguments, "confirm": True})
+    assert json.loads(route.calls.last.request.content)["schema"] == {"questions": []}
+    assert "field_schema" not in json.loads(route.calls.last.request.content)
