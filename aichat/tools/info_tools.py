@@ -132,6 +132,12 @@ support it; the default remains `gpt-4.1`.
 Use `aichat_create_conversation_v2` for these models; they are not supported by
 `aichat_create_conversation`. The default model remains `gpt-4.1`.
 
+## Xiaomi MiMo (prepared; not yet available)
+- mimo-v2.6-pro
+- mimo-v2.6-flash
+
+These input identifiers are staged for text chat and function tools. Check the live catalog and account access before using them. Do not select them automatically while unavailable.
+
 ## Zhipu GLM
 - glm-5.3
 - glm-5.2
