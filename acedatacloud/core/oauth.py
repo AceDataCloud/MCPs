@@ -20,6 +20,7 @@ import hashlib
 import json
 import secrets
 import time
+from typing import Any
 from urllib.parse import urlencode
 
 import httpx
@@ -343,8 +344,8 @@ class AceDataCloudOAuthProvider:
     # --- Internal helpers ---
 
     @staticmethod
-    def _decode_jwt_payload(token: str) -> dict[str, str] | None:
-        """Decode JWT payload without verification (for debug logging only)."""
+    def _decode_jwt_payload(token: str) -> dict[str, Any] | None:
+        """Read candidate-selection metadata; PlatformBackend authenticates the bearer."""
         try:
             parts = token.split(".")
             if len(parts) != 3:
@@ -412,6 +413,9 @@ class AceDataCloudOAuthProvider:
         claims = self._decode_jwt_payload(jwt_token) or {}
         user_id = claims.get("user_id")
         auth_epoch = claims.get("auth_epoch", 0)
+        if type(auth_epoch) is not int or auth_epoch < 0:
+            logger.warning("OAuth token has an invalid account security version")
+            return None
         try:
             async with httpx.AsyncClient(timeout=30) as client:
                 # Reuse an existing tagged token if the user already has one.

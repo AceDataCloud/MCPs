@@ -240,3 +240,13 @@ def test_mfa_reuses_only_current_epoch():
         )
         == "current"
     )
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("epoch", ["2", True, -1, None])
+async def test_invalid_security_version_cannot_reuse_or_mint_tokens(epoch):
+    provider = AceDataCloudOAuthProvider()
+    assert (
+        await provider._get_platform_token(_make_jwt({"user_id": "u1", "auth_epoch": epoch}))
+        is None
+    )
