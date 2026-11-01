@@ -2,7 +2,7 @@
 
 from typing import get_args
 
-from core.types import AiChatModel, AiChatV2Model
+from core.types import AiChatModel, AiChatV2Model, AiChatV2ModelGroup
 
 
 def test_kimi_models_are_available_in_aichat_v2() -> None:
@@ -43,3 +43,10 @@ def test_flagship_models_are_available_in_aichat_v2() -> None:
 def test_deepseek_v4_pro_is_available_once_in_each_aichat_api() -> None:
     assert get_args(AiChatModel).count("deepseek-v4-pro") == 1
     assert get_args(AiChatV2Model).count("deepseek-v4-pro") == 1
+
+
+def test_mimo_identifiers_are_available_without_duplicate_aliases() -> None:
+    for model in ("mimo-v2.6-pro", "mimo-v2.6-flash"):
+        assert get_args(AiChatModel).count(model) == 1
+        assert get_args(AiChatV2Model).count(model) == 1
+    assert "mimo" in get_args(AiChatV2ModelGroup)

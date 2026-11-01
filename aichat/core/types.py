@@ -4,6 +4,8 @@ from typing import Literal
 
 # All supported models from OpenAPI spec
 AiChatModel = Literal[
+    "mimo-v2.6-pro",
+    "mimo-v2.6-flash",
     "gemini-3.8-flash",
     "gpt-6-astra",
     "gpt-6.1-sol",
@@ -107,9 +109,13 @@ DEFAULT_MODEL: AiChatModel = "gpt-4.1"
 
 AiChatV2Action = Literal["chat", "retrieve", "retrieve_batch", "update", "delete"]
 
-AiChatV2ModelGroup = Literal["chatgpt", "claude", "gemini", "grok", "kimi", "glm", "deepseek"]
+AiChatV2ModelGroup = Literal[
+    "chatgpt", "claude", "gemini", "grok", "kimi", "glm", "mimo", "deepseek"
+]
 
 AiChatV2Model = Literal[
+    "mimo-v2.6-pro",
+    "mimo-v2.6-flash",
     "gpt-5.6-sol-fast",
     "gpt-6-astra",
     "gpt-6.1-sol",
