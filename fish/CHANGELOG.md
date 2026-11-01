@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+- Add reusable public voice creation with the current Fish model API.
+- Align task guidance with the finished_at terminal marker.
+
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),

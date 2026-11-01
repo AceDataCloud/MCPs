@@ -263,24 +263,10 @@
     },
     {
       "method": "POST",
-      "path": "/email-marketing/admin/campaigns/{id}/activate/",
-      "handler": "EmailCampaignActionView",
-      "coverage": "covered",
-      "tool": "acedatacloud_run_email_campaigns_activate"
-    },
-    {
-      "method": "POST",
       "path": "/email-marketing/admin/campaigns/{id}/cancel/",
       "handler": "EmailCampaignActionView",
       "coverage": "covered",
       "tool": "acedatacloud_run_email_campaigns_cancel"
-    },
-    {
-      "method": "POST",
-      "path": "/email-marketing/admin/campaigns/{id}/create-carryover/",
-      "handler": "EmailCampaignActionView",
-      "coverage": "covered",
-      "tool": "acedatacloud_run_email_campaigns_create_carryover"
     },
     {
       "method": "POST",
@@ -291,31 +277,10 @@
     },
     {
       "method": "POST",
-      "path": "/email-marketing/admin/campaigns/{id}/prepare/",
-      "handler": "EmailCampaignActionView",
-      "coverage": "covered",
-      "tool": "acedatacloud_run_email_campaigns_prepare"
-    },
-    {
-      "method": "POST",
-      "path": "/email-marketing/admin/campaigns/{id}/prepare-carryover/",
-      "handler": "EmailCampaignActionView",
-      "coverage": "covered",
-      "tool": "acedatacloud_run_email_campaigns_prepare_carryover"
-    },
-    {
-      "method": "POST",
       "path": "/email-marketing/admin/campaigns/{id}/preview-audience/",
       "handler": "EmailCampaignActionView",
       "coverage": "covered",
       "tool": "acedatacloud_run_email_campaigns_preview_audience"
-    },
-    {
-      "method": "POST",
-      "path": "/email-marketing/admin/campaigns/{id}/release-next-wave/",
-      "handler": "EmailCampaignActionView",
-      "coverage": "covered",
-      "tool": "acedatacloud_run_email_campaigns_release_next_wave"
     },
     {
       "method": "POST",
@@ -885,25 +850,11 @@
       "tool": "acedatacloud_create_applications_deployment_save_config"
     },
     {
-      "method": "POST",
-      "path": "/applications/{id}/deployment-start/",
-      "handler": "ApplicationViewSet",
-      "coverage": "covered",
-      "tool": "acedatacloud_create_applications_deployment_start"
-    },
-    {
       "method": "GET",
       "path": "/applications/{id}/deployment-status/",
       "handler": "ApplicationViewSet",
       "coverage": "covered",
       "tool": "acedatacloud_get_applications_deployment_status"
-    },
-    {
-      "method": "POST",
-      "path": "/applications/{id}/deployment-stop/",
-      "handler": "ApplicationViewSet",
-      "coverage": "covered",
-      "tool": "acedatacloud_create_applications_deployment_stop"
     },
     {
       "method": "POST",
@@ -3116,6 +3067,132 @@
       "handler": "AdminUserPlatformAnalyticsView",
       "coverage": "covered",
       "tool": "acedatacloud_get_admin_users_analytics"
+    },
+    {
+      "method": "GET",
+      "path": "/blogs/categories/",
+      "handler": "PublicBlogCategoryListView",
+      "coverage": "covered",
+      "tool": "acedatacloud_list_blogs_categories"
+    },
+    {
+      "method": "GET",
+      "path": "/blogs/admin/categories/",
+      "handler": "BlogCategoryAdminListCreateView",
+      "coverage": "covered",
+      "tool": "acedatacloud_list_blogs_admin_categories"
+    },
+    {
+      "method": "POST",
+      "path": "/blogs/admin/categories/",
+      "handler": "BlogCategoryAdminListCreateView",
+      "coverage": "covered",
+      "tool": "acedatacloud_create_blogs_admin_categories"
+    },
+    {
+      "method": "GET",
+      "path": "/blogs/admin/categories/{slug}/",
+      "handler": "BlogCategoryAdminDetailView",
+      "coverage": "covered",
+      "tool": "acedatacloud_get_blogs_admin_categories_slug"
+    },
+    {
+      "method": "PUT",
+      "path": "/blogs/admin/categories/{slug}/",
+      "handler": "BlogCategoryAdminDetailView",
+      "coverage": "covered",
+      "tool": "acedatacloud_replace_blogs_admin_categories_slug"
+    },
+    {
+      "method": "PATCH",
+      "path": "/blogs/admin/categories/{slug}/",
+      "handler": "BlogCategoryAdminDetailView",
+      "coverage": "covered",
+      "tool": "acedatacloud_update_blogs_admin_categories_slug"
+    },
+    {
+      "method": "DELETE",
+      "path": "/blogs/admin/categories/{slug}/",
+      "handler": "BlogCategoryAdminDetailView",
+      "coverage": "covered",
+      "tool": "acedatacloud_delete_blogs_admin_categories_slug"
+    },
+    {
+      "method": "GET",
+      "path": "/email-marketing/admin/sender-quotas/",
+      "handler": "EmailSenderQuotaView",
+      "coverage": "covered",
+      "tool": "acedatacloud_get_email_sender_quotas"
+    },
+    {
+      "method": "GET",
+      "path": "/email-marketing/admin/campaigns/{id}/delivery-plan/",
+      "handler": "EmailCampaignDeliveryPlanView",
+      "coverage": "covered",
+      "tool": "acedatacloud_get_email_campaigns_delivery_plan"
+    },
+    {
+      "method": "GET",
+      "path": "/email-marketing/admin/campaigns/{id}/conversions/",
+      "handler": "EmailCampaignConversionView",
+      "coverage": "covered",
+      "tool": "acedatacloud_get_email_campaigns_conversions"
+    },
+    {
+      "method": "GET",
+      "path": "/email-marketing/admin/campaigns/{id}/analytics/",
+      "handler": "EmailCampaignGoogleAnalyticsView",
+      "coverage": "covered",
+      "tool": "acedatacloud_get_email_campaigns_analytics"
+    },
+    {
+      "method": "GET",
+      "path": "/admin/health/summary/",
+      "handler": "HealthSummaryView",
+      "coverage": "covered",
+      "tool": "acedatacloud_get_admin_health_summary"
+    },
+    {
+      "method": "GET",
+      "path": "/admin/health/traffic/",
+      "handler": "HealthTrafficView",
+      "coverage": "covered",
+      "tool": "acedatacloud_get_admin_health_traffic"
+    },
+    {
+      "method": "GET",
+      "path": "/admin/health/{domain}/",
+      "handler": "HealthDomainView",
+      "coverage": "covered",
+      "tool": "acedatacloud_get_admin_health_domain"
+    },
+    {
+      "method": "GET",
+      "path": "/applications/{id}/agent-setup/",
+      "handler": "ApplicationViewSet",
+      "coverage": "covered",
+      "tool": "acedatacloud_get_applications_agent_setup"
+    },
+    {
+      "method": "GET",
+      "path": "/orders/revenue-customers/",
+      "handler": "RevenueCustomersView",
+      "coverage": "covered",
+      "tool": "acedatacloud_get_orders_revenue_customers"
+    },
+    {
+      "method": "GET",
+      "path": "/invoices/admin/orders/{order_id}/manual/",
+      "handler": "InvoiceAdminOrderManualView",
+      "coverage": "covered",
+      "tool": "acedatacloud_get_invoices_admin_orders_manual"
+    },
+    {
+      "method": "POST",
+      "path": "/invoices/admin/orders/{order_id}/manual/",
+      "handler": "InvoiceAdminOrderManualView",
+      "coverage": "covered",
+      "tool": "acedatacloud_create_invoices_admin_orders_manual"
     }
   ],
   "tools": [
@@ -3132,10 +3209,8 @@
       "query_schema": {
         "type": "object",
         "properties": {
-          "category": {
-            "type": "string",
-            "maxLength": 32
-          },
+          "content_type": {},
+          "category": {},
           "lang": {},
           "limit": {
             "type": "integer",
@@ -3145,13 +3220,6 @@
           "offset": {
             "type": "integer",
             "minimum": 0
-          },
-          "content_type": {
-            "type": "string",
-            "enum": [
-              "article",
-              "video"
-            ]
           }
         },
         "additionalProperties": false
@@ -3178,11 +3246,10 @@
       "query_schema": {
         "type": "object",
         "properties": {
-          "category": {
-            "type": "string",
-            "maxLength": 32
-          },
+          "content_type": {},
+          "category": {},
           "published": {},
+          "status": {},
           "q": {
             "type": "string"
           },
@@ -3262,8 +3329,7 @@
             "type": "string"
           },
           "content": {
-            "type": "string",
-            "description": "Markdown source; required for articles, optional for videos."
+            "type": "string"
           },
           "source_lang": {
             "enum": [
@@ -3280,17 +3346,17 @@
             "format": "date-time"
           },
           "content_type": {
-            "type": "string",
             "enum": [
               "article",
               "video"
-            ]
+            ],
+            "type": "string"
           },
           "video_url": {
             "type": "string",
             "format": "uri",
             "maxLength": 2048,
-            "description": "HTTPS video URL; required for video posts."
+            "pattern": "^(?:[a-z0-9.+-]*)://(?:[^\\s:@/]+(?::[^\\s:@/]*)?@)?(?:(?:0|25[0-5]|2[0-4]\\d|1\\d?\\d?|[1-9]\\d?)(?:\\.(?:0|25[0-5]|2[0-4]\\d|1\\d?\\d?|[1-9]\\d?)){3}|\\[[0-9a-f:.]+\\]|([a-z¡-￿0-9](?:[a-z¡-￿0-9-]{0,61}[a-z¡-￿0-9])?(?:\\.(?!-)[a-z¡-￿0-9-]{1,63}(?<!-))*\\.(?!-)(?:[a-z¡-￿-]{2,63}|xn--[a-z0-9]{1,59})(?<!-)\\.?|localhost))(?::\\d{2,5})?(?:[/?#][^\\s]*)?\\z"
           }
         },
         "required": [
@@ -3398,8 +3464,7 @@
             "type": "string"
           },
           "content": {
-            "type": "string",
-            "description": "Markdown source; required for articles, optional for videos."
+            "type": "string"
           },
           "source_lang": {
             "enum": [
@@ -3416,17 +3481,17 @@
             "format": "date-time"
           },
           "content_type": {
-            "type": "string",
             "enum": [
               "article",
               "video"
-            ]
+            ],
+            "type": "string"
           },
           "video_url": {
             "type": "string",
             "format": "uri",
             "maxLength": 2048,
-            "description": "HTTPS video URL; required for video posts."
+            "pattern": "^(?:[a-z0-9.+-]*)://(?:[^\\s:@/]+(?::[^\\s:@/]*)?@)?(?:(?:0|25[0-5]|2[0-4]\\d|1\\d?\\d?|[1-9]\\d?)(?:\\.(?:0|25[0-5]|2[0-4]\\d|1\\d?\\d?|[1-9]\\d?)){3}|\\[[0-9a-f:.]+\\]|([a-z¡-￿0-9](?:[a-z¡-￿0-9-]{0,61}[a-z¡-￿0-9])?(?:\\.(?!-)[a-z¡-￿0-9-]{1,63}(?<!-))*\\.(?!-)(?:[a-z¡-￿-]{2,63}|xn--[a-z0-9]{1,59})(?<!-)\\.?|localhost))(?::\\d{2,5})?(?:[/?#][^\\s]*)?\\z"
           }
         },
         "required": [
@@ -3498,8 +3563,7 @@
             "type": "string"
           },
           "content": {
-            "type": "string",
-            "description": "Markdown source; required for articles, optional for videos."
+            "type": "string"
           },
           "source_lang": {
             "enum": [
@@ -3516,17 +3580,17 @@
             "format": "date-time"
           },
           "content_type": {
-            "type": "string",
             "enum": [
               "article",
               "video"
-            ]
+            ],
+            "type": "string"
           },
           "video_url": {
             "type": "string",
             "format": "uri",
             "maxLength": 2048,
-            "description": "HTTPS video URL; required for video posts."
+            "pattern": "^(?:[a-z0-9.+-]*)://(?:[^\\s:@/]+(?::[^\\s:@/]*)?@)?(?:(?:0|25[0-5]|2[0-4]\\d|1\\d?\\d?|[1-9]\\d?)(?:\\.(?:0|25[0-5]|2[0-4]\\d|1\\d?\\d?|[1-9]\\d?)){3}|\\[[0-9a-f:.]+\\]|([a-z¡-￿0-9](?:[a-z¡-￿0-9-]{0,61}[a-z¡-￿0-9])?(?:\\.(?!-)[a-z¡-￿0-9-]{1,63}(?<!-))*\\.(?!-)(?:[a-z¡-￿-]{2,63}|xn--[a-z0-9]{1,59})(?<!-)\\.?|localhost))(?::\\d{2,5})?(?:[/?#][^\\s]*)?\\z"
           }
         },
         "required": [],
@@ -3556,68 +3620,7 @@
       },
       "body_schema": {
         "type": "object",
-        "properties": {
-          "slug": {
-            "type": "string",
-            "maxLength": 200,
-            "pattern": "^[-a-zA-Z0-9_]+$"
-          },
-          "category": {
-            "type": "string",
-            "maxLength": 32
-          },
-          "author": {
-            "type": "string",
-            "maxLength": 120
-          },
-          "cover_url": {
-            "type": "string",
-            "format": "uri",
-            "maxLength": 2048,
-            "pattern": "^(?:[a-z0-9.+-]*)://(?:[^\\s:@/]+(?::[^\\s:@/]*)?@)?(?:(?:0|25[0-5]|2[0-4]\\d|1\\d?\\d?|[1-9]\\d?)(?:\\.(?:0|25[0-5]|2[0-4]\\d|1\\d?\\d?|[1-9]\\d?)){3}|\\[[0-9a-f:.]+\\]|([a-z¡-￿0-9](?:[a-z¡-￿0-9-]{0,61}[a-z¡-￿0-9])?(?:\\.(?!-)[a-z¡-￿0-9-]{1,63}(?<!-))*\\.(?!-)(?:[a-z¡-￿-]{2,63}|xn--[a-z0-9]{1,59})(?<!-)\\.?|localhost))(?::\\d{2,5})?(?:[/?#][^\\s]*)?\\z"
-          },
-          "cover_alt": {
-            "type": "string",
-            "maxLength": 255
-          },
-          "tags": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "title": {
-            "type": "string",
-            "maxLength": 255
-          },
-          "summary": {
-            "type": "string"
-          },
-          "content": {
-            "type": "string"
-          },
-          "source_lang": {
-            "enum": [
-              "zh-cn",
-              "en"
-            ],
-            "type": "string"
-          },
-          "published": {
-            "type": "boolean"
-          },
-          "publish_at": {
-            "type": "string",
-            "format": "date-time"
-          }
-        },
-        "required": [
-          "slug",
-          "title",
-          "summary",
-          "content"
-        ],
-        "additionalProperties": false
+        "properties": {}
       },
       "description": "Delete blogs admin id. Backend account permissions and ownership checks apply.",
       "disclose": []
@@ -4054,50 +4057,7 @@
       },
       "body_schema": {
         "type": "object",
-        "properties": {
-          "title": {
-            "type": "string",
-            "nullable": true,
-            "maxLength": 255
-          },
-          "content": {
-            "type": "string",
-            "nullable": true
-          },
-          "translation_key": {
-            "type": "string",
-            "nullable": true,
-            "maxLength": 255
-          },
-          "published": {
-            "type": "boolean",
-            "nullable": true
-          },
-          "publish_at": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
-          },
-          "rank": {
-            "type": "integer",
-            "maximum": 2147483647,
-            "minimum": -2147483648,
-            "nullable": true
-          },
-          "tags": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "nullable": true
-          },
-          "metadata": {
-            "type": "object",
-            "nullable": true
-          }
-        },
-        "required": [],
-        "additionalProperties": false
+        "properties": {}
       },
       "description": "Delete announcements admin id. Backend account permissions and ownership checks apply.",
       "disclose": []
@@ -4526,6 +4486,17 @@
           "send_time_eligibility": {
             "type": "object"
           },
+          "daily_cap": {
+            "type": "integer",
+            "maximum": 2147483647,
+            "minimum": -2147483648,
+            "nullable": true
+          },
+          "expires_at": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
           "scheduled_at": {
             "type": "string",
             "format": "date-time",
@@ -4680,6 +4651,17 @@
           "send_time_eligibility": {
             "type": "object"
           },
+          "daily_cap": {
+            "type": "integer",
+            "maximum": 2147483647,
+            "minimum": -2147483648,
+            "nullable": true
+          },
+          "expires_at": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
           "scheduled_at": {
             "type": "string",
             "format": "date-time",
@@ -4798,6 +4780,17 @@
           "send_time_eligibility": {
             "type": "object"
           },
+          "daily_cap": {
+            "type": "integer",
+            "maximum": 2147483647,
+            "minimum": -2147483648,
+            "nullable": true
+          },
+          "expires_at": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
           "scheduled_at": {
             "type": "string",
             "format": "date-time",
@@ -4839,99 +4832,7 @@
       },
       "body_schema": {
         "type": "object",
-        "properties": {
-          "announcement": {
-            "type": "string",
-            "nullable": true
-          },
-          "site_id": {
-            "type": "string",
-            "nullable": true,
-            "maxLength": 255
-          },
-          "name": {
-            "type": "string",
-            "maxLength": 255
-          },
-          "message_class": {
-            "enum": [
-              "ServiceNotice",
-              "ProductUpdate",
-              "Promotion",
-              "Newsletter"
-            ],
-            "type": "string"
-          },
-          "subscription_topic": {
-            "enum": [
-              "product_updates",
-              "promotions",
-              "newsletter"
-            ],
-            "type": "string",
-            "nullable": true
-          },
-          "subject_by_locale": {
-            "type": "object"
-          },
-          "content_by_locale": {
-            "type": "object"
-          },
-          "delivery_locale": {
-            "enum": [
-              "auto",
-              "en",
-              "zh-cn"
-            ],
-            "type": "string"
-          },
-          "audience_rule": {
-            "type": "object"
-          },
-          "audience_rule_version": {
-            "type": "integer",
-            "maximum": 2147483647,
-            "minimum": -2147483648
-          },
-          "provider": {
-            "type": "string",
-            "maxLength": 40
-          },
-          "from_address": {
-            "type": "string",
-            "nullable": true,
-            "maxLength": 320
-          },
-          "reply_to": {
-            "type": "string",
-            "nullable": true,
-            "maxLength": 320
-          },
-          "guardrail_thresholds": {
-            "type": "object"
-          },
-          "send_time_eligibility": {
-            "type": "object"
-          },
-          "scheduled_at": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
-          },
-          "tags": {
-            "type": "object",
-            "nullable": true
-          },
-          "metadata": {
-            "type": "object",
-            "nullable": true
-          }
-        },
-        "required": [
-          "name",
-          "message_class"
-        ],
-        "additionalProperties": false
+        "properties": {}
       },
       "description": "Delete email campaigns id. Backend account permissions and ownership checks apply.",
       "disclose": []
@@ -5026,6 +4927,7 @@
       "query_schema": {
         "type": "object",
         "properties": {
+          "status_group": {},
           "state": {},
           "limit": {
             "type": "integer",
@@ -5131,36 +5033,6 @@
       "disclose": []
     },
     {
-      "operation_id": "surface.run_email_campaigns_activate",
-      "name": "acedatacloud_run_email_campaigns_activate",
-      "method": "POST",
-      "path": "/email-marketing/admin/campaigns/{id}/activate/",
-      "domain": "Email Marketing",
-      "authentication": "authenticated",
-      "required_permissions": [
-        "email-marketing:send"
-      ],
-      "confirm": true,
-      "path_parameters": [
-        "id"
-      ],
-      "query_schema": {
-        "type": "object",
-        "properties": {},
-        "additionalProperties": false
-      },
-      "body_schema": {
-        "type": "object",
-        "properties": {
-          "reason": {}
-        },
-        "required": [],
-        "additionalProperties": false
-      },
-      "description": "Run email campaigns activate. Backend account permissions and ownership checks apply.",
-      "disclose": []
-    },
-    {
       "operation_id": "surface.run_email_campaigns_cancel",
       "name": "acedatacloud_run_email_campaigns_cancel",
       "method": "POST",
@@ -5188,36 +5060,6 @@
         "additionalProperties": false
       },
       "description": "Run email campaigns cancel. Backend account permissions and ownership checks apply.",
-      "disclose": []
-    },
-    {
-      "operation_id": "surface.run_email_campaigns_create_carryover",
-      "name": "acedatacloud_run_email_campaigns_create_carryover",
-      "method": "POST",
-      "path": "/email-marketing/admin/campaigns/{id}/create-carryover/",
-      "domain": "Email Marketing",
-      "authentication": "authenticated",
-      "required_permissions": [
-        "email-marketing:write"
-      ],
-      "confirm": true,
-      "path_parameters": [
-        "id"
-      ],
-      "query_schema": {
-        "type": "object",
-        "properties": {},
-        "additionalProperties": false
-      },
-      "body_schema": {
-        "type": "object",
-        "properties": {
-          "reason": {}
-        },
-        "required": [],
-        "additionalProperties": false
-      },
-      "description": "Run email campaigns create carryover. Backend account permissions and ownership checks apply.",
       "disclose": []
     },
     {
@@ -5251,66 +5093,6 @@
       "disclose": []
     },
     {
-      "operation_id": "surface.run_email_campaigns_prepare",
-      "name": "acedatacloud_run_email_campaigns_prepare",
-      "method": "POST",
-      "path": "/email-marketing/admin/campaigns/{id}/prepare/",
-      "domain": "Email Marketing",
-      "authentication": "authenticated",
-      "required_permissions": [
-        "email-marketing:write"
-      ],
-      "confirm": true,
-      "path_parameters": [
-        "id"
-      ],
-      "query_schema": {
-        "type": "object",
-        "properties": {},
-        "additionalProperties": false
-      },
-      "body_schema": {
-        "type": "object",
-        "properties": {
-          "reason": {}
-        },
-        "required": [],
-        "additionalProperties": false
-      },
-      "description": "Run email campaigns prepare. Backend account permissions and ownership checks apply.",
-      "disclose": []
-    },
-    {
-      "operation_id": "surface.run_email_campaigns_prepare_carryover",
-      "name": "acedatacloud_run_email_campaigns_prepare_carryover",
-      "method": "POST",
-      "path": "/email-marketing/admin/campaigns/{id}/prepare-carryover/",
-      "domain": "Email Marketing",
-      "authentication": "authenticated",
-      "required_permissions": [
-        "email-marketing:write"
-      ],
-      "confirm": true,
-      "path_parameters": [
-        "id"
-      ],
-      "query_schema": {
-        "type": "object",
-        "properties": {},
-        "additionalProperties": false
-      },
-      "body_schema": {
-        "type": "object",
-        "properties": {
-          "reason": {}
-        },
-        "required": [],
-        "additionalProperties": false
-      },
-      "description": "Run email campaigns prepare carryover. Backend account permissions and ownership checks apply.",
-      "disclose": []
-    },
-    {
       "operation_id": "surface.run_email_campaigns_preview_audience",
       "name": "acedatacloud_run_email_campaigns_preview_audience",
       "method": "POST",
@@ -5338,36 +5120,6 @@
         "additionalProperties": false
       },
       "description": "Run email campaigns preview audience. Backend account permissions and ownership checks apply.",
-      "disclose": []
-    },
-    {
-      "operation_id": "surface.run_email_campaigns_release_next_wave",
-      "name": "acedatacloud_run_email_campaigns_release_next_wave",
-      "method": "POST",
-      "path": "/email-marketing/admin/campaigns/{id}/release-next-wave/",
-      "domain": "Email Marketing",
-      "authentication": "authenticated",
-      "required_permissions": [
-        "email-marketing:send"
-      ],
-      "confirm": true,
-      "path_parameters": [
-        "id"
-      ],
-      "query_schema": {
-        "type": "object",
-        "properties": {},
-        "additionalProperties": false
-      },
-      "body_schema": {
-        "type": "object",
-        "properties": {
-          "reason": {}
-        },
-        "required": [],
-        "additionalProperties": false
-      },
-      "description": "Run email campaigns release next wave. Backend account permissions and ownership checks apply.",
       "disclose": []
     },
     {
@@ -5782,7 +5534,6 @@
       "query_schema": {
         "type": "object",
         "properties": {
-          "provider": {},
           "limit": {
             "type": "integer",
             "minimum": 1,
@@ -6913,6 +6664,7 @@
       "query_schema": {
         "type": "object",
         "properties": {
+          "view": {},
           "start_time": {},
           "end_time": {},
           "utm_source": {
@@ -7329,11 +7081,6 @@
             },
             "nullable": true
           },
-          "expired_at": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
-          },
           "metadata": {
             "type": "object",
             "nullable": true
@@ -7406,7 +7153,10 @@
           "config": {
             "type": "object"
           },
-          "helm_overrides": {}
+          "helm_overrides": {},
+          "secrets": {
+            "type": "object"
+          }
         },
         "required": [],
         "additionalProperties": false
@@ -7551,32 +7301,6 @@
       "disclose": []
     },
     {
-      "operation_id": "surface.create_applications_deployment_start",
-      "name": "acedatacloud_create_applications_deployment_start",
-      "method": "POST",
-      "path": "/applications/{id}/deployment-start/",
-      "domain": "Applications",
-      "authentication": "authenticated",
-      "required_permissions": [
-        "applications:write"
-      ],
-      "confirm": true,
-      "path_parameters": [
-        "id"
-      ],
-      "query_schema": {
-        "type": "object",
-        "properties": {},
-        "additionalProperties": false
-      },
-      "body_schema": {
-        "type": "object",
-        "properties": {}
-      },
-      "description": "Create applications deployment start. Backend account permissions and ownership checks apply.",
-      "disclose": []
-    },
-    {
       "operation_id": "surface.get_applications_deployment_status",
       "name": "acedatacloud_get_applications_deployment_status",
       "method": "GET",
@@ -7610,32 +7334,6 @@
         "properties": {}
       },
       "description": "Get applications deployment status. Backend account permissions and ownership checks apply.",
-      "disclose": []
-    },
-    {
-      "operation_id": "surface.create_applications_deployment_stop",
-      "name": "acedatacloud_create_applications_deployment_stop",
-      "method": "POST",
-      "path": "/applications/{id}/deployment-stop/",
-      "domain": "Applications",
-      "authentication": "authenticated",
-      "required_permissions": [
-        "applications:write"
-      ],
-      "confirm": true,
-      "path_parameters": [
-        "id"
-      ],
-      "query_schema": {
-        "type": "object",
-        "properties": {},
-        "additionalProperties": false
-      },
-      "body_schema": {
-        "type": "object",
-        "properties": {}
-      },
-      "description": "Create applications deployment stop. Backend account permissions and ownership checks apply.",
       "disclose": []
     },
     {
@@ -8365,129 +8063,7 @@
       },
       "body_schema": {
         "type": "object",
-        "properties": {
-          "origin": {
-            "type": "string",
-            "maxLength": 255
-          },
-          "title": {
-            "type": "string",
-            "nullable": true,
-            "maxLength": 255
-          },
-          "description": {
-            "type": "string",
-            "nullable": true
-          },
-          "keywords": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "nullable": true
-          },
-          "logo": {
-            "type": "string",
-            "nullable": true
-          },
-          "logo_light": {
-            "type": "string",
-            "nullable": true
-          },
-          "logo_dark": {
-            "type": "string",
-            "nullable": true
-          },
-          "favicon": {
-            "type": "string",
-            "nullable": true
-          },
-          "language": {
-            "type": "string",
-            "nullable": true,
-            "maxLength": 255
-          },
-          "supported_locales": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "nullable": true
-          },
-          "forced_locale": {
-            "type": "string",
-            "nullable": true,
-            "maxLength": 10
-          },
-          "distribution": {
-            "type": "object",
-            "nullable": true
-          },
-          "features": {
-            "type": "object",
-            "nullable": true
-          },
-          "admins": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "nullable": true
-          },
-          "auth": {
-            "type": "object",
-            "nullable": true
-          },
-          "configuration_revision": {
-            "type": "integer",
-            "maximum": 9223372036854775807,
-            "format": "int64",
-            "minimum": 0
-          },
-          "tags": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "nullable": true
-          },
-          "commerce": {
-            "type": "object",
-            "nullable": true
-          },
-          "home": {
-            "type": "object",
-            "nullable": true
-          },
-          "theme": {
-            "type": "object",
-            "nullable": true
-          },
-          "layout": {
-            "type": "object",
-            "nullable": true
-          },
-          "nav": {
-            "type": "object",
-            "nullable": true
-          },
-          "console_nav": {
-            "type": "object",
-            "nullable": true
-          },
-          "branding": {
-            "type": "object",
-            "nullable": true
-          },
-          "analytics": {
-            "type": "object",
-            "nullable": true
-          }
-        },
-        "required": [
-          "origin"
-        ],
-        "additionalProperties": false
+        "properties": {}
       },
       "description": "Delete sites id. Backend account permissions and ownership checks apply.",
       "disclose": []
@@ -8874,34 +8450,7 @@
       },
       "body_schema": {
         "type": "object",
-        "properties": {
-          "hostname": {
-            "type": "string",
-            "maxLength": 253
-          },
-          "kind": {
-            "enum": [
-              "Page",
-              "Api"
-            ],
-            "type": "string"
-          },
-          "tags": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "nullable": true
-          },
-          "metadata": {
-            "type": "object",
-            "nullable": true
-          }
-        },
-        "required": [
-          "hostname"
-        ],
-        "additionalProperties": false
+        "properties": {}
       },
       "description": "Delete site domains id. Backend account permissions and ownership checks apply.",
       "disclose": []
@@ -9199,22 +8748,7 @@
       },
       "body_schema": {
         "type": "object",
-        "properties": {
-          "display_name": {
-            "type": "string",
-            "nullable": true,
-            "maxLength": 120
-          },
-          "icon_url": {
-            "type": "string",
-            "format": "uri",
-            "nullable": true,
-            "maxLength": 2048,
-            "pattern": "^(?:[a-z0-9.+-]*)://(?:[^\\s:@/]+(?::[^\\s:@/]*)?@)?(?:(?:0|25[0-5]|2[0-4]\\d|1\\d?\\d?|[1-9]\\d?)(?:\\.(?:0|25[0-5]|2[0-4]\\d|1\\d?\\d?|[1-9]\\d?)){3}|\\[[0-9a-f:.]+\\]|([a-z¡-￿0-9](?:[a-z¡-￿0-9-]{0,61}[a-z¡-￿0-9])?(?:\\.(?!-)[a-z¡-￿0-9-]{1,63}(?<!-))*\\.(?!-)(?:[a-z¡-￿-]{2,63}|xn--[a-z0-9]{1,59})(?<!-)\\.?|localhost))(?::\\d{2,5})?(?:[/?#][^\\s]*)?\\z"
-          }
-        },
-        "required": [],
-        "additionalProperties": false
+        "properties": {}
       },
       "description": "Delete site capability overrides id. Backend account permissions and ownership checks apply.",
       "disclose": []
@@ -9459,42 +8993,7 @@
       },
       "body_schema": {
         "type": "object",
-        "properties": {
-          "visible": {
-            "type": "boolean"
-          },
-          "markup_ratio": {
-            "type": "number",
-            "nullable": true
-          },
-          "display_title": {
-            "type": "string",
-            "nullable": true,
-            "maxLength": 120
-          },
-          "display_summary": {
-            "type": "string",
-            "nullable": true
-          },
-          "sort_order": {
-            "type": "integer",
-            "maximum": 2147483647,
-            "minimum": -2147483648
-          },
-          "tags": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "nullable": true
-          },
-          "metadata": {
-            "type": "object",
-            "nullable": true
-          }
-        },
-        "required": [],
-        "additionalProperties": false
+        "properties": {}
       },
       "description": "Delete site service overrides id. Backend account permissions and ownership checks apply.",
       "disclose": []
@@ -9752,49 +9251,7 @@
       },
       "body_schema": {
         "type": "object",
-        "properties": {
-          "visible": {
-            "type": "boolean"
-          },
-          "cascade": {
-            "type": "boolean"
-          },
-          "display_title": {
-            "type": "string",
-            "nullable": true,
-            "maxLength": 120
-          },
-          "display_summary": {
-            "type": "string",
-            "nullable": true
-          },
-          "content_mode": {
-            "type": "string",
-            "maxLength": 20
-          },
-          "content_markdown": {
-            "type": "string",
-            "nullable": true
-          },
-          "sort_order": {
-            "type": "integer",
-            "maximum": 2147483647,
-            "minimum": -2147483648
-          },
-          "tags": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "nullable": true
-          },
-          "metadata": {
-            "type": "object",
-            "nullable": true
-          }
-        },
-        "required": [],
-        "additionalProperties": false
+        "properties": {}
       },
       "description": "Delete site document overrides id. Backend account permissions and ownership checks apply.",
       "disclose": []
@@ -10116,55 +9573,7 @@
       },
       "body_schema": {
         "type": "object",
-        "properties": {
-          "image_url": {
-            "type": "string",
-            "nullable": true
-          },
-          "link_url": {
-            "type": "string",
-            "nullable": true
-          },
-          "title": {
-            "type": "object",
-            "nullable": true
-          },
-          "subtitle": {
-            "type": "object",
-            "nullable": true
-          },
-          "visible": {
-            "type": "boolean"
-          },
-          "sort_order": {
-            "type": "integer",
-            "maximum": 2147483647,
-            "minimum": -2147483648
-          },
-          "start_at": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
-          },
-          "end_at": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
-          },
-          "tags": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "nullable": true
-          },
-          "metadata": {
-            "type": "object",
-            "nullable": true
-          }
-        },
-        "required": [],
-        "additionalProperties": false
+        "properties": {}
       },
       "description": "Delete site banners id. Backend account permissions and ownership checks apply.",
       "disclose": []
@@ -10267,17 +9676,6 @@
       "body_schema": {
         "type": "object",
         "properties": {
-          "presentation": {
-            "type": "object",
-            "description": "Website presentation options.",
-            "properties": {
-              "open_external": {
-                "type": "boolean",
-                "description": "External-open option for website sections only."
-              }
-            },
-            "additionalProperties": false
-          },
           "site": {
             "type": "string"
           },
@@ -10299,10 +9697,25 @@
           "render_in_iframe": {
             "type": "boolean"
           },
+          "presentation": {
+            "type": "object",
+            "description": "Website presentation options.",
+            "properties": {
+              "open_external": {
+                "type": "boolean",
+                "description": "External-open option for website sections only."
+              }
+            },
+            "additionalProperties": false
+          },
           "height": {
             "type": "integer",
             "maximum": 2147483647,
             "minimum": -2147483648,
+            "nullable": true
+          },
+          "oauth": {
+            "type": "object",
             "nullable": true
           },
           "visible": {
@@ -10405,17 +9818,6 @@
       "body_schema": {
         "type": "object",
         "properties": {
-          "presentation": {
-            "type": "object",
-            "description": "Website presentation options.",
-            "properties": {
-              "open_external": {
-                "type": "boolean",
-                "description": "External-open option for website sections only."
-              }
-            },
-            "additionalProperties": false
-          },
           "kind": {
             "enum": [
               "markdown",
@@ -10434,10 +9836,25 @@
           "render_in_iframe": {
             "type": "boolean"
           },
+          "presentation": {
+            "type": "object",
+            "description": "Website presentation options.",
+            "properties": {
+              "open_external": {
+                "type": "boolean",
+                "description": "External-open option for website sections only."
+              }
+            },
+            "additionalProperties": false
+          },
           "height": {
             "type": "integer",
             "maximum": 2147483647,
             "minimum": -2147483648,
+            "nullable": true
+          },
+          "oauth": {
+            "type": "object",
             "nullable": true
           },
           "visible": {
@@ -10491,17 +9908,6 @@
       "body_schema": {
         "type": "object",
         "properties": {
-          "presentation": {
-            "type": "object",
-            "description": "Website presentation options; PATCH merges supplied keys.",
-            "properties": {
-              "open_external": {
-                "type": "boolean",
-                "description": "External-open option for website sections only."
-              }
-            },
-            "additionalProperties": false
-          },
           "kind": {
             "enum": [
               "markdown",
@@ -10520,10 +9926,25 @@
           "render_in_iframe": {
             "type": "boolean"
           },
+          "presentation": {
+            "type": "object",
+            "description": "Website presentation options; PATCH merges supplied keys.",
+            "properties": {
+              "open_external": {
+                "type": "boolean",
+                "description": "External-open option for website sections only."
+              }
+            },
+            "additionalProperties": false
+          },
           "height": {
             "type": "integer",
             "maximum": 2147483647,
             "minimum": -2147483648,
+            "nullable": true
+          },
+          "oauth": {
+            "type": "object",
             "nullable": true
           },
           "visible": {
@@ -10572,56 +9993,7 @@
       },
       "body_schema": {
         "type": "object",
-        "properties": {
-          "kind": {
-            "enum": [
-              "markdown",
-              "html",
-              "website"
-            ],
-            "type": "string"
-          },
-          "title": {
-            "type": "string",
-            "maxLength": 160
-          },
-          "body": {
-            "type": "string"
-          },
-          "render_in_iframe": {
-            "type": "boolean"
-          },
-          "height": {
-            "type": "integer",
-            "maximum": 2147483647,
-            "minimum": -2147483648,
-            "nullable": true
-          },
-          "visible": {
-            "type": "boolean"
-          },
-          "sort_order": {
-            "type": "integer",
-            "maximum": 2147483647,
-            "minimum": -2147483648
-          },
-          "start_at": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
-          },
-          "end_at": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
-          }
-        },
-        "required": [
-          "kind",
-          "title",
-          "body"
-        ],
-        "additionalProperties": false
+        "properties": {}
       },
       "description": "Delete site home sections id. Backend account permissions and ownership checks apply.",
       "disclose": []
@@ -12399,6 +11771,10 @@
       "body_schema": {
         "type": "object",
         "properties": {
+          "manual_void_confirmed": {
+            "type": "boolean",
+            "default": false
+          },
           "status": {
             "enum": [
               "Processing",
@@ -13525,85 +12901,7 @@
       },
       "body_schema": {
         "type": "object",
-        "properties": {
-          "name": {
-            "type": "string",
-            "nullable": true,
-            "maxLength": 255
-          },
-          "type": {
-            "enum": [
-              "Token",
-              "Identity"
-            ],
-            "type": "string",
-            "nullable": true
-          },
-          "limited_amount": {
-            "type": "number",
-            "nullable": true
-          },
-          "used_amount": {
-            "type": "number",
-            "nullable": true
-          },
-          "token": {
-            "type": "string",
-            "nullable": true,
-            "maxLength": 512
-          },
-          "username": {
-            "type": "string",
-            "nullable": true,
-            "maxLength": 30
-          },
-          "password": {
-            "type": "string",
-            "nullable": true,
-            "maxLength": 100
-          },
-          "user_id": {
-            "type": "string",
-            "nullable": true,
-            "maxLength": 255
-          },
-          "creator_id": {
-            "type": "string",
-            "nullable": true,
-            "maxLength": 255
-          },
-          "host": {
-            "type": "string",
-            "nullable": true,
-            "maxLength": 255
-          },
-          "allowed_api_ids": {
-            "type": "array",
-            "items": {
-              "type": "string",
-              "format": "uuid"
-            },
-            "nullable": true
-          },
-          "expired_at": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
-          },
-          "tags": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "nullable": true
-          },
-          "metadata": {
-            "type": "object",
-            "nullable": true
-          }
-        },
-        "required": [],
-        "additionalProperties": false
+        "properties": {}
       },
       "description": "Delete credentials id. Backend account permissions and ownership checks apply.",
       "disclose": []
@@ -14933,9 +14231,25 @@
       "body_schema": {
         "type": "object",
         "properties": {
-          "reward": {}
+          "expected_reward": {
+            "type": "string",
+            "format": "decimal",
+            "multipleOf": 0.01,
+            "maximum": 10000000000000000,
+            "minimum": -10000000000000000
+          },
+          "reward": {
+            "type": "string",
+            "format": "decimal",
+            "multipleOf": 0.01,
+            "maximum": 10000000000000000,
+            "minimum": -10000000000000000
+          }
         },
-        "required": [],
+        "required": [
+          "expected_reward",
+          "reward"
+        ],
         "additionalProperties": false
       },
       "description": "Create distribution statuses update reward. Backend account permissions and ownership checks apply.",
@@ -15144,26 +14458,7 @@
       },
       "body_schema": {
         "type": "object",
-        "properties": {
-          "user_id": {
-            "type": "string",
-            "nullable": true,
-            "maxLength": 255
-          },
-          "tags": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "nullable": true
-          },
-          "metadata": {
-            "type": "object",
-            "nullable": true
-          }
-        },
-        "required": [],
-        "additionalProperties": false
+        "properties": {}
       },
       "description": "Delete platform tokens id. Backend account permissions and ownership checks apply.",
       "disclose": []
@@ -15755,26 +15050,7 @@
       },
       "body_schema": {
         "type": "object",
-        "properties": {
-          "user_id": {
-            "type": "string",
-            "nullable": true,
-            "maxLength": 255
-          },
-          "discount": {
-            "type": "number"
-          },
-          "service_id": {
-            "type": "string",
-            "writeOnly": true,
-            "nullable": true
-          }
-        },
-        "required": [
-          "user_id",
-          "discount"
-        ],
-        "additionalProperties": false
+        "properties": {}
       },
       "description": "Delete order discounts id. Backend account permissions and ownership checks apply.",
       "disclose": []
@@ -16066,26 +15342,7 @@
       },
       "body_schema": {
         "type": "object",
-        "properties": {
-          "threshold_amount": {
-            "type": "number",
-            "nullable": true
-          },
-          "stripe_account": {
-            "type": "string",
-            "nullable": true,
-            "maxLength": 8
-          },
-          "tags": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "nullable": true
-          }
-        },
-        "required": [],
-        "additionalProperties": false
+        "properties": {}
       },
       "description": "Delete auto recharge configs id. Backend account permissions and ownership checks apply.",
       "disclose": []
@@ -16608,58 +15865,7 @@
       },
       "body_schema": {
         "type": "object",
-        "properties": {
-          "name": {
-            "type": "string",
-            "maxLength": 128
-          },
-          "description": {
-            "type": "string"
-          },
-          "enabled": {
-            "type": "boolean"
-          },
-          "rollout_percentage": {
-            "type": "integer",
-            "maximum": 2147483647,
-            "minimum": -2147483648
-          },
-          "client_overridable": {
-            "type": "boolean"
-          },
-          "starts_at": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
-          },
-          "ends_at": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
-          },
-          "targeting": {
-            "type": "object",
-            "nullable": true
-          },
-          "archived": {
-            "type": "boolean"
-          },
-          "tags": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "nullable": true
-          },
-          "metadata": {
-            "type": "object",
-            "nullable": true
-          }
-        },
-        "required": [
-          "name"
-        ],
-        "additionalProperties": false
+        "properties": {}
       },
       "description": "Delete feature flags id. Backend account permissions and ownership checks apply.",
       "disclose": []
@@ -17181,86 +16387,7 @@
       },
       "body_schema": {
         "type": "object",
-        "properties": {
-          "name": {
-            "type": "string",
-            "maxLength": 255
-          },
-          "alias": {
-            "type": "string",
-            "maxLength": 255
-          },
-          "title": {
-            "type": "string",
-            "nullable": true,
-            "maxLength": 255
-          },
-          "description": {
-            "type": "string",
-            "nullable": true
-          },
-          "enabled": {
-            "type": "boolean"
-          },
-          "mode": {
-            "enum": [
-              "Allowlist",
-              "Blocklist"
-            ],
-            "type": "string"
-          },
-          "require_approval": {
-            "type": "boolean"
-          },
-          "minimum_ace_tier": {
-            "type": "integer",
-            "maximum": 2147483647,
-            "minimum": -2147483648,
-            "nullable": true
-          },
-          "starts_at": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
-          },
-          "ends_at": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
-          },
-          "services": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "apis": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "request_condition": {
-            "type": "object",
-            "nullable": true
-          },
-          "tags": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "nullable": true
-          },
-          "metadata": {
-            "type": "object",
-            "nullable": true
-          }
-        },
-        "required": [
-          "name",
-          "alias"
-        ],
-        "additionalProperties": false
+        "properties": {}
       },
       "description": "Delete access policies id. Backend account permissions and ownership checks apply.",
       "disclose": []
@@ -17623,60 +16750,7 @@
       },
       "body_schema": {
         "type": "object",
-        "properties": {
-          "policy": {
-            "type": "string"
-          },
-          "user_id": {
-            "type": "string",
-            "maxLength": 255
-          },
-          "status": {
-            "enum": [
-              "Active",
-              "Revoked"
-            ],
-            "type": "string"
-          },
-          "source": {
-            "enum": [
-              "Manual",
-              "Request",
-              "Grandfather",
-              "Import"
-            ],
-            "type": "string"
-          },
-          "request": {
-            "type": "string",
-            "nullable": true
-          },
-          "expires_at": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
-          },
-          "note": {
-            "type": "string",
-            "nullable": true
-          },
-          "tags": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "nullable": true
-          },
-          "metadata": {
-            "type": "object",
-            "nullable": true
-          }
-        },
-        "required": [
-          "policy",
-          "user_id"
-        ],
-        "additionalProperties": false
+        "properties": {}
       },
       "description": "Delete access grants id. Backend account permissions and ownership checks apply.",
       "disclose": []
@@ -17818,34 +16892,7 @@
       },
       "body_schema": {
         "type": "object",
-        "properties": {
-          "service": {
-            "type": "string",
-            "nullable": true
-          },
-          "reason": {
-            "type": "string",
-            "nullable": true
-          },
-          "contact": {
-            "type": "string",
-            "nullable": true,
-            "maxLength": 255
-          },
-          "tags": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "nullable": true
-          },
-          "metadata": {
-            "type": "object",
-            "nullable": true
-          }
-        },
-        "required": [],
-        "additionalProperties": false
+        "properties": {}
       },
       "description": "Delete access requests id. Backend account permissions and ownership checks apply.",
       "disclose": []
@@ -18317,66 +17364,7 @@
       },
       "body_schema": {
         "type": "object",
-        "properties": {
-          "alias": {
-            "type": "string",
-            "maxLength": 64
-          },
-          "name": {
-            "type": "string",
-            "maxLength": 255
-          },
-          "description": {
-            "type": "string",
-            "nullable": true
-          },
-          "state": {
-            "enum": [
-              "Draft",
-              "Active",
-              "Archived"
-            ],
-            "type": "string"
-          },
-          "version": {
-            "type": "integer",
-            "maximum": 2147483647,
-            "minimum": -2147483648
-          },
-          "schema": {
-            "type": "object"
-          },
-          "reward": {
-            "type": "object"
-          },
-          "trigger": {
-            "type": "object"
-          },
-          "starts_at": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
-          },
-          "ends_at": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
-          },
-          "tags": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "metadata": {
-            "type": "object"
-          }
-        },
-        "required": [
-          "alias",
-          "name"
-        ],
-        "additionalProperties": false
+        "properties": {}
       },
       "description": "Delete surveys admin templates id. Backend account permissions and ownership checks apply.",
       "disclose": []
@@ -18944,61 +17932,7 @@
       },
       "body_schema": {
         "type": "object",
-        "properties": {
-          "name": {
-            "type": "string",
-            "maxLength": 64
-          },
-          "description": {
-            "type": "string"
-          },
-          "method": {
-            "enum": [
-              "GET",
-              "POST",
-              "PUT",
-              "PATCH",
-              "DELETE"
-            ],
-            "type": "string"
-          },
-          "url": {
-            "type": "string",
-            "maxLength": 2048
-          },
-          "headers": {
-            "type": "object",
-            "nullable": true
-          },
-          "body": {
-            "type": "object",
-            "nullable": true
-          },
-          "timeout": {
-            "type": "integer",
-            "maximum": 2147483647,
-            "minimum": -2147483648
-          },
-          "enabled": {
-            "type": "boolean"
-          },
-          "tags": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "nullable": true
-          },
-          "metadata": {
-            "type": "object",
-            "nullable": true
-          }
-        },
-        "required": [
-          "name",
-          "url"
-        ],
-        "additionalProperties": false
+        "properties": {}
       },
       "description": "Delete webhooks id. Backend account permissions and ownership checks apply.",
       "disclose": []
@@ -19331,34 +18265,7 @@
       },
       "body_schema": {
         "type": "object",
-        "properties": {
-          "event": {
-            "type": "string",
-            "maxLength": 64
-          },
-          "webhook": {
-            "type": "string"
-          },
-          "enabled": {
-            "type": "boolean"
-          },
-          "tags": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "nullable": true
-          },
-          "metadata": {
-            "type": "object",
-            "nullable": true
-          }
-        },
-        "required": [
-          "event",
-          "webhook"
-        ],
-        "additionalProperties": false
+        "properties": {}
       },
       "description": "Delete webhook subscriptions id. Backend account permissions and ownership checks apply.",
       "disclose": []
@@ -19970,13 +18877,780 @@
       },
       "description": "Get admin users analytics. Backend account permissions and ownership checks apply.",
       "disclose": []
+    },
+    {
+      "operation_id": "surface.list_blogs_categories",
+      "name": "acedatacloud_list_blogs_categories",
+      "method": "GET",
+      "path": "/blogs/categories/",
+      "domain": "Blogs",
+      "authentication": "public",
+      "required_permissions": [],
+      "confirm": false,
+      "path_parameters": [],
+      "query_schema": {
+        "type": "object",
+        "properties": {
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100
+          },
+          "offset": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "additionalProperties": false
+      },
+      "body_schema": {
+        "type": "object",
+        "properties": {}
+      },
+      "description": "List blogs categories. Backend account permissions and ownership checks apply.",
+      "disclose": []
+    },
+    {
+      "operation_id": "surface.list_blogs_admin_categories",
+      "name": "acedatacloud_list_blogs_admin_categories",
+      "method": "GET",
+      "path": "/blogs/admin/categories/",
+      "domain": "Blogs",
+      "authentication": "authenticated",
+      "required_permissions": [
+        "blog:read"
+      ],
+      "confirm": false,
+      "path_parameters": [],
+      "query_schema": {
+        "type": "object",
+        "properties": {
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100
+          },
+          "offset": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "additionalProperties": false
+      },
+      "body_schema": {
+        "type": "object",
+        "properties": {}
+      },
+      "description": "List blogs admin categories. Backend account permissions and ownership checks apply.",
+      "disclose": []
+    },
+    {
+      "operation_id": "surface.create_blogs_admin_categories",
+      "name": "acedatacloud_create_blogs_admin_categories",
+      "method": "POST",
+      "path": "/blogs/admin/categories/",
+      "domain": "Blogs",
+      "authentication": "authenticated",
+      "required_permissions": [
+        "blog:publish"
+      ],
+      "confirm": true,
+      "path_parameters": [],
+      "query_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      },
+      "body_schema": {
+        "type": "object",
+        "properties": {
+          "slug": {
+            "type": "string",
+            "maxLength": 32,
+            "pattern": "^[-a-zA-Z0-9_]+$"
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 80
+          },
+          "name_en": {
+            "type": "string",
+            "maxLength": 80
+          },
+          "position": {
+            "type": "integer",
+            "maximum": 2147483647,
+            "minimum": 0
+          }
+        },
+        "required": [
+          "slug",
+          "name",
+          "name_en"
+        ],
+        "additionalProperties": false
+      },
+      "description": "Create blogs admin categories. Backend account permissions and ownership checks apply.",
+      "disclose": []
+    },
+    {
+      "operation_id": "surface.get_blogs_admin_categories_slug",
+      "name": "acedatacloud_get_blogs_admin_categories_slug",
+      "method": "GET",
+      "path": "/blogs/admin/categories/{slug}/",
+      "domain": "Blogs",
+      "authentication": "authenticated",
+      "required_permissions": [
+        "blog:read"
+      ],
+      "confirm": false,
+      "path_parameters": [
+        "slug"
+      ],
+      "query_schema": {
+        "type": "object",
+        "properties": {
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100
+          },
+          "offset": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "additionalProperties": false
+      },
+      "body_schema": {
+        "type": "object",
+        "properties": {}
+      },
+      "description": "Get blogs admin categories slug. Backend account permissions and ownership checks apply.",
+      "disclose": []
+    },
+    {
+      "operation_id": "surface.replace_blogs_admin_categories_slug",
+      "name": "acedatacloud_replace_blogs_admin_categories_slug",
+      "method": "PUT",
+      "path": "/blogs/admin/categories/{slug}/",
+      "domain": "Blogs",
+      "authentication": "authenticated",
+      "required_permissions": [
+        "blog:publish"
+      ],
+      "confirm": true,
+      "path_parameters": [
+        "slug"
+      ],
+      "query_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      },
+      "body_schema": {
+        "type": "object",
+        "properties": {
+          "slug": {
+            "type": "string",
+            "maxLength": 32,
+            "pattern": "^[-a-zA-Z0-9_]+$"
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 80
+          },
+          "name_en": {
+            "type": "string",
+            "maxLength": 80
+          },
+          "position": {
+            "type": "integer",
+            "maximum": 2147483647,
+            "minimum": 0
+          }
+        },
+        "required": [
+          "slug",
+          "name",
+          "name_en"
+        ],
+        "additionalProperties": false
+      },
+      "description": "Replace blogs admin categories slug. Backend account permissions and ownership checks apply.",
+      "disclose": []
+    },
+    {
+      "operation_id": "surface.update_blogs_admin_categories_slug",
+      "name": "acedatacloud_update_blogs_admin_categories_slug",
+      "method": "PATCH",
+      "path": "/blogs/admin/categories/{slug}/",
+      "domain": "Blogs",
+      "authentication": "authenticated",
+      "required_permissions": [
+        "blog:publish"
+      ],
+      "confirm": true,
+      "path_parameters": [
+        "slug"
+      ],
+      "query_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      },
+      "body_schema": {
+        "type": "object",
+        "properties": {
+          "slug": {
+            "type": "string",
+            "maxLength": 32,
+            "pattern": "^[-a-zA-Z0-9_]+$"
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 80
+          },
+          "name_en": {
+            "type": "string",
+            "maxLength": 80
+          },
+          "position": {
+            "type": "integer",
+            "maximum": 2147483647,
+            "minimum": 0
+          }
+        },
+        "required": [],
+        "additionalProperties": false
+      },
+      "description": "Update blogs admin categories slug. Backend account permissions and ownership checks apply.",
+      "disclose": []
+    },
+    {
+      "operation_id": "surface.delete_blogs_admin_categories_slug",
+      "name": "acedatacloud_delete_blogs_admin_categories_slug",
+      "method": "DELETE",
+      "path": "/blogs/admin/categories/{slug}/",
+      "domain": "Blogs",
+      "authentication": "authenticated",
+      "required_permissions": [
+        "blog:publish"
+      ],
+      "confirm": true,
+      "path_parameters": [
+        "slug"
+      ],
+      "query_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      },
+      "body_schema": {
+        "type": "object",
+        "properties": {}
+      },
+      "description": "Delete blogs admin categories slug. Backend account permissions and ownership checks apply.",
+      "disclose": []
+    },
+    {
+      "operation_id": "surface.get_email_sender_quotas",
+      "name": "acedatacloud_get_email_sender_quotas",
+      "method": "GET",
+      "path": "/email-marketing/admin/sender-quotas/",
+      "domain": "Email Marketing",
+      "authentication": "authenticated",
+      "required_permissions": [
+        "email-marketing:read"
+      ],
+      "confirm": false,
+      "path_parameters": [],
+      "query_schema": {
+        "type": "object",
+        "properties": {
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100
+          },
+          "offset": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "additionalProperties": false
+      },
+      "body_schema": {
+        "type": "object",
+        "properties": {}
+      },
+      "description": "Get email sender quotas. Backend account permissions and ownership checks apply.",
+      "disclose": []
+    },
+    {
+      "operation_id": "surface.get_email_campaigns_delivery_plan",
+      "name": "acedatacloud_get_email_campaigns_delivery_plan",
+      "method": "GET",
+      "path": "/email-marketing/admin/campaigns/{id}/delivery-plan/",
+      "domain": "Email Marketing",
+      "authentication": "authenticated",
+      "required_permissions": [
+        "email-marketing:read"
+      ],
+      "confirm": false,
+      "path_parameters": [
+        "id"
+      ],
+      "query_schema": {
+        "type": "object",
+        "properties": {
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100
+          },
+          "offset": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "additionalProperties": false
+      },
+      "body_schema": {
+        "type": "object",
+        "properties": {}
+      },
+      "description": "Get email campaigns delivery plan. Backend account permissions and ownership checks apply.",
+      "disclose": []
+    },
+    {
+      "operation_id": "surface.get_email_campaigns_conversions",
+      "name": "acedatacloud_get_email_campaigns_conversions",
+      "method": "GET",
+      "path": "/email-marketing/admin/campaigns/{id}/conversions/",
+      "domain": "Email Marketing",
+      "authentication": "authenticated",
+      "required_permissions": [
+        "email-marketing:read"
+      ],
+      "confirm": false,
+      "path_parameters": [
+        "id"
+      ],
+      "query_schema": {
+        "type": "object",
+        "properties": {
+          "include_auto": {},
+          "converted_only": {},
+          "basis": {
+            "type": "string"
+          },
+          "days": {
+            "type": "integer"
+          },
+          "page": {
+            "type": "integer"
+          },
+          "page_size": {
+            "type": "integer"
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100
+          },
+          "offset": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "additionalProperties": false
+      },
+      "body_schema": {
+        "type": "object",
+        "properties": {}
+      },
+      "description": "Get email campaigns conversions. Backend account permissions and ownership checks apply.",
+      "disclose": []
+    },
+    {
+      "operation_id": "surface.get_email_campaigns_analytics",
+      "name": "acedatacloud_get_email_campaigns_analytics",
+      "method": "GET",
+      "path": "/email-marketing/admin/campaigns/{id}/analytics/",
+      "domain": "Email Marketing",
+      "authentication": "authenticated",
+      "required_permissions": [
+        "email-marketing:read"
+      ],
+      "confirm": false,
+      "path_parameters": [
+        "id"
+      ],
+      "query_schema": {
+        "type": "object",
+        "properties": {
+          "start_date": {},
+          "end_date": {},
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100
+          },
+          "offset": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "additionalProperties": false
+      },
+      "body_schema": {
+        "type": "object",
+        "properties": {}
+      },
+      "description": "Get email campaigns analytics. Backend account permissions and ownership checks apply.",
+      "disclose": []
+    },
+    {
+      "operation_id": "surface.get_admin_health_summary",
+      "name": "acedatacloud_get_admin_health_summary",
+      "method": "GET",
+      "path": "/admin/health/summary/",
+      "domain": "Administration",
+      "authentication": "authenticated",
+      "required_permissions": [],
+      "confirm": false,
+      "path_parameters": [],
+      "query_schema": {
+        "type": "object",
+        "properties": {
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100
+          },
+          "offset": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "additionalProperties": false
+      },
+      "body_schema": {
+        "type": "object",
+        "properties": {}
+      },
+      "description": "Get admin health summary. Backend account permissions and ownership checks apply. Requires a superuser account with a platform token.",
+      "disclose": [],
+      "requires_admin_health": true
+    },
+    {
+      "operation_id": "surface.get_admin_health_traffic",
+      "name": "acedatacloud_get_admin_health_traffic",
+      "method": "GET",
+      "path": "/admin/health/traffic/",
+      "domain": "Administration",
+      "authentication": "authenticated",
+      "required_permissions": [],
+      "confirm": false,
+      "path_parameters": [],
+      "query_schema": {
+        "type": "object",
+        "properties": {
+          "window": {
+            "type": "string"
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100
+          },
+          "offset": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "additionalProperties": false
+      },
+      "body_schema": {
+        "type": "object",
+        "properties": {}
+      },
+      "description": "Get admin health traffic. Backend account permissions and ownership checks apply. Requires a superuser account with a platform token.",
+      "disclose": [],
+      "requires_admin_health": true
+    },
+    {
+      "operation_id": "surface.get_admin_health_domain",
+      "name": "acedatacloud_get_admin_health_domain",
+      "method": "GET",
+      "path": "/admin/health/{domain}/",
+      "domain": "Administration",
+      "authentication": "authenticated",
+      "required_permissions": [],
+      "confirm": false,
+      "path_parameters": [
+        "domain"
+      ],
+      "query_schema": {
+        "type": "object",
+        "properties": {
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100
+          },
+          "offset": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "additionalProperties": false
+      },
+      "body_schema": {
+        "type": "object",
+        "properties": {}
+      },
+      "description": "Get admin health domain. Backend account permissions and ownership checks apply. Requires a superuser account with a platform token.",
+      "disclose": [],
+      "requires_admin_health": true
+    },
+    {
+      "operation_id": "surface.get_applications_agent_setup",
+      "name": "acedatacloud_get_applications_agent_setup",
+      "method": "GET",
+      "path": "/applications/{id}/agent-setup/",
+      "domain": "Applications",
+      "authentication": "authenticated",
+      "required_permissions": [
+        "applications:read"
+      ],
+      "confirm": false,
+      "path_parameters": [
+        "id"
+      ],
+      "query_schema": {
+        "type": "object",
+        "properties": {
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100
+          },
+          "offset": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "additionalProperties": false
+      },
+      "body_schema": {
+        "type": "object",
+        "properties": {}
+      },
+      "description": "Get applications agent setup. Backend account permissions and ownership checks apply.",
+      "disclose": []
+    },
+    {
+      "operation_id": "surface.get_orders_revenue_customers",
+      "name": "acedatacloud_get_orders_revenue_customers",
+      "method": "GET",
+      "path": "/orders/revenue-customers/",
+      "domain": "Orders",
+      "authentication": "authenticated",
+      "required_permissions": [
+        "revenue:read"
+      ],
+      "confirm": false,
+      "path_parameters": [],
+      "query_schema": {
+        "type": "object",
+        "properties": {
+          "segment": {
+            "type": "string"
+          },
+          "ordering": {
+            "type": "string"
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100
+          },
+          "offset": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "search": {
+            "type": "string"
+          },
+          "start_date": {
+            "type": "string",
+            "format": "date",
+            "description": "Completed-day window in YYYY-MM-DD format."
+          },
+          "end_date": {
+            "type": "string",
+            "format": "date",
+            "description": "Completed-day window in YYYY-MM-DD format."
+          }
+        },
+        "additionalProperties": false
+      },
+      "body_schema": {
+        "type": "object",
+        "properties": {}
+      },
+      "description": "Get orders revenue customers. Backend account permissions and ownership checks apply.",
+      "disclose": []
+    },
+    {
+      "operation_id": "surface.get_invoices_admin_orders_manual",
+      "name": "acedatacloud_get_invoices_admin_orders_manual",
+      "method": "GET",
+      "path": "/invoices/admin/orders/{order_id}/manual/",
+      "domain": "Invoices",
+      "authentication": "authenticated",
+      "required_permissions": [
+        "invoices:write:any"
+      ],
+      "confirm": false,
+      "path_parameters": [
+        "order_id"
+      ],
+      "query_schema": {
+        "type": "object",
+        "properties": {
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100
+          },
+          "offset": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "additionalProperties": false
+      },
+      "body_schema": {
+        "type": "object",
+        "properties": {}
+      },
+      "description": "Get invoices admin orders manual. Backend account permissions and ownership checks apply.",
+      "disclose": []
+    },
+    {
+      "operation_id": "surface.create_invoices_admin_orders_manual",
+      "name": "acedatacloud_create_invoices_admin_orders_manual",
+      "method": "POST",
+      "path": "/invoices/admin/orders/{order_id}/manual/",
+      "domain": "Invoices",
+      "authentication": "authenticated",
+      "required_permissions": [
+        "invoices:write:any"
+      ],
+      "confirm": true,
+      "path_parameters": [
+        "order_id"
+      ],
+      "query_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      },
+      "body_schema": {
+        "type": "object",
+        "properties": {
+          "invoice_type": {
+            "enum": [
+              "general",
+              "special"
+            ],
+            "type": "string"
+          },
+          "confirmed_amount": {
+            "type": "string",
+            "format": "decimal",
+            "multipleOf": 0.01,
+            "maximum": 10000000000,
+            "minimum": "0.01"
+          },
+          "confirmed_currency": {
+            "enum": [
+              "CNY",
+              "USD"
+            ],
+            "type": "string"
+          },
+          "filename": {
+            "type": "string"
+          },
+          "content_base64": {
+            "type": "string"
+          },
+          "content_type": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "filename",
+          "content_base64"
+        ],
+        "additionalProperties": false
+      },
+      "description": "Create invoices admin orders manual. Backend account permissions and ownership checks apply.",
+      "disclose": [],
+      "encoding": "multipart"
     }
   ],
   "source_overrides": {
     "admin/upstreams/{domain}/models": "4efc4f5c2f562a7ee3f02766cafb3e09620c22a6",
-    "blogs": "cdf8bcd878ebc07afb48941e7dd3b8a3aca3c5b7",
-    "blogs/admin": "cdf8bcd878ebc07afb48941e7dd3b8a3aca3c5b7",
-    "blogs/admin/{id}": "cdf8bcd878ebc07afb48941e7dd3b8a3aca3c5b7",
-    "recharge-cards/allocations": "b00da5d2ee28006adacfa0960020fdf08265c5ce"
+    "blogs": "071a3ac9c1a68232947bf8112096bb8b70996daa",
+    "blogs/admin": "071a3ac9c1a68232947bf8112096bb8b70996daa",
+    "blogs/admin/{id}": "071a3ac9c1a68232947bf8112096bb8b70996daa",
+    "recharge-cards/allocations": "b00da5d2ee28006adacfa0960020fdf08265c5ce",
+    "access-grants/{id}": "071a3ac9c1a68232947bf8112096bb8b70996daa",
+    "access-policies/{id}": "071a3ac9c1a68232947bf8112096bb8b70996daa",
+    "access-requests/{id}": "071a3ac9c1a68232947bf8112096bb8b70996daa",
+    "admin/health/summary": "071a3ac9c1a68232947bf8112096bb8b70996daa",
+    "admin/health/traffic": "071a3ac9c1a68232947bf8112096bb8b70996daa",
+    "admin/health/{domain}": "071a3ac9c1a68232947bf8112096bb8b70996daa",
+    "announcements/admin/{id}": "071a3ac9c1a68232947bf8112096bb8b70996daa",
+    "applications": "071a3ac9c1a68232947bf8112096bb8b70996daa",
+    "applications/{id}/agent-setup": "071a3ac9c1a68232947bf8112096bb8b70996daa",
+    "applications/{id}/deployment-deploy": "071a3ac9c1a68232947bf8112096bb8b70996daa",
+    "auto-recharge-configs/{id}": "071a3ac9c1a68232947bf8112096bb8b70996daa",
+    "blogs/admin/categories": "071a3ac9c1a68232947bf8112096bb8b70996daa",
+    "blogs/admin/categories/{slug}": "071a3ac9c1a68232947bf8112096bb8b70996daa",
+    "blogs/categories": "071a3ac9c1a68232947bf8112096bb8b70996daa",
+    "credentials/{id}": "071a3ac9c1a68232947bf8112096bb8b70996daa",
+    "distribution-statuses/{id}/update-reward": "071a3ac9c1a68232947bf8112096bb8b70996daa",
+    "email-marketing/admin/campaigns": "071a3ac9c1a68232947bf8112096bb8b70996daa",
+    "email-marketing/admin/campaigns/{id}": "071a3ac9c1a68232947bf8112096bb8b70996daa",
+    "email-marketing/admin/campaigns/{id}/analytics": "071a3ac9c1a68232947bf8112096bb8b70996daa",
+    "email-marketing/admin/campaigns/{id}/conversions": "071a3ac9c1a68232947bf8112096bb8b70996daa",
+    "email-marketing/admin/campaigns/{id}/delivery-plan": "071a3ac9c1a68232947bf8112096bb8b70996daa",
+    "email-marketing/admin/campaigns/{id}/recipients": "071a3ac9c1a68232947bf8112096bb8b70996daa",
+    "email-marketing/admin/provider/health": "071a3ac9c1a68232947bf8112096bb8b70996daa",
+    "email-marketing/admin/sender-quotas": "071a3ac9c1a68232947bf8112096bb8b70996daa",
+    "feature-flags/{id}": "071a3ac9c1a68232947bf8112096bb8b70996daa",
+    "invoices/admin/orders/{order_id}/manual": "071a3ac9c1a68232947bf8112096bb8b70996daa",
+    "invoices/admin/{id}": "071a3ac9c1a68232947bf8112096bb8b70996daa",
+    "marketing-attribution/summary": "071a3ac9c1a68232947bf8112096bb8b70996daa",
+    "order-discounts/{id}": "071a3ac9c1a68232947bf8112096bb8b70996daa",
+    "orders/revenue-customers": "071a3ac9c1a68232947bf8112096bb8b70996daa",
+    "platform-tokens/{id}": "071a3ac9c1a68232947bf8112096bb8b70996daa",
+    "site-banners/{id}": "071a3ac9c1a68232947bf8112096bb8b70996daa",
+    "site-capability-overrides/{id}": "071a3ac9c1a68232947bf8112096bb8b70996daa",
+    "site-document-overrides/{id}": "071a3ac9c1a68232947bf8112096bb8b70996daa",
+    "site-domains/{id}": "071a3ac9c1a68232947bf8112096bb8b70996daa",
+    "site-home-sections": "071a3ac9c1a68232947bf8112096bb8b70996daa",
+    "site-home-sections/{id}": "071a3ac9c1a68232947bf8112096bb8b70996daa",
+    "site-service-overrides/{id}": "071a3ac9c1a68232947bf8112096bb8b70996daa",
+    "sites/{id}": "071a3ac9c1a68232947bf8112096bb8b70996daa",
+    "surveys/admin/templates/{id}": "071a3ac9c1a68232947bf8112096bb8b70996daa",
+    "webhook-subscriptions/{id}": "071a3ac9c1a68232947bf8112096bb8b70996daa",
+    "webhooks/{id}": "071a3ac9c1a68232947bf8112096bb8b70996daa"
   }
 }

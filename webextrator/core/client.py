@@ -102,11 +102,14 @@ class WebExtraterClient:
         expected_type: str | None = None,
         enable_llm: bool | None = None,
         wait_until: str | None = None,
-        timeout: float | None = None,
-        delay: float | None = None,
+        timeout: int | None = None,
+        delay: int | None = None,
         wait_for_selector: str | None = None,
         block_resources: list[str] | None = None,
         headers: dict[str, str] | None = None,
+        cookies: list[dict[str, Any]] | None = None,
+        bypass_cache: bool | None = None,
+        cache_ttl_seconds: int | None = None,
         user_agent: str | None = None,
         callback_url: str | None = None,
         async_: bool | None = None,
@@ -123,6 +126,9 @@ class WebExtraterClient:
             wait_for_selector: CSS selector to wait for.
             block_resources: Resource types to block.
             headers: Extra HTTP headers.
+            cookies: Cookies to inject before navigation.
+            bypass_cache: Skip cache reads.
+            cache_ttl_seconds: Cache lifetime in whole seconds, or 0 to disable writes.
             user_agent: Override User-Agent.
             callback_url: Async processing callback URL.
 
@@ -146,6 +152,12 @@ class WebExtraterClient:
             payload["block_resources"] = block_resources
         if headers is not None:
             payload["headers"] = headers
+        if cookies is not None:
+            payload["cookies"] = cookies
+        if bypass_cache is not None:
+            payload["bypass_cache"] = bypass_cache
+        if cache_ttl_seconds is not None:
+            payload["cache_ttl_seconds"] = cache_ttl_seconds
         if user_agent is not None:
             payload["user_agent"] = user_agent
         if callback_url is not None:
@@ -192,11 +204,14 @@ class WebExtraterClient:
         self,
         url: str,
         wait_until: str | None = None,
-        timeout: float | None = None,
-        delay: float | None = None,
+        timeout: int | None = None,
+        delay: int | None = None,
         wait_for_selector: str | None = None,
         block_resources: list[str] | None = None,
         headers: dict[str, str] | None = None,
+        cookies: list[dict[str, Any]] | None = None,
+        bypass_cache: bool | None = None,
+        cache_ttl_seconds: int | None = None,
         user_agent: str | None = None,
         callback_url: str | None = None,
         async_: bool | None = None,
@@ -211,6 +226,9 @@ class WebExtraterClient:
             wait_for_selector: CSS selector to wait for before capturing HTML.
             block_resources: Resource types to block.
             headers: Extra HTTP headers.
+            cookies: Cookies to inject before navigation.
+            bypass_cache: Skip cache reads.
+            cache_ttl_seconds: Cache lifetime in whole seconds, or 0 to disable writes.
             user_agent: Override User-Agent.
             callback_url: Async processing callback URL.
 
@@ -230,6 +248,12 @@ class WebExtraterClient:
             payload["block_resources"] = block_resources
         if headers is not None:
             payload["headers"] = headers
+        if cookies is not None:
+            payload["cookies"] = cookies
+        if bypass_cache is not None:
+            payload["bypass_cache"] = bypass_cache
+        if cache_ttl_seconds is not None:
+            payload["cache_ttl_seconds"] = cache_ttl_seconds
         if user_agent is not None:
             payload["user_agent"] = user_agent
         if callback_url is not None:

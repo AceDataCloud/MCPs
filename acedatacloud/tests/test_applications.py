@@ -167,7 +167,7 @@ async def test_all_application_mutation_previews_make_zero_http_calls():
         await acedatacloud_update_application_balance_policy(APP_ID, True),
         await acedatacloud_save_deployment_config(APP_ID, {"secret": "value"}),
         await acedatacloud_deploy_application(APP_ID, helm_overrides={"token": "value"}),
-        await acedatacloud_control_deployment(APP_ID, "stop"),
+        await acedatacloud_control_deployment(APP_ID, "restart"),
         await acedatacloud_teardown_deployment(APP_ID, force=True),
     ]
     assert all(json.loads(result)["status"] == "confirmation_required" for result in results)

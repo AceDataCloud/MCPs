@@ -94,13 +94,17 @@ async def maestro_create_video(
             description=(
                 "Visual style preset. Named presets: cinematic, glass, "
                 "luxury, swiss, modern, editorial, warm, vibrant, neon, mono, pastel, bold, "
-                "industrial, futuristic, retro. Use 'auto' or omit to let the server decide."
+                "industrial, futuristic, retro. Free text is also accepted as a soft visual hint. Use 'auto' or omit to let the server decide."
             )
         ),
     ] = None,
     voice: Annotated[
         MaestroVoice | None,
-        Field(description=("Narration voice preset. Use 'auto' or omit to let the server decide.")),
+        Field(
+            description=(
+                "Narration voice preset or a 32-character hexadecimal voice reference ID. Use 'auto' or omit to let the server decide."
+            )
+        ),
     ] = None,
     callback_url: Annotated[
         str | None,

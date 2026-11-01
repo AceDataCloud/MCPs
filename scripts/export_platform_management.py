@@ -185,6 +185,7 @@ def source_inputs(view, method):
                     key
                     in {
                         "metadata",
+                        "secrets",
                         "context",
                         "audience_rule",
                         "guardrail_thresholds",
@@ -291,11 +292,12 @@ def walk(patterns, prefix=""):
             schema._view = view
             request_schema = None
             error = None
-            if method != "get":
+            if method in {"post", "put", "patch"}:
                 try:
-                    serializer = view.get_serializer()
+                    # Introspection must not run view-specific DB-backed context builders.
+                    serializer = view.get_serializer_class()(context={"request": view.request, "view": view})
                     request_schema = schema.map_serializer(serializer)
-                except Exception as exc:
+                except Exception as exc:  # noqa: BLE001 - record serializer introspection failures
                     error = type(exc).__name__ + ": " + str(exc)[:160]
             custom_body, queries, action_choices, unsupported = source_inputs(view, method)
             if custom_body is not None:

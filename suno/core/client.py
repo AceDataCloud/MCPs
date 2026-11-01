@@ -259,6 +259,13 @@ class SunoClient:
         )
         return await self.request("/suno/custom-models", payload, extra_headers=headers)
 
+    async def manage_project(
+        self, idempotency_key: str | None = None, **kwargs: Any
+    ) -> dict[str, Any]:
+        """Manage a Studio project using the caller's stable write-operation key."""
+        headers = {"Idempotency-Key": idempotency_key} if idempotency_key is not None else None
+        return await self.request("/suno/projects", kwargs, extra_headers=headers)
+
     async def list_personas(self, **kwargs: Any) -> dict[str, Any]:
         """List personas for a user."""
         user_id = kwargs.get("user_id", "")

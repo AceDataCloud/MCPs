@@ -44,25 +44,38 @@ async def test_voice_requests_use_voices_endpoint(api_token: str) -> None:
 
 
 @respx.mock
-async def test_task_operations_use_tasks_endpoint(api_token: str) -> None:
-    route = respx.post("https://api.acedata.cloud/digital-human/tasks").mock(
-        side_effect=[
-            httpx.Response(200, json={"task_id": "task-1", "state": "processing"}),
-            httpx.Response(200, json={"items": [], "count": 0}),
-            httpx.Response(200, json={"success": True}),
-        ]
-    )
-    client = DigitalHumanClient(api_token=api_token)
+async def test_task_operations_use_exact_ids_instead_of_recent_history(api_token: str) -> None:
+    import json
 
-    await client.get_task("task-1", action="retrieve")
-    await client.get_tasks_batch(["task-1", "task-2"])
+    async def retrieve(request: httpx.Request) -> httpx.Response:
+        body = json.loads(request.content)
+        # The real retrieve_batch endpoint ignores IDs and returns recent history.
+        if body["action"] == "retrieve_batch":
+            return httpx.Response(200, json={"items": [{"id": "unrelated-recent"}]})
+        if body["action"] == "delete":
+            return httpx.Response(200, json={"id": body["task_id"], "deleted": True})
+        return httpx.Response(200, json={"id": body["task_id"], "state": "succeeded"})
+
+    route = respx.post("https://api.acedata.cloud/digital-human/tasks").mock(side_effect=retrieve)
+    client = DigitalHumanClient(api_token=api_token)
+    result = await client.get_tasks_batch(["older-task", "newer-task"])
     await client.delete_task("task-3")
 
-    assert route.calls[0].request.read() == b'{"task_id":"task-1","action":"retrieve"}'
-    assert route.calls[1].request.read() == (
-        b'{"task_id":["task-1","task-2"],"action":"retrieve_batch"}'
+    assert result == {
+        "count": 2,
+        "items": [
+            {"id": "older-task", "state": "succeeded"},
+            {"id": "newer-task", "state": "succeeded"},
+        ],
+    }
+    assert [json.loads(call.request.content) for call in route.calls] == [
+        {"task_id": "older-task", "action": "retrieve"},
+        {"task_id": "newer-task", "action": "retrieve"},
+        {"task_id": "task-3", "action": "delete"},
+    ]
+    assert all(
+        call.request.headers["authorization"] == "Bearer " + api_token for call in route.calls
     )
-    assert route.calls[2].request.read() == b'{"task_id":"task-3","action":"delete"}'
 
 
 @respx.mock

@@ -45,7 +45,7 @@ async def test_sol_fast_dispatch_preserves_public_alias(
 async def test_gemini_argon_discovery_identifies_v2_and_wrapper_limits() -> None:
     listing = await aichat_list_models()
     guide = await aichat_get_usage_guide()
-    assert "Google Gemini (AiChat v2 only)" in listing
+    assert "Gemini endpoint coverage" in listing
     for text in (listing, guide):
         assert "gemini-4-argon" in text
         assert "aichat_create_conversation_v2" in text

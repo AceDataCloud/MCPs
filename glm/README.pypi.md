@@ -173,3 +173,9 @@ For **401**, check which auth route the client used and whether the token or OAu
 ## License
 
 MIT — see [LICENSE](LICENSE).
+
+### Chat response mode
+
+Chat tools return one complete JSON response. Omit `stream` or pass `false`.
+`stream: true` is rejected locally before an API request is sent. For native SSE
+streaming, use the HTTP API directly.

@@ -19,6 +19,7 @@ SECRET_KEYS = {
     "refresh_token",
     "revoked_tx",
     "secret",
+    "secrets",
     "setup_intent_id",
     "setup_token",
     "setup_tx",

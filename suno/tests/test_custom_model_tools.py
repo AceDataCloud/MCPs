@@ -129,3 +129,44 @@ class TestCustomModelTools:
             "action": "delete",
             "id": "model-1",
         }
+
+
+@pytest.mark.parametrize(
+    "extra",
+    [
+        {"instrumental": True},
+        {"lyric_prompt": "Write a song about spring"},
+    ],
+)
+async def test_custom_model_supports_instrumental_and_auto_lyrics(extra):
+    with patch(
+        "tools.custom_model_tools.client.custom_models",
+        new=AsyncMock(return_value={"task_id": "task"}),
+    ) as call:
+        await mcp.call_tool(
+            "suno_generate_with_custom_model",
+            {
+                "id": "model",
+                "weirdness": 0,
+                "style_influence": 0,
+                "negative_tags": "metal",
+                "duration": 60,
+                "callback_url": "https://example.com/callback",
+                **extra,
+            },
+        )
+    payload = call.await_args.kwargs
+    assert payload["id"] == "model"
+    assert payload["weirdness"] == 0
+    assert payload["style_influence"] == 0
+    assert payload["duration"] == 60
+    assert all(payload[k] == v for k, v in extra.items())
+
+
+async def test_custom_model_missing_lyrics_is_rejected_before_submission():
+    with (
+        patch("tools.custom_model_tools.client.custom_models", new=AsyncMock()) as call,
+        pytest.raises(ValueError, match="lyric or lyric_prompt"),
+    ):
+        await suno_generate_with_custom_model(model_id="model")
+    call.assert_not_awaited()

@@ -176,3 +176,13 @@ For **401**, check which auth route the client used and whether the token or OAu
 ## License
 
 MIT — see [LICENSE](LICENSE).
+
+### Rendering and cache controls
+
+Both `webextrator_extract` and `webextrator_render` accept `cookies`, `bypass_cache`,
+and `cache_ttl_seconds`. Cookie objects require `name`, `value`, and `domain`; optional
+fields are `path`, `expires`, `httpOnly`, `secure`, and `sameSite` (Strict/Lax/None).
+`bypass_cache: true` skips cache reads; `cache_ttl_seconds: 0` prevents caching the result.
+The default cache lifetime is 3600 seconds. `timeout` is a positive integer in seconds
+and `delay` is a nonnegative integer in seconds. The default `wait_until` is `load`;
+set another wait condition explicitly when the page requires it.

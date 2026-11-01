@@ -5,7 +5,9 @@ from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
-from core.native_types import NativeRequest
+from core.native_types import ElementReference, NativeRequest
+from core.types import KlingCameraControl, KlingReferenceImage, KlingReferenceVideo
+from core.video_contract import validate_video_request
 
 
 class AssetManagementRequest(NativeRequest):
@@ -30,13 +32,6 @@ class VoiceCreationRequest(NativeRequest):
     )
 
 
-class ElementReference(BaseModel):
-    model_config = ConfigDict(extra="forbid")
-    element_id: str = Field(
-        min_length=1, description="Owned or verified preset platform element ID."
-    )
-
-
 class VoiceReference(BaseModel):
     model_config = ConfigDict(extra="forbid")
     voice_id: str = Field(min_length=1, description="Owned or verified preset platform voice ID.")
@@ -52,6 +47,11 @@ class AssetVideoRequest(NativeRequest):
     generate_audio: bool = False
     start_image_url: str | None = None
     end_image_url: str | None = None
+    image_list: list[KlingReferenceImage] | None = Field(default=None, min_length=1, max_length=7)
+    video_list: list[KlingReferenceVideo] | None = Field(default=None, min_length=1, max_length=1)
+    negative_prompt: str | None = None
+    cfg_scale: float | None = Field(default=None, ge=0, le=1)
+    camera_control: KlingCameraControl | None = None
     element_list: list[ElementReference] | None = Field(default=None, min_length=1, max_length=3)
     voice_list: list[VoiceReference] | None = Field(default=None, min_length=1, max_length=2)
 
@@ -75,4 +75,20 @@ class AssetVideoRequest(NativeRequest):
             raise ValueError("V2.6 duration must be 5 or 10 seconds")
         if self.action == "image2video" and not self.start_image_url:
             raise ValueError("image2video requires a start frame")
+        error = validate_video_request(
+            model=self.model,
+            mode=self.mode,
+            duration=self.duration,
+            generate_audio=self.generate_audio,
+            negative_prompt=self.negative_prompt,
+            cfg_scale=self.cfg_scale,
+            camera_control=self.camera_control,
+            image_list=self.image_list,
+            video_list=self.video_list,
+            element_count=len(self.element_list or []),
+            start_image_url=self.start_image_url,
+            end_image_url=self.end_image_url,
+        )
+        if error:
+            raise ValueError(error)
         return self

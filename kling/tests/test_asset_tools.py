@@ -64,3 +64,18 @@ def test_voice_indices_must_match_selected_list():
             prompt="Hello <<<voice_2>>>",
             voice_list=[{"voice_id": "owned"}],
         )
+
+
+async def test_asset_video_combines_element_and_reference_image():
+    body = AssetVideoRequest(
+        model="kling-v3-omni",
+        prompt="Scene <<<element_1>>> with <<<image_1>>>",
+        element_list=[{"element_id": "owned"}],
+        image_list=[{"image_url": "https://example.com/ref.png"}],
+    )
+    with patch(
+        "tools.asset_tools.client.generate_video", new=AsyncMock(return_value={"task_id": "t"})
+    ) as call:
+        await kling_generate_with_assets(body)
+    assert call.await_args.kwargs["image_list"] == [{"image_url": "https://example.com/ref.png"}]
+    assert call.await_args.kwargs["element_list"] == [{"element_id": "owned"}]

@@ -33,6 +33,14 @@ async def fish_get_usage_guide() -> str:
 - format: "mp3" | "wav" | "pcm" (optional, default: mp3)
 - callback_url: Async callback URL (optional)
 
+### Reusable Public Voice Creation
+**fish_create_model** - Save a voice from one authorized reference audio URL
+- title and voices (one HTTP(S) URL) are required
+- Saved voices are long-term and public; other users may discover and use them
+- There is no private/unlisted option; only publish audio you have permission to publish
+- Use the returned _id as reference_id for fish_generate_audio
+- For one-shot conditioning without saving a voice, use fish_generate_audio references
+
 ### Model Discovery
 **fish_list_models** - List available voice models
 - page_size, page_number: Pagination controls (optional)
@@ -77,11 +85,11 @@ fish_get_task(task_id="93f11baf-347b-4bb4-9520-8653cb46d6a3")
 ## Workflow: Async Generation
 
 For long-running tasks, the API may return a task_id immediately.
-Poll fish_get_task until the state is 'complete':
+Poll fish_get_task until finished_at is set:
 
 1. Call fish_generate_audio → get task_id
 2. Call fish_get_task(task_id=...) repeatedly
-3. When state='complete', retrieve the audio URL from the response
+3. Once finished_at is set, inspect response.error/success and retrieve the audio URL on success
 
 ## Response Structure
 

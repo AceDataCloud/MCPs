@@ -131,6 +131,12 @@ async def openai_list_tasks(
         int | None,
         Field(description="Number of tasks per page. Default is 12."),
     ] = None,
+    count_mode: Annotated[
+        Literal["none", "exact"],
+        Field(
+            description="Count mode. none (default) avoids a full count; exact attempts a total within 2 seconds and may fall back to a lower bound."
+        ),
+    ] = "none",
     created_at_min: Annotated[
         float | None,
         Field(description="Earliest task creation timestamp (Unix seconds, inclusive)."),
@@ -157,7 +163,7 @@ async def openai_list_tasks(
         JSON object with 'items' array and 'count' field.
     """
     try:
-        payload: dict[str, Any] = {"action": "retrieve_batch"}
+        payload: dict[str, Any] = {"action": "retrieve_batch", "count_mode": count_mode}
         if ids is not None:
             payload["ids"] = ids
         if trace_ids is not None:

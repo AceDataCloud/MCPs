@@ -71,3 +71,7 @@ ruff check .
 
 <!-- canonical-documentation -->
 [Documentation](https://platform.acedata.cloud/documents/digitalhuman?utm_source=pypi&utm_medium=referral&utm_campaign=evergreen&utm_content=digitalhuman_mcp_package_quick_start)
+
+## API parameter behavior
+
+`digitalhuman_get_tasks_batch` retrieves exactly the supplied IDs in input order using authenticated single-task requests. It does not list recent history. A failed retrieval is reported as an error rather than replaced with unrelated tasks.
