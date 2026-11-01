@@ -239,4 +239,4 @@ MIT
 
 ## MiMo integration status
 
-The typed inputs include `mimo-v2.6-pro`, `mimo-v2.6-flash` and the v2 `mimo` group in preparation for release. They are not yet available. Check the current model catalog and account access before calling them. Initial scope is text, reasoning and function tools; built-in web search and multimodal inputs are not enabled.
+The typed inputs include `mimo-v2.6-pro`, `mimo-v2.6-flash` and the v2 `mimo` group. Check the current model catalog, service status and account access before calling them. Initial scope is text, reasoning and function tools; built-in web search and multimodal inputs are not enabled.
