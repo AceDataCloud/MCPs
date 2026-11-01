@@ -27,10 +27,6 @@ async def aichat_list_models() -> str:
         "aichat_create_conversation_v2. Use the exact endpoint model list above.\n\n"
         "## Kimi (AiChat v2 only)\n"
         "Kimi models require aichat_create_conversation_v2. The default remains gpt-4.1.\n"
-        "\n## Xiaomi MiMo (prepared; not yet available)\n"
-        "mimo-v2.6-pro and mimo-v2.6-flash are staged for text chat and function tools. "
-        "Check the live catalog and account access before using them. "
-        "Do not select them automatically while unavailable.\n"
     )
 
 
