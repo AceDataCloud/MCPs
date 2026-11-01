@@ -41,8 +41,8 @@ async def producer_generate_music(
     sound_strength: Annotated[
         float | None,
         Field(
-            description="Creative control for how strongly the sound/style drives the generation. Range 0-1.",
-            ge=0.0,
+            description="Creative control for how strongly the sound/style drives the generation. Range 0.2-1.",
+            ge=0.2,
             le=1.0,
         ),
     ] = None,
@@ -152,8 +152,8 @@ async def producer_generate_custom_music(
     sound_strength: Annotated[
         float | None,
         Field(
-            description="Creative control for how strongly the sound/style drives the generation. Range 0-1.",
-            ge=0.0,
+            description="Creative control for how strongly the sound/style drives the generation. Range 0.2-1.",
+            ge=0.2,
             le=1.0,
         ),
     ] = None,
