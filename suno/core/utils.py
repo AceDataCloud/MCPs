@@ -74,7 +74,8 @@ def _with_task_guidance(
     success = response.get("success", False) if isinstance(response, dict) else False
     response_failed = isinstance(response, dict) and response.get("success") is False
 
-    if success:
+    unfinished = "finished_at" in payload and payload["finished_at"] is None
+    if success and not unfinished:
         payload["mcp_task_polling"] = {
             "task_id": task_id,
             "state": "complete",
@@ -83,15 +84,19 @@ def _with_task_guidance(
             "should_poll": False,
             "terminal_state_reached": True,
             "recommended_action": "stop",
-            "note": "Task is complete. The audio URLs are final and ready to present to the user.",
+            "note": "Task is complete. The final result is available in response; preserve its endpoint-specific fields.",
         }
     else:
-        is_failed = response_failed or str(state).lower() in {
-            "failed",
-            "error",
-            "cancelled",
-            "canceled",
-        }
+        is_failed = not unfinished and (
+            response_failed
+            or str(state).lower()
+            in {
+                "failed",
+                "error",
+                "cancelled",
+                "canceled",
+            }
+        )
         effective_state = state or ("failed" if is_failed else "pending")
         payload["mcp_task_polling"] = {
             "task_id": task_id,

@@ -155,6 +155,11 @@ def _audience(operation: Operation, permissions: tuple[str, ...]) -> Audience:
     if operation.authentication == "public":
         return "public"
     if any(
+        spec["name"] == operation.tool and spec.get("requires_admin_health")
+        for spec in SURFACE_TOOLS
+    ):
+        return "admin"
+    if any(
         permission.endswith(":any") or permission.split(":")[0] in ADMIN_PERMISSIONS
         for permission in permissions
     ):

@@ -1,11 +1,13 @@
 """Public Maestro API types."""
 
-from typing import Literal
+from typing import Annotated, Literal
+
+from pydantic import Field
 
 MaestroAction = Literal["generate", "remix", "edit", "extend"]
 MaestroAspect = Literal["9:16", "16:9", "1:1"]
 MaestroScenario = Literal["auto", "narrated", "captions", "avatar", "drama"]
-MaestroStyle = Literal[
+MaestroStylePreset = Literal[
     "auto",
     "cinematic",
     "glass",
@@ -23,7 +25,9 @@ MaestroStyle = Literal[
     "futuristic",
     "retro",
 ]
-MaestroVoice = Literal[
+MaestroStyle = MaestroStylePreset | str
+
+MaestroVoicePreset = Literal[
     "auto",
     "warm-female",
     "bright-female",
@@ -35,3 +39,5 @@ MaestroVoice = Literal[
     "energetic-male",
     "storyteller-male",
 ]
+
+MaestroVoice = MaestroVoicePreset | Annotated[str, Field(pattern=r"^[0-9a-fA-F]{32}$")]

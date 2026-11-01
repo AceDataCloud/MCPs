@@ -9,6 +9,9 @@ async def turnstile_get_usage_guide() -> str:
     return """# Turnstile Usage Guide
 
 Use `turnstile_get_token` to request a Turnstile token. Add `async: true` only when asynchronous processing is needed.
+
+If submission returns task_id, call `turnstile_get_task(task_id=...)` every 3-5 seconds
+until status is ready or a terminal error is returned. Do not resubmit while processing.
 """
 
 
@@ -22,4 +25,5 @@ Endpoints:
 - `POST /captcha/token/turnstile` with `website_key`, `website_url`, `action?`, `cdata?`, `async?`
 
 Ready responses may include `token` and `elapsed`.
+- `POST /captcha/tasks` with `task_id`
 """

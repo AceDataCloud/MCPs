@@ -145,6 +145,17 @@ Workflow Examples:
 9. Full stems: suno_all_stems_music → use stems for further production
 10. Remix: suno_stems_music → use stems for further production
 11. Fix section: suno_replace_section → suno_get_task
+
+Additional operations:
+- suno_add_stem: Add one selected voice/instrument stem; max_mode is opt-in and costs more.
+- suno_extract_stem: Extract a stem with complementary audio results.
+- suno_generate_sound: Create one-shot or loop sound effects (optional bpm/key).
+- suno_adjust_speed: Adjust speed with optional pitch preservation.
+- suno_manage_project: Create/retrieve/save/upload/add_track/generate_track/replace_section/
+  commit_candidate/remove_track/render a versioned Studio project. Every write needs a stable
+  idempotency_key. Poll accepted task IDs; generation creates candidates, not committed tracks.
+- Custom generation supports variety/max_mode/audio_weight; custom-model generation also
+  supports instrumental, lyric_prompt and advanced controls. Never enable max_mode implicitly.
 """
 
 

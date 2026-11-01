@@ -7,6 +7,7 @@ from pydantic import Field
 
 from core.client import client
 from core.server import mcp
+from core.types import VocalGender
 
 
 @mcp.tool()
@@ -95,31 +96,60 @@ async def suno_generate_with_custom_model(
         str,
         Field(description="Ready custom music model ID to generate with.", validation_alias="id"),
     ],
-    title: Annotated[
-        str,
-        Field(description="Title for the generated song."),
-    ],
+    title: Annotated[str, Field(description="Optional song title.")] = "",
     lyric: Annotated[
-        str,
-        Field(description="Lyrics for the generated song."),
-    ],
-    style: Annotated[
-        str,
-        Field(description="Music style for the generated song."),
-    ],
+        str, Field(description="Lyrics; required unless instrumental or lyric_prompt is supplied.")
+    ] = "",
+    style: Annotated[str, Field(description="Optional music style.")] = "",
+    lyric_prompt: Annotated[
+        str | None, Field(description="Generate lyrics from this description.")
+    ] = None,
+    instrumental: Annotated[
+        bool | None, Field(description="Generate without vocals. Default false.")
+    ] = None,
+    negative_tags: Annotated[str | None, Field(description="Styles to exclude.")] = None,
+    vocal_gender: Annotated[
+        VocalGender | None, Field(description="Vocal preference: f or m.")
+    ] = None,
+    weirdness: Annotated[float | None, Field(ge=0, le=1)] = None,
+    style_influence: Annotated[float | None, Field(ge=0, le=1)] = None,
+    duration: Annotated[
+        int | None,
+        Field(
+            description="Requested duration in seconds; availability depends on the custom model."
+        ),
+    ] = None,
+    callback_url: Annotated[
+        str | None, Field(description="HTTPS webhook for the completed task.")
+    ] = None,
 ) -> str:
-    """Generate a song using a ready custom music model.
+    """Generate with a ready custom model, including instrumental or automatic lyrics.
 
-    The initial response only accepts the async task. Poll it until success or
-    failure; this operation never falls back to another model.
+    Submission returns a task ID. Poll suno_get_task until finished_at is set and
+    inspect response.success. This operation never falls back to another model.
     """
-    result = await client.custom_models(
-        action="generate",
-        id=model_id,
-        title=title,
-        lyric=lyric,
-        style=style,
-    )
+    if not instrumental and not lyric.strip() and not (lyric_prompt and lyric_prompt.strip()):
+        raise ValueError("lyric or lyric_prompt is required when instrumental is false")
+    payload: dict = {
+        "action": "generate",
+        "id": model_id,
+        "title": title,
+        "lyric": lyric,
+        "style": style,
+    }
+    for key, value in {
+        "lyric_prompt": lyric_prompt,
+        "instrumental": instrumental,
+        "negative_tags": negative_tags,
+        "vocal_gender": vocal_gender,
+        "weirdness": weirdness,
+        "style_influence": style_influence,
+        "duration": duration,
+        "callback_url": callback_url,
+    }.items():
+        if value is not None and not (key == "vocal_gender" and value == ""):
+            payload[key] = value
+    result = await client.custom_models(**payload)
     return json.dumps(result, ensure_ascii=False, indent=2)
 
 

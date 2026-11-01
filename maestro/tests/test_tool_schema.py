@@ -33,3 +33,30 @@ async def test_list_tasks_schema_matches_history_contract() -> None:
     assert "strictly after" in schema["properties"]["created_at_min"]["description"]
     assert "strictly before" in schema["properties"]["created_at_max"]["description"]
     assert not schema.get("required")
+
+
+async def test_public_custom_style_and_voice_are_forwarded_but_invalid_voice_is_rejected():
+    from unittest.mock import AsyncMock, patch
+
+    import pytest
+
+    with patch(
+        "tools.video_tools.client.create_video", new=AsyncMock(return_value={"task_id": "t"})
+    ) as call:
+        await mcp.call_tool(
+            "maestro_create_video",
+            {
+                "prompt": "A documentary",
+                "style": "watercolor documentary",
+                "voice": "0123456789abcdef0123456789abcdef",
+            },
+        )
+        assert call.await_args.args[0]["style"] == "watercolor documentary"
+        assert call.await_args.args[0]["voice"] == "0123456789abcdef0123456789abcdef"
+        call.reset_mock()
+        for voice in ("arbitrary narrator", "abc", "g" * 32):
+            with pytest.raises(Exception, match="validation error"):
+                await mcp.call_tool(
+                    "maestro_create_video", {"prompt": "A documentary", "voice": voice}
+                )
+        call.assert_not_awaited()

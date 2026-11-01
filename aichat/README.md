@@ -198,8 +198,9 @@ authorization or other execution conditions.
 ### Zhipu AI
 - glm-5.1, glm-4.7, glm-4.6, glm-3-turbo
 
-### Google Gemini (AiChat v2 only)
+### Google Gemini
 
+`gemini-3.8-flash` is available through both conversation tools.
 Use `aichat_create_conversation_v2` with `model="gemini-4-argon"` for Gemini 4
 Argon. It is not available through the v1 tool; the default remains `gpt-4.1`.
 

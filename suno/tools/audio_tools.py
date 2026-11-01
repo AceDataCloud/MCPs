@@ -10,6 +10,7 @@ from core.types import (
     DEFAULT_MODEL,
     ReplaceSectionResultMode,
     SunoModel,
+    SunoVariety,
     VariationCategory,
     VocalGender,
 )
@@ -41,6 +42,9 @@ async def suno_generate_music(
         Field(
             description="Variation intensity for v5+ models. 'high' for maximum variation, 'normal' for balanced, 'subtle' for minimal changes. Only supported in chirp-v5 and above."
         ),
+    ] = None,
+    variety: Annotated[
+        SunoVariety | None, Field(description="Result diversity: off, normal, high, extra, or max.")
     ] = None,
     callback_url: Annotated[
         str | None,
@@ -75,6 +79,8 @@ async def suno_generate_music(
     if variation_category:
         payload["variation_category"] = variation_category
 
+    if variety is not None:
+        payload["variety"] = variety
     result = await client.generate_audio(**payload)
     return format_audio_result(result)
 
@@ -151,6 +157,18 @@ async def suno_generate_custom_music(
             description="Target length of the generated track in seconds, an integer between 10 and 360. Only takes effect for the 'generate' action in custom mode with model 'chirp-v5-5'; other combinations return a 400 error. The finished track lands near this value but is not guaranteed to match it exactly."
         ),
     ] = None,
+    audio_weight: Annotated[
+        float | None, Field(ge=0, le=1, description="Audio influence; 0 is a valid explicit value.")
+    ] = None,
+    max_mode: Annotated[
+        bool | None,
+        Field(
+            description="Enable enhanced generation with a higher API price. Omitted/false keeps normal pricing."
+        ),
+    ] = None,
+    variety: Annotated[
+        SunoVariety | None, Field(description="Result diversity: off, normal, high, extra, or max.")
+    ] = None,
     callback_url: Annotated[
         str | None,
         Field(
@@ -203,6 +221,13 @@ async def suno_generate_custom_music(
     if duration is not None:
         payload["duration"] = duration
 
+    for key, value in {
+        "audio_weight": audio_weight,
+        "max_mode": max_mode,
+        "variety": variety,
+    }.items():
+        if value is not None:
+            payload[key] = value
     result = await client.generate_audio(**payload)
     return format_audio_result(result)
 

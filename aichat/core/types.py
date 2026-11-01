@@ -6,8 +6,10 @@ from typing import Literal
 AiChatModel = Literal[
     "mimo-v2.6-pro",
     "mimo-v2.6-flash",
+    "gemini-3.8-flash",
     "gpt-6-astra",
     "gpt-6.1-sol",
+    "gpt-6.1-terra",
     "gpt-6-sol",
     "gpt-6-luna",
     "gpt-5.6-luna",
@@ -117,6 +119,7 @@ AiChatV2Model = Literal[
     "gpt-5.6-sol-fast",
     "gpt-6-astra",
     "gpt-6.1-sol",
+    "gpt-6.1-terra",
     "gpt-6-sol",
     "gpt-6-luna",
     "gpt-4",

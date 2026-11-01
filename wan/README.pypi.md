@@ -345,3 +345,7 @@ MIT License - see [LICENSE](LICENSE) for details.
 ---
 
 Made with love by [AceDataCloud](https://platform.acedata.cloud?utm_source=pypi&utm_medium=referral&utm_campaign=evergreen&utm_content=wan_mcp_package_platform)
+
+## API parameter behavior
+
+`wan_generate_video` accepts `shot_type="single"` or `"multi"` for supported text-to-video models, matching the image tool and public API.

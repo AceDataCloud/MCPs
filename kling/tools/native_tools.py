@@ -28,7 +28,7 @@ async def kling_generate_turbo_video(request: TurboRequest) -> str:
 
 @mcp.tool()
 async def kling_generate_storyboard(request: StoryboardRequest) -> str:
-    """Generate V3/V3 Omni automatic or custom multishot video. Poll kling_get_task."""
+    """Generate V3/V3 Omni multishot video with optional elements and Omni references. Poll kling_get_task."""
     return json.dumps(
         await client.generate_video(
             **request.model_dump(mode="json", by_alias=True, exclude_none=True)

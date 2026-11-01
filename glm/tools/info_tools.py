@@ -48,7 +48,7 @@ Create a chat completion with any supported GLM model.
 - `temperature` (optional): Sampling temperature between 0 and 2. Default: 1
 - `max_tokens` (optional): Maximum tokens to generate.
 - `top_p` (optional): Nucleus sampling probability mass. Default: 1
-- `stream` (optional): Whether to stream the response. Default: False
+- `stream` (optional): Omit or set false. This MCP tool returns the complete response; true is rejected before any API request.
 - `n` (optional): Number of completions to generate. Default: 1
 - `stop` (optional): Stop sequences.
 - `frequency_penalty` (optional): Frequency penalty (-2 to 2). Default: 0

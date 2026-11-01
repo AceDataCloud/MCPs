@@ -72,7 +72,9 @@ async def openai_create_response(
     ] = None,
     stream: Annotated[
         bool | None,
-        Field(description="Whether to stream partial response output. Default is false."),
+        Field(
+            description="This MCP tool returns a complete JSON response. Omit or set false; stream=true is rejected before sending a request."
+        ),
     ] = None,
     tools: Annotated[
         list[dict[str, Any]] | None,
@@ -124,6 +126,15 @@ async def openai_create_response(
     Returns:
         JSON response containing the model's output and usage information.
     """
+    if stream:
+        return json.dumps(
+            {
+                "error": "Validation Error",
+                "code": "streaming_not_supported",
+                "message": "This MCP tool returns a complete JSON response. Omit stream or set it to false. No API request was sent.",
+            }
+        )
+
     try:
         payload: dict[str, Any] = {
             "model": model,

@@ -286,6 +286,7 @@
             "description": "The model to use for chat completion. Options include gpt-4.1, gpt-4o, gpt-5, o1, o3, o4-mini, and many more. Default is gpt-4.1.",
             "enum": [
               "gpt-6.1-sol",
+              "gpt-6.1-terra",
               "gpt-6-sol",
               "gpt-6-luna",
               "gpt-6-astra",
@@ -1496,6 +1497,7 @@
             "description": "The model to use. Supports a wide range of GPT-4, GPT-4o, GPT-5, and o-series models including their dated variants. Default is gpt-4.1.",
             "enum": [
               "gpt-6.1-sol",
+              "gpt-6.1-terra",
               "gpt-6-sol",
               "gpt-6-luna",
               "gpt-6-astra",

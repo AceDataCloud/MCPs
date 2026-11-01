@@ -123,9 +123,12 @@ async def happyhorse_generate_video_from_image(
         Resolution,
         Field(description="Output resolution: 720P or 1080P."),
     ] = DEFAULT_RESOLUTION,
-    ratio: Annotated[
+    ratio: Annotated[  # noqa: ARG001 - retained for compatibility
         AspectRatio,
-        Field(description="Output aspect ratio: 16:9, 9:16, 1:1, 4:3, or 3:4."),
+        Field(
+            description="Ignored compatibility parameter: image animation inherits the source image aspect ratio.",
+            deprecated=True,
+        ),
     ] = DEFAULT_RATIO,
     duration: Annotated[
         int,
@@ -154,7 +157,6 @@ async def happyhorse_generate_video_from_image(
         "model": model,
         "image_url": image_url,
         "prompt": prompt,
-        "ratio": ratio,
         **_generation_options(resolution, duration, watermark, seed, callback_url),
     }
     return format_video_result(await client.generate_video(payload))
@@ -252,14 +254,18 @@ async def happyhorse_edit_video(
         Resolution,
         Field(description="Output resolution: 720P or 1080P."),
     ] = DEFAULT_RESOLUTION,
-    ratio: Annotated[
+    ratio: Annotated[  # noqa: ARG001 - retained for compatibility
         AspectRatio,
-        Field(description="Output aspect ratio: 16:9, 9:16, 1:1, 4:3, or 3:4."),
+        Field(
+            description="Ignored compatibility parameter: editing inherits the source video aspect ratio.",
+            deprecated=True,
+        ),
     ] = DEFAULT_RATIO,
-    duration: Annotated[
+    duration: Annotated[  # noqa: ARG001 - retained for compatibility
         int,
         Field(
-            description="Output duration in seconds, from 3 through 15.",
+            description="Ignored compatibility parameter: editing inherits the source video duration.",
+            deprecated=True,
             ge=MIN_DURATION,
             le=MAX_DURATION,
         ),
@@ -281,7 +287,11 @@ async def happyhorse_edit_video(
         Field(description="Optional webhook URL. Omit it to receive a task ID for polling."),
     ] = None,
 ) -> str:
-    """Edit a source video using text and optional reference images."""
+    """Edit a source video using text and optional reference images.
+
+    Duration and aspect ratio follow the source video. Editing is billed by the
+    combined input and output video duration, not the compatibility duration argument.
+    """
     if image_urls is not None and len(image_urls) > MAX_EDIT_REFERENCE_IMAGES:
         return f"Error: image_urls supports at most {MAX_EDIT_REFERENCE_IMAGES} references."
     payload: dict[str, Any] = {
@@ -290,8 +300,6 @@ async def happyhorse_edit_video(
         "prompt": prompt,
         "video_url": video_url,
         "resolution": resolution,
-        "ratio": ratio,
-        "duration": duration,
         "audio_setting": audio_setting,
         "watermark": watermark,
     }

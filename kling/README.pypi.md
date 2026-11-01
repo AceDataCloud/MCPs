@@ -375,3 +375,7 @@ For a 5-second `kling-o1` result, current Credits are:
 Confirm current account pricing and balance before submitting; poll the original task ID instead of generating again to check progress.
 
 Use `element_list` and `voice_list` only with already valid platform references and the supported model combinations in the current backend guide. Standalone asset creation and management are not published.
+
+## API parameter behavior
+
+`kling_generate_storyboard` can combine supported Omni image/video references and platform element IDs. `kling_generate_with_assets` also accepts supported Omni references. Model restrictions, reference-count limits and audio/4k incompatibilities still apply. Asset management endpoints remain unpublished.

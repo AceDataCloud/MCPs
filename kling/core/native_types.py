@@ -4,6 +4,9 @@ from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
+from core.types import KlingCameraControl, KlingReferenceImage, KlingReferenceVideo
+from core.video_contract import validate_video_request
+
 
 class NativeRequest(BaseModel):
     model_config = ConfigDict(extra="forbid")
@@ -35,6 +38,13 @@ class Shot(BaseModel):
     duration: int = Field(ge=1)
 
 
+class ElementReference(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    element_id: str = Field(
+        min_length=1, description="Owned or verified preset platform element ID."
+    )
+
+
 class StoryboardRequest(NativeRequest):
     model: Literal["kling-v3", "kling-v3-omni"] = "kling-v3"
     action: Literal["text2video", "image2video"] = "text2video"
@@ -45,6 +55,12 @@ class StoryboardRequest(NativeRequest):
     generate_audio: bool = False
     start_image_url: str | None = None
     end_image_url: str | None = None
+    image_list: list[KlingReferenceImage] | None = Field(default=None, min_length=1, max_length=7)
+    video_list: list[KlingReferenceVideo] | None = Field(default=None, min_length=1, max_length=1)
+    element_list: list[ElementReference] | None = Field(default=None, min_length=1, max_length=3)
+    negative_prompt: str | None = None
+    cfg_scale: float | None = Field(default=None, ge=0, le=1)
+    camera_control: KlingCameraControl | None = None
     multi_shot: Literal[True] = True
     shot_type: Literal["intelligence", "customize"] = "intelligence"
     multi_prompt: list[Shot] | None = Field(default=None, min_length=1, max_length=6)
@@ -65,8 +81,22 @@ class StoryboardRequest(NativeRequest):
             raise ValueError("intelligence needs prompt and omits multi_prompt")
         if self.action == "image2video" and not self.start_image_url:
             raise ValueError("image2video requires start_image_url")
-        if self.end_image_url and not self.start_image_url:
-            raise ValueError("an end frame requires a start frame")
+        error = validate_video_request(
+            model=self.model,
+            mode=self.mode,
+            duration=self.duration,
+            generate_audio=self.generate_audio,
+            negative_prompt=self.negative_prompt,
+            cfg_scale=self.cfg_scale,
+            camera_control=self.camera_control,
+            image_list=self.image_list,
+            video_list=self.video_list,
+            element_count=len(self.element_list or []),
+            start_image_url=self.start_image_url,
+            end_image_url=self.end_image_url,
+        )
+        if error:
+            raise ValueError(error)
         return self
 
 

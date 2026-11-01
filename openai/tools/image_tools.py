@@ -228,7 +228,7 @@ async def openai_edit_image(
         str,
         Field(
             description=(
-                "Text description of the desired edit. Max 1000 characters for gpt-image models. "
+                "Text description of the desired edit. GPT Image models allow up to 32000 characters; dall-e-2 allows up to 1000. "
                 "Describe what you want to change or add to the image."
             )
         ),

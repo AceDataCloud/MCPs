@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased
+
+- Add public stem, sound-effect, and speed actions plus variety and opt-in enhanced generation.
+- Expose complete custom-model generation controls, including instrumental and automatic lyrics.
+- Add versioned Studio projects with action-specific inputs and explicit idempotency keys.
+- Preserve object and media result shapes in batch tasks, and respect unfinished task timestamps.
+
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),

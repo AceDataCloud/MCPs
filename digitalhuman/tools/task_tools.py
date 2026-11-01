@@ -52,7 +52,7 @@ async def digitalhuman_get_tasks_batch(
         Field(description="List of Digital Human task IDs to query.", min_length=1),
     ],
 ) -> str:
-    """Get multiple Digital Human tasks in one request."""
+    """Get exactly the requested Digital Human tasks in input order."""
     if not task_ids:
         return json.dumps({"error": "Validation Error", "message": "task_ids is required"})
     try:

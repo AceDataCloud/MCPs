@@ -5,6 +5,7 @@ import inspect
 from typing import Annotated, Any, Literal
 from urllib.parse import quote
 
+from mcp.server.fastmcp.utilities.func_metadata import ArgModelBase
 from pydantic import BaseModel, ConfigDict, Field, create_model
 
 from contracts.management_surface import SURFACE_TOOLS
@@ -24,9 +25,13 @@ def _type(schema: dict[str, Any], name: str) -> Any:
     elif schema.get("type") == "array":
         kind = list[_type(schema.get("items", {}), name + "Item")]  # type: ignore[misc]
     else:
-        kind = {"integer": int, "number": float, "boolean": bool, "object": dict[str, Any]}.get(
-            str(schema.get("type", "unknown")), Any
-        )
+        kind = {
+            "string": str,
+            "integer": int,
+            "number": float,
+            "boolean": bool,
+            "object": dict[str, Any],
+        }.get(str(schema.get("type", "unknown")), Any)
     constraints: dict[str, Any] = {"description": schema.get("description", name)}
     for key, value in [
         ("minLength", "min_length"),
@@ -114,7 +119,11 @@ def build_tool(spec: dict[str, Any]) -> Any:
         body = {
             key: _plain(kwargs[arg])
             for key, arg in body_names.items()
-            if kwargs.get(arg) is not None
+            if arg in kwargs
+            and (
+                kwargs[arg] is not None
+                or spec["body_schema"].get("properties", {}).get(key, {}).get("nullable")
+            )
         }
         query = {
             key: _plain(kwargs[arg])
@@ -137,6 +146,10 @@ def build_tool(spec: dict[str, Any]) -> Any:
                 )
             endpoint = endpoint.replace("{" + key + "}", quote(value, safe=""))
         try:
+            if spec.get("requires_admin_health"):
+                subject = await get_request_subject()
+                if subject.get("can_read_admin_health") is not True:
+                    return error_json("permission_denied", "A superuser platform token is required")
             owner_collections = {
                 "/applications/": "applications:read:any",
                 "/credentials/": "credentials:write:any",
@@ -206,6 +219,18 @@ def build_tool(spec: dict[str, Any]) -> Any:
     return invoke
 
 
+def _supplied_arguments(self: ArgModelBase) -> dict[str, Any]:
+    """Keep omitted defaults distinct from explicit null through FastMCP dispatch."""
+    return {
+        self.__class__.model_fields[name].alias or name: getattr(self, name)
+        for name in self.model_fields_set
+    }
+
+
 REGISTERED_TOOLS = {spec["name"]: build_tool(spec) for spec in SURFACE_TOOLS}
 for function in REGISTERED_TOOLS.values():
     mcp.add_tool(function)
+    registered = mcp._tool_manager.get_tool(function.__name__)
+    assert registered is not None
+    # This per-tool SDK adapter preserves aliases and input presence; native tools keep defaults.
+    registered.fn_metadata.arg_model.model_dump_one_level = _supplied_arguments  # type: ignore[method-assign]

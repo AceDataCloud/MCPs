@@ -129,3 +129,40 @@ def test_shot_duration_mismatch_rejected():
             duration=5,
             multi_prompt=[{"index": 1, "prompt": "ocean", "duration": 2}],
         )
+
+
+async def test_storyboard_combines_omni_references_and_owned_elements():
+    from core.server import mcp
+
+    request = {
+        "model": "kling-v3-omni",
+        "prompt": "Follow <<<image_1>>> and <<<element_1>>>",
+        "image_list": [{"image_url": "https://example.com/reference.png"}],
+        "video_list": [{"video_url": "https://example.com/reference.mp4", "refer_type": "feature"}],
+        "element_list": [{"element_id": "owned-element"}],
+    }
+    with patch(
+        "tools.native_tools.client.generate_video", new=AsyncMock(return_value={"task_id": "t"})
+    ) as call:
+        await mcp.call_tool("kling_generate_storyboard", {"request": request})
+    payload = call.await_args.kwargs
+    assert payload["multi_shot"] is True
+    assert payload["image_list"] == request["image_list"]
+    assert payload["element_list"] == request["element_list"]
+    assert payload["video_list"][0]["refer_type"] == "feature"
+
+
+@pytest.mark.parametrize(
+    "extra",
+    [
+        {"mode": "4k", "image_list": [{"image_url": "https://example.com/r.png"}]},
+        {"generate_audio": True, "video_list": [{"video_url": "https://example.com/r.mp4"}]},
+        {
+            "image_list": [{"image_url": f"https://example.com/{i}.png"} for i in range(5)],
+            "element_list": [{"element_id": str(i)} for i in range(3)],
+        },
+    ],
+)
+def test_storyboard_reference_constraints_remain_enforced(extra):
+    with pytest.raises(ValidationError):
+        StoryboardRequest(model="kling-v3-omni", prompt="Scene", **extra)
