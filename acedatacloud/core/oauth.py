@@ -20,6 +20,7 @@ import hashlib
 import json
 import secrets
 import time
+from typing import Any
 from urllib.parse import urlencode
 
 import httpx
@@ -343,8 +344,8 @@ class AceDataCloudOAuthProvider:
     # --- Internal helpers ---
 
     @staticmethod
-    def _decode_jwt_payload(token: str) -> dict[str, str] | None:
-        """Decode JWT payload without verification (for debug logging only)."""
+    def _decode_jwt_payload(token: str) -> dict[str, Any] | None:
+        """Read candidate-selection metadata; PlatformBackend authenticates the bearer."""
         try:
             parts = token.split(".")
             if len(parts) != 3:
@@ -409,7 +410,12 @@ class AceDataCloudOAuthProvider:
         """
         headers = {"Authorization": f"Bearer {jwt_token}"}
         endpoint = f"{settings.api_base_url.rstrip('/')}/api/v1/platform-tokens/"
-        user_id = (self._decode_jwt_payload(jwt_token) or {}).get("user_id")
+        claims = self._decode_jwt_payload(jwt_token) or {}
+        user_id = claims.get("user_id")
+        auth_epoch = claims.get("auth_epoch", 0)
+        if type(auth_epoch) is not int or auth_epoch < 0:
+            logger.warning("OAuth token has an invalid account security version")
+            return None
         try:
             async with httpx.AsyncClient(timeout=30) as client:
                 # Reuse an existing tagged token if the user already has one.
@@ -422,7 +428,7 @@ class AceDataCloudOAuthProvider:
                         params={"user_id": user_id, "tag": PLATFORM_TOKEN_TAG},
                     )
                     if resp.status_code == 200:
-                        existing = self._extract_token(resp.json())
+                        existing = self._extract_token(resp.json(), auth_epoch=auth_epoch)
                         if existing:
                             logger.info("OAuth: reusing existing platform token")
                             return existing
@@ -447,7 +453,7 @@ class AceDataCloudOAuthProvider:
         return None
 
     @staticmethod
-    def _extract_token(payload: object) -> str | None:
+    def _extract_token(payload: object, auth_epoch: int = 0) -> str | None:
         """Pull the first token from a list or paginated platform-tokens response."""
         results = (
             payload.get("items", payload.get("results", payload))
@@ -456,6 +462,10 @@ class AceDataCloudOAuthProvider:
         )
         if isinstance(results, list):
             for item in results:
-                if isinstance(item, dict) and item.get("token"):
+                if (
+                    isinstance(item, dict)
+                    and item.get("token")
+                    and item.get("auth_epoch", 0) == auth_epoch
+                ):
                     return str(item["token"])
         return None

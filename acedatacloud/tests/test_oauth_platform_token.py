@@ -203,3 +203,50 @@ async def test_oauth_registration_callback_and_code_exchange_cross_replicas(monk
     assert await first.load_authorization_code(registered, code) is None
     with pytest.raises(ValueError, match="already used"):
         await first.exchange_authorization_code(registered, loaded)
+
+
+@respx.mock
+@pytest.mark.asyncio
+async def test_mfa_security_change_never_reuses_old_platform_token():
+    provider = AceDataCloudOAuthProvider()
+    jwt = _make_jwt({"user_id": "u1", "auth_epoch": 2})
+    respx.get(f"{API}/platform-tokens/").mock(
+        return_value=httpx.Response(
+            200,
+            json={
+                "items": [
+                    {"token": "platform-before-mfa"},
+                    {"token": "platform-old", "auth_epoch": 1},
+                ]
+            },
+        )
+    )
+    create = respx.post(f"{API}/platform-tokens/").mock(
+        return_value=httpx.Response(201, json={"token": "platform-new", "auth_epoch": 2})
+    )
+    assert await provider._get_platform_token(jwt) == "platform-new"
+    assert create.call_count == 1
+    assert "auth_epoch" not in json.loads(
+        create.calls.last.request.content
+    )  # Server owns this claim.
+
+
+def test_mfa_reuses_only_current_epoch():
+    provider = AceDataCloudOAuthProvider()
+    assert (
+        provider._extract_token(
+            {"items": [{"token": "old", "auth_epoch": 1}, {"token": "current", "auth_epoch": 2}]},
+            auth_epoch=2,
+        )
+        == "current"
+    )
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("epoch", ["2", True, -1, None])
+async def test_invalid_security_version_cannot_reuse_or_mint_tokens(epoch):
+    provider = AceDataCloudOAuthProvider()
+    assert (
+        await provider._get_platform_token(_make_jwt({"user_id": "u1", "auth_epoch": epoch}))
+        is None
+    )
