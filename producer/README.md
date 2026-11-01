@@ -246,6 +246,10 @@ For **401**, check which auth route the client used and whether the token or OAu
 | `producer_list_actions`           | List available API actions       |
 | `producer_get_lyric_format_guide` | Lyric formatting guide           |
 
+## Action-specific inputs
+
+`producer_generate_music` requires a prompt. For custom vocals, supply `lyric` to `producer_generate_custom_music`; for custom instrumental music, set `instrumental=true` and omit lyrics and prompt. A title is optional. `producer_extend_music` needs `audio_id` and a positive `continue_at`; it also needs lyrics unless `instrumental=true`. Lyrics on extensions and replacements select custom mode. Covers, variations, swaps and stem separation need the source `audio_id`, not placeholder lyrics or prompts. Omitted `lyrics_strength` and `sound_strength` use the API defaults (0.5).
+
 ## Usage Examples
 
 ### Generate Music from Prompt

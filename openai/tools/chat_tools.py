@@ -65,8 +65,8 @@ async def openai_chat_completion(
         ReasoningEffort | None,
         Field(
             description=(
-                "Constrains effort on reasoning for reasoning models. Options: 'minimal', "
-                "'low', 'medium', 'high'. Default is 'medium'."
+                "Reasoning effort: minimal, low, medium, high, xhigh, or max, depending on the model. "
+                "GPT-6.1 Terra supports low through max, not minimal; start with low."
             )
         ),
     ] = None,
@@ -171,6 +171,10 @@ async def openai_chat_completion(
         dict[str, Any] | None,
         Field(description="Web search configuration for search-capable models."),
     ] = None,
+    thinking: Annotated[
+        dict[str, Any] | None,
+        Field(description="MiMo reasoning control: {'type': 'enabled'} or {'type': 'disabled'}."),
+    ] = None,
 ) -> str:
     """Create a chat completion using OpenAI models via AceDataCloud.
 
@@ -233,6 +237,7 @@ async def openai_chat_completion(
             "audio": audio,
             "prediction": prediction,
             "web_search_options": web_search_options,
+            "thinking": thinking,
         }
         payload.update({key: value for key, value in optional_params.items() if value is not None})
 

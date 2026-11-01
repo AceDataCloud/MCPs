@@ -12,6 +12,74 @@ from tools import chat_tools, info_tools
 
 
 @pytest.mark.asyncio
+@pytest.mark.parametrize("model", ["mimo-v2.6-pro", "mimo-v2.6-flash"])
+async def test_mimo_text_chat_reaches_http(monkeypatch, model):
+    import httpx
+
+    captured = {}
+
+    async def post(_client, url, **kwargs):
+        captured.update(kwargs["json"])
+        assert url == "https://api.acedata.cloud/openai/chat/completions"
+        return httpx.Response(200, json={}, request=httpx.Request("POST", url))
+
+    monkeypatch.setattr(httpx.AsyncClient, "post", post)
+    monkeypatch.setattr(chat_tools.client, "api_token", "test-token")
+    messages = [
+        {
+            "role": "assistant",
+            "content": None,
+            "reasoning_content": "reasoning",
+            "tool_calls": [
+                {
+                    "id": "call-1",
+                    "type": "function",
+                    "function": {"name": "lookup", "arguments": "{}"},
+                }
+            ],
+        },
+        {"role": "tool", "tool_call_id": "call-1", "content": "result"},
+    ]
+    await mcp.call_tool(
+        "openai_chat_completion",
+        {
+            "model": model,
+            "messages": messages,
+            "thinking": {"type": "disabled"},
+            "max_completion_tokens": 256,
+            "tool_choice": "auto",
+            "stream": False,
+        },
+    )
+    assert captured == {
+        "model": model,
+        "messages": messages,
+        "thinking": {"type": "disabled"},
+        "max_completion_tokens": 256,
+        "tool_choice": "auto",
+        "stream": False,
+    }
+    schema = mcp._tool_manager._tools["openai_create_response"].parameters
+    assert model not in schema["properties"]["model"]["enum"]
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("effort", ["low", "medium", "high", "xhigh", "max"])
+async def test_terra_reasoning_levels(monkeypatch, effort):
+    request = AsyncMock(return_value={"id": "test-response"})
+    monkeypatch.setattr(chat_tools.client, "chat_completions", request)
+    await mcp.call_tool(
+        "openai_chat_completion",
+        {
+            "model": "gpt-6.1-terra",
+            "messages": [{"role": "user", "content": "hello"}],
+            "reasoning_effort": effort,
+        },
+    )
+    assert request.await_args.kwargs["reasoning_effort"] == effort
+
+
+@pytest.mark.asyncio
 @pytest.mark.parametrize(
     ("tool_name", "client_method", "arguments"),
     [

@@ -210,6 +210,8 @@ For **401**, check which auth route the client used and whether the token or OAu
 ## Supported Models
 
 ### Chat Completion Models
+- **GPT-6.1 Terra**: `gpt-6.1-terra` works with `openai_chat_completion` and `openai_create_response`. Start with `reasoning_effort="low"` for Chat or `reasoning={"effort": "low"}` for Responses; supported levels are `low`, `medium`, `high`, `xhigh`, and `max`, not `none` or `minimal`. Inputs above 272,000 tokens use long-context pricing; check current account access and prices.
+- **MiMo**: `mimo-v2.6-pro` and `mimo-v2.6-flash` are available through `openai_chat_completion` with the corresponding service permission. This release covers text Chat Completions only, not images, audio, video, web search, Responses or Messages. Set `thinking={"type": "enabled"}` or `{"type": "disabled"}` and use `max_completion_tokens` for the total reasoning/output budget. Tools must be `type="function"` with `tool_choice="auto"`; execute tools in your application and preserve assistant `reasoning_content`, `tool_calls` and matching `tool_call_id` when continuing. The MCP tool returns complete JSON and rejects `stream=true` before calling the API. Reported cached input is included in `prompt_tokens`, and reasoning output is included in `completion_tokens`; do not count either twice.
 - **GPT-5.6 Sol Fast**: `gpt-5.6-sol-fast`, supported by both `openai_chat_completion` and `openai_create_response`. Existing defaults are unchanged.
 - **GPT-5 Series**: gpt-5.5, gpt-5.5-pro, gpt-5.4, gpt-5.4-pro, gpt-5.2, gpt-5.1, gpt-5, gpt-5-mini, gpt-5-nano
 - **GPT-4 Series**: gpt-4.1, gpt-4.1-mini, gpt-4.1-nano, gpt-4o, gpt-4o-mini, gpt-4

@@ -8,7 +8,7 @@ AceDataCloud Digital Human API.
 
 - Create lip-synced digital human videos from a source face video or image
 - Clone voices from short reference audio samples
-- Poll, batch-retrieve, or delete Digital Human tasks
+- Poll, batch-retrieve, list recent history, or delete Digital Human tasks
 
 ## Connect locally
 
@@ -75,3 +75,5 @@ ruff check .
 ## API parameter behavior
 
 `digitalhuman_get_tasks_batch` retrieves exactly the supplied IDs in input order using authenticated single-task requests. It does not list recent history. A failed retrieval is reported as an error rather than replaced with unrelated tasks.
+
+Use `digitalhuman_list_tasks(limit=20, type="voices")` to list the authenticated caller's recent tasks, newest first. `limit` is 1–100; optional `type` is `videos` or `voices`. `created_at_min` and `created_at_max` filter strictly after/before Unix timestamps in seconds. This uses the API's `retrieve_batch` history action, without an ID array. The result retains `count` and detailed `items`; media URLs and voice IDs are nested in each item's `response`. `started_at`, `finished_at` and `elapsed` can be null while processing.
