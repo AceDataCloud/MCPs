@@ -2,7 +2,7 @@
 
 import asyncio
 import json
-from typing import Annotated
+from typing import Annotated, Literal
 
 from pydantic import Field
 
@@ -63,6 +63,38 @@ async def digitalhuman_get_tasks_batch(
         return json.dumps({"error": "API Error", "message": exc.message})
     except Exception as exc:
         return json.dumps({"error": "Error querying tasks", "message": str(exc)})
+
+
+@mcp.tool()
+async def digitalhuman_list_tasks(
+    limit: Annotated[
+        int, Field(ge=1, le=100, description="Maximum recent tasks to return, from 1 to 100.")
+    ] = 20,
+    created_at_min: Annotated[
+        int | None,
+        Field(description="Only tasks created strictly after this Unix timestamp in seconds."),
+    ] = None,
+    created_at_max: Annotated[
+        int | None,
+        Field(description="Only tasks created strictly before this Unix timestamp in seconds."),
+    ] = None,
+    type: Annotated[
+        Literal["videos", "voices"] | None, Field(description="Optional task history kind filter.")
+    ] = None,
+) -> str:
+    """List the authenticated caller's recent tasks, newest first, not a batch lookup by ID."""
+    try:
+        return format_batch_task_result(
+            await client.list_tasks(
+                limit=limit, created_at_min=created_at_min, created_at_max=created_at_max, type=type
+            )
+        )
+    except DigitalHumanAuthError as exc:
+        return json.dumps({"error": "Authentication Error", "message": exc.message})
+    except DigitalHumanAPIError as exc:
+        return json.dumps({"error": "API Error", "message": exc.message})
+    except Exception as exc:
+        return json.dumps({"error": "Error listing tasks", "message": str(exc)})
 
 
 @mcp.tool()

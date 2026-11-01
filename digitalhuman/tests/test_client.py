@@ -79,6 +79,25 @@ async def test_task_operations_use_exact_ids_instead_of_recent_history(api_token
 
 
 @respx.mock
+@pytest.mark.parametrize(
+    "filters", [{}, {"type": "voices", "created_at_min": 0, "created_at_max": 100}]
+)
+async def test_list_tasks_sends_history_filters(api_token: str, filters: dict) -> None:
+    import json
+
+    route = respx.post("https://api.acedata.cloud/digital-human/tasks").mock(
+        return_value=httpx.Response(200, json={"count": 0, "items": []})
+    )
+    result = await DigitalHumanClient(api_token=api_token).list_tasks(**filters)
+    assert result == {"count": 0, "items": []}
+    assert json.loads(route.calls.last.request.content) == {
+        "action": "retrieve_batch",
+        "limit": 20,
+        **filters,
+    }
+
+
+@respx.mock
 async def test_401_is_auth_error(api_token: str) -> None:
     respx.post("https://api.acedata.cloud/digital-human/videos").mock(
         return_value=httpx.Response(401, json={"error": {"message": "bad token"}})

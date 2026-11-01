@@ -51,6 +51,8 @@ ChatModel = Literal[
     "o3-mini",
     "o3-pro",
     "o4-mini",
+    "mimo-v2.6-pro",
+    "mimo-v2.6-flash",
 ]
 
 # Responses API model options
@@ -213,7 +215,7 @@ ImageModeration = Literal["low", "auto"]
 ImageInputFidelity = Literal["high", "low"]
 
 # Chat reasoning effort options
-ReasoningEffort = Literal["minimal", "low", "medium", "high"]
+ReasoningEffort = Literal["minimal", "low", "medium", "high", "xhigh", "max"]
 
 # Chat service tier options
 ServiceTier = Literal["auto", "default", "flex", "scale", "priority"]

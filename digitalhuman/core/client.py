@@ -111,6 +111,25 @@ class DigitalHumanClient:
         items = [await self.get_task(task_id, action="retrieve") for task_id in task_ids]
         return {"count": len(items), "items": items}
 
+    async def list_tasks(
+        self,
+        limit: int = 20,
+        created_at_min: int | None = None,
+        created_at_max: int | None = None,
+        type: str | None = None,
+    ) -> dict[str, Any]:
+        """List the authenticated caller's recent tasks, newest first."""
+        return await self.request(
+            "/digital-human/tasks",
+            {
+                "action": "retrieve_batch",
+                "limit": limit,
+                "created_at_min": created_at_min,
+                "created_at_max": created_at_max,
+                "type": type,
+            },
+        )
+
     async def delete_task(self, task_id: str) -> dict[str, Any]:
         """Delete one task."""
         return await self.request("/digital-human/tasks", {"task_id": task_id, "action": "delete"})

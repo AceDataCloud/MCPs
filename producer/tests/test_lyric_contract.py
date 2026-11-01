@@ -3,6 +3,7 @@
 from unittest.mock import AsyncMock, patch
 
 import pytest
+from mcp.server.fastmcp.exceptions import ToolError
 
 from core.server import mcp
 from tools.audio_tools import producer_extend_music, producer_replace_section
@@ -41,6 +42,27 @@ async def test_lyrics_use_custom_path_in_actual_mcp_dispatch(name, arguments):
     assert payload["custom"] is True
     assert payload["lyric"] == arguments["lyric"]
     assert payload["async"] is False
+
+
+async def test_custom_instrumental_needs_no_placeholder_lyrics_or_prompt():
+    with patch(
+        "tools.audio_tools.client.generate_audio", new=AsyncMock(return_value={"task_id": "task"})
+    ) as call:
+        await mcp.call_tool("producer_generate_custom_music", {"instrumental": True})
+    payload = call.await_args.kwargs
+    assert payload["custom"] is True
+    assert payload["instrumental"] is True
+    assert not payload.get("lyric")
+    assert not payload.get("prompt")
+
+
+async def test_custom_vocals_require_lyrics_before_submission():
+    with (
+        patch("tools.audio_tools.client.generate_audio", new=AsyncMock()) as call,
+        pytest.raises(ToolError, match="lyric is required"),
+    ):
+        await mcp.call_tool("producer_generate_custom_music", {})
+    call.assert_not_awaited()
 
 
 async def test_instrumental_extension_without_lyrics():
