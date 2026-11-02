@@ -10,6 +10,7 @@ from mcp.server.fastmcp.exceptions import ToolError
 from core.client import set_request_api_token
 from core.server import mcp
 from tools.admin_tools import acedatacloud_list_admin_invoices
+from tools.read_tools import acedatacloud_usage_summary
 from tools.user.auto_recharge import (
     acedatacloud_confirm_auto_recharge_setup,
     acedatacloud_create_auto_recharge,
@@ -46,6 +47,7 @@ from tools.user.usage import (
     acedatacloud_get_proxy_usage,
     acedatacloud_get_usage,
     acedatacloud_list_proxy_usage,
+    acedatacloud_list_usage,
     acedatacloud_list_usage_status_codes,
 )
 
@@ -98,6 +100,51 @@ async def test_billing_read_routes():
         set_request_api_token(None)
     assert auto_list.calls[0].request.url.params["user_id"] == "user-1"
     assert proxy_list.calls[0].request.url.params["user_id"] == "user-1"
+
+
+@respx.mock
+@pytest.mark.asyncio
+async def test_usage_without_expired_bodies_preserves_billing_and_aggregate():
+    record = {
+        "id": ID,
+        "trace_id": "trace-1",
+        "created_at": "2026-09-18T00:00:00Z",
+        "status_code": 200,
+        "deducted_amount": 2.5,
+        "metadata": {"model": "gpt-4o", "usage": {"total_tokens": 100}},
+    }
+    respx.get(f"{API}/platform-tokens/me/").mock(
+        return_value=httpx.Response(200, json={"id": "user-1"})
+    )
+    respx.get(f"{API}/usage/apis/{ID}").mock(return_value=httpx.Response(200, json=record))
+    listing = respx.get(f"{API}/usage/apis/").mock(
+        return_value=httpx.Response(200, json={"count": 1, "items": [record]})
+    )
+    aggregate = respx.get(f"{API}/usage/apis/aggregate/").mock(
+        return_value=httpx.Response(
+            200,
+            json={"total": 2.5, "items": [{"api_id": "api-1", "amount": 2.5}], "apis": {}},
+        )
+    )
+    set_request_api_token("platform-token")
+    try:
+        detail = json.loads(await acedatacloud_get_usage(ID))
+        page = json.loads(await acedatacloud_list_usage(days=45))
+        summary = json.loads(await acedatacloud_usage_summary(days=45))
+    finally:
+        set_request_api_token(None)
+    assert detail == record
+    assert page["items"] == [record]
+    assert "request" not in detail["metadata"]
+    assert "response" not in detail["metadata"]
+    assert summary == {
+        "days": 45,
+        "total_credits": 2.5,
+        "by_api": [{"api_id": "api-1", "title": None, "credits": 2.5}],
+    }
+    for route in (listing, aggregate):
+        assert route.calls[0].request.url.params["user_id"] == "user-1"
+        assert "created_at_from" in route.calls[0].request.url.params
 
 
 @respx.mock

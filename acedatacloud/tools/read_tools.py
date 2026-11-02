@@ -98,7 +98,9 @@ async def acedatacloud_get_balance(
     """Summarize your remaining credit balance across subscriptions.
 
     Returns a compact list of ``{service_id, remaining_amount, used_amount, scope}``
-    plus the total remaining. Amounts are in Credits, not USD.
+    plus the total remaining. Amounts are in Credits, not USD. Proxy balances may
+    be last-saved values when synchronization is paused or times out; check service
+    status separately, since a positive balance does not prove availability.
     """
     try:
         result = await client.get(
@@ -129,7 +131,7 @@ async def acedatacloud_usage_summary(
     ] = 30,
     api_id: Annotated[str | None, Field(description="Optional API UUID to filter by.")] = None,
 ) -> str:
-    """Aggregate API spend over a time window: total Credits plus a per-API breakdown."""
+    """Aggregate API spend within the most recent 60 days; 30-day body expiry does not change billing or totals."""
     try:
         result = await client.get(
             "/usage/apis/aggregate/",

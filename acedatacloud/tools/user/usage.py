@@ -60,7 +60,7 @@ async def acedatacloud_list_usage(
     limit: Annotated[int, Field(description="Max records.", ge=1, le=100)] = 20,
     offset: Annotated[int, Field(description="Pagination offset.", ge=0)] = 0,
 ) -> str:
-    """List API usage with complete backend-supported filters."""
+    """List API usage within the most recent 60 days; request/response bodies expire after 30 days."""
     try:
         if days is not None and created_at_from is None:
             created_at_from = (dt.datetime.now(dt.timezone.utc) - dt.timedelta(days=days)).strftime(
@@ -92,7 +92,7 @@ async def acedatacloud_list_usage(
 async def acedatacloud_get_usage(
     usage_id: Annotated[str, Field(description="API usage UUID.")],
 ) -> str:
-    """Get one caller-authorized API usage record."""
+    """Get an authorized API usage record (60 days); metadata.request and metadata.response expire after 30 days, not billing summaries."""
     try:
         return dumps(await client.get(f"/usage/apis/{usage_id}"))
     except PlatformError as error:
@@ -144,7 +144,7 @@ async def acedatacloud_export_usage(
         int, Field(description="Maximum CSV bytes returned.", ge=1024, le=10_485_760)
     ] = 2_097_152,
 ) -> str:
-    """Export bounded API usage CSV; narrow filters when the response exceeds the limit."""
+    """Export bounded API usage CSV within 60 days; 30-day body expiry does not change billing or totals. Narrow filters if oversized."""
     try:
         params = _params(
             application_id,

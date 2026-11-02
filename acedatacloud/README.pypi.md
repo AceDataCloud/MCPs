@@ -479,6 +479,32 @@ dry-run preview and performs no HTTP request.
 
 <!-- END GENERATED TOOL REFERENCE -->
 
+### Check usage and retained request details
+
+Use `acedatacloud_list_usage` to find API calls, `acedatacloud_get_usage(usage_id=...)`
+for a record's details, `acedatacloud_usage_summary(days=...)` for spend by API, and
+`acedatacloud_export_usage` for bounded CSV. Keep query time bounds and day-based
+lookbacks within the most recent **60 days**, the retention window for API usage
+records and billing summaries. Narrow export filters if the CSV exceeds the MCP's
+byte limit.
+
+Request and response bodies are retained for only **30 days**. Records aged 30–60
+days still retain trace, status, time, model, usage and actual charges, but detail
+metadata no longer includes `metadata.request` or `metadata.response`. Missing bodies
+do not mean the call was free or failed: body expiry does not change charges, usage,
+model aggregates or effective-result statistics. Save bodies at call time if you
+need longer retention; a later detail lookup or export cannot recover expired bodies.
+
+### Check proxy balances before relying on availability
+
+Use `acedatacloud_get_balance` for a compact balance summary, then
+`acedatacloud_get_application(application_id=...)` for application and service details.
+For proxy services, paused balance synchronization or a synchronization timeout
+returns the **last saved balance**, not proof that the service is currently available.
+Check service status separately, along with the application's `disabled` and
+`expired_at` fields, even when `remaining_amount` is positive. Balance URLs,
+platform-token authentication and response field names are unchanged.
+
 ### Find failed invoices
 
 Use `acedatacloud_list_invoices(status="Failed")` to find caller-owned invoices whose issuance failed. Read the returned `failure_reason` before deciding whether to apply again or contact support. `Failed` is a read filter, not an administrator status-update option.
