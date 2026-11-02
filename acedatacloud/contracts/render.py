@@ -150,6 +150,11 @@ def render_usage_guide(profile: ToolProfile = "curated", tool_names: set[str] | 
             "## Safety",
             "- Mutations without confirm=true return a redacted dry-run and make zero HTTP calls.",
             "- Amounts are in Credits, not USD.",
+            "- API usage records and billing summaries cover the most recent 60 days; request/response "
+            "bodies expire after 30 days without changing charges, usage or aggregate totals. "
+            "Save bodies at call time if longer retention is needed.",
+            "- Proxy balances may be last-saved when synchronization is paused or times out; "
+            "check service status separately. A positive balance does not prove availability.",
             "- Newly created tokens are disclosed only once at their exact response path.",
             "- Backend account permissions and ownership checks apply to every authenticated operation.",
         )

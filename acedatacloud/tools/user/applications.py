@@ -89,7 +89,7 @@ async def acedatacloud_create_application(
 async def acedatacloud_get_application(
     application_id: Annotated[str, Field(description="Application UUID.")],
 ) -> str:
-    """Get one application and its service/pricing details."""
+    """Get application/service details; proxy balances may be last-saved when sync pauses or times out, so check service status separately."""
     try:
         return dumps(await client.get(f"/applications/{application_id}"))
     except PlatformError as error:
