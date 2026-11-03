@@ -155,6 +155,12 @@ def render_usage_guide(profile: ToolProfile = "curated", tool_names: set[str] | 
             "Save bodies at call time if longer retention is needed.",
             "- Proxy balances may be last-saved when synchronization is paused or times out; "
             "check service status separately. A positive balance does not prove availability.",
+            "- Read allow_overdraft before treating a low balance as a hard stop: it defaults to "
+            "false and is admin-controlled, not a customer write option. Authorized Usage "
+            "applications keep billing their own balance; negative amounts are unsettled usage. "
+            "Top-ups offset debt without resetting usage; disabled/expiry and credential limits still apply. "
+            "Overdraft-enabled applications do not fall back to global balance for insufficient funds; "
+            "otherwise allow_consume_global applies and the charged global application's overdraft setting governs.",
             "- Newly created tokens are disclosed only once at their exact response path.",
             "- Backend account permissions and ownership checks apply to every authenticated operation.",
         )

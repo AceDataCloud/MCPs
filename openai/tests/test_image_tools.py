@@ -1,6 +1,7 @@
 """Unit tests for image tools."""
 
 import json
+from pathlib import Path
 from typing import Any
 
 import pytest
@@ -211,8 +212,10 @@ async def test_openai_generate_image_preserves_explicit_sync(monkeypatch):
     "model",
     [
         "gpt-image-2.5-flare",
+        "gpt-image-2.5-flare:reverse",
         "gpt-image-2.5-flare:official",
         "gpt-image-2.5-sunburst",
+        "gpt-image-2.5-sunburst:reverse",
         "gpt-image-2.5-sunburst:official",
     ],
 )
@@ -236,6 +239,8 @@ async def test_image_quality_schema_and_dispatch(monkeypatch, tool_name, model, 
     assert {"auto", "high", "medium", "low", "xhigh", "max", "standard"} <= set(schema["enum"])
     assert ("hd" in schema["enum"]) == (tool_name == "openai_generate_image")
     assert "Only 'gpt-image-2.5-flare' and 'gpt-image-2.5-sunburst'" in schema["description"]
+    assert "including ':reverse' and ':official'" in schema["description"]
+    assert model in tool.inputSchema["properties"]["model"]["enum"]
     arguments = {"prompt": "test", "model": model, "quality": quality}
     if tool_name == "openai_edit_image":
         arguments["image"] = "https://example.com/base.png"
@@ -248,8 +253,10 @@ def test_openai_image_tool_schemas_expose_exact_gpt_image_2_5_models():
     tools = {tool.name: tool for tool in mcp._tool_manager.list_tools()}
     expected = {
         "gpt-image-2.5-flare",
+        "gpt-image-2.5-flare:reverse",
         "gpt-image-2.5-flare:official",
         "gpt-image-2.5-sunburst",
+        "gpt-image-2.5-sunburst:reverse",
         "gpt-image-2.5-sunburst:official",
     }
     for name in ("openai_generate_image", "openai_edit_image"):
@@ -259,6 +266,13 @@ def test_openai_image_tool_schemas_expose_exact_gpt_image_2_5_models():
         assert "gpt-image-2.5" not in models
         assert "gpt-image-2.5:official" not in models
         assert "gpt-image-2.5:reverse" not in models
+        manifest = json.loads((Path(__file__).parents[1] / "lobehub/lhm.plugin.json").read_text())
+        listing = next(tool for tool in manifest["tools"] if tool["name"] == name)
+        for field in ("model", "quality"):
+            assert (
+                listing["inputSchema"]["properties"][field]
+                == tools[name].parameters["properties"][field]
+            )
 
 
 @pytest.mark.asyncio
@@ -266,8 +280,10 @@ def test_openai_image_tool_schemas_expose_exact_gpt_image_2_5_models():
     "model",
     [
         "gpt-image-2.5-flare",
+        "gpt-image-2.5-flare:reverse",
         "gpt-image-2.5-flare:official",
         "gpt-image-2.5-sunburst",
+        "gpt-image-2.5-sunburst:reverse",
         "gpt-image-2.5-sunburst:official",
     ],
 )

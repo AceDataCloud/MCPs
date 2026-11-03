@@ -504,6 +504,12 @@ Check service status separately, along with the application's `disabled` and
 `expired_at` fields, even when `remaining_amount` is positive. Balance URLs,
 platform-token authentication and response field names are unchanged.
 
+### Interpret overdraft status
+
+Read `allow_overdraft` in `acedatacloud_get_balance`, `acedatacloud_list_applications` or `acedatacloud_get_application` before treating a low or negative balance as a hard stop. It defaults to `false` and is read-only for customers; creating an application or updating its global-balance policy cannot enable it. Administrators may authorize overdraft for `Usage` applications: calls continue billing against the application's own balance, negative amounts represent unsettled usage, and top-ups offset that debt without resetting cumulative usage. Disabled/expired applications and credential limits still apply.
+
+An overdraft-enabled application's insufficient balance does not trigger global fallback. Otherwise `allow_consume_global` controls fallback; any overdraft permission is determined by the global application actually charged. Do not infer overdraft authorization from the balance alone.
+
 ### Find failed invoices
 
 Use `acedatacloud_list_invoices(status="Failed")` to find caller-owned invoices whose issuance failed. Read the returned `failure_reason` before deciding whether to apply again or contact support. `Failed` is a read filter, not an administrator status-update option.

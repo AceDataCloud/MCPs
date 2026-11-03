@@ -94,6 +94,15 @@ async def test_usage_retention_and_saved_balance_guidance_is_discoverable(monkey
     assert "30 days without changing charges, usage or aggregate totals" in guide
     assert "Save bodies at call time" in guide
     assert "A positive balance does not prove availability" in guide
+    assert "allow_overdraft" in visible["acedatacloud_get_balance"].description
+    assert "allow_overdraft" in guide
+    assert "admin-controlled, not a customer write option" in guide
+    assert "negative amounts are unsettled usage" in guide
+    for name in (
+        "acedatacloud_create_application",
+        "acedatacloud_update_application_balance_policy",
+    ):
+        assert "allow_overdraft" not in visible[name].inputSchema["properties"]
 
 
 def test_readme_generated_reference_is_current():
