@@ -106,8 +106,10 @@ async def openai_list_image_models() -> str:
 | gpt-image-1.5        | GPT Image 1.5 - improved quality                  |
 | gpt-image-2          | GPT Image 2 - established default                |
 | gpt-image-2.5-flare  | GPT Image 2.5 Flare - faster generation           |
+| gpt-image-2.5-flare:reverse | Explicit alias of gpt-image-2.5-flare      |
 | gpt-image-2.5-flare:official | GPT Image 2.5 Flare official mode         |
 | gpt-image-2.5-sunburst | GPT Image 2.5 Sunburst - high-fidelity control  |
+| gpt-image-2.5-sunburst:reverse | Explicit alias of gpt-image-2.5-sunburst |
 | gpt-image-2.5-sunburst:official | GPT Image 2.5 Sunburst official mode   |
 | gpt-image-2:reverse  | GPT Image 2 reverse mode                          |
 | gpt-image-2:official | GPT Image 2 official mode                         |
@@ -150,13 +152,17 @@ async def openai_list_image_models() -> str:
 |-----------|------------------------------------------------|
 | auto      | Model chooses quality (default)                |
 | high      | High quality                                   |
-| xhigh     | GPT Image 2.5 Flare/Sunburst only (including :official) |
-| max       | GPT Image 2.5 Flare/Sunburst only (including :official) |
+| xhigh     | GPT Image 2.5 Flare/Sunburst only (including :reverse and :official) |
+| max       | GPT Image 2.5 Flare/Sunburst only (including :reverse and :official) |
 | medium    | Balanced quality/speed                         |
 | low       | Faster, lower quality                          |
 | hd        | High detail (dall-e-3 only)                    |
 | standard  | Standard detail (DALL-E; only option for dall-e-2) |
 
+GPT Image 2/2.5 unsuffixed models and their :reverse aliases bill per successful image
+(base price: 0.19 Credits/image; check current account pricing and usage).
+Reverse requests may be fulfilled by compatible GPT Image 2.5 Flare during recovery;
+the requested model and per-image billing stay unchanged.
 GPT Image official variants bill actual token usage.
 """
 

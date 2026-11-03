@@ -97,8 +97,10 @@ async def acedatacloud_get_balance(
 ) -> str:
     """Summarize your remaining credit balance across subscriptions.
 
-    Returns a compact list of ``{service_id, remaining_amount, used_amount, scope}``
-    plus the total remaining. Amounts are in Credits, not USD. Proxy balances may
+    Returns per-application balances, scope and read-only ``allow_overdraft`` plus
+    the total remaining. Negative balances are unsettled usage; admin-authorized
+    overdraft lets Usage applications continue billing, subject to disabled/expiry
+    and credential limits. Amounts are in Credits, not USD. Proxy balances may
     be last-saved values when synchronization is paused or times out; check service
     status separately, since a positive balance does not prove availability.
     """
@@ -115,6 +117,7 @@ async def acedatacloud_get_balance(
                 "remaining_amount": it.get("remaining_amount"),
                 "used_amount": it.get("used_amount"),
                 "scope": it.get("scope"),
+                "allow_overdraft": it.get("allow_overdraft", False),
             }
             for it in items
         ]

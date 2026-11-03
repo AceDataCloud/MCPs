@@ -29,30 +29,40 @@ async def test_profile_only_discovers_image_and_task_tools():
 
 
 @pytest.mark.asyncio
-async def test_dispatch_preserves_model_async_and_task_submission():
+@pytest.mark.parametrize("model", ["gpt-image-2", "gpt-image-2:reverse"])
+async def test_dispatch_preserves_model_async_and_task_submission(model):
     client = image_tools.client
     response = {"task_id": "existing-fixture", "status": "pending"}
     with patch.object(
         client, "images_generations_async", new=AsyncMock(return_value=response)
     ) as call:
         await create_server().call_tool(
-            "gpt_image_generate", {"prompt": "fixture", "model": "gpt-image-2", "async": True}
+            "gpt_image_generate", {"prompt": "fixture", "model": model, "async": True}
         )
-        assert call.call_args.kwargs["model"] == "gpt-image-2"
+        assert call.call_args.kwargs["model"] == model
         assert call.call_args.kwargs["async"] is True
 
 
 @pytest.mark.asyncio
 @pytest.mark.parametrize("quality", ["xhigh", "max"])
 @pytest.mark.parametrize(
+    "model",
+    [
+        "gpt-image-2.5-flare:official",
+        "gpt-image-2.5-flare:reverse",
+        "gpt-image-2.5-sunburst:reverse",
+    ],
+)
+@pytest.mark.parametrize(
     ("tool_name", "client_method"),
     [("gpt_image_generate", "images_generations_async"), ("gpt_image_edit", "images_edits_async")],
 )
-async def test_profile_preserves_extended_quality(tool_name, client_method, quality):
+async def test_profile_preserves_extended_quality(tool_name, client_method, quality, model):
     server = create_server()
     tool = next(tool for tool in await server.list_tools() if tool.name == tool_name)
     assert {"xhigh", "max"} <= set(tool.inputSchema["properties"]["quality"]["enum"])
-    arguments = {"prompt": "fixture", "model": "gpt-image-2.5-flare:official", "quality": quality}
+    assert model in tool.inputSchema["properties"]["model"]["enum"]
+    arguments = {"prompt": "fixture", "model": model, "quality": quality}
     if tool_name == "gpt_image_edit":
         arguments["image"] = "https://example.test/base.png"
     with patch.object(
@@ -66,7 +76,11 @@ async def test_profile_preserves_extended_quality(tool_name, client_method, qual
 @pytest.mark.asyncio
 async def test_other_models_and_missing_model_fail_before_api():
     with patch.object(image_tools.client, "images_generations_async", new=AsyncMock()) as call:
-        for arguments in ({"prompt": "fixture", "model": "nano-banana"}, {"prompt": "fixture"}):
+        for arguments in (
+            {"prompt": "fixture", "model": "nano-banana"},
+            {"prompt": "fixture", "model": "gpt-image-2.5:reverse"},
+            {"prompt": "fixture"},
+        ):
             with pytest.raises(ToolError):
                 await create_server().call_tool("gpt_image_generate", arguments)
         call.assert_not_awaited()
@@ -90,7 +104,13 @@ async def test_edit_preserves_ordered_image_list_and_public_alias():
 async def test_static_model_listing_does_not_request_generation():
     with patch.object(image_tools.client, "images_generations_async", new=AsyncMock()) as call:
         content = await create_server().call_tool("gpt_image_list_models", {})
-        assert "gpt-image-2" in json.dumps(content, default=str)
+        text = json.dumps(content, default=str)
+        for model in (
+            "gpt-image-2:reverse",
+            "gpt-image-2.5-flare:reverse",
+            "gpt-image-2.5-sunburst:reverse",
+        ):
+            assert model in text
         call.assert_not_awaited()
 
 

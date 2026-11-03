@@ -147,6 +147,33 @@ async def test_get_balance_summarizes(mock_applications_page):
 
 @respx.mock
 @pytest.mark.asyncio
+@pytest.mark.parametrize("allow_overdraft", [False, True, None])
+@pytest.mark.parametrize("remaining_amount", [-1.25, None])
+async def test_get_balance_preserves_overdraft_and_unsettled_amounts(
+    mock_applications_page, allow_overdraft, remaining_amount
+):
+    application = mock_applications_page["items"][0]
+    application["remaining_amount"] = remaining_amount
+    if allow_overdraft is not None:
+        application["allow_overdraft"] = allow_overdraft
+    respx.get(f"{API}/platform-tokens/me/").mock(
+        return_value=httpx.Response(200, json={"id": "user-1"})
+    )
+    respx.get(f"{API}/applications/").mock(
+        return_value=httpx.Response(200, json=mock_applications_page)
+    )
+    set_request_api_token("platform-request-token")
+    try:
+        out = json.loads(await acedatacloud_get_balance())
+    finally:
+        set_request_api_token(None)
+    assert out["applications"][0]["remaining_amount"] == remaining_amount
+    assert out["applications"][0]["allow_overdraft"] is (allow_overdraft is True)
+    assert out["total_remaining"] == (remaining_amount or 0)
+
+
+@respx.mock
+@pytest.mark.asyncio
 async def test_create_credential_confirm_gate_no_http():
     # Register the route so any accidental call is observable, then assert the
     # confirm gate short-circuited and made ZERO HTTP calls.

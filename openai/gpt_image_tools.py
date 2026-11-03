@@ -16,11 +16,7 @@ from pydantic import Field
 from core.types import ImageModel
 from tools import image_tools, tasks_tools
 
-GPT_IMAGE_MODELS = tuple(
-    model
-    for model in get_args(ImageModel)
-    if model.startswith("gpt-image-") and ":reverse" not in model
-)
+GPT_IMAGE_MODELS = tuple(model for model in get_args(ImageModel) if model.startswith("gpt-image-"))
 
 
 def image_function(original: Callable[..., Any]) -> Callable[..., Any]:

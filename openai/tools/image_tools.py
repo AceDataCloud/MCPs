@@ -47,7 +47,8 @@ async def openai_generate_image(
             description=(
                 "The image model to use. Options: 'gpt-image-1' (default, versatile), "
                 "'gpt-image-1.5', 'gpt-image-2', 'gpt-image-2.5-flare', "
-                "'gpt-image-2.5-flare:official', 'gpt-image-2.5-sunburst', "
+                "'gpt-image-2.5-flare:reverse', 'gpt-image-2.5-flare:official', "
+                "'gpt-image-2.5-sunburst', 'gpt-image-2.5-sunburst:reverse', "
                 "'gpt-image-2.5-sunburst:official', 'dall-e-3', 'dall-e-2', "
                 "'nano-banana', 'nano-banana-2-lite', 'nano-banana-2', 'nano-banana-2.1', 'nano-banana-pro'. Nano Banana 2.1 has no ':official' variant. GPT Image ':official' variants use actual-token billing."
             )
@@ -75,7 +76,7 @@ async def openai_generate_image(
         Field(
             description=(
                 "Image quality. GPT Image: 'auto' (default), 'high', 'medium', 'low'. "
-                "Only 'gpt-image-2.5-flare' and 'gpt-image-2.5-sunburst' (including ':official') "
+                "Only 'gpt-image-2.5-flare' and 'gpt-image-2.5-sunburst' (including ':reverse' and ':official') "
                 "also support 'xhigh' and 'max'. Official variants bill actual token usage. "
                 "dall-e-3: 'hd' or 'standard'; dall-e-2: 'standard' only."
             )
@@ -239,7 +240,8 @@ async def openai_edit_image(
             description=(
                 "The image model to use for editing. Options: 'dall-e-3' (default), "
                 "'gpt-image-1.5', 'gpt-image-2', 'gpt-image-2.5-flare', "
-                "'gpt-image-2.5-flare:official', 'gpt-image-2.5-sunburst', "
+                "'gpt-image-2.5-flare:reverse', 'gpt-image-2.5-flare:official', "
+                "'gpt-image-2.5-sunburst', 'gpt-image-2.5-sunburst:reverse', "
                 "'gpt-image-2.5-sunburst:official', 'dall-e-3', and 'nano-banana' variants including 'nano-banana-2.1' (no ':official' variant)."
             )
         ),
@@ -263,7 +265,7 @@ async def openai_edit_image(
         Field(
             description=(
                 "Output quality. GPT Image: 'auto' (default), 'high', 'medium', 'low'. "
-                "Only 'gpt-image-2.5-flare' and 'gpt-image-2.5-sunburst' (including ':official') "
+                "Only 'gpt-image-2.5-flare' and 'gpt-image-2.5-sunburst' (including ':reverse' and ':official') "
                 "also support 'xhigh' and 'max'. Official variants bill actual token usage. "
                 "dall-e-2: 'standard' only."
             )
