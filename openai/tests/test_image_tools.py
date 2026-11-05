@@ -380,12 +380,21 @@ async def test_dispatch_forwards_nano_banana_2_1(monkeypatch, tool_name, endpoin
 
 @pytest.mark.asyncio
 @pytest.mark.parametrize("tool_name", ["openai_generate_image", "openai_edit_image"])
-async def test_dispatch_rejects_nano_banana_2_1_official(monkeypatch, tool_name):
+@pytest.mark.parametrize(
+    "model",
+    [
+        "nano-banana-2.1:official",
+        "gpt-image-2.6",
+        "gpt-image-2.6:reverse",
+        "gpt-image-2.6:official",
+    ],
+)
+async def test_dispatch_rejects_unsupported_image_models(monkeypatch, tool_name, model):
     async def unexpected_request(*_args, **_kwargs):
         pytest.fail("An unsupported model must not reach the API")
 
     monkeypatch.setattr(image_tools.client, "request", unexpected_request)
-    arguments = {"prompt": "test", "model": "nano-banana-2.1:official"}
+    arguments = {"prompt": "test", "model": model}
     if tool_name == "openai_edit_image":
         arguments["image"] = "https://example.com/base.png"
     with pytest.raises(ToolError):
