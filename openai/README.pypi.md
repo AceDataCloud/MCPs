@@ -33,16 +33,16 @@ The Platform catalog hides OpenAI image API/model entries and companion image gu
 
 - **Chat Completions** — Access GPT-4, GPT-4o, GPT-5, o1, o3, o4-mini, and many more models
 - **Responses API** — Extended model variant support including dated releases and search-preview models
-- **Image Generation** — Create images with gpt-image-1, gpt-image-2, GPT Image 2.5 Flare/Sunburst standard, reverse or official variants, dall-e-3, and nano-banana models
+- **Image Generation** — Create images with gpt-image-1, gpt-image-2, GPT Image 2.5/2.6 Flare/Sunburst standard, reverse or official variants, dall-e-3, and nano-banana models
 - **Image Editing** — Modify existing images with AI
 - **Text Embeddings** — Generate vector representations with text-embedding-3 models
 - **Audio** — Convert text to speech and transcribe audio with whisper-1 or gpt-transcribe
 
 ## Image quality
 
-For generation and editing, GPT Image models accept `quality: "auto"`, `"low"`, `"medium"` or `"high"`. Only `gpt-image-2.5-flare` and `gpt-image-2.5-sunburst`, including their `:reverse` and `:official` variants, additionally accept `"xhigh"` and `"max"`. Official variants bill actual token usage; check current pricing and usage rather than treating a pre-request estimate as the final charge. DALL-E 3 generation accepts `"hd"` or `"standard"`; DALL-E 2 accepts only `"standard"`.
+For generation and editing, GPT Image models accept `quality: "auto"`, `"low"`, `"medium"` or `"high"`. GPT Image 2.5 and 2.6 Flare/Sunburst, including their `:reverse` and `:official` variants, additionally accept `"xhigh"` and `"max"`. Official variants bill actual token usage; check current pricing and usage rather than treating a pre-request estimate as the final charge. DALL-E 3 generation accepts `"hd"` or `"standard"`; DALL-E 2 accepts only `"standard"`.
 
-`gpt-image-2.5-flare:reverse` and `gpt-image-2.5-sunburst:reverse` are explicit aliases of their unsuffixed models for both generation and editing. Keep the full requested name. GPT Image 2/2.5 unsuffixed and `:reverse` models bill per successful image at a base price of **0.19 Credits/image**; account discounts and final charges follow current pricing and usage records. During recovery, reverse requests may be fulfilled by compatible GPT Image 2.5 Flare without changing the requested model or per-image billing.
+`gpt-image-2.5-flare:reverse` and `gpt-image-2.5-sunburst:reverse` are explicit aliases of their unsuffixed models for both generation and editing. Keep the full requested name. GPT Image 2/2.5/2.6 unsuffixed and `:reverse` models bill per successful image at a base price of **0.19 Credits/image**; account discounts and final charges follow current pricing and usage records. During recovery, 2.0/2.5 reverse requests may be fulfilled by compatible GPT Image 2.5 Flare without changing the requested model or per-image billing.
 
 ## Chat and Responses billing
 
@@ -221,7 +221,7 @@ For **401**, check which auth route the client used and whether the token or OAu
 - **Reasoning**: o4-mini, o3, o3-mini, o3-pro, o1, o1-mini, o1-pro
 
 ### Image Models
-- gpt-image-1, gpt-image-1.5, gpt-image-2, gpt-image-2:reverse, gpt-image-2:official, gpt-image-2.5-flare, gpt-image-2.5-flare:reverse, gpt-image-2.5-flare:official, gpt-image-2.5-sunburst, gpt-image-2.5-sunburst:reverse, gpt-image-2.5-sunburst:official, dall-e-3, dall-e-2, nano-banana, nano-banana-2-lite, nano-banana-2, nano-banana-2.1, nano-banana-pro
+- gpt-image-1, gpt-image-1.5, gpt-image-2, gpt-image-2:reverse, gpt-image-2:official, gpt-image-2.5-flare, gpt-image-2.5-flare:reverse, gpt-image-2.5-flare:official, gpt-image-2.5-sunburst, gpt-image-2.5-sunburst:reverse, gpt-image-2.5-sunburst:official, gpt-image-2.6-flare, gpt-image-2.6-flare:reverse, gpt-image-2.6-flare:official, gpt-image-2.6-sunburst, gpt-image-2.6-sunburst:reverse, gpt-image-2.6-sunburst:official, dall-e-3, dall-e-2, nano-banana, nano-banana-2-lite, nano-banana-2, nano-banana-2.1, nano-banana-pro
 - GPT Image `:official` variants settle from actual text-input, image-input, and image-output tokens.
 - Nano Banana 2.1 supports generation and editing using exactly `nano-banana-2.1`; there is no `nano-banana-2.1:official` variant. For multiple images use `n` with the default URL response; `b64_json` requires `n=1`. These tools use OpenAI's `size` parameter, not the dedicated NanoBanana tools' `resolution` parameter.
 
