@@ -346,3 +346,5 @@ streaming, use the HTTP API directly.
 `openai_list_tasks` accepts `count_mode: "none"` (default) or `"exact"`. Exact counting
 has a two-second server budget and may fall back to a lower bound; inspect the returned
 pagination metadata. GPT Image edit prompts allow up to 32000 characters (1000 for dall-e-2).
+
+GPT Image 2.6 adds `gpt-image-2.6-flare` and `gpt-image-2.6-sunburst`, each with `:reverse` and `:official` variants. Generation and edits accept `xhigh`/`max` with the same raster contract as 2.5. Plain/reverse variants cost 0.19 Credits per image; official variants use the same token rates as 2.5. SVG/GIF are not exposed.

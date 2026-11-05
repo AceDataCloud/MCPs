@@ -212,11 +212,17 @@ async def test_openai_generate_image_preserves_explicit_sync(monkeypatch):
     "model",
     [
         "gpt-image-2.5-flare",
+        "gpt-image-2.6-flare",
         "gpt-image-2.5-flare:reverse",
+        "gpt-image-2.6-flare:reverse",
         "gpt-image-2.5-flare:official",
+        "gpt-image-2.6-flare:official",
         "gpt-image-2.5-sunburst",
+        "gpt-image-2.6-sunburst",
         "gpt-image-2.5-sunburst:reverse",
+        "gpt-image-2.6-sunburst:reverse",
         "gpt-image-2.5-sunburst:official",
+        "gpt-image-2.6-sunburst:official",
     ],
 )
 @pytest.mark.parametrize("tool_name", ["openai_generate_image", "openai_edit_image"])
@@ -238,7 +244,7 @@ async def test_image_quality_schema_and_dispatch(monkeypatch, tool_name, model, 
     schema = tool.inputSchema["properties"]["quality"]
     assert {"auto", "high", "medium", "low", "xhigh", "max", "standard"} <= set(schema["enum"])
     assert ("hd" in schema["enum"]) == (tool_name == "openai_generate_image")
-    assert "Only 'gpt-image-2.5-flare' and 'gpt-image-2.5-sunburst'" in schema["description"]
+    assert "GPT Image 2.5 and 2.6 Flare/Sunburst" in schema["description"]
     assert "including ':reverse' and ':official'" in schema["description"]
     assert model in tool.inputSchema["properties"]["model"]["enum"]
     arguments = {"prompt": "test", "model": model, "quality": quality}
@@ -253,11 +259,17 @@ def test_openai_image_tool_schemas_expose_exact_gpt_image_2_5_models():
     tools = {tool.name: tool for tool in mcp._tool_manager.list_tools()}
     expected = {
         "gpt-image-2.5-flare",
+        "gpt-image-2.6-flare",
         "gpt-image-2.5-flare:reverse",
+        "gpt-image-2.6-flare:reverse",
         "gpt-image-2.5-flare:official",
+        "gpt-image-2.6-flare:official",
         "gpt-image-2.5-sunburst",
+        "gpt-image-2.6-sunburst",
         "gpt-image-2.5-sunburst:reverse",
+        "gpt-image-2.6-sunburst:reverse",
         "gpt-image-2.5-sunburst:official",
+        "gpt-image-2.6-sunburst:official",
     }
     for name in ("openai_generate_image", "openai_edit_image"):
         model_schema = tools[name].parameters["properties"]["model"]
@@ -280,11 +292,17 @@ def test_openai_image_tool_schemas_expose_exact_gpt_image_2_5_models():
     "model",
     [
         "gpt-image-2.5-flare",
+        "gpt-image-2.6-flare",
         "gpt-image-2.5-flare:reverse",
+        "gpt-image-2.6-flare:reverse",
         "gpt-image-2.5-flare:official",
+        "gpt-image-2.6-flare:official",
         "gpt-image-2.5-sunburst",
+        "gpt-image-2.6-sunburst",
         "gpt-image-2.5-sunburst:reverse",
+        "gpt-image-2.6-sunburst:reverse",
         "gpt-image-2.5-sunburst:official",
+        "gpt-image-2.6-sunburst:official",
     ],
 )
 async def test_openai_image_tools_forward_gpt_image_2_5_models(monkeypatch, model):

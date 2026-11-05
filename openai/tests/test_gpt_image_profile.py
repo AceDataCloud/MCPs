@@ -49,8 +49,11 @@ async def test_dispatch_preserves_model_async_and_task_submission(model):
     "model",
     [
         "gpt-image-2.5-flare:official",
+        "gpt-image-2.6-flare:official",
         "gpt-image-2.5-flare:reverse",
+        "gpt-image-2.6-flare:reverse",
         "gpt-image-2.5-sunburst:reverse",
+        "gpt-image-2.6-sunburst:reverse",
     ],
 )
 @pytest.mark.parametrize(
@@ -108,7 +111,9 @@ async def test_static_model_listing_does_not_request_generation():
         for model in (
             "gpt-image-2:reverse",
             "gpt-image-2.5-flare:reverse",
+            "gpt-image-2.6-flare:reverse",
             "gpt-image-2.5-sunburst:reverse",
+            "gpt-image-2.6-sunburst:reverse",
         ):
             assert model in text
         call.assert_not_awaited()
