@@ -42,9 +42,9 @@ The original `mcp-openai-pro` command without `--profile` keeps its general Open
 
 Start with `gpt_image_list_models`; it reads local metadata and sends no generation request. Choose a listed model explicitly before a paid generation. For example, after approving the current price and budget, ask the client to call `gpt_image_generate` with `prompt`, `model: "gpt-image-2"` and `async: true`. Editing uses `gpt_image_edit` with an ordered URL list in `image`.
 
-For generation and editing, GPT Image models accept `quality: "auto"`, `"low"`, `"medium"` or `"high"`. Use `"xhigh"` or `"max"` only with `gpt-image-2.5-flare` or `gpt-image-2.5-sunburst`, including their `:reverse` and `:official` variants. Official variants bill actual token usage, not the pre-request estimate.
+For generation and editing, GPT Image models accept `quality: "auto"`, `"low"`, `"medium"` or `"high"`. Use `"xhigh"` or `"max"` only with GPT Image 2.5 or 2.6 Flare/Sunburst, including their `:reverse` and `:official` variants. Official variants bill actual token usage, not the pre-request estimate.
 
-To explicitly select reverse mode, pass `model: "gpt-image-2.5-flare:reverse"` or `model: "gpt-image-2.5-sunburst:reverse"` unchanged to either generate or edit; these are aliases of the unsuffixed models. GPT Image 2/2.5 unsuffixed and `:reverse` models bill per successful image (base price **0.19 Credits/image**; verify current account pricing and usage). During recovery the API may fulfill reverse requests with compatible GPT Image 2.5 Flare while retaining the requested model and per-image billing.
+To explicitly select reverse mode, pass `model: "gpt-image-2.5-flare:reverse"` or `model: "gpt-image-2.5-sunburst:reverse"` unchanged to either generate or edit; these are aliases of the unsuffixed models. GPT Image 2/2.5 unsuffixed and `:reverse` models bill per successful image (base price **0.19 Credits/image**; verify current account pricing and usage). During recovery the API may fulfill 2.0/2.5 reverse requests with compatible GPT Image 2.5 Flare while retaining the requested model and per-image billing.
 
 Save the returned `task_id`. Call `gpt_image_get_task` with that same `id` until a terminal result is present; inspect the returned `response`/media links and error if any. A `pending` task or a green client message is not a completed image. Never rerun generation merely to poll. Querying another task ID does not grant generation permission.
 
@@ -66,3 +66,5 @@ No paid generation was performed for this guide. Local protocol tests use mocked
 这是 Ace Data Cloud 提供的 GPT Image 独立工具入口，复用现有 OpenAIMCP 的接口、错误与任务查询实现，不是把通用服务器换个名字重复上架。2026-10-19已从官方目录和公开PyPI读回匹配版本2026.10.18.2；目录已收录不代表所有客户端普通安装或收费结果都已验证。
 
 进入 **Applications → General application** 复制或创建专用 API Token，核对权限、余额及当前价格。目录客户端按包字段安装；手动客户端使用上面的 `--profile gpt-image`，将原始 Token 放进 `ACEDATACLOUD_API_TOKEN`。先调用免费本地模型说明；收费生成需要明确选择模型和预算。拿到 `task_id` 后只查同一 ID 到终态，不为轮询重复生成。
+
+GPT Image 2.6 adds `gpt-image-2.6-flare` and `gpt-image-2.6-sunburst`, each with `:reverse` and `:official` variants. Generation and edits accept `xhigh`/`max` with the same raster contract as 2.5. Plain/reverse variants cost 0.22 Credits per image; official variants use the same token rates as 2.5. SVG/GIF are not exposed.

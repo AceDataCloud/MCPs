@@ -49,7 +49,10 @@ async def openai_generate_image(
                 "'gpt-image-1.5', 'gpt-image-2', 'gpt-image-2.5-flare', "
                 "'gpt-image-2.5-flare:reverse', 'gpt-image-2.5-flare:official', "
                 "'gpt-image-2.5-sunburst', 'gpt-image-2.5-sunburst:reverse', "
-                "'gpt-image-2.5-sunburst:official', 'dall-e-3', 'dall-e-2', "
+                "'gpt-image-2.5-sunburst:official', 'gpt-image-2.6-flare', "
+                "'gpt-image-2.6-flare:reverse', 'gpt-image-2.6-flare:official', "
+                "'gpt-image-2.6-sunburst', 'gpt-image-2.6-sunburst:reverse', "
+                "'gpt-image-2.6-sunburst:official', 'dall-e-3', 'dall-e-2', "
                 "'nano-banana', 'nano-banana-2-lite', 'nano-banana-2', 'nano-banana-2.1', 'nano-banana-pro'. Nano Banana 2.1 has no ':official' variant. GPT Image ':official' variants use actual-token billing."
             )
         ),
@@ -59,7 +62,7 @@ async def openai_generate_image(
         Field(
             description=(
                 "Image dimensions as 'WIDTHxHEIGHT' or 'auto' (default). "
-                "GPT Image 2 and 2.5 models accept custom dimensions matching the format "
+                "GPT Image 2, 2.5 and 2.6 models accept custom dimensions matching the format "
                 "(multiples of 16, longer side ≤ 3840, total pixels 655,360–8,294,400, "
                 "aspect ratio ≤ 3:1). "
                 "Common presets — 1K: '1024x1024', '1536x1024', '1024x1536', "
@@ -76,7 +79,7 @@ async def openai_generate_image(
         Field(
             description=(
                 "Image quality. GPT Image: 'auto' (default), 'high', 'medium', 'low'. "
-                "Only 'gpt-image-2.5-flare' and 'gpt-image-2.5-sunburst' (including ':reverse' and ':official') "
+                "GPT Image 2.5 and 2.6 Flare/Sunburst (including ':reverse' and ':official') "
                 "also support 'xhigh' and 'max'. Official variants bill actual token usage. "
                 "dall-e-3: 'hd' or 'standard'; dall-e-2: 'standard' only."
             )
@@ -242,7 +245,10 @@ async def openai_edit_image(
                 "'gpt-image-1.5', 'gpt-image-2', 'gpt-image-2.5-flare', "
                 "'gpt-image-2.5-flare:reverse', 'gpt-image-2.5-flare:official', "
                 "'gpt-image-2.5-sunburst', 'gpt-image-2.5-sunburst:reverse', "
-                "'gpt-image-2.5-sunburst:official', 'dall-e-3', and 'nano-banana' variants including 'nano-banana-2.1' (no ':official' variant)."
+                "'gpt-image-2.5-sunburst:official', 'gpt-image-2.6-flare', "
+                "'gpt-image-2.6-flare:reverse', 'gpt-image-2.6-flare:official', "
+                "'gpt-image-2.6-sunburst', 'gpt-image-2.6-sunburst:reverse', "
+                "'gpt-image-2.6-sunburst:official', 'dall-e-3', and 'nano-banana' variants including 'nano-banana-2.1' (no ':official' variant)."
             )
         ),
     ] = "dall-e-3",
@@ -251,7 +257,7 @@ async def openai_edit_image(
         Field(
             description=(
                 "Output image dimensions as 'WIDTHxHEIGHT' or 'auto'. Default is 'auto'. "
-                "GPT Image 2 and 2.5 models accept custom dimensions (multiples of 16, longer side ≤ 3840, "
+                "GPT Image 2, 2.5 and 2.6 models accept custom dimensions (multiples of 16, longer side ≤ 3840, "
                 "total pixels 655,360–8,294,400, aspect ratio ≤ 3:1). Common presets — 1K: '1024x1024', '1536x1024', "
                 "'1024x1536', '1792x1024', '1024x1792'; 2K: '2048x2048', "
                 "'2048x1536', '1536x2048', '2048x1152', '1152x2048'; 4K: "
@@ -265,7 +271,7 @@ async def openai_edit_image(
         Field(
             description=(
                 "Output quality. GPT Image: 'auto' (default), 'high', 'medium', 'low'. "
-                "Only 'gpt-image-2.5-flare' and 'gpt-image-2.5-sunburst' (including ':reverse' and ':official') "
+                "GPT Image 2.5 and 2.6 Flare/Sunburst (including ':reverse' and ':official') "
                 "also support 'xhigh' and 'max'. Official variants bill actual token usage. "
                 "dall-e-2: 'standard' only."
             )
