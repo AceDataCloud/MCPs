@@ -69,3 +69,22 @@ async def test_openai_list_image_models_names_all_gpt_image_2_5_variants():
     assert "including :reverse and :official" in text
     assert "gpt-image-2.5 |" not in text
     assert "gpt-image-2.5:reverse" not in text
+
+
+@pytest.mark.asyncio
+async def test_image_model_guide_covers_gpt_image_2_6_contract():
+    text = await info_tools.openai_list_image_models()
+
+    assert "GPT Image 2/2.5/2.6 custom dimensions" in text
+    assert "GPT Image 2.5/2.6 Flare/Sunburst only" in text
+    assert (
+        "GPT Image 2.6 unsuffixed models and their :reverse aliases bill per successful image"
+        in text
+    )
+    assert "0.22 Credits/image" in text
+    assert "2.0/2.5 reverse requests may be fulfilled" in text
+    assert "GPT Image 2.6 has no cross-model fallback" in text
+    assert "same token rates as 2.5" in text
+    assert "not fixed per-image charges" in text
+    assert "PNG/JPEG/WebP only" in text
+    assert "not gpt-image-2.6 or a bare :reverse/:official alias" in text

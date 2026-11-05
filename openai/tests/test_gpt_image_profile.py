@@ -49,6 +49,9 @@ async def test_dispatch_preserves_model_async_and_task_submission(model):
     "model",
     [
         "gpt-image-2.5-flare:official",
+        "gpt-image-2.6-flare",
+        "gpt-image-2.6-sunburst",
+        "gpt-image-2.6-sunburst:official",
         "gpt-image-2.6-flare:official",
         "gpt-image-2.5-flare:reverse",
         "gpt-image-2.6-flare:reverse",
@@ -82,6 +85,9 @@ async def test_other_models_and_missing_model_fail_before_api():
         for arguments in (
             {"prompt": "fixture", "model": "nano-banana"},
             {"prompt": "fixture", "model": "gpt-image-2.5:reverse"},
+            {"prompt": "fixture", "model": "gpt-image-2.6"},
+            {"prompt": "fixture", "model": "gpt-image-2.6:reverse"},
+            {"prompt": "fixture", "model": "gpt-image-2.6:official"},
             {"prompt": "fixture"},
         ):
             with pytest.raises(ToolError):

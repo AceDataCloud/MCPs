@@ -149,17 +149,17 @@ async def openai_list_image_models() -> str:
 | 256x256     | 1:1             | Small, legacy (dall-e-2)     |
 | 512x512     | 1:1             | Medium, legacy (dall-e-2)    |
 | auto        | Varies          | Model chooses                |
-| WIDTHxHEIGHT | Custom         | GPT Image 2/2.5: valid dims |
+| WIDTHxHEIGHT | Custom         | GPT Image 2/2.5/2.6: valid dims |
 
-**GPT Image 2/2.5 custom dimensions**: multiples of 16, longer side ≤ 3840, total pixels 655,360–8,294,400, aspect ratio ≤ 3:1.
+**GPT Image 2/2.5/2.6 custom dimensions**: multiples of 16, longer side ≤ 3840, total pixels 655,360–8,294,400, aspect ratio ≤ 3:1.
 
 ## Quality Options
 | Quality   | Description                                    |
 |-----------|------------------------------------------------|
 | auto      | Model chooses quality (default)                |
 | high      | High quality                                   |
-| xhigh     | GPT Image 2.5 Flare/Sunburst only (including :reverse and :official) |
-| max       | GPT Image 2.5 Flare/Sunburst only (including :reverse and :official) |
+| xhigh     | GPT Image 2.5/2.6 Flare/Sunburst only (including :reverse and :official) |
+| max       | GPT Image 2.5/2.6 Flare/Sunburst only (including :reverse and :official) |
 | medium    | Balanced quality/speed                         |
 | low       | Faster, lower quality                          |
 | hd        | High detail (dall-e-3 only)                    |
@@ -167,9 +167,15 @@ async def openai_list_image_models() -> str:
 
 GPT Image 2/2.5 unsuffixed models and their :reverse aliases bill per successful image
 (base price: 0.19 Credits/image; check current account pricing and usage).
-Reverse requests may be fulfilled by compatible GPT Image 2.5 Flare during recovery;
+2.0/2.5 reverse requests may be fulfilled by compatible GPT Image 2.5 Flare during recovery;
 the requested model and per-image billing stay unchanged.
-GPT Image official variants bill actual token usage.
+GPT Image 2.6 unsuffixed models and their :reverse aliases bill per successful image
+(base price: 0.22 Credits/image), even when token statistics are returned.
+Use complete gpt-image-2.6-flare or gpt-image-2.6-sunburst IDs and their listed variants,
+not gpt-image-2.6 or a bare :reverse/:official alias.
+GPT Image 2.6 has no cross-model fallback. Output is PNG/JPEG/WebP only, not SVG/GIF.
+GPT Image official variants bill actual token usage; 2.6 uses the same token rates as 2.5.
+Pre-request estimates are not fixed per-image charges; check current pricing and usage.
 """
 
 
