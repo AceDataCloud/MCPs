@@ -41,7 +41,7 @@ The Platform catalog hides OpenAI image API/model entries and companion image gu
 
 For generation and editing, GPT Image models accept `quality: "auto"`, `"low"`, `"medium"` or `"high"`. GPT Image 2.5 and 2.6 Flare/Sunburst, including their `:reverse` and `:official` variants, additionally accept `"xhigh"` and `"max"`. Official variants bill actual token usage; check current pricing and usage rather than treating a pre-request estimate as the final charge. DALL-E 3 generation accepts `"hd"` or `"standard"`; DALL-E 2 accepts only `"standard"`.
 
-`gpt-image-2.5-flare:reverse` and `gpt-image-2.5-sunburst:reverse` are explicit aliases of their unsuffixed models for both generation and editing. Keep the full requested name. GPT Image 2/2.5/2.6 unsuffixed and `:reverse` models bill per successful image at a base price of **0.19 Credits/image**; account discounts and final charges follow current pricing and usage records. During recovery, 2.0/2.5 reverse requests may be fulfilled by compatible GPT Image 2.5 Flare without changing the requested model or per-image billing.
+`gpt-image-2.5-flare:reverse` and `gpt-image-2.5-sunburst:reverse` are explicit aliases of their unsuffixed models for both generation and editing. Keep the full requested name. GPT Image 2/2.5 unsuffixed and `:reverse` models bill per successful image at a base price of **0.19 Credits/image**; account discounts and final charges follow current pricing and usage records. During recovery, 2.0/2.5 reverse requests may be fulfilled by compatible GPT Image 2.5 Flare without changing the requested model or per-image billing.
 
 ## Chat and Responses billing
 
@@ -347,4 +347,4 @@ streaming, use the HTTP API directly.
 has a two-second server budget and may fall back to a lower bound; inspect the returned
 pagination metadata. GPT Image edit prompts allow up to 32000 characters (1000 for dall-e-2).
 
-GPT Image 2.6 adds `gpt-image-2.6-flare` and `gpt-image-2.6-sunburst`, each with `:reverse` and `:official` variants. Generation and edits accept `xhigh`/`max` with the same raster contract as 2.5. Plain/reverse variants cost 0.19 Credits per image; official variants use the same token rates as 2.5. SVG/GIF are not exposed.
+GPT Image 2.6 adds `gpt-image-2.6-flare` and `gpt-image-2.6-sunburst`, each with `:reverse` and `:official` variants. Generation and edits accept `xhigh`/`max` with the same raster contract as 2.5. Plain/reverse variants cost 0.22 Credits per image; official variants use the same token rates as 2.5. SVG/GIF are not exposed.
