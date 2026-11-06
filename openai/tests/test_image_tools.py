@@ -399,3 +399,76 @@ async def test_dispatch_rejects_unsupported_image_models(monkeypatch, tool_name,
         arguments["image"] = "https://example.com/base.png"
     with pytest.raises(ToolError):
         await mcp.call_tool(tool_name, arguments)
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize(
+    "model",
+    [
+        "gpt-image-2.6-flare",
+        "gpt-image-2.6-flare:reverse",
+        "gpt-image-2.6-flare:official",
+        "gpt-image-2.6-sunburst:official",
+    ],
+)
+@pytest.mark.parametrize("edit", [False, True])
+async def test_native_gif_controls_reach_generation_and_edit(monkeypatch, model, edit):
+    captured = {}
+
+    async def submit(**kwargs):
+        captured.update(kwargs)
+        return {"task_id": "gif-task"}
+
+    method = "images_edits_async" if edit else "images_generations_async"
+    monkeypatch.setattr(image_tools.client, method, submit)
+    tool = image_tools.openai_edit_image if edit else image_tools.openai_generate_image
+    args = {
+        "model": model,
+        "prompt": "animate",
+        "output_format": "gif",
+        "frame_count": 9,
+        "frame_duration_ms": 200,
+    }
+    if edit:
+        args["image"] = "https://example.com/reference.png"
+    await tool(**args)
+    assert captured["output_format"] == "gif"
+    assert captured["frame_count"] == 9
+    assert captured["frame_duration_ms"] == 200
+    assert captured["size"] == "auto"
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize(
+    "model", ["gpt-image-2.6-sunburst", "gpt-image-2.6-sunburst:reverse", "gpt-image-2.5-flare"]
+)
+async def test_unsupported_gif_model_is_rejected_without_generation(monkeypatch, model):
+    async def unexpected(**_kwargs):
+        pytest.fail("unsupported model must not submit a generation")
+
+    monkeypatch.setattr(image_tools.client, "images_generations_async", unexpected)
+    result = await image_tools.openai_generate_image(
+        prompt="animate", model=model, output_format="gif"
+    )
+    assert json.loads(result)["code"] == "validation_error"
+
+
+@pytest.mark.asyncio
+async def test_frame_controls_require_gif(monkeypatch):
+    async def unexpected(**_kwargs):
+        pytest.fail("invalid frame settings must not submit a generation")
+
+    monkeypatch.setattr(image_tools.client, "images_generations_async", unexpected)
+    result = await image_tools.openai_generate_image(
+        prompt="image", model="gpt-image-2.6-flare", frame_count=9
+    )
+    assert json.loads(result)["code"] == "validation_error"
+
+
+def test_image_tool_schema_exposes_native_gif_controls():
+    for tool in mcp._tool_manager.list_tools():
+        if tool.name not in {"openai_generate_image", "openai_edit_image"}:
+            continue
+        fields = tool.parameters["properties"]
+        assert "gif" in fields["output_format"]["enum"]
+        assert "frame_count" in fields and "frame_duration_ms" in fields

@@ -86,5 +86,7 @@ async def test_image_model_guide_covers_gpt_image_2_6_contract():
     assert "GPT Image 2.6 has no cross-model fallback" in text
     assert "same token rates as 2.5" in text
     assert "not fixed per-image charges" in text
-    assert "PNG/JPEG/WebP only" in text
+    assert "Static PNG/JPEG/WebP" in text
+    assert "Native GIF generation/editing" in text
+    assert "Ordinary/reverse Sunburst GIF is not available" in text
     assert "not gpt-image-2.6 or a bare :reverse/:official alias" in text
