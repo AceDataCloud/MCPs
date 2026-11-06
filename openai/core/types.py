@@ -211,6 +211,8 @@ GIF_IMAGE_MODELS = frozenset(
         "gpt-image-2.6-flare",
         "gpt-image-2.6-flare:reverse",
         "gpt-image-2.6-flare:official",
+        "gpt-image-2.6-sunburst",
+        "gpt-image-2.6-sunburst:reverse",
         "gpt-image-2.6-sunburst:official",
     }
 )

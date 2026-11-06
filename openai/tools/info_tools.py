@@ -175,7 +175,9 @@ Use complete gpt-image-2.6-flare or gpt-image-2.6-sunburst IDs and their listed 
 not gpt-image-2.6 or a bare :reverse/:official alias.
 GPT Image 2.6 has no cross-model fallback. Static PNG/JPEG/WebP generation and editing support 4K pixel presets.
 Native GIF generation/editing is available for gpt-image-2.6-flare, its :reverse/:official variants,
-and gpt-image-2.6-sunburst:official. Ordinary/reverse Sunburst GIF is not available.
+and gpt-image-2.6-sunburst with :reverse/:official variants.
+GIF accepts 2-16 frames and a 20-655350ms frame delay (rounded to 10ms).
+GPT Image 2.6 accepts complexity=low/medium/high; static edits support transparent PNG markup matching the first reference.
 GIF uses a 512x512 preview when size is omitted or auto, with frame_count=9 and frame_duration_ms=200 by default.
 Models may adjust actual GIF dimensions; the static 4K size contract does not apply to GIF. SVG is not supported.
 GPT Image official variants bill actual token usage; 2.6 uses the same token rates as 2.5.

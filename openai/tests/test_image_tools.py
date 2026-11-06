@@ -408,6 +408,8 @@ async def test_dispatch_rejects_unsupported_image_models(monkeypatch, tool_name,
         "gpt-image-2.6-flare",
         "gpt-image-2.6-flare:reverse",
         "gpt-image-2.6-flare:official",
+        "gpt-image-2.6-sunburst",
+        "gpt-image-2.6-sunburst:reverse",
         "gpt-image-2.6-sunburst:official",
     ],
 )
@@ -439,9 +441,7 @@ async def test_native_gif_controls_reach_generation_and_edit(monkeypatch, model,
 
 
 @pytest.mark.asyncio
-@pytest.mark.parametrize(
-    "model", ["gpt-image-2.6-sunburst", "gpt-image-2.6-sunburst:reverse", "gpt-image-2.5-flare"]
-)
+@pytest.mark.parametrize("model", ["gpt-image-2", "gpt-image-2.5-sunburst", "gpt-image-2.5-flare"])
 async def test_unsupported_gif_model_is_rejected_without_generation(monkeypatch, model):
     async def unexpected(**_kwargs):
         pytest.fail("unsupported model must not submit a generation")
@@ -472,3 +472,60 @@ def test_image_tool_schema_exposes_native_gif_controls():
         fields = tool.parameters["properties"]
         assert "gif" in fields["output_format"]["enum"]
         assert "frame_count" in fields and "frame_duration_ms" in fields
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize(
+    "extra",
+    [
+        {"frame_count": 1},
+        {"frame_count": 17},
+        {"frame_duration_ms": 19},
+        {"frame_duration_ms": 655351},
+    ],
+)
+async def test_invalid_gif_boundaries_never_submit(monkeypatch, extra):
+    async def unexpected(**_kwargs):
+        pytest.fail("must reject before charging")
+
+    monkeypatch.setattr(image_tools.client, "images_generations_async", unexpected)
+    result = await image_tools.openai_generate_image(
+        prompt="animate", model="gpt-image-2.6-sunburst", output_format="gif", **extra
+    )
+    assert json.loads(result)["code"] == "validation_error"
+
+
+@pytest.mark.asyncio
+async def test_markup_and_complexity_survive_edit_tool(monkeypatch):
+    captured = {}
+
+    async def submit(**kwargs):
+        captured.update(kwargs)
+        return {"task_id": "same-task"}
+
+    monkeypatch.setattr(image_tools.client, "images_edits_async", submit)
+    await image_tools.openai_edit_image(
+        image="https://example.test/base.png",
+        prompt="edit",
+        model="gpt-image-2.6-flare",
+        complexity="low",
+        markup="https://example.test/markup.png",
+    )
+    assert captured["complexity"] == "low"
+    assert captured["markup"] == "https://example.test/markup.png"
+
+
+@pytest.mark.asyncio
+async def test_markup_rejects_gif_before_submission(monkeypatch):
+    async def unexpected(**_kwargs):
+        pytest.fail("must not submit an unsupported annotation")
+
+    monkeypatch.setattr(image_tools.client, "images_edits_async", unexpected)
+    result = await image_tools.openai_edit_image(
+        image="https://example.test/base.png",
+        prompt="edit",
+        model="gpt-image-2.6-flare",
+        output_format="gif",
+        markup="https://example.test/markup.png",
+    )
+    assert json.loads(result)["code"] == "validation_error"

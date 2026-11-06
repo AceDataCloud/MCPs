@@ -88,5 +88,7 @@ async def test_image_model_guide_covers_gpt_image_2_6_contract():
     assert "not fixed per-image charges" in text
     assert "Static PNG/JPEG/WebP" in text
     assert "Native GIF generation/editing" in text
-    assert "Ordinary/reverse Sunburst GIF is not available" in text
+    assert "gpt-image-2.6-sunburst with :reverse/:official variants" in text
+    assert "2-16 frames" in text
+    assert "complexity=low/medium/high" in text
     assert "not gpt-image-2.6 or a bare :reverse/:official alias" in text

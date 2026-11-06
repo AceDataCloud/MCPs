@@ -71,6 +71,8 @@ GPT Image 2.6 adds `gpt-image-2.6-flare` and `gpt-image-2.6-sunburst`, each with
 
 ### GPT Image 2.6 GIF and 4K
 
-Native `output_format: "gif"` is available for `gpt-image-2.6-flare`, its `:reverse` and `:official` variants, and `gpt-image-2.6-sunburst:official`, for generation and reference-image editing. Ordinary/reverse Sunburst GIF remains unavailable. Set optional `frame_count` and `frame_duration_ms` to positive integers; the API defaults to 9 frames, 200 ms per frame and a 512x512 preview when size is omitted or auto. Actual GIF dimensions may be adjusted by the model.
+Native `output_format: "gif"` is available for `gpt-image-2.6-flare`, its `:reverse` and `:official` variants, and all `gpt-image-2.6-sunburst` variants, for generation and reference-image editing.  Set `frame_count` to 2–16 and `frame_duration_ms` to 20–655350 milliseconds; the API defaults to 9 frames, 200 ms per frame and a 512x512 preview when size is omitted or auto. Actual GIF dimensions may be adjusted by the model.
 
 Use a static PNG/JPEG/WebP format for 4K, with pixel dimensions such as `3840x2160` or `2160x3840`. Both 2.6 models and their listed billing variants support these static generation/edit presets. GIF has separate size/frame constraints.
+
+GPT Image 2.6 supports `complexity="low"|"medium"|"high"` (omitted: model default high). Static edits accept `markup`: a PNG with transparent pixels, matching the first reference after orientation, up to 16,777,216 pixels per image and 40MB for the annotation. JSON accepts an HTTPS URL, PNG data URL or an object containing only `image_url`; multipart accepts an annotation file. Do not combine markup with mask, GIF or prompt_rewriter. GIF frame count is 2–16; frame duration is 20–655350ms, rounded to 10ms. GIF rejects masks, custom compression and partial streaming. Pricing is unchanged.
