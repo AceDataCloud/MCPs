@@ -898,7 +898,7 @@
           },
           "size": {
             "default": "auto",
-            "description": "Image dimensions as 'WIDTHxHEIGHT' or 'auto' (default). GPT Image 2, 2.5 and 2.6 models accept custom dimensions matching the format (multiples of 16, longer side ≤ 3840, total pixels 655,360–8,294,400, aspect ratio ≤ 3:1). Common presets — 1K: '1024x1024', '1536x1024', '1024x1536', '1792x1024', '1024x1792'; 2K: '2048x2048', '2048x1536', '1536x2048', '2048x1152', '1152x2048'; 4K: '2880x2880', '3264x2448', '2448x3264', '3840x2160', '2160x3840'. dall-e-2: '256x256', '512x512', '1024x1024'. dall-e-3: '1024x1024', '1792x1024', '1024x1792'.",
+            "description": "Image dimensions as 'WIDTHxHEIGHT' or 'auto' (default). GPT Image 2, 2.5 and 2.6 models accept custom dimensions matching the format (multiples of 16, longer side ≤ 3840, total pixels 655,360–8,294,400, aspect ratio ≤ 3:1). Common presets — 1K: '1024x1024', '1536x1024', '1024x1536', '1792x1024', '1024x1792'; 2K: '2048x2048', '2048x1536', '1536x2048', '2048x1152', '1152x2048'; 4K: '2880x2880', '3264x2448', '2448x3264', '3840x2160', '2160x3840'. dall-e-2: '256x256', '512x512', '1024x1024'. dall-e-3: '1024x1024', '1792x1024', '1024x1792'. These GPT Image limits apply to static images. GIF uses a 512x512 preview when size is auto; size, frame count and n share a separate model pixel budget.",
             "title": "Size",
             "type": "string"
           },
@@ -918,6 +918,24 @@
             "title": "Quality",
             "type": "string"
           },
+          "complexity": {
+            "anyOf": [
+              {
+                "enum": [
+                  "low",
+                  "medium",
+                  "high"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "GPT Image 2.6 only: planning complexity, independent of quality, with no separate surcharge. Omit for model default high; official variants still bill actual tokens.",
+            "title": "Complexity"
+          },
           "n": {
             "anyOf": [
               {
@@ -928,19 +946,50 @@
               }
             ],
             "default": null,
-            "description": "Number of images to generate (1-10). Default is 1.",
+            "description": "Number of output files (1-10), not GIF frames. Default is 1.",
             "title": "N"
           },
           "output_format": {
             "default": "png",
-            "description": "Output file format. Options: 'png' (default), 'jpeg', 'webp'.",
+            "description": "Output format: png (default), jpeg, webp; gif for GPT Image 2.6 Flare/Sunburst (standard/reverse/official). GIF defaults to a 512x512 preview, 9 frames, 200ms per frame; static 4K sizes do not apply to GIF.",
             "enum": [
               "png",
               "jpeg",
-              "webp"
+              "webp",
+              "gif"
             ],
             "title": "Output Format",
             "type": "string"
+          },
+          "frame_count": {
+            "anyOf": [
+              {
+                "maximum": 16,
+                "minimum": 2,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "GIF frame count, 2-16. Defaults to 9.",
+            "title": "Frame Count"
+          },
+          "frame_duration_ms": {
+            "anyOf": [
+              {
+                "maximum": 655350,
+                "minimum": 20,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "GIF frame duration in milliseconds, 20-655350; rounded to 10ms. Defaults to 200.",
+            "title": "Frame Duration Ms"
           },
           "response_format": {
             "default": "url",
@@ -1143,7 +1192,7 @@
           },
           "size": {
             "default": "auto",
-            "description": "Output image dimensions as 'WIDTHxHEIGHT' or 'auto'. Default is 'auto'. GPT Image 2, 2.5 and 2.6 models accept custom dimensions (multiples of 16, longer side ≤ 3840, total pixels 655,360–8,294,400, aspect ratio ≤ 3:1). Common presets — 1K: '1024x1024', '1536x1024', '1024x1536', '1792x1024', '1024x1792'; 2K: '2048x2048', '2048x1536', '1536x2048', '2048x1152', '1152x2048'; 4K: '2880x2880', '3264x2448', '2448x3264', '3840x2160', '2160x3840'. dall-e-2: '256x256', '512x512', '1024x1024'.",
+            "description": "Output image dimensions as 'WIDTHxHEIGHT' or 'auto'. Default is 'auto'. GPT Image 2, 2.5 and 2.6 models accept custom dimensions (multiples of 16, longer side ≤ 3840, total pixels 655,360–8,294,400, aspect ratio ≤ 3:1). Common presets — 1K: '1024x1024', '1536x1024', '1024x1536', '1792x1024', '1024x1792'; 2K: '2048x2048', '2048x1536', '1536x2048', '2048x1152', '1152x2048'; 4K: '2880x2880', '3264x2448', '2448x3264', '3840x2160', '2160x3840'. dall-e-2: '256x256', '512x512', '1024x1024'. These GPT Image limits apply to static images. GIF uses a 512x512 preview when size is auto; size, frame count and n share a separate model pixel budget.",
             "title": "Size",
             "type": "string"
           },
@@ -1162,6 +1211,24 @@
             "title": "Quality",
             "type": "string"
           },
+          "complexity": {
+            "anyOf": [
+              {
+                "enum": [
+                  "low",
+                  "medium",
+                  "high"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "GPT Image 2.6 only: planning complexity, independent of quality, with no separate surcharge. Omit for model default high; official variants still bill actual tokens.",
+            "title": "Complexity"
+          },
           "n": {
             "anyOf": [
               {
@@ -1172,7 +1239,7 @@
               }
             ],
             "default": null,
-            "description": "Number of images to generate (1-10). Default is 1.",
+            "description": "Number of output files (1-10), not GIF frames. Default is 1.",
             "title": "N"
           },
           "background": {
@@ -1193,6 +1260,22 @@
             "description": "Background handling. 'transparent' removes background, 'opaque' keeps it, 'auto' decides automatically.",
             "title": "Background"
           },
+          "markup": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/$defs/ImageMarkup"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "GPT Image 2.6 static edit annotation: HTTPS URL, PNG data URL or an object containing only image_url. PNG must contain transparent pixels and match the first reference after orientation; each image ≤ 16,777,216 pixels, annotation ≤ 40MB. Cannot combine with mask, GIF or prompt_rewriter; file_id is unsupported.",
+            "title": "Markup"
+          },
           "input_fidelity": {
             "anyOf": [
               {
@@ -1212,14 +1295,45 @@
           },
           "output_format": {
             "default": "png",
-            "description": "Output file format. Options: 'png' (default), 'jpeg', 'webp'.",
+            "description": "Output format: png (default), jpeg, webp; gif for GPT Image 2.6 Flare/Sunburst (standard/reverse/official). GIF defaults to a 512x512 preview, 9 frames, 200ms per frame; static 4K sizes do not apply to GIF.",
             "enum": [
               "png",
               "jpeg",
-              "webp"
+              "webp",
+              "gif"
             ],
             "title": "Output Format",
             "type": "string"
+          },
+          "frame_count": {
+            "anyOf": [
+              {
+                "maximum": 16,
+                "minimum": 2,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "GIF frame count, 2-16. Defaults to 9.",
+            "title": "Frame Count"
+          },
+          "frame_duration_ms": {
+            "anyOf": [
+              {
+                "maximum": 655350,
+                "minimum": 20,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "GIF frame duration in milliseconds, 20-655350; rounded to 10ms. Defaults to 200.",
+            "title": "Frame Duration Ms"
           },
           "response_format": {
             "default": "url",
@@ -1269,6 +1383,22 @@
             "default": null,
             "description": "Whether to process the request asynchronously.",
             "title": "Async"
+          }
+        },
+        "$defs": {
+          "ImageMarkup": {
+            "additionalProperties": false,
+            "properties": {
+              "image_url": {
+                "title": "Image Url",
+                "type": "string"
+              }
+            },
+            "required": [
+              "image_url"
+            ],
+            "title": "ImageMarkup",
+            "type": "object"
           }
         },
         "required": [

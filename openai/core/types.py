@@ -2,7 +2,7 @@
 
 from typing import Annotated, Literal
 
-from pydantic import Field
+from pydantic import BaseModel, ConfigDict, Field
 
 # Chat completion model options
 ChatModel = Literal[
@@ -228,6 +228,13 @@ ImageBackground = Literal["transparent", "opaque", "auto"]
 
 # Image moderation options
 ImageModeration = Literal["low", "auto"]
+
+
+class ImageMarkup(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    image_url: str
+
 
 # Image input fidelity options
 ImageInputFidelity = Literal["high", "low"]
