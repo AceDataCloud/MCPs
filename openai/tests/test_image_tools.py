@@ -516,6 +516,190 @@ async def test_markup_and_complexity_survive_edit_tool(monkeypatch):
 
 
 @pytest.mark.asyncio
+@pytest.mark.parametrize("profile", [False, True])
+@pytest.mark.parametrize("edit", [False, True])
+@pytest.mark.parametrize(
+    "model",
+    [
+        "gpt-image-2.6-flare",
+        "gpt-image-2.6-flare:reverse",
+        "gpt-image-2.6-flare:official",
+        "gpt-image-2.6-sunburst",
+        "gpt-image-2.6-sunburst:reverse",
+        "gpt-image-2.6-sunburst:official",
+    ],
+)
+async def test_gif_dispatch_preserves_public_contract(monkeypatch, profile, edit, model):
+    from gpt_image_tools import create_server
+
+    server = create_server() if profile else mcp
+    name = (
+        ("gpt_image_edit" if edit else "gpt_image_generate")
+        if profile
+        else ("openai_edit_image" if edit else "openai_generate_image")
+    )
+    captured = {}
+
+    async def request(endpoint, payload):
+        assert endpoint == f"/openai/images/{'edits' if edit else 'generations'}"
+        captured.update(payload)
+        return {"task_id": "gif-task"}
+
+    monkeypatch.setattr(image_tools.client, "request", request)
+    arguments = {
+        "model": model,
+        "prompt": "animate",
+        "output_format": "gif",
+        "size": "512x512",
+        "frame_count": 9,
+        "frame_duration_ms": 205,
+        "complexity": "medium",
+        "n": 2,
+        "async": True,
+    }
+    if edit:
+        arguments["image"] = "https://example.test/base.png"
+    await server.call_tool(name, arguments)
+    assert captured == {**arguments, "quality": "auto", "response_format": "url"}
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("profile", [False, True])
+@pytest.mark.parametrize("complexity", ["low", "medium", "high"])
+@pytest.mark.parametrize(
+    "markup",
+    [
+        "https://example.test/markup.png",
+        "data:image/png;base64,fixture",
+        {"image_url": "https://example.test/markup.png"},
+    ],
+)
+async def test_markup_dispatch_keeps_json_shape(monkeypatch, profile, complexity, markup):
+    from gpt_image_tools import create_server
+
+    captured = {}
+
+    async def request(endpoint, payload):
+        assert endpoint == "/openai/images/edits"
+        captured.update(payload)
+        return {"task_id": "same-task"}
+
+    monkeypatch.setattr(image_tools.client, "request", request)
+    server = create_server() if profile else mcp
+    await server.call_tool(
+        "gpt_image_edit" if profile else "openai_edit_image",
+        {
+            "model": "gpt-image-2.6-sunburst:official",
+            "prompt": "edit the marked region",
+            "image": ["https://example.test/base.png", "https://example.test/ref.png"],
+            "markup": markup,
+            "complexity": complexity,
+            "size": "3840x2160",
+        },
+    )
+    assert captured["markup"] == markup
+    assert captured["complexity"] == complexity
+    assert captured["size"] == "3840x2160"
+    assert captured["async"] is True
+    assert "input_fidelity" not in captured
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("markup", [{}, {"file_id": "file-1"}, {"image_url": "url", "extra": 1}])
+@pytest.mark.parametrize("profile", [False, True])
+async def test_markup_dispatch_rejects_non_contract_objects(monkeypatch, profile, markup):
+    from gpt_image_tools import create_server
+
+    async def unexpected(*_args, **_kwargs):
+        pytest.fail("invalid markup must not reach the API")
+
+    monkeypatch.setattr(image_tools.client, "request", unexpected)
+    server = create_server() if profile else mcp
+    with pytest.raises(ToolError):
+        await server.call_tool(
+            "gpt_image_edit" if profile else "openai_edit_image",
+            {
+                "model": "gpt-image-2.6-flare",
+                "prompt": "edit",
+                "image": "https://example.test/base.png",
+                "markup": markup,
+            },
+        )
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("tool_name", ["openai_generate_image", "openai_edit_image"])
+@pytest.mark.parametrize(
+    "extra",
+    [
+        {"output_format": "gif", "output_compression": 80},
+        {"model": "gpt-image-2.5-flare", "complexity": "low"},
+        {"frame_duration_ms": 200},
+    ],
+)
+async def test_incompatible_image_controls_never_submit(monkeypatch, tool_name, extra):
+    async def unexpected(*_args, **_kwargs):
+        pytest.fail("incompatible controls must not reach the API")
+
+    monkeypatch.setattr(image_tools.client, "request", unexpected)
+    arguments = {"model": "gpt-image-2.6-flare", "prompt": "test", **extra}
+    if tool_name == "openai_edit_image":
+        arguments["image"] = "https://example.test/base.png"
+    content, _ = await mcp.call_tool(tool_name, arguments)
+    assert json.loads(content[0].text)["code"] == "validation_error"
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("partial_images", [0, 1, 3])
+@pytest.mark.parametrize("profile", [False, True])
+async def test_gif_rejects_partial_images_before_submission(monkeypatch, profile, partial_images):
+    from gpt_image_tools import create_server
+
+    async def unexpected(*_args, **_kwargs):
+        pytest.fail("GIF partial streaming must not reach the API")
+
+    monkeypatch.setattr(image_tools.client, "request", unexpected)
+    server = create_server() if profile else mcp
+    content, _ = await server.call_tool(
+        "gpt_image_generate" if profile else "openai_generate_image",
+        {
+            "model": "gpt-image-2.6-flare",
+            "prompt": "animate",
+            "output_format": "gif",
+            "partial_images": partial_images,
+        },
+    )
+    assert json.loads(content[0].text)["code"] == "validation_error"
+
+
+def test_image_listing_matches_changed_tool_fields():
+    manifest = json.loads((Path(__file__).parents[1] / "lobehub/lhm.plugin.json").read_text())
+    for tool in mcp._tool_manager.list_tools():
+        if tool.name not in {"openai_generate_image", "openai_edit_image"}:
+            continue
+        listing = next(entry for entry in manifest["tools"] if entry["name"] == tool.name)
+        for field in (
+            "size",
+            "n",
+            "output_format",
+            "frame_count",
+            "frame_duration_ms",
+            "complexity",
+            "markup",
+        ):
+            if field in tool.parameters["properties"]:
+                assert (
+                    listing["inputSchema"]["properties"][field]
+                    == tool.parameters["properties"][field]
+                )
+        if tool.name == "openai_edit_image":
+            markup = tool.parameters["$defs"]["ImageMarkup"]
+            assert markup["additionalProperties"] is False
+            assert markup["required"] == ["image_url"]
+            assert listing["inputSchema"]["$defs"]["ImageMarkup"] == markup
+
+
+@pytest.mark.asyncio
 async def test_markup_rejects_gif_before_submission(monkeypatch):
     async def unexpected(**_kwargs):
         pytest.fail("must not submit an unsupported annotation")

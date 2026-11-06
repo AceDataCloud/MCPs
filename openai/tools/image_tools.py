@@ -19,6 +19,7 @@ from core.types import (
     ImageEditQuality,
     ImageEditSize,
     ImageInputFidelity,
+    ImageMarkup,
     ImageModel,
     ImageModeration,
     ImageOutputFormat,
@@ -92,7 +93,9 @@ async def openai_generate_image(
                 "'1536x2048', '2048x1152', '1152x2048'; 4K: '2880x2880', "
                 "'3264x2448', '2448x3264', '3840x2160', '2160x3840'. "
                 "dall-e-2: '256x256', '512x512', '1024x1024'. "
-                "dall-e-3: '1024x1024', '1792x1024', '1024x1792'."
+                "dall-e-3: '1024x1024', '1792x1024', '1024x1792'. "
+                "These GPT Image limits apply to static images. GIF uses a 512x512 preview "
+                "when size is auto; size, frame count and n share a separate model pixel budget."
             )
         ),
     ] = DEFAULT_IMAGE_SIZE,
@@ -110,12 +113,12 @@ async def openai_generate_image(
     complexity: Annotated[
         Literal["low", "medium", "high"] | None,
         Field(
-            description="GPT Image 2.6 planning complexity, independent of quality. Omit for model default high."
+            description="GPT Image 2.6 only: planning complexity, independent of quality, with no separate surcharge. Omit for model default high; official variants still bill actual tokens."
         ),
     ] = None,
     n: Annotated[
         int | None,
-        Field(description="Number of images to generate (1-10). Default is 1."),
+        Field(description="Number of output files (1-10), not GIF frames. Default is 1."),
     ] = None,
     output_format: Annotated[
         ImageOutputFormat,
@@ -225,6 +228,8 @@ async def openai_generate_image(
             raise OpenAIError("complexity requires GPT Image 2.6.", code="validation_error")
         if output_format == "gif" and output_compression is not None:
             raise OpenAIError("GIF does not support output_compression.", code="validation_error")
+        if output_format == "gif" and partial_images is not None:
+            raise OpenAIError("GIF does not support partial_images.", code="validation_error")
         payload: dict[str, Any] = {
             "prompt": prompt,
             "model": model,
@@ -316,7 +321,9 @@ async def openai_edit_image(
                 "'1024x1536', '1792x1024', '1024x1792'; 2K: '2048x2048', "
                 "'2048x1536', '1536x2048', '2048x1152', '1152x2048'; 4K: "
                 "'2880x2880', '3264x2448', '2448x3264', '3840x2160', '2160x3840'. "
-                "dall-e-2: '256x256', '512x512', '1024x1024'."
+                "dall-e-2: '256x256', '512x512', '1024x1024'. "
+                "These GPT Image limits apply to static images. GIF uses a 512x512 preview "
+                "when size is auto; size, frame count and n share a separate model pixel budget."
             )
         ),
     ] = "auto",
@@ -334,12 +341,12 @@ async def openai_edit_image(
     complexity: Annotated[
         Literal["low", "medium", "high"] | None,
         Field(
-            description="GPT Image 2.6 planning complexity, independent of quality. Omit for model default high."
+            description="GPT Image 2.6 only: planning complexity, independent of quality, with no separate surcharge. Omit for model default high; official variants still bill actual tokens."
         ),
     ] = None,
     n: Annotated[
         int | None,
-        Field(description="Number of images to generate (1-10). Default is 1."),
+        Field(description="Number of output files (1-10), not GIF frames. Default is 1."),
     ] = None,
     background: Annotated[
         ImageBackground | None,
@@ -351,9 +358,14 @@ async def openai_edit_image(
         ),
     ] = None,
     markup: Annotated[
-        str | None,
+        str | ImageMarkup | None,
         Field(
-            description="GPT Image 2.6 static edit annotation: transparent PNG HTTPS URL or data URL, matching the first reference dimensions, maximum 40MB. Cannot combine with GIF."
+            description=(
+                "GPT Image 2.6 static edit annotation: HTTPS URL, PNG data URL or an object "
+                "containing only image_url. PNG must contain transparent pixels and match the "
+                "first reference after orientation; each image ≤ 16,777,216 pixels, annotation "
+                "≤ 40MB. Cannot combine with mask, GIF or prompt_rewriter; file_id is unsupported."
+            )
         ),
     ] = None,
     input_fidelity: Annotated[
@@ -450,7 +462,7 @@ async def openai_edit_image(
         }
 
         if markup is not None:
-            payload["markup"] = markup
+            payload["markup"] = markup.model_dump() if isinstance(markup, ImageMarkup) else markup
         if complexity is not None:
             payload["complexity"] = complexity
         if frame_count is not None:

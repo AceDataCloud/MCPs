@@ -355,4 +355,24 @@ Native `output_format: "gif"` is available for `gpt-image-2.6-flare`, its `:reve
 
 Use a static PNG/JPEG/WebP format for 4K, with pixel dimensions such as `3840x2160` or `2160x3840`. Both 2.6 models and their listed billing variants support these static generation/edit presets. GIF has separate size/frame constraints.
 
-GPT Image 2.6 supports `complexity="low"|"medium"|"high"` (omitted: model default high). Static edits accept `markup`: a PNG with transparent pixels, matching the first reference after orientation, up to 16,777,216 pixels per image and 40MB for the annotation. JSON accepts an HTTPS URL, PNG data URL or an object containing only `image_url`; multipart accepts an annotation file. Do not combine markup with mask, GIF or prompt_rewriter. GIF frame count is 2–16; frame duration is 20–655350ms, rounded to 10ms. GIF rejects masks, custom compression and partial streaming. Pricing is unchanged.
+GPT Image 2.6 supports `complexity="low"|"medium"|"high"` (omitted: model default high), independently of rendering quality and without a separate surcharge; official variants still bill actual tokens. Static edits accept `markup`: a PNG with transparent pixels, matching the first reference after orientation, up to 16,777,216 pixels per image and 40MB for the annotation. Both MCP profiles send JSON and accept an HTTPS URL, PNG data URL or an object containing only `image_url`; local file uploads require the HTTP multipart API. Do not use `file_id` or combine markup with mask, GIF or prompt_rewriter. Omit `input_fidelity` for 2.6.
+
+GIF frame count is 2–16; frame duration is 20–655350ms, rounded to the nearest 10ms. `n` counts output GIF files, not frames. GIF rejects masks, markup, custom compression, prompt rewriting and partial streaming. Size, frames and quantity share a model pixel budget; do not assume arbitrary 1K or 4K GIF combinations work. For static images, `4K` is not a valid size and `4096x4096` exceeds the pixel limit. Pricing is unchanged.
+
+Example MCP generation arguments (also accepted by `gpt_image_generate` in the image-only profile):
+
+```json
+{
+  "model": "gpt-image-2.6-flare",
+  "prompt": "A small red ball moves left and right on a white background, seamless looping animation, no text.",
+  "output_format": "gif",
+  "size": "512x512",
+  "quality": "medium",
+  "frame_count": 9,
+  "frame_duration_ms": 200,
+  "n": 1,
+  "async": true
+}
+```
+
+Submit once and query the returned task ID with `openai_get_task` (or `gpt_image_get_task`); do not generate again to check progress.
