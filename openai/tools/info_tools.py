@@ -173,7 +173,11 @@ GPT Image 2.6 unsuffixed models and their :reverse aliases bill per successful i
 (base price: 0.22 Credits/image), even when token statistics are returned.
 Use complete gpt-image-2.6-flare or gpt-image-2.6-sunburst IDs and their listed variants,
 not gpt-image-2.6 or a bare :reverse/:official alias.
-GPT Image 2.6 has no cross-model fallback. Output is PNG/JPEG/WebP only, not SVG/GIF.
+GPT Image 2.6 has no cross-model fallback. Static PNG/JPEG/WebP generation and editing support 4K pixel presets.
+Native GIF generation/editing is available for gpt-image-2.6-flare, its :reverse/:official variants,
+and gpt-image-2.6-sunburst:official. Ordinary/reverse Sunburst GIF is not available.
+GIF uses a 512x512 preview when size is omitted or auto, with frame_count=9 and frame_duration_ms=200 by default.
+Models may adjust actual GIF dimensions; the static 4K size contract does not apply to GIF. SVG is not supported.
 GPT Image official variants bill actual token usage; 2.6 uses the same token rates as 2.5.
 Pre-request estimates are not fixed per-image charges; check current pricing and usage.
 """

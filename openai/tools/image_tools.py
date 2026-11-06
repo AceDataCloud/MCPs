@@ -6,7 +6,7 @@ from typing import Annotated, Any
 from pydantic import Field
 
 from core.client import client
-from core.exceptions import format_tool_error
+from core.exceptions import OpenAIError, format_tool_error
 from core.server import mcp
 from core.types import (
     DEFAULT_IMAGE_MODEL,
@@ -14,6 +14,7 @@ from core.types import (
     DEFAULT_IMAGE_QUALITY,
     DEFAULT_IMAGE_RESPONSE_FORMAT,
     DEFAULT_IMAGE_SIZE,
+    GIF_IMAGE_MODELS,
     ImageBackground,
     ImageEditQuality,
     ImageEditSize,
@@ -27,6 +28,23 @@ from core.types import (
     ImageStyle,
 )
 from core.utils import format_submission_result
+
+
+def _validate_gif_options(
+    model: str, output_format: str, frame_count: int | None, frame_duration_ms: int | None
+) -> None:
+    if output_format == "gif" and model not in GIF_IMAGE_MODELS:
+        raise OpenAIError(
+            "GIF requires GPT Image 2.6 Flare (standard/reverse/official) or Sunburst official.",
+            code="validation_error",
+        )
+    for name, value in (("frame_count", frame_count), ("frame_duration_ms", frame_duration_ms)):
+        if value is None:
+            continue
+        if output_format != "gif":
+            raise OpenAIError(f"{name} requires output_format=gif.", code="validation_error")
+        if isinstance(value, bool) or not isinstance(value, int) or value <= 0:
+            raise OpenAIError(f"{name} must be a positive integer.", code="validation_error")
 
 
 @mcp.tool()
@@ -91,8 +109,24 @@ async def openai_generate_image(
     ] = None,
     output_format: Annotated[
         ImageOutputFormat,
-        Field(description="Output file format. Options: 'png' (default), 'jpeg', 'webp'."),
+        Field(
+            description="Output format: png (default), jpeg, webp; gif for GPT Image 2.6 Flare (standard/reverse/official) and Sunburst official. GIF defaults to a 512x512 preview, 9 frames, 200ms per frame; static 4K sizes do not apply to GIF."
+        ),
     ] = DEFAULT_IMAGE_OUTPUT_FORMAT,
+    frame_count: Annotated[
+        int | None,
+        Field(
+            gt=0, strict=True, description="GIF frame count. GIF-only; defaults to 9 at the API."
+        ),
+    ] = None,
+    frame_duration_ms: Annotated[
+        int | None,
+        Field(
+            gt=0,
+            strict=True,
+            description="GIF frame duration in milliseconds. GIF-only; defaults to 200 at the API.",
+        ),
+    ] = None,
     response_format: Annotated[
         ImageResponseFormat,
         Field(
@@ -177,6 +211,7 @@ async def openai_generate_image(
         result is POSTed there instead.
     """
     try:
+        _validate_gif_options(model, output_format, frame_count, frame_duration_ms)
         payload: dict[str, Any] = {
             "prompt": prompt,
             "model": model,
@@ -186,6 +221,10 @@ async def openai_generate_image(
             "response_format": response_format,
         }
 
+        if frame_count is not None:
+            payload["frame_count"] = frame_count
+        if frame_duration_ms is not None:
+            payload["frame_duration_ms"] = frame_duration_ms
         if n is not None:
             payload["n"] = n
         if style is not None:
@@ -301,8 +340,24 @@ async def openai_edit_image(
     ] = None,
     output_format: Annotated[
         ImageOutputFormat,
-        Field(description="Output file format. Options: 'png' (default), 'jpeg', 'webp'."),
+        Field(
+            description="Output format: png (default), jpeg, webp; gif for GPT Image 2.6 Flare (standard/reverse/official) and Sunburst official. GIF defaults to a 512x512 preview, 9 frames, 200ms per frame; static 4K sizes do not apply to GIF."
+        ),
     ] = DEFAULT_IMAGE_OUTPUT_FORMAT,
+    frame_count: Annotated[
+        int | None,
+        Field(
+            gt=0, strict=True, description="GIF frame count. GIF-only; defaults to 9 at the API."
+        ),
+    ] = None,
+    frame_duration_ms: Annotated[
+        int | None,
+        Field(
+            gt=0,
+            strict=True,
+            description="GIF frame duration in milliseconds. GIF-only; defaults to 200 at the API.",
+        ),
+    ] = None,
     response_format: Annotated[
         ImageResponseFormat,
         Field(
@@ -349,6 +404,7 @@ async def openai_edit_image(
         result is POSTed there instead.
     """
     try:
+        _validate_gif_options(model, output_format, frame_count, frame_duration_ms)
         payload: dict[str, Any] = {
             "image": image,
             "prompt": prompt,
@@ -359,6 +415,10 @@ async def openai_edit_image(
             "response_format": response_format,
         }
 
+        if frame_count is not None:
+            payload["frame_count"] = frame_count
+        if frame_duration_ms is not None:
+            payload["frame_duration_ms"] = frame_duration_ms
         if n is not None:
             payload["n"] = n
         if background is not None:

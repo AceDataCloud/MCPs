@@ -67,4 +67,10 @@ No paid generation was performed for this guide. Local protocol tests use mocked
 
 进入 **Applications → General application** 复制或创建专用 API Token，核对权限、余额及当前价格。目录客户端按包字段安装；手动客户端使用上面的 `--profile gpt-image`，将原始 Token 放进 `ACEDATACLOUD_API_TOKEN`。先调用免费本地模型说明；收费生成需要明确选择模型和预算。拿到 `task_id` 后只查同一 ID 到终态，不为轮询重复生成。
 
-GPT Image 2.6 adds `gpt-image-2.6-flare` and `gpt-image-2.6-sunburst`, each with `:reverse` and `:official` variants. Generation and edits accept `xhigh`/`max` with the same raster contract as 2.5. Plain/reverse variants cost 0.22 Credits per image; official variants use the same token rates as 2.5. SVG/GIF are not exposed.
+GPT Image 2.6 adds `gpt-image-2.6-flare` and `gpt-image-2.6-sunburst`, each with `:reverse` and `:official` variants. Generation and edits accept `xhigh`/`max` with the same raster contract as 2.5. Plain/reverse variants cost 0.22 Credits per image; official variants use the same token rates as 2.5. SVG is not exposed. Native GIF is available on the verified variants described below.
+
+### GPT Image 2.6 GIF and 4K
+
+Native `output_format: "gif"` is available for `gpt-image-2.6-flare`, its `:reverse` and `:official` variants, and `gpt-image-2.6-sunburst:official`, for generation and reference-image editing. Ordinary/reverse Sunburst GIF remains unavailable. Set optional `frame_count` and `frame_duration_ms` to positive integers; the API defaults to 9 frames, 200 ms per frame and a 512x512 preview when size is omitted or auto. Actual GIF dimensions may be adjusted by the model.
+
+Use a static PNG/JPEG/WebP format for 4K, with pixel dimensions such as `3840x2160` or `2160x3840`. Both 2.6 models and their listed billing variants support these static generation/edit presets. GIF has separate size/frame constraints.

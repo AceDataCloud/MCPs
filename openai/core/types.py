@@ -205,7 +205,15 @@ ImageQuality = Literal["auto", "high", "medium", "low", "xhigh", "max", "hd", "s
 ImageEditQuality = Literal["auto", "high", "medium", "low", "xhigh", "max", "standard"]
 
 # Image output format options
-ImageOutputFormat = Literal["png", "jpeg", "webp"]
+ImageOutputFormat = Literal["png", "jpeg", "webp", "gif"]
+GIF_IMAGE_MODELS = frozenset(
+    {
+        "gpt-image-2.6-flare",
+        "gpt-image-2.6-flare:reverse",
+        "gpt-image-2.6-flare:official",
+        "gpt-image-2.6-sunburst:official",
+    }
+)
 
 # Image response format options
 ImageResponseFormat = Literal["url", "b64_json"]
