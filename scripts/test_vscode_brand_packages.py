@@ -72,6 +72,30 @@ class BrandPackagesTest(unittest.TestCase):
         self.assertIn("mcp-gpt-image", ids)
         self.assertIn("mcp-happyhorse", ids)
 
+    def test_new_user_checks_do_not_require_a_generation_task(self):
+        services = {service.alias: service for service in codegen.load_services()}
+        nano = codegen.render_readme(
+            services["nanobanana"],
+            codegen.extract_tools(ROOT / "nanobanana/README.md"),
+        )
+        self.assertIn("Call nanobanana_list_models only", nano)
+        self.assertIn("does not prove that your key has generation access", nano)
+        self.assertIn(
+            "info_tools",
+            (ROOT / "nanobanana/tools/__init__.py").read_text(),
+        )
+        suno = codegen.render_readme(
+            services["suno"], codegen.extract_tools(ROOT / "suno/README.md")
+        )
+        self.assertIn("suno_list_custom_models", suno)
+        self.assertIn("`limit=1`", suno)
+        self.assertIn("including an empty list", suno)
+        self.assertIn("does not prove generation permission or balance", suno)
+        self.assertIn(
+            "suno_list_custom_models",
+            codegen.render_chinese_readme(services["suno"]),
+        )
+
     def test_workflow_has_no_duplicate_yaml_keys(self):
         import yaml
 

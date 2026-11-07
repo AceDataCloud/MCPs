@@ -28,7 +28,7 @@ asyncio.run(main())
 
 @pytest.mark.parametrize(
     "alias,count",
-    [("seedance", 7), ("nanobanana", 4), ("happyhorse", 7), ("openai", 15)],
+    [("seedance", 7), ("nanobanana", 5), ("happyhorse", 7), ("openai", 15)],
 )
 def test_initialize_returns_catalog_icon_and_existing_tools(alias, count):
     env = os.environ.copy()
@@ -54,4 +54,6 @@ def test_initialize_returns_catalog_icon_and_existing_tools(alias, count):
     icon = runtime_icons(load_catalog())[alias]
     assert [{key: value[key] for key in icon} for value in data["server"]["icons"]] == [icon]
     assert len(data["tools"]) == count
+    if alias == "nanobanana":
+        assert "nanobanana_list_models" in {tool["name"] for tool in data["tools"]}
     assert all(tool["inputSchema"]["type"] == "object" for tool in data["tools"])

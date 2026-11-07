@@ -587,7 +587,7 @@ BRAND_TOOLS = {
     "seedance": ("seedance_list_models", "seedance_get_task"),
     "happyhorse": ("happyhorse_list_models", "happyhorse_get_task"),
     "openai": ("openai_list_image_models", "openai_get_task"),
-    "nanobanana": (None, "nanobanana_get_task"),
+    "nanobanana": ("nanobanana_list_models", "nanobanana_get_task"),
 }
 
 
@@ -603,6 +603,17 @@ def first_use(svc: Service) -> str:
         if reference
         else "Replace TASK_ID with a task already completed by your own application. If you have no task, stop after tool discovery; do not invent a task ID or generate just to test installation."
     )
+    auth_check = ""
+    if svc.alias == "suno":
+        auth_check = (
+            "For an application-backed read-only authentication check, enable only "
+            "`suno_list_custom_models` and call it with `limit=1`. A successful `items` "
+            "response, including an empty list, confirms custom-model lookup access. "
+            "It does not create music or train a model; it does not prove generation "
+            "permission or balance. Check Allowed APIs for that lookup. Your Chat model "
+            "can still be billed separately.\n"
+        )
+
     text = f"""
 ## First use: discover, then read an existing result
 
@@ -637,6 +648,12 @@ Historical real VS Code 1.141 screenshots, included in tutorials on 2026-10-09 (
 | Pending task | Query the same original ID; do not submit generation again. |
 | 429 / 5xx | Preserve task/trace ID, inspect original task and Usage, and do not automatically retry a paid operation. |
 """
+    if auth_check:
+        text = text.replace(
+            "For an existing media task,",
+            auth_check + "\nFor an existing media task,",
+            1,
+        )
     return text
 
 
@@ -647,6 +664,15 @@ def render_chinese_readme(svc: Service) -> str:
         if reference
         else f"只用 {query} 查询我已有的任务 TASK_ID，不要提交新的图片生成。"
     )
+    auth_check = ""
+    if svc.alias == "suno":
+        auth_check = (
+            "若要做读取当前应用的认证检查，只启用 `suno_list_custom_models`，参数 "
+            "`limit=1`。成功的 `items` 响应（包括新应用的空列表）说明自定义模型查询可访问；"
+            "这是 retrieve_batch，不创建音乐或训练模型，也不证明生成权限或余额。"
+            "Allowed APIs 需允许该查询；聊天模型仍可能单独计费。\n"
+        )
+
     text = f"""# {svc.display_name} · VS Code 中文教程
 
 [English]({svc.repo_url}/blob/main/vscode/README.md) · [官方扩展市场安装](https://marketplace.visualstudio.com/items?itemName={svc.publisher}.{svc.ext_name})
@@ -699,6 +725,8 @@ VS Code 1.141历史真实截图于2026-10-09收入教程；工具图以OpenAI为
 
 更多服务说明见 [{svc.docs_label}]({svc.docs_url})。支持排查时提供task/trace ID，不提供Key。
 """
+    if auth_check:
+        text = text.replace("## 5. 常见问题", auth_check + "\n## 5. 常见问题", 1)
     return render_marketing_readme(text, svc.alias, "vscode_marketplace")
 
 
