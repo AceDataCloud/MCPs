@@ -3,7 +3,7 @@
 import json
 from typing import Annotated
 
-from pydantic import Field
+from pydantic import AliasChoices, Field
 
 from core.client import client
 from core.exceptions import ShortURLAPIError, ShortURLAuthError
@@ -12,9 +12,12 @@ from core.server import mcp
 
 @mcp.tool()
 async def shorturl_create(
-    url: Annotated[
+    content: Annotated[
         str,
-        Field(description="The long URL to shorten. Must be a valid HTTP or HTTPS URL. Required."),
+        Field(
+            validation_alias=AliasChoices("content", "url"),
+            description="The long URL to shorten. Must be a valid HTTP or HTTPS URL. Required.",
+        ),
     ],
 ) -> str:
     """Create a short URL from a long URL.
@@ -29,18 +32,18 @@ async def shorturl_create(
     - Making long URLs more manageable in documents and messages
 
     Args:
-        url: The long URL to shorten. Must be a valid HTTP or HTTPS URL.
+        content: The long URL to shorten. Must be a valid HTTP or HTTPS URL.
 
     Returns:
         JSON response containing the shortened URL.
 
     Example:
-        shorturl_create(url="https://platform.acedata.cloud/documents/a2303356-6672-4eb8-9778-75f55c998fe9")
+        shorturl_create(content="https://platform.acedata.cloud/documents/a2303356-6672-4eb8-9778-75f55c998fe9")
     """
-    if not url:
+    if not content:
         return json.dumps({"error": "Validation Error", "message": "URL is required"})
 
-    if not url.startswith(("http://", "https://")):
+    if not content.startswith(("http://", "https://")):
         return json.dumps(
             {
                 "error": "Validation Error",
@@ -49,7 +52,7 @@ async def shorturl_create(
         )
 
     try:
-        result = await client.shorten(content=url)
+        result = await client.shorten(content=content)
 
         if not result:
             return json.dumps({"error": "No response received from the API."})
