@@ -59,12 +59,13 @@ Save the key in the client's credential store or the environment variable shown 
 
 ## Tool Reference
 
-**4 tools** available via this server.
+**5 tools** available via this server.
 
 | Tool | Description |
 | --- | --- |
 | `nanobanana_generate_image` | Generate an AI image from a text prompt using Google's Nano Banana model. |
 | `nanobanana_edit_image` | Edit or combine images using AI based on a text prompt. |
+| `nanobanana_list_models` | List accepted model identifiers locally, without an API request or image generation. |
 | `nanobanana_get_task` | Query the status and result of an image generation or edit task. |
 | `nanobanana_get_tasks_batch` | Query multiple image generation/edit tasks at once. |
 
@@ -156,14 +157,14 @@ MIT — see [LICENSE](LICENSE).
 
 1. Install [Nano Banana by Ace Data Cloud](https://marketplace.visualstudio.com/items?itemName=acedatacloud.mcp-nanobanana). This is an independent service extension; the Ace toolbox is optional. Do not enable two copies of the same server.
 2. Complete the application-key steps above. Run **Nano Banana by Ace Data Cloud: Set Ace Data Cloud API Key** and paste only the token. No workspace configuration file is needed.
-3. In **Chat: Manage Language Models**, show and select a tool-capable model. If you use the separate Ace Chat Models extension, follow its [model setup](https://github.com/AceDataCloud/VSCodeModelProvider#4-show-the-model-in-chat). Then open **Chat → Agent → Configure Tools** and enable only `nanobanana_get_task` for this first check.
+3. In **Chat: Manage Language Models**, show and select a tool-capable model. If you use the separate Ace Chat Models extension, follow its [model setup](https://github.com/AceDataCloud/VSCodeModelProvider#4-show-the-model-in-chat). Then open **Chat → Agent → Configure Tools** and enable only `nanobanana_list_models` for this first check.
 4. Send the prompt below and inspect the confirmation's tool name and arguments. Your Chat model and background requests may be billed even when the service tool is read-only.
 
 ```text
-Use nanobanana_get_task only for my existing task TASK_ID. Do not generate another image.
+Call nanobanana_list_models only. Show supported models/actions. Do not generate anything.
 ```
 
-Replace TASK_ID with a task already completed by your own application. If you have no task, stop after tool discovery; do not invent a task ID or generate just to test installation.
+The model-list tool returns reference information without generating media. It does not prove that your key has generation access.
 
 For an existing media task, enable only `nanobanana_get_task`, replace `TASK_ID` with your original task ID, and query that same ID until terminal success or failure. Open the returned media link and match the original generation task to its charge in [Usage](https://platform.acedata.cloud/console/usage?utm_source=vscode_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=nanobanana_mcp_vscode_console_usage). An accepted task or green Chat turn alone is not a completed artifact. Never resubmit generation just to check progress.
 

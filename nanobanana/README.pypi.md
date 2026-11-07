@@ -44,8 +44,17 @@ Search for `mcp-nanobanana-pro` (or `io.github.AceDataCloud/mcp-nanobanana-pro`)
 |------|-------------|
 | `nanobanana_generate_image` | Generate an AI image from a text prompt using Google's Nano Banana model. |
 | `nanobanana_edit_image` | Edit or combine images using AI based on a text prompt. |
+| `nanobanana_list_models` | List accepted model identifiers locally, without an API request or image generation. |
 | `nanobanana_get_task` | Query the status and result of an image generation or edit task. |
 | `nanobanana_get_tasks_batch` | Query multiple image generation/edit tasks at once. |
+
+## Verify the connection before generating
+
+After installation, discover the server's tools and call `nanobanana_list_models` with no arguments. This reference tool returns locally defined model or action information without calling a generation API. It does **not** validate your application key, account balance, service access, or current price. Your client's Chat model can still create separate charges.
+
+To check authenticated access without creating media, query a task already owned by your application using the task-lookup tool and the **same original task ID**. If you have no existing task, stop after discovery/reference output; do not generate media just to test installation. Review [current pricing](https://platform.acedata.cloud/models?utm_source=pypi&utm_medium=referral&utm_campaign=evergreen&utm_content=nanobanana_mcp_package_models) before any new generation.
+
+For missing tools, reconnect and refresh the tool list. For 401/403, check the existing application's key, service permissions, Allowed APIs, expiration and usage limit before replacing credentials. Keep a task/trace ID for other failures, never your key; do not automatically retry a paid operation.
 
 ## Connect: hosted OAuth, API token, or local stdio
 

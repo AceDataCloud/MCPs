@@ -25,7 +25,7 @@
 
 运行命令 **Nano Banana by Ace Data Cloud: Set Ace Data Cloud API Key**，粘贴应用 Token；保存于 VS Code SecretStorage。服务器地址为 `https://nanobanana.mcp.acedata.cloud/mcp`。若要求信任服务器，先核对地址。
 
-打开 **Chat: Manage Language Models**，使所选模型可见，再在 Chat 选择它；可安装独立的 [Ace Chat Models](https://marketplace.visualstudio.com/items?itemName=acedatacloud.chat-models)。打开 **Agent → Configure Tools**，只勾选 `nanobanana_get_task`，列表为空时先 Update Tools。组织禁用 BYOK 时遵守管理员政策。
+打开 **Chat: Manage Language Models**，使所选模型可见，再在 Chat 选择它；可安装独立的 [Ace Chat Models](https://marketplace.visualstudio.com/items?itemName=acedatacloud.chat-models)。打开 **Agent → Configure Tools**，只勾选 `nanobanana_list_models`，列表为空时先 Update Tools。组织禁用 BYOK 时遵守管理员政策。
 
 ![真实VS Code模型管理界面参考](https://raw.githubusercontent.com/AceDataCloud/VSCodeModelProvider/667593eb14bf15d434a1c41d47ef1f39199f7d68/assets/tutorial/02-manage-models.png)
 
@@ -36,7 +36,7 @@ VS Code 1.141历史真实截图于2026-10-09收入教程；工具图以OpenAI为
 ## 4. 首次验证与同ID结果查询
 
 ```text
-只用 nanobanana_get_task 查询我已有的任务 TASK_ID，不要提交新的图片生成。
+只调用 nanobanana_list_models，显示模型/动作说明，不要生成任何媒体。
 ```
 
 模型说明工具不生成媒体，也不证明生成权限；没有已完成任务时，图片服务停在工具发现，不要为验安装新发生成。聊天模型和辅助请求仍可能收费，先查模型价格。已有任务只用 `nanobanana_get_task` 查询同一个原ID（将 `TASK_ID` 替换为自己的原任务ID），直至成功或失败；打开结果媒体，并在 [Usage](https://platform.acedata.cloud/console/usage?utm_source=vscode_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=nanobanana_mcp_vscode_console_usage) 对应原生成任务及Credits账单。accepted、绿色聊天回合都不等于最终媒体成功，不要重新生成来轮询。
