@@ -360,9 +360,18 @@ async def test_path_values_are_encoded_and_traversal_rejected():
 
 
 @respx.mock
-async def test_csv_and_wallet_artifacts_are_bounded_downloads():
-    csv = b"code,amount\nSECRET-CARD,100\n"
-    respx.post(f"{API}/recharge-cards/admin/issue/").mock(
+@pytest.mark.parametrize("amount", ["1", "100", "500", "1000", "5000"])
+async def test_recharge_card_denominations_preserve_confirmation_and_csv_download(amount):
+    name = "acedatacloud_create_recharge_cards_admin_issue"
+    arguments = {"amount": amount, "quantity": 1}
+    preview, _ = await mcp.call_tool(name, arguments)
+    target = json.loads(preview[0].text)
+    assert target["status"] == "confirmation_required"
+    assert target["target"]["body"] == arguments
+    assert not respx.calls
+
+    csv = f"code,amount\nSECRET-CARD,{amount}\n".encode()
+    route = respx.post(f"{API}/recharge-cards/admin/issue/").mock(
         return_value=httpx.Response(
             200,
             content=csv,
@@ -372,13 +381,33 @@ async def test_csv_and_wallet_artifacts_are_bounded_downloads():
             },
         )
     )
-    result = json.loads(
-        await REGISTERED_TOOLS["acedatacloud_create_recharge_cards_admin_issue"](
-            amount=100, quantity=1, confirm=True
-        )
-    )
+    content, _ = await mcp.call_tool(name, {**arguments, "confirm": True})
+    result = json.loads(content[0].text)
+    assert route.call_count == 1
+    assert json.loads(route.calls.last.request.content) == arguments
     assert base64.b64decode(result["content_base64"]) == csv
     assert result["filename"] == "cards.csv"
+
+
+@respx.mock
+@pytest.mark.parametrize("amount", ["0", "2", "1.5", "10000"])
+@pytest.mark.parametrize("confirm", [False, True])
+async def test_unsupported_recharge_card_denomination_is_rejected_before_http(amount, confirm):
+    with pytest.raises(ToolError):
+        await mcp.call_tool(
+            "acedatacloud_create_recharge_cards_admin_issue",
+            {"amount": amount, "quantity": 1, "confirm": confirm},
+        )
+    assert not respx.calls
+
+
+@respx.mock
+async def test_recharge_card_admin_can_filter_one_credit_cards():
+    route = respx.get(f"{API}/recharge-cards/admin/").mock(
+        return_value=httpx.Response(200, json={"count": 0, "items": []})
+    )
+    await mcp.call_tool("acedatacloud_list_recharge_cards_admin", {"amount": "1"})
+    assert route.calls.last.request.url.params["amount"] == "1"
 
 
 @respx.mock
