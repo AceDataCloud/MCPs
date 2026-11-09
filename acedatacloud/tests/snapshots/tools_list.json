@@ -7821,6 +7821,7 @@
         "amount": {
           "description": "acedatacloud_create_recharge_cards_admin_issue_amount",
           "enum": [
+            "1",
             "100",
             "500",
             "1000",

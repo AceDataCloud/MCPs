@@ -708,6 +708,15 @@ mcp-acedatacloud --transport http --port 8000
   Reconnect OAuth to review newly granted permissions. Existing durable platform tokens
   follow current account permissions, including revocations, on each request.
 - Announcement tools require the corresponding account permission.
+- Recharge cards are one-time general-Credit vouchers, delivered as physical cards or
+  private digital codes. For a digital card, retrieve the code from the original
+  purchase order's private delivery result; do not paste it into agent chat or support
+  messages. Redemption does not enable automatic recharge and cannot be undone.
+- `acedatacloud_create_recharge_cards_admin_issue` supports `amount` values `"1"`,
+  `"100"`, `"500"`, `"1000"` and `"5000"` (general Credits), including a 1-Credit
+  small trial denomination. These are not US dollars, the purchase channel's wallet
+  balance or a service's sale price. Issuance requires `recharge-cards:write:any`;
+  review the preview before repeating the request with `confirm=true`.
 - New recharge-card allocations accept only `ribbon`, `blossom`, `dawn` and `confetti`
   cover themes; omit `theme_id` to use the Backend default (`ribbon`). Creation rejects
   legacy theme IDs; existing cards retain their original covers.
