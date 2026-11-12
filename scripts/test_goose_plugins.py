@@ -40,6 +40,19 @@ class GoosePluginContracts(unittest.TestCase):
                     len(list((root / "goose/skills").glob("*/SKILL.md"))), 1
                 )
 
+    def test_skills_serialize_trial_requests_and_preserve_original_tasks(self):
+        for service in SERVICES:
+            with self.subTest(service=service):
+                skill = next((ROOT / service / "goose/skills").glob("*/SKILL.md"))
+                text = skill.read_text()
+                self.assertIn("one billable request at a time", text)
+                self.assertIn("across all API keys and services", text)
+                self.assertIn("asynchronous acceptance does not free the slot", text)
+                self.assertIn("HTTP 429 `too_many_requests`", text)
+                self.assertIn("free task polling on the original task ID", text)
+                self.assertIn("A disconnect or proxy timeout does not prove", text)
+                self.assertIn("`trace_id`", text)
+
     def test_gpt_image_uses_published_narrow_profile_without_another_adapter(self):
         servers = json.loads((ROOT / "openai/.mcp.json").read_text())["mcpServers"]
         server = servers["gpt-image"]

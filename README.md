@@ -49,6 +49,8 @@ Two exceptions matter: [AceDataCloudMCP](acedatacloud/README.md) manages the acc
 
 For generation/search API keys, follow the illustrated [application-key steps](suno/README.md#api-token-hosted-server): register or sign in, initialize General application if needed, open Keys / Manage Keys, create or copy a key, then store it in your client. Check service access, limits and balance before your first request.
 
+Trial accounts that have never completed a paid recharge or received administrator-added Credits can run only one billable request at a time across all keys and services. Wait for the original task's terminal result before submitting another; free task polling remains available. See the [trial-account workflow](acedatacloud/README.md#plan-trial-account-requests-sequentially) for HTTP 429 and timeout handling.
+
 The account-management server uses [Account Tokens](https://platform.acedata.cloud/console/platform-tokens?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=mcp_catalog_readme_account_token) instead; see its [creation steps](acedatacloud/README.md#explicit-platform-token). Hosted OAuth users follow browser sign-in instead of copying a key. The Discord Agent Proxy uses the URL and token issued by that deployment, as explained in [its prerequisites](discord-bot/README.md#prerequisites).
 
 ## Retired
