@@ -511,6 +511,14 @@ Read `allow_overdraft` in `acedatacloud_get_balance`, `acedatacloud_list_applica
 
 An overdraft-enabled application's insufficient balance does not trigger global fallback. Otherwise `allow_consume_global` controls fallback; any overdraft permission is determined by the global application actually charged. Do not infer overdraft authorization from the balance alone.
 
+### Plan trial-account requests sequentially
+
+Accounts that have never completed a paid recharge or received an administrator's manual Credit addition can run only **one billable request at a time across the whole account**, shared by all API keys and services. Backend tracks this with the read-only user flag `has_recharged`; rewards, recharge cards and transferred Credits do not qualify. A completed paid recharge or administrator Credit addition removes this trial-only limit, but normal balance and credential limits still apply. Do not infer eligibility from a positive balance or try to change the flag through application settings.
+
+While a billable request is running, another returns HTTP **429 `too_many_requests`**. Submit sequentially: asynchronous acceptance does not release the slot. Retain the original task ID and use the service's free task-query tool until terminal success or failure before submitting another billable request. Do not rotate keys, switch services or blindly retry to bypass the account-wide limit.
+
+A disconnect or proxy timeout does not prove the task has stopped. Query the original task if its ID is known; if it remains without a terminal result for a long time, contact support with the returned `trace_id`. Free task polling remains available. Realtime connection authentication uses its existing per-turn billing flow and does not occupy this ordinary-request slot. This limit changes neither trial API eligibility nor billing rules: charges still settle after the request according to actual usage.
+
 ### Find failed invoices
 
 Use `acedatacloud_list_invoices(status="Failed")` to find caller-owned invoices whose issuance failed. Read the returned `failure_reason` before deciding whether to apply again or contact support. `Failed` is a read filter, not an administrator status-update option.
