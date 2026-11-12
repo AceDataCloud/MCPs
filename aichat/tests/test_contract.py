@@ -71,6 +71,7 @@ def test_v2_offers_claude_sonnet_5():
 
 def test_v2_offers_claude_spec_models():
     spec_models = {
+        "claude-fable-5-2",
         "claude-fable-5-1",
         "claude-fable-5",
         "claude-opus-5",
