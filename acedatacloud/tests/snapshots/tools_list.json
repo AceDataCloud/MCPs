@@ -17875,23 +17875,6 @@
     }
   },
   {
-    "name": "acedatacloud_get_proxy_usage",
-    "inputSchema": {
-      "properties": {
-        "usage_id": {
-          "description": "Proxy usage UUID.",
-          "title": "Usage Id",
-          "type": "string"
-        }
-      },
-      "required": [
-        "usage_id"
-      ],
-      "title": "acedatacloud_get_proxy_usageArguments",
-      "type": "object"
-    }
-  },
-  {
     "name": "acedatacloud_get_public_usage_packages",
     "inputSchema": {
       "properties": {
@@ -18238,63 +18221,6 @@
         "lookup_value"
       ],
       "title": "acedatacloud_get_services_lookup_valueArguments",
-      "type": "object"
-    }
-  },
-  {
-    "name": "acedatacloud_get_services_proxies",
-    "inputSchema": {
-      "properties": {
-        "id": {
-          "title": "Id",
-          "type": "string"
-        },
-        "ordering": {
-          "anyOf": [
-            {
-              "description": "acedatacloud_get_services_proxies_ordering"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "title": "Ordering"
-        },
-        "limit": {
-          "anyOf": [
-            {
-              "description": "acedatacloud_get_services_proxies_limit",
-              "maximum": 100,
-              "minimum": 1,
-              "type": "integer"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "title": "Limit"
-        },
-        "offset": {
-          "anyOf": [
-            {
-              "description": "acedatacloud_get_services_proxies_offset",
-              "minimum": 0,
-              "type": "integer"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "title": "Offset"
-        }
-      },
-      "required": [
-        "id"
-      ],
-      "title": "acedatacloud_get_services_proxiesArguments",
       "type": "object"
     }
   },
@@ -19955,51 +19881,6 @@
     "inputSchema": {
       "properties": {},
       "title": "acedatacloud_get_usage_guideArguments",
-      "type": "object"
-    }
-  },
-  {
-    "name": "acedatacloud_get_usage_proxies_id",
-    "inputSchema": {
-      "properties": {
-        "id": {
-          "title": "Id",
-          "type": "string"
-        },
-        "limit": {
-          "anyOf": [
-            {
-              "description": "acedatacloud_get_usage_proxies_id_limit",
-              "maximum": 100,
-              "minimum": 1,
-              "type": "integer"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "title": "Limit"
-        },
-        "offset": {
-          "anyOf": [
-            {
-              "description": "acedatacloud_get_usage_proxies_id_offset",
-              "minimum": 0,
-              "type": "integer"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "title": "Offset"
-        }
-      },
-      "required": [
-        "id"
-      ],
-      "title": "acedatacloud_get_usage_proxies_idArguments",
       "type": "object"
     }
   },
@@ -24398,85 +24279,6 @@
     }
   },
   {
-    "name": "acedatacloud_list_proxy_usage",
-    "inputSchema": {
-      "properties": {
-        "application_id": {
-          "anyOf": [
-            {
-              "type": "string"
-            },
-            {
-              "items": {
-                "type": "string"
-              },
-              "type": "array"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "description": "Proxy application UUID filters.",
-          "title": "Application Id"
-        },
-        "proxy_id": {
-          "anyOf": [
-            {
-              "type": "string"
-            },
-            {
-              "items": {
-                "type": "string"
-              },
-              "type": "array"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "description": "Proxy UUID filters.",
-          "title": "Proxy Id"
-        },
-        "ordering": {
-          "anyOf": [
-            {
-              "enum": [
-                "-created_at",
-                "-updated_at"
-              ],
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "description": "Usage ordering.",
-          "title": "Ordering"
-        },
-        "limit": {
-          "default": 20,
-          "description": "Max records.",
-          "maximum": 100,
-          "minimum": 1,
-          "title": "Limit",
-          "type": "integer"
-        },
-        "offset": {
-          "default": 0,
-          "description": "Pagination offset.",
-          "minimum": 0,
-          "title": "Offset",
-          "type": "integer"
-        }
-      },
-      "title": "acedatacloud_list_proxy_usageArguments",
-      "type": "object"
-    }
-  },
-  {
     "name": "acedatacloud_list_recharge_cards_admin",
     "inputSchema": {
       "properties": {
@@ -26205,108 +26007,6 @@
         }
       },
       "title": "acedatacloud_list_usage_apisArguments",
-      "type": "object"
-    }
-  },
-  {
-    "name": "acedatacloud_list_usage_proxies",
-    "inputSchema": {
-      "properties": {
-        "application_id": {
-          "anyOf": [
-            {
-              "description": "acedatacloud_list_usage_proxies_application_id",
-              "items": {
-                "description": "acedatacloud_list_usage_proxies_application_idItem",
-                "type": "string"
-              },
-              "type": "array"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "title": "Application Id"
-        },
-        "user_id": {
-          "anyOf": [
-            {
-              "description": "acedatacloud_list_usage_proxies_user_id",
-              "items": {
-                "description": "acedatacloud_list_usage_proxies_user_idItem",
-                "type": "string"
-              },
-              "type": "array"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "title": "User Id"
-        },
-        "proxy_id": {
-          "anyOf": [
-            {
-              "description": "acedatacloud_list_usage_proxies_proxy_id",
-              "items": {
-                "description": "acedatacloud_list_usage_proxies_proxy_idItem",
-                "type": "string"
-              },
-              "type": "array"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "title": "Proxy Id"
-        },
-        "limit": {
-          "anyOf": [
-            {
-              "description": "acedatacloud_list_usage_proxies_limit",
-              "maximum": 100,
-              "minimum": 1,
-              "type": "integer"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "title": "Limit"
-        },
-        "offset": {
-          "anyOf": [
-            {
-              "description": "acedatacloud_list_usage_proxies_offset",
-              "minimum": 0,
-              "type": "integer"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "title": "Offset"
-        },
-        "ordering": {
-          "anyOf": [
-            {
-              "description": "acedatacloud_list_usage_proxies_ordering",
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "title": "Ordering"
-        }
-      },
-      "title": "acedatacloud_list_usage_proxiesArguments",
       "type": "object"
     }
   },

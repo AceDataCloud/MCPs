@@ -23,16 +23,16 @@ Claude, VS Code, Studio, or any MCP-compatible client.
 <!-- BEGIN GENERATED TOOL REFERENCE -->
 ## Tool Reference
 
-The default curated catalog advertises **359 tools** before
+The default curated catalog advertises **355 tools** before
 account-permission filtering, including `acedatacloud_get_usage_guide`.
-The complete compatibility registry retains **530 tools**.
+The complete compatibility registry retains **525 tools**.
 Discovery is grouped by business task, not by one tool per REST endpoint.
 
 | Not advertised by default | Count |
 |---------------------------|-------|
 | alternate full-replacement update | 21 |
 | client rendering, telemetry or protocol helper | 19 |
-| duplicate native route | 127 |
+| duplicate native route | 126 |
 | prefer the task-oriented catalog reader | 4 |
 
 ### Categories
@@ -40,9 +40,9 @@ Discovery is grouped by business task, not by one tool per REST endpoint.
 | Category | Public | Account | Workspace | Admin |
 |----------|--------|---------|-----------|-------|
 | Account & API keys | 0 | 11 | 0 | 1 |
-| Catalog & documentation | 20 | 2 | 0 | 0 |
+| Catalog & documentation | 19 | 2 | 0 | 0 |
 | Applications & deployments | 0 | 14 | 0 | 4 |
-| Usage & billing | 1 | 41 | 0 | 31 |
+| Usage & billing | 1 | 39 | 0 | 30 |
 | Sites & branding | 1 | 0 | 38 | 0 |
 | Community & wallet | 1 | 31 | 0 | 12 |
 | Content & announcements | 5 | 0 | 28 | 0 |
@@ -89,7 +89,6 @@ Admin tools require their exact permission grants, not just an admin label.
 | `acedatacloud_get_public_usage_packages` | Get a service's public Usage package amount and price for Credit-to-USD conversion. | public | public |
 | `acedatacloud_get_service` | Get one service by UUID or alias. | public | public |
 | `acedatacloud_get_services_apis` | Get services apis. Backend account permissions and ownership checks apply. | public | public |
-| `acedatacloud_get_services_proxies` | Get services proxies. Backend account permissions and ownership checks apply. | public | public |
 | `acedatacloud_list_apis` | List API endpoints and billing metadata. | public | public |
 | `acedatacloud_list_datasets` | List downloadable datasets. | public | public |
 | `acedatacloud_list_docs` | Browse documentation pages. | public | public |
@@ -170,7 +169,6 @@ Admin tools require their exact permission grants, not just an admin label.
 | `acedatacloud_get_orders_revenue_customers` | Get orders revenue customers. Backend account permissions and ownership checks apply. | admin | revenue:read |
 | `acedatacloud_get_orders_revenue_summary` | Get orders revenue summary. Backend account permissions and ownership checks apply. | admin | revenue:read |
 | `acedatacloud_get_orders_revenue_trend` | Get orders revenue trend. Backend account permissions and ownership checks apply. | admin | revenue:read |
-| `acedatacloud_get_proxy_usage` | Get proxy usage detail. | account | usage:read |
 | `acedatacloud_get_recharge_cards_allocations_id` | Get recharge cards allocations id. Backend account permissions and ownership checks apply. | account | applications:read |
 | `acedatacloud_get_recharge_cards_allocations_token` | Get recharge cards allocations token. Backend account permissions and ownership checks apply. | public | applications:read |
 | `acedatacloud_get_recharge_cards_allocations_wallet` | Get recharge cards allocations wallet. Backend account permissions and ownership checks apply. | account | applications:read |
@@ -182,12 +180,10 @@ Admin tools require their exact permission grants, not just an admin label.
 | `acedatacloud_list_order_discounts` | List order discounts. Backend account permissions and ownership checks apply. | admin | order-discounts:read:any |
 | `acedatacloud_list_orders` | List recharge orders. | account | orders:read |
 | `acedatacloud_list_orders_detail` | List orders. Backend account permissions and ownership checks apply. | admin | orders:read, orders:read:any |
-| `acedatacloud_list_proxy_usage` | List proxy usage. | account | usage:read |
 | `acedatacloud_list_recharge_cards_admin` | List recharge cards admin. Backend account permissions and ownership checks apply. | admin | recharge-cards:read:any |
 | `acedatacloud_list_recharge_cards_allocations` | List recharge cards allocations. Backend account permissions and ownership checks apply. | account | applications:read |
 | `acedatacloud_list_usage` | List recent API usage records. | account | usage:read |
 | `acedatacloud_list_usage_apis` | List usage apis. Backend account permissions and ownership checks apply. | admin | usage:read, usage:read:any |
-| `acedatacloud_list_usage_proxies` | List usage proxies. Backend account permissions and ownership checks apply. | admin | usage:read, usage:read:any |
 | `acedatacloud_list_usage_status_codes` | List usage status codes. | account | usage:read |
 | `acedatacloud_pay_order` | Create an order payment session. | account | authenticated |
 | `acedatacloud_preview_invoice` | Preview invoice amount. | account | authenticated |

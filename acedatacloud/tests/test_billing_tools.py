@@ -44,9 +44,7 @@ from tools.user.orders import (
 )
 from tools.user.usage import (
     acedatacloud_export_usage,
-    acedatacloud_get_proxy_usage,
     acedatacloud_get_usage,
-    acedatacloud_list_proxy_usage,
     acedatacloud_list_usage,
     acedatacloud_list_usage_status_codes,
 )
@@ -72,7 +70,6 @@ async def test_billing_read_routes():
         ("GET", f"/auto-recharge-configs/{ID}", acedatacloud_get_auto_recharge, (ID,)),
         ("GET", f"/usage/apis/{ID}", acedatacloud_get_usage, (ID,)),
         ("GET", "/usage/apis/status-codes/", acedatacloud_list_usage_status_codes, ()),
-        ("GET", f"/usage/proxies/{ID}", acedatacloud_get_proxy_usage, (ID,)),
     ]
     try:
         for method, path, function, args in routes:
@@ -89,17 +86,12 @@ async def test_billing_read_routes():
     auto_list = respx.get(f"{API}/auto-recharge-configs/").mock(
         return_value=httpx.Response(200, json={"items": []})
     )
-    proxy_list = respx.get(f"{API}/usage/proxies/").mock(
-        return_value=httpx.Response(200, json={"items": []})
-    )
     set_request_api_token("platform-token")
     try:
         await acedatacloud_list_auto_recharges()
-        await acedatacloud_list_proxy_usage()
     finally:
         set_request_api_token(None)
     assert auto_list.calls[0].request.url.params["user_id"] == "user-1"
-    assert proxy_list.calls[0].request.url.params["user_id"] == "user-1"
 
 
 @respx.mock

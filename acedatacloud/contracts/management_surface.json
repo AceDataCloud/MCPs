@@ -753,13 +753,6 @@
     },
     {
       "method": "GET",
-      "path": "/services/{id}/proxies/",
-      "handler": "ServiceViewSet",
-      "coverage": "covered",
-      "tool": "acedatacloud_get_services_proxies"
-    },
-    {
-      "method": "GET",
       "path": "/applications/{id}/recharge-card-eligibility/",
       "handler": "AllocationEligibilityView",
       "coverage": "covered",
@@ -1875,48 +1868,6 @@
       "method": "DELETE",
       "path": "/usage/apis/{id}",
       "handler": "ApiUsageRetrieveUpdateDestroyViewSet",
-      "coverage": "excluded",
-      "rationale": "The backend deliberately rejects this HTTP method with 405."
-    },
-    {
-      "method": "GET",
-      "path": "/usage/proxies/",
-      "handler": "ProxyUsageListCreateViewSet",
-      "coverage": "covered",
-      "tool": "acedatacloud_list_usage_proxies"
-    },
-    {
-      "method": "POST",
-      "path": "/usage/proxies/",
-      "handler": "ProxyUsageListCreateViewSet",
-      "coverage": "excluded",
-      "rationale": "The backend deliberately rejects this HTTP method with 405."
-    },
-    {
-      "method": "GET",
-      "path": "/usage/proxies/{id}",
-      "handler": "ProxyUsageRetrieveUpdateDestroyViewSet",
-      "coverage": "covered",
-      "tool": "acedatacloud_get_usage_proxies_id"
-    },
-    {
-      "method": "PUT",
-      "path": "/usage/proxies/{id}",
-      "handler": "ProxyUsageRetrieveUpdateDestroyViewSet",
-      "coverage": "excluded",
-      "rationale": "The backend deliberately rejects this HTTP method with 405."
-    },
-    {
-      "method": "PATCH",
-      "path": "/usage/proxies/{id}",
-      "handler": "ProxyUsageRetrieveUpdateDestroyViewSet",
-      "coverage": "excluded",
-      "rationale": "The backend deliberately rejects this HTTP method with 405."
-    },
-    {
-      "method": "DELETE",
-      "path": "/usage/proxies/{id}",
-      "handler": "ProxyUsageRetrieveUpdateDestroyViewSet",
       "coverage": "excluded",
       "rationale": "The backend deliberately rejects this HTTP method with 405."
     },
@@ -6901,41 +6852,6 @@
         "properties": {}
       },
       "description": "Get services apis. Backend account permissions and ownership checks apply.",
-      "disclose": []
-    },
-    {
-      "operation_id": "surface.get_services_proxies",
-      "name": "acedatacloud_get_services_proxies",
-      "method": "GET",
-      "path": "/services/{id}/proxies/",
-      "domain": "Services",
-      "authentication": "public",
-      "required_permissions": [],
-      "confirm": false,
-      "path_parameters": [
-        "id"
-      ],
-      "query_schema": {
-        "type": "object",
-        "properties": {
-          "ordering": {},
-          "limit": {
-            "type": "integer",
-            "minimum": 1,
-            "maximum": 100
-          },
-          "offset": {
-            "type": "integer",
-            "minimum": 0
-          }
-        },
-        "additionalProperties": false
-      },
-      "body_schema": {
-        "type": "object",
-        "properties": {}
-      },
-      "description": "Get services proxies. Backend account permissions and ownership checks apply.",
       "disclose": []
     },
     {
@@ -12462,97 +12378,6 @@
         "properties": {}
       },
       "description": "Get usage apis id. Backend account permissions and ownership checks apply.",
-      "disclose": []
-    },
-    {
-      "operation_id": "surface.list_usage_proxies",
-      "name": "acedatacloud_list_usage_proxies",
-      "method": "GET",
-      "path": "/usage/proxies/",
-      "domain": "Usage",
-      "authentication": "authenticated",
-      "required_permissions": [
-        "usage:read"
-      ],
-      "confirm": false,
-      "path_parameters": [],
-      "query_schema": {
-        "type": "object",
-        "properties": {
-          "application_id": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "user_id": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "proxy_id": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "limit": {
-            "type": "integer",
-            "minimum": 1,
-            "maximum": 100
-          },
-          "offset": {
-            "type": "integer",
-            "minimum": 0
-          },
-          "ordering": {
-            "type": "string"
-          }
-        },
-        "additionalProperties": false
-      },
-      "body_schema": {
-        "type": "object",
-        "properties": {}
-      },
-      "description": "List usage proxies. Backend account permissions and ownership checks apply.",
-      "disclose": []
-    },
-    {
-      "operation_id": "surface.get_usage_proxies_id",
-      "name": "acedatacloud_get_usage_proxies_id",
-      "method": "GET",
-      "path": "/usage/proxies/{id}",
-      "domain": "Usage",
-      "authentication": "authenticated",
-      "required_permissions": [
-        "usage:read"
-      ],
-      "confirm": false,
-      "path_parameters": [
-        "id"
-      ],
-      "query_schema": {
-        "type": "object",
-        "properties": {
-          "limit": {
-            "type": "integer",
-            "minimum": 1,
-            "maximum": 100
-          },
-          "offset": {
-            "type": "integer",
-            "minimum": 0
-          }
-        },
-        "additionalProperties": false
-      },
-      "body_schema": {
-        "type": "object",
-        "properties": {}
-      },
-      "description": "Get usage proxies id. Backend account permissions and ownership checks apply.",
       "disclose": []
     },
     {
@@ -19652,6 +19477,10 @@
     "sites/{id}": "071a3ac9c1a68232947bf8112096bb8b70996daa",
     "surveys/admin/templates/{id}": "071a3ac9c1a68232947bf8112096bb8b70996daa",
     "webhook-subscriptions/{id}": "071a3ac9c1a68232947bf8112096bb8b70996daa",
-    "webhooks/{id}": "071a3ac9c1a68232947bf8112096bb8b70996daa"
+    "webhooks/{id}": "071a3ac9c1a68232947bf8112096bb8b70996daa",
+    "documents": "3b0aeacfe8a51a74f7f83b2c2eced08e757a417f",
+    "services": "3b0aeacfe8a51a74f7f83b2c2eced08e757a417f",
+    "documents/{lookup_value}": "3b0aeacfe8a51a74f7f83b2c2eced08e757a417f",
+    "services/{lookup_value}": "3b0aeacfe8a51a74f7f83b2c2eced08e757a417f"
   }
 }
