@@ -156,7 +156,6 @@ def build_tool(spec: dict[str, Any]) -> Any:
                 "/orders/": "orders:read:any",
                 "/platform-tokens/": None,
                 "/usage/apis/": "usage:read:any",
-                "/usage/proxies/": "usage:read:any",
                 "/coin-infos/": None,
                 "/distribution-statuses/": "distribution:read:any",
             }

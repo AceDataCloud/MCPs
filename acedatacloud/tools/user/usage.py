@@ -1,4 +1,4 @@
-"""API and proxy usage self-service tools."""
+"""API usage self-service tools."""
 
 import datetime as dt
 from typing import Annotated, Literal
@@ -164,47 +164,5 @@ async def acedatacloud_export_usage(
                 "content": result.content,
             }
         )
-    except PlatformError as error:
-        return error_json(error.code, error.message)
-
-
-@mcp.tool()
-async def acedatacloud_list_proxy_usage(
-    application_id: Annotated[
-        str | list[str] | None, Field(description="Proxy application UUID filters.")
-    ] = None,
-    proxy_id: Annotated[str | list[str] | None, Field(description="Proxy UUID filters.")] = None,
-    ordering: Annotated[
-        Literal["-created_at", "-updated_at"] | None, Field(description="Usage ordering.")
-    ] = None,
-    limit: Annotated[int, Field(description="Max records.", ge=1, le=100)] = 20,
-    offset: Annotated[int, Field(description="Pagination offset.", ge=0)] = 0,
-) -> str:
-    """List caller-owned proxy usage records."""
-    try:
-        return dumps(
-            await client.get(
-                "/usage/proxies/",
-                {
-                    "user_id": await get_request_user_id(),
-                    "application_id": application_id,
-                    "proxy_id": proxy_id,
-                    "ordering": ordering,
-                    "limit": limit,
-                    "offset": offset,
-                },
-            )
-        )
-    except PlatformError as error:
-        return error_json(error.code, error.message)
-
-
-@mcp.tool()
-async def acedatacloud_get_proxy_usage(
-    usage_id: Annotated[str, Field(description="Proxy usage UUID.")],
-) -> str:
-    """Get one caller-authorized proxy usage record."""
-    try:
-        return dumps(await client.get(f"/usage/proxies/{usage_id}"))
     except PlatformError as error:
         return error_json(error.code, error.message)

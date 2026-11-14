@@ -97,7 +97,6 @@ CROSS_ACCOUNT_TOOLS = {
     "acedatacloud_list_credentials_detail": "credentials:write:any",
     "acedatacloud_list_orders_detail": "orders:read:any",
     "acedatacloud_list_usage_apis": "usage:read:any",
-    "acedatacloud_list_usage_proxies": "usage:read:any",
     "acedatacloud_list_distribution_statuses": "distribution:read:any",
 }
 
