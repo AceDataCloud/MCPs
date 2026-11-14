@@ -191,7 +191,7 @@ class AceDataCloudOAuthProvider:
 
         raise TokenError(
             error="invalid_grant",
-            error_description="This server issues non-expiring tokens; refresh is not supported.",
+            error_description="This server issues expiring tokens; refresh is not supported.",
         )
 
     async def load_access_token(self, token: str) -> AccessToken | None:
@@ -286,33 +286,12 @@ class AceDataCloudOAuthProvider:
                 if not application_id:
                     return None
 
-                # Query for existing shared "OAuth MCP" credential first
-                cred_list_resp = await client.get(
-                    f"{settings.platform_base_url}/api/v1/credentials/",
-                    params={"application_id": application_id, "name": "OAuth MCP"},
-                    headers=headers,
-                )
-                existing_creds = []
-                if cred_list_resp.status_code == 200:
-                    cred_data = cred_list_resp.json()
-                    existing_creds = cred_data.get("items", cred_data.get("results", []))
-
-                # Reuse existing credential if found
-                if existing_creds and isinstance(existing_creds, list):
-                    data = existing_creds[0]
-                    token = data.get("token") if isinstance(data, dict) else None
-                    if isinstance(token, str) and token:
-                        logger.info(f"Reusing existing OAuth MCP Credential (id={data.get('id')})")
-                        return token
-
-                # Create new credential only if not found
+                # The backend derives the service from the verified OAuth client;
+                # it never accepts a caller-selected service or reuses broad tokens.
                 cred_resp = await client.post(
-                    f"{settings.platform_base_url}/api/v1/credentials/",
+                    f"{settings.platform_base_url}/api/v1/credentials/hosted-mcp/",
                     headers={**headers, "Content-Type": "application/json"},
-                    json={
-                        "application_id": application_id,
-                        "name": "OAuth MCP",
-                    },
+                    json={},
                 )
                 if cred_resp.status_code not in (200, 201):
                     logger.error(

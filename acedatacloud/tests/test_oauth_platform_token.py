@@ -8,7 +8,6 @@ from urllib.parse import parse_qs, urlparse
 import fakeredis.aioredis
 import httpx
 import pytest
-import respx
 from mcp.server.auth.provider import (
     AuthorizationParams,
     OAuthClientInformationFull,
@@ -30,7 +29,8 @@ async def test_authorize_requests_account_derived_scopes(monkeypatch):
     monkeypatch.setattr(settings, "oauth_client_id", "platform-mcp")
     provider = AceDataCloudOAuthProvider()
     client = OAuthClientInformationFull(
-        client_id="mcp-client", redirect_uris=[AnyUrl("https://client.example/callback")]
+        client_id="mcp-client",
+        redirect_uris=[AnyUrl("https://client.example/callback")],
     )
     params = AuthorizationParams(
         state="client-state",
@@ -56,38 +56,36 @@ def _make_jwt(claims: dict) -> str:
     return f"aaa.{payload}.bbb"
 
 
-@respx.mock
 @pytest.mark.asyncio
 @pytest.mark.parametrize("pagination_key", ["items", "results"])
-async def test_get_platform_token_reuses_existing_tagged_token(pagination_key):
+async def test_get_platform_token_never_reuses_broad_tagged_token(pagination_key, respx_mock):
     provider = AceDataCloudOAuthProvider()
     jwt = _make_jwt({"user_id": "u1"})
-    list_route = respx.get(f"{API}/platform-tokens/").mock(
+    list_route = respx_mock.get(f"{API}/platform-tokens/").mock(
         return_value=httpx.Response(
             200,
             json={pagination_key: [{"token": "platform-existing", "tags": [PLATFORM_TOKEN_TAG]}]},
         )
     )
-    create_route = respx.post(f"{API}/platform-tokens/").mock(
+    create_route = respx_mock.post(f"{API}/platform-tokens/").mock(
         return_value=httpx.Response(201, json={"token": "platform-new"})
     )
 
     token = await provider._get_platform_token(jwt)
 
-    assert token == "platform-existing"
-    assert list_route.called
-    assert create_route.call_count == 0  # reuse must not mint a new token
+    assert token == "platform-new"
+    assert not list_route.called
+    assert create_route.call_count == 1
 
 
-@respx.mock
 @pytest.mark.asyncio
-async def test_get_platform_token_creates_when_none_exist():
+async def test_get_platform_token_creates_when_none_exist(respx_mock):
     provider = AceDataCloudOAuthProvider()
     jwt = _make_jwt({"user_id": "u1"})
-    respx.get(f"{API}/platform-tokens/").mock(
+    respx_mock.get(f"{API}/platform-tokens/").mock(
         return_value=httpx.Response(200, json={"results": []})
     )
-    create_route = respx.post(f"{API}/platform-tokens/").mock(
+    create_route = respx_mock.post(f"{API}/platform-tokens/").mock(
         return_value=httpx.Response(201, json={"token": "platform-new"})
     )
 
@@ -99,15 +97,16 @@ async def test_get_platform_token_creates_when_none_exist():
     assert PLATFORM_TOKEN_TAG in body["tags"]
 
 
-@respx.mock
 @pytest.mark.asyncio
-async def test_get_platform_token_returns_none_on_create_failure():
+async def test_get_platform_token_returns_none_on_create_failure(respx_mock):
     provider = AceDataCloudOAuthProvider()
     jwt = _make_jwt({"user_id": "u1"})
-    respx.get(f"{API}/platform-tokens/").mock(
+    respx_mock.get(f"{API}/platform-tokens/").mock(
         return_value=httpx.Response(200, json={"results": []})
     )
-    respx.post(f"{API}/platform-tokens/").mock(return_value=httpx.Response(403, text="forbidden"))
+    respx_mock.post(f"{API}/platform-tokens/").mock(
+        return_value=httpx.Response(403, text="forbidden")
+    )
 
     assert await provider._get_platform_token(jwt) is None
 
@@ -138,7 +137,9 @@ async def test_load_refresh_token_returns_none():
 
 
 @pytest.mark.asyncio
-async def test_oauth_registration_callback_and_code_exchange_cross_replicas(monkeypatch):
+async def test_oauth_registration_callback_and_code_exchange_cross_replicas(
+    monkeypatch,
+):
     monkeypatch.setattr(settings, "server_url", "https://mcp.acedata.cloud")
     monkeypatch.setattr(settings, "oauth_client_id", "platform-mcp")
     redis_server = fakeredis.FakeServer()
@@ -205,12 +206,11 @@ async def test_oauth_registration_callback_and_code_exchange_cross_replicas(monk
         await first.exchange_authorization_code(registered, loaded)
 
 
-@respx.mock
 @pytest.mark.asyncio
-async def test_mfa_security_change_never_reuses_old_platform_token():
+async def test_mfa_security_change_never_reuses_old_platform_token(respx_mock):
     provider = AceDataCloudOAuthProvider()
     jwt = _make_jwt({"user_id": "u1", "auth_epoch": 2})
-    respx.get(f"{API}/platform-tokens/").mock(
+    respx_mock.get(f"{API}/platform-tokens/").mock(
         return_value=httpx.Response(
             200,
             json={
@@ -221,7 +221,7 @@ async def test_mfa_security_change_never_reuses_old_platform_token():
             },
         )
     )
-    create = respx.post(f"{API}/platform-tokens/").mock(
+    create = respx_mock.post(f"{API}/platform-tokens/").mock(
         return_value=httpx.Response(201, json={"token": "platform-new", "auth_epoch": 2})
     )
     assert await provider._get_platform_token(jwt) == "platform-new"
@@ -235,7 +235,12 @@ def test_mfa_reuses_only_current_epoch():
     provider = AceDataCloudOAuthProvider()
     assert (
         provider._extract_token(
-            {"items": [{"token": "old", "auth_epoch": 1}, {"token": "current", "auth_epoch": 2}]},
+            {
+                "items": [
+                    {"token": "old", "auth_epoch": 1},
+                    {"token": "current", "auth_epoch": 2},
+                ]
+            },
             auth_epoch=2,
         )
         == "current"
