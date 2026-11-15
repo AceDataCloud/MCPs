@@ -98,6 +98,7 @@
       },
       "registry": {
         "title": "HappyHorse by Ace Data Cloud",
+        "guide": "README.md",
         "description": "Generate and edit HappyHorse videos with Ace Data Cloud; retrieve the original task for results.",
         "icon": {
           "src": "https://cdn.acedata.cloud/2841e8c719.png",

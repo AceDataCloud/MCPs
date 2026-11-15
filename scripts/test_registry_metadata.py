@@ -3,10 +3,22 @@ import unittest
 from urllib.parse import parse_qs, urlsplit
 
 from scripts.mcp_catalog import load_catalog
-from scripts.registry_metadata import outputs
+from scripts.registry_metadata import listing_url, outputs
 
 
 class RegistryMetadataTest(unittest.TestCase):
+    def test_happyhorse_listing_lands_on_existing_mcp_and_token_guide(self):
+        catalog = load_catalog()
+        url = listing_url(
+            "happyhorse", catalog["happyhorse"], "https://github.com/AceDataCloud/HappyHorseMCP"
+        )
+        self.assertEqual(urlsplit(url).path, "/AceDataCloud/HappyHorseMCP/blob/main/README.md")
+        self.assertEqual(parse_qs(urlsplit(url).query)["utm_source"], ["mcp_registry"])
+        for guide in ("../README.md", "https://example.com/README.md", "missing.md"):
+            entry = {**catalog["happyhorse"], "registry": {"guide": guide}}
+            with self.subTest(guide=guide), self.assertRaises(ValueError):
+                listing_url("happyhorse", entry, "https://github.com/AceDataCloud/HappyHorseMCP")
+
     def test_existing_entries_match_single_catalog_and_current_link_contract(self):
         catalog = load_catalog()
         for path, expected in outputs():
