@@ -32,7 +32,7 @@ spec:
             - name: MCP_SERVER_URL
               value: "https://qwen-image.mcp.acedata.cloud"
             - name: ACEDATACLOUD_OAUTH_CLIENT_ID
-              value: "uIXm6GbjXJJVR7h8ccXqvj0cgcAKKw3IkhQ-hD8Grk8"
+              value: "FH9m5HORfu4s7pyBWGjdTakvvv3viIvMZn6GqWVMT3E"
             - name: MCP_OAUTH_REDIS_URL
               value: "redis://mcp-acedatacloud-oauth-redis:6379/0"
             - name: MCP_OAUTH_REDIS_PASSWORD
