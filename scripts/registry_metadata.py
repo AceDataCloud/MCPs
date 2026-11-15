@@ -11,8 +11,16 @@ from scripts.mcp_catalog import documentation_target, load_catalog
 ROOT = Path(__file__).resolve().parents[1]
 
 
-def listing_url(alias, entry):
+def listing_url(alias, entry, repository_url=None):
     destination, _ = documentation_target(entry)
+    if guide := entry.get("registry", {}).get("guide"):
+        if not repository_url or Path(guide).name != guide or not guide.endswith(".md"):
+            raise ValueError(
+                f"{alias}: Registry guide must name an existing repository Markdown file"
+            )
+        if not (ROOT / alias / guide).is_file():
+            raise ValueError(f"{alias}: Registry guide does not exist: {guide}")
+        destination = repository_url + "/blob/main/" + guide
     rules = contract()
     return (
         destination
@@ -34,7 +42,7 @@ def outputs():
         if entry["status"] != "active" or not path.exists():
             continue
         server = json.loads(path.read_text())
-        server["websiteUrl"] = listing_url(alias, entry)
+        server["websiteUrl"] = listing_url(alias, entry, server["repository"]["url"])
         if metadata := entry.get("registry"):
             server["title"] = metadata["title"]
             server["description"] = metadata["description"]
@@ -46,9 +54,7 @@ def outputs():
                 name=profile["name"],
                 title=profile["title"],
                 description=profile["description"],
-                websiteUrl=server["repository"]["url"]
-                + "/blob/main/"
-                + profile["guide"],
+                websiteUrl=server["repository"]["url"] + "/blob/main/" + profile["guide"],
                 icons=[profile["icon"]],
             )
             scoped.pop("remotes", None)
