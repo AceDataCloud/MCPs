@@ -9,7 +9,7 @@ Flow:
 3. User logs in (if needed), sees consent page, approves
 4. auth.acedata.cloud issues an authorization code, redirects to /oauth/callback
 5. MCP server exchanges code for a JWT via POST /oauth2/token (with PKCE)
-6. MCP server uses that JWT to mint a durable, non-expiring platform-* token
+6. MCP server uses that JWT to mint a durable, bounded-lifetime platform-* token
    (POST platform.acedata.cloud/api/v1/platform-tokens/, reused via a tag)
 7. Issues the platform token as the OAuth access_token — no refresh flow, so
    redeploys/pod restarts never force re-authorization
@@ -53,12 +53,7 @@ def _normalize_scopes(scopes: list[str] | None) -> list[str]:
 
 
 class AceDataCloudOAuthProvider:
-    """OAuth provider that delegates authentication to AceDataCloud platform.
-
-    The access token is a durable, non-expiring platform-* token minted from the
-    user's JWT. There is no refresh flow — the token never expires, so pod
-    restarts/redeploys never force re-authorization.
-    """
+    """Issue a consent-bound platform token; reauthorize after its expiry."""
 
     def __init__(self, redis_client: Redis | None = None, state_key: str = "") -> None:
         # Hosted OAuth has multiple replicas. Redis is the shared source of
@@ -186,7 +181,7 @@ class AceDataCloudOAuthProvider:
 
             jwt_token = token_data["access_token"]
 
-            # Mint a durable, non-expiring platform-* token as the access token.
+            # Mint a durable, bounded-lifetime platform-* token as the access token.
             api_token = await self._get_platform_token(jwt_token)
             if not api_token:
                 logger.error("handle_callback: platform-token mint failed, returning 502")
@@ -280,7 +275,7 @@ class AceDataCloudOAuthProvider:
 
         client_id = client.client_id or ""
 
-        # The access token is a durable, non-expiring platform-* token.
+        # The access token is a durable, bounded-lifetime platform-* token.
         self._access_tokens[api_token] = AccessToken(
             token=api_token,
             client_id=client_id,
@@ -300,7 +295,7 @@ class AceDataCloudOAuthProvider:
         client: OAuthClientInformationFull,  # noqa: ARG002
         refresh_token: str,  # noqa: ARG002
     ) -> RefreshToken | None:
-        # No refresh flow — the access token is a durable, non-expiring platform token.
+        # No refresh flow — the access token is a durable, bounded-lifetime platform token.
         return None
 
     async def exchange_refresh_token(
@@ -311,11 +306,11 @@ class AceDataCloudOAuthProvider:
     ) -> OAuthToken:
         from mcp.server.auth.provider import TokenError
 
-        # Tokens never expire, so there is nothing to refresh. An old client that
+        # Child tokens have a bounded lifetime. An old client that
         # still holds a pre-migration refresh_token gets a clean re-auth prompt.
         raise TokenError(
             error="invalid_grant",
-            error_description="This server issues non-expiring tokens; refresh is not supported.",
+            error_description="This server issues bounded-lifetime tokens; refresh is not supported.",
         )
 
     async def load_access_token(self, token: str) -> AccessToken | None:
@@ -339,7 +334,7 @@ class AceDataCloudOAuthProvider:
     async def revoke_token(self, token: AccessToken | RefreshToken) -> None:
         if isinstance(token, AccessToken):
             self._access_tokens.pop(token.token, None)
-        logger.info(f"Revoked token: {token.token[:8]}...")
+        logger.info("Revoked local token registration")
 
     # --- Internal helpers ---
 
@@ -402,37 +397,23 @@ class AceDataCloudOAuthProvider:
         return None
 
     async def _get_platform_token(self, jwt_token: str) -> str | None:
-        """Mint (or reuse) a durable, non-expiring platform-* token for the user.
+        """Mint a fresh consent-bound platform token for the user.
 
         platform.acedata.cloud accepts the JWT (JWTAuthentication) to create a
-        PlatformToken, which never expires. Reuse is keyed on a tag so repeated
-        authorizations don't pile up orphan tokens.
+        PlatformToken, which expires with its upstream authorization. Tokens are
+        never reused across consent grants.
         """
         headers = {"Authorization": f"Bearer {jwt_token}"}
         endpoint = f"{settings.api_base_url.rstrip('/')}/api/v1/platform-tokens/"
         claims = self._decode_jwt_payload(jwt_token) or {}
-        user_id = claims.get("user_id")
         auth_epoch = claims.get("auth_epoch", 0)
         if type(auth_epoch) is not int or auth_epoch < 0:
             logger.warning("OAuth token has an invalid account security version")
             return None
         try:
             async with httpx.AsyncClient(timeout=30) as client:
-                # Reuse an existing tagged token if the user already has one.
-                # user_id is required: the list endpoint 403s a non-superuser
-                # whose page contains another user's token.
-                if user_id:
-                    resp = await client.get(
-                        endpoint,
-                        headers=headers,
-                        params={"user_id": user_id, "tag": PLATFORM_TOKEN_TAG},
-                    )
-                    if resp.status_code == 200:
-                        existing = self._extract_token(resp.json(), auth_epoch=auth_epoch)
-                        if existing:
-                            logger.info("OAuth: reusing existing platform token")
-                            return existing
-
+                # Always issue a child of this consent. Reusing a token by tag
+                # would merge different clients, scopes and revocation families.
                 # Otherwise mint a new durable, tagged token.
                 resp = await client.post(
                     endpoint,

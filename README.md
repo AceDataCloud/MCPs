@@ -205,3 +205,14 @@ One daily Kubernetes Job reviews Backend docs and API changes with Claude Code,
 updates existing files, and creates or updates one reviewable PR per repository.
 It never merges PRs or duplicates the Backend guide tree. Normal CI and review
 remain required; publication and sub-repository mirroring run after merge.
+
+## Hosted OAuth credential boundaries
+
+Generation MCPs provision through PlatformBackend `/credentials/hosted-mcp/`.
+The backend binds API permissions to the verified OAuth client and original grant;
+MCP-supplied names or service selectors cannot widen that boundary. A new consent
+gets a new credential; the legacy shared `OAuth MCP` credential is never reused.
+Account MCP likewise creates a fresh grant-bound platform token. Credentials expire
+with the upstream access authorization and require reauthorization; restarting a pod
+does not renew them. Backend/Gateway grant readers and Auth migration 0090 must be
+deployed first. Existing broad credentials are not automatically revoked by this PR.

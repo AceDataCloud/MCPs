@@ -95,8 +95,8 @@ async def test_pkce_callback_and_single_use_durable_token(provider, client, resp
     respx_mock.get("https://platform.example.com/api/v1/applications/").respond(
         200, json={"items": [{"id": "global-app"}]}
     )
-    respx_mock.get("https://platform.example.com/api/v1/credentials/").respond(
-        200, json={"items": [{"id": "credential", "token": "durable-token"}]}
+    respx_mock.post("https://platform.example.com/api/v1/credentials/hosted-mcp/").respond(
+        201, json={"id": "credential", "token": "durable-token"}
     )
     response = await provider.handle_callback(callback(state))
     assert response.status_code == 302
@@ -121,14 +121,13 @@ async def test_pkce_callback_and_single_use_durable_token(provider, client, resp
 
 
 @pytest.mark.asyncio
-async def test_credential_creation_uses_global_usage_and_shared_name(
+async def test_credential_creation_uses_server_bound_service_endpoint(
     provider, respx_mock
 ):
     apps = "https://platform.example.com/api/v1/applications/"
-    credentials = "https://platform.example.com/api/v1/credentials/"
+    credentials = "https://platform.example.com/api/v1/credentials/hosted-mcp/"
     lookup = respx_mock.get(apps).respond(200, json={"results": []})
     create_app = respx_mock.post(apps).respond(201, json={"id": "new-app"})
-    credential_lookup = respx_mock.get(credentials).respond(200, json={"results": []})
     create_credential = respx_mock.post(credentials).respond(
         201, json={"token": "new-credential"}
     )
@@ -138,14 +137,7 @@ async def test_credential_creation_uses_global_usage_and_shared_name(
         "type": "Usage",
         "scope": "Global",
     }
-    assert dict(credential_lookup.calls.last.request.url.params) == {
-        "application_id": "new-app",
-        "name": "OAuth MCP",
-    }
-    assert json.loads(create_credential.calls.last.request.content) == {
-        "application_id": "new-app",
-        "name": "OAuth MCP",
-    }
+    assert json.loads(create_credential.calls.last.request.content) == {}
 
 
 @pytest.mark.asyncio
