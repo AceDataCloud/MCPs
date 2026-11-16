@@ -3,6 +3,7 @@
 import logging
 
 from mcp.server.fastmcp import FastMCP
+from mcp.types import Icon
 
 from core.config import settings
 
@@ -50,6 +51,7 @@ if settings.server_url:
 # Initialize FastMCP server
 mcp = FastMCP(
     settings.server_name,
+    icons=[Icon(src="https://platform.acedata.cloud/acemusic/icon.png", mimeType="image/png")],
     **mcp_kwargs,
 )
 

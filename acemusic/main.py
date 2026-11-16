@@ -135,7 +135,7 @@ Environment Variables:
 
             async def favicon(_request: Request) -> RedirectResponse:
                 return RedirectResponse(
-                    "https://cdn.acedata.cloud/ahjfwi.png",
+                    "https://platform.acedata.cloud/acemusic/icon.png",
                     status_code=301,
                 )
 
