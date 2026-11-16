@@ -95,6 +95,25 @@
       "listing": null,
       "docs": "https://platform.acedata.cloud/documents/openai",
       "model_prefix": "gpt-image-"
+    },
+    {
+      "alias": "acemusic",
+      "directory": "acemusic/jetbrains",
+      "package": "com.acedatacloud.mcp.acemusic",
+      "settings_class": "McpSettings",
+      "configurable": "McpSettingsConfigurable",
+      "title": "ACE Music by Ace Data Cloud",
+      "brand": "ACE Music",
+      "kind": "music",
+      "model_tool": "acemusic_list_models",
+      "generate_tool": "acemusic_generate_music",
+      "task_tool": "acemusic_get_task",
+      "task_arg": "task_id",
+      "endpoint": "https://acemusic.mcp.acedata.cloud/mcp",
+      "repo": "AceMusicMCP",
+      "pypi": "mcp-acemusic",
+      "listing": null,
+      "docs": "https://platform.acedata.cloud/documents/acemusic"
     }
   ]
 }

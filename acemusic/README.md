@@ -19,7 +19,7 @@ uvx mcp-acemusic
 
 For source development: `pip install -e ".[dev,test]"`, then `mcp-acemusic`.
 
-The hosted target after deployment is `https://acemusic.mcp.acedata.cloud/mcp`. Configure a Bearer API key in the client or use its OAuth connection flow when registration is enabled. The deployer must provision ACE Music's own OAuth client and state secret; credentials from another service must not be reused.
+The hosted target after deployment is `https://acemusic.mcp.acedata.cloud/mcp`. Configure a Bearer API key in the client or use its OAuth connection flow when registration is enabled. The deployer must sync ACE Music's own AuthBackend OAuth seed and provision its state secret; credentials from another service must not be reused.
 
 ## Tools
 
@@ -44,6 +44,6 @@ The package does not promise upload, cover, extend, stems, voice cloning, WAV, M
 
 Run `ruff check .`, `ruff format --check .`, `mypy core tools main.py`, `pytest`, and `python -m build`. Tests mock HTTP and do not spend account credit.
 
-`deploy/production` targets the shared `nginx-router` ingress. Provision `mcp-acemusic-oauth-state` with `client_id` and `state_key`, the shared OAuth Redis secret, DNS/TLS and package/image publication before enabling the hosted entry. `deploy/run.sh` uses the repository's normal release mechanism.
+`deploy/production` targets the shared `nginx-router` ingress. Provision `mcp-acemusic-oauth-state` with `state_key`, the shared OAuth Redis secret, DNS/TLS and package/image publication before enabling the hosted entry. `deploy/run.sh` uses the repository's normal release mechanism.
 
 <!-- mcp-name: io.github.AceDataCloud/mcp-acemusic -->

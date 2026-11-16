@@ -6,7 +6,7 @@ from core.server import mcp
 
 
 @mcp.tool()
-def acemusic_list_models() -> str:
+async def acemusic_list_models() -> str:
     """List supported public ACE Music model IDs and the default."""
     return json.dumps({"models": ["acemusic-v1.1", "acemusic-v1"], "default": "acemusic-v1.1"})
 

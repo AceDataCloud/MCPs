@@ -32,10 +32,7 @@ spec:
             - name: MCP_SERVER_URL
               value: "https://acemusic.mcp.acedata.cloud"
             - name: ACEDATACLOUD_OAUTH_CLIENT_ID
-              valueFrom:
-                secretKeyRef:
-                  name: mcp-acemusic-oauth-state
-                  key: client_id
+              value: "C0bODdSJ0XrZs8mjY5K-rc79pY1WefW-hPTt1QArgEg"
             - name: MCP_OAUTH_REDIS_URL
               value: "redis://mcp-acedatacloud-oauth-redis:6379/0"
             - name: MCP_OAUTH_REDIS_PASSWORD
