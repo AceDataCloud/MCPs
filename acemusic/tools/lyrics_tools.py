@@ -19,4 +19,6 @@ async def acemusic_generate_lyrics(
     Show or edit the lyrics before a separate custom music generation. Do not
     call this implicitly when the user has already supplied complete lyrics.
     """
-    return format_result(await client.generate_lyrics(prompt=prompt, style=style))
+    return format_result(
+        await client.generate_lyrics(prompt=prompt, **({"style": style} if style else {}))
+    )

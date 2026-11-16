@@ -61,7 +61,7 @@ async def acemusic_generate_custom_music(
         custom=True,
         lyric=lyric,
         style=style,
-        title=title,
+        **({"title": title} if title else {}),
         **({"callback_url": callback_url} if callback_url else {}),
     )
     return format_result(result, submission=True)
