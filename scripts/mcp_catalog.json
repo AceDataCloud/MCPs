@@ -9,6 +9,23 @@
         "default": false
       }
     },
+    "acemusic": {
+      "status": "active",
+      "type": "document",
+      "alias": "acemusic",
+      "vscode_bundle": {
+        "label": "ACE Music",
+        "default": false
+      },
+      "registry": {
+        "title": "ACE Music by Ace Data Cloud",
+        "description": "Create ACE Music songs and lyrics with Ace Data Cloud; query the original task for results.",
+        "icon": {
+          "src": "https://raw.githubusercontent.com/AceDataCloud/MCPs/b63e431b4464d1d57b1f950d4ba957402f9fa8cd/vscode-bundle/icon.png",
+          "mimeType": "image/png"
+        }
+      }
+    },
     "aichat": {
       "status": "active",
       "runtime_icon": {

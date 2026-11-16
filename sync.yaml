@@ -133,3 +133,7 @@ mappings:
       - .gitbooks
   vscode-bundle:
     repo: AceDataCloud/VSCodeMCP
+  acemusic:
+    repo: AceDataCloud/AceMusicMCP
+    exclude:
+      - .gitbooks

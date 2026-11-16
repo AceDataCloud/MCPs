@@ -1,7 +1,7 @@
 # Ace Data Cloud MCP
 
 One VS Code extension for AI chat, images, video, music, search, web extraction,
-and account management. Choose from **26 hosted MCP services** and use them in
+and account management. Choose from **27 hosted MCP services** and use them in
 VS Code Chat without installing Python or running local servers.
 
 [简体中文教程](README.zh-CN.md) · [Current models and pricing](https://platform.acedata.cloud/models?utm_source=vscode_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=vscode_bundle_mcp_vscode_models)
@@ -90,6 +90,7 @@ The same extension exposes the services below. **GPT Image is under OpenAI**, an
 | Service | Credential |
 | --- | --- |
 | Ace Data Cloud Account | Platform token |
+| ACE Music | API key |
 | AI Chat | API key |
 | Face Transform | API key |
 | Fish Audio | API key |
