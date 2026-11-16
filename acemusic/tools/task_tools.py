@@ -36,4 +36,6 @@ async def acemusic_list_tasks(
     page_size: Annotated[int, Field(ge=1, le=50)] = 20,
 ) -> str:
     """List the caller's ACE Music task history with bounded pagination."""
-    return format_result(await client.query_task(action="list", page=page, page_size=page_size))
+    return format_result(
+        await client.query_task(action="list", limit=page_size, offset=(page - 1) * page_size)
+    )

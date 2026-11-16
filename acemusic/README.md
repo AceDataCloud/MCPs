@@ -3,7 +3,7 @@
 Create songs from an idea or custom lyrics, generate lyrics, and retrieve the original task through Ace Data Cloud.
 
 <!-- canonical-documentation -->
-[Documentation](https://platform.acedata.cloud/documents/acemusic?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=acemusic_mcp_readme_quick_start)
+[Documentation](https://platform.acedata.cloud/documents/mcp-acemusic?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=acemusic_mcp_readme_quick_start)
 
 This new service package is prepared for release alongside the ACE Music API. Package publication, hosted deployment and real generation are separate release checks; source code does not confirm their availability.
 

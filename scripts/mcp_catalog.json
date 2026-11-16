@@ -12,7 +12,7 @@
     "acemusic": {
       "status": "active",
       "type": "document",
-      "alias": "acemusic",
+      "alias": "mcp-acemusic",
       "vscode_bundle": {
         "label": "ACE Music",
         "default": false
@@ -21,7 +21,7 @@
         "title": "ACE Music by Ace Data Cloud",
         "description": "Create ACE Music songs and lyrics with Ace Data Cloud; query the original task for results.",
         "icon": {
-          "src": "https://raw.githubusercontent.com/AceDataCloud/MCPs/b63e431b4464d1d57b1f950d4ba957402f9fa8cd/vscode-bundle/icon.png",
+          "src": "https://platform.acedata.cloud/acemusic/icon.png",
           "mimeType": "image/png"
         }
       }

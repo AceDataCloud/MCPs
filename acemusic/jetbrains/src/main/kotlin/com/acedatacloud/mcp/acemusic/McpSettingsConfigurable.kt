@@ -94,7 +94,7 @@ class McpSettingsConfigurable : Configurable {
                     browserLink("Ace Data Cloud Platform", "https://platform.acedata.cloud?utm_source=jetbrains_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=acemusic_mcp_jetbrains_platform")
                 }
                 row {
-                    browserLink("Documentation", "https://platform.acedata.cloud/documents/acemusic?utm_source=jetbrains_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=acemusic_mcp_jetbrains_quick_start")
+                    browserLink("Documentation", "https://platform.acedata.cloud/documents/mcp-acemusic?utm_source=jetbrains_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=acemusic_mcp_jetbrains_quick_start")
                 }
                 row {
                     browserLink("Source Code", "https://github.com/AceDataCloud/AceMusicMCP")

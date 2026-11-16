@@ -26,7 +26,7 @@
       ]
     }
   ],
-  "websiteUrl": "https://platform.acedata.cloud/documents/acemusic?utm_source=mcp_registry&utm_medium=referral&utm_campaign=evergreen&utm_content=acemusic_mcp_listing_guide",
+  "websiteUrl": "https://platform.acedata.cloud/documents/mcp-acemusic?utm_source=mcp_registry&utm_medium=referral&utm_campaign=evergreen&utm_content=acemusic_mcp_listing_guide",
   "remotes": [
     {
       "type": "streamable-http",
@@ -36,7 +36,7 @@
   "title": "ACE Music by Ace Data Cloud",
   "icons": [
     {
-      "src": "https://raw.githubusercontent.com/AceDataCloud/MCPs/b63e431b4464d1d57b1f950d4ba957402f9fa8cd/vscode-bundle/icon.png",
+      "src": "https://platform.acedata.cloud/acemusic/icon.png",
       "mimeType": "image/png"
     }
   ]

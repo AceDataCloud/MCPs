@@ -63,7 +63,7 @@ async def test_lyrics_and_task_queries_preserve_identity():
         await acemusic_get_tasks_batch(["one", "two"])
         mock.assert_awaited_with(action="retrieve_batch", ids=["one", "two"])
         await acemusic_list_tasks(2, 10)
-        mock.assert_awaited_with(action="list", page=2, page_size=10)
+        mock.assert_awaited_with(action="list", limit=10, offset=10)
 
 
 def test_group_state_overrides_media_and_partial_is_terminal():

@@ -74,7 +74,7 @@ Save the key in the client's credential store or the environment variable shown 
 
 ## Pricing
 
-Generation and lyrics are priced separately. Check current package pricing; task lookup is authenticated and free. See [Documentation](https://platform.acedata.cloud/documents/acemusic?utm_source=vscode_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=acemusic_mcp_vscode_quick_start).
+Generation and lyrics are priced separately. Check current package pricing; task lookup is authenticated and free. See [Documentation](https://platform.acedata.cloud/documents/mcp-acemusic?utm_source=vscode_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=acemusic_mcp_vscode_quick_start).
 
 ---
 
@@ -146,7 +146,7 @@ version, install [`uv`](https://docs.astral.sh/uv/) and use:
 - **PyPI package:** [`mcp-acemusic`](https://pypi.org/project/mcp-acemusic/)
 - **Source repository:** https://github.com/AceDataCloud/AceMusicMCP
 - **Ace Data Cloud platform:** https://platform.acedata.cloud?utm_source=vscode_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=acemusic_mcp_vscode_platform
-- **Documentation:** https://platform.acedata.cloud/documents/acemusic?utm_source=vscode_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=acemusic_mcp_vscode_quick_start
+- **Documentation:** https://platform.acedata.cloud/documents/mcp-acemusic?utm_source=vscode_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=acemusic_mcp_vscode_quick_start
 
 ## License
 
