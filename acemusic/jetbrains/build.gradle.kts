@@ -58,3 +58,18 @@ tasks {
         gradleVersion = providers.gradleProperty("gradleVersion").get()
     }
 }
+
+
+// Brand bytes are generated from the immutable CDN asset, never stored in source.
+val prepareOfficialBrandIcon by tasks.registering(Exec::class) {
+    workingDir = rootProject.projectDir.parentFile
+    commandLine("python3", "scripts/fetch_brand_assets.py", "--target", "jetbrains")
+    inputs.file(rootProject.file("../brand-assets.json"))
+    inputs.file(rootProject.file("../scripts/fetch_brand_assets.py"))
+    outputs.files(
+        rootProject.file("src/main/resources/META-INF/pluginIcon.png"),
+        rootProject.file("src/main/resources/META-INF/pluginIcon.svg"),
+        rootProject.file("src/main/resources/META-INF/pluginIcon_dark.svg"),
+    )
+}
+tasks.named("processResources") { dependsOn(prepareOfficialBrandIcon) }

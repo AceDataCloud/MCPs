@@ -47,3 +47,8 @@ Run `ruff check .`, `ruff format --check .`, `mypy core tools main.py`, `pytest`
 `deploy/production` targets the shared `nginx-router` ingress. Provision `mcp-acemusic-oauth-state` with `state_key`, the shared OAuth Redis secret, DNS/TLS and package/image publication before enabling the hosted entry. `deploy/run.sh` uses the repository's normal release mechanism.
 
 <!-- mcp-name: io.github.AceDataCloud/mcp-acemusic -->
+
+
+The official ACE Music icon comes from the immutable CDN URL and SHA256 in
+`brand-assets.json`. VS Code and JetBrains builds download and verify that asset
+before packaging; generated icon files are ignored and are not source assets.

@@ -59,5 +59,8 @@
         "category": "MCP"
       }
     ]
+  },
+  "scripts": {
+    "vscode:prepublish": "python3 ../scripts/fetch_brand_assets.py --target vscode"
   }
 }

@@ -80,3 +80,9 @@ Thumbs.db
 
 # Project specific
 *.log
+
+# Generated from the pinned official CDN icon at package build time
+vscode/icon.png
+jetbrains/src/main/resources/META-INF/pluginIcon.png
+jetbrains/src/main/resources/META-INF/pluginIcon.svg
+jetbrains/src/main/resources/META-INF/pluginIcon_dark.svg

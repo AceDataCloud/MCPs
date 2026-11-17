@@ -21,7 +21,7 @@
         "title": "ACE Music by Ace Data Cloud",
         "description": "Create ACE Music songs and lyrics with Ace Data Cloud; query the original task for results.",
         "icon": {
-          "src": "https://platform.acedata.cloud/acemusic/icon.png",
+          "src": "https://cdn.acedata.cloud/acemusic-icon-52deddfc87b9.png",
           "mimeType": "image/png"
         }
       }
