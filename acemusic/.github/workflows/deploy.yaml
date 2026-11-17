@@ -9,6 +9,12 @@ on:
       - CHANGELOG.md
       - LICENSE
       - ".github/ISSUE_TEMPLATE/**"
+  workflow_dispatch:
+
+concurrency:
+  group: acemusic-mcp-production
+  cancel-in-progress: false
+
 jobs:
   run:
     runs-on: ubuntu-latest
