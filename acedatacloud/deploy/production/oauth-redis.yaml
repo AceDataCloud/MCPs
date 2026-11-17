@@ -98,6 +98,7 @@ spec:
                 operator: In
                 values:
                   - mcp-acedatacloud
+                  - mcp-acemusic
                   - mcp-aichat
                   - mcp-face-transform
                   - mcp-fish
