@@ -97,3 +97,13 @@ async def test_timeout_does_not_retry_paid_submission():
     with pytest.raises(AceMusicTimeoutError):
         await AceMusicClient(api_token="secret").generate_audio(prompt="folk")
     assert route.call_count == 1
+
+
+@pytest.mark.asyncio
+async def test_custom_tool_schema_requires_title_before_submission():
+    from core.server import mcp
+
+    tools = await mcp.list_tools()
+    tool = next(tool for tool in tools if tool.name == "acemusic_generate_custom_music")
+    assert set(tool.inputSchema["required"]) == {"lyric", "style", "title"}
+    assert tool.inputSchema["properties"]["title"]["minLength"] == 1

@@ -46,7 +46,7 @@ async def acemusic_generate_custom_music(
         str,
         Field(min_length=1, description="Musical style, instruments, mood and vocal description."),
     ],
-    title: str = "",
+    title: Annotated[str, Field(min_length=1, description="Title for the custom song.")],
     model: AceMusicModel = DEFAULT_MODEL,
     callback_url: str | None = None,
 ) -> str:
@@ -61,7 +61,7 @@ async def acemusic_generate_custom_music(
         custom=True,
         lyric=lyric,
         style=style,
-        **({"title": title} if title else {}),
+        title=title,
         **({"callback_url": callback_url} if callback_url else {}),
     )
     return format_result(result, submission=True)
