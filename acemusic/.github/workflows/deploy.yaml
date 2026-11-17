@@ -9,6 +9,7 @@ on:
       - CHANGELOG.md
       - LICENSE
       - ".github/ISSUE_TEMPLATE/**"
+  workflow_dispatch:
 jobs:
   run:
     runs-on: ubuntu-latest
