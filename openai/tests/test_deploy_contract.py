@@ -42,11 +42,6 @@ def test_apply_preserves_manifest_namespace_and_explicit_context(
         "service.yaml",
         "ingress.yaml",
     }
-    assert all(
-        "namespace: acedatacloud" in text for text in applied["resources"].values()
-    )
-    assert (
-        "ghcr.io/acedatacloud/mcp-openai:123-1"
-        in applied["resources"]["deployment.yaml"]
-    )
+    assert all("namespace: acedatacloud" in text for text in applied["resources"].values())
+    assert "ghcr.io/acedatacloud/mcp-openai:123-1" in applied["resources"]["deployment.yaml"]
     assert result.stdout.strip() == "applied"
