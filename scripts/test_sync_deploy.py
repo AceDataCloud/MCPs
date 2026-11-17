@@ -71,3 +71,31 @@ class OrdinaryDeployTests(unittest.TestCase):
             self.assertFalse(
                 calls.exists(), "All resources must render before any apply"
             )
+
+    def test_invalid_or_mutable_tags_fail_before_apply(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            deploy = root / "deploy"
+            shutil.copytree(ROOT / "suno/deploy", deploy)
+            binary = root / "bin"
+            binary.mkdir()
+            calls = root / "calls"
+            (binary / "kubectl").write_text('#!/bin/sh\ntouch "$CALLS"\n')
+            (binary / "kubectl").chmod(0o755)
+            env = {
+                **os.environ,
+                "PATH": f"{binary}:{os.environ['PATH']}",
+                "CALLS": str(calls),
+                "KUBE_CONTEXT": "reviewed",
+            }
+            for version in ("", "latest", ".bad", "-bad", "bad;command", "a" * 129):
+                with self.subTest(version=version):
+                    result = subprocess.run(
+                        ["sh", str(deploy / "run.sh")],
+                        env={**env, "BUILD_NUMBER": version},
+                        capture_output=True,
+                        text=True,
+                        check=False,
+                    )
+                    self.assertNotEqual(result.returncode, 0)
+                    self.assertFalse(calls.exists())
