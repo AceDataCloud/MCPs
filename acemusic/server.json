@@ -1,0 +1,43 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.AceDataCloud/mcp-acemusic",
+  "description": "Create ACE Music songs and lyrics with Ace Data Cloud; query the original task for results.",
+  "version": "2026.11.17.0",
+  "repository": {
+    "url": "https://github.com/AceDataCloud/AceMusicMCP",
+    "source": "github"
+  },
+  "packages": [
+    {
+      "identifier": "mcp-acemusic",
+      "version": "2026.11.17.0",
+      "transport": {
+        "type": "stdio"
+      },
+      "registryType": "pypi",
+      "runtimeHint": "uvx",
+      "environmentVariables": [
+        {
+          "name": "ACEDATACLOUD_API_TOKEN",
+          "description": "API token from Ace Data Cloud (https://platform.acedata.cloud)",
+          "isRequired": true,
+          "isSecret": true
+        }
+      ]
+    }
+  ],
+  "websiteUrl": "https://platform.acedata.cloud/documents/mcp-acemusic?utm_source=mcp_registry&utm_medium=referral&utm_campaign=evergreen&utm_content=acemusic_mcp_listing_guide",
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://acemusic.mcp.acedata.cloud/mcp"
+    }
+  ],
+  "title": "ACE Music by Ace Data Cloud",
+  "icons": [
+    {
+      "src": "https://cdn.acedata.cloud/acemusic-icon-52deddfc87b9.png",
+      "mimeType": "image/png"
+    }
+  ]
+}

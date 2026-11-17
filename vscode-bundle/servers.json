@@ -6,6 +6,12 @@
     "credential": "platform"
   },
   {
+    "id": "acemusic",
+    "label": "ACE Music",
+    "url": "https://acemusic.mcp.acedata.cloud/mcp",
+    "credential": "api"
+  },
+  {
     "id": "aichat",
     "label": "AI Chat",
     "url": "https://aichat.mcp.acedata.cloud/mcp",

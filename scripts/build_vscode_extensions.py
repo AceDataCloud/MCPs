@@ -250,6 +250,8 @@ def render_package_json(svc: Service) -> str:
             ],
         },
     }
+    if svc.alias == "acemusic":
+        pkg["scripts"] = {"vscode:prepublish": "python3 ../scripts/fetch_brand_assets.py --target vscode"}
     # Pretty + trailing newline.
     return json.dumps(pkg, indent=2, ensure_ascii=False) + "\n"
 

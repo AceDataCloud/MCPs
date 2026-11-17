@@ -1,7 +1,7 @@
 {
   "name": "mcp-toolbox",
   "displayName": "Ace Data Cloud MCP",
-  "description": "One MCP toolbox for AI chat, images, video, music, search and account management. Choose from 26 hosted Ace Data Cloud services.",
+  "description": "One MCP toolbox for AI chat, images, video, music, search and account management. Choose from 27 hosted Ace Data Cloud services.",
   "version": "2026.1004.0",
   "publisher": "acedatacloud",
   "icon": "icon.png",
@@ -88,6 +88,7 @@
             "type": "string",
             "enum": [
               "acedatacloud",
+              "acemusic",
               "aichat",
               "face",
               "fish",
@@ -116,6 +117,7 @@
             ],
             "enumDescriptions": [
               "Ace Data Cloud Account",
+              "ACE Music",
               "AI Chat",
               "Face Transform",
               "Fish Audio",

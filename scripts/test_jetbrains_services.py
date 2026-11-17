@@ -26,7 +26,7 @@ class JetBrainsServiceTest(unittest.TestCase):
     def test_top_five_keep_service_first_names_and_independent_ids(self):
         self.assertEqual(
             {s["alias"] for s in SERVICES},
-            {"suno", "seedance", "nanobanana", "happyhorse", "gpt-image"},
+            {"acemusic", "suno", "seedance", "nanobanana", "happyhorse", "gpt-image"},
         )
         identities = set()
         for service in SERVICES:

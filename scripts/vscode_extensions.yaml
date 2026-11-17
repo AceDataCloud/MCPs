@@ -354,3 +354,20 @@ services:
     examples:
       - 'Use openai_get_task only for my existing image task TASK_ID. Do not generate another image.'
     pricing_note: "Image generation is metered. Check the exact model, quality, count, pricing and account balance before submitting."
+
+  acemusic:
+    display_name: ACE Music by Ace Data Cloud
+    repo: AceMusicMCP
+    domain: music
+    tagline: "ACE Music songs and lyrics with Ace Data Cloud; retrieve original task results."
+    description: >
+      Create songs from an idea or custom lyrics and musical style, write lyrics,
+      and retrieve your original ACE Music task. One task targets two MP3 candidates.
+      Package publication and hosted deployment are release prerequisites.
+    keywords: [acemusic, ace music, music, ai music, lyrics, audio]
+    examples:
+      - 'Create a warm folk song about returning home using ACE Music.'
+      - 'Use these lyrics and a jazz style to create an ACE Music song.'
+      - 'Check the original ACE Music task and return the final MP3 URLs.'
+    models: ["acemusic-v1.1", "acemusic-v1"]
+    pricing_note: "Generation and lyrics are priced separately. Check current package pricing; task lookup is authenticated and free."

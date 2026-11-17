@@ -16,6 +16,7 @@ STATE_HEADER = (
 DEPLOY_SOURCE = Path("shared/deploy_oauth_state.sh")
 
 SHARED_SERVERS = (
+    "acemusic",
     "aichat",
     "face",
     "fish",
