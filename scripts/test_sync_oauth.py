@@ -5,8 +5,6 @@ import unittest
 from pathlib import Path
 
 from scripts.sync_oauth import (
-    DEPLOY_SERVERS,
-    DEPLOY_SOURCE,
     HEADER,
     LOCAL_SERVERS,
     SHARED_SERVERS,
@@ -27,7 +25,6 @@ class SyncOAuthTests(unittest.TestCase):
         source.parent.mkdir()
         source.write_text('"""Shared provider."""\nVALUE = 1\n')
         (self.root / STATE_SOURCE).write_text('"""Shared store."""\nVALUE = 2\n')
-        (self.root / DEPLOY_SOURCE).write_text("#!/bin/sh\necho shared\n")
         for server in set(SHARED_SERVERS) | LOCAL_SERVERS.keys():
             path = self.root / server / "core/oauth.py"
             path.parent.mkdir(parents=True)
@@ -40,7 +37,7 @@ class SyncOAuthTests(unittest.TestCase):
         }
         self.assertEqual(
             len(sync(self.root)),
-            len(SHARED_SERVERS) + len(STATE_SERVERS) + len(DEPLOY_SERVERS),
+            len(SHARED_SERVERS) + len(STATE_SERVERS),
         )
         self.assertEqual(sync(self.root), [])
         expected = HEADER.encode() + (self.root / SOURCE).read_bytes()
@@ -57,11 +54,6 @@ class SyncOAuthTests(unittest.TestCase):
             self.assertEqual(
                 (self.root / server / "core/oauth_state.py").read_bytes(),
                 expected_state,
-            )
-        for server in DEPLOY_SERVERS:
-            self.assertEqual(
-                (self.root / server / "deploy/oauth-state.sh").read_bytes(),
-                (self.root / DEPLOY_SOURCE).read_bytes(),
             )
 
     def test_check_detects_manual_edits_without_writing(self):
@@ -80,11 +72,6 @@ class SyncOAuthTests(unittest.TestCase):
         sync(self.root)
         (self.root / STATE_SOURCE).write_text("VALUE = 3\n")
         self.assertEqual(len(sync(self.root, check=True)), len(STATE_SERVERS))
-
-    def test_shared_deploy_change_requires_all_consumers_to_update(self):
-        sync(self.root)
-        (self.root / DEPLOY_SOURCE).write_text("#!/bin/sh\necho changed\n")
-        self.assertEqual(len(sync(self.root, check=True)), len(DEPLOY_SERVERS))
 
     def test_unclassified_or_missing_server_fails_before_writing(self):
         original = (self.root / "suno/core/oauth.py").read_bytes()

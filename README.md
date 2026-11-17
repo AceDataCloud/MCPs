@@ -114,8 +114,9 @@ PlatformBackend's daily ecosystem CronJob prepares incremental capability PRs
 using a pinned Backend source. Existing CI and human review gate each update.
 The previous dispatch/Copilot sync workflows are retired.
 
-After a reviewed PR lands, `sync-to-repos.yml` distributes the affected packages
-to their standalone repositories for publishing.
+After a reviewed PR lands, `sync-to-repos.yml` reconciles all mappings from one
+current-main snapshot after acquiring the mirror lock. Unchanged standalone
+repositories receive no commit. `sync.yaml.exclude` is the only file-ownership rule.
 
 ### Rules
 
@@ -217,3 +218,44 @@ Account MCP likewise creates a fresh grant-bound platform token. Credentials exp
 with the upstream access authorization and require reauthorization; restarting a pod
 does not renew them. Backend/Gateway grant readers and Auth migration 0090 must be
 deployed first. Existing broad credentials are not automatically revoked by this PR.
+
+
+### Hosted deployment
+
+Ordinary `deploy/run.sh` only renders its explicit resource list and applies it:
+
+```sh
+KUBE_CONTEXT=your-context BUILD_NUMBER=the-built-tag sh suno/deploy/run.sh
+```
+
+Success means `applied`, not rollout or business acceptance. It never creates or
+rotates OAuth keys, waits for all replicas, or repairs shared Redis. Each hosted
+workflow holds a queued production lock, checks out current main once, runs its
+quality checks, builds an immutable run-id/attempt tag, and applies that same
+checkout. Existing account-MCP quality checks remain included.
+
+Edit `shared/deploy/` and run `python3 scripts/sync_deploy.py`, then commit all
+generated copies. CI checks `python3 scripts/sync_deploy.py --check`. Generated
+standalone workflows and shell entrypoints have one source and no runtime
+cross-repository downloads. Retired Sora remains disabled and is not generated.
+
+#### First install and key recovery
+
+Run this from the source monorepo with Python/PyYAML and kubectl, **before the
+first application Deployment exists**:
+
+```sh
+python3 scripts/bootstrap_oauth_state.py acedatacloud --context your-context
+python3 scripts/bootstrap_oauth_state.py suno --context your-context
+```
+
+Provision the shared Redis Secret once, then each new hosted package's Secret.
+Normal releases never invoke this tool. Existing valid Secrets are preserved.
+If a Deployment already exists, or the shared Redis PVC exists, a missing key
+requires restoration from the existing key backup; bootstrap refuses to create
+a replacement. Existing OAuth state and persistent Redis data must keep their
+original keys. Do not delete the Deployment or PVC to bypass this recovery guard.
+For a new install accidentally applied before provisioning, inspect whether it
+has ever served OAuth traffic before following an operator-reviewed recovery.
+All shared-store/PVC/NetworkPolicy manifests remain managed; this PR does not
+weaken runtime secret requirements or introduce an in-memory production fallback.
