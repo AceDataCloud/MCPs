@@ -85,7 +85,7 @@ async def acemusic_upload_audio(
     """
     parsed = urlsplit(audio_url)
     if parsed.scheme != "https" or not parsed.hostname or parsed.username or parsed.password:
-        raise ValueError("A public HTTPS audio URL without credentials is required")
+        raise ValueError("A public HTTPS MP3 URL without credentials is required")
     result = await client.generate_audio(
         action="upload",
         audio_url=audio_url,

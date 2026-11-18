@@ -61,7 +61,7 @@ Save the key in the client's credential store or the environment variable shown 
 | --- | --- |
 | `acemusic_generate_music` | One paid idea-to-song submission |
 | `acemusic_generate_custom_music` | One paid submission with lyrics, style and title |
-| `acemusic_upload_audio` | Separate priced single-track import from a public HTTPS URL |
+| `acemusic_upload_audio` | Separate priced single-track import from a public HTTPS MP3 URL |
 | `acemusic_cover_audio` | One paid cover submission using an owned platform audio ID |
 | `acemusic_mashup_audio` | One paid submission using exactly two compatible owned platform audio IDs |
 | `acemusic_generate_lyrics` | Separately priced title/lyrics assistant |
