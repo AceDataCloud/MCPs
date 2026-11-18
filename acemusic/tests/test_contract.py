@@ -107,3 +107,66 @@ async def test_custom_tool_schema_requires_title_before_submission():
     tool = next(tool for tool in tools if tool.name == "acemusic_generate_custom_music")
     assert set(tool.inputSchema["required"]) == {"lyric", "style", "title"}
     assert tool.inputSchema["properties"]["title"]["minLength"] == 1
+
+
+@pytest.mark.asyncio
+async def test_reference_tools_map_public_ids_without_implicit_work():
+    from tools.audio_tools import acemusic_cover_audio, acemusic_mashup_audio, acemusic_upload_audio
+
+    mock = AsyncMock(return_value={"task_id": "one"})
+    with patch("tools.audio_tools.client.generate_audio", mock):
+        await acemusic_upload_audio("https://example.com/owned.mp3", audio_id="anchor")
+        mock.assert_awaited_with(
+            action="upload", audio_url="https://example.com/owned.mp3", audio_id="anchor"
+        )
+        await acemusic_cover_audio("audio-a", "words", "folk")
+        mock.assert_awaited_with(
+            action="cover",
+            model="acemusic-v1.1",
+            audio_id="audio-a",
+            lyric="words",
+            style="folk",
+            audio_influence=60,
+        )
+        await acemusic_mashup_audio(["audio-a", "audio-b"], "words", "folk")
+        mock.assert_awaited_with(
+            action="mashup",
+            model="acemusic-v1.1",
+            mashup_audio_ids=["audio-a", "audio-b"],
+            lyric="words",
+            style="folk",
+            audio_influence=60,
+        )
+        assert mock.await_count == 3
+
+
+@pytest.mark.asyncio
+async def test_invalid_reference_input_never_submits():
+    from tools.audio_tools import acemusic_cover_audio, acemusic_mashup_audio, acemusic_upload_audio
+
+    with patch("tools.audio_tools.client.generate_audio", AsyncMock()) as mock:
+        with pytest.raises(ValueError):
+            await acemusic_mashup_audio(["same", "same"], "words", "folk")
+        with pytest.raises(ValueError):
+            await acemusic_cover_audio("audio", "words", "folk", audio_influence=101)
+        with pytest.raises(ValueError):
+            await acemusic_upload_audio("http://example.com/audio.mp3")
+        mock.assert_not_awaited()
+
+
+@pytest.mark.asyncio
+async def test_reference_schema_and_capability_discovery_agree():
+    from core.server import mcp
+    from tools.info_tools import acemusic_get_capabilities
+
+    tools = {tool.name: tool for tool in await mcp.list_tools()}
+    assert {
+        "acemusic_upload_audio",
+        "acemusic_cover_audio",
+        "acemusic_mashup_audio",
+    } <= tools.keys()
+    schema = tools["acemusic_mashup_audio"].inputSchema["properties"]["mashup_audio_ids"]
+    assert schema["minItems"] == schema["maxItems"] == 2
+    capabilities = json.loads(acemusic_get_capabilities())
+    assert capabilities["actions"] == ["generate", "upload", "cover", "mashup"]
+    assert not {"upload", "cover", "mashup"} & set(capabilities["unsupported"])

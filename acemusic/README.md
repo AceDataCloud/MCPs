@@ -27,6 +27,9 @@ The hosted target after deployment is `https://acemusic.mcp.acedata.cloud/mcp`. 
 | --- | --- |
 | `acemusic_generate_music` | One paid idea-to-song submission |
 | `acemusic_generate_custom_music` | One paid submission with lyrics, style and title |
+| `acemusic_upload_audio` | Separate priced single-track import from a public HTTPS MP3 URL |
+| `acemusic_cover_audio` | One paid cover submission using an owned platform audio ID |
+| `acemusic_mashup_audio` | One paid submission using exactly two compatible owned platform audio IDs |
 | `acemusic_generate_lyrics` | Separately priced title/lyrics assistant |
 | `acemusic_get_task` | Free authenticated lookup of the original task |
 | `acemusic_get_tasks_batch` | Query up to 50 original tasks |
@@ -38,7 +41,7 @@ Models: `acemusic-v1.1` (default), `acemusic-v1`. A music task targets two MP3 c
 
 Save `task_id` immediately. Poll the same task every 10 seconds, inspecting its persisted `response` and group state. Partial failure is terminal and may include one playable candidate. A nonempty URL or a task ID alone does not mean full success. A client timeout must preserve the task identity for recovery rather than triggering another paid generation. If submission times out before a task ID arrives, reconcile the original request.
 
-The package does not promise upload, cover, extend, stems, voice cloning, WAV, MIDI or video export. Check [current pricing](https://platform.acedata.cloud/services/024e09b4-52cf-5e98-a91a-efedf43104c4?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=acemusic_mcp_readme_services_024e09b4-52cf-5e98-a91a-efedf43104c4) before submitting; task lookup is free and still requires authorization.
+Cover and mashup require `acemusic-v1.1`, supplied lyrics/style and compatible caller-owned platform audio IDs. `audio_influence` accepts 1–100 (default 60); title is optional for these actions. Upload is explicit and separately priced, with one delivered track. It accepts a public HTTPS MP3 URL and an optional owned audio ID anchor; it never creates a cover implicitly. Continuation, stems, voice cloning, WAV, MIDI and video export remain unsupported. Check [current pricing](https://platform.acedata.cloud/services/024e09b4-52cf-5e98-a91a-efedf43104c4?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=acemusic_mcp_readme_services_024e09b4-52cf-5e98-a91a-efedf43104c4) before submitting; task lookup is free and still requires authorization.
 
 ## Development and deployment
 

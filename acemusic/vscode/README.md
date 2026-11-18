@@ -55,12 +55,15 @@ Save the key in the client's credential store or the environment variable shown 
 
 ## Tool Reference
 
-**8 tools** available via this server.
+**11 tools** available via this server.
 
 | Tool | Description |
 | --- | --- |
 | `acemusic_generate_music` | One paid idea-to-song submission |
 | `acemusic_generate_custom_music` | One paid submission with lyrics, style and title |
+| `acemusic_upload_audio` | Separate priced single-track import from a public HTTPS MP3 URL |
+| `acemusic_cover_audio` | One paid cover submission using an owned platform audio ID |
+| `acemusic_mashup_audio` | One paid submission using exactly two compatible owned platform audio IDs |
 | `acemusic_generate_lyrics` | Separately priced title/lyrics assistant |
 | `acemusic_get_task` | Free authenticated lookup of the original task |
 | `acemusic_get_tasks_batch` | Query up to 50 original tasks |

@@ -1,6 +1,7 @@
 """ACE Music generation tools."""
 
-from typing import Annotated
+from typing import Annotated, Literal
+from urllib.parse import urlsplit
 
 from pydantic import Field
 
@@ -62,6 +63,114 @@ async def acemusic_generate_custom_music(
         lyric=lyric,
         style=style,
         title=title,
+        **({"callback_url": callback_url} if callback_url else {}),
+    )
+    return format_result(result, submission=True)
+
+
+@mcp.tool()
+async def acemusic_upload_audio(
+    audio_url: Annotated[
+        str, Field(min_length=1, description="Public HTTPS URL of audio you own or may use.")
+    ],
+    name: str | None = None,
+    audio_id: str | None = None,
+    callback_url: str | None = None,
+) -> str:
+    """Import one reference track as a separate priced operation.
+
+    This does not create a cover automatically. An optional caller-owned
+    platform audio_id anchors the import to that track for later reference use.
+    Save task_id and query the original task until its single track succeeds.
+    """
+    parsed = urlsplit(audio_url)
+    if parsed.scheme != "https" or not parsed.hostname or parsed.username or parsed.password:
+        raise ValueError("A public HTTPS MP3 URL without credentials is required")
+    result = await client.generate_audio(
+        action="upload",
+        audio_url=audio_url,
+        **({"name": name} if name else {}),
+        **({"audio_id": audio_id} if audio_id else {}),
+        **({"callback_url": callback_url} if callback_url else {}),
+    )
+    return format_result(result, submission=True)
+
+
+@mcp.tool()
+async def acemusic_cover_audio(
+    audio_id: Annotated[
+        str,
+        Field(
+            min_length=1, description="Successful caller-owned platform audio ID, not a task ID."
+        ),
+    ],
+    lyric: Annotated[str, Field(min_length=1, description="Lyrics for the new cover.")],
+    style: Annotated[str, Field(min_length=1, description="Musical style for the new cover.")],
+    title: str | None = None,
+    audio_influence: Annotated[float, Field(ge=1, le=100)] = 60,
+    model: Literal["acemusic-v1.1"] = "acemusic-v1.1",
+    callback_url: str | None = None,
+) -> str:
+    """Submit one paid cover task targeting two songs from an owned reference.
+
+    Use a public audio ID returned by a successful task. Reference compatibility
+    is checked by the service; do not upload again or generate a replacement on
+    rejection. Save the original task_id and query it instead of resubmitting.
+    """
+    if model != "acemusic-v1.1" or not 1 <= audio_influence <= 100:
+        raise ValueError("Cover requires acemusic-v1.1 and audio_influence between 1 and 100")
+    result = await client.generate_audio(
+        action="cover",
+        model=model,
+        audio_id=audio_id,
+        lyric=lyric,
+        style=style,
+        audio_influence=audio_influence,
+        **({"title": title} if title else {}),
+        **({"callback_url": callback_url} if callback_url else {}),
+    )
+    return format_result(result, submission=True)
+
+
+@mcp.tool()
+async def acemusic_mashup_audio(
+    mashup_audio_ids: Annotated[
+        list[str],
+        Field(
+            min_length=2,
+            max_length=2,
+            description="Exactly two distinct successful caller-owned platform audio IDs.",
+        ),
+    ],
+    lyric: Annotated[str, Field(min_length=1, description="Lyrics for the new mashup.")],
+    style: Annotated[str, Field(min_length=1, description="Musical style for the new mashup.")],
+    title: str | None = None,
+    audio_influence: Annotated[float, Field(ge=1, le=100)] = 60,
+    model: Literal["acemusic-v1.1"] = "acemusic-v1.1",
+    callback_url: str | None = None,
+) -> str:
+    """Submit one paid two-reference mashup task targeting two songs.
+
+    Both public audio IDs must be caller-owned and compatible references.
+    The service rejects incompatible sources; never substitute references or
+    perform an extra paid upload automatically. Poll the returned task_id.
+    """
+    if (
+        len(mashup_audio_ids) != 2
+        or len(set(mashup_audio_ids)) != 2
+        or any(not item.strip() for item in mashup_audio_ids)
+    ):
+        raise ValueError("Mashup requires exactly two distinct platform audio IDs")
+    if model != "acemusic-v1.1" or not 1 <= audio_influence <= 100:
+        raise ValueError("Mashup requires acemusic-v1.1 and audio_influence between 1 and 100")
+    result = await client.generate_audio(
+        action="mashup",
+        model=model,
+        mashup_audio_ids=mashup_audio_ids,
+        lyric=lyric,
+        style=style,
+        audio_influence=audio_influence,
+        **({"title": title} if title else {}),
         **({"callback_url": callback_url} if callback_url else {}),
     )
     return format_result(result, submission=True)
