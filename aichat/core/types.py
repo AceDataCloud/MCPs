@@ -4,6 +4,8 @@ from typing import Literal
 
 # All supported models from OpenAPI spec
 AiChatModel = Literal[
+    "gpt-6.2-astra",
+    "gpt-6.2-sol",
     "mimo-v2.6-pro",
     "mimo-v2.6-flash",
     "gemini-3.8-flash",
@@ -114,6 +116,8 @@ AiChatV2ModelGroup = Literal[
 ]
 
 AiChatV2Model = Literal[
+    "gpt-6.2-astra",
+    "gpt-6.2-sol",
     "mimo-v2.6-pro",
     "mimo-v2.6-flash",
     "gpt-5.6-sol-fast",

@@ -80,6 +80,28 @@ async def test_terra_reasoning_levels(monkeypatch, effort):
 
 
 @pytest.mark.asyncio
+@pytest.mark.parametrize("model", ["gpt-6.2-astra", "gpt-6.2-sol"])
+@pytest.mark.parametrize(
+    ("tool_name", "client_method", "arguments"),
+    [
+        (
+            "openai_chat_completion",
+            "chat_completions",
+            {"messages": [{"role": "user", "content": "hello"}], "reasoning_effort": "low"},
+        ),
+        ("openai_create_response", "responses", {"input": "hello", "reasoning": {"effort": "low"}}),
+    ],
+)
+async def test_gpt62_models_reach_both_api_clients(
+    monkeypatch, model, tool_name, client_method, arguments
+):
+    request = AsyncMock(return_value={"id": "test-response"})
+    monkeypatch.setattr(chat_tools.client, client_method, request)
+    await mcp.call_tool(tool_name, {"model": model, **arguments})
+    assert request.await_args.kwargs["model"] == model
+
+
+@pytest.mark.asyncio
 @pytest.mark.parametrize(
     ("tool_name", "client_method", "arguments"),
     [
