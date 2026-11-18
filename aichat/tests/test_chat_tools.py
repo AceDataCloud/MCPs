@@ -55,10 +55,13 @@ async def test_gemini_argon_discovery_identifies_v2_and_wrapper_limits() -> None
 
 
 @pytest.mark.asyncio
-async def test_gemini_argon_v2_dispatch_preserves_public_model(mock_conversation_response) -> None:
+@pytest.mark.parametrize("model", ["gemini-4-argon", "gemini-4-carbon", "gemini-4-hydrogen"])
+async def test_gemini_argon_v2_dispatch_preserves_public_model(
+    mock_conversation_response, model
+) -> None:
     tools = {tool.name: tool for tool in await mcp.list_tools()}
     properties = tools["aichat_create_conversation_v2"].inputSchema["properties"]
-    assert "gemini-4-argon" in properties["model"]["enum"]
+    assert model in properties["model"]["enum"]
     assert properties["model"]["default"] == "gpt-4.1"
     assert not {"max_tokens", "thinking_level", "cached_content"} & properties.keys()
     with patch(
@@ -67,9 +70,9 @@ async def test_gemini_argon_v2_dispatch_preserves_public_model(mock_conversation
     ) as request:
         result = await mcp.call_tool(
             "aichat_create_conversation_v2",
-            {"question": "hello", "model": "gemini-4-argon"},
+            {"question": "hello", "model": model},
         )
-    assert request.await_args.kwargs["model"] == "gemini-4-argon"
+    assert request.await_args.kwargs["model"] == model
     content, _ = result
     assert json.loads(content[0].text) == mock_conversation_response
 

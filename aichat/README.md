@@ -201,7 +201,8 @@ authorization or other execution conditions.
 ### Google Gemini
 
 `gemini-3.8-flash` is available through both conversation tools.
-Use `aichat_create_conversation_v2` with `model="gemini-4-argon"` for Gemini 4
+Use `aichat_create_conversation_v2` with `model="gemini-4-argon"`,
+`model="gemini-4-carbon"` or `model="gemini-4-hydrogen"` for Gemini 4
 Argon. It is not available through the v1 tool; the default remains `gpt-4.1`.
 
 ```json
