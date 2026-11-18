@@ -23,7 +23,7 @@ async def aichat_list_models() -> str:
         f"## aichat_create_conversation (default: {DEFAULT_MODEL})\n{v1_models}\n\n"
         f"## aichat_create_conversation_v2 (default: {DEFAULT_V2_MODEL})\n{v2_models}\n\n"
         "## Gemini endpoint coverage\n"
-        "gemini-3.8-flash is available through both tools. gemini-4-argon requires "
+        "gemini-3.8-flash is available through both tools. gemini-4-argon, gemini-4-carbon and gemini-4-hydrogen require "
         "aichat_create_conversation_v2. Use the exact endpoint model list above.\n\n"
         "## Kimi (AiChat v2 only)\n"
         "Kimi models require aichat_create_conversation_v2. The default remains gpt-4.1.\n"
