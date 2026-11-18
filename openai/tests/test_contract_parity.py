@@ -1,6 +1,7 @@
 """Regressions for documented chat streaming and model discovery contracts."""
 
 import json
+from pathlib import Path
 from typing import get_args
 from unittest.mock import AsyncMock
 
@@ -77,6 +78,31 @@ async def test_terra_reasoning_levels(monkeypatch, effort):
         },
     )
     assert request.await_args.kwargs["reasoning_effort"] == effort
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("model", ["gpt-6.2-astra", "gpt-6.2-sol"])
+@pytest.mark.parametrize(
+    ("tool_name", "client_method", "arguments"),
+    [
+        (
+            "openai_chat_completion",
+            "chat_completions",
+            {"messages": [{"role": "user", "content": "hello"}], "reasoning_effort": "low"},
+        ),
+        ("openai_create_response", "responses", {"input": "hello", "reasoning": {"effort": "low"}}),
+    ],
+)
+async def test_gpt62_models_reach_both_api_clients(
+    monkeypatch, model, tool_name, client_method, arguments
+):
+    request = AsyncMock(return_value={"id": "test-response"})
+    monkeypatch.setattr(chat_tools.client, client_method, request)
+    await mcp.call_tool(tool_name, {"model": model, **arguments})
+    assert request.await_args.kwargs["model"] == model
+    manifest = json.loads((Path(__file__).parents[1] / "lobehub/lhm.plugin.json").read_text())
+    declaration = next(tool for tool in manifest["tools"] if tool["name"] == tool_name)
+    assert model in declaration["inputSchema"]["properties"]["model"]["enum"]
 
 
 @pytest.mark.asyncio

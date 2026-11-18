@@ -8,6 +8,8 @@ from tools import chat_tools
 
 # Models the /aichat/conversations spec enum requires us to offer.
 V1_REQUIRED = {
+    "gpt-6.2-astra",
+    "gpt-6.2-sol",
     "gpt-6-astra",
     "gpt-6.1-sol",
     "gpt-6.1-terra",
@@ -54,6 +56,8 @@ def test_v1_offers_the_newest_models():
 def test_v2_offers_new_chat_compatible_models():
     models = set(get_args(AiChatV2Model))
     assert {
+        "gpt-6.2-astra",
+        "gpt-6.2-sol",
         "gpt-6-astra",
         "gpt-6.1-sol",
         "gpt-6.1-terra",
