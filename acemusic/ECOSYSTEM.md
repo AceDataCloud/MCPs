@@ -31,7 +31,7 @@ The links below identify Ace Data Cloud's dedicated source repositories. During 
 | --- | --- |
 | Cline, Kilo Code, goose and LobeHub | [Cline](docs/cline.md) · [Kilo Code](kilo/README.md) · [goose](goose/README.md) · [LobeHub](lobehub/README.md) |
 | Cherry Studio | [Remote or local connection instructions](docs/cherry-studio.md) |
-| Workflow builders | [Coze API import](https://github.com/AceDataCloud/CozeAPI) · [Langflow](https://github.com/AceDataCloud/LangflowAceDataCloud) · [Zapier](https://github.com/AceDataCloud/AceDataCloudZapier) · [Make](https://github.com/AceDataCloud/SDK/tree/main/make) |
+| Workflow builders | [Coze API import](https://github.com/AceDataCloud/CozeAPI) · [Langflow](https://github.com/AceDataCloud/LangflowAceDataCloud) · [Zapier](https://github.com/AceDataCloud/AceDataCloudZapier) · [Make](https://github.com/AceDataCloud/SDK/tree/main/examples/make) |
 | Agent SDKs | [LangChain](https://github.com/AceDataCloud/LangChain) · [Vercel AI SDK](https://github.com/AceDataCloud/AISDK) · [OpenClaw](https://github.com/AceDataCloud/OpenClawProvider) |
 | Editors and chat apps | [GitHub Copilot](https://github.com/AceDataCloud/CopilotPlugins) · [Continue](https://github.com/AceDataCloud/ContinueIntegrations) · [LibreChat](https://github.com/AceDataCloud/LibreChatPlugins) · [Open WebUI](https://github.com/AceDataCloud/OpenWebUIPlugins) |
 | Claude Code, Amp and WeKnora | [Agent Skills and host-specific configurations](https://github.com/AceDataCloud/Skills) |
