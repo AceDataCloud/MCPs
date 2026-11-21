@@ -1,5 +1,7 @@
 # ACE Music MCP
 
+[中文安装指南](readme/README_zh_Hans.md) · [Ecosystem directory](ECOSYSTEM.md) · [Glama](readme/GLAMA.md)
+
 Create songs from an idea or custom lyrics, import reference audio, cover a track, blend two tracks, and retrieve the original task through Ace Data Cloud.
 
 <!-- canonical-documentation -->
