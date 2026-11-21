@@ -18,6 +18,8 @@ Get an application API key in [Applications](https://platform.acedata.cloud/cons
 
 [REST API, OpenAPI and examples](https://github.com/AceDataCloud/ACEMusicAPI) · [CLI](https://github.com/AceDataCloud/AceMusicCli) · [Python, TypeScript and Go SDKs](https://github.com/AceDataCloud/SDK) · [n8n community node](https://github.com/AceDataCloud/ACEMusicN8N)
 
+[goose plugin](goose/README.md) · [Cline](docs/cline.md) · [Kilo Code](kilo/README.md) · [LobeHub](lobehub/README.md)
+
 ## Tools
 
 | Tool | Purpose |

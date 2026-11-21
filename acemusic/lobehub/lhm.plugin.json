@@ -1,0 +1,574 @@
+{
+  "identifier": "acedatacloud-acemusicmcp",
+  "name": "ACE Music by Ace Data Cloud",
+  "version": "2026.11.18.0",
+  "author": "Ace Data Cloud",
+  "authorUrl": "https://github.com/AceDataCloud",
+  "homepage": "https://platform.acedata.cloud/documents/mcp-acemusic?utm_source=opensource&utm_medium=referral&utm_campaign=evergreen&utm_content=acemusic_lobehub_guide",
+  "description": "Songs, lyrics, reference imports, covers, mashups and task lookup through ACE Music.",
+  "cloudEndpoint": "https://acemusic.mcp.acedata.cloud/mcp",
+  "tags": [
+    "acemusic",
+    "music",
+    "lyrics",
+    "mcp"
+  ],
+  "tools": [
+    {
+      "name": "acemusic_cover_audio",
+      "description": "Submit one paid cover task targeting two songs from an owned reference.\n\n    Use a public audio ID returned by a successful task. Reference compatibility\n    is checked by the service; do not upload again or generate a replacement on\n    rejection. Save the original task_id and query it instead of resubmitting.\n    ",
+      "inputSchema": {
+        "properties": {
+          "audio_id": {
+            "description": "Successful caller-owned platform audio ID, not a task ID.",
+            "minLength": 1,
+            "title": "Audio Id",
+            "type": "string"
+          },
+          "lyric": {
+            "description": "Lyrics for the new cover.",
+            "minLength": 1,
+            "title": "Lyric",
+            "type": "string"
+          },
+          "style": {
+            "description": "Musical style for the new cover.",
+            "minLength": 1,
+            "title": "Style",
+            "type": "string"
+          },
+          "title": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Title"
+          },
+          "audio_influence": {
+            "default": 60,
+            "maximum": 100,
+            "minimum": 1,
+            "title": "Audio Influence",
+            "type": "number"
+          },
+          "model": {
+            "const": "acemusic-v1.1",
+            "default": "acemusic-v1.1",
+            "title": "Model",
+            "type": "string"
+          },
+          "callback_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Callback Url"
+          }
+        },
+        "required": [
+          "audio_id",
+          "lyric",
+          "style"
+        ],
+        "title": "acemusic_cover_audioArguments",
+        "type": "object"
+      },
+      "outputSchema": {
+        "properties": {
+          "result": {
+            "title": "Result",
+            "type": "string"
+          }
+        },
+        "required": [
+          "result"
+        ],
+        "title": "acemusic_cover_audioOutput",
+        "type": "object"
+      }
+    },
+    {
+      "name": "acemusic_generate_custom_music",
+      "description": "Submit one paid ACE Music task using the user's lyrics and style.\n\n    Lyrics are sent as the singular platform field lyric. This creates a new\n    song group; it does not upload, cover, extend or separate existing audio.\n    ",
+      "inputSchema": {
+        "properties": {
+          "lyric": {
+            "description": "Custom lyrics, optionally with [Verse]/[Chorus] sections.",
+            "minLength": 1,
+            "title": "Lyric",
+            "type": "string"
+          },
+          "style": {
+            "description": "Musical style, instruments, mood and vocal description.",
+            "minLength": 1,
+            "title": "Style",
+            "type": "string"
+          },
+          "title": {
+            "description": "Title for the custom song.",
+            "minLength": 1,
+            "title": "Title",
+            "type": "string"
+          },
+          "model": {
+            "default": "acemusic-v1.1",
+            "enum": [
+              "acemusic-v1.1",
+              "acemusic-v1"
+            ],
+            "title": "Model",
+            "type": "string"
+          },
+          "callback_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Callback Url"
+          }
+        },
+        "required": [
+          "lyric",
+          "style",
+          "title"
+        ],
+        "title": "acemusic_generate_custom_musicArguments",
+        "type": "object"
+      },
+      "outputSchema": {
+        "properties": {
+          "result": {
+            "title": "Result",
+            "type": "string"
+          }
+        },
+        "required": [
+          "result"
+        ],
+        "title": "acemusic_generate_custom_musicOutput",
+        "type": "object"
+      }
+    },
+    {
+      "name": "acemusic_generate_lyrics",
+      "description": "Generate a title and lyrics. This is a separately priced request.\n\n    Show or edit the lyrics before a separate custom music generation. Do not\n    call this implicitly when the user has already supplied complete lyrics.\n    ",
+      "inputSchema": {
+        "properties": {
+          "prompt": {
+            "description": "Theme and story for the lyrics.",
+            "minLength": 1,
+            "title": "Prompt",
+            "type": "string"
+          },
+          "style": {
+            "default": "",
+            "title": "Style",
+            "type": "string"
+          }
+        },
+        "required": [
+          "prompt"
+        ],
+        "title": "acemusic_generate_lyricsArguments",
+        "type": "object"
+      },
+      "outputSchema": {
+        "properties": {
+          "result": {
+            "title": "Result",
+            "type": "string"
+          }
+        },
+        "required": [
+          "result"
+        ],
+        "title": "acemusic_generate_lyricsOutput",
+        "type": "object"
+      }
+    },
+    {
+      "name": "acemusic_generate_music",
+      "description": "Submit one ACE Music task from an idea, targeting two song candidates.\n\n    This is a paid generation. Save the returned task ID and use acemusic_get_task\n    until the group reaches a terminal state. Never resubmit to check progress.\n    A callback is optional; use a real webhook you control.\n    ",
+      "inputSchema": {
+        "properties": {
+          "prompt": {
+            "description": "Describe the song theme and musical style.",
+            "minLength": 1,
+            "title": "Prompt",
+            "type": "string"
+          },
+          "model": {
+            "default": "acemusic-v1.1",
+            "enum": [
+              "acemusic-v1.1",
+              "acemusic-v1"
+            ],
+            "title": "Model",
+            "type": "string"
+          },
+          "callback_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Callback Url"
+          }
+        },
+        "required": [
+          "prompt"
+        ],
+        "title": "acemusic_generate_musicArguments",
+        "type": "object"
+      },
+      "outputSchema": {
+        "properties": {
+          "result": {
+            "title": "Result",
+            "type": "string"
+          }
+        },
+        "required": [
+          "result"
+        ],
+        "title": "acemusic_generate_musicOutput",
+        "type": "object"
+      }
+    },
+    {
+      "name": "acemusic_get_capabilities",
+      "description": "Describe supported workflows, fees and task recovery boundaries.",
+      "inputSchema": {
+        "properties": {},
+        "title": "acemusic_get_capabilitiesArguments",
+        "type": "object"
+      },
+      "outputSchema": {
+        "properties": {
+          "result": {
+            "title": "Result",
+            "type": "string"
+          }
+        },
+        "required": [
+          "result"
+        ],
+        "title": "acemusic_get_capabilitiesOutput",
+        "type": "object"
+      }
+    },
+    {
+      "name": "acemusic_get_task",
+      "description": "Retrieve your existing task and its song-group state without generating.\n\n    Inspect the persisted response and group state. Partial failure is terminal:\n    keep any successful audio and report the failed candidate. An audio URL by\n    itself does not prove that the entire group has completed.\n    ",
+      "inputSchema": {
+        "properties": {
+          "task_id": {
+            "description": "The original platform task_id.",
+            "minLength": 1,
+            "title": "Task Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "task_id"
+        ],
+        "title": "acemusic_get_taskArguments",
+        "type": "object"
+      },
+      "outputSchema": {
+        "properties": {
+          "result": {
+            "title": "Result",
+            "type": "string"
+          }
+        },
+        "required": [
+          "result"
+        ],
+        "title": "acemusic_get_taskOutput",
+        "type": "object"
+      }
+    },
+    {
+      "name": "acemusic_get_tasks_batch",
+      "description": "Retrieve up to 50 original task IDs in one authenticated free request.",
+      "inputSchema": {
+        "properties": {
+          "task_ids": {
+            "items": {
+              "type": "string"
+            },
+            "maxItems": 50,
+            "minItems": 1,
+            "title": "Task Ids",
+            "type": "array"
+          }
+        },
+        "required": [
+          "task_ids"
+        ],
+        "title": "acemusic_get_tasks_batchArguments",
+        "type": "object"
+      },
+      "outputSchema": {
+        "properties": {
+          "result": {
+            "title": "Result",
+            "type": "string"
+          }
+        },
+        "required": [
+          "result"
+        ],
+        "title": "acemusic_get_tasks_batchOutput",
+        "type": "object"
+      }
+    },
+    {
+      "name": "acemusic_list_models",
+      "description": "List supported public ACE Music model IDs and the default.",
+      "inputSchema": {
+        "properties": {},
+        "title": "acemusic_list_modelsArguments",
+        "type": "object"
+      },
+      "outputSchema": {
+        "properties": {
+          "result": {
+            "title": "Result",
+            "type": "string"
+          }
+        },
+        "required": [
+          "result"
+        ],
+        "title": "acemusic_list_modelsOutput",
+        "type": "object"
+      }
+    },
+    {
+      "name": "acemusic_list_tasks",
+      "description": "List the caller's ACE Music task history with bounded pagination.",
+      "inputSchema": {
+        "properties": {
+          "page": {
+            "default": 1,
+            "minimum": 1,
+            "title": "Page",
+            "type": "integer"
+          },
+          "page_size": {
+            "default": 20,
+            "maximum": 50,
+            "minimum": 1,
+            "title": "Page Size",
+            "type": "integer"
+          }
+        },
+        "title": "acemusic_list_tasksArguments",
+        "type": "object"
+      },
+      "outputSchema": {
+        "properties": {
+          "result": {
+            "title": "Result",
+            "type": "string"
+          }
+        },
+        "required": [
+          "result"
+        ],
+        "title": "acemusic_list_tasksOutput",
+        "type": "object"
+      }
+    },
+    {
+      "name": "acemusic_mashup_audio",
+      "description": "Submit one paid two-reference mashup task targeting two songs.\n\n    Both public audio IDs must be caller-owned and compatible references.\n    The service rejects incompatible sources; never substitute references or\n    perform an extra paid upload automatically. Poll the returned task_id.\n    ",
+      "inputSchema": {
+        "properties": {
+          "mashup_audio_ids": {
+            "description": "Exactly two distinct successful caller-owned platform audio IDs.",
+            "items": {
+              "type": "string"
+            },
+            "maxItems": 2,
+            "minItems": 2,
+            "title": "Mashup Audio Ids",
+            "type": "array"
+          },
+          "lyric": {
+            "description": "Lyrics for the new mashup.",
+            "minLength": 1,
+            "title": "Lyric",
+            "type": "string"
+          },
+          "style": {
+            "description": "Musical style for the new mashup.",
+            "minLength": 1,
+            "title": "Style",
+            "type": "string"
+          },
+          "title": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Title"
+          },
+          "audio_influence": {
+            "default": 60,
+            "maximum": 100,
+            "minimum": 1,
+            "title": "Audio Influence",
+            "type": "number"
+          },
+          "model": {
+            "const": "acemusic-v1.1",
+            "default": "acemusic-v1.1",
+            "title": "Model",
+            "type": "string"
+          },
+          "callback_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Callback Url"
+          }
+        },
+        "required": [
+          "mashup_audio_ids",
+          "lyric",
+          "style"
+        ],
+        "title": "acemusic_mashup_audioArguments",
+        "type": "object"
+      },
+      "outputSchema": {
+        "properties": {
+          "result": {
+            "title": "Result",
+            "type": "string"
+          }
+        },
+        "required": [
+          "result"
+        ],
+        "title": "acemusic_mashup_audioOutput",
+        "type": "object"
+      }
+    },
+    {
+      "name": "acemusic_upload_audio",
+      "description": "Import one reference track as a separate priced operation.\n\n    This does not create a cover automatically. An optional caller-owned\n    platform audio_id anchors the import to that track for later reference use.\n    Save task_id and query the original task until its single track succeeds.\n    ",
+      "inputSchema": {
+        "properties": {
+          "audio_url": {
+            "description": "Public HTTPS URL of audio you own or may use.",
+            "minLength": 1,
+            "title": "Audio Url",
+            "type": "string"
+          },
+          "name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Name"
+          },
+          "audio_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Audio Id"
+          },
+          "callback_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Callback Url"
+          }
+        },
+        "required": [
+          "audio_url"
+        ],
+        "title": "acemusic_upload_audioArguments",
+        "type": "object"
+      },
+      "outputSchema": {
+        "properties": {
+          "result": {
+            "title": "Result",
+            "type": "string"
+          }
+        },
+        "required": [
+          "result"
+        ],
+        "title": "acemusic_upload_audioOutput",
+        "type": "object"
+      }
+    }
+  ],
+  "prompts": [],
+  "localizations": [
+    {
+      "locale": "zh-CN",
+      "name": "ACE Music（Ace Data Cloud 提供）",
+      "description": "创作歌曲和歌词、上传参考、翻唱、融合并查询原任务。",
+      "tags": [
+        "acemusic",
+        "音乐",
+        "歌词",
+        "mcp"
+      ]
+    }
+  ]
+}

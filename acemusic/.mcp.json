@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "acemusic": {
+      "command": "uvx",
+      "args": [
+        "--from",
+        "mcp-acemusic==2026.11.18.0",
+        "mcp-acemusic"
+      ]
+    }
+  }
+}
