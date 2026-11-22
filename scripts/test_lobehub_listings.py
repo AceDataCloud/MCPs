@@ -7,6 +7,7 @@ from urllib.parse import parse_qs, urlsplit
 
 ROOT = Path(__file__).resolve().parents[1]
 SERVICES = {
+    "acemusic": ("acedatacloud-acemusicmcp", "ACE Music"),
     "suno": ("acedatacloud-mcpsuno", "Suno"),
     "seedance": ("acedatacloud-seedancemcp", "Seedance"),
     "happyhorse": ("acedatacloud-happyhorsemcp", "HappyHorse"),
@@ -26,7 +27,7 @@ class LobeHubListingsTest(unittest.TestCase):
                 self.assertEqual(manifest["cloudEndpoint"], f"https://{service}.mcp.acedata.cloud/mcp")
                 source_names = set()
                 for path in (ROOT / service / "tools").glob("*.py"):
-                    source_names.update(re.findall(r"async def (\w+)\(", path.read_text()))
+                    source_names.update(re.findall(r"^(?:async )?def (\w+)\(", path.read_text(), re.MULTILINE))
                 self.assertTrue(manifest["tools"])
                 for tool in manifest["tools"]:
                     self.assertIn(tool["name"], source_names)

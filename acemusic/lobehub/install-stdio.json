@@ -1,0 +1,16 @@
+{
+  "mcpServers": {
+    "ace-acemusic": {
+      "type": "stdio",
+      "command": "uvx",
+      "args": [
+        "--from",
+        "mcp-acemusic==2026.11.18.0",
+        "mcp-acemusic"
+      ],
+      "env": {
+        "ACEDATACLOUD_API_TOKEN": "YOUR_API_TOKEN"
+      }
+    }
+  }
+}

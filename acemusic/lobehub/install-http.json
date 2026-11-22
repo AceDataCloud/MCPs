@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "ace-acemusic": {
+      "type": "http",
+      "url": "https://acemusic.mcp.acedata.cloud/mcp"
+    }
+  }
+}

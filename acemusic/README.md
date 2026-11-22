@@ -1,25 +1,25 @@
 # ACE Music MCP
 
-Create songs from an idea or custom lyrics, generate lyrics, and retrieve the original task through Ace Data Cloud.
+[中文安装指南](https://github.com/AceDataCloud/AceMusicMCP/blob/main/readme/README_zh_Hans.md) · [Ecosystem directory](https://github.com/AceDataCloud/AceMusicMCP/blob/main/ECOSYSTEM.md) · [Glama](https://github.com/AceDataCloud/AceMusicMCP/blob/main/readme/GLAMA.md)
+
+Create songs from an idea or custom lyrics, import reference audio, cover a track, blend two tracks, and retrieve the original task through Ace Data Cloud.
 
 <!-- canonical-documentation -->
 [Documentation](https://platform.acedata.cloud/documents/mcp-acemusic?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=acemusic_mcp_readme_quick_start)
 
-This new service package is prepared for release alongside the ACE Music API. Package publication, hosted deployment and real generation are separate release checks; source code does not confirm their availability.
+## Connect to ACE Music
 
-## Configure a credential
+- **VS Code** installs the [ACE Music extension](https://marketplace.visualstudio.com/items?itemName=acedatacloud.mcp-acemusic), which registers the hosted server.
+- **Remote MCP clients** use the Streamable HTTP URL `https://acemusic.mcp.acedata.cloud/mcp`. Choose the client's OAuth sign-in flow or configure a Bearer application API key in its private credential settings. The [server card](https://acemusic.mcp.acedata.cloud/.well-known/mcp/server-card.json) lists the available tools.
+- **Local stdio clients** launch the [published Python package](https://pypi.org/project/mcp-acemusic/) with command `uvx` and argument `mcp-acemusic`. Supply `ACEDATACLOUD_API_TOKEN` through the client's private environment settings.
 
-Get an application API key at [Applications](https://platform.acedata.cloud/console/applications?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=acemusic_mcp_readme_api_key). Use a general application with ACE Music access or an ACE Music application; check balance, expiration and allowed APIs. Store the raw key in `ACEDATACLOUD_API_TOKEN`, never in a prompt or commit. Account management tokens do not replace generation API keys.
+Get an application API key in [Applications](https://platform.acedata.cloud/console/applications?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=acemusic_mcp_readme_api_key). A general application with ACE Music access or a dedicated ACE Music application can run the tools. For a first read-only check, list the models or retrieve an existing task. To add the companion instructions to an agent, install the [ACE Music Skill](https://skills.sh/acedatacloud/skills/ace-music).
 
-```bash
-export ACEDATACLOUD_API_TOKEN="your-api-key"
-# After the package is published:
-uvx mcp-acemusic
-```
+## Other integrations
 
-For source development: `pip install -e ".[dev,test]"`, then `mcp-acemusic`.
+[REST API, OpenAPI and examples](https://github.com/AceDataCloud/ACEMusicAPI) · [CLI](https://github.com/AceDataCloud/AceMusicCli) · [Python, TypeScript and Go SDKs](https://github.com/AceDataCloud/SDK) · [n8n community node](https://github.com/AceDataCloud/ACEMusicN8N)
 
-The hosted target after deployment is `https://acemusic.mcp.acedata.cloud/mcp`. Configure a Bearer API key in the client or use its OAuth connection flow when registration is enabled. The deployer must sync ACE Music's own AuthBackend OAuth seed and provision its state secret; credentials from another service must not be reused.
+[goose plugin](https://github.com/AceDataCloud/AceMusicMCP/blob/main/goose/README.md) · [Cline](https://github.com/AceDataCloud/AceMusicMCP/blob/main/docs/cline.md) · [Kilo Code](https://github.com/AceDataCloud/AceMusicMCP/blob/main/kilo/README.md) · [LobeHub](https://github.com/AceDataCloud/AceMusicMCP/blob/main/lobehub/README.md)
 
 ## Tools
 

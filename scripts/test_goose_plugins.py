@@ -7,7 +7,7 @@ from pathlib import Path
 from urllib.parse import parse_qs, urlparse
 
 ROOT = Path(__file__).resolve().parents[1]
-SERVICES = ("suno", "seedance", "happyhorse", "openai", "nanobanana")
+SERVICES = ("acemusic", "suno", "seedance", "happyhorse", "openai", "nanobanana")
 
 
 class GoosePluginContracts(unittest.TestCase):
