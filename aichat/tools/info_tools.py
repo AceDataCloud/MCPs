@@ -2,6 +2,7 @@
 
 from typing import get_args
 
+from core.messages_models import MessagesModel
 from core.server import mcp
 from core.types import DEFAULT_MODEL, DEFAULT_V2_MODEL, AiChatModel, AiChatV2Model
 
@@ -18,10 +19,12 @@ async def aichat_list_models() -> str:
     """
     v1_models = "\n".join(f"- {model}" for model in get_args(AiChatModel))
     v2_models = "\n".join(f"- {model}" for model in get_args(AiChatV2Model))
+    native_models = "\n".join(f"- {model}" for model in get_args(MessagesModel))
     return (
         "# Available AiChat Models\n\n"
         f"## aichat_create_conversation (default: {DEFAULT_MODEL})\n{v1_models}\n\n"
         f"## aichat_create_conversation_v2 (default: {DEFAULT_V2_MODEL})\n{v2_models}\n\n"
+        f"## aichat_create_message (native Messages, model and max_tokens required)\n{native_models}\n\n"
         "## Gemini endpoint coverage\n"
         "gemini-3.8-flash is available through both tools. gemini-4-argon, gemini-4-carbon and gemini-4-hydrogen require "
         "aichat_create_conversation_v2. Use the exact endpoint model list above.\n\n"
@@ -44,6 +47,12 @@ async def aichat_get_usage_guide() -> str:
     return """# AiChat Tools Usage Guide
 
 ## Available Tools
+
+### aichat_create_message
+Call the native `/v1/messages` API, including Claude Opus 5.5 and Sonnet 5.5.
+Choose `model` from this tool's list and supply `messages` and a positive `max_tokens` output budget.
+Use a General application's API token with Claude Messages API service access.
+The output budget does not describe the model's maximum context. Calls use the current application balance and are not automatically retried.
 
 ### aichat_create_conversation
 Create an AI conversation with any supported model.

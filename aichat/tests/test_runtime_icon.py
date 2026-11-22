@@ -30,6 +30,7 @@ async def test_initialize_advertises_a_valid_public_png_icon_and_existing_tools(
     assert {tool.name for tool in listed.tools} == {
         "aichat_create_conversation",
         "aichat_create_conversation_v2",
+        "aichat_create_message",
         "aichat_list_models",
         "aichat_get_usage_guide",
     }

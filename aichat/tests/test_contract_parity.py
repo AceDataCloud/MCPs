@@ -23,7 +23,7 @@ async def test_published_model_v1_dispatch(monkeypatch, model):
 async def test_discovery_matches_both_endpoint_enums():
     listing = await info_tools.aichat_list_models()
     v1, rest = listing.split("## aichat_create_conversation_v2", 1)
-    v2 = rest.split("## Gemini endpoint coverage", 1)[0]
+    v2 = rest.split("## aichat_create_message", 1)[0]
     assert {line[2:] for line in v1.splitlines() if line.startswith("- ")} == set(
         get_args(AiChatModel)
     )
