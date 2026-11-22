@@ -45,6 +45,7 @@ def test_flagship_models_are_available_in_aichat_v2() -> None:
 
 def test_deepseek_models_match_in_both_aichat_apis() -> None:
     expected = [
+        "deepseek-v4.1-flash-1017",
         "deepseek-v4.1-flash",
         "deepseek-v4-flash",
         "deepseek-flash",
