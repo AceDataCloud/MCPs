@@ -15,9 +15,7 @@ from tools import chat_tools, info_tools
 async def test_published_model_v1_dispatch(monkeypatch, model):
     request = AsyncMock(return_value={"answer": "hello"})
     monkeypatch.setattr(chat_tools.client, "create_conversation", request)
-    await mcp.call_tool(
-        "aichat_create_conversation", {"question": "hello", "model": model}
-    )
+    await mcp.call_tool("aichat_create_conversation", {"question": "hello", "model": model})
     assert request.await_args.kwargs["model"] == model
 
 
