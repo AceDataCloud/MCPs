@@ -112,7 +112,7 @@ async def test_kimi_discovery_identifies_v2_tool_and_keeps_k3_alias() -> None:
 
 
 @pytest.mark.asyncio
-@pytest.mark.parametrize("model", ["kimi-k3.1-pro", "kimi-k3", "kimi-k2.6"])
+@pytest.mark.parametrize("model", ["kimi-k3.1-pro", "kimi-k3", "kimi-k2.6", "kimi-k2.7-code"])
 async def test_kimi_v2_dispatch_preserves_public_alias(model: str) -> None:
     tools = {tool.name: tool for tool in await mcp.list_tools()}
     properties = tools["aichat_create_conversation_v2"].inputSchema["properties"]

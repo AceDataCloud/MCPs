@@ -218,7 +218,7 @@ are available through this conversation wrapper.
 ### Kimi (AiChat v2 only)
 
 Use `aichat_create_conversation_v2` with `model="kimi-k3.1-pro"` to use Kimi
-K3.1 Pro. `kimi-k3` and existing v2 Kimi aliases remain supported; the default
+K3.1 Pro. `kimi-k3`, `kimi-k2.6`, and `kimi-k2.7-code` are also available; the default
 model is still `gpt-4.1`. These models are not available through the v1 tool.
 
 ```json
