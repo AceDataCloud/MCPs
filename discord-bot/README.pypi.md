@@ -2,7 +2,7 @@
 # MCP Discord Bot Server
 
 A Model Context Protocol (MCP) server that provides tools for automating Discord
-through a self-hosted [Discord Agent Proxy](https://platform.acedata.cloud?utm_source=pypi&utm_medium=referral&utm_campaign=evergreen&utm_content=discord_bot_mcp_package_platform) instance.
+through a self-hosted [Discord Agent Proxy](https://platform.acedata.cloud?utm_source=pypi&utm_medium=referral&utm_campaign=evergreen) instance.
 
 ## Overview
 
@@ -18,7 +18,7 @@ as MCP tools for use with Claude, Cursor, and other MCP-compatible AI clients.
 
 ## Prerequisites
 
-1. Create a Discord Agent Proxy application at [platform.acedata.cloud](https://platform.acedata.cloud/console/applications?utm_source=pypi&utm_medium=referral&utm_campaign=evergreen&utm_content=discord_bot_mcp_package_api_key) and activate a subscription. Instance resources are configured automatically; no instance size selection is needed.
+1. Create a Discord Agent Proxy application at [platform.acedata.cloud](https://platform.acedata.cloud/console/applications?utm_source=pypi&utm_medium=referral&utm_campaign=evergreen) and activate a subscription. Instance resources are configured automatically; no instance size selection is needed.
 2. Enter your Discord account credentials in the configuration page and deploy.
 3. In the application's **Overview** tab, confirm the account is connected and copy the MCP endpoint and access token from the Discord account card. A running container does not guarantee a connected Discord account.
 
@@ -30,7 +30,7 @@ The **Documentation** tab lists all 14 REST operations with request parameters, 
 
 This package connects to **your own deployed Discord Agent Proxy**, not to the shared `https://<service>.mcp.acedata.cloud/mcp` endpoint used by the generation MCPs. The proxy's URL and access token are shown in the application's **Overview** tab after you deploy and connect the Discord account. The proxy credential is `DISCORD_BOT_TOKEN`; an AceDataCloud API token or MCP OAuth/DCR setup does not replace it.
 
-Use a dedicated Discord account and follow Discord's current terms and rate limits. Sending, editing, deleting, and reacting affect that real account. [Deployment and API documentation](https://platform.acedata.cloud/documents/development_discord_bot?utm_source=pypi&utm_medium=referral&utm_campaign=evergreen&utm_content=discord_bot_mcp_package_quick_start).
+Use a dedicated Discord account and follow Discord's current terms and rate limits. Sending, editing, deleting, and reacting affect that real account. [Deployment and API documentation](https://platform.acedata.cloud/documents/development_discord_bot?utm_source=pypi&utm_medium=referral&utm_campaign=evergreen).
 
 ### Local stdio setup
 
@@ -91,7 +91,7 @@ If `discord_whoami` fails, check the proxy URL, proxy token and connected-accoun
 ## Documentation
 
 <!-- canonical-documentation -->
-[Documentation](https://platform.acedata.cloud/documents/development_discord_bot?utm_source=pypi&utm_medium=referral&utm_campaign=evergreen&utm_content=discord_bot_mcp_package_quick_start)
+[Documentation](https://platform.acedata.cloud/documents/development_discord_bot?utm_source=pypi&utm_medium=referral&utm_campaign=evergreen)
 
 ## License
 

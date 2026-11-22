@@ -33,7 +33,7 @@ mcp-recaptcha = "main:main"
 
 [project.urls]
 Homepage = "https://github.com/AceDataCloud/MCPs"
-Documentation = "https://platform.acedata.cloud/services/485cc5ca-7f1e-48e5-944e-1fe82b4637e8?utm_source=pypi&utm_medium=referral&utm_campaign=evergreen&utm_content=recaptcha_mcp_package_quick_start"
+Documentation = "https://platform.acedata.cloud/services/485cc5ca-7f1e-48e5-944e-1fe82b4637e8?utm_source=pypi&utm_medium=referral&utm_campaign=evergreen"
 Repository = "https://github.com/AceDataCloud/MCPs"
 Issues = "https://github.com/AceDataCloud/MCPs/issues"
 

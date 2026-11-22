@@ -70,7 +70,7 @@ mcp-luma = "main:main"
 
 [project.urls]
 Homepage = "https://github.com/AceDataCloud/LumaMCP"
-Documentation = "https://platform.acedata.cloud/documents/luma-mcp?utm_source=pypi&utm_medium=referral&utm_campaign=evergreen&utm_content=luma_mcp_package_quick_start"
+Documentation = "https://platform.acedata.cloud/documents/luma-mcp?utm_source=pypi&utm_medium=referral&utm_campaign=evergreen"
 Repository = "https://github.com/AceDataCloud/LumaMCP"
 Issues = "https://github.com/AceDataCloud/LumaMCP/issues"
 Changelog = "https://github.com/AceDataCloud/LumaMCP/blob/main/CHANGELOG.md"

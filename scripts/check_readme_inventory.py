@@ -23,7 +23,7 @@ def without_utm(text: str) -> str:
         query = [
             (key, value)
             for key, value in parse_qsl(parts.query)
-            if key not in {"utm_source", "utm_medium", "utm_campaign", "utm_content"}
+            if key not in {"utm_source", "utm_medium", "utm_campaign"}
         ]
         return urlunsplit(
             (parts.scheme, parts.netloc, parts.path, urlencode(query), parts.fragment)

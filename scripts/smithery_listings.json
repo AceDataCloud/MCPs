@@ -7,7 +7,7 @@
     "source_sha": "f288eb461f15d057e9f5cedd634ce1e5c4959552",
     "config_url": "https://github.com/AceDataCloud/PlatformBackend/blob/f288eb461f15d057e9f5cedd634ce1e5c4959552/config/marketing_attribution.json",
     "source": "opensource",
-    "reason": "Current producer contract has no smithery source. Use its recognized opensource/referral source and encode smithery in utm_content without modifying global rules."
+    "reason": "Current producer contract has no smithery source. Use its recognized opensource/referral source."
   },
   "token_images": [
     "https://raw.githubusercontent.com/AceDataCloud/SunoDify/8d3d03570e73324220f111f7fe343da0792a8071/_assets/tutorial/get-api-key-en.png",

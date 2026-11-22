@@ -20,8 +20,8 @@ Choose **Hosted (API token)** to connect without installing Python. Alternativel
 
 ## 2. Get the correct application API token
 
-1. Register or sign in to [Ace Data Cloud → Applications](https://platform.acedata.cloud/console/applications?utm_source=opensource&utm_medium=referral&utm_campaign=evergreen&utm_content=kilo_gpt_image_api_key). If no General application exists, choose **Initialize General Application**.
-2. Open **General application**. Confirm GPT Image access, [current pricing and account balance](https://platform.acedata.cloud/models?utm_source=opensource&utm_medium=referral&utm_campaign=evergreen&utm_content=kilo_gpt_image_pricing) before any generation. A General application token can cover multiple entitled services; a service-specific token only covers that service.
+1. Register or sign in to [Ace Data Cloud → Applications](https://platform.acedata.cloud/console/applications?utm_source=opensource&utm_medium=referral&utm_campaign=evergreen). If no General application exists, choose **Initialize General Application**.
+2. Open **General application**. Confirm GPT Image access, [current pricing and account balance](https://platform.acedata.cloud/models?utm_source=opensource&utm_medium=referral&utm_campaign=evergreen) before any generation. A General application token can cover multiple entitled services; a service-specific token only covers that service.
 3. Use the copy icon for an existing key, or **Manage Keys → Create** for a dedicated `Kilo GPT Image` key. Set expiry and usage limits as needed. If API restrictions are enabled, allow **/openai/images/generations, /openai/images/edits and /openai/tasks** so both generation and result retrieval work.
 
 ![Copy an application API key or open Manage Keys](https://raw.githubusercontent.com/AceDataCloud/SunoDify/8d3d03570e73324220f111f7fe343da0792a8071/_assets/tutorial/get-api-key-en.png)
@@ -52,11 +52,11 @@ This checks discovery or a local information tool, not a paid generation. Any mo
 
 ## 5. Generate only when you choose, then retrieve the same task
 
-After checking [service parameters and current prices](https://platform.acedata.cloud/documents/openai-images-generations?utm_source=opensource&utm_medium=referral&utm_campaign=evergreen&utm_content=kilo_gpt_image_service_docs), explicitly ask for the media you want. `openai_generate_image` is a billable action. Review the exact model, duration/size and other required fields before approving it. Do not substitute a different model automatically.
+After checking [service parameters and current prices](https://platform.acedata.cloud/documents/openai-images-generations?utm_source=opensource&utm_medium=referral&utm_campaign=evergreen), explicitly ask for the media you want. `openai_generate_image` is a billable action. Review the exact model, duration/size and other required fields before approving it. Do not substitute a different model automatically.
 
 Keep the returned **task ID**. If the result is pending, call **`openai_get_task`** with that same ID using the field shown in the tool schema. Continue querying the same task until a terminal success with completed image URL(s) in the returned task data or a terminal failure appears. A timeout/disconnect is not permission to submit a new generation; check the existing task first. Open the actual returned URL rather than a placeholder.
 
-In [Ace Applications](https://platform.acedata.cloud/console/applications?utm_source=opensource&utm_medium=referral&utm_campaign=evergreen&utm_content=kilo_gpt_image_usage), check the same application and credential's request/usage records. A workflow may contain several API requests; verify each actual request once. Installation count and a successful local check are not revenue or unique-billing proof.
+In [Ace Applications](https://platform.acedata.cloud/console/applications?utm_source=opensource&utm_medium=referral&utm_campaign=evergreen), check the same application and credential's request/usage records. A workflow may contain several API requests; verify each actual request once. Installation count and a successful local check are not revenue or unique-billing proof.
 
 ## Troubleshooting
 

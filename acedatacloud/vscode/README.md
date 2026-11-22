@@ -16,7 +16,7 @@ can call it directly from chat.
 ## Quick Start
 
 1. **Install this extension.** VS Code registers the `acedatacloud` MCP server automatically.
-2. **Get an account token** from [Account Tokens](https://platform.acedata.cloud/console/platform-tokens?utm_source=vscode_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=acedatacloud_mcp_vscode_platform_token), following the steps below. This account server requires a `platform-...` token.
+2. **Get an account token** from [Account Tokens](https://platform.acedata.cloud/console/platform-tokens?utm_source=vscode_marketplace&utm_medium=referral&utm_campaign=evergreen), following the steps below. This account server requires a `platform-...` token.
 3. **Open Copilot Chat** in agent mode and ask for a account task — the extension prompts for the account token the first time and stores it in the OS keychain via VS Code's `SecretStorage`.
 
 You can rotate or remove the account token any time from the command palette:
@@ -30,7 +30,7 @@ You can rotate or remove the account token any time from the command palette:
 ### Get the account-management token
 
 <!-- BEGIN TOKEN ONBOARDING -->
-1. Sign in or register at [Ace Data Cloud → Account Tokens](https://platform.acedata.cloud/console/platform-tokens?utm_source=vscode_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=acedatacloud_mcp_vscode_platform_token).
+1. Sign in or register at [Ace Data Cloud → Account Tokens](https://platform.acedata.cloud/console/platform-tokens?utm_source=vscode_marketplace&utm_medium=referral&utm_campaign=evergreen).
 2. Click **Create** and copy the token with the copy button. It starts with `platform-`; it is an account-management credential, separate from an application's generation API key.
 3. Paste only the token into this account MCP's credential field, or set `ACEDATACLOUD_PLATFORM_TOKEN` for local stdio. Add `Bearer ` only when configuring an HTTP `Authorization` header yourself.
 4. Keep it private and remove it from **Account Tokens** to revoke access when no longer needed. For a client that supports hosted OAuth, you can instead use the browser sign-in flow described in this guide.
@@ -52,7 +52,7 @@ _Tool list is dynamically loaded from the server. Run a query to discover availa
 
 ## Pricing
 
-Free — management API calls are not billed. Recharges use your existing balance. See [Documentation](https://platform.acedata.cloud/documents/acedatacloud-mcp?utm_source=vscode_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=acedatacloud_mcp_vscode_quick_start).
+Free — management API calls are not billed. Recharges use your existing balance. See [Documentation](https://platform.acedata.cloud/documents/acedatacloud-mcp?utm_source=vscode_marketplace&utm_medium=referral&utm_campaign=evergreen).
 
 ---
 
@@ -123,8 +123,8 @@ version, install [`uv`](https://docs.astral.sh/uv/) and use:
 - **Hosted endpoint:** https://mcp.acedata.cloud/mcp
 - **PyPI package:** [`mcp-acedatacloud`](https://pypi.org/project/mcp-acedatacloud/)
 - **Source repository:** https://github.com/AceDataCloud/AceDataCloudMCP
-- **Ace Data Cloud platform:** https://platform.acedata.cloud?utm_source=vscode_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=acedatacloud_mcp_vscode_platform
-- **Documentation:** https://platform.acedata.cloud/documents/acedatacloud-mcp?utm_source=vscode_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=acedatacloud_mcp_vscode_quick_start
+- **Ace Data Cloud platform:** https://platform.acedata.cloud?utm_source=vscode_marketplace&utm_medium=referral&utm_campaign=evergreen
+- **Documentation:** https://platform.acedata.cloud/documents/acedatacloud-mcp?utm_source=vscode_marketplace&utm_medium=referral&utm_campaign=evergreen
 
 ## License
 

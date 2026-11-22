@@ -9,8 +9,8 @@
 [![MCP](https://img.shields.io/badge/MCP-Compatible-green.svg)](https://modelcontextprotocol.io)
 
 A [Model Context Protocol (MCP)](https://modelcontextprotocol.io) server for
-**managing your [AceDataCloud](https://platform.acedata.cloud?utm_source=pypi&utm_medium=referral&utm_campaign=evergreen&utm_content=acedatacloud_mcp_package_platform) account** through
-the [platform management API](https://platform.acedata.cloud/documents/platform-token?utm_source=pypi&utm_medium=referral&utm_campaign=evergreen&utm_content=acedatacloud_mcp_package_documents_platform-token).
+**managing your [AceDataCloud](https://platform.acedata.cloud?utm_source=pypi&utm_medium=referral&utm_campaign=evergreen) account** through
+the [platform management API](https://platform.acedata.cloud/documents/platform-token?utm_source=pypi&utm_medium=referral&utm_campaign=evergreen).
 
 Check your balance, look up usage and spend, manage API keys, list services,
 create and pay recharge orders, manage platform tokens, list models, and use
@@ -559,7 +559,7 @@ This is the **management** MCP at `https://mcp.acedata.cloud/mcp`. It uses a **p
 | Hosted platform token | Your client cannot complete OAuth or needs an explicit management credential | Send `Authorization: Bearer platform-…` in the client's HTTP header. |
 | Local stdio | Your client launches local MCP processes | Install `mcp-acedatacloud` and set `ACEDATACLOUD_PLATFORM_TOKEN` for that process. |
 
-Hosted OAuth reuses or creates a durable platform token. Review the consent screen for the account capabilities being requested; the account's current backend permissions still govern individual tools, and OAuth consent does not grant administrator access. Sensitive writes require their documented confirmation steps. Platform tokens are returned in full only when created; keep them private. [Platform token documentation](https://platform.acedata.cloud/documents/platform-token?utm_source=pypi&utm_medium=referral&utm_campaign=evergreen&utm_content=acedatacloud_mcp_package_documents_platform-token).
+Hosted OAuth reuses or creates a durable platform token. Review the consent screen for the account capabilities being requested; the account's current backend permissions still govern individual tools, and OAuth consent does not grant administrator access. Sensitive writes require their documented confirmation steps. Platform tokens are returned in full only when created; keep them private. [Platform token documentation](https://platform.acedata.cloud/documents/platform-token?utm_source=pypi&utm_medium=referral&utm_campaign=evergreen).
 
 ### Hosted OAuth clients
 
@@ -584,7 +584,7 @@ VS Code-specific workspace example:
 ### Explicit platform token
 
 <!-- BEGIN TOKEN ONBOARDING -->
-1. Sign in or register at [Ace Data Cloud → Account Tokens](https://platform.acedata.cloud/console/platform-tokens?utm_source=pypi&utm_medium=referral&utm_campaign=evergreen&utm_content=acedatacloud_mcp_package_platform_token).
+1. Sign in or register at [Ace Data Cloud → Account Tokens](https://platform.acedata.cloud/console/platform-tokens?utm_source=pypi&utm_medium=referral&utm_campaign=evergreen).
 2. Click **Create** and copy the token with the copy button. It starts with `platform-`; it is an account-management credential, separate from an application's generation API key.
 3. Paste only the token into this account MCP's credential field, or set `ACEDATACLOUD_PLATFORM_TOKEN` for local stdio. Add `Bearer ` only when configuring an HTTP `Authorization` header yourself.
 4. Keep it private and remove it from **Account Tokens** to revoke access when no longer needed. For a client that supports hosted OAuth, you can instead use the browser sign-in flow described in this guide.
@@ -785,7 +785,7 @@ and does not read a production .env or execute endpoint handlers.
 ## Documentation
 
 <!-- canonical-documentation -->
-[Documentation](https://platform.acedata.cloud/documents/acedatacloud-mcp?utm_source=pypi&utm_medium=referral&utm_campaign=evergreen&utm_content=acedatacloud_mcp_package_quick_start)
+[Documentation](https://platform.acedata.cloud/documents/acedatacloud-mcp?utm_source=pypi&utm_medium=referral&utm_campaign=evergreen)
 
 ## License
 

@@ -38,7 +38,7 @@ mcp-digitalhuman = "main:main"
 
 [project.urls]
 Homepage = "https://github.com/AceDataCloud/MCPs/tree/main/digitalhuman"
-Documentation = "https://platform.acedata.cloud/documents/digitalhuman?utm_source=pypi&utm_medium=referral&utm_campaign=evergreen&utm_content=digitalhuman_mcp_package_quick_start"
+Documentation = "https://platform.acedata.cloud/documents/digitalhuman?utm_source=pypi&utm_medium=referral&utm_campaign=evergreen"
 Repository = "https://github.com/AceDataCloud/MCPs"
 Issues = "https://github.com/AceDataCloud/MCPs/issues"
 

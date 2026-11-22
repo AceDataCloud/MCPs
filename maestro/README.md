@@ -2,7 +2,7 @@
 
 <!-- mcp-name: io.github.AceDataCloud/mcp-maestro -->
 
-Produce complete videos from a natural-language brief with [Maestro](https://studio.acedata.cloud/maestro?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=maestro_mcp_readme_maestro) through the Ace Data Cloud API. Maestro plans the script, creates or sources media, generates voiceover and music, edits, captions, renders, and returns one finished video in the selected language.
+Produce complete videos from a natural-language brief with [Maestro](https://studio.acedata.cloud/maestro?utm_source=github&utm_medium=referral&utm_campaign=evergreen) through the Ace Data Cloud API. Maestro plans the script, creates or sources media, generates voiceover and music, edits, captions, renders, and returns one finished video in the selected language.
 
 ## Connect: hosted OAuth, API token, or local stdio
 
@@ -14,7 +14,7 @@ The hosted endpoint is `https://maestro.mcp.acedata.cloud/mcp`. Choose one route
 | Hosted API token | The client cannot finish OAuth, or you need an explicit integration credential | Send an AceDataCloud API token in the `Authorization: Bearer …` header. Keep it in a local secret store or environment variable. |
 | Local stdio | The client runs a local MCP process | Install `mcp-maestro` and pass `ACEDATACLOUD_API_TOKEN` to that process. It still calls the AceDataCloud API. |
 
-The hosted service advertises OAuth metadata and Dynamic Client Registration (DCR). **DCR registers the client application; it is not an API key.** OAuth signs you in and the client sends the resulting Bearer token; it may reuse or create an API credential for the account. Browser sign-in still requires an AceDataCloud account. The hosted service can be metered: review [current service documentation](https://platform.acedata.cloud/documents/maestro?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=maestro_mcp_readme_quick_start) and displayed pricing before a real operation. Do not configure both an OAuth login and a fixed `Authorization` header for the same server.
+The hosted service advertises OAuth metadata and Dynamic Client Registration (DCR). **DCR registers the client application; it is not an API key.** OAuth signs you in and the client sends the resulting Bearer token; it may reuse or create an API credential for the account. Browser sign-in still requires an AceDataCloud account. The hosted service can be metered: review [current service documentation](https://platform.acedata.cloud/documents/maestro?utm_source=github&utm_medium=referral&utm_campaign=evergreen) and displayed pricing before a real operation. Do not configure both an OAuth login and a fixed `Authorization` header for the same server.
 
 ### Hosted OAuth examples
 
@@ -47,8 +47,8 @@ VS Code-specific workspace config (OAuth):
 ### Hosted API token
 
 <!-- BEGIN TOKEN ONBOARDING -->
-1. Open [Ace Data Cloud → Applications](https://platform.acedata.cloud/console/applications?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=maestro_mcp_readme_api_key). Sign in, or register an account first.
-2. Find **General application**. If it has not been created, choose **Initialize General Application**. A general key can use the services available to your account; a dedicated application's key is limited to its service. Check the required service/model access and [current pricing](https://platform.acedata.cloud/models?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=maestro_mcp_readme_models).
+1. Open [Ace Data Cloud → Applications](https://platform.acedata.cloud/console/applications?utm_source=github&utm_medium=referral&utm_campaign=evergreen). Sign in, or register an account first.
+2. Find **General application**. If it has not been created, choose **Initialize General Application**. A general key can use the services available to your account; a dedicated application's key is limited to its service. Check the required service/model access and [current pricing](https://platform.acedata.cloud/models?utm_source=github&utm_medium=referral&utm_campaign=evergreen).
 3. Copy the **API Key** from the application card, or open **Keys / Manage Keys → Create** to create a separate key for this integration. Give it a recognizable name so you can revoke or rotate it independently.
 4. When creating a key, review **Expiration Time**, **Set Usage Limitation**, and **Allowed APIs**. Enable only the restrictions you need, allow the operations you will call, then click **Create** and copy the token from the key list. Task lookup does not grant permission to submit a generation. Confirm the application's balance can cover your first request; any trial allowance is whatever your account currently displays.
 5. Copy only the token value, without quotation marks, spaces, or `Bearer `. An API Key / API Token field expects this raw value; only a manually configured HTTP `Authorization` header needs the `Bearer ` prefix. A `platform-...` account-management token cannot replace a generation API key.
@@ -146,7 +146,7 @@ Keep this user-level file private. Self-hosted HTTP uses `mcp-maestro --transpor
 
 1. `https://maestro.mcp.acedata.cloud/health` returning `{"status":"ok"}` checks endpoint reachability only.
 2. Confirm that the MCP client loads tools. The tool list shows MCP discovery, not downstream API access or balance.
-3. If you need a full API check, call `maestro_create_video` with your own valid input after reviewing [current service documentation](https://platform.acedata.cloud/documents/maestro?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=maestro_mcp_readme_quick_start) and displayed pricing. If the result contains a task ID, call `maestro_get_task` on that same ID until terminal success or failure. Do not resubmit the operation just to check progress.
+3. If you need a full API check, call `maestro_create_video` with your own valid input after reviewing [current service documentation](https://platform.acedata.cloud/documents/maestro?utm_source=github&utm_medium=referral&utm_campaign=evergreen) and displayed pricing. If the result contains a task ID, call `maestro_get_task` on that same ID until terminal success or failure. Do not resubmit the operation just to check progress.
 
 For **401**, check which auth route the client used and whether the token or OAuth session is valid. A **403** may mean an account permission or content moderation failure; read the returned error. Insufficient balance and downstream service failures need their own diagnosis. A listed tool or submitted task does not prove a successful result.
 
@@ -170,7 +170,7 @@ To inspect existing task history without creating a video, call `maestro_list_ta
 
 ## Production contract
 
-Maestro provides the complete capability set on every request: all actions and scenarios, 5–300 seconds, one language per task, and 1080p/30fps output. Successful jobs cost 0.7 Credits per actual delivered second, with no scenario or language surcharge; check the current [Maestro pricing](https://platform.acedata.cloud/documents/maestro?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=maestro_mcp_readme_quick_start) before submitting. Billing never exceeds the requested duration; failed jobs and task polling are free. Task polling does not submit a new generation.
+Maestro provides the complete capability set on every request: all actions and scenarios, 5–300 seconds, one language per task, and 1080p/30fps output. Successful jobs cost 0.7 Credits per actual delivered second, with no scenario or language surcharge; check the current [Maestro pricing](https://platform.acedata.cloud/documents/maestro?utm_source=github&utm_medium=referral&utm_campaign=evergreen) before submitting. Billing never exceeds the requested duration; failed jobs and task polling are free. Task polling does not submit a new generation.
 
 To revise an existing result, call `maestro_create_video` with an iteration action and the prior task ID:
 
@@ -209,12 +209,12 @@ mypy core tools main.py
 python -m build
 ```
 
-See the [Maestro API documentation](https://platform.acedata.cloud/documents/maestro?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=maestro_mcp_readme_quick_start) for billing and response details.
+See the [Maestro API documentation](https://platform.acedata.cloud/documents/maestro?utm_source=github&utm_medium=referral&utm_campaign=evergreen) for billing and response details.
 
 ## Documentation
 
 <!-- canonical-documentation -->
-[Documentation](https://platform.acedata.cloud/documents/maestro?utm_source=github&utm_medium=referral&utm_campaign=evergreen&utm_content=maestro_mcp_readme_quick_start)
+[Documentation](https://platform.acedata.cloud/documents/maestro?utm_source=github&utm_medium=referral&utm_campaign=evergreen)
 
 ## API parameter behavior
 

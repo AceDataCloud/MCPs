@@ -46,7 +46,7 @@ class MarketingReadmeTest(unittest.TestCase):
                     self.assertEqual(query["utm_source"], [source], url)
                     self.assertEqual(query["utm_medium"], ["referral"], url)
                     self.assertEqual(query["utm_campaign"], ["evergreen"], url)
-                    self.assertLessEqual(len(query["utm_content"][0]), 96)
+                    self.assertEqual(set(query), {"utm_source", "utm_medium", "utm_campaign"})
 
     def test_code_protocols_and_retired_packages_are_untouched(self):
         sample = '```json\n{"base_url": "https://platform.acedata.cloud"}\n```\n`[config](https://platform.acedata.cloud)`\n[mcp](https://suno.mcp.acedata.cloud/mcp)\n[API](https://platform.acedata.cloud/api/v1/users/)\n'
@@ -58,7 +58,7 @@ class MarketingReadmeTest(unittest.TestCase):
 
     def test_existing_parameters_and_fragments_survive_without_duplicate_tags(self):
         url = "https://platform.acedata.cloud/console/applications?tab=key&utm_source=old#new"
-        result = tagged_url(url, "suno", "pypi", contract(), load_catalog())
+        result = tagged_url(url, "pypi", contract())
         self.assertEqual(
             parse_qs(urlsplit(result).query),
             {
@@ -66,12 +66,11 @@ class MarketingReadmeTest(unittest.TestCase):
                 "utm_source": ["pypi"],
                 "utm_medium": ["referral"],
                 "utm_campaign": ["evergreen"],
-                "utm_content": ["suno_mcp_package_api_key"],
             },
         )
         self.assertEqual(urlsplit(result).fragment, "new")
         self.assertEqual(
-            tagged_url(result, "suno", "pypi", contract(), load_catalog()), result
+            tagged_url(result, "pypi", contract()), result
         )
 
     def test_seedance_setup_anchor_and_protocol_stay_valid(self):
@@ -209,7 +208,7 @@ class CredentialGuideTest(unittest.TestCase):
             ):
                 query = parse_qs(urlsplit(url).query)
                 self.assertEqual(query["utm_source"], ["vscode_marketplace"])
-                self.assertIn("vscode_bundle_mcp_vscode_", query["utm_content"][0])
+                self.assertEqual(set(query), {"utm_source", "utm_medium", "utm_campaign"})
 
 
 class JetBrainsDescriptionTest(unittest.TestCase):
@@ -243,7 +242,7 @@ class JetBrainsDescriptionTest(unittest.TestCase):
                         self.assertEqual(query["utm_medium"], ["referral"])
                     self.assertEqual(
                         render_jetbrains_settings(
-                            text, alias, contract(), load_catalog()
+                            text, alias, contract()
                         ),
                         text,
                     )
@@ -275,7 +274,7 @@ class JetBrainsDescriptionTest(unittest.TestCase):
                     query = parse_qs(urlsplit(html.unescape(url)).query)
                     self.assertEqual(query["utm_source"], ["jetbrains_marketplace"])
                     self.assertEqual(query["utm_medium"], ["referral"])
-                    self.assertIn("utm_content", query)
+                    self.assertEqual(set(query), {"utm_source", "utm_medium", "utm_campaign"})
 
     def test_description_update_preserves_identity_and_is_idempotent(self):
         from scripts.marketing_readmes import render_jetbrains_description
@@ -283,7 +282,7 @@ class JetBrainsDescriptionTest(unittest.TestCase):
         path = ROOT / "suno/jetbrains/src/main/resources/META-INF/plugin.xml"
         text = path.read_text()
         rendered = render_jetbrains_description(
-            text, "suno", contract(), load_catalog()
+            text, "suno", contract()
         )
         self.assertEqual(rendered, text)
         self.assertIn("<id>com.acedatacloud.mcp.suno</id>", rendered)

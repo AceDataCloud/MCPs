@@ -42,7 +42,7 @@ def contract():
     return data["contract"]
 
 
-def tagged_url(url, alias, source, rules, catalog):
+def tagged_url(url, source, rules):
     parts = urlsplit(url)
     if parts.scheme != "https" or parts.netloc not in {
         "platform.acedata.cloud",
@@ -51,41 +51,17 @@ def tagged_url(url, alias, source, rules, catalog):
         return url
     if parts.path.startswith("/api/"):
         return url
-    canonical, _ = documentation_target(catalog[alias])
-    destination = urlunsplit((parts.scheme, parts.netloc, parts.path, "", ""))
-    if destination == canonical:
-        placement = "quick_start"
-    elif parts.path.startswith("/console/platform-tokens"):
-        placement = "platform_token"
-    elif parts.path.startswith("/console/applications"):
-        placement = "api_key"
-    elif parts.path in ("", "/"):
-        placement = "platform"
-    else:
-        placement = re.sub(r"[^a-z0-9_.-]", "_", parts.path.strip("/").lower())
-    surface = rules["link_defaults"]["surfaces"][source]
-    content = rules["link_defaults"]["content_template"].format(
-        entry=alias.replace("-", "_") + "_mcp", surface=surface, placement=placement
-    )
-    limit = rules["max_tag_length"]
-    if len(content) > limit:
-        content = (
-            content[: limit - 9]
-            + "_"
-            + hashlib.sha256(content.encode()).hexdigest()[:8]
-        )
     tags = {
         "utm_source": source,
         "utm_medium": rules["sources"][source],
         "utm_campaign": rules["link_defaults"]["campaign"],
-        "utm_content": content,
     }
     if any(not re.fullmatch(rules["tag_pattern"], value) for value in tags.values()):
         raise ValueError("Invalid generated marketing tag")
     query = [
         (key, value)
         for key, value in parse_qsl(parts.query, keep_blank_values=True)
-        if key not in rules["utm_keys"]
+        if not key.startswith("utm_")
     ]
     query.extend(tags.items())
     return urlunsplit(
@@ -118,21 +94,21 @@ def render(text, alias, source, rules=None, catalog=None):
         for i in range(0, len(chunks), 2):
             chunks[i] = LINK.sub(
                 lambda m: (
-                    f"[{m[1]}]({tagged_url(m[2], alias, source, rules, catalog)})"
+                    f"[{m[1]}]({tagged_url(m[2], source, rules)})"
                 ),
                 chunks[i],
             )
             # Bare resource links at the end of a prose line are also clickable.
             chunks[i] = re.sub(
                 r"(?<![\w/(\[?=])https://(?:platform|studio)\.acedata\.cloud[^\s)>]*?(?=\s*$)",
-                lambda m: tagged_url(m[0], alias, source, rules, catalog),
+                lambda m: tagged_url(m[0], source, rules),
                 chunks[i],
             )
         output.append("".join(chunks))
     return "".join(output)
 
 
-def render_jetbrains_description(text, alias, rules, catalog):
+def render_jetbrains_description(text, alias, rules):
     """Update the descriptor actually uploaded to Marketplace, not only README."""
     pattern = r"(<description>\s*<!\[CDATA\[)(.*?)(\]\]>\s*</description>)"
 
@@ -148,7 +124,7 @@ def render_jetbrains_description(text, alias, rules, catalog):
         )
 
         def mapper(url):
-            return tagged_url(url, alias, "jetbrains_marketplace", rules, catalog)
+            return tagged_url(url, "jetbrains_marketplace", rules)
 
         body = re.sub(
             r'href="(https://(?:platform|studio)\.acedata\.cloud[^"]*)"',
@@ -177,7 +153,7 @@ def render_jetbrains_description(text, alias, rules, catalog):
     return result
 
 
-def render_jetbrains_settings(text, alias, rules, catalog):
+def render_jetbrains_settings(text, alias, rules):
     """Keep installed settings links aligned with the credential guide."""
     text = re.sub(
         r"\n\s*// BEGIN TOKEN ONBOARDING.*?// END TOKEN ONBOARDING\n",
@@ -216,7 +192,7 @@ def render_jetbrains_settings(text, alias, rules, catalog):
         r'"(https://(?:platform|studio)\.acedata\.cloud[^"\\]*)"',
         lambda match: (
             '"'
-            + tagged_url(match[1], alias, "jetbrains_marketplace", rules, catalog)
+            + tagged_url(match[1], "jetbrains_marketplace", rules)
             + '"'
         ),
         text,
@@ -244,7 +220,7 @@ def outputs():
         project = re.sub(
             r'^Documentation = ".*"$',
             'Documentation = "'
-            + tagged_url(destination, alias, "pypi", rules, catalog)
+            + tagged_url(destination, "pypi", rules)
             + '"',
             project,
             flags=re.MULTILINE,
@@ -263,7 +239,7 @@ def outputs():
             yield (
                 descriptor,
                 render_jetbrains_description(
-                    descriptor.read_text(), alias, rules, catalog
+                    descriptor.read_text(), alias, rules
                 ),
             )
 
@@ -274,7 +250,7 @@ def outputs():
         ):
             yield (
                 settings,
-                render_jetbrains_settings(settings.read_text(), alias, rules, catalog),
+                render_jetbrains_settings(settings.read_text(), alias, rules),
             )
 
     bundle_catalog = {

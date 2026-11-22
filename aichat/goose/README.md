@@ -6,7 +6,7 @@ This is a shareable, independently installed preset for goose 1.55.0+, not an of
 
 ## Key and installation
 
-Register/sign in at [Applications](https://platform.acedata.cloud/console/applications?utm_source=opensource&utm_medium=referral&utm_campaign=evergreen&utm_content=acedatacloud_goose_api_key), open General application, copy or create a separately named API Key. Check chat permissions, expiry/Allowed APIs, balance and [current model price](https://platform.acedata.cloud/models?utm_source=opensource&utm_medium=referral&utm_campaign=evergreen&utm_content=acedatacloud_goose_pricing). Do not use a `platform-...` management token.
+Register/sign in at [Applications](https://platform.acedata.cloud/console/applications?utm_source=opensource&utm_medium=referral&utm_campaign=evergreen), open General application, copy or create a separately named API Key. Check chat permissions, expiry/Allowed APIs, balance and [current model price](https://platform.acedata.cloud/models?utm_source=opensource&utm_medium=referral&utm_campaign=evergreen). Do not use a `platform-...` management token.
 
 ![Copy the API Key or Manage Keys — real Ace console reference](https://raw.githubusercontent.com/AceDataCloud/SunoDify/8d3d03570e73324220f111f7fe343da0792a8071/_assets/tutorial/get-api-key-en.png)
 

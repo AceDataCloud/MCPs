@@ -75,7 +75,7 @@ mcp-openai-pro = "main:main"
 
 [project.urls]
 Homepage = "https://github.com/AceDataCloud/OpenAIMCP"
-Documentation = "https://platform.acedata.cloud/documents/openai?utm_source=pypi&utm_medium=referral&utm_campaign=evergreen&utm_content=openai_mcp_package_quick_start"
+Documentation = "https://platform.acedata.cloud/documents/openai?utm_source=pypi&utm_medium=referral&utm_campaign=evergreen"
 Repository = "https://github.com/AceDataCloud/OpenAIMCP"
 Issues = "https://github.com/AceDataCloud/OpenAIMCP/issues"
 Changelog = "https://github.com/AceDataCloud/OpenAIMCP/blob/main/CHANGELOG.md"

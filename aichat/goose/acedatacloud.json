@@ -16,9 +16,9 @@
   "requires_auth": true,
   "supports_streaming": true,
   "dynamic_models": false,
-  "model_doc_link": "https://platform.acedata.cloud/models?utm_source=opensource&utm_medium=referral&utm_campaign=evergreen&utm_content=acedatacloud_goose_models",
+  "model_doc_link": "https://platform.acedata.cloud/models?utm_source=opensource&utm_medium=referral&utm_campaign=evergreen",
   "setup_steps": [
-    "Open https://platform.acedata.cloud/console/applications?utm_source=opensource&utm_medium=referral&utm_campaign=evergreen&utm_content=acedatacloud_goose_api_key",
+    "Open https://platform.acedata.cloud/console/applications?utm_source=opensource&utm_medium=referral&utm_campaign=evergreen",
     "Sign in, open General application and check chat access, current price and balance.",
     "Copy or create a service API key. Enter its raw value as ACEDATACLOUD_API_TOKEN; never put the key in a prompt."
   ]

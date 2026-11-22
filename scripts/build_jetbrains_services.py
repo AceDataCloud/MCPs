@@ -68,7 +68,7 @@ def generate():
         )
 
         def url(target):
-            return tagged_url(target, alias, "jetbrains_marketplace", rules, catalog)
+            return tagged_url(target, "jetbrains_marketplace", rules)
 
         substitutions = {
             "__PACKAGE__": service["package"],
@@ -156,7 +156,7 @@ def generate():
             count=1,
             flags=re.S,
         )
-        yield descriptor, render_jetbrains_description(text, alias, rules, catalog)
+        yield descriptor, render_jetbrains_description(text, alias, rules)
 
         listing = service[
             "listing"

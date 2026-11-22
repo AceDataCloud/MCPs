@@ -72,7 +72,7 @@ class GoosePluginContracts(unittest.TestCase):
                 self.assertEqual(query["utm_source"], ["opensource"])
                 self.assertEqual(query["utm_medium"], ["referral"])
                 self.assertEqual(query["utm_campaign"], ["evergreen"])
-                self.assertIn("goose", query["utm_content"][0])
+                self.assertEqual(set(query), {"utm_source", "utm_medium", "utm_campaign"})
 
 
 if __name__ == "__main__":
