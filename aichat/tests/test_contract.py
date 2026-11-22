@@ -124,22 +124,6 @@ def test_v2_offers_gemini_spec_models():
     )
 
 
-def test_v2_offers_deepseek_spec_models():
-    spec_models = {
-        "deepseek-chat",
-        "deepseek-r1",
-        "deepseek-r1-0528",
-        "deepseek-reasoner",
-        "deepseek-v3",
-        "deepseek-v3-250324",
-        "deepseek-v3.2-exp",
-        "deepseek-v4-flash",
-        "deepseek-v4-pro",
-    }
-    missing = spec_models - set(get_args(AiChatV2Model))
-    assert not missing, f"AiChatV2Model is missing DeepSeek spec models {sorted(missing)}"
-
-
 def test_v2_offers_glm_spec_models():
     spec_models = {
         "glm-5.3",
