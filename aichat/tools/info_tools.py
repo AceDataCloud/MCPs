@@ -115,7 +115,7 @@ aichat_create_conversation(
 ```
 aichat_create_conversation(
     question="Explain quantum entanglement.",
-    model="deepseek-r1"
+    model="deepseek-v4-pro"
 )
 ```
 

@@ -43,9 +43,16 @@ def test_flagship_models_are_available_in_aichat_v2() -> None:
     assert "glm-5.2" in models
 
 
-def test_deepseek_v4_pro_is_available_once_in_each_aichat_api() -> None:
-    assert get_args(AiChatModel).count("deepseek-v4-pro") == 1
-    assert get_args(AiChatV2Model).count("deepseek-v4-pro") == 1
+def test_deepseek_models_match_in_both_aichat_apis() -> None:
+    expected = [
+        "deepseek-v4.1-flash",
+        "deepseek-v4-flash",
+        "deepseek-flash",
+        "deepseek-v4-pro",
+        "deepseek-v3.2",
+    ]
+    for model_type in (AiChatModel, AiChatV2Model):
+        assert [m for m in get_args(model_type) if m.startswith("deepseek-")] == expected
 
 
 def test_mimo_identifiers_are_available_without_duplicate_aliases() -> None:
