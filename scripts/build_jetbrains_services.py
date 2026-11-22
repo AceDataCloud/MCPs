@@ -77,7 +77,6 @@ def generate():
             "__BRAND__": service["brand"],
             "__KIND__": service["kind"],
             "__MODEL_TOOL__": service["model_tool"],
-            "__MODEL_PREFIX__": service.get("model_prefix", ""),
             "__GENERATE_TOOL__": service["generate_tool"],
             "__TASK_TOOL__": service["task_tool"],
             "__TASK_ARG__": service["task_arg"],
@@ -193,7 +192,7 @@ The new native panel keeps its key in memory and clears it when the settings pag
 
 ## First use and existing task lookup
 
-1. Click **List models**. Review [current pricing](https://platform.acedata.cloud/models), then enter the exact model ID you want. The plugin does not silently select a substitute.
+1. Click **List models** to read this service's full model catalog, including compatible aliases returned by the service. Review [current pricing](https://platform.acedata.cloud/models), then enter the exact model ID you want. The plugin does not filter model names by brand prefix or silently select a substitute.
 2. Enter a prompt and click **Generate {service["kind"]}**. Review the one-request charge confirmation. Cancel if the model, access or balance is unclear. No automatic generation or retry runs.
 3. Copy the returned `task_id` to **Existing task ID** if it is not filled automatically. Click **Check existing task** on that same ID until the response reports a terminal state. Keep the result/URL and verify it opens before calling the job successful. A pending response or accepted request is not completed media.
 4. If a submission times out, do not submit again blindly. Find the original task in your Ace account first to avoid duplicate charges. A failed/content-restricted/rate-limited result must remain distinct.
@@ -282,7 +281,7 @@ Ace Data Cloud 提供的独立 {service["brand"]} {service["kind"]} 集成，并
 
 ## 4. 首次使用：先查模型，再明确提交一次
 
-1. 点击 **List models**。{lookup_zh}先核对返回的模型和[当前价](https://platform.acedata.cloud/models)，再把自己选择的精确模型 ID 填入 **Model (choose explicitly)**。插件不默认替换或添加 fallback。
+1. 点击 **List models**。{lookup_zh}界面保留服务返回的完整模型目录及兼容别名，不按品牌前缀筛选。先核对返回的模型和[当前价](https://platform.acedata.cloud/models)，再把自己选择的精确模型 ID 填入 **Model (choose explicitly)**。插件不默认替换或添加 fallback。
 2. 在 **Prompt** 填写自己的要求。{service["brand"]} 新面板只提供现有生成工具的基础模型/提示词入口，服务的其他参数与高级能力请查看[服务文档]({service["docs"]})，不能从基础界面推断全套高级功能均已接入。
 3. 点击 **Generate {service["kind"]}** 后，核对一次请求的模型与计费提醒；只有明确同意消耗自己的应用余额才选择 **Submit once**，否则选择 Cancel。插件不会自动生成或自动重试。
 4. 本教程没有让用户照抄固定收费样例，也没有证明新的生产生成。静态模型列表、连接或 HTTP 200 都不能当作生成成功。

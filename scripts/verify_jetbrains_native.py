@@ -9,6 +9,9 @@ import tempfile
 import threading
 
 ROOT = Path(__file__).resolve().parents[1]
+SERVICES = json.loads((ROOT / "scripts/jetbrains_services.json").read_text())[
+    "services"
+]
 
 JAVA = r"""import java.net.URI;
 public class NativeClientProbe {
@@ -23,15 +26,65 @@ public class NativeClientProbe {
  }
 }"""
 
+PANEL_JAVA = r"""import java.awt.Component;
+import java.awt.Container;
+import java.lang.reflect.Field;
+import javax.swing.*;
+public class NativePanelProbe {
+ static Object field(Object panel, String name) throws Exception {
+  Field f=panel.getClass().getDeclaredField(name); f.setAccessible(true); return f.get(panel);
+ }
+ static JButton generationButton(Container parent) {
+  for (Component child:parent.getComponents()) {
+   if (child instanceof JButton b && b.getText().startsWith("Generate ")) return b;
+   if (child instanceof Container c) { JButton b=generationButton(c); if (b!=null) return b; }
+  }
+  return null;
+ }
+ public static void main(String[] args) throws Exception {
+  SwingUtilities.invokeAndWait(() -> {
+   try {
+    Object panel=Class.forName(args[0]).getConstructor().newInstance();
+    JTextField model=(JTextField)field(panel,"model");
+    JTextArea prompt=(JTextArea)field(panel,"prompt");
+    JLabel status=(JLabel)field(panel,"status");
+    JButton generate=generationButton((Container)panel);
+    if (generate==null) throw new AssertionError("Generation button missing");
+    prompt.setText("Headless validation only; key stays empty");
+    for (int i=1;i<args.length;i++) {
+     model.setText(args[i]); generate.doClick();
+     if (!status.getText().equals("Paste only your raw application API key."))
+      throw new AssertionError(args[i]+": "+status.getText());
+    }
+    model.setText(""); generate.doClick();
+    if (!status.getText().contains("enter a model explicitly")) throw new AssertionError("Empty model accepted");
+    model.setText(args[1]); prompt.setText(""); generate.doClick();
+    if (!status.getText().equals("Enter a prompt.")) throw new AssertionError("Empty prompt accepted");
+    panel.getClass().getMethod("dispose").invoke(panel);
+    System.out.println((args.length-1)+" model IDs reached the empty-key guard; no request or paid confirmation opened");
+   } catch (Exception e) {throw new RuntimeException(e);}
+  });
+ }
+}"""
+
 
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--java", required=True)
     parser.add_argument("--ide-home", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument(
+        "--service",
+        action="append",
+        choices=[service["alias"] for service in SERVICES],
+        help="Verify only these service aliases",
+    )
     args = parser.parse_args()
     received = []
-    mode = {"status": 200, "sse": False, "tool_error": False}
+    mode = {"status": 200, "sse": False, "tool_error": False, "catalog_text": None}
+    image_models = json.loads(
+        (ROOT / "scripts/fixtures/published_image_models.json").read_text()
+    )["model_ids"]
 
     class Handler(BaseHTTPRequestHandler):
         def log_message(self, *_):
@@ -76,7 +129,8 @@ def main():
                     "content": [
                         {
                             "type": "text",
-                            "text": '{"task_id":"LOCAL_EXISTING_TASK","status":"pending","model":"gpt-image-LOCAL_TEST"}',
+                            "text": mode["catalog_text"]
+                            or '{"task_id":"LOCAL_EXISTING_TASK","status":"pending","model":"gpt-image-LOCAL_TEST"}',
                         }
                     ],
                     "isError": mode["tool_error"],
@@ -102,10 +156,12 @@ def main():
     ) as temporary:
         probe = Path(temporary) / "NativeClientProbe.java"
         probe.write_text(JAVA)
+        panel_probe = Path(temporary) / "NativePanelProbe.java"
+        panel_probe.write_text(PANEL_JAVA)
         results = []
-        for service in json.loads(
-            (ROOT / "scripts/jetbrains_services.json").read_text()
-        )["services"]:
+        for service in SERVICES:
+            if args.service and service["alias"] not in args.service:
+                continue
             directory = ROOT / service["directory"]
             jar = next((directory / "build/libs").glob("mcp-*-0.1.0.jar"))
             classpath = ":".join(map(str, [jar, *args.ide_home.glob("lib/*.jar")]))
@@ -143,6 +199,69 @@ def main():
                         "sse": sse,
                         "pass": True,
                         "requests": len(requests),
+                    }
+                )
+            if service["alias"] == "gpt-image":
+                catalog_text = (
+                    "Available image models:\n\n"
+                    + "\n".join(f"- {model}" for model in image_models)
+                    + "\n\nChoose an exact ID and check current pricing."
+                )
+                for sse in [False, True]:
+                    mode.update(status=200, sse=sse, catalog_text=catalog_text)
+                    start = len(received)
+                    p = subprocess.run(
+                        [
+                            args.java,
+                            "-cp",
+                            classpath,
+                            str(probe),
+                            service["package"] + ".AceServiceClient",
+                            endpoint,
+                            service["model_tool"],
+                            "{}",
+                        ],
+                        capture_output=True,
+                        text=True,
+                        timeout=30,
+                    )
+                    assert p.returncode == 0, p.stderr
+                    assert p.stdout.strip() == catalog_text, p.stdout
+                    assert len(received[start:]) == 3
+                    results.append(
+                        {
+                            "service": service["alias"],
+                            "scenario": "complete-image-catalog",
+                            "sse": sse,
+                            "models": len(image_models),
+                            "pass": True,
+                        }
+                    )
+                mode["catalog_text"] = None
+                start = len(received)
+                p = subprocess.run(
+                    [
+                        args.java,
+                        "-Djava.awt.headless=true",
+                        "-cp",
+                        classpath,
+                        str(panel_probe),
+                        service["package"] + ".AceServicePanel",
+                        *image_models,
+                    ],
+                    capture_output=True,
+                    text=True,
+                    timeout=30,
+                )
+                assert p.returncode == 0, p.stderr
+                assert len(received) == start
+                results.append(
+                    {
+                        "service": service["alias"],
+                        "scenario": "all-models-pass-panel-validation",
+                        "models": len(image_models),
+                        "requests": 0,
+                        "pass": True,
                     }
                 )
             mode.update(status=429, sse=False)
