@@ -11,13 +11,14 @@ from tools import chat_tools, info_tools
 
 
 @pytest.mark.asyncio
-async def test_gemini_38_flash_v1_dispatch(monkeypatch):
+@pytest.mark.parametrize("model", ["gemini-3.8-flash", "glm-4.5", "glm-4.5v"])
+async def test_published_model_v1_dispatch(monkeypatch, model):
     request = AsyncMock(return_value={"answer": "hello"})
     monkeypatch.setattr(chat_tools.client, "create_conversation", request)
     await mcp.call_tool(
-        "aichat_create_conversation", {"question": "hello", "model": "gemini-3.8-flash"}
+        "aichat_create_conversation", {"question": "hello", "model": model}
     )
-    assert request.await_args.kwargs["model"] == "gemini-3.8-flash"
+    assert request.await_args.kwargs["model"] == model
 
 
 @pytest.mark.asyncio
