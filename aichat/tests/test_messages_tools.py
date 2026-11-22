@@ -107,6 +107,22 @@ async def test_native_discovery_matches_tool_choices():
     assert {"claude-opus-5-5", "claude-sonnet-5-5"} <= set(get_args(MessagesModel))
 
 
+@pytest.mark.asyncio
+@pytest.mark.usefixtures("native_token")
+async def test_non_object_response_is_reported_as_a_tool_error():
+    with respx.mock() as upstream:
+        upstream.post("https://api.acedata.cloud/v1/messages").respond(200, json=[])
+        with pytest.raises(ToolError, match="non-object response"):
+            await mcp.call_tool(
+                "aichat_create_message",
+                {
+                    "model": "claude-sonnet-5-5",
+                    "messages": [{"role": "user", "content": "Hello"}],
+                    "max_tokens": 64,
+                },
+            )
+
+
 def test_generator_reads_only_native_request_models(tmp_path):
     models = ["new-native-model"]
     schema = {

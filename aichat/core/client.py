@@ -222,9 +222,12 @@ class AiChatClient:
         if response.status_code >= 400:
             self._handle_error_response(response)
         try:
-            return response.json()
+            result = response.json()
         except ValueError as error:
             raise AiChatAPIError(message="Native Messages returned invalid JSON") from error
+        if not isinstance(result, dict):
+            raise AiChatAPIError(message="Native Messages returned a non-object response")
+        return result
 
 
 # Global client instance
