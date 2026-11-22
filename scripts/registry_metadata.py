@@ -30,7 +30,6 @@ def listing_url(alias, entry, repository_url=None):
                 "utm_source": "mcp_registry",
                 "utm_medium": rules["sources"]["mcp_registry"],
                 "utm_campaign": rules["link_defaults"]["campaign"],
-                "utm_content": alias.replace("-", "_") + "_mcp_listing_guide",
             }
         )
     )

@@ -15,26 +15,24 @@ def load_catalog():
     return json.loads((ROOT / "scripts/smithery_listings.json").read_text())
 
 
-def tagged_url(path, alias, placement):
+def tagged_url(path):
     # opensource/referral is recognized by the pinned Backend producer contract.
-    # Keep the actual Smithery placement explicit without inventing a global source.
     tags = {
         "utm_source": "opensource",
         "utm_medium": "referral",
         "utm_campaign": "evergreen",
-        "utm_content": f"{alias}_smithery_{placement}",
     }
     return "https://platform.acedata.cloud" + path + "?" + urlencode(tags)
 
 
-def config_schema(service):
+def config_schema():
     return {
         "type": "object",
         "properties": {
             "apiKey": {
                 "type": "string",
                 "description": "Ace Data Cloud application API Token. Get it at "
-                + tagged_url("/console/applications", service["alias"], "api_key")
+                + tagged_url("/console/applications")
                 + ". Paste the token only, without Bearer.",
                 "x-from": {"header": "x-api-key"},
                 "x-to": {"header": "Authorization", "prefix": "Bearer "},
@@ -58,7 +56,7 @@ def metadata(service):
         + limitation
         + "\n\n1. Install this server from Smithery in your client.\n"
         + "2. Register or sign in to [Ace Data Cloud Applications]("
-        + tagged_url("/console/applications", service["alias"], "api_key")
+        + tagged_url("/console/applications")
         + "). Initialize General application if needed, then copy its API Key or "
         + "create a dedicated key. Check service access, expiry, limits and balance.\n"
         + "3. In the connection's apiKey / API Token field, paste only the token, "
@@ -66,9 +64,9 @@ def metadata(service):
         + f"4. Query {service['task_tool']} with an existing task's "
         + f"{service['task_field']}; do not submit generation again while pending.\n\n"
         + "Generation is metered; see [current pricing]("
-        + tagged_url(service["price_path"], service["alias"], "pricing")
+        + tagged_url(service["price_path"])
         + "). A platform- account token cannot replace the application API Key.",
-        "homepage": tagged_url(service["price_path"], service["alias"], "listing"),
+        "homepage": tagged_url(service["price_path"]),
         "repositoryUrl": "https://github.com/AceDataCloud/" + service["repository"],
         "license": "MIT",
         "iconUrl": service["icon_url"],
@@ -78,8 +76,8 @@ def metadata(service):
 def render_readme(service, catalog, zh=False):
     name, alias = service["service"], service["alias"]
     listing = "https://smithery.ai/servers/" + service["qualified_name"]
-    key = tagged_url("/console/applications", alias, "api_key")
-    pricing = tagged_url(service["price_path"], alias, "pricing")
+    key = tagged_url("/console/applications")
+    pricing = tagged_url(service["price_path"])
     other = "README.md" if zh else "README_zh-CN.md"
     switch = "English" if zh else "简体中文"
     pending = service["status"] == "candidate"
@@ -254,7 +252,7 @@ def outputs():
                 {
                     "type": "external",
                     "upstreamUrl": service["endpoint"],
-                    "configSchema": config_schema(service),
+                    "configSchema": config_schema(),
                 },
                 ensure_ascii=False,
                 indent=2,

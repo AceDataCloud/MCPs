@@ -4,7 +4,7 @@ One VS Code extension for AI chat, images, video, music, search, web extraction,
 and account management. Choose from **27 hosted MCP services** and use them in
 VS Code Chat without installing Python or running local servers.
 
-[简体中文教程](README.zh-CN.md) · [Current models and pricing](https://platform.acedata.cloud/models?utm_source=vscode_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=vscode_bundle_mcp_vscode_models)
+[简体中文教程](README.zh-CN.md) · [Current models and pricing](https://platform.acedata.cloud/models?utm_source=vscode_marketplace&utm_medium=referral&utm_campaign=evergreen)
 
 ## First image: GPT Image in VS Code
 
@@ -20,7 +20,7 @@ Open [Ace Data Cloud MCP](https://marketplace.visualstudio.com/items?itemName=ac
 
 New account? Register and sign in first. If no General application is shown, choose **Initialize General Application**. When creating a separate key, name it for VS Code and review expiration, usage limits and API restrictions before saving.
 
-1. Sign in to [Ace Data Cloud → Applications](https://platform.acedata.cloud/console/applications?utm_source=vscode_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=vscode_bundle_mcp_vscode_api_key).
+1. Sign in to [Ace Data Cloud → Applications](https://platform.acedata.cloud/console/applications?utm_source=vscode_marketplace&utm_medium=referral&utm_campaign=evergreen).
 2. Open **General application**. Copy its API key, or choose **Manage Keys → Create** to make a separate VS Code key. Check OpenAI image-generation access, current price, and balance before submitting a task.
 3. If **Allowed APIs** is enabled, permit both generation and task lookup: `/openai/images/generations` and `/openai/tasks`. Copy only the token string, without `Bearer ` or quotation marks. A `platform-...` management token is for the optional account server, not this image tool.
 
@@ -72,7 +72,7 @@ If there is no `finished_at` or result URL yet, wait and query **the same ID** a
 
 ### 7. Open the image and check billing
 
-Open **View the generated image**. In our verified run, the returned link served a 1024 × 1024 PNG with HTTP 200. Open [Ace Data Cloud Usage](https://platform.acedata.cloud/console/usage?utm_source=vscode_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=vscode_bundle_mcp_vscode_console_usage) and match the **single generation task ID** to its Credits charge; task queries must not create another image charge. Prices and package conversion rates change, so check the current display rather than copying this example's amount.
+Open **View the generated image**. In our verified run, the returned link served a 1024 × 1024 PNG with HTTP 200. Open [Ace Data Cloud Usage](https://platform.acedata.cloud/console/usage?utm_source=vscode_marketplace&utm_medium=referral&utm_campaign=evergreen) and match the **single generation task ID** to its Credits charge; task queries must not create another image charge. Prices and package conversion rates change, so check the current display rather than copying this example's amount.
 
 | What you see | What to do |
 | --- | --- |
@@ -119,7 +119,7 @@ The same extension exposes the services below. **GPT Image is under OpenAI**, an
 <!-- END GENERATED SERVICES -->
 
 Account management is optional and requires its own platform token from
-[Platform tokens](https://platform.acedata.cloud/console/platform-tokens?utm_source=vscode_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=vscode_bundle_mcp_vscode_platform_token).
+[Platform tokens](https://platform.acedata.cloud/console/platform-tokens?utm_source=vscode_marketplace&utm_medium=referral&utm_campaign=evergreen).
 Run **Ace Data Cloud: Set Account Platform Token** to save it. API keys are never
 sent to the account-management server, and platform tokens are never sent to
 API-service servers.
@@ -171,7 +171,7 @@ CI checks the generated list, package settings and README together. A retired
 service is automatically omitted. Publish runs tests, packages a VSIX and reads
 back the public Marketplace version.
 
-[API documentation](https://platform.acedata.cloud/documents?utm_source=vscode_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=vscode_bundle_mcp_vscode_documents) ·
+[API documentation](https://platform.acedata.cloud/documents?utm_source=vscode_marketplace&utm_medium=referral&utm_campaign=evergreen) ·
 [MCP server source](https://github.com/AceDataCloud/MCPs) ·
 [Issues](https://github.com/AceDataCloud/VSCodeMCP/issues)
 

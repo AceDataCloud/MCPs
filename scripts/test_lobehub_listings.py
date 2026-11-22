@@ -61,5 +61,4 @@ class LobeHubListingsTest(unittest.TestCase):
                         self.assertEqual(query["utm_source"], ["opensource"])
                         self.assertEqual(query["utm_medium"], ["referral"])
                         self.assertEqual(query["utm_campaign"], ["evergreen"])
-                        self.assertIn("lobehub", query["utm_content"][0])
-                        self.assertLessEqual(len(query["utm_content"][0]), 96)
+                        self.assertEqual(set(query), {"utm_source", "utm_medium", "utm_campaign"})

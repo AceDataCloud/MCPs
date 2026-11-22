@@ -76,7 +76,7 @@ mcp-nanobanana-pro = "main:main"
 
 [project.urls]
 Homepage = "https://github.com/AceDataCloud/NanoBananaMCP"
-Documentation = "https://platform.acedata.cloud/documents/nano-banana-mcp?utm_source=pypi&utm_medium=referral&utm_campaign=evergreen&utm_content=nanobanana_mcp_package_quick_start"
+Documentation = "https://platform.acedata.cloud/documents/nano-banana-mcp?utm_source=pypi&utm_medium=referral&utm_campaign=evergreen"
 Repository = "https://github.com/AceDataCloud/NanoBananaMCP"
 Issues = "https://github.com/AceDataCloud/NanoBananaMCP/issues"
 Changelog = "https://github.com/AceDataCloud/NanoBananaMCP/blob/main/CHANGELOG.md"

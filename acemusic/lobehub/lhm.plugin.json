@@ -4,7 +4,7 @@
   "version": "2026.11.18.0",
   "author": "Ace Data Cloud",
   "authorUrl": "https://github.com/AceDataCloud",
-  "homepage": "https://platform.acedata.cloud/documents/mcp-acemusic?utm_source=opensource&utm_medium=referral&utm_campaign=evergreen&utm_content=acemusic_lobehub_guide",
+  "homepage": "https://platform.acedata.cloud/documents/mcp-acemusic?utm_source=opensource&utm_medium=referral&utm_campaign=evergreen",
   "description": "Songs, lyrics, reference imports, covers, mashups and task lookup through ACE Music.",
   "cloudEndpoint": "https://acemusic.mcp.acedata.cloud/mcp",
   "tags": [

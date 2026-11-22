@@ -46,7 +46,7 @@ class RegistryMetadataTest(unittest.TestCase):
                 query = parse_qs(urlsplit(actual["websiteUrl"]).query)
                 self.assertEqual(
                     set(query),
-                    {"utm_source", "utm_medium", "utm_campaign", "utm_content"},
+                    {"utm_source", "utm_medium", "utm_campaign"},
                 )
                 self.assertEqual(query["utm_source"], ["mcp_registry"])
                 self.assertEqual(query["utm_medium"], ["referral"])

@@ -33,7 +33,7 @@ mcp-image2text = "main:main"
 
 [project.urls]
 Homepage = "https://github.com/AceDataCloud/MCPs"
-Documentation = "https://platform.acedata.cloud/services/2aaa7faf-099e-410e-82f3-8d78170f25bb?utm_source=pypi&utm_medium=referral&utm_campaign=evergreen&utm_content=image2text_mcp_package_quick_start"
+Documentation = "https://platform.acedata.cloud/services/2aaa7faf-099e-410e-82f3-8d78170f25bb?utm_source=pypi&utm_medium=referral&utm_campaign=evergreen"
 Repository = "https://github.com/AceDataCloud/MCPs"
 Issues = "https://github.com/AceDataCloud/MCPs/issues"
 

@@ -6,7 +6,7 @@ Add the hosted server from Cline's MCP settings or CLI:
 cline mcp add ace-music https://acemusic.mcp.acedata.cloud/mcp --transport http --yes
 ```
 
-Complete the client's OAuth sign-in, or configure a private Bearer header with an [application key](https://platform.acedata.cloud/console/applications?utm_source=opensource&utm_medium=referral&utm_campaign=evergreen&utm_content=acemusic_cline_api_key). List available tools and run `acemusic_list_models` for a free check. Keep the original task ID when requesting songs.
+Complete the client's OAuth sign-in, or configure a private Bearer header with an [application key](https://platform.acedata.cloud/console/applications?utm_source=opensource&utm_medium=referral&utm_campaign=evergreen). List available tools and run `acemusic_list_models` for a free check. Keep the original task ID when requesting songs.
 
 ## 中文
 

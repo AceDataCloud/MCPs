@@ -81,17 +81,10 @@ class Service:
         account = self.token_env == "ACEDATACLOUD_PLATFORM_TOKEN"
         parts = urlsplit(self.signup_url)
         path = "/console/platform-tokens" if account else "/console/applications"
-        placement = "platform_token" if account else "api_key"
-        content = rules["link_defaults"]["content_template"].format(
-            entry=self.alias.replace("-", "_") + "_mcp",
-            surface="extension",
-            placement=placement,
-        )
         tags = {
             "utm_source": "vscode",
             "utm_medium": rules["sources"]["vscode"],
             "utm_campaign": rules["link_defaults"]["campaign"],
-            "utm_content": content,
         }
         if any(
             len(value) > rules["max_tag_length"]

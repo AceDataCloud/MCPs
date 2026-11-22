@@ -25,7 +25,7 @@ class McpAcedatacloudSettingsConfigurable : Configurable {
             group("API Configuration") {
                 // BEGIN TOKEN ONBOARDING
                 row {
-                    browserLink("Get an account-management token", "https://platform.acedata.cloud/console/platform-tokens?utm_source=jetbrains_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=acedatacloud_mcp_jetbrains_platform_token")
+                    browserLink("Get an account-management token", "https://platform.acedata.cloud/console/platform-tokens?utm_source=jetbrains_marketplace&utm_medium=referral&utm_campaign=evergreen")
                 }
                 row {
                     comment("Create a platform token with only the account permissions you need.")
@@ -90,10 +90,10 @@ class McpAcedatacloudSettingsConfigurable : Configurable {
 
             group("Links") {
                 row {
-                    browserLink("Ace Data Cloud Platform", "https://platform.acedata.cloud?utm_source=jetbrains_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=acedatacloud_mcp_jetbrains_platform")
+                    browserLink("Ace Data Cloud Platform", "https://platform.acedata.cloud?utm_source=jetbrains_marketplace&utm_medium=referral&utm_campaign=evergreen")
                 }
                 row {
-                    browserLink("Documentation", "https://platform.acedata.cloud/documents/acedatacloud-mcp?utm_source=jetbrains_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=acedatacloud_mcp_jetbrains_quick_start")
+                    browserLink("Documentation", "https://platform.acedata.cloud/documents/acedatacloud-mcp?utm_source=jetbrains_marketplace&utm_medium=referral&utm_campaign=evergreen")
                 }
                 row {
                     browserLink("Source Code", "https://github.com/AceDataCloud/AceDataCloudMCP")

@@ -75,7 +75,7 @@ Repository = "https://github.com/AceDataCloud/WanMCP"
 Issues = "https://github.com/AceDataCloud/WanMCP/issues"
 Changelog = "https://github.com/AceDataCloud/WanMCP/blob/main/CHANGELOG.md"
 
-Documentation = "https://platform.acedata.cloud/documents/wan?utm_source=pypi&utm_medium=referral&utm_campaign=evergreen&utm_content=wan_mcp_package_quick_start"
+Documentation = "https://platform.acedata.cloud/documents/wan?utm_source=pypi&utm_medium=referral&utm_campaign=evergreen"
 [build-system]
 requires = ["hatchling>=1.21.0,<1.30.0"]
 build-backend = "hatchling.build"

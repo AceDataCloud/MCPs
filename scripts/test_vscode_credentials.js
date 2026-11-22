@@ -53,7 +53,7 @@ test('generated credential prompts use the matching credential page and current 
     assert.equal(url.searchParams.get('utm_source'), 'vscode');
     assert.equal(url.searchParams.get('utm_medium'), 'referral');
     assert.equal(url.searchParams.get('utm_campaign'), 'evergreen');
-    assert.equal(url.searchParams.get('utm_content'), `${alias}_mcp_extension_${account ? 'platform_token' : 'api_key'}`);
+    assert.deepEqual([...url.searchParams.keys()].sort(), ['utm_campaign', 'utm_medium', 'utm_source']);
     assert.equal(prompt.password, true);
     assert.equal(definition.headers.Authorization, account ? 'Bearer platform-test-token' : 'Bearer test-api-key');
     assert.equal(state.secrets.get(`${alias}.apiToken`), account ? 'platform-test-token' : 'test-api-key');

@@ -29,8 +29,8 @@ You can rotate or remove the API key any time from the command palette:
 ### Get your API key
 
 <!-- BEGIN TOKEN ONBOARDING -->
-1. Open [Ace Data Cloud → Applications](https://platform.acedata.cloud/console/applications?utm_source=vscode_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=shorturl_mcp_vscode_api_key). Sign in, or register an account first.
-2. Find **General application**. If it has not been created, choose **Initialize General Application**. A general key can use the services available to your account; a dedicated application's key is limited to its service. Check the required service/model access and [current pricing](https://platform.acedata.cloud/models?utm_source=vscode_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=shorturl_mcp_vscode_models).
+1. Open [Ace Data Cloud → Applications](https://platform.acedata.cloud/console/applications?utm_source=vscode_marketplace&utm_medium=referral&utm_campaign=evergreen). Sign in, or register an account first.
+2. Find **General application**. If it has not been created, choose **Initialize General Application**. A general key can use the services available to your account; a dedicated application's key is limited to its service. Check the required service/model access and [current pricing](https://platform.acedata.cloud/models?utm_source=vscode_marketplace&utm_medium=referral&utm_campaign=evergreen).
 3. Copy the **API Key** from the application card, or open **Keys / Manage Keys → Create** to create a separate key for this integration. Give it a recognizable name so you can revoke or rotate it independently.
 4. When creating a key, review **Expiration Time**, **Set Usage Limitation**, and **Allowed APIs**. Enable only the restrictions you need, allow the operations you will call, then click **Create** and copy the token from the key list. Task lookup does not grant permission to submit a generation. Confirm the application's balance can cover your first request; any trial allowance is whatever your account currently displays.
 5. Copy only the token value, without quotation marks, spaces, or `Bearer `. An API Key / API Token field expects this raw value; only a manually configured HTTP `Authorization` header needs the `Bearer ` prefix. A `platform-...` account-management token cannot replace a generation API key.
@@ -46,8 +46,8 @@ Save the key in the client's credential store or the environment variable shown 
 
 For screenshots, token setup, project-level and user-level `mcp.json`, and Copilot Agent Mode examples, see:
 
-- [ShortURL MCP VS Code guide](https://platform.acedata.cloud/documents/promotion_article_mcp_shorturl_vscode?utm_source=vscode_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=shorturl_mcp_vscode_documents_promotion_article_mcp_shorturl_vscode)
-- [All Ace Data Cloud MCP servers in VS Code](https://platform.acedata.cloud/documents/promotion_article_mcp_all_vscode?utm_source=vscode_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=shorturl_mcp_vscode_documents_promotion_article_mcp_all_vscode)
+- [ShortURL MCP VS Code guide](https://platform.acedata.cloud/documents/promotion_article_mcp_shorturl_vscode?utm_source=vscode_marketplace&utm_medium=referral&utm_campaign=evergreen)
+- [All Ace Data Cloud MCP servers in VS Code](https://platform.acedata.cloud/documents/promotion_article_mcp_all_vscode?utm_source=vscode_marketplace&utm_medium=referral&utm_campaign=evergreen)
 
 ### Example prompts
 
@@ -69,7 +69,7 @@ For screenshots, token setup, project-level and user-level `mcp.json`, and Copil
 
 ## Pricing
 
-Free tier available. Higher quotas with paid plans. See full pricing at [https://platform.acedata.cloud/documents/short-url-mcp](https://platform.acedata.cloud/documents/short-url-mcp?utm_source=vscode_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=shorturl_mcp_vscode_quick_start).
+Free tier available. Higher quotas with paid plans. See full pricing at [https://platform.acedata.cloud/documents/short-url-mcp](https://platform.acedata.cloud/documents/short-url-mcp?utm_source=vscode_marketplace&utm_medium=referral&utm_campaign=evergreen).
 
 ---
 
@@ -140,8 +140,8 @@ version, install [`uv`](https://docs.astral.sh/uv/) and use:
 - **Hosted endpoint:** https://shorturl.mcp.acedata.cloud/mcp
 - **PyPI package:** [`mcp-shorturl`](https://pypi.org/project/mcp-shorturl/)
 - **Source repository:** https://github.com/AceDataCloud/ShortURLMCP
-- **Ace Data Cloud platform:** https://platform.acedata.cloud?utm_source=vscode_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=shorturl_mcp_vscode_platform
-- **MCP documentation:** https://platform.acedata.cloud/documents/short-url-mcp?utm_source=vscode_marketplace&utm_medium=referral&utm_campaign=evergreen&utm_content=shorturl_mcp_vscode_quick_start
+- **Ace Data Cloud platform:** https://platform.acedata.cloud?utm_source=vscode_marketplace&utm_medium=referral&utm_campaign=evergreen
+- **MCP documentation:** https://platform.acedata.cloud/documents/short-url-mcp?utm_source=vscode_marketplace&utm_medium=referral&utm_campaign=evergreen
 
 ## License
 

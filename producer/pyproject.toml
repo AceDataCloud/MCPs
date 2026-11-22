@@ -71,7 +71,7 @@ mcp-producer = "main:main"
 
 [project.urls]
 Homepage = "https://github.com/AceDataCloud/ProducerMCP"
-Documentation = "https://platform.acedata.cloud/documents/producer?utm_source=pypi&utm_medium=referral&utm_campaign=evergreen&utm_content=producer_mcp_package_quick_start"
+Documentation = "https://platform.acedata.cloud/documents/producer?utm_source=pypi&utm_medium=referral&utm_campaign=evergreen"
 Repository = "https://github.com/AceDataCloud/ProducerMCP"
 Issues = "https://github.com/AceDataCloud/ProducerMCP/issues"
 Changelog = "https://github.com/AceDataCloud/ProducerMCP/blob/main/CHANGELOG.md"

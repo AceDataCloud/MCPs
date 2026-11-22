@@ -74,11 +74,10 @@ class GlamaGuideTest(unittest.TestCase):
                 self.assertTrue(urls)
                 for url in urls:
                     query = parse_qs(urlsplit(url).query)
-                    self.assertEqual(set(query), {"utm_source", "utm_medium", "utm_campaign", "utm_content"})
+                    self.assertEqual(set(query), {"utm_source", "utm_medium", "utm_campaign"})
                     self.assertEqual(query["utm_source"], ["glama"])
                     self.assertEqual(query["utm_medium"], ["referral"])
                     self.assertEqual(query["utm_campaign"], ["evergreen"])
-                    self.assertRegex(query["utm_content"][0], r"^[a-z0-9][a-z0-9_.-]{0,95}$")
 
     def test_package_guides_and_real_images_are_in_the_source_payload(self):
         for alias in SERVICES:

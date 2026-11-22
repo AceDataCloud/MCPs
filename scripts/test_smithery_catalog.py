@@ -41,28 +41,21 @@ class SmitheryCatalogTest(unittest.TestCase):
                 )
                 self.assertIn(service["endpoint"], [r["url"] for r in server["remotes"]])
 
-    def test_current_producer_accepts_all_four_utm_values(self):
+    def test_current_producer_accepts_the_projected_utm_values(self):
         rules = json.loads((ROOT / "contracts/marketing-attribution.json").read_text())["contract"]
-        for service in load_catalog()["services"]:
-            for placement in ["api_key", "pricing", "listing"]:
-                url = tagged_url("/console/applications", service["alias"], placement)
-                tags = parse_qs(urlsplit(url).query)
-                self.assertEqual(set(tags), set(rules["utm_keys"]))
-                source = tags["utm_source"][0]
-                self.assertEqual(rules["sources"][source], tags["utm_medium"][0])
-                self.assertIn("smithery", tags["utm_content"][0])
-                self.assertTrue(
-                    all(re.fullmatch(rules["tag_pattern"], v[0]) for v in tags.values())
-                )
+        tags = parse_qs(urlsplit(tagged_url("/console/applications")).query)
+        self.assertEqual(set(tags), set(rules["utm_keys"]))
+        source = tags["utm_source"][0]
+        self.assertEqual(rules["sources"][source], tags["utm_medium"][0])
+        self.assertTrue(all(re.fullmatch(rules["tag_pattern"], v[0]) for v in tags.values()))
 
     def test_config_keeps_secret_header_boundary_and_documented_limits(self):
-        for service in load_catalog()["services"]:
-            schema = config_schema(service)
-            self.assertLessEqual(len(json.dumps(schema).encode()), 1024)
-            self.assertEqual(schema["required"], ["apiKey"])
-            prop = schema["properties"]["apiKey"]
-            self.assertEqual(prop["x-from"], {"header": "x-api-key"})
-            self.assertEqual(prop["x-to"], {"header": "Authorization", "prefix": "Bearer "})
+        schema = config_schema()
+        self.assertLessEqual(len(json.dumps(schema).encode()), 1024)
+        self.assertEqual(schema["required"], ["apiKey"])
+        prop = schema["properties"]["apiKey"]
+        self.assertEqual(prop["x-from"], {"header": "x-api-key"})
+        self.assertEqual(prop["x-to"], {"header": "Authorization", "prefix": "Bearer "})
 
     def test_readonly_and_query_names_match_actual_tool_signatures(self):
         for service in load_catalog()["services"]:
