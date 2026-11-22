@@ -50,7 +50,6 @@ def test_deepseek_models_match_in_both_aichat_apis() -> None:
         "deepseek-v4-flash",
         "deepseek-flash",
         "deepseek-v4-pro",
-        "deepseek-v4-pro-0813",
         "deepseek-v3.2",
     ]
     for model_type in (AiChatModel, AiChatV2Model):

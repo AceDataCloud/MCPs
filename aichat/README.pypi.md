@@ -191,7 +191,7 @@ authorization or other execution conditions.
 - o-series: o1, o1-mini, o1-pro, o3, o3-mini, o3-pro, o4-mini
 
 ### DeepSeek
-- deepseek-v4.1-flash-1017, deepseek-v4.1-flash, deepseek-v4-flash, deepseek-flash, deepseek-v4-pro, deepseek-v4-pro-0813, deepseek-v3.2
+- deepseek-v4.1-flash-1017, deepseek-v4.1-flash, deepseek-v4-flash, deepseek-flash, deepseek-v4-pro, deepseek-v3.2
 
 ### xAI
 - grok-3
