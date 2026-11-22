@@ -6,7 +6,7 @@ Monorepo for all AceDataCloud MCP (Model Context Protocol) servers.
 
 | Directory | Standalone Repo | PyPI Package | Category | Documentation |
 |---|---|---|---|---|
-| `acemusic/` | [AceMusicMCP](https://github.com/AceDataCloud/AceMusicMCP) | [mcp-acemusic](https://pypi.org/project/mcp-acemusic/) | Music | [Documentation](https://platform.acedata.cloud/documents/mcp-acemusic) |
+| `acemusic/` | [AceMusicMCP](https://github.com/AceDataCloud/AceMusicMCP) | [mcp-acemusic](https://pypi.org/project/mcp-acemusic/) | Music | [Documentation](https://platform.acedata.cloud/documents/mcp-acemusic?utm_source=github) |
 | `acedatacloud/` | [AceDataCloudMCP](https://github.com/AceDataCloud/AceDataCloudMCP) | [mcp-acedatacloud](https://pypi.org/project/mcp-acedatacloud/) | Account | [Documentation](https://platform.acedata.cloud/documents/acedatacloud-mcp?utm_source=github&utm_medium=referral&utm_campaign=evergreen) |
 | `face/` | [FaceTransformMCP](https://github.com/AceDataCloud/FaceTransformMCP) | [mcp-face-transform](https://pypi.org/project/mcp-face-transform/) | Vision | [Service details](https://platform.acedata.cloud/services/8efa1d83-9b75-4562-b44a-af95ce563d05?utm_source=github&utm_medium=referral&utm_campaign=evergreen) |
 | `fish/` | [FishMCP](https://github.com/AceDataCloud/FishMCP) | [mcp-fish](https://pypi.org/project/mcp-fish/) | Audio | [Documentation](https://platform.acedata.cloud/documents/fish?utm_source=github&utm_medium=referral&utm_campaign=evergreen) |

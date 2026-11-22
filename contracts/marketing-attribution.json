@@ -10,6 +10,7 @@
       "cli": "referral",
       "csdn": "referral",
       "devto": "referral",
+      "dify": "referral",
       "discord": "social",
       "docker_hub": "referral",
       "email": "email",
@@ -47,6 +48,6 @@
   },
   "producer": "AceDataCloud/PlatformBackend",
   "profile": "links",
-  "sha256": "e23b91bca4bcfcbcc54a39d7216e89840660808f05b257d2e0f9f172da61988b",
-  "source_sha": "3335be115e62a0a1a9cd08895263e2328954b795"
+  "sha256": "c50fccbbdf02096fd6912bd566189f0e1157c25775ac76a1153df2ecc1690790",
+  "source_sha": "9505629a38d8117399797c72ad11cb594f02ab6c"
 }
