@@ -32,6 +32,10 @@ V1_REQUIRED = {
 
 # Kimi models the spec removed; they must stay out of the MCP surface.
 V2_RETIRED_KIMI = {
+    "kimi-k2.5",
+    "kimi-k2-thinking",
+    "kimi-k2-thinking-turbo",
+    "kimi-k3.1-pro-highspeed",
     "kimi-k2-0711-preview",
     "kimi-k2-0905-preview",
     "kimi-k2-instruct-0905",

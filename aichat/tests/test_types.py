@@ -11,6 +11,7 @@ def test_kimi_models_are_available_in_aichat_v2() -> None:
     assert "kimi-k3.1-pro" in models
     assert "kimi-k3" in models
     assert "kimi-k2.6" in models
+    assert "kimi-k2.7-code" in models
 
 
 def test_claude_fable_models_are_available_once_in_aichat_v2() -> None:

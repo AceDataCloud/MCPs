@@ -139,7 +139,7 @@ aichat_create_conversation_v2(
 )
 ```
 
-`kimi-k3` remains supported by v2. This tool uses `/aichat2/conversations`,
+`kimi-k3`, `kimi-k2.6`, and `kimi-k2.7-code` are also available in v2. This tool uses `/aichat2/conversations`,
 not `/kimi/chat/completions`; it does not expose `reasoning_effort`.
 
 ## Response Structure
