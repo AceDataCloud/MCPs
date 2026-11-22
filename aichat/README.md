@@ -3,11 +3,29 @@
 <!-- mcp-name: io.github.AceDataCloud/mcp-aichat -->
 
 A Model Context Protocol (MCP) server for AI dialogue via the AceDataCloud platform.
-Supports a wide range of models including GPT-4/5, o-series, DeepSeek, Grok, and GLM.
+Supports the published AiChat and native Messages models, including GPT, Claude, Gemini, DeepSeek, Grok, Kimi, and GLM.
 
 ## Ace Data Cloud in goose
 
 [Named provider preset and upstream acceptance status](goose/README.md). This independently installed preset is not an official built-in provider.
+
+## Native Messages, including Claude 5.5
+
+Use `aichat_create_message` for models listed under native Messages by `aichat_list_models`, including `claude-opus-5-5` and `claude-sonnet-5-5`. This tool calls the actual `/v1/messages` endpoint. Models keep their exact public identifiers.
+
+Use the API token of your **General application** with access to the **Claude Messages API**. A token limited to AiChat conversation services does not automatically authorize Messages. Hosted HTTP uses `Authorization: Bearer`; the existing OAuth and local stdio configuration remain available.
+
+The tool requires `model`, a nonempty `messages` history, and a positive `max_tokens` output budget. The budget is a caller-selected request limit, not a claim about the model's context capacity. Native system content, tools, thinking and other optional Messages fields are forwarded without converting them to AiChat conversation fields. Capability availability and pricing follow the selected model and your application. The call uses the application's balance and does not automatically retry.
+
+```json
+{
+  "model": "claude-sonnet-5-5",
+  "messages": [{"role": "user", "content": "Summarize this design."}],
+  "max_tokens": 1024
+}
+```
+
+For contract updates, the existing PlatformBackend bundle maps `claude` to `aichat`. Generate this tool's model choices with `python scripts/sync_messages_models.py --bundle-dir /path/to/verified-bundle` from the `aichat/` directory, then run the normal tests. `--check` verifies that the committed choices still match that bundle.
 
 ## Features
 

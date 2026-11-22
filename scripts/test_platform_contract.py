@@ -1,3 +1,4 @@
+import ast
 import importlib.util
 import json
 import tempfile
@@ -12,6 +13,20 @@ SPEC.loader.exec_module(contract)
 
 
 class PlatformContractTests(unittest.TestCase):
+    def test_published_chat_models_have_an_appropriate_mcp_tool(self) -> None:
+        root = Path(__file__).resolve().parents[1]
+        expected = set(json.loads((root / "scripts/fixtures/published_chat_models.json").read_text())["model_ids"])
+        choices = set()
+        for relative, names in (
+            ("aichat/core/types.py", {"AiChatModel", "AiChatV2Model"}),
+            ("aichat/core/messages_models.py", {"MessagesModel"}),
+            ("openai/core/types.py", {"ChatModel", "ResponsesModel"}),
+        ):
+            for node in ast.parse((root / relative).read_text()).body:
+                if isinstance(node, ast.Assign) and getattr(node.targets[0], "id", "") in names:
+                    choices.update(ast.literal_eval(node.value.slice))
+        self.assertFalse(expected - choices, f"Published models missing from MCP tools: {sorted(expected - choices)}")
+
     def test_alias_and_group_targets_are_scoped(self) -> None:
         with tempfile.TemporaryDirectory() as temporary_directory:
             root = Path(temporary_directory)

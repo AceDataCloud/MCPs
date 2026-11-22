@@ -196,6 +196,36 @@ class AiChatClient:
                 logger.error(f"Request error: {e}")
                 raise AiChatAPIError(message=str(e)) from e
 
+    async def create_message(
+        self, model: str, messages: list[dict[str, Any]], max_tokens: int, **options: Any
+    ) -> dict[str, Any]:
+        """Send one non-streaming native Messages request with the existing credential."""
+        payload = {
+            **{name: value for name, value in options.items() if value is not None},
+            "model": model,
+            "messages": messages,
+            "max_tokens": max_tokens,
+            "stream": False,
+        }
+        async with httpx.AsyncClient() as http_client:
+            try:
+                response = await http_client.post(
+                    f"{self.base_url.rstrip('/')}/v1/messages",
+                    json=payload,
+                    headers={**self._get_headers(), "anthropic-version": "2023-06-01"},
+                    timeout=self.timeout,
+                )
+            except httpx.TimeoutException as error:
+                raise AiChatTimeoutError("Native Messages request timed out") from error
+            except httpx.RequestError as error:
+                raise AiChatAPIError(message="Native Messages transport failed") from error
+        if response.status_code >= 400:
+            self._handle_error_response(response)
+        try:
+            return response.json()
+        except ValueError as error:
+            raise AiChatAPIError(message="Native Messages returned invalid JSON") from error
+
 
 # Global client instance
 client = AiChatClient()
