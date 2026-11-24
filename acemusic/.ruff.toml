@@ -38,4 +38,3 @@ known-first-party = ["core", "tools", "prompts"]
 
 
 [lint.per-file-ignores]
-".github/scripts/verify_smithery_release.py" = ["UP038"]
