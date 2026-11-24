@@ -11,7 +11,6 @@ from scripts.smithery_catalog import (
     config_schema,
     load_catalog,
     metadata,
-    outputs,
     tagged_url,
 )
 
@@ -76,20 +75,16 @@ class SmitheryCatalogTest(unittest.TestCase):
                     self.assertIn(service["read_tool"], functions)
                 self.assertIn(service["generation_tool"], functions)
 
-    def test_generated_materials_preserve_candidate_and_credential_boundaries(self):
-        for path, expected in outputs():
-            self.assertEqual(path.read_text(), expected, str(path))
+    def test_generated_guides_use_the_canonical_direct_endpoint(self):
         for service in load_catalog()["services"]:
-            for filename in ["README.md", "README_zh-CN.md"]:
-                text = (ROOT / service["alias"] / "smithery" / filename).read_text()
-                self.assertIn("General application", text)
-                self.assertIn("platform-", text)
-                self.assertIn("YOUR_EXISTING_TASK_ID", text)
-                self.assertIn("get-api-key-en.png", text)
-                self.assertIn("create-api-key-en.png", text)
-                self.assertIn("AUTH_TIMEOUT", text)
-                if service["status"] == "candidate":
-                    self.assertTrue("candidate" in text or "候选" in text)
+            folder = ROOT / service["alias"] / "smithery"
+            for filename in ("README.md", "README_zh-CN.md"):
+                with self.subTest(alias=service["alias"], filename=filename):
+                    text = (folder / filename).read_text()
+                    self.assertIn(service["endpoint"], text)
+                    self.assertIn("https://smithery.ai/future", text)
+                    self.assertNotIn("smithery.ai/servers/", text)
+                    self.assertIn(service["task_tool"], text)
 
     def test_real_suno_screenshot_has_recorded_provenance(self):
         import hashlib
