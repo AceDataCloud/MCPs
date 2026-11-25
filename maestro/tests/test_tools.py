@@ -3,7 +3,7 @@
 import json
 from unittest.mock import AsyncMock, patch
 
-from tools.task_tools import maestro_get_task
+from tools.task_tools import maestro_get_task, maestro_list_tasks
 from tools.video_tools import maestro_create_video
 
 
@@ -14,7 +14,7 @@ async def test_create_video_builds_complete_payload() -> None:
             prompt="Launch video for a new camera",
             action="generate",
             file_urls=["https://example.com/camera.jpg"],
-            langs=["en", "pt-br"],
+            langs=["en"],
             aspect="16:9",
             duration=45,
             scenario="captions",
@@ -27,7 +27,7 @@ async def test_create_video_builds_complete_payload() -> None:
             "prompt": "Launch video for a new camera",
             "action": "generate",
             "file_urls": ["https://example.com/camera.jpg"],
-            "langs": ["en", "pt-br"],
+            "langs": ["en"],
             "aspect": "16:9",
             "duration": 45,
             "scenario": "captions",
@@ -42,6 +42,14 @@ async def test_iteration_requires_reference_task() -> None:
     result = await maestro_create_video(prompt="Make it faster", action="remix")
 
     assert result == "Error: action=remix requires ref_task_id."
+
+
+async def test_create_video_rejects_multiple_languages_before_submission() -> None:
+    with patch("tools.video_tools.client.create_video", new_callable=AsyncMock) as create:
+        result = await maestro_create_video(prompt="A quick explainer", langs=["en", "pt-br"])
+
+    assert result == "Error: langs must contain exactly one output language."
+    create.assert_not_awaited()
 
 
 async def test_generate_omits_unset_optional_fields() -> None:
@@ -95,3 +103,51 @@ async def test_task_tools_delegate_to_client() -> None:
         await maestro_get_task("task-1")
 
     get_task.assert_awaited_once_with("task-1")
+
+
+async def test_list_tasks_delegates_filters_to_client() -> None:
+    with patch("tools.task_tools.client.list_tasks", new_callable=AsyncMock) as list_tasks:
+        list_tasks.return_value = {"count": 0, "items": []}
+
+        result = await maestro_list_tasks(30, 100, 200)
+
+    list_tasks.assert_awaited_once_with(30, 100, 200)
+    assert json.loads(result) == {"count": 0, "items": []}
+
+
+async def test_list_tasks_uses_public_defaults() -> None:
+    with patch("tools.task_tools.client.list_tasks", new_callable=AsyncMock) as list_tasks:
+        list_tasks.return_value = {"count": 0, "items": []}
+
+        await maestro_list_tasks()
+
+    list_tasks.assert_awaited_once_with(20, None, None)
+
+
+async def test_compact_maestro_tasks_keep_ids_and_outputs_without_large_briefs() -> None:
+    task = {
+        "id": "task-1",
+        "status": "succeeded",
+        "created_at": 100,
+        "request": {"prompt": "private brief " * 3000, "duration": 27, "aspect": "16:9"},
+        "response": {
+            "data": {
+                "variants": [{"output_url": "https://example.com/video.mp4"}],
+                "progress": ["long"] * 1000,
+            }
+        },
+    }
+    with patch("tools.task_tools.client.list_tasks", new_callable=AsyncMock) as list_tasks:
+        list_tasks.return_value = {"count": 1, "items": [task]}
+        listed = json.loads(await maestro_list_tasks(compact=True))
+    assert listed["count"] == 1
+    assert listed["items"][0]["id"] == "task-1"
+    assert listed["items"][0]["duration"] == 27
+    assert "output_url" not in listed["items"][0]
+    assert "private brief" not in json.dumps(listed)
+    with patch("tools.task_tools.client.get_task", new_callable=AsyncMock) as get_task:
+        get_task.return_value = task
+        detail = json.loads(await maestro_get_task("task-1", compact=True))
+    assert detail["id"] == "task-1"
+    assert detail["output_url"] == "https://example.com/video.mp4"
+    assert "private brief" not in json.dumps(detail)

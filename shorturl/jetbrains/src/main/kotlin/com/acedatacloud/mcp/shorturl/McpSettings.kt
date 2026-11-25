@@ -30,11 +30,11 @@ class McpSettings : PersistentStateComponent<McpSettings.State> {
 
     fun getStdioConfig(): String {
         val token = myState.apiToken.ifEmpty { "YOUR_API_TOKEN" }
-        return """{"mcpServers": {"shorturl": {"command": "uvx", "args": ["mcp-shorturl"], "env": {"ACEDATACLOUD_API_TOKEN": "$$token"}}}}"""
+        return """{"mcpServers": {"shorturl": {"command": "uvx", "args": ["mcp-shorturl"], "env": {"ACEDATACLOUD_API_TOKEN": "$token"}}}}"""
     }
 
     fun getHttpConfig(): String {
         val token = myState.apiToken.ifEmpty { "YOUR_API_TOKEN" }
-        return """{"mcpServers": {"shorturl": {"url": "https://shorturl.mcp.acedata.cloud/mcp", "headers": {"Authorization": "Bearer $$token"}}}}"""
+        return """{"mcpServers": {"shorturl": {"url": "https://shorturl.mcp.acedata.cloud/mcp", "headers": {"Authorization": "Bearer $token"}}}}"""
     }
 }

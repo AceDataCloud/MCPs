@@ -1,8 +1,8 @@
 [project]
 name = "mcp-suno"
 version = "2026.1.22.6"
-description = "MCP Server for Suno AI Music Generation via AceDataCloud API"
-readme = "README.md"
+description = "Suno music generation, lyrics, and covers by Ace Data Cloud via MCP"
+readme = "README.pypi.md"
 license = { text = "MIT" }
 requires-python = ">=3.10"
 authors = [
@@ -22,6 +22,10 @@ keywords = [
     "acedata",
     "llm",
     "claude",
+    "suno-music",
+    "music-generation",
+    "lyrics",
+    "acedatacloud",
 ]
 classifiers = [
     "Development Status :: 4 - Beta",
@@ -41,6 +45,8 @@ dependencies = [
     "python-dotenv>=1.0.0",
     "pydantic>=2.0.0",
     "loguru>=0.7.0",
+    "redis>=5.0.0,<7",
+    "cryptography>=42.0.0",
 ]
 
 [project.optional-dependencies]
@@ -54,6 +60,7 @@ test = [
     "pytest-asyncio>=0.23.0",
     "pytest-cov>=5.0.0",
     "respx>=0.21.0",
+    "fakeredis>=2.25.0",
 ]
 release = [
     "build>=1.2.0",
@@ -67,11 +74,11 @@ all = [
 mcp-suno = "main:main"
 
 [project.urls]
-Homepage = "https://github.com/AceDataCloud/mcp-suno"
-Documentation = "https://platform.acedata.cloud/documents/suno-mcp"
-Repository = "https://github.com/AceDataCloud/mcp-suno"
-Issues = "https://github.com/AceDataCloud/mcp-suno/issues"
-Changelog = "https://github.com/AceDataCloud/mcp-suno/blob/main/CHANGELOG.md"
+Homepage = "https://github.com/AceDataCloud/SunoMCP"
+Documentation = "https://platform.acedata.cloud/documents/suno-mcp?utm_source=pypi&utm_medium=referral&utm_campaign=evergreen"
+Repository = "https://github.com/AceDataCloud/SunoMCP"
+Issues = "https://github.com/AceDataCloud/SunoMCP/issues"
+Changelog = "https://github.com/AceDataCloud/SunoMCP/blob/main/CHANGELOG.md"
 
 [build-system]
 requires = ["hatchling>=1.21.0,<1.30.0"]
@@ -82,12 +89,18 @@ packages = ["core", "tools", "prompts", "main.py"]
 
 [tool.hatch.build.targets.sdist]
 include = [
+    "goose/",
+    ".goose-plugin/",
+    ".mcp.json",
+    "kilo/",
     "core/",
     "tools/",
     "prompts/",
     "tests/",
     "main.py",
     "README.md",
+    "README.pypi.md",
+    "readme/",
     "LICENSE",
     "CHANGELOG.md",
     ".env.example",

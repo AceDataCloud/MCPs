@@ -48,7 +48,7 @@ class TurnstileClient:
             raise TurnstileAuthError("API token not configured")
         return {
             "accept": "application/json",
-            "authorization": "******",
+            "authorization": f"Bearer {token}",
             "content-type": "application/json",
         }
 
@@ -77,6 +77,7 @@ class TurnstileClient:
         *,
         payload: dict[str, Any] | None = None,
         timeout: float | None = None,
+        allowed_error_statuses: set[int] | None = None,
     ) -> dict[str, Any]:
         method_upper = method.upper()
         url = f"{self.base_url}{endpoint}"
@@ -92,7 +93,9 @@ class TurnstileClient:
                     headers=self._get_headers(),
                     timeout=request_timeout,
                 )
-                if response.status_code >= 400:
+                if response.status_code >= 400 and response.status_code not in (
+                    allowed_error_statuses or set()
+                ):
                     self._handle_error_response(response)
                 return response.json()  # type: ignore[no-any-return]
             except httpx.TimeoutException as e:
@@ -119,6 +122,15 @@ class TurnstileClient:
             payload["cdata"] = cdata
         _apply_async_flag(payload, async_)
         return await self.request("POST", "/captcha/token/turnstile", payload=payload)
+
+    async def get_task(self, task_id: str) -> dict[str, Any]:
+        """Retrieve an existing async task, preserving timeout terminal results."""
+        return await self.request(
+            "POST",
+            "/captcha/tasks",
+            payload={"task_id": task_id},
+            allowed_error_statuses={504},
+        )
 
 
 client = TurnstileClient()

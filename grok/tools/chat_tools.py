@@ -26,9 +26,7 @@ async def grok_chat_completions(
     model: Annotated[
         GrokChatModel,
         Field(
-            description=(
-                "The Grok chat model: grok-4.5 (default, latest flagship), grok-4 or grok-3."
-            )
+            description=("The Grok chat model: grok-4.7, grok-4.5, grok-4 (default), or grok-3.")
         ),
     ] = DEFAULT_CHAT_MODEL,
     temperature: Annotated[
@@ -45,7 +43,9 @@ async def grok_chat_completions(
     ] = None,
     stream: Annotated[
         bool | None,
-        Field(description="Whether to stream partial message deltas. Default False."),
+        Field(
+            description="This MCP tool returns a complete JSON response. Omit or set false; stream=true is rejected before sending a request."
+        ),
     ] = None,
     stop: Annotated[
         str | list[str] | None,
@@ -169,6 +169,15 @@ async def grok_chat_completions(
     """
     if not messages:
         return json.dumps({"error": "Validation Error", "message": "messages is required"})
+
+    if stream:
+        return json.dumps(
+            {
+                "error": "Validation Error",
+                "code": "streaming_not_supported",
+                "message": "This MCP tool returns a complete JSON response. Omit stream or set it to false. No API request was sent.",
+            }
+        )
 
     try:
         result = await client.chat_completions(

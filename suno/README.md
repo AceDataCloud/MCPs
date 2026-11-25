@@ -1,4 +1,6 @@
-# SunoMCP
+# Suno by Ace Data Cloud
+
+[简体中文安装与首用指南](https://github.com/AceDataCloud/SunoMCP/blob/main/readme/README_zh_Hans.md)
 
 <!-- mcp-name: io.github.AceDataCloud/mcp-suno -->
 
@@ -8,9 +10,24 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![MCP](https://img.shields.io/badge/MCP-Compatible-green.svg)](https://modelcontextprotocol.io)
 
-A [Model Context Protocol (MCP)](https://modelcontextprotocol.io) server for AI music generation using [Suno](https://suno.ai) through the [AceDataCloud API](https://platform.acedata.cloud).
+A [Model Context Protocol (MCP)](https://modelcontextprotocol.io) server for AI music generation using [Suno](https://suno.ai) through the [AceDataCloud API](https://platform.acedata.cloud?utm_source=github&utm_medium=referral&utm_campaign=evergreen).
 
 Generate AI music, lyrics, and manage audio projects directly from Claude, VS Code, or any MCP-compatible client.
+
+## Use Suno in Glama
+
+Find the Ace-provided [Suno source listing](https://glama.ai/mcp/servers/AceDataCloud/SunoMCP) or [remote connector](https://glama.ai/mcp/connectors/io.github.AceDataCloud/mcp-suno). Follow the [Glama installation, API Token and first-use guide](https://github.com/AceDataCloud/SunoMCP/blob/main/readme/GLAMA.md). Public discovery and a successful personal connection are separate checks; generation uses your Ace account balance.
+
+## Suno in goose
+
+Use the independent **Suno by Ace Data Cloud** native goose plugin: [install and API Token guide](goose/README.md) · [简体中文](goose/README_zh_Hans.md). It reuses this MCP server and does not imply goose Marketplace or default-provider inclusion.
+
+## Find the Suno integration in the official MCP Registry
+
+Open [Suno in the official MCP Registry](https://registry.modelcontextprotocol.io/?q=io.github.AceDataCloud%2Fmcp-suno), expand the matching `io.github.AceDataCloud` entry, and use its **Packages** or **Remotes** installation information in a client that consumes MCP catalogs. This is the Suno integration provided by Ace Data Cloud; it is not an endorsement by the model vendor. The Registry is a directory, not the app that runs a tool.
+
+Search for `mcp-suno` (or `io.github.AceDataCloud/mcp-suno`) to locate the exact entry. The official Registry search currently matches server names; spaces in a display title do not create extra search aliases. If your client does not consume the catalog, use the client-specific connection instructions below and check **Applications → General application** for your token, service permissions, balance and current price. Keep the original task ID when checking asynchronous results.
+
 
 ## Features
 
@@ -40,284 +57,211 @@ Generate AI music, lyrics, and manage audio projects directly from Claude, VS Co
 | `suno_upload_cover` | Create an AI cover of an uploaded audio (your own music). |
 | `suno_mashup_music` | Blend exactly two songs using a required creative-direction prompt. |
 | `suno_all_stems_music` | Return two distinct 12-stem candidate sets, labeled `stem_set` 1 and 2 in task results. |
-| `suno_generate_with_persona_vox` | Generate music with a persona while preserving the supplied vocal audio. |
-| `suno_underpainting` | Fill or regenerate a selected interval within an existing song. |
-| `suno_overpainting` | Add generated material over a selected interval of an existing song. |
-| `suno_samples_music` | Generate music variations from authorized sample audio. |
-| `suno_generate_inspo` | Generate music from an inspiration clip and creative direction. |
 | `suno_generate_lyrics` | Generate song lyrics from a text prompt. |
 | `suno_get_mp4` | Get an MP4 video version of a generated song. |
 | `suno_get_timing` | Get timing and subtitle data for a generated song. |
+| `suno_check_audio_availability` | Synchronously check for positive evidence that an audio ID is available on the current channel. |
 | `suno_extract_vocals` | Extract a required vocal interval shorter than 30 seconds. |
 | `suno_get_wav` | Get the lossless WAV format of a generated song. |
 | `suno_get_mp3` | Get the compressed MP3 format of a generated song. |
 | `suno_get_midi` | Get MIDI data extracted from a generated song. |
-| `suno_create_persona` | Create a new artist persona from an existing audio's vocal style. |
-| `suno_list_personas` | List reusable artist personas available to the current application. |
-| `suno_delete_persona` | Delete a reusable artist persona. |
+| `suno_create_persona` | Create a new artist persona from an existing audio's vocal style; API pricing applies. |
+| `suno_list_personas` | List saved personas for a user without a usage charge. |
+| `suno_delete_persona` | Permanently delete a saved persona without a usage charge. |
 | `suno_create_custom_model` | Create a reusable custom music model from 6 to 24 authorized audio URLs. |
 | `suno_get_custom_model` | Retrieve one custom music model by ID. |
 | `suno_list_custom_models` | List custom music models for the current Suno application. |
 | `suno_generate_with_custom_model` | Generate a song using a ready custom music model. |
 | `suno_archive_custom_model` | Archive a custom music model so it can no longer be used. |
 | `suno_optimize_style` | Optimize a music style description for better generation results. |
-| `suno_create_voice` | Create a reusable voice from authorized audio. |
 | `suno_mashup_lyrics` | Generate mashup lyrics by combining two sets of lyrics. |
 | `suno_upload_audio` | Upload external audio in standard or enhanced mode for subsequent operations. |
+| `suno_add_stem` | Add an instrument or vocal stem to an existing audio. |
+| `suno_adjust_speed` | Change audio playback speed and optionally preserve pitch. |
+| `suno_create_voice` | Create a custom voice persona from authorized audio. |
+| `suno_extract_stem` | Extract a selected stem and its complementary track. |
+| `suno_generate_inspo` | Generate music inspired by one to four reference clips. |
+| `suno_generate_sound` | Generate a one-shot or looping sound effect. |
+| `suno_generate_with_persona_vox` | Generate music using the vocals of a saved artist persona. |
+| `suno_manage_project` | Create and manage music projects, edit their tracks, and render the result. |
+| `suno_overpainting` | Add generated vocals to an instrumental recording. |
+| `suno_samples_music` | Add generated samples to an uploaded recording. |
+| `suno_underpainting` | Add instrumental accompaniment to an uploaded recording. |
 | `suno_get_task` | Query the status and result of a music generation task. |
 | `suno_get_tasks_batch` | Query multiple music generation tasks at once. |
 | `suno_list_models` | List all available Suno models and their capabilities. |
 | `suno_list_actions` | List all available Suno API actions and corresponding tools. |
 | `suno_get_lyric_format_guide` | Get guidance on formatting lyrics for Suno music generation. |
 
-## Quick Start
+## Verify the connection before generating
 
-### 1. Get Your API Token
+First discover the server's tools, then call `suno_list_models` with no arguments. This returns local reference information without generating music; it does not validate the application key. Your client's Chat model may still be billed separately.
 
-1. Sign up at [AceDataCloud Platform](https://platform.acedata.cloud)
-2. Go to the [API documentation page](https://platform.acedata.cloud/documents/suno-audios)
-3. Click **"Acquire"** to get your API token
-4. Copy the token for use below
+For an application-backed read-only check, enable only `suno_list_custom_models` and call it with `limit=1`. This uses the existing custom-model **retrieve_batch** operation; it does not create music or train a model. A successful `items` response, including an empty list for a new application, is the success criterion. The key must permit the custom-model lookup API. This confirms only that lookup's access, not permission to generate music or sufficient balance for a generation.
 
-### 2. Use the Hosted Server (Recommended)
+If the tool is missing, reconnect and refresh the tool list. For 401/403, check the copied key, application/service permissions, Allowed APIs, expiration and usage limits before creating another credential. For other errors retain the task/trace ID, never the key. Do not retry generation to test authentication. Review [current pricing](https://platform.acedata.cloud/models?utm_source=github&utm_medium=referral&utm_campaign=evergreen) before a paid request.
 
-AceDataCloud hosts a managed MCP server — **no local installation required**.
+## Connect in minutes
 
-**Endpoint:** `https://suno.mcp.acedata.cloud/mcp`
+The hosted server is `https://suno.mcp.acedata.cloud/mcp`. Choose **one** authentication route before following a client example:
 
-All requests require a Bearer token. Use the API token from Step 1.
+| Route | Use it when | What you provide |
+|---|---|---|
+| Browser sign-in (OAuth) | Your MCP client supports remote OAuth; use DCR if the client requires automatic registration | The server URL; sign in to AceDataCloud and approve access in the browser. No key needs to be pasted into the MCP config. |
+| API token | Your client cannot complete the remote OAuth flow, or you need an explicit credential for an integration | An AceDataCloud API token in the client's Bearer header. Keep it in a user-level secret store or environment variable. |
+| Local stdio | You want the MCP process to run on your machine | Install `mcp-suno` and pass `ACEDATACLOUD_API_TOKEN` to that process. |
 
-#### Claude.ai
+The hosted server always receives a Bearer token: with OAuth, the client obtains and sends it after sign-in; with API-token setup, you supply it. **DCR is client registration, not a separate AceDataCloud API key.** After consent, the hosted service currently reuses or creates an API credential for your account; it may fail if the account cannot obtain one. Some clients offer a published client identity or manual client ID; those are client-specific alternatives, not a second API-token requirement. Browser sign-in does not remove the need for an AceDataCloud account. Music generation uses your AceDataCloud account and may incur usage charges. Review [current Suno pricing and limits](https://platform.acedata.cloud/documents/suno-audios?utm_source=github&utm_medium=referral&utm_campaign=evergreen) before generating.
 
-Connect directly on [Claude.ai](https://claude.ai) with OAuth — **no API token needed**:
+### Browser sign-in: hosted server
 
-1. Go to Claude.ai **Settings → Integrations → Add More**
-2. Enter the server URL: `https://suno.mcp.acedata.cloud/mcp`
-3. Complete the OAuth login flow
-4. Start using the tools in your conversation
+Use this path for clients with remote MCP OAuth support. Add **only the URL** first; do not also set an `Authorization` header. If a client cannot complete discovery or registration, use the API-token route below.
 
-#### Claude Desktop
+#### Claude and Claude Desktop chat
 
-Add to your config (`~/Library/Application Support/Claude/claude_desktop_config.json` on macOS):
+Use Claude's **remote custom connector** in `Customize → Connectors → Add custom connector` (or your organization's connector settings). Enter the hosted URL, choose sign-in, and select **Register automatically** for the OAuth client if Claude asks. Complete the AceDataCloud login and consent flow, then enable the connector in your conversation. Claude Desktop's `claude_desktop_config.json` is for **local** MCP processes; it is not where Claude's remote custom connectors are installed. [Claude's connector guide](https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp).
+
+#### Claude Code
+
+```bash
+claude mcp add --transport http --scope user suno https://suno.mcp.acedata.cloud/mcp
+claude mcp login suno
+```
+
+In Claude Code, `/mcp` shows the connection and available tools. For project scope, merge `{"mcpServers":{"suno":{"type":"http","url":"https://suno.mcp.acedata.cloud/mcp"}}}` into `<project>/.mcp.json`; keep existing entries when merging. Claude Code and Claude Desktop chat have separate MCP configuration. [Claude Code MCP guide](https://code.claude.com/docs/en/mcp).
+
+#### Cursor
+
+In Cursor's MCP settings, add a remote server with the hosted URL and complete the OAuth prompt. For project scope, merge this into `<project>/.cursor/mcp.json`; for your own machines, use `~/.cursor/mcp.json`:
 
 ```json
 {
   "mcpServers": {
     "suno": {
-      "type": "streamable-http",
-      "url": "https://suno.mcp.acedata.cloud/mcp",
-      "headers": {
-        "Authorization": "Bearer YOUR_API_TOKEN"
-      }
+      "url": "https://suno.mcp.acedata.cloud/mcp"
     }
   }
 }
 ```
 
-#### Cursor / Windsurf
+The URL-only project config contains no token. Do not commit a project config if you later add a real token. [Cursor MCP guide](https://cursor.com/docs/mcp).
 
-Add to your MCP config (`.cursor/mcp.json` or `.windsurf/mcp.json`):
+#### VS Code with GitHub Copilot
 
-```json
-{
-  "mcpServers": {
-    "suno": {
-      "type": "streamable-http",
-      "url": "https://suno.mcp.acedata.cloud/mcp",
-      "headers": {
-        "Authorization": "Bearer YOUR_API_TOKEN"
-      }
-    }
-  }
-}
-```
-
-#### VS Code (Copilot)
-
-Add to your VS Code MCP config (`.vscode/mcp.json`):
+Run **MCP: Add Server**, choose HTTP, and enter the hosted URL. Save to the user profile for personal use or to a workspace config for a team; approve the server and complete sign-in when prompted. New workspace configs use `<project>/.mcp.json`; VS Code also reads its `.vscode/mcp.json` format. This is the VS Code format for a local workspace:
 
 ```json
 {
   "servers": {
     "suno": {
-      "type": "streamable-http",
-      "url": "https://suno.mcp.acedata.cloud/mcp",
-      "headers": {
-        "Authorization": "Bearer YOUR_API_TOKEN"
-      }
+      "type": "http",
+      "url": "https://suno.mcp.acedata.cloud/mcp"
     }
   }
 }
 ```
 
-Or install the [Ace Data Cloud MCP extension](https://marketplace.visualstudio.com/items?itemName=acedatacloud.acedatacloud-mcp) for VS Code, which registers the hosted MCP servers with one-click setup.
+Run **MCP: List Servers** to check connection and tool loading. [VS Code MCP setup](https://code.visualstudio.com/docs/agent-customization/mcp-servers) and [configuration reference](https://code.visualstudio.com/docs/agents/reference/mcp-configuration).
 
-#### JetBrains IDEs
-
-1. Go to **Settings → Tools → AI Assistant → Model Context Protocol (MCP)**
-2. Click **Add** → **HTTP**
-3. Paste:
-
-```json
-{
-  "mcpServers": {
-    "suno": {
-      "url": "https://suno.mcp.acedata.cloud/mcp",
-      "headers": {
-        "Authorization": "Bearer YOUR_API_TOKEN"
-      }
-    }
-  }
-}
-```
-
-
-#### Claude Code
-
-Claude Code supports MCP servers natively:
+#### Codex CLI or Codex app
 
 ```bash
-claude mcp add suno --transport http https://suno.mcp.acedata.cloud/mcp \
-  -h "Authorization: Bearer YOUR_API_TOKEN"
+codex mcp add suno --url https://suno.mcp.acedata.cloud/mcp
+codex mcp login suno
 ```
 
-Or add to your project's `.mcp.json`:
+Codex keeps user MCP settings in `~/.codex/config.toml` and can show the server in `/mcp`. [Official Codex MCP guide](https://developers.openai.com/codex/mcp/).
 
-```json
-{
-  "mcpServers": {
-    "suno": {
-      "type": "streamable-http",
-      "url": "https://suno.mcp.acedata.cloud/mcp",
-      "headers": {
-        "Authorization": "Bearer YOUR_API_TOKEN"
-      }
-    }
-  }
-}
-```
+### API token: hosted server
 
-#### Cline
+<!-- BEGIN TOKEN ONBOARDING -->
+1. Open [Ace Data Cloud → Applications](https://platform.acedata.cloud/console/applications?utm_source=github&utm_medium=referral&utm_campaign=evergreen). Sign in, or register an account first.
+2. Find **General application**. If it has not been created, choose **Initialize General Application**. A general key can use the services available to your account; a dedicated application's key is limited to its service. Check the required service/model access and [current pricing](https://platform.acedata.cloud/models?utm_source=github&utm_medium=referral&utm_campaign=evergreen).
+3. Copy the **API Key** from the application card, or open **Keys / Manage Keys → Create** to create a separate key for this integration. Give it a recognizable name so you can revoke or rotate it independently.
+4. When creating a key, review **Expiration Time**, **Set Usage Limitation**, and **Allowed APIs**. Enable only the restrictions you need, allow the operations you will call, then click **Create** and copy the token from the key list. Task lookup does not grant permission to submit a generation. Confirm the application's balance can cover your first request; any trial allowance is whatever your account currently displays.
+5. Copy only the token value, without quotation marks, spaces, or `Bearer `. An API Key / API Token field expects this raw value; only a manually configured HTTP `Authorization` header needs the `Bearer ` prefix. A `platform-...` account-management token cannot replace a generation API key.
 
-Add to Cline's MCP settings (`.cline/mcp_settings.json`):
+![Copy an application API key or open Manage Keys](https://raw.githubusercontent.com/AceDataCloud/NanoBananaDify/2522b2f57210597af2db866445319334a1677a23/_assets/tutorial/get-api-key-en.png)
 
-```json
-{
-  "mcpServers": {
-    "suno": {
-      "type": "streamable-http",
-      "url": "https://suno.mcp.acedata.cloud/mcp",
-      "headers": {
-        "Authorization": "Bearer YOUR_API_TOKEN"
-      }
-    }
-  }
-}
-```
+![Create a separately named key with optional restrictions](https://raw.githubusercontent.com/AceDataCloud/NanoBananaDify/2522b2f57210597af2db866445319334a1677a23/_assets/tutorial/create-api-key-en.png)
 
-#### Amazon Q Developer
+Save the key in the client's credential store or the environment variable shown below. Never put it in a prompt, shared workflow, screenshot, or Git commit. If authentication fails, check the full copied value, application/service access, expiration, usage limit, and balance before creating another key.
+<!-- END TOKEN ONBOARDING -->
 
-Add to your MCP configuration:
+Use this route when you need a fixed credential or your client does not complete OAuth. An invalid fixed header does not automatically fall back to browser sign-in.
 
-```json
-{
-  "mcpServers": {
-    "suno": {
-      "type": "streamable-http",
-      "url": "https://suno.mcp.acedata.cloud/mcp",
-      "headers": {
-        "Authorization": "Bearer YOUR_API_TOKEN"
-      }
-    }
-  }
-}
-```
-
-#### Roo Code
-
-Add to Roo Code MCP settings:
-
-```json
-{
-  "mcpServers": {
-    "suno": {
-      "type": "streamable-http",
-      "url": "https://suno.mcp.acedata.cloud/mcp",
-      "headers": {
-        "Authorization": "Bearer YOUR_API_TOKEN"
-      }
-    }
-  }
-}
-```
-
-#### Continue.dev
-
-Add to `.continue/config.yaml`:
-
-```yaml
-mcpServers:
-  - name: suno
-    type: streamable-http
-    url: https://suno.mcp.acedata.cloud/mcp
-    headers:
-      Authorization: "Bearer YOUR_API_TOKEN"
-```
-
-#### Zed
-
-Add to Zed's settings (`~/.config/zed/settings.json`):
-
-```json
-{
-  "language_models": {
-    "mcp_servers": {
-      "suno": {
-        "url": "https://suno.mcp.acedata.cloud/mcp",
-        "headers": {
-          "Authorization": "Bearer YOUR_API_TOKEN"
-        }
-      }
-    }
-  }
-}
-```
-
-#### cURL Test
+For **Claude Code**, set the variable in the environment that starts Claude Code, then add the server. The shell expands the token when you add the server, so treat the saved user-level MCP config as a secret; use browser sign-in above if you do not want a key in client config:
 
 ```bash
-# Health check (no auth required)
-curl https://suno.mcp.acedata.cloud/health
-
-# MCP initialize
-curl -X POST https://suno.mcp.acedata.cloud/mcp \
-  -H "Content-Type: application/json" \
-  -H "Accept: application/json" \
-  -H "Authorization: Bearer YOUR_API_TOKEN" \
-  -d '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2025-03-26","capabilities":{},"clientInfo":{"name":"test","version":"1.0"}}}'
+export ACEDATACLOUD_API_TOKEN='YOUR_API_TOKEN'
+claude mcp add --transport http --scope user suno https://suno.mcp.acedata.cloud/mcp \
+  --header "Authorization: Bearer $ACEDATACLOUD_API_TOKEN"
 ```
 
-### 3. Or Run Locally (Alternative)
+For a shared project config, put only the variable reference in `<project>/.mcp.json` and keep the token in each user's environment. Unlike the CLI example above, Claude Code expands `${ACEDATACLOUD_API_TOKEN}` when it reads `.mcp.json`. Merge this entry with existing servers:
 
-If you prefer to run the server on your own machine:
+```json
+{
+  "mcpServers": {
+    "suno": {
+      "type": "http",
+      "url": "https://suno.mcp.acedata.cloud/mcp",
+      "headers": {
+        "Authorization": "Bearer ${ACEDATACLOUD_API_TOKEN}"
+      }
+    }
+  }
+}
+```
+
+For **Cursor**, use its `${env:ACEDATACLOUD_API_TOKEN}` syntax in a user-level `~/.cursor/mcp.json` (or an uncommitted project config):
+
+```json
+{
+  "mcpServers": {
+    "suno": {
+      "url": "https://suno.mcp.acedata.cloud/mcp",
+      "headers": {
+        "Authorization": "Bearer ${env:ACEDATACLOUD_API_TOKEN}"
+      }
+    }
+  }
+}
+```
+
+For **VS Code**, prefer a user-profile MCP config and a masked input instead of putting the token in the JSON. Merge these fields into the file opened by **MCP: Open User Configuration**:
+
+```json
+{
+  "inputs": [
+    {"id": "acedata-suno-token", "type": "promptString", "description": "AceDataCloud API token", "password": true}
+  ],
+  "servers": {
+    "suno": {
+      "type": "http",
+      "url": "https://suno.mcp.acedata.cloud/mcp",
+      "headers": {"Authorization": "Bearer ${input:acedata-suno-token}"}
+    }
+  }
+}
+```
+
+This interactive input is specific to VS Code's user/workspace format; do not copy it into `.mcp.json` for Agent Host. VS Code prompts once and stores the value securely for later use. [VS Code configuration reference](https://code.visualstudio.com/docs/agents/reference/mcp-configuration).
+
+Other clients use different schemas. For **Cline**, open **MCP Servers → Configure → Configure MCP Servers** (Cline CLI: `~/.cline/data/settings/cline_mcp_settings.json`) and use `type: "streamableHttp"` under `mcpServers`; [Cline's guide](https://docs.cline.bot/mcp/mcp-overview) has the full shape. For **JetBrains AI Assistant**, go to **Settings → Tools → AI Assistant → Model Context Protocol (MCP)** and add a remote server using the hosted URL; check its connection status and use the API-token route if your version does not complete OAuth. [JetBrains' guide](https://www.jetbrains.com/help/ai-assistant/mcp.html). For **Zed**, use `context_servers` with the hosted URL in its settings; omitting `Authorization` starts its OAuth flow. [Zed's guide](https://zed.dev/docs/ai/mcp).
+
+### Local stdio server
+
+Local mode needs an API token. Use it when your client only supports local processes or you want the MCP process on your machine; it still calls the AceDataCloud API and does not run Suno locally.
 
 ```bash
-# Install from PyPI
-pip install mcp-suno
-# or
-uvx mcp-suno
-
-# Set your API token
-export ACEDATACLOUD_API_TOKEN="your_token_here"
-
-# Run (stdio mode for Claude Desktop / local clients)
+# Install once, then run the local stdio server
+python -m pip install mcp-suno
+export ACEDATACLOUD_API_TOKEN='YOUR_API_TOKEN'
 mcp-suno
-
-# Run (HTTP mode for remote access)
-mcp-suno --transport http --port 8000
 ```
 
-#### Claude Desktop (Local)
+For Claude Desktop's **local** MCP configuration, merge this into the file opened by its developer settings (`~/Library/Application Support/Claude/claude_desktop_config.json` on macOS). This is a local `uvx` process; it is separate from the remote custom connector above:
 
 ```json
 {
@@ -326,120 +270,120 @@ mcp-suno --transport http --port 8000
       "command": "uvx",
       "args": ["mcp-suno"],
       "env": {
-        "ACEDATACLOUD_API_TOKEN": "your_token_here"
+        "ACEDATACLOUD_API_TOKEN": "YOUR_API_TOKEN"
       }
     }
   }
 }
 ```
 
-#### Docker (Self-Hosting)
+Keep this user-level file private. On Windows, set `$env:ACEDATACLOUD_API_TOKEN = 'YOUR_API_TOKEN'` in the shell that starts local clients. `uvx` requires [uv](https://docs.astral.sh/uv/) on `PATH`; `mcp-suno` requires the package installed in the environment from which the client launches it.
 
-```bash
-docker pull ghcr.io/acedatacloud/mcp-suno:latest
-docker run -p 8000:8000 ghcr.io/acedatacloud/mcp-suno:latest
+For self-hosted HTTP, run `mcp-suno --transport http --port 8000` or build this repository's Dockerfile and run the resulting image. Clients must send their own Bearer tokens; expose the service only with suitable network and TLS controls.
+
+### Check the connection before generating
+
+1. `https://suno.mcp.acedata.cloud/health` returning `{"status":"ok"}` checks reachability only, not authentication.
+2. Use the client's MCP server list to confirm Suno tools appear. `suno_list_models` and `suno_list_actions` return static reference data; they confirm tool loading, **not** that your downstream API credential or balance works.
+3. When ready, ask the client to call `suno_generate_music` with a short prompt. Save the returned task ID, then call `suno_get_task` until it completes. This is the first end-to-end API check and can be billed. Check the current [Suno service limits and pricing](https://platform.acedata.cloud/documents/suno-audios?utm_source=github&utm_medium=referral&utm_campaign=evergreen) before this step.
+
+If you see **401**, check whether the client completed OAuth or sent a valid token, and do not configure both paths at once. If OAuth redirects but fails, retry from the same client session; if the account cannot create or retrieve a credential, resolve that in AceDataCloud Platform. A tool list can load while an API call fails for balance, permissions, or service availability, so check the returned error rather than assuming the connection failed.
+
+## Use the tools
+
+Tool names in the client include the `suno_` prefix. Start with `suno_list_models` or `suno_list_actions` to confirm the connection. For generation, use `suno_generate_music` for a prompt or `suno_generate_custom_music` for your own lyrics and style. Advanced operations, media conversion, personas, and custom models are listed in the [tool reference](#tool-reference) and exposed by the MCP server.
+
+Generation and edits return a **task ID**, not a finished song. Query `suno_get_task` (or `suno_get_tasks_batch` for multiple IDs) until the task reports success and final media URLs. An intermediate audio URL may be only a preview; a failed task should stop polling. Do not repeat the generation call to check progress, because it may submit and bill another task.
+
+Example request to your MCP client:
+
+> Use `suno_generate_music` to create a short upbeat acoustic birthday song. Give me the task ID, check it with `suno_get_task`, and share the final audio only after the task completes.
+
+For custom lyrics:
+
+> Use `suno_generate_custom_music` with title “Storm”, style “energetic rock”, and these lyrics: `[Verse] Thunder in the night [Chorus] We are the storm`. Then follow the returned task ID to completion.
+
+`negative_tags` excludes styles or genres in custom generation (`custom=true`) and in `suno_replace_section`. The API currently sets no fixed character limit for this field, but overly long content may still fail; keep the description concise.
+
+Extensions (`suno_extend_music`, `suno_upload_extend`) require a positive `continue_at` in seconds; fractional boundaries such as `30.792` are preserved. Lyrics affect only new content after that boundary, not the original portion. Replacement requires `0 <= replace_section_start < replace_section_end`. `suno_samples_music` selects an interval from one source audio: `samples_start` defaults to 0, and `samples_end` is required and must be greater than start. Interval ends must not exceed the source duration. `duration` (an integer from 10–360) is a target used only for generation; actual length depends on the model.
+
+For `suno_generate_inspo`, supply 1–4 public reference audio URLs. Use `instrumental=true` for a no-lyrics request, or `custom=true` with `lyric_prompt` and empty `lyric` for automatic lyrics. The optional `persona_id` is a voice ID, not an audio ID; voice support with Inspo depends on the service channel. Extensions do not use an additional persona ID.
+
+For `suno_all_stems_music`, wait for successful terminal completion of the full task. Playable URLs during processing do not mean every stem is complete.
+
+For covers, extensions and stem separation, use the returned audio `id` as `audio_id`. A downloadable audio file does **not** guarantee that its ID remains available for further processing.
+
+### Replace a song section
+
+1. Listen to the complete source song and use `suno_get_timing` to select full musical phrases. Supply its audio `id`, not its `task_id`, and keep `0 <= replace_section_start < replace_section_end <= source duration`.
+2. Pass **local new lyrics only** in `lyric`; for a lyric edit, set `prompt` to the same local text. `prompt` is not an inspiration or style description here. Match the selected phrase's line count, syllables and rhythm; neither field guarantees word-for-word singing.
+3. Keep `replace_section_result_mode: "full_song"` (default) to receive two complete songs without another `suno_concat_music` call. Poll the original task with `suno_get_task`, then select a song from `response.data`. Use `"candidates"` only to choose an unmerged clip and pass that candidate's `id` to `suno_concat_music`.
+4. Listen to both results and check new words, transitions and `duration`. A successful task does not prove the lyrics were sung correctly. Returned `lyric` is metadata, not a transcript; full-song lyrics may be empty when source timing is unavailable. Full songs can be longer than the source and later sections may shift; the generation-only `duration` parameter cannot lock replacement length.
+5. For another edit, use the selected **complete result's audio ID**, recheck its timing, and supply fresh local lyrics—not the entire returned `lyric`. If the results still sing old words, miss words or grow unexpectedly, retain the task ID, source ID, request fields and result audio for support. More polling cannot change completed audio.
+
+Example MCP arguments (substitute your completed song's ID and actual interval):
+
+```json
+{
+  "audio_id": "YOUR_COMPLETED_AUDIO_ID",
+  "replace_section_start": 30.0,
+  "replace_section_end": 50.0,
+  "lyric": "New words for this phrase",
+  "prompt": "New words for this phrase",
+  "replace_section_result_mode": "full_song"
+}
 ```
 
-Clients connect with their own Bearer token — the server extracts the token from each request's `Authorization` header.
+### Suno request pricing
 
-## Available Tools
+| Tool / action | Standard cost per successful request |
+|---|---|
+| `suno_generate_lyrics` | 0.08 Credits, even with multiple lyric candidates |
+| `suno_create_voice` | 0.15 Credits |
+| `suno_stems_music` (`stems`) | 0.56 Credits for vocals and accompaniment together |
 
-### Music Generation
+Applicable discounts follow the actual bill; failed requests are not charged. `all_stems`, `extract_stem` and other actions have their own prices. Confirm current pricing and spending approval before submitting; these costs are not verified account billing records.
 
-| Tool                    | Description                                                |
-| ----------------------- | ---------------------------------------------------------- |
-| `generate_music`        | Generate music from a text prompt (Inspiration Mode)       |
-| `generate_custom_music` | Generate with custom lyrics, title, and style              |
-| `extend_music`          | Extend an existing song from a timestamp                   |
-| `cover_music`           | Create a cover/remix version                               |
-| `concat_music`          | Merge extended segments into complete audio                |
-| `generate_with_persona` | Generate using a saved voice style                         |
-| `remaster_music`        | Remaster an existing song to improve audio quality         |
-| `stems_music`           | Separate a song into individual stems (vocals/instruments) |
-| `replace_section`       | Replace a specific time range with new generated content   |
-| `upload_extend`         | Extend uploaded audio with new AI-generated content        |
-| `upload_cover`          | Create an AI cover of uploaded audio                       |
-| `mashup_music`          | Create a mashup by blending multiple songs together        |
+### Manage saved personas
 
-### Lyrics
+Call `suno_list_personas` with `user_id` to find an existing voice before creating another one; use optional `limit` (default 50) and `offset` (default 0) for pagination. Listing uses `GET /suno/persona` and is free. After confirming the exact persona to remove, call `suno_delete_persona` with `persona_id` and optional `user_id` for ownership verification. Deletion uses `DELETE /suno/persona` and is also free, but permanent; do not use it to test the connection.
 
-| Tool              | Description                                                |
-| ----------------- | ---------------------------------------------------------- |
-| `generate_lyrics` | Generate song lyrics from a prompt                         |
-| `mashup_lyrics`   | Generate mashup lyrics by combining two sets of lyrics     |
-| `optimize_style`  | Optimize a style description for better generation results |
+Neither listing nor deletion needs an extra billing-exemption header. Normal API authentication and permissions still apply. `suno_create_persona` uses `POST /suno/persona` and remains subject to the API's pricing rules; check current pricing and spending approval before creation. The free list/delete policy does not make voice creation or music generation free.
 
-### Media Conversion
+### Cover with a specified voice
 
-| Tool             | Description                                       |
-| ---------------- | ------------------------------------------------- |
-| `get_mp4`        | Get an MP4 video version of a generated song      |
-| `get_wav`        | Get lossless WAV format of a generated song       |
-| `get_mp3`        | Get compressed MP3 format of a generated song     |
-| `get_midi`       | Get MIDI data extracted from a generated song     |
-| `get_timing`     | Get timing and subtitle data for a generated song |
-| `extract_vocals` | Extract the vocal track from a generated song     |
+Both `suno_cover_music` and `suno_upload_cover` accept `persona_id` for a specified-voice cover. A private voice created by `suno_create_voice` requires this sequence:
 
-### Persona
+1. Keep the returned `persona_id` from voice creation.
+2. Call `suno_upload_audio` with the original song's public `audio_url`, `mode: "standard"` and that `persona_id` to associate the source with the voice. `persona_id` cannot be used with `mode: "enhanced"`.
+3. Call `suno_upload_cover` with the upload's returned `data.audio_id` and the same `persona_id`, then follow its task ID to completion.
 
-| Tool             | Description                  |
-| ---------------- | ---------------------------- |
-| `create_persona` | Save a voice style for reuse |
+Do not reuse an older audio ID that was not uploaded with that private voice. Voice creation, upload and cover must use the same service channel. No extra `vocal_gender` is needed; a gender preference is not a substitute for a voice ID.
 
-### Upload
+### Check audio availability before processing
 
-| Tool                    | Description                                                    |
-| ----------------------- | -------------------------------------------------------------- |
-| `upload_audio`          | Upload external audio in standard or enhanced mode for subsequent operations |
+Before a cover or extension, you can call `suno_check_audio_availability` with the audio UUID from a completed song's `id`, **not** the generation `task_id`:
 
-### Tasks
-
-| Tool              | Description                  |
-| ----------------- | ---------------------------- |
-| `get_task`        | Query a single task status   |
-| `get_tasks_batch` | Query multiple tasks at once |
-
-### Information
-
-| Tool                     | Description                 |
-| ------------------------ | --------------------------- |
-| `list_models`            | List available Suno models  |
-| `list_actions`           | List available API actions  |
-| `get_lyric_format_guide` | Get lyrics formatting guide |
-
-## Usage Examples
-
-### Generate Music from Prompt
-
-```
-User: Create a happy birthday song
-
-Claude: I'll generate a birthday song for you.
-[Calls generate_music with prompt="A happy birthday celebration song"]
+```json
+{"audio_id":"33333333-3333-4333-8333-333333333333"}
 ```
 
-### Generate with Custom Lyrics
+Pass these arguments to `suno_check_audio_availability`. It calls `POST /suno/availability` synchronously with an API token and currently costs no Credits. Do not poll its returned `task_id` as though it were a generation job.
 
-```
-User: Create a rock song with these lyrics:
-[Verse]
-Thunder in the night
-Electric soul ignite
-[Chorus]
-We are the storm
+A successful response has `data.id` and `data.available=true`: the current channel found positive evidence of availability at check time. This does **not** guarantee that a later cover, extension or other operation will succeed. If availability cannot be confirmed, the API returns an error such as HTTP 503 `availability_unknown`, **never** `available=false`. Do not interpret an error (including rate limits or upstream failures) as proof that the audio is unavailable. Retain returned support identifiers and do not blindly retry or submit a paid operation to resolve uncertainty. Invalid audio IDs return HTTP 400; the MCP tool rejects malformed UUIDs before calling the API.
 
-Claude: I'll create a rock song with your lyrics.
-[Calls generate_custom_music with lyrics, title="Storm", style="rock, powerful"]
-```
+### Processing errors
 
-### Extend a Song
+The audio API documents these HTTP 500 errors:
 
-```
-User: Continue this song from the 2-minute mark with a bridge section
+| Code | Meaning |
+| --- | --- |
+| `api_error` with message `the account may have been offline` | The audio API reports that the account may have been offline. |
+| `suno_processing_unavailable` | Music processing is unavailable. |
+| `suno_model_unavailable` | The selected model is unavailable for this operation. |
+| `suno_processing_failed` | Music processing returned no audio. |
 
-Claude: I'll extend the song with a bridge.
-[Calls extend_music with audio_id, continue_at=120, lyric="[Bridge]..."]
-```
+Stop on terminal failure, retain any returned `task_id` and `trace_id`, and contact support with those IDs. Do not blindly resubmit, switch models, or treat an existing download URL as proof that another processing request will work.
 
 ## Available Models
 
@@ -467,7 +411,7 @@ Claude: I'll extend the song with a bridge.
 
 | Variable                    | Description                  | Default                     |
 | --------------------------- | ---------------------------- | --------------------------- |
-| `ACEDATACLOUD_API_TOKEN`    | API token from AceDataCloud  | **Required**                |
+| `ACEDATACLOUD_API_TOKEN`    | Local stdio token; hosted requests provide it via OAuth or Bearer header | Required for local stdio |
 | `ACEDATACLOUD_API_BASE_URL` | API base URL                 | `https://api.acedata.cloud` |
 | `ACEDATACLOUD_OAUTH_CLIENT_ID`  | OAuth client ID (hosted mode) | —                           |
 | `ACEDATACLOUD_PLATFORM_BASE_URL` | Platform base URL            | `https://platform.acedata.cloud` |
@@ -586,12 +530,12 @@ SunoMCP/
 
 ## API Reference
 
-This server wraps the [AceDataCloud Suno API](https://platform.acedata.cloud/documents/suno-audios):
+This server wraps the [AceDataCloud Suno API](https://platform.acedata.cloud/documents/suno-audios?utm_source=github&utm_medium=referral&utm_campaign=evergreen):
 
-- [Suno Audios API](https://platform.acedata.cloud/documents/suno-audios) - Music generation
-- [Suno Lyrics API](https://platform.acedata.cloud/documents/suno-lyrics) - Lyrics generation
-- [Suno Tasks API](https://platform.acedata.cloud/documents/suno-tasks) - Task queries
-- [Suno Persona API](https://platform.acedata.cloud/documents/suno-persona) - Persona management
+- [Suno Audios API](https://platform.acedata.cloud/documents/suno-audios?utm_source=github&utm_medium=referral&utm_campaign=evergreen) - Music generation
+- [Suno Lyrics API](https://platform.acedata.cloud/documents/suno-lyrics?utm_source=github&utm_medium=referral&utm_campaign=evergreen) - Lyrics generation
+- [Suno Tasks API](https://platform.acedata.cloud/documents/suno-tasks?utm_source=github&utm_medium=referral&utm_campaign=evergreen) - Task queries
+- [Suno Persona API](https://platform.acedata.cloud/documents/suno-persona?utm_source=github&utm_medium=referral&utm_campaign=evergreen) - Persona management
 
 ## Contributing
 
@@ -606,7 +550,7 @@ Contributions are welcome! Please:
 ## Documentation
 
 <!-- canonical-documentation -->
-[Documentation](https://platform.acedata.cloud/documents/suno-mcp)
+[Documentation](https://platform.acedata.cloud/documents/suno-mcp?utm_source=github&utm_medium=referral&utm_campaign=evergreen)
 
 ## License
 
@@ -614,11 +558,56 @@ MIT License - see [LICENSE](LICENSE) for details.
 
 ## Links
 
-- [AceDataCloud Platform](https://platform.acedata.cloud)
+- [AceDataCloud Platform](https://platform.acedata.cloud?utm_source=github&utm_medium=referral&utm_campaign=evergreen)
 - [Suno Official](https://suno.ai)
 - [Model Context Protocol](https://modelcontextprotocol.io)
 - [MCP Python SDK](https://github.com/modelcontextprotocol/python-sdk)
 
 ---
 
-Made with love by [AceDataCloud](https://platform.acedata.cloud)
+Made with love by [AceDataCloud](https://platform.acedata.cloud?utm_source=github&utm_medium=referral&utm_campaign=evergreen)
+
+## Cline setup / Cline 图文接入
+
+[Suno by Ace Data Cloud — English guide](https://github.com/AceDataCloud/MCPs/blob/4a2fb4e17d322bc22c5742ab3a5bd48b24ec5bdc/suno/docs/cline.md) · [完整中文图文步骤](https://github.com/AceDataCloud/MCPs/blob/4a2fb4e17d322bc22c5742ab3a5bd48b24ec5bdc/suno/docs/cline.md#中文步骤). The Cline marketplace submission is pending review as of 2026-10-18; the guide labels the manual fallback separately. / Cline 官方目录投稿仍待审核，手动接入不等于已上架。
+
+## Additional audio operations and controls
+
+- `suno_add_stem`: generate a selected voice/instrument stem with optional style,
+  influence controls, `variety`, and explicitly opted-in `max_mode`.
+- `suno_extract_stem`: extract a selected stem and complementary remainder.
+- `suno_generate_sound`: create `one-shot` or `loop` sound effects with optional
+  BPM, musical key, and MP3 output selection.
+- `suno_adjust_speed`: change playback speed from 0.25 to 4, optionally preserving pitch.
+
+Prompt generation accepts `variety`; custom generation also accepts `max_mode`
+and `audio_weight`. Enhanced `max_mode` has a higher API price and remains off
+unless explicitly requested. Existing model defaults are unchanged.
+
+`suno_generate_with_custom_model` accepts instrumental generation or `lyric_prompt`
+in place of supplied lyrics, plus `negative_tags`, `vocal_gender`, `weirdness`,
+`style_influence`, `duration`, and `callback_url`. Title and style are optional.
+
+## Studio projects (Beta)
+
+`suno_manage_project(request=..., idempotency_key=...)` covers `create`, `retrieve`,
+`save`, `upload`, `add_track`, `generate_track`, `replace_section`,
+`commit_candidate`, `remove_track`, and `render`. Its action-specific schema
+requires only the fields applicable to that operation.
+
+1. Create a project, then retrieve and retain its complete state and latest `version_id`.
+2. Save complete state, upload material, or add tracks using the current version.
+3. For generation, supply a source audio ID and a completed project render audio ID.
+   Source ranges use seconds; project timeline ranges use beats.
+4. Poll accepted task IDs with `suno_get_task` until `finished_at` is set and
+   inspect `response.success`. Generating candidates does not modify the project.
+5. Choose a candidate and explicitly commit it to a track, then render with the
+   latest version. Candidate playback alone does not prove a project is renderable.
+
+Every write requires a caller-selected `idempotency_key`. Retry an uncertain
+submission with the same key and identical request, or poll its original task ID;
+never automatically generate a new key and resubmit a billable operation. On a
+version conflict, retrieve the current project and re-plan the change.
+
+`suno_get_tasks_batch` returns full JSON task records with polling guidance,
+preserving model objects, project state/candidates, and media fields such as MIDI.

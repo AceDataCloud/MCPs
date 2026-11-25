@@ -3,6 +3,10 @@
 import json
 from unittest.mock import AsyncMock, patch
 
+import pytest
+from mcp.server.fastmcp.exceptions import ToolError
+
+from core.server import mcp
 from tools.task_tools import (
     digitalhuman_delete_task,
     digitalhuman_get_task,
@@ -10,6 +14,32 @@ from tools.task_tools import (
 )
 from tools.video_tools import digitalhuman_create_video
 from tools.voice_tools import digitalhuman_clone_voice
+
+
+async def test_history_dispatch_preserves_nested_results() -> None:
+    history = {
+        "count": 1,
+        "items": [{"id": "task-1", "finished_at": None, "response": {"voice_id": "voice-1"}}],
+    }
+    with patch(
+        "tools.task_tools.client.list_tasks", new=AsyncMock(return_value=history)
+    ) as request:
+        content, _ = await mcp.call_tool(
+            "digitalhuman_list_tasks",
+            {"limit": 1, "created_at_min": 0, "created_at_max": 100, "type": "voices"},
+        )
+    assert json.loads(content[0].text) == history
+    request.assert_awaited_once_with(limit=1, created_at_min=0, created_at_max=100, type="voices")
+
+
+@pytest.mark.parametrize("arguments", [{"limit": 0}, {"limit": 101}, {"type": "other"}])
+async def test_history_rejects_invalid_filters(arguments: dict) -> None:
+    with (
+        patch("tools.task_tools.client.list_tasks", new=AsyncMock()) as request,
+        pytest.raises(ToolError),
+    ):
+        await mcp.call_tool("digitalhuman_list_tasks", arguments)
+    request.assert_not_awaited()
 
 
 async def test_create_video_payload() -> None:

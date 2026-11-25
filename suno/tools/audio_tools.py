@@ -10,6 +10,7 @@ from core.types import (
     DEFAULT_MODEL,
     ReplaceSectionResultMode,
     SunoModel,
+    SunoVariety,
     VariationCategory,
     VocalGender,
 )
@@ -41,6 +42,9 @@ async def suno_generate_music(
         Field(
             description="Variation intensity for v5+ models. 'high' for maximum variation, 'normal' for balanced, 'subtle' for minimal changes. Only supported in chirp-v5 and above."
         ),
+    ] = None,
+    variety: Annotated[
+        SunoVariety | None, Field(description="Result diversity: off, normal, high, extra, or max.")
     ] = None,
     callback_url: Annotated[
         str | None,
@@ -75,6 +79,8 @@ async def suno_generate_music(
     if variation_category:
         payload["variation_category"] = variation_category
 
+    if variety is not None:
+        payload["variety"] = variety
     result = await client.generate_audio(**payload)
     return format_audio_result(result)
 
@@ -118,7 +124,7 @@ async def suno_generate_custom_music(
     negative_tags: Annotated[
         str,
         Field(
-            description="Styles or genres to explicitly exclude from custom generation. Examples: 'heavy metal, screaming', 'autotune, electronic'"
+            description="Styles or genres to exclude in custom mode (custom=true). The API currently sets no fixed character limit, but overly long content may still fail; keep it concise. Examples: 'heavy metal, screaming', 'autotune, electronic'"
         ),
     ] = "",
     vocal_gender: Annotated[
@@ -148,8 +154,22 @@ async def suno_generate_custom_music(
     duration: Annotated[
         int | None,
         Field(
-            description="Target length of the generated track in seconds, an integer between 10 and 360. Only takes effect for the 'generate' action in custom mode with model 'chirp-v5-5'; other combinations return a 400 error. The finished track lands near this value but is not guaranteed to match it exactly."
+            description="Target length in whole seconds (10-360). Only generate uses duration; the model may ignore this target. Actual length comes from the result.",
+            ge=10,
+            le=360,
         ),
+    ] = None,
+    audio_weight: Annotated[
+        float | None, Field(ge=0, le=1, description="Audio influence; 0 is a valid explicit value.")
+    ] = None,
+    max_mode: Annotated[
+        bool | None,
+        Field(
+            description="Enable enhanced generation with a higher API price. Omitted/false keeps normal pricing."
+        ),
+    ] = None,
+    variety: Annotated[
+        SunoVariety | None, Field(description="Result diversity: off, normal, high, extra, or max.")
     ] = None,
     callback_url: Annotated[
         str | None,
@@ -203,6 +223,13 @@ async def suno_generate_custom_music(
     if duration is not None:
         payload["duration"] = duration
 
+    for key, value in {
+        "audio_weight": audio_weight,
+        "max_mode": max_mode,
+        "variety": variety,
+    }.items():
+        if value is not None:
+            payload[key] = value
     result = await client.generate_audio(**payload)
     return format_audio_result(result)
 
@@ -224,7 +251,8 @@ async def suno_extend_music(
     continue_at: Annotated[
         float,
         Field(
-            description="Timestamp in seconds where to start the extension. For example, 120.5 means continue from 2 minutes and 0.5 seconds into the song."
+            description="Positive continuation boundary in seconds; fractional seconds are preserved. Lyrics only affect new content after this boundary, not the source before it.",
+            gt=0,
         ),
     ],
     style: Annotated[
@@ -312,6 +340,17 @@ async def suno_cover_music(
             description="Webhook callback URL for asynchronous notifications. When provided, the API will call this URL when the cover is complete."
         ),
     ] = None,
+    persona_id: Annotated[
+        str | None,
+        Field(
+            description=(
+                "Persona ID for a specified-voice cover. For private voices from suno_create_voice, "
+                "first upload the source with the same persona_id in suno_upload_audio, then use "
+                "suno_upload_cover with its returned audio_id. Keep all steps on the same service "
+                "channel; vocal_gender is not required and cannot replace the voice ID."
+            ),
+        ),
+    ] = None,
 ) -> str:
     """Create a cover or remix version of an existing song in a different style.
 
@@ -339,6 +378,8 @@ async def suno_cover_music(
         payload["style"] = style
     if audio_weight is not None:
         payload["audio_weight"] = audio_weight
+    if persona_id is not None:
+        payload["persona_id"] = persona_id
 
     result = await client.generate_audio(**payload)
     return format_audio_result(result)
@@ -497,7 +538,10 @@ async def suno_stems_music(
     """Separate a song into individual stems (vocals and instruments).
 
     Splits the audio into separate tracks for vocals and instrumentals,
-    useful for remixing, karaoke, or isolating specific parts.
+    useful for remixing, karaoke, or isolating specific parts. Successful stems
+    requests cost 0.56 Credits each, with vocals and accompaniment billed together.
+    Discounts follow the actual bill; failed requests are not charged.
+    all_stems and extract_stem have their own prices.
 
     Use this when:
     - You want to separate vocals from instrumentals
@@ -519,20 +563,26 @@ async def suno_stems_music(
 async def suno_replace_section(
     audio_id: Annotated[
         str,
-        Field(description="ID of the audio to replace a section in."),
+        Field(
+            description="Complete source song's audio ID, not a task ID. For another edit, use the selected full-song result's id and recheck its duration and timestamps."
+        ),
     ],
     replace_section_start: Annotated[
         float,
-        Field(description="Start time in seconds of the section to replace."),
+        Field(
+            ge=0, description="Required start time in seconds, at least 0; fractions are preserved."
+        ),
     ],
     replace_section_end: Annotated[
         float,
-        Field(description="End time in seconds of the section to replace."),
+        Field(
+            description="Required end time in seconds, greater than start and no later than source duration."
+        ),
     ],
     lyric: Annotated[
         str | None,
         Field(
-            description="New lyrics for the replaced section. Use section markers like [Verse], [Chorus]."
+            description="Local new lyrics for the selected interval, not the whole song. For lyric edits, also set prompt to the same local text; full_song output does not require full-song lyrics."
         ),
     ] = None,
     style: Annotated[
@@ -552,16 +602,35 @@ async def suno_replace_section(
         Field(
             validation_alias="replace_section_result_mode",
             description=(
-                "Result shape: full_song returns two complete songs, one from each replacement candidate; "
-                "candidates returns the two unmerged replacement clips."
+                "full_song (default) returns two complete songs without another concat; length may change. "
+                "candidates returns two unmerged clips; select a candidate's id for concat."
             ),
         ),
     ] = "full_song",
+    negative_tags: Annotated[
+        str,
+        Field(
+            description="Styles or genres to exclude from the replacement; keep concise. No fixed API character limit."
+        ),
+    ] = "",
+    prompt: Annotated[
+        str | None,
+        Field(
+            description="Local new lyrics for the selected interval, preferably the same text as lyric. Not an inspiration or style description; does not guarantee word-for-word singing."
+        ),
+    ] = None,
 ) -> str:
     """Replace a specific time range in a song with new generated content.
 
-    Re-generates a portion of a song between the specified start and end times,
-    keeping the rest of the song unchanged. Great for fixing sections you don't like.
+    Supply local new lyrics, preferably matching lyric and prompt. Lyric-only
+    requests remain supported. Listen to the source and use suno_get_timing to
+    select complete phrases; match the local line count, length and rhythm.
+    Default full_song returns two complete songs without another concat, but
+    length may change and later sections may shift. duration cannot lock an edit.
+    Returned lyric is metadata, not a transcript, and may be empty. Listen to
+    both results to check new words and transitions; success is not proof of
+    lyric fidelity. For another edit, use the selected full-song id and recheck
+    its timestamps. More polling cannot change a completed result.
 
     Use this when:
     - A specific section of a song needs improvement
@@ -571,6 +640,11 @@ async def suno_replace_section(
     Returns:
         Task ID plus two complete songs by default, or two unmerged clips in candidates mode.
     """
+    if replace_section_start < 0 or replace_section_end <= replace_section_start:
+        raise ValueError(
+            "replace_section_end must be greater than a nonnegative replace_section_start"
+        )
+
     payload: dict = {
         "action": "replace_section",
         "audio_id": audio_id,
@@ -581,9 +655,13 @@ async def suno_replace_section(
     }
 
     payload["replace_section_result_mode"] = result_mode
+    if negative_tags:
+        payload["negative_tags"] = negative_tags
     if lyric:
         payload["lyric"] = lyric
         payload["custom"] = True
+    if prompt is not None:
+        payload["prompt"] = prompt
     if style:
         payload["style"] = style
 
@@ -605,7 +683,10 @@ async def suno_upload_extend(
     ],
     continue_at: Annotated[
         float,
-        Field(description="Timestamp in seconds where to start the extension."),
+        Field(
+            gt=0,
+            description="Positive continuation boundary in seconds; fractional seconds are preserved.",
+        ),
     ],
     style: Annotated[
         str,
@@ -675,6 +756,17 @@ async def suno_upload_cover(
         str | None,
         Field(description="Webhook callback URL for asynchronous notifications."),
     ] = None,
+    persona_id: Annotated[
+        str | None,
+        Field(
+            description=(
+                "Persona ID for a specified-voice cover. Private voices require the audio_id "
+                "returned by suno_upload_audio with this same persona_id in standard mode. "
+                "Keep voice creation, upload and cover on the same service channel. "
+                "No extra vocal_gender is needed; gender cannot replace the voice ID."
+            ),
+        ),
+    ] = None,
 ) -> str:
     """Create an AI cover of an uploaded audio (your own music).
 
@@ -699,6 +791,8 @@ async def suno_upload_cover(
         payload["style"] = style
     if audio_weight is not None:
         payload["audio_weight"] = audio_weight
+    if persona_id is not None:
+        payload["persona_id"] = persona_id
 
     result = await client.generate_audio(**payload)
     return format_audio_result(result)
@@ -978,12 +1072,12 @@ async def suno_samples_music(
     ],
     samples_start: Annotated[
         float,
-        Field(description="Start time in seconds for adding samples. Default is 0."),
+        Field(ge=0, description="Sample interval start in seconds, at least 0. Default is 0."),
     ] = 0.0,
     samples_end: Annotated[
         float | None,
         Field(
-            description="End time in seconds for adding samples. Must be less than total song duration."
+            description="Required sample interval end in seconds, greater than start and no later than source duration."
         ),
     ] = None,
     model: Annotated[
@@ -1008,6 +1102,11 @@ async def suno_samples_music(
     Returns:
         Task ID and the audio with samples added.
     """
+    if samples_end is None or samples_start < 0 or samples_end <= samples_start:
+        raise ValueError(
+            "samples_end is required and must be greater than a nonnegative samples_start"
+        )
+
     payload: dict = {
         "action": "samples",
         "audio_id": audio_id,
@@ -1028,7 +1127,9 @@ async def suno_generate_inspo(
     audio_urls: Annotated[
         list[str],
         Field(
-            description="1 to 4 publicly accessible reference audio URLs used as inspiration. Suno extracts stylistic ideas from these tracks (rather than copying them) to create a brand-new song. Tip: avoid well-known catalog recordings, which may be rejected by Suno's copyright check."
+            description="1 to 4 publicly accessible reference audio URLs used as inspiration. Suno extracts stylistic ideas from these tracks (rather than copying them) to create a brand-new song. Tip: avoid well-known catalog recordings, which may be rejected by Suno's copyright check.",
+            min_length=1,
+            max_length=4,
         ),
     ],
     prompt: Annotated[
@@ -1063,6 +1164,25 @@ async def suno_generate_inspo(
             description="Webhook callback URL for asynchronous notifications. When provided, the API will call this URL when generation completes."
         ),
     ] = None,
+    instrumental: Annotated[
+        bool | None, Field(description="Generate instrumental music without lyrics.")
+    ] = None,
+    persona_id: Annotated[
+        str | None,
+        Field(
+            description="Voice ID, not an audio ID. Availability with Inspo depends on the service channel."
+        ),
+    ] = None,
+    custom: Annotated[
+        bool | None, Field(description="Enable custom mode; use lyric or lyric_prompt for lyrics.")
+    ] = None,
+    lyric: Annotated[
+        str | None, Field(description="Lyrics in custom mode; ignored for instrumental generation.")
+    ] = None,
+    lyric_prompt: Annotated[
+        str | None,
+        Field(description="Auto-lyric prompt, only when custom=true and lyric is empty."),
+    ] = None,
 ) -> str:
     """Generate brand-new music inspired by 1 to 4 reference audios (Suno Inspo / 灵感创作).
 
@@ -1091,6 +1211,15 @@ async def suno_generate_inspo(
         payload["style"] = style
     if audio_weight is not None:
         payload["audio_weight"] = audio_weight
+    for key, value in {
+        "instrumental": instrumental,
+        "persona_id": persona_id,
+        "custom": custom,
+        "lyric": lyric,
+        "lyric_prompt": lyric_prompt,
+    }.items():
+        if value is not None:
+            payload[key] = value
 
     result = await client.generate_audio(**payload)
     return format_audio_result(result)

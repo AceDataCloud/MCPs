@@ -8,7 +8,7 @@ from pydantic import Field
 from core.client import client
 from core.exceptions import WebExtraterAPIError, WebExtraterAuthError
 from core.server import mcp
-from core.types import BlockResource, ExpectedType, WaitUntil
+from core.types import BlockResource, Cookie, ExpectedType, WaitUntil
 from core.utils import format_submission_result
 
 
@@ -41,17 +41,20 @@ async def webextrator_extract(
         Field(
             description=(
                 "Page load wait condition before extracting. Options: 'load', "
-                "'domcontentloaded', 'networkidle', 'commit'. Default is 'networkidle'."
+                "'domcontentloaded', 'networkidle', 'commit'. Default is 'load'."
             )
         ),
     ] = None,
     timeout: Annotated[
-        float | None,
-        Field(description="Total timeout in seconds for page load. Default is 30."),
+        int | None,
+        Field(
+            gt=0,
+            description="Page-load timeout in whole seconds (positive integer). Default is 30.",
+        ),
     ] = None,
     delay: Annotated[
-        float | None,
-        Field(description="Extra delay in seconds after page load before extracting."),
+        int | None,
+        Field(ge=0, description="Extra delay in whole seconds after page load before extracting."),
     ] = None,
     wait_for_selector: Annotated[
         str | None,
@@ -69,6 +72,25 @@ async def webextrator_extract(
     headers: Annotated[
         dict[str, str] | None,
         Field(description="Extra HTTP headers to include with the page request."),
+    ] = None,
+    cookies: Annotated[
+        list[Cookie] | None,
+        Field(
+            description="Cookies to inject before navigation. Each requires name, value and domain."
+        ),
+    ] = None,
+    bypass_cache: Annotated[
+        bool | None,
+        Field(
+            description="Skip cache reads and fetch a fresh page; the result can still be cached. Default false."
+        ),
+    ] = None,
+    cache_ttl_seconds: Annotated[
+        int | None,
+        Field(
+            ge=0,
+            description="Cache lifetime in whole seconds. Set 0 to avoid caching this response; default 3600.",
+        ),
     ] = None,
     user_agent: Annotated[
         str | None,
@@ -118,6 +140,11 @@ async def webextrator_extract(
             wait_for_selector=wait_for_selector,
             block_resources=cast(list[str] | None, block_resources),
             headers=headers,
+            cookies=[cookie.model_dump(exclude_none=True) for cookie in cookies]
+            if cookies is not None
+            else None,
+            bypass_cache=bypass_cache,
+            cache_ttl_seconds=cache_ttl_seconds,
             user_agent=user_agent,
             callback_url=callback_url,
             async_=async_,
@@ -147,17 +174,22 @@ async def webextrator_render(
         Field(
             description=(
                 "Page load wait condition before capturing HTML. Options: 'load', "
-                "'domcontentloaded', 'networkidle', 'commit'. Default is 'networkidle'."
+                "'domcontentloaded', 'networkidle', 'commit'. Default is 'load'."
             )
         ),
     ] = None,
     timeout: Annotated[
-        float | None,
-        Field(description="Total timeout in seconds for page load. Default is 30."),
+        int | None,
+        Field(
+            gt=0,
+            description="Page-load timeout in whole seconds (positive integer). Default is 30.",
+        ),
     ] = None,
     delay: Annotated[
-        float | None,
-        Field(description="Extra delay in seconds after page load before capturing HTML."),
+        int | None,
+        Field(
+            ge=0, description="Extra delay in whole seconds after page load before capturing HTML."
+        ),
     ] = None,
     wait_for_selector: Annotated[
         str | None,
@@ -175,6 +207,25 @@ async def webextrator_render(
     headers: Annotated[
         dict[str, str] | None,
         Field(description="Extra HTTP headers to include with the page request."),
+    ] = None,
+    cookies: Annotated[
+        list[Cookie] | None,
+        Field(
+            description="Cookies to inject before navigation. Each requires name, value and domain."
+        ),
+    ] = None,
+    bypass_cache: Annotated[
+        bool | None,
+        Field(
+            description="Skip cache reads and fetch a fresh page; the result can still be cached. Default false."
+        ),
+    ] = None,
+    cache_ttl_seconds: Annotated[
+        int | None,
+        Field(
+            ge=0,
+            description="Cache lifetime in whole seconds. Set 0 to avoid caching this response; default 3600.",
+        ),
     ] = None,
     user_agent: Annotated[
         str | None,
@@ -224,6 +275,11 @@ async def webextrator_render(
             wait_for_selector=wait_for_selector,
             block_resources=cast(list[str] | None, block_resources),
             headers=headers,
+            cookies=[cookie.model_dump(exclude_none=True) for cookie in cookies]
+            if cookies is not None
+            else None,
+            bypass_cache=bypass_cache,
+            cache_ttl_seconds=cache_ttl_seconds,
             user_agent=user_agent,
             callback_url=callback_url,
             async_=async_,

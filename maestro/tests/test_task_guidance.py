@@ -40,8 +40,8 @@ def test_payload_without_id_is_left_untouched():
     assert "mcp_task_polling" not in json.loads(format_task_result({"error": "nope"}))
 
 
-def test_batch_poll_tool_is_not_advertised():
-    """Maestro has no documented batch-retrieval task API."""
+def test_history_listing_is_not_advertised_as_batch_polling():
+    """History enumeration cannot poll a known set of task IDs."""
     block = _guidance({"id": "t-1", "finished_at": None})
     assert block["batch_poll_tool"] is None
 

@@ -1,0 +1,66 @@
+{
+  "name": "mcp-acemusic",
+  "displayName": "ACE Music by Ace Data Cloud",
+  "description": "ACE Music songs and lyrics with Ace Data Cloud; retrieve original task results.",
+  "version": "0.3.0",
+  "publisher": "acedatacloud",
+  "icon": "icon.png",
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.101.0"
+  },
+  "categories": [
+    "AI",
+    "Chat"
+  ],
+  "keywords": [
+    "mcp",
+    "model context protocol",
+    "ai",
+    "copilot",
+    "ace data cloud",
+    "acemusic",
+    "ace music",
+    "music",
+    "ai music",
+    "lyrics",
+    "audio"
+  ],
+  "galleryBanner": {
+    "color": "#0E1117",
+    "theme": "dark"
+  },
+  "homepage": "https://github.com/AceDataCloud/AceMusicMCP",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AceDataCloud/AceMusicMCP"
+  },
+  "bugs": {
+    "url": "https://github.com/AceDataCloud/AceMusicMCP/issues"
+  },
+  "activationEvents": [],
+  "main": "./extension.js",
+  "contributes": {
+    "mcpServerDefinitionProviders": [
+      {
+        "id": "acedatacloud.acemusic",
+        "label": "ACE Music by Ace Data Cloud"
+      }
+    ],
+    "commands": [
+      {
+        "command": "acedatacloud.acemusic.setApiToken",
+        "title": "ACE Music by Ace Data Cloud: Set Ace Data Cloud API Key",
+        "category": "MCP"
+      },
+      {
+        "command": "acedatacloud.acemusic.clearApiToken",
+        "title": "ACE Music by Ace Data Cloud: Clear Ace Data Cloud API Key",
+        "category": "MCP"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "python3 ../scripts/fetch_brand_assets.py --target vscode"
+  }
+}

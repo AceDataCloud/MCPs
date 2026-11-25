@@ -5,7 +5,7 @@ from pydantic import ValidationError
 
 from core.server import mcp
 from core.types import MinimaxContent
-from tools import video_tools
+from tools import info_tools, video_tools
 
 
 @pytest.fixture
@@ -26,6 +26,17 @@ async def test_generation_tool_schemas_expose_async_default():
         properties = tools[name].inputSchema["properties"]
         assert properties["async"]["default"] is True
         assert "async_" not in properties
+
+
+@pytest.mark.asyncio
+async def test_actions_guide_matches_async_schema_and_terminal_states():
+    guide = await info_tools.minimax_list_actions()
+
+    assert "default async to true" in guide
+    assert "minimax_get_task" in guide
+    assert "succeeded, failed, or cancelled" in guide
+    assert "HTTP 200" in guide
+    assert "wait for completion by default" not in guide
 
 
 @pytest.mark.asyncio

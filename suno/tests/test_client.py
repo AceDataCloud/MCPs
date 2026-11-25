@@ -106,6 +106,121 @@ class TestSunoClient:
         assert request.kwargs["json"] == {"audio_id": "audio-1", "async": True}
 
     @pytest.mark.asyncio
+    async def test_availability_is_authenticated_and_synchronous(
+        self, client, mock_availability_response
+    ):
+        response = httpx.Response(200, json=mock_availability_response)
+        with patch("httpx.AsyncClient") as mock_client:
+            mock_instance = AsyncMock()
+            mock_instance.post.return_value = response
+            mock_client.return_value.__aenter__.return_value = mock_instance
+
+            result = await client.check_audio_availability(
+                audio_id=mock_availability_response["data"]["id"]
+            )
+
+        assert result == mock_availability_response
+        mock_instance.post.assert_awaited_once_with(
+            "https://api.test.com/suno/availability",
+            json={"audio_id": mock_availability_response["data"]["id"]},
+            headers=client._get_headers(),
+            timeout=client.timeout,
+        )
+        assert (
+            mock_instance.post.await_args.kwargs["headers"]["authorization"] == "Bearer test-token"
+        )
+
+    @pytest.mark.asyncio
+    async def test_availability_unknown_preserves_error_and_identifiers(
+        self, client, mock_availability_response
+    ):
+        response = httpx.Response(
+            503,
+            json={
+                "error": {"code": "availability_unknown", "message": "Availability unknown"},
+                "task_id": mock_availability_response["task_id"],
+                "trace_id": mock_availability_response["trace_id"],
+            },
+        )
+        with patch("httpx.AsyncClient") as mock_client:
+            mock_instance = AsyncMock()
+            mock_instance.post.return_value = response
+            mock_client.return_value.__aenter__.return_value = mock_instance
+
+            with pytest.raises(SunoAPIError) as exc_info:
+                await client.check_audio_availability(
+                    audio_id=mock_availability_response["data"]["id"]
+                )
+
+        assert exc_info.value.status_code == 503
+        assert exc_info.value.code == "availability_unknown"
+        assert exc_info.value.task_id == mock_availability_response["task_id"]
+        assert exc_info.value.trace_id == mock_availability_response["trace_id"]
+        mock_instance.post.assert_awaited_once()
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize(
+        ("operation", "method", "arguments"),
+        [
+            ("list_personas", "get", {"user_id": "user-uuid", "limit": 50, "offset": 0}),
+            (
+                "delete_persona",
+                "delete",
+                {"persona_id": "eae26f89-b64b-404d-a80c-761996660b1c", "user_id": None},
+            ),
+            (
+                "delete_persona",
+                "delete",
+                {"persona_id": "eae26f89-b64b-404d-a80c-761996660b1c", "user_id": "user-uuid"},
+            ),
+        ],
+    )
+    async def test_persona_management_uses_free_methods_with_normal_headers(
+        self, client, operation, method, arguments
+    ):
+        response = MagicMock(status_code=200)
+        with patch("httpx.AsyncClient") as mock_client:
+            mock_instance = AsyncMock()
+            request = getattr(mock_instance, method)
+            request.return_value = response
+            mock_client.return_value.__aenter__.return_value = mock_instance
+
+            result = await getattr(client, operation)(**arguments)
+
+        assert result is response.json.return_value
+        request.assert_awaited_once_with(
+            "https://api.test.com/suno/persona",
+            params={key: value for key, value in arguments.items() if value is not None},
+            headers={
+                "accept": "application/json",
+                "authorization": "Bearer test-token",
+                "content-type": "application/json",
+            },
+            timeout=client.timeout,
+        )
+        mock_instance.post.assert_not_awaited()
+
+    @pytest.mark.asyncio
+    async def test_persona_creation_keeps_post_contract(self, client, mock_persona_response):
+        response = httpx.Response(200, json=mock_persona_response)
+        with patch("httpx.AsyncClient") as mock_client:
+            mock_instance = AsyncMock()
+            mock_instance.post.return_value = response
+            mock_client.return_value.__aenter__.return_value = mock_instance
+
+            result = await client.create_persona(audio_id="audio-id-1", name="My Voice")
+
+        assert result == mock_persona_response
+        mock_instance.post.assert_awaited_once_with(
+            "https://api.test.com/suno/persona",
+            json={"audio_id": "audio-id-1", "name": "My Voice"},
+            headers=client._get_headers(),
+            timeout=client.timeout,
+        )
+        mock_instance.get.assert_not_awaited()
+        mock_instance.delete.assert_not_awaited()
+
+    @pytest.mark.asyncio
     async def test_custom_models_uses_endpoint_and_idempotency_header(
         self, client, mock_audio_response
     ):
@@ -181,6 +296,91 @@ class TestSunoClient:
             assert exc_info.value.status_code == 403
 
     @pytest.mark.asyncio
+    @pytest.mark.parametrize(
+        ("code", "message"),
+        [
+            ("api_error", "the account may have been offline"),
+            (
+                "suno_processing_unavailable",
+                "Music processing is unavailable. Contact support with the trace ID.",
+            ),
+            (
+                "suno_model_unavailable",
+                "The selected model is unavailable for this operation. Contact support with the trace ID.",
+            ),
+            (
+                "suno_processing_failed",
+                "Music processing returned no audio. Contact support with the trace ID.",
+            ),
+        ],
+    )
+    @pytest.mark.parametrize("task_id", [None, "test-task-123"])
+    async def test_processing_errors_preserve_support_identifiers(
+        self, client, code, message, task_id
+    ):
+        body = {"error": {"code": code, "message": message}, "trace_id": "test-trace-456"}
+        if task_id is not None:
+            body["task_id"] = task_id
+        response = httpx.Response(500, json=body)
+
+        with patch("httpx.AsyncClient") as mock_client:
+            mock_instance = AsyncMock()
+            mock_instance.post.return_value = response
+            mock_client.return_value.__aenter__.return_value = mock_instance
+
+            with pytest.raises(SunoAPIError) as exc_info:
+                await client.generate_audio(action="cover", audio_id="audio-1")
+
+        error = exc_info.value
+        assert error.code == code
+        assert error.message == message
+        assert error.status_code == 500
+        assert error.task_id == task_id
+        assert error.trace_id == "test-trace-456"
+        assert code in str(error)
+        assert "trace_id=test-trace-456" in str(error)
+        if task_id is not None:
+            assert f"task_id={task_id}" in str(error)
+        mock_instance.post.assert_awaited_once()
+
+    @pytest.mark.asyncio
+    async def test_trial_concurrency_error_does_not_retry_or_block_task_polling(
+        self, client, mock_task_response
+    ):
+        response = httpx.Response(
+            429,
+            json={
+                "error": {"code": "too_many_requests"},
+                "trace_id": "test-trace-456",
+            },
+        )
+        with patch("httpx.AsyncClient") as mock_client:
+            mock_instance = AsyncMock()
+            mock_instance.post.side_effect = [
+                response,
+                httpx.Response(200, json=mock_task_response),
+            ]
+            mock_client.return_value.__aenter__.return_value = mock_instance
+
+            with pytest.raises(SunoAPIError) as exc_info:
+                await client.generate_audio(action="generate")
+
+            assert exc_info.value.status_code == 429
+            assert exc_info.value.code == "too_many_requests"
+            assert exc_info.value.trace_id == "test-trace-456"
+            mock_instance.post.assert_awaited_once()
+
+            result = await client.query_task(action="retrieve", id=mock_task_response["id"])
+
+        assert result == mock_task_response
+        assert mock_instance.post.await_count == 2
+        assert mock_instance.post.await_args.args[0] == "https://api.test.com/suno/tasks"
+        assert mock_instance.post.await_args.kwargs["json"] == {
+            "action": "retrieve",
+            "id": mock_task_response["id"],
+        }
+
+    @pytest.mark.asyncio
     async def test_request_timeout(self, client):
         """Test timeout raises timeout error."""
         with patch("httpx.AsyncClient") as mock_client:
@@ -190,6 +390,8 @@ class TestSunoClient:
 
             with pytest.raises(SunoTimeoutError, match="timed out"):
                 await client.request("/suno/audios", {})
+
+        mock_instance.post.assert_awaited_once()
 
     @pytest.mark.asyncio
     async def test_request_http_error(self, client):

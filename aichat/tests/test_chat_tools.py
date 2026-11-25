@@ -4,9 +4,184 @@ import json
 from unittest.mock import AsyncMock, patch
 
 import pytest
+from mcp.server.fastmcp.exceptions import ToolError
 
 from core.server import mcp
 from tools.chat_tools import aichat_create_conversation_v2
+from tools.info_tools import aichat_get_usage_guide, aichat_list_models
+
+
+@pytest.mark.asyncio
+async def test_list_models_includes_sol_fast() -> None:
+    assert "gpt-5.6-sol-fast" in await aichat_list_models()
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize(
+    ("tool_name", "client_method"),
+    [
+        ("aichat_create_conversation", "create_conversation"),
+        ("aichat_create_conversation_v2", "create_conversation_v2"),
+    ],
+)
+async def test_sol_fast_dispatch_preserves_public_alias(
+    mock_conversation_response, tool_name, client_method
+) -> None:
+    tools = {tool.name: tool for tool in await mcp.list_tools()}
+    model_schema = tools[tool_name].inputSchema["properties"]["model"]
+    assert "gpt-5.6-sol-fast" in model_schema["enum"]
+    assert model_schema["default"] == "gpt-4.1"
+
+    with patch(
+        f"tools.chat_tools.client.{client_method}",
+        new=AsyncMock(return_value=mock_conversation_response),
+    ) as mock_request:
+        await mcp.call_tool(tool_name, {"question": "hello", "model": "gpt-5.6-sol-fast"})
+
+    assert mock_request.await_args.kwargs["model"] == "gpt-5.6-sol-fast"
+
+
+@pytest.mark.asyncio
+async def test_gemini_argon_discovery_identifies_v2_and_wrapper_limits() -> None:
+    listing = await aichat_list_models()
+    guide = await aichat_get_usage_guide()
+    assert "Gemini endpoint coverage" in listing
+    for text in (listing, guide):
+        assert "gemini-4-argon" in text
+        assert "aichat_create_conversation_v2" in text
+        assert "gpt-4.1" in text
+    assert "not native Gemini Generate Content or Google" in guide
+    assert "does not expose `max_tokens`" in guide
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("model", ["gemini-4-argon", "gemini-4-carbon", "gemini-4-hydrogen"])
+async def test_gemini_argon_v2_dispatch_preserves_public_model(
+    mock_conversation_response, model
+) -> None:
+    tools = {tool.name: tool for tool in await mcp.list_tools()}
+    properties = tools["aichat_create_conversation_v2"].inputSchema["properties"]
+    assert model in properties["model"]["enum"]
+    assert properties["model"]["default"] == "gpt-4.1"
+    assert not {"max_tokens", "thinking_level", "cached_content"} & properties.keys()
+    with patch(
+        "tools.chat_tools.client.create_conversation_v2",
+        new=AsyncMock(return_value=mock_conversation_response),
+    ) as request:
+        result = await mcp.call_tool(
+            "aichat_create_conversation_v2",
+            {"question": "hello", "model": model},
+        )
+    assert request.await_args.kwargs["model"] == model
+    content, _ = result
+    assert json.loads(content[0].text) == mock_conversation_response
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize(
+    ("tool_name", "client_method", "model"),
+    [
+        ("aichat_create_conversation", "create_conversation", "gemini-4-argon"),
+        ("aichat_create_conversation_v2", "create_conversation_v2", "claude-opus-5-5"),
+    ],
+)
+async def test_models_outside_endpoint_contract_fail_before_api(
+    tool_name: str, client_method: str, model: str
+) -> None:
+    with (
+        patch(f"tools.chat_tools.client.{client_method}", new=AsyncMock()) as request,
+        pytest.raises(ToolError),
+    ):
+        await mcp.call_tool(tool_name, {"question": "hello", "model": model})
+    request.assert_not_awaited()
+
+
+@pytest.mark.asyncio
+async def test_kimi_discovery_identifies_v2_tool_and_keeps_k3_alias() -> None:
+    listing = await aichat_list_models()
+    guide = await aichat_get_usage_guide()
+    assert "Kimi (AiChat v2 only)" in listing
+    assert "recommended" not in next(
+        line for line in listing.splitlines() if line.startswith("- kimi-k3.1-pro")
+    )
+    for model in ("kimi-k3.1-pro", "kimi-k3"):
+        assert model in listing
+        assert model in guide
+    assert "aichat_create_conversation_v2" in listing
+    assert "does not expose `reasoning_effort`" in guide
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("model", ["kimi-k3.1-pro", "kimi-k3", "kimi-k2.6", "kimi-k2.7-code"])
+async def test_kimi_v2_dispatch_preserves_public_alias(model: str) -> None:
+    tools = {tool.name: tool for tool in await mcp.list_tools()}
+    properties = tools["aichat_create_conversation_v2"].inputSchema["properties"]
+    assert model in properties["model"]["enum"]
+    assert properties["model"]["default"] == "gpt-4.1"
+    assert "reasoning_effort" not in properties
+    assert (
+        model not in tools["aichat_create_conversation"].inputSchema["properties"]["model"]["enum"]
+    )
+    with patch(
+        "tools.chat_tools.client.create_conversation_v2", new=AsyncMock(return_value={"id": "test"})
+    ) as request:
+        await mcp.call_tool("aichat_create_conversation_v2", {"question": "hello", "model": model})
+    assert request.await_args.kwargs["model"] == model
+    assert "reasoning_effort" not in request.await_args.kwargs
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("model", ["kimi-k3.1-pro", "kimi-k2-0905-preview"])
+async def test_v1_rejects_kimi_without_api_call(model: str) -> None:
+    with (
+        patch("tools.chat_tools.client.create_conversation", new=AsyncMock()) as request,
+        pytest.raises(ToolError),
+    ):
+        await mcp.call_tool("aichat_create_conversation", {"question": "hello", "model": model})
+    request.assert_not_awaited()
+
+
+@pytest.mark.asyncio
+async def test_v2_rejects_retired_kimi_without_api_call() -> None:
+    with (
+        patch("tools.chat_tools.client.create_conversation_v2", new=AsyncMock()) as request,
+        pytest.raises(ToolError),
+    ):
+        await mcp.call_tool("aichat_create_conversation_v2", {"model": "kimi-k2-0905-preview"})
+    request.assert_not_awaited()
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("max_turns", [None, 1, 500])
+async def test_v2_agent_turn_limit_dispatch(max_turns: int | None) -> None:
+    tool = next(
+        tool for tool in await mcp.list_tools() if tool.name == "aichat_create_conversation_v2"
+    )
+    schema = tool.inputSchema["properties"]["max_turns"]
+    integer_schema = next(item for item in schema["anyOf"] if item["type"] == "integer")
+    assert integer_schema["minimum"] == 1
+    assert integer_schema["maximum"] == 500
+    assert "defaults to 500" in schema["description"]
+    arguments = {} if max_turns is None else {"max_turns": max_turns}
+    with patch(
+        "tools.chat_tools.client.create_conversation_v2", new=AsyncMock(return_value={"id": "test"})
+    ) as request:
+        await mcp.call_tool("aichat_create_conversation_v2", {"question": "hello", **arguments})
+    if max_turns is None:
+        assert "max_turns" not in request.await_args.kwargs
+    else:
+        assert request.await_args.kwargs["max_turns"] == max_turns
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("max_turns", [0, 501])
+async def test_v2_rejects_out_of_range_turn_limit_without_api_call(max_turns: int) -> None:
+    with (
+        patch("tools.chat_tools.client.create_conversation_v2", new=AsyncMock()) as request,
+        pytest.raises(ToolError),
+    ):
+        await mcp.call_tool("aichat_create_conversation_v2", {"max_turns": max_turns})
+    request.assert_not_awaited()
 
 
 @pytest.mark.asyncio

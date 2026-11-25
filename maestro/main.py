@@ -80,6 +80,10 @@ def main() -> None:
                         "name": "maestro_get_task",
                         "description": "Get video progress and outputs",
                     },
+                    {
+                        "name": "maestro_list_tasks",
+                        "description": "List recent Maestro tasks",
+                    },
                 ],
                 "prompts": [
                     {

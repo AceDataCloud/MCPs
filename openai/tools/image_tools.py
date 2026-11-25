@@ -1,12 +1,12 @@
 """Image generation and editing tools for OpenAI API."""
 
 import json
-from typing import Annotated, Any
+from typing import Annotated, Any, Literal
 
 from pydantic import Field
 
 from core.client import client
-from core.exceptions import OpenAIAPIError, OpenAIAuthError
+from core.exceptions import OpenAIError, format_tool_error
 from core.server import mcp
 from core.types import (
     DEFAULT_IMAGE_MODEL,
@@ -14,10 +14,12 @@ from core.types import (
     DEFAULT_IMAGE_QUALITY,
     DEFAULT_IMAGE_RESPONSE_FORMAT,
     DEFAULT_IMAGE_SIZE,
+    GIF_IMAGE_MODELS,
     ImageBackground,
     ImageEditQuality,
     ImageEditSize,
     ImageInputFidelity,
+    ImageMarkup,
     ImageModel,
     ImageModeration,
     ImageOutputFormat,
@@ -27,6 +29,27 @@ from core.types import (
     ImageStyle,
 )
 from core.utils import format_submission_result
+
+
+def _validate_gif_options(
+    model: str, output_format: str, frame_count: int | None, frame_duration_ms: int | None
+) -> None:
+    if output_format == "gif" and model not in GIF_IMAGE_MODELS:
+        raise OpenAIError(
+            "GIF requires GPT Image 2.6 Flare/Sunburst (standard/reverse/official).",
+            code="validation_error",
+        )
+    for name, value in (("frame_count", frame_count), ("frame_duration_ms", frame_duration_ms)):
+        if value is None:
+            continue
+        if output_format != "gif":
+            raise OpenAIError(f"{name} requires output_format=gif.", code="validation_error")
+        minimum, maximum = (2, 16) if name == "frame_count" else (20, 655350)
+        if isinstance(value, bool) or not isinstance(value, int) or not minimum <= value <= maximum:
+            raise OpenAIError(
+                f"{name} must be an integer between {minimum} and {maximum}.",
+                code="validation_error",
+            )
 
 
 @mcp.tool()
@@ -46,8 +69,14 @@ async def openai_generate_image(
         Field(
             description=(
                 "The image model to use. Options: 'gpt-image-1' (default, versatile), "
-                "'gpt-image-1.5', 'gpt-image-2', 'gpt-image-2.5-flare', 'gpt-image-2.5-sunburst', 'dall-e-3', 'dall-e-2', 'nano-banana', "
-                "'nano-banana-2', 'nano-banana-pro'."
+                "'gpt-image-1.5', 'gpt-image-2', 'gpt-image-2.5-flare', "
+                "'gpt-image-2.5-flare:reverse', 'gpt-image-2.5-flare:official', "
+                "'gpt-image-2.5-sunburst', 'gpt-image-2.5-sunburst:reverse', "
+                "'gpt-image-2.5-sunburst:official', 'gpt-image-2.6-flare', "
+                "'gpt-image-2.6-flare:reverse', 'gpt-image-2.6-flare:official', "
+                "'gpt-image-2.6-sunburst', 'gpt-image-2.6-sunburst:reverse', "
+                "'gpt-image-2.6-sunburst:official', 'dall-e-3', 'dall-e-2', "
+                "'nano-banana', 'nano-banana-2-lite', 'nano-banana-2', 'nano-banana-2.1', 'nano-banana-pro'. Nano Banana 2.1 has no ':official' variant. GPT Image ':official' variants use actual-token billing."
             )
         ),
     ] = DEFAULT_IMAGE_MODEL,
@@ -56,7 +85,7 @@ async def openai_generate_image(
         Field(
             description=(
                 "Image dimensions as 'WIDTHxHEIGHT' or 'auto' (default). "
-                "GPT Image 2 and 2.5 models accept custom dimensions matching the format "
+                "GPT Image 2, 2.5 and 2.6 models accept custom dimensions matching the format "
                 "(multiples of 16, longer side ≤ 3840, total pixels 655,360–8,294,400, "
                 "aspect ratio ≤ 3:1). "
                 "Common presets — 1K: '1024x1024', '1536x1024', '1024x1536', "
@@ -64,7 +93,9 @@ async def openai_generate_image(
                 "'1536x2048', '2048x1152', '1152x2048'; 4K: '2880x2880', "
                 "'3264x2448', '2448x3264', '3840x2160', '2160x3840'. "
                 "dall-e-2: '256x256', '512x512', '1024x1024'. "
-                "dall-e-3: '1024x1024', '1792x1024', '1024x1792'."
+                "dall-e-3: '1024x1024', '1792x1024', '1024x1792'. "
+                "These GPT Image limits apply to static images. GIF uses a 512x512 preview "
+                "when size is auto; size, frame count and n share a separate model pixel budget."
             )
         ),
     ] = DEFAULT_IMAGE_SIZE,
@@ -72,19 +103,42 @@ async def openai_generate_image(
         ImageQuality,
         Field(
             description=(
-                "Image quality. Options: 'auto' (default), 'high', 'medium', 'low', "
-                "'hd' (dall-e-3 high detail), 'standard' (dall-e-3 standard)."
+                "Image quality. GPT Image: 'auto' (default), 'high', 'medium', 'low'. "
+                "GPT Image 2.5 and 2.6 Flare/Sunburst (including ':reverse' and ':official') "
+                "also support 'xhigh' and 'max'. Official variants bill actual token usage. "
+                "dall-e-3: 'hd' or 'standard'; dall-e-2: 'standard' only."
             )
         ),
     ] = DEFAULT_IMAGE_QUALITY,
+    complexity: Annotated[
+        Literal["low", "medium", "high"] | None,
+        Field(
+            description="GPT Image 2.6 only: planning complexity, independent of quality, with no separate surcharge. Omit for model default high; official variants still bill actual tokens."
+        ),
+    ] = None,
     n: Annotated[
         int | None,
-        Field(description="Number of images to generate (1-10). Default is 1."),
+        Field(description="Number of output files (1-10), not GIF frames. Default is 1."),
     ] = None,
     output_format: Annotated[
         ImageOutputFormat,
-        Field(description="Output file format. Options: 'png' (default), 'jpeg', 'webp'."),
+        Field(
+            description="Output format: png (default), jpeg, webp; gif for GPT Image 2.6 Flare/Sunburst (standard/reverse/official). GIF defaults to a 512x512 preview, 9 frames, 200ms per frame; static 4K sizes do not apply to GIF."
+        ),
     ] = DEFAULT_IMAGE_OUTPUT_FORMAT,
+    frame_count: Annotated[
+        int | None,
+        Field(ge=2, le=16, strict=True, description="GIF frame count, 2-16. Defaults to 9."),
+    ] = None,
+    frame_duration_ms: Annotated[
+        int | None,
+        Field(
+            ge=20,
+            le=655350,
+            strict=True,
+            description="GIF frame duration in milliseconds, 20-655350; rounded to 10ms. Defaults to 200.",
+        ),
+    ] = None,
     response_format: Annotated[
         ImageResponseFormat,
         Field(
@@ -169,6 +223,13 @@ async def openai_generate_image(
         result is POSTed there instead.
     """
     try:
+        _validate_gif_options(model, output_format, frame_count, frame_duration_ms)
+        if complexity is not None and model not in GIF_IMAGE_MODELS:
+            raise OpenAIError("complexity requires GPT Image 2.6.", code="validation_error")
+        if output_format == "gif" and output_compression is not None:
+            raise OpenAIError("GIF does not support output_compression.", code="validation_error")
+        if output_format == "gif" and partial_images is not None:
+            raise OpenAIError("GIF does not support partial_images.", code="validation_error")
         payload: dict[str, Any] = {
             "prompt": prompt,
             "model": model,
@@ -178,6 +239,12 @@ async def openai_generate_image(
             "response_format": response_format,
         }
 
+        if complexity is not None:
+            payload["complexity"] = complexity
+        if frame_count is not None:
+            payload["frame_count"] = frame_count
+        if frame_duration_ms is not None:
+            payload["frame_duration_ms"] = frame_duration_ms
         if n is not None:
             payload["n"] = n
         if style is not None:
@@ -202,12 +269,8 @@ async def openai_generate_image(
 
         return format_submission_result(result)
 
-    except OpenAIAuthError as e:
-        return json.dumps({"error": "Authentication Error", "message": e.message})
-    except OpenAIAPIError as e:
-        return json.dumps({"error": "API Error", "message": e.message})
     except Exception as e:
-        return json.dumps({"error": "Error generating image", "message": str(e)})
+        return format_tool_error(e, "Error generating image")
 
 
 @mcp.tool()
@@ -228,7 +291,7 @@ async def openai_edit_image(
         str,
         Field(
             description=(
-                "Text description of the desired edit. Max 1000 characters for gpt-image models. "
+                "Text description of the desired edit. GPT Image models allow up to 32000 characters; dall-e-2 allows up to 1000. "
                 "Describe what you want to change or add to the image."
             )
         ),
@@ -238,7 +301,13 @@ async def openai_edit_image(
         Field(
             description=(
                 "The image model to use for editing. Options: 'dall-e-3' (default), "
-                "'gpt-image-1.5', 'gpt-image-2', 'gpt-image-2.5-flare', 'gpt-image-2.5-sunburst', 'dall-e-3', 'nano-banana' variants."
+                "'gpt-image-1.5', 'gpt-image-2', 'gpt-image-2.5-flare', "
+                "'gpt-image-2.5-flare:reverse', 'gpt-image-2.5-flare:official', "
+                "'gpt-image-2.5-sunburst', 'gpt-image-2.5-sunburst:reverse', "
+                "'gpt-image-2.5-sunburst:official', 'gpt-image-2.6-flare', "
+                "'gpt-image-2.6-flare:reverse', 'gpt-image-2.6-flare:official', "
+                "'gpt-image-2.6-sunburst', 'gpt-image-2.6-sunburst:reverse', "
+                "'gpt-image-2.6-sunburst:official', 'dall-e-3', and 'nano-banana' variants including 'nano-banana-2.1' (no ':official' variant)."
             )
         ),
     ] = "dall-e-3",
@@ -247,12 +316,14 @@ async def openai_edit_image(
         Field(
             description=(
                 "Output image dimensions as 'WIDTHxHEIGHT' or 'auto'. Default is 'auto'. "
-                "GPT Image 2 and 2.5 models accept custom dimensions (multiples of 16, longer side ≤ 3840, "
+                "GPT Image 2, 2.5 and 2.6 models accept custom dimensions (multiples of 16, longer side ≤ 3840, "
                 "total pixels 655,360–8,294,400, aspect ratio ≤ 3:1). Common presets — 1K: '1024x1024', '1536x1024', "
                 "'1024x1536', '1792x1024', '1024x1792'; 2K: '2048x2048', "
                 "'2048x1536', '1536x2048', '2048x1152', '1152x2048'; 4K: "
                 "'2880x2880', '3264x2448', '2448x3264', '3840x2160', '2160x3840'. "
-                "dall-e-2: '256x256', '512x512', '1024x1024'."
+                "dall-e-2: '256x256', '512x512', '1024x1024'. "
+                "These GPT Image limits apply to static images. GIF uses a 512x512 preview "
+                "when size is auto; size, frame count and n share a separate model pixel budget."
             )
         ),
     ] = "auto",
@@ -260,13 +331,22 @@ async def openai_edit_image(
         ImageEditQuality,
         Field(
             description=(
-                "Output quality. Options: 'auto' (default), 'high', 'medium', 'low', 'standard'."
+                "Output quality. GPT Image: 'auto' (default), 'high', 'medium', 'low'. "
+                "GPT Image 2.5 and 2.6 Flare/Sunburst (including ':reverse' and ':official') "
+                "also support 'xhigh' and 'max'. Official variants bill actual token usage. "
+                "dall-e-2: 'standard' only."
             )
         ),
     ] = "auto",
+    complexity: Annotated[
+        Literal["low", "medium", "high"] | None,
+        Field(
+            description="GPT Image 2.6 only: planning complexity, independent of quality, with no separate surcharge. Omit for model default high; official variants still bill actual tokens."
+        ),
+    ] = None,
     n: Annotated[
         int | None,
-        Field(description="Number of images to generate (1-10). Default is 1."),
+        Field(description="Number of output files (1-10), not GIF frames. Default is 1."),
     ] = None,
     background: Annotated[
         ImageBackground | None,
@@ -277,19 +357,45 @@ async def openai_edit_image(
             )
         ),
     ] = None,
+    markup: Annotated[
+        str | ImageMarkup | None,
+        Field(
+            description=(
+                "GPT Image 2.6 static edit annotation: HTTPS URL, PNG data URL or an object "
+                "containing only image_url. PNG must contain transparent pixels and match the "
+                "first reference after orientation; each image ≤ 16,777,216 pixels, annotation "
+                "≤ 40MB. Cannot combine with mask, GIF or prompt_rewriter; file_id is unsupported."
+            )
+        ),
+    ] = None,
     input_fidelity: Annotated[
         ImageInputFidelity | None,
         Field(
             description=(
-                "How closely to follow the reference image. 'high' preserves more detail, "
+                "Omit for GPT Image 2/2.5/2.6. For earlier supported models, high preserves more detail, "
                 "'low' allows more creative freedom."
             )
         ),
     ] = None,
     output_format: Annotated[
         ImageOutputFormat,
-        Field(description="Output file format. Options: 'png' (default), 'jpeg', 'webp'."),
+        Field(
+            description="Output format: png (default), jpeg, webp; gif for GPT Image 2.6 Flare/Sunburst (standard/reverse/official). GIF defaults to a 512x512 preview, 9 frames, 200ms per frame; static 4K sizes do not apply to GIF."
+        ),
     ] = DEFAULT_IMAGE_OUTPUT_FORMAT,
+    frame_count: Annotated[
+        int | None,
+        Field(ge=2, le=16, strict=True, description="GIF frame count, 2-16. Defaults to 9."),
+    ] = None,
+    frame_duration_ms: Annotated[
+        int | None,
+        Field(
+            ge=20,
+            le=655350,
+            strict=True,
+            description="GIF frame duration in milliseconds, 20-655350; rounded to 10ms. Defaults to 200.",
+        ),
+    ] = None,
     response_format: Annotated[
         ImageResponseFormat,
         Field(
@@ -336,6 +442,15 @@ async def openai_edit_image(
         result is POSTed there instead.
     """
     try:
+        _validate_gif_options(model, output_format, frame_count, frame_duration_ms)
+        if complexity is not None and model not in GIF_IMAGE_MODELS:
+            raise OpenAIError("complexity requires GPT Image 2.6.", code="validation_error")
+        if output_format == "gif" and output_compression is not None:
+            raise OpenAIError("GIF does not support output_compression.", code="validation_error")
+        if markup is not None and (model not in GIF_IMAGE_MODELS or output_format == "gif"):
+            raise OpenAIError(
+                "markup requires a GPT Image 2.6 static edit.", code="validation_error"
+            )
         payload: dict[str, Any] = {
             "image": image,
             "prompt": prompt,
@@ -346,6 +461,14 @@ async def openai_edit_image(
             "response_format": response_format,
         }
 
+        if markup is not None:
+            payload["markup"] = markup.model_dump() if isinstance(markup, ImageMarkup) else markup
+        if complexity is not None:
+            payload["complexity"] = complexity
+        if frame_count is not None:
+            payload["frame_count"] = frame_count
+        if frame_duration_ms is not None:
+            payload["frame_duration_ms"] = frame_duration_ms
         if n is not None:
             payload["n"] = n
         if background is not None:
@@ -366,9 +489,5 @@ async def openai_edit_image(
 
         return format_submission_result(result)
 
-    except OpenAIAuthError as e:
-        return json.dumps({"error": "Authentication Error", "message": e.message})
-    except OpenAIAPIError as e:
-        return json.dumps({"error": "API Error", "message": e.message})
     except Exception as e:
-        return json.dumps({"error": "Error editing image", "message": str(e)})
+        return format_tool_error(e, "Error editing image")

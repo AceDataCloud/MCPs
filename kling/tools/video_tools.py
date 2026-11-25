@@ -21,79 +21,13 @@ from core.types import (
     Mode,
 )
 from core.utils import format_video_result
+from core.video_contract import validate_video_request as _validate_video_request
 
 
 def _dump_models(items: Sequence[BaseModel] | None) -> list[dict] | None:
     if items is None:
         return None
     return [item.model_dump(mode="json", exclude_none=True) for item in items]
-
-
-def _validate_video_request(
-    *,
-    model: KlingModel,
-    mode: Mode,
-    duration: Duration,
-    generate_audio: bool,
-    negative_prompt: str | None,
-    cfg_scale: float | None,
-    camera_control: KlingCameraControl | None,
-    image_list: list[KlingReferenceImage] | None,
-    video_list: list[KlingReferenceVideo] | None,
-    start_image_url: str | None = None,
-    end_image_url: str | None = None,
-) -> str | None:
-    has_references = bool(image_list or video_list)
-    uses_omni = model == "kling-o1" or has_references
-
-    if model == "kling-o1":
-        if duration != 5:
-            return "Error: kling-o1 supports duration=5 only."
-        if mode not in ("std", "pro"):
-            return "Error: kling-o1 supports std and pro modes only."
-        if generate_audio:
-            return "Error: generate_audio is not supported by kling-o1."
-    elif model in ("kling-v3", "kling-v3-omni"):
-        if not 3 <= duration <= 15:
-            return f"Error: {model} duration must be an integer from 3 to 15."
-    elif duration not in (5, 10):
-        return f"Error: {model} duration must be 5 or 10."
-
-    if has_references and model not in ("kling-o1", "kling-v3-omni"):
-        return f"Error: image_list and video_list are not supported by {model}."
-    if uses_omni and any(
-        value is not None for value in (negative_prompt, cfg_scale, camera_control)
-    ):
-        return "Error: negative_prompt, cfg_scale, and camera_control are not supported by Omni generation."
-    if has_references and mode == "4k":
-        return "Error: mode=4k is not supported with image_list or video_list."
-
-    frame_count = int(bool(start_image_url)) + int(bool(end_image_url))
-    reference_image_count = frame_count + len(image_list or [])
-    max_images = 4 if video_list else 7
-    if reference_image_count > max_images:
-        return f"Error: this request supports at most {max_images} reference images including first/end frames."
-
-    first_frame_count = int(bool(start_image_url)) + sum(
-        item.type == "first_frame" for item in image_list or []
-    )
-    end_frame_count = int(bool(end_image_url)) + sum(
-        item.type == "end_frame" for item in image_list or []
-    )
-    if first_frame_count > 1 or end_frame_count > 1:
-        return "Error: provide at most one first frame and one end frame."
-    if end_frame_count and not first_frame_count:
-        return "Error: a first frame is required when an end frame is provided."
-
-    if video_list:
-        if len(video_list) != 1:
-            return "Error: video_list must contain exactly one reference video."
-        if generate_audio:
-            return "Error: generate_audio cannot be used with video_list."
-        if video_list[0].refer_type == "base" and (first_frame_count or end_frame_count):
-            return "Error: an editable base video cannot be combined with first or end frames."
-
-    return None
 
 
 @mcp.tool()
@@ -129,11 +63,11 @@ async def kling_generate_video(
         ),
     ] = DEFAULT_DURATION,
     generate_audio: Annotated[
-        bool,
+        bool | None,
         Field(
-            description="Whether to generate audio synchronously. Supported by kling-v3, kling-v3-omni, and kling-v2-6 (pro mode only). Default is false."
+            description="Whether to generate audio synchronously. Supported by kling-v3, kling-v3-omni, and kling-v2-6 (pro mode only). Omit for the model default. Turbo always includes native audio."
         ),
-    ] = False,
+    ] = None,
     negative_prompt: Annotated[
         str | None,
         Field(
@@ -161,7 +95,7 @@ async def kling_generate_video(
     video_list: Annotated[
         list[KlingReferenceVideo] | None,
         Field(
-            description="One Omni reference video for kling-o1 or kling-v3-omni. Cite it as <<<video_1>>>. Use refer_type='feature' to reference it or 'base' to edit it."
+            description="One Omni reference video for kling-o1 or kling-v3-omni. Cite it as <<<video_1>>>. Use refer_type='feature' to reference it or 'base' (default) to edit it. Reference video pricing is separate: base bills actual output duration rounded to integer seconds; feature uses the requested duration. Read final billed seconds from usage.reference_video_seconds. Reference images alone do not trigger this tier; generate_audio must not be true."
         ),
     ] = None,
     callback_url: Annotated[
@@ -211,8 +145,8 @@ async def kling_generate_video(
 
     if callback_url:
         payload["callback_url"] = callback_url
-    if generate_audio:
-        payload["generate_audio"] = True
+    if generate_audio is not None:
+        payload["generate_audio"] = generate_audio
     if negative_prompt:
         payload["negative_prompt"] = negative_prompt
     if cfg_scale is not None:
@@ -269,11 +203,11 @@ async def kling_generate_video_from_image(
         ),
     ] = DEFAULT_DURATION,
     generate_audio: Annotated[
-        bool,
+        bool | None,
         Field(
             description="Whether to generate audio synchronously. Supported by kling-v3, kling-v3-omni, and kling-v2-6 (pro mode only)."
         ),
-    ] = False,
+    ] = None,
     negative_prompt: Annotated[
         str | None,
         Field(description="Things to avoid in the video."),
@@ -298,7 +232,9 @@ async def kling_generate_video_from_image(
     ] = None,
     video_list: Annotated[
         list[KlingReferenceVideo] | None,
-        Field(description="One Omni reference video for kling-o1 or kling-v3-omni."),
+        Field(
+            description="One Omni reference video for kling-o1 or kling-v3-omni. Reference video pricing is separate: base (default) bills actual output duration rounded to integer seconds; feature uses the requested duration. Read final billed seconds from usage.reference_video_seconds. Reference images alone do not trigger this tier; generate_audio must not be true."
+        ),
     ] = None,
     callback_url: Annotated[
         str | None,
@@ -354,8 +290,8 @@ async def kling_generate_video_from_image(
         payload["start_image_url"] = start_image_url
     if end_image_url:
         payload["end_image_url"] = end_image_url
-    if generate_audio:
-        payload["generate_audio"] = True
+    if generate_audio is not None:
+        payload["generate_audio"] = generate_audio
     if negative_prompt:
         payload["negative_prompt"] = negative_prompt
     if cfg_scale is not None:

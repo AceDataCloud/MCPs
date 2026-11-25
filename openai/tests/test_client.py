@@ -91,8 +91,10 @@ class TestOpenAIClient:
             mock_instance.post.return_value = mock_response
             mock_http.return_value.__aenter__.return_value = mock_instance
 
-            with pytest.raises(OpenAIAuthError, match="Invalid API token"):
+            with pytest.raises(OpenAIAuthError, match="API authentication failed") as exc_info:
                 await client.request("/openai/chat/completions", {})
+            assert exc_info.value.status_code == 401
+            assert exc_info.value.code == "unauthorized"
 
     @pytest.mark.asyncio
     async def test_request_timeout(self, client):
@@ -120,7 +122,7 @@ class TestOpenAIClient:
             mock_instance.post.return_value = mock_response
             mock_http.return_value.__aenter__.return_value = mock_instance
 
-            with pytest.raises(OpenAIAPIError, match="Internal Server Error") as exc_info:
+            with pytest.raises(OpenAIAPIError, match="temporarily unavailable") as exc_info:
                 await client.request("/openai/chat/completions", {})
 
             assert exc_info.value.status_code == 500

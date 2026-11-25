@@ -3,6 +3,7 @@
 import logging
 
 from mcp.server.fastmcp import FastMCP
+from mcp.types import Icon
 
 from core.config import settings
 
@@ -36,4 +37,8 @@ if settings.server_url:
         required_scopes=["mcp:access"],
     )
 
-mcp = FastMCP(settings.server_name, **mcp_kwargs)
+mcp = FastMCP(
+    settings.server_name,
+    icons=[Icon(src="https://cdn.acedata.cloud/2841e8c719.png", mimeType="image/png")],
+    **mcp_kwargs,
+)

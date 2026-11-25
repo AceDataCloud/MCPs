@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "nano-banana": {
+      "command": "uvx",
+      "args": [
+        "--from",
+        "mcp-nanobanana-pro==2026.10.19.3",
+        "mcp-nanobanana-pro"
+      ]
+    }
+  }
+}

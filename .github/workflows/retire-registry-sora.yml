@@ -1,0 +1,42 @@
+name: Retire existing Sora Registry records
+
+on:
+  workflow_dispatch:
+    inputs:
+      apply:
+        description: "Deprecate only existing active Sora records after freeze checks"
+        required: true
+        default: false
+        type: boolean
+
+permissions:
+  contents: read
+
+jobs:
+  retire:
+    if: github.repository == 'AceDataCloud/MCPs' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Check freeze and retire existing records only
+        env:
+          GH_TOKEN: ${{ github.token }}
+          APPLY_RETIREMENT: ${{ inputs.apply }}
+        run: |
+          args=()
+          if [ "$APPLY_RETIREMENT" = "true" ]; then
+            args+=(--apply)
+          fi
+          python3 scripts/retire_registry_sora.py "${args[@]}" --output retirement.json
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: sora-registry-retirement
+          path: retirement.json

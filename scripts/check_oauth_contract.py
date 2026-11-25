@@ -18,11 +18,38 @@ def main() -> None:
         name = path.parts[-3]
         source = path.read_text()
         tree = ast.parse(source, filename=str(path))
-        functions = {
-            node.name
-            for node in tree.body
-            if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef))
-        }
+
+
+        # The account MCP asks AuthBackend to resolve the current account's
+        # delegable scopes for consent. Generation MCPs retain their fixed
+        # Credential bootstrap scopes.
+        expected_scopes = (
+            {"account"}
+            if name == PLATFORM_TOKEN_EXEMPTION
+            else {
+                "profile:read",
+                "applications:read",
+                "applications:write",
+                "credentials:read",
+                "credentials:write",
+            }
+        )
+        authorization_scopes = []
+        for node in ast.walk(tree):
+            if isinstance(node, ast.Dict):
+                fields = {
+                    key.value: value
+                    for key, value in zip(node.keys, node.values)
+                    if isinstance(key, ast.Constant)
+                }
+                if "response_type" in fields and "scope" in fields:
+                    value = fields["scope"]
+                    if isinstance(value, ast.Constant) and isinstance(value.value, str):
+                        authorization_scopes.append(set(value.value.split()))
+        if authorization_scopes != [expected_scopes]:
+            failures.append(
+                f"{name}: authorization must request canonical scopes for its token flow"
+            )
 
         if name == PLATFORM_TOKEN_EXEMPTION:
             if "_get_platform_token" not in source or '"name": "OAuth MCP"' in source:
@@ -35,18 +62,9 @@ def main() -> None:
 
         applicable.append(name)
         checks = {
-            "shared OAuth MCP name sent": '"name": "OAuth MCP"' in source,
-            "Global Usage application lookup": '"scope": "Global"' in source
-            and '"type": "Usage"' in source,
-            "query-first pattern": 'params={"application_id": application_id, "name": "OAuth MCP"}'
-            in source
-            or 'params={\'application_id\': application_id, \'name\': \'OAuth MCP\'}'
-            in source,
-            "arbitrary selector removed": "_is_reusable_credential" not in source,
-            "per-server managed key removed": "managed_key" not in source
-            and "_managed_credential_key" not in functions,
-            "nested credential fallback removed": "app_creds" not in source
-            and "app_credentials" not in source,
+            "server-bound credential endpoint": "/credentials/hosted-mcp/" in source,
+            "Global Usage application lookup": '"scope": "Global"' in source,
+            "no shared-token name reuse": '"name": "OAuth MCP"' not in source,
         }
         for label, passed in checks.items():
             if not passed:

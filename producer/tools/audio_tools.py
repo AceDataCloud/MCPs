@@ -41,8 +41,8 @@ async def producer_generate_music(
     sound_strength: Annotated[
         float | None,
         Field(
-            description="Creative control for how strongly the sound/style drives the generation. Range 0-1.",
-            ge=0.0,
+            description="Creative control for how strongly the sound/style drives the generation. Range 0.2-1.",
+            ge=0.2,
             le=1.0,
         ),
     ] = None,
@@ -118,11 +118,11 @@ async def producer_generate_custom_music(
         Field(
             description="Song lyrics with section markers. Use [Verse], [Chorus], [Pre-Chorus], [Bridge], [Outro], [Intro] to structure the song. Example:\n[Verse 1]\nWalking down the empty street\nRain is falling at my feet\n\n[Chorus]\nBut I keep moving on\nUntil the break of dawn"
         ),
-    ],
+    ] = "",
     title: Annotated[
         str,
-        Field(description="Title of the song. Keep it concise and memorable."),
-    ],
+        Field(description="Optional title of the song. Keep it concise and memorable."),
+    ] = "",
     prompt: Annotated[
         str,
         Field(
@@ -152,8 +152,8 @@ async def producer_generate_custom_music(
     sound_strength: Annotated[
         float | None,
         Field(
-            description="Creative control for how strongly the sound/style drives the generation. Range 0-1.",
-            ge=0.0,
+            description="Creative control for how strongly the sound/style drives the generation. Range 0.2-1.",
+            ge=0.2,
             le=1.0,
         ),
     ] = None,
@@ -197,6 +197,9 @@ async def producer_generate_custom_music(
     Returns:
         Task ID and generated audio information including URLs, title, lyrics, and duration.
     """
+    if not instrumental and not lyric.strip():
+        raise ValueError("lyric is required when instrumental is false")
+
     payload: dict = {
         "action": "generate",
         "custom": True,
@@ -235,7 +238,8 @@ async def producer_extend_music(
     continue_at: Annotated[
         float,
         Field(
-            description="Timestamp in seconds where to start the extension. For example, 120.5 means continue from 2 minutes and 0.5 seconds into the song."
+            description="Positive timestamp in seconds where to start the extension. For example, 120.5 means continue from 2 minutes and 0.5 seconds into the song.",
+            gt=0,
         ),
     ],
     lyric: Annotated[
@@ -254,6 +258,9 @@ async def producer_extend_music(
         ProducerModel,
         Field(description="Model version to use for the extension."),
     ] = DEFAULT_MODEL,
+    instrumental: Annotated[
+        bool, Field(description="Generate an instrumental extension. Otherwise lyric is required.")
+    ] = False,
     callback_url: Annotated[
         str | None,
         Field(description="Webhook callback URL for asynchronous notifications."),
@@ -278,10 +285,17 @@ async def producer_extend_music(
     Returns:
         Task ID and the extended audio information.
     """
+    if continue_at <= 0:
+        raise ValueError("continue_at must be greater than 0")
+    if not instrumental and not lyric.strip():
+        raise ValueError("lyric is required when instrumental is false")
+
     payload: dict = {
         "action": "extend",
         "audio_id": audio_id,
         "continue_at": continue_at,
+        "custom": bool(lyric) or instrumental,
+        "instrumental": instrumental,
         "model": model,
         "callback_url": callback_url,
     }
@@ -551,6 +565,7 @@ async def producer_replace_section(
 
     if lyric:
         payload["lyric"] = lyric
+        payload["custom"] = True
     if prompt:
         payload["prompt"] = prompt
     if async_ is not None:

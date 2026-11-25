@@ -23,8 +23,19 @@ It lets you automate Discord operations from your AI client (Claude, Cursor, etc
 
 ## Prerequisites
 
-You need a running Discord Agent Proxy instance. Deploy one at:
+Create a Discord Agent Proxy application and activate a subscription at:
 https://platform.acedata.cloud/console/applications
+
+Enter your Discord account credentials and deploy. Instance resources are configured
+automatically; no instance size selection is needed. In Overview, check the Discord
+account card for connection status, the MCP endpoint, and the access token. A running
+container does not guarantee the Discord account is connected.
+
+Use the Documentation tab to inspect all 14 REST operations and test GET /api/whoami,
+or call discord_whoami after configuring this MCP server. Confirm the account before
+sending messages. Sending, editing, and deleting messages affects the real account;
+confirm the target and content before testing. OpenAPI downloads include the instance
+address but not the access token. Use Redeploy in Overview to change account credentials.
 
 ⚠️ **Warning**: Automating a personal Discord account (self-bot) violates Discord's Terms
 of Service. Use a dedicated account and avoid high-frequency or mass-messaging behavior.

@@ -37,5 +37,10 @@ Tasks:
 - minimax_get_tasks_batch
 - minimax_delete_task
 
-Generation tools wait for completion by default. Set async to true (or provide callback_url) to return a task_id immediately, then poll it with minimax_get_task.
+MCP generation tools default async to true and return a task_id immediately.
+Call minimax_get_task with that ID until status is succeeded, failed, or cancelled.
+Only present the video URL after succeeded; for failed or cancelled, inspect the error.
+A task_id or HTTP 200 means submission was accepted, not that the video is ready.
+Set async to false only when the client can wait for the complete result.
+The HTTP API defaults async to false, unlike these MCP tools.
 """

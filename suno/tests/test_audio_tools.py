@@ -3,6 +3,7 @@
 from unittest.mock import AsyncMock, patch
 
 import pytest
+from mcp.server.fastmcp.exceptions import ToolError
 
 from core.server import mcp
 from tools.audio_tools import (
@@ -12,6 +13,125 @@ from tools.audio_tools import (
     suno_remaster_music,
     suno_replace_section,
 )
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("name", ["suno_extend_music", "suno_upload_extend"])
+async def test_extension_preserves_fractional_boundary_and_rejects_zero(name, mock_audio_response):
+    with patch(
+        "tools.audio_tools.client.generate_audio", new=AsyncMock(return_value=mock_audio_response)
+    ) as request:
+        await mcp.call_tool(
+            name, {"audio_id": "audio-1", "lyric": "new section", "continue_at": 30.792}
+        )
+        assert request.await_args.kwargs["continue_at"] == 30.792
+        request.reset_mock()
+        with pytest.raises(ToolError):
+            await mcp.call_tool(
+                name, {"audio_id": "audio-1", "lyric": "new section", "continue_at": 0}
+            )
+        request.assert_not_awaited()
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize(
+    "name,arguments",
+    [
+        ("suno_samples_music", {}),
+        ("suno_samples_music", {"samples_start": -1, "samples_end": 2}),
+        ("suno_samples_music", {"samples_start": 2, "samples_end": 2}),
+        ("suno_replace_section", {"replace_section_start": -1, "replace_section_end": 2}),
+        ("suno_replace_section", {"replace_section_start": 2, "replace_section_end": 1}),
+    ],
+)
+async def test_invalid_intervals_never_submit(name, arguments):
+    with patch("tools.audio_tools.client.generate_audio", new=AsyncMock()) as request:
+        with pytest.raises(ToolError):
+            await mcp.call_tool(name, {"audio_id": "audio-1", **arguments})
+        request.assert_not_awaited()
+
+
+@pytest.mark.asyncio
+async def test_sample_fractional_interval_and_replacement_exclusions(mock_audio_response):
+    with patch(
+        "tools.audio_tools.client.generate_audio", new=AsyncMock(return_value=mock_audio_response)
+    ) as request:
+        await mcp.call_tool("suno_samples_music", {"audio_id": "audio-1", "samples_end": 30.792})
+        assert request.await_args.kwargs["samples_start"] == 0
+        assert request.await_args.kwargs["samples_end"] == 30.792
+        await mcp.call_tool(
+            "suno_replace_section",
+            {
+                "audio_id": "audio-1",
+                "replace_section_start": 0,
+                "replace_section_end": 30.792,
+                "negative_tags": "distortion",
+            },
+        )
+        assert request.await_args.kwargs["negative_tags"] == "distortion"
+        assert request.await_args.kwargs["replace_section_start"] == 0
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("instrumental", [True, False])
+async def test_inspo_forwards_voice_and_lyric_controls(instrumental, mock_audio_response):
+    with patch(
+        "tools.audio_tools.client.generate_audio", new=AsyncMock(return_value=mock_audio_response)
+    ) as request:
+        await mcp.call_tool(
+            "suno_generate_inspo",
+            {
+                "audio_urls": ["https://example.com/authorized.wav"],
+                "instrumental": instrumental,
+                "persona_id": "voice-1",
+                "custom": True,
+                "lyric": "",
+                "lyric_prompt": "about spring",
+                "audio_weight": 0,
+            },
+        )
+    payload = request.await_args.kwargs
+    assert payload["instrumental"] is instrumental
+    assert payload["persona_id"] == "voice-1"
+    assert payload["custom"] is True
+    assert payload["lyric"] == ""
+    assert payload["lyric_prompt"] == "about spring"
+    assert payload["audio_weight"] == 0
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("urls", [[], ["https://example.com/authorized.wav"] * 5])
+async def test_inspo_reference_count_is_validated(urls):
+    with patch("tools.audio_tools.client.generate_audio", new=AsyncMock()) as request:
+        with pytest.raises(ToolError):
+            await mcp.call_tool("suno_generate_inspo", {"audio_urls": urls})
+        request.assert_not_awaited()
+
+
+class TestCoverPersona:
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize("tool_name", ["suno_cover_music", "suno_upload_cover"])
+    @pytest.mark.parametrize("persona_id", [None, "persona-id-456"])
+    async def test_schema_and_dispatch(self, tool_name, persona_id, mock_audio_response):
+        tool = next(tool for tool in await mcp.list_tools() if tool.name == tool_name)
+        assert "persona_id" not in tool.inputSchema["required"]
+        assert "same service channel" in tool.inputSchema["properties"]["persona_id"]["description"]
+        arguments = {"audio_id": "audio-id-1"}
+        if persona_id is not None:
+            arguments["persona_id"] = persona_id
+        with patch(
+            "tools.audio_tools.client.generate_audio",
+            new=AsyncMock(return_value=mock_audio_response),
+        ) as request:
+            await mcp.call_tool(tool_name, arguments)
+        payload = request.await_args.kwargs
+        assert payload["action"] == ("cover" if tool_name == "suno_cover_music" else "upload_cover")
+        assert payload["audio_id"] == arguments["audio_id"]
+        if persona_id is None:
+            assert "persona_id" not in payload
+        else:
+            assert payload["persona_id"] == persona_id
+        assert "vocal_gender" not in payload
 
 
 class TestInspoTool:
@@ -108,19 +228,37 @@ class TestCustomNegativeTags:
     """Tests for excluded styles on custom generation."""
 
     @pytest.mark.asyncio
-    async def test_negative_tags_are_forwarded(self, mock_audio_response):
+    @pytest.mark.parametrize("negative_tags", ["metal, distortion", "distortion, " * 200])
+    async def test_negative_tags_are_forwarded(self, mock_audio_response, negative_tags):
         with patch(
             "tools.audio_tools.client.generate_audio",
             new=AsyncMock(return_value=mock_audio_response),
         ) as mock_generate:
             await suno_generate_custom_music(
                 lyric="[Verse]\nhello",
-                negative_tags="metal, distortion",
+                negative_tags=negative_tags,
             )
 
         payload = mock_generate.await_args.kwargs
-        assert payload["negative_tags"] == "metal, distortion"
+        assert payload["custom"] is True
+        assert payload["negative_tags"] == negative_tags
         assert "style_negative" not in payload
+
+    @pytest.mark.asyncio
+    async def test_negative_tags_schema_has_no_fixed_limit(self, mock_audio_response):
+        tools = {tool.name: tool for tool in await mcp.list_tools()}
+        schema = tools["suno_generate_custom_music"].inputSchema["properties"]["negative_tags"]
+        assert "maxLength" not in schema
+        assert "no fixed character limit" in schema["description"]
+        negative_tags = "distortion, " * 200
+
+        with patch(
+            "tools.audio_tools.client.generate_audio",
+            new=AsyncMock(return_value=mock_audio_response),
+        ) as mock_generate:
+            await mcp.call_tool("suno_generate_custom_music", {"negative_tags": negative_tags})
+
+        assert mock_generate.await_args.kwargs["negative_tags"] == negative_tags
 
     @pytest.mark.asyncio
     async def test_empty_negative_tags_are_omitted(self, mock_audio_response):
@@ -195,23 +333,101 @@ class TestCustomDuration:
         assert "duration" not in mock_generate.await_args.kwargs
 
     @pytest.mark.asyncio
-    async def test_duration_is_not_range_or_model_gated(self, mock_audio_response):
-        """Any value on any model is forwarded as-is; the API owns the rules."""
+    async def test_duration_is_not_model_gated(self, mock_audio_response):
         with patch(
             "tools.audio_tools.client.generate_audio",
             new=AsyncMock(return_value=mock_audio_response),
         ) as mock_generate:
-            await suno_generate_custom_music(
-                lyric="[Verse]\nhello",
-                title="Long Take",
-                model="chirp-v4",
-                duration=900,
+            await mcp.call_tool(
+                "suno_generate_custom_music",
+                {
+                    "lyric": "[Verse]\nhello",
+                    "model": "chirp-v4",
+                    "duration": 60,
+                },
             )
 
-        assert mock_generate.await_args.kwargs["duration"] == 900
+        assert mock_generate.await_args.kwargs["duration"] == 60
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize("duration", [9, 361, 60.5])
+    async def test_invalid_duration_fails_before_submission(self, duration):
+        with patch("tools.audio_tools.client.generate_audio", new=AsyncMock()) as request:
+            with pytest.raises(ToolError):
+                await mcp.call_tool("suno_generate_custom_music", {"duration": duration})
+            request.assert_not_awaited()
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize(
+    "name,credits",
+    [
+        ("suno_generate_lyrics", "0.08 Credits"),
+        ("suno_create_voice", "0.15 Credits"),
+        ("suno_stems_music", "0.56 Credits"),
+    ],
+)
+async def test_tool_descriptions_state_success_only_request_pricing(name, credits):
+    tools = {tool.name: tool for tool in await mcp.list_tools()}
+    description = tools[name].description
+    assert credits in description
+    assert "per request" in description or "each" in description
+    assert "failed requests are not charged" in description.replace("\n    ", " ")
 
 
 class TestReplaceSectionResultMode:
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize(
+        "fields",
+        [
+            {"lyric": "Local new words", "prompt": "Local new words"},
+            {"lyric": "Local new words"},
+            {"prompt": "Local new words"},
+            {"prompt": ""},
+            {},
+        ],
+    )
+    async def test_local_lyrics_and_optional_prompt_dispatch(self, fields, mock_audio_response):
+        with patch(
+            "tools.audio_tools.client.generate_audio",
+            new=AsyncMock(return_value=mock_audio_response),
+        ) as request:
+            await mcp.call_tool(
+                "suno_replace_section",
+                {
+                    "audio_id": "audio-1",
+                    "replace_section_start": 30.792,
+                    "replace_section_end": 50.5,
+                    **fields,
+                },
+            )
+
+        payload = request.await_args.kwargs
+        assert payload["audio_id"] == "audio-1"
+        assert payload["replace_section_start"] == 30.792
+        assert payload["replace_section_end"] == 50.5
+        assert payload["replace_section_result_mode"] == "full_song"
+        for key in ("lyric", "prompt"):
+            if key in fields:
+                assert payload[key] == fields[key]
+            else:
+                assert key not in payload
+        assert payload.get("custom") is (True if "lyric" in fields else None)
+        assert "duration" not in payload
+        request.assert_awaited_once()
+
+    @pytest.mark.asyncio
+    async def test_replacement_schema_explains_local_input_and_result_limits(self):
+        tools = {tool.name: tool for tool in await mcp.list_tools()}
+        tool = tools["suno_replace_section"]
+        properties = tool.inputSchema["properties"]
+        assert "prompt" not in tool.inputSchema["required"]
+        assert properties["prompt"]["default"] is None
+        assert "same text as lyric" in properties["prompt"]["description"]
+        assert "not the whole song" in properties["lyric"]["description"]
+        assert "length may change" in properties["replace_section_result_mode"]["description"]
+        assert "not a transcript" in tool.description
+
     @pytest.mark.asyncio
     async def test_fastmcp_dispatch_maps_openapi_parameter_name(
         self, mock_audio_response: dict[str, object]

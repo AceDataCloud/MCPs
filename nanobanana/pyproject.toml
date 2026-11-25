@@ -1,8 +1,8 @@
 [project]
 name = "mcp-nanobanana-pro"
 version = "2026.4.5.0"
-description = "MCP Server for NanoBanana AI Image Generation via AceDataCloud API"
-readme = "README.md"
+description = "Nano Banana (NanoBanana) image generation and editing by Ace Data Cloud via MCP"
+readme = "README.pypi.md"
 license = { text = "MIT" }
 requires-python = ">=3.10"
 authors = [
@@ -24,6 +24,10 @@ keywords = [
     "llm",
     "claude",
     "google",
+    "nano banana",
+    "image-generation",
+    "image-editing",
+    "acedatacloud",
 ]
 classifiers = [
     "Development Status :: 4 - Beta",
@@ -43,6 +47,8 @@ dependencies = [
     "python-dotenv>=1.0.0",
     "pydantic>=2.0.0",
     "loguru>=0.7.0",
+    "redis>=5.0.0,<7",
+    "cryptography>=42.0.0",
 ]
 
 [project.optional-dependencies]
@@ -70,7 +76,7 @@ mcp-nanobanana-pro = "main:main"
 
 [project.urls]
 Homepage = "https://github.com/AceDataCloud/NanoBananaMCP"
-Documentation = "https://platform.acedata.cloud/documents/nano-banana-mcp"
+Documentation = "https://platform.acedata.cloud/documents/nano-banana-mcp?utm_source=pypi&utm_medium=referral&utm_campaign=evergreen"
 Repository = "https://github.com/AceDataCloud/NanoBananaMCP"
 Issues = "https://github.com/AceDataCloud/NanoBananaMCP/issues"
 Changelog = "https://github.com/AceDataCloud/NanoBananaMCP/blob/main/CHANGELOG.md"
@@ -84,12 +90,17 @@ packages = ["core", "tools", "prompts", "main.py"]
 
 [tool.hatch.build.targets.sdist]
 include = [
+    "goose/",
+    ".goose-plugin/",
+    ".mcp.json",
+    "kilo/",
     "core/",
     "tools/",
     "prompts/",
     "tests/",
     "main.py",
     "README.md",
+    "README.pypi.md", "readme/",
     "LICENSE",
     "CHANGELOG.md",
     ".env.example",

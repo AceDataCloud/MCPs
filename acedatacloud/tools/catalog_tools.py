@@ -7,6 +7,7 @@ lookup here uses the list endpoints with the filters that actually work:
 """
 
 import re
+from decimal import Decimal, InvalidOperation
 from typing import Annotated, Any
 
 from pydantic import Field
@@ -83,23 +84,88 @@ async def acedatacloud_get_pricing(
         Field(description="Service UUID or alias to price (e.g. 'suno')."),
     ],
 ) -> str:
-    """Get a service's pricing: the billing ``unit`` (Count/Token/MB/GB/Credit),
-    ``free_amount`` and the display ``cost`` rules. No token required.
+    """Get billing unit, free amount and display cost rules. Public contact-only
+    datasets also return pricing_mode and any reference_quote, not checkout prices.
+    No token required.
     """
     try:
         svc = await _resolve_service(service)
         if not svc:
             return error_json("Not Found", f"No service matched '{service}'.")
+        pricing = {
+            "service_id": svc.get("id"),
+            "alias": svc.get("alias"),
+            "title": svc.get("title"),
+            "type": svc.get("type"),
+            "unit": svc.get("unit"),
+            "free_amount": svc.get("free_amount"),
+            "cost": svc.get("cost"),
+        }
+        metadata = svc.get("metadata") or {}
+        if (
+            svc.get("type") == "Dataset"
+            and svc.get("private") is False
+            and metadata.get("pricing_mode") == "contact_only"
+        ):
+            pricing["pricing_mode"] = metadata["pricing_mode"]
+            quote = metadata.get("reference_quote")
+            if quote is not None:
+                pricing["reference_quote"] = {
+                    key: quote[key]
+                    for key in ("currency", "min_amount", "max_amount", "unit", "status")
+                    if key in quote
+                }
+        return dumps(pricing)
+    except PlatformError as error:
+        return error_json(error.code, error.message)
+
+
+@mcp.tool()
+async def acedatacloud_get_public_usage_packages(
+    service: Annotated[
+        str,
+        Field(description="Service UUID or exact alias whose public Usage packages are needed."),
+    ],
+) -> str:
+    """Get one service's public Usage packages for Credit-to-USD pricing.
+
+    The pricing reader returns Credit cost rules, but not the package
+    amount/price pairs. Package ladders can differ between services, so the
+    generic model catalog's ladder must not be substituted for this service.
+    Fail closed if the public service detail cannot be read.
+    """
+    try:
+        svc = await _resolve_service(service)
+        if not svc:
+            return error_json("Not Found", f"No service matched '{service}'.")
+        detail = await client.get_public(f"/services/{svc['id']}/")
+        rates = detail.get("packages") if isinstance(detail, dict) else None
+        if not isinstance(rates, list):
+            return error_json(
+                "Unavailable", "This service's public Usage packages are unavailable."
+            )
+        packages = []
+        for rate in rates:
+            if (
+                not isinstance(rate, dict)
+                or rate.get("private") is True
+                or rate.get("type") != "Usage"
+            ):
+                continue
+            try:
+                amount = Decimal(str(rate["amount"]))
+                price = Decimal(str(rate["price"]))
+            except (KeyError, InvalidOperation, TypeError, ValueError):
+                continue
+            if not amount.is_finite() or not price.is_finite() or amount <= 0 or price <= 0:
+                continue
+            packages.append({"amount": str(amount), "price": str(price)})
+        if not packages:
+            return error_json(
+                "Unavailable", "No positive public Usage packages were returned for this service."
+            )
         return dumps(
-            {
-                "service_id": svc.get("id"),
-                "alias": svc.get("alias"),
-                "title": svc.get("title"),
-                "type": svc.get("type"),
-                "unit": svc.get("unit"),
-                "free_amount": svc.get("free_amount"),
-                "cost": svc.get("cost"),
-            }
+            {"source": "public_service_detail", "service_id": svc["id"], "packages": packages}
         )
     except PlatformError as error:
         return error_json(error.code, error.message)

@@ -29,7 +29,7 @@ async def aichat_create_conversation(
         Field(
             description=(
                 "The model to use for generating the answer. Options include gpt-4.1, gpt-4o, "
-                "gpt-5, o1, o3, o4-mini, deepseek-r1, deepseek-v3, grok-3, glm-4.7, and many "
+                "gpt-5, o1, o3, o4-mini, deepseek-v4.1-flash, deepseek-v4-pro, grok-3, glm-4.7, and many "
                 "more. Default is gpt-4.1."
             )
         ),
@@ -146,7 +146,11 @@ async def aichat_create_conversation_v2(
     ] = None,
     max_turns: Annotated[
         int | None,
-        Field(ge=1, description="Maximum number of turns for conversation history."),
+        Field(
+            ge=1,
+            le=500,
+            description="Maximum agent iterations for this request (1–500); defaults to 500 when omitted.",
+        ),
     ] = None,
     async_: Annotated[
         bool | None,

@@ -1,0 +1,22 @@
+{
+  "as_of": "2026-10-18",
+  "source_type": "official_doc",
+  "files": [
+    {
+      "file": "marketplace-official.png",
+      "source_url": "https://resources.jetbrains.com/help/img/idea/2026.2/plugins_settings.png",
+      "official_page_url": "https://www.jetbrains.com/help/idea/managing-plugins.html",
+      "date": "2026-10-18 download; official capture date not disclosed",
+      "sha256": "06c8c91912e2cd587865d00213773fb4b034c7a3c8259a02af13c2ab624176ec",
+      "limits": "Official 2026.2 reference screenshot, not the new Ace service panel or a successful Ace request."
+    },
+    {
+      "file": "mcp-http-official.png",
+      "source_url": "https://resources.jetbrains.com/help/img/idea/2026.2/ai_mcp_server_parameters_http.png",
+      "official_page_url": "https://www.jetbrains.com/help/ai-assistant/mcp.html",
+      "date": "2026-10-18 download; official capture date not disclosed",
+      "sha256": "c99fe725f3427b99fd270b657b65b8c9b97bef010418199f842b81906f094819",
+      "limits": "Official 2026.2 reference screenshot, not the new Ace service panel or a successful Ace request."
+    }
+  ]
+}

@@ -1,5 +1,6 @@
 """Async HTTP client for the AceDataCloud platform management API."""
 
+import base64
 import contextvars
 from dataclasses import dataclass
 from typing import Any
@@ -207,12 +208,14 @@ class PlatformClient:
         timeout: float | None = None,
         auth_required: bool = True,
         follow_redirects: bool = False,
+        display_endpoint: str | None = None,
     ) -> httpx.Response:
         url = f"{self.base_url}/api/v1{endpoint}"
         request_timeout = timeout or self.timeout
         clean_params = _clean_params(params)
 
-        logger.info(f"{method} {url}")
+        logged_endpoint = display_endpoint or endpoint
+        logger.info(f"{method} {self.base_url}/api/v1{logged_endpoint}")
         if json_body is not None:
             logger.debug("JSON body configured (values redacted from logs)")
 
@@ -233,13 +236,88 @@ class PlatformClient:
             except httpx.TimeoutException as error:
                 logger.error(f"Request timeout after {request_timeout}s")
                 raise PlatformTimeoutError(
-                    f"Request to {endpoint} timed out after {request_timeout}s"
+                    f"Request to {logged_endpoint} timed out after {request_timeout}s"
                 ) from error
             except PlatformError:
                 raise
             except Exception as error:
                 logger.error(f"Request error: {type(error).__name__}")
                 raise PlatformAPIError(message=str(error)) from error
+
+    async def request_payload(
+        self,
+        method: str,
+        endpoint: str,
+        *,
+        params: dict[str, Any] | None = None,
+        json_body: dict[str, Any] | None = None,
+        auth_required: bool = True,
+        display_endpoint: str | None = None,
+    ) -> Any:
+        """Return JSON, a redirect link, or a bounded downloadable artifact."""
+        response = await self._send(
+            method,
+            endpoint,
+            params=params,
+            json_body=json_body,
+            auth_required=auth_required,
+            display_endpoint=display_endpoint,
+        )
+        if response.status_code == 204 or not response.content and not response.is_redirect:
+            return None
+        if response.is_redirect:
+            return {
+                "download_url": response.headers.get("location"),
+                "status_code": response.status_code,
+            }
+        try:
+            return response.json()
+        except ValueError:
+            if len(response.content) > 2 * 1024 * 1024:
+                raise PlatformAPIError(
+                    "Artifact exceeds the 2 MiB MCP limit",
+                    code="response_too_large",
+                    status_code=413,
+                ) from None
+            content_type = response.headers.get("content-type", "application/octet-stream")
+            return {
+                "content_type": content_type,
+                "filename": _content_disposition_filename(
+                    response.headers.get("content-disposition")
+                ),
+                "size_bytes": len(response.content),
+                "content_base64": base64.b64encode(response.content).decode("ascii"),
+            }
+
+    async def upload_file(
+        self,
+        endpoint: str,
+        filename: str,
+        content: bytes,
+        content_type: str,
+        fields: dict[str, Any] | None = None,
+    ) -> Any:
+        """Upload caller-provided bytes to a fixed authenticated upload route."""
+        if len(content) > 2 * 1024 * 1024:
+            raise PlatformAPIError(
+                "File exceeds the 2 MiB MCP limit", code="request_too_large", status_code=413
+            )
+        headers = self._get_headers()
+        headers.pop("content-type", None)
+        async with httpx.AsyncClient(follow_redirects=False) as http_client:
+            try:
+                response = await http_client.post(
+                    f"{self.base_url}/api/v1{endpoint}",
+                    headers=headers,
+                    files={"file": (filename, content, content_type)},
+                    data=fields or {},
+                    timeout=self.timeout,
+                )
+                if response.status_code >= 400:
+                    self._handle_error_response(response)
+                return response.json()
+            except httpx.TimeoutException as error:
+                raise PlatformTimeoutError("Upload timed out") from error
 
     async def get(
         self,

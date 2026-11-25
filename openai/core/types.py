@@ -2,19 +2,26 @@
 
 from typing import Annotated, Literal
 
-from pydantic import Field
+from pydantic import BaseModel, ConfigDict, Field
 
 # Chat completion model options
 ChatModel = Literal[
+    "gpt-6.2-astra",
+    "gpt-6.2-sol",
+    "gpt-6.1-sol",
+    "gpt-6.1-terra",
+    "gpt-6-sol",
+    "gpt-6-luna",
+    "gpt-6-astra",
     "gpt-oss:free",
     "gpt-5.5:free",
     "gpt-5:free",
     "gpt-4.1:free",
     "gpt-4o:free",
     "gpt-4o-mini:free",
-    "gpt-6-astra",
     "gpt-5.6-luna",
     "gpt-5.6-terra",
+    "gpt-5.6-sol-fast",
     "gpt-5.6-sol",
     "gpt-5.5",
     "gpt-5.5-pro",
@@ -26,6 +33,7 @@ ChatModel = Literal[
     "gpt-5.1",
     "gpt-5.1-all",
     "gpt-5",
+    "gpt-5-pro",
     "gpt-5-mini",
     "gpt-5-nano",
     "gpt-4",
@@ -45,13 +53,22 @@ ChatModel = Literal[
     "o3-mini",
     "o3-pro",
     "o4-mini",
+    "mimo-v2.6-pro",
+    "mimo-v2.6-flash",
 ]
 
 # Responses API model options
 ResponsesModel = Literal[
+    "gpt-6.2-astra",
+    "gpt-6.2-sol",
+    "gpt-6.1-sol",
+    "gpt-6.1-terra",
+    "gpt-6-sol",
+    "gpt-6-luna",
     "gpt-6-astra",
     "gpt-5.6-luna",
     "gpt-5.6-terra",
+    "gpt-5.6-sol-fast",
     "gpt-5.6-sol",
     "gpt-5.5",
     "gpt-5.5-pro",
@@ -60,8 +77,10 @@ ResponsesModel = Literal[
     "gpt-5.4-nano",
     "gpt-5.4-pro",
     "gpt-5.1",
+    "gpt-5.2",
     "gpt-5.1-all",
     "gpt-5",
+    "gpt-5-pro",
     "gpt-5-mini",
     "gpt-5-nano",
     "gpt-4",
@@ -127,7 +146,6 @@ ResponsesModel = Literal[
 EmbeddingModel = Literal[
     "text-embedding-3-small",
     "text-embedding-3-large",
-    "text-embedding-ada-002",
 ]
 
 # Embedding encoding format options
@@ -153,12 +171,23 @@ ImageModel = Literal[
     "gpt-image-1.5",
     "gpt-image-2",
     "gpt-image-2.5-flare",
+    "gpt-image-2.6-flare",
+    "gpt-image-2.5-flare:reverse",
+    "gpt-image-2.6-flare:reverse",
+    "gpt-image-2.5-flare:official",
+    "gpt-image-2.6-flare:official",
     "gpt-image-2.5-sunburst",
+    "gpt-image-2.6-sunburst",
+    "gpt-image-2.5-sunburst:reverse",
+    "gpt-image-2.6-sunburst:reverse",
+    "gpt-image-2.5-sunburst:official",
+    "gpt-image-2.6-sunburst:official",
     "gpt-image-2:reverse",
     "gpt-image-2:official",
     "nano-banana",
     "nano-banana-2-lite",
     "nano-banana-2",
+    "nano-banana-2.1",
     "nano-banana-pro",
 ]
 
@@ -174,13 +203,23 @@ ImageSize = str
 ImageEditSize = str
 
 # Image quality options
-ImageQuality = Literal["auto", "high", "medium", "low", "hd", "standard"]
+ImageQuality = Literal["auto", "high", "medium", "low", "xhigh", "max", "hd", "standard"]
 
 # Image edit quality options
-ImageEditQuality = Literal["auto", "high", "medium", "low", "standard"]
+ImageEditQuality = Literal["auto", "high", "medium", "low", "xhigh", "max", "standard"]
 
 # Image output format options
-ImageOutputFormat = Literal["png", "jpeg", "webp"]
+ImageOutputFormat = Literal["png", "jpeg", "webp", "gif"]
+GIF_IMAGE_MODELS = frozenset(
+    {
+        "gpt-image-2.6-flare",
+        "gpt-image-2.6-flare:reverse",
+        "gpt-image-2.6-flare:official",
+        "gpt-image-2.6-sunburst",
+        "gpt-image-2.6-sunburst:reverse",
+        "gpt-image-2.6-sunburst:official",
+    }
+)
 
 # Image response format options
 ImageResponseFormat = Literal["url", "b64_json"]
@@ -194,11 +233,18 @@ ImageBackground = Literal["transparent", "opaque", "auto"]
 # Image moderation options
 ImageModeration = Literal["low", "auto"]
 
+
+class ImageMarkup(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    image_url: str
+
+
 # Image input fidelity options
 ImageInputFidelity = Literal["high", "low"]
 
 # Chat reasoning effort options
-ReasoningEffort = Literal["minimal", "low", "medium", "high"]
+ReasoningEffort = Literal["minimal", "low", "medium", "high", "xhigh", "max"]
 
 # Chat service tier options
 ServiceTier = Literal["auto", "default", "flex", "scale", "priority"]

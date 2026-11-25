@@ -1,6 +1,10 @@
 """Informational tools for AiChat API."""
 
+from typing import get_args
+
+from core.messages_models import MessagesModel
 from core.server import mcp
+from core.types import DEFAULT_MODEL, DEFAULT_V2_MODEL, AiChatModel, AiChatV2Model
 
 
 @mcp.tool()
@@ -13,121 +17,20 @@ async def aichat_list_models() -> str:
     Returns:
         Formatted list of available models with descriptions.
     """
-    # Last updated: 2026-09-05
-    return """# Available AiChat Models
-
-## OpenAI GPT-6 Series (latest)
-- gpt-6-astra
-
-## OpenAI GPT-5.6 Series
-- gpt-5.6-luna
-- gpt-5.6-terra
-- gpt-5.6-sol
-
-## OpenAI GPT-5 Series
-- gpt-5.5
-- gpt-5.5-pro
-- gpt-5.4
-- gpt-5.4-mini
-- gpt-5.4-nano
-- gpt-5.4-pro
-- gpt-5.2
-- gpt-5.1
-- gpt-5.1-all
-- gpt-5
-- gpt-5-mini
-- gpt-5-nano
-- gpt-5-all
-
-## OpenAI GPT-4.1 Series
-- gpt-4.1 (recommended default)
-- gpt-4.1-2025-04-14
-- gpt-4.1-mini
-- gpt-4.1-mini-2025-04-14
-- gpt-4.1-nano
-- gpt-4.1-nano-2025-04-14
-
-## OpenAI GPT-4.5 Series
-- gpt-4.5-preview
-- gpt-4.5-preview-2025-02-27
-
-## OpenAI GPT-4o Series
-- gpt-4o
-- gpt-4o-2024-05-13
-- gpt-4o-2024-08-06
-- gpt-4o-2024-11-20
-- gpt-4o-all
-- gpt-4o-image
-- gpt-4o-mini
-- gpt-4o-mini-2024-07-18
-- gpt-4o-mini-search-preview
-- gpt-4o-mini-search-preview-2025-03-11
-- gpt-4o-search-preview
-- gpt-4o-search-preview-2025-03-11
-
-## OpenAI GPT-4 Series
-- gpt-4
-- gpt-4-all
-- gpt-4-turbo
-- gpt-4-turbo-preview
-- gpt-4-vision-preview
-
-## OpenAI o-Series (Reasoning)
-- o1
-- o1-2024-12-17
-- o1-all
-- o1-mini
-- o1-mini-2024-09-12
-- o1-mini-all
-- o1-preview
-- o1-preview-2024-09-12
-- o1-preview-all
-- o1-pro
-- o1-pro-2025-03-19
-- o1-pro-all
-- o3
-- o3-2025-04-16
-- o3-all
-- o3-mini
-- o3-mini-2025-01-31
-- o3-mini-2025-01-31-high
-- o3-mini-2025-01-31-low
-- o3-mini-2025-01-31-medium
-- o3-mini-all
-- o3-mini-high
-- o3-mini-high-all
-- o3-mini-low
-- o3-mini-medium
-- o3-pro
-- o3-pro-2025-06-10
-- o4-mini
-- o4-mini-2025-04-16
-- o4-mini-all
-- o4-mini-high-all
-
-## DeepSeek
-- deepseek-r1
-- deepseek-r1-0528
-- deepseek-v3
-- deepseek-v3-250324
-- deepseek-v4-pro
-- deepseek-v4-flash
-- deepseek-v4-pro
-
-## xAI Grok
-- grok-3
-- grok-4.5
-
-## Zhipu GLM
-- glm-5.3
-- glm-5.2
-- glm-5
-- glm-5-turbo
-- glm-5.1
-- glm-4.7
-- glm-4.6
-- glm-3-turbo
-"""
+    v1_models = "\n".join(f"- {model}" for model in get_args(AiChatModel))
+    v2_models = "\n".join(f"- {model}" for model in get_args(AiChatV2Model))
+    native_models = "\n".join(f"- {model}" for model in get_args(MessagesModel))
+    return (
+        "# Available AiChat Models\n\n"
+        f"## aichat_create_conversation (default: {DEFAULT_MODEL})\n{v1_models}\n\n"
+        f"## aichat_create_conversation_v2 (default: {DEFAULT_V2_MODEL})\n{v2_models}\n\n"
+        f"## aichat_create_message (native Messages, model and max_tokens required)\n{native_models}\n\n"
+        "## Gemini endpoint coverage\n"
+        "gemini-3.8-flash is available through both tools. gemini-4-argon, gemini-4-carbon and gemini-4-hydrogen require "
+        "aichat_create_conversation_v2. Use the exact endpoint model list above.\n\n"
+        "## Kimi (AiChat v2 only)\n"
+        "Kimi models require aichat_create_conversation_v2. The default remains gpt-4.1.\n"
+    )
 
 
 @mcp.tool()
@@ -144,6 +47,12 @@ async def aichat_get_usage_guide() -> str:
     return """# AiChat Tools Usage Guide
 
 ## Available Tools
+
+### aichat_create_message
+Call the native `/v1/messages` API, including Claude Opus 5.5 and Sonnet 5.5.
+Choose `model` from this tool's list and supply `messages` and a positive `max_tokens` output budget.
+Use a General application's API token with Claude Messages API service access.
+The output budget does not describe the model's maximum context. Calls use the current application balance and are not automatically retried.
 
 ### aichat_create_conversation
 Create an AI conversation with any supported model.
@@ -215,9 +124,32 @@ aichat_create_conversation(
 ```
 aichat_create_conversation(
     question="Explain quantum entanglement.",
-    model="deepseek-r1"
+    model="deepseek-v4-pro"
 )
 ```
+
+### Use Gemini 4 Argon with AiChat v2
+```
+aichat_create_conversation_v2(
+    question="Review this code and identify its key risks.",
+    model="gemini-4-argon"
+)
+```
+
+This uses `/aichat2/conversations`, not native Gemini Generate Content or Google
+Interactions. It does not expose `max_tokens`, thinking-level or explicit-cache
+controls. The v1 tool does not accept this model; the default remains `gpt-4.1`.
+
+### Use Kimi with AiChat v2
+```
+aichat_create_conversation_v2(
+    question="Review this code and identify its key risks.",
+    model="kimi-k3.1-pro"
+)
+```
+
+`kimi-k3`, `kimi-k2.6`, and `kimi-k2.7-code` are also available in v2. This tool uses `/aichat2/conversations`,
+not `/kimi/chat/completions`; it does not expose `reasoning_effort`.
 
 ## Response Structure
 

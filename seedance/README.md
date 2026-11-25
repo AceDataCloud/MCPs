@@ -1,4 +1,6 @@
-# SeedanceMCP
+# Seedance by Ace Data Cloud
+
+[简体中文安装与首用指南](https://github.com/AceDataCloud/SeedanceMCP/blob/main/readme/README_zh_Hans.md)
 
 <!-- mcp-name: io.github.AceDataCloud/mcp-seedance -->
 
@@ -8,9 +10,187 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![MCP](https://img.shields.io/badge/MCP-Compatible-green.svg)](https://modelcontextprotocol.io)
 
-A [Model Context Protocol (MCP)](https://modelcontextprotocol.io) server for AI video generation using [ByteDance Seedance](https://seedance.ai) through the [AceDataCloud API](https://platform.acedata.cloud).
+A [Model Context Protocol (MCP)](https://modelcontextprotocol.io) server for AI video generation using [ByteDance Seedance](https://seedance.ai) through the [AceDataCloud API](https://platform.acedata.cloud?utm_source=github&utm_medium=referral&utm_campaign=evergreen).
 
 Generate AI videos directly from Claude, VS Code, or any MCP-compatible client.
+
+
+## Use Seedance in Glama
+
+Find the Ace-provided [Seedance source listing](https://glama.ai/mcp/servers/AceDataCloud/SeedanceMCP) or [remote connector](https://glama.ai/mcp/connectors/io.github.AceDataCloud/mcp-seedance). Follow the [Glama installation, API Token and first-use guide](https://github.com/AceDataCloud/SeedanceMCP/blob/main/readme/GLAMA.md). Public discovery and a successful personal connection are separate checks; generation uses your Ace account balance.
+
+## Seedance in goose
+
+Use the independent **Seedance by Ace Data Cloud** native goose plugin: [install and API Token guide](goose/README.md) · [简体中文](goose/README_zh_Hans.md). It reuses this MCP server and does not imply goose Marketplace or default-provider inclusion.
+
+## Find the Seedance integration in the official MCP Registry
+
+Open [Seedance in the official MCP Registry](https://registry.modelcontextprotocol.io/?q=io.github.AceDataCloud%2Fmcp-seedance), expand the matching `io.github.AceDataCloud` entry, and use its **Packages** or **Remotes** installation information in a client that consumes MCP catalogs. This is the Seedance integration provided by Ace Data Cloud; it is not an endorsement by the model vendor. The Registry is a directory, not the app that runs a tool.
+
+Search for `mcp-seedance` (or `io.github.AceDataCloud/mcp-seedance`) to locate the exact entry. The official Registry search currently matches server names; spaces in a display title do not create extra search aliases. If your client does not consume the catalog, use the client-specific connection instructions below and check **Applications → General application** for your token, service permissions, balance and current price. Keep the original task ID when checking asynchronous results.
+
+
+## Verify the connection before generating
+
+After installation, discover the server's tools and call `seedance_list_models` with no arguments. This reference tool returns locally defined model or action information without calling a generation API. It does **not** validate your application key, account balance, service access, or current price. Your client's Chat model can still create separate charges.
+
+To check authenticated access without creating media, query a task already owned by your application using the task-lookup tool and the **same original task ID**. If you have no existing task, stop after discovery/reference output; do not generate media just to test installation. Review [current pricing](https://platform.acedata.cloud/models?utm_source=github&utm_medium=referral&utm_campaign=evergreen) before any new generation.
+
+For missing tools, reconnect and refresh the tool list. For 401/403, check the existing application's key, service permissions, Allowed APIs, expiration and usage limit before replacing credentials. Keep a task/trace ID for other failures, never your key; do not automatically retry a paid operation.
+
+## Connect: hosted OAuth, API token, or local stdio
+
+The hosted endpoint is `https://seedance.mcp.acedata.cloud/mcp`. Choose one route for the MCP client:
+
+| Route | When to use it | Credential setup |
+|---|---|---|
+| Hosted OAuth | The client supports remote MCP OAuth | Add only the URL, then sign in to AceDataCloud and approve access. No token needs to be pasted into client configuration. |
+| Hosted API token | The client cannot finish OAuth, or you need an explicit integration credential | Send an AceDataCloud API token in the `Authorization: Bearer …` header. Keep it in a local secret store or environment variable. |
+| Local stdio | The client runs a local MCP process | Install `mcp-seedance` and pass `ACEDATACLOUD_API_TOKEN` to that process. It still calls the AceDataCloud API. |
+
+The hosted service advertises OAuth metadata and Dynamic Client Registration (DCR). **DCR registers the client application; it is not an API key.** OAuth signs you in and the client sends the resulting Bearer token; it may reuse or create an API credential for the account. Browser sign-in still requires an AceDataCloud account. The hosted service can be metered: review [current service documentation](https://platform.acedata.cloud/documents/seedance-mcp?utm_source=github&utm_medium=referral&utm_campaign=evergreen) and displayed pricing before a real operation. Do not configure both an OAuth login and a fixed `Authorization` header for the same server.
+
+### Hosted OAuth examples
+
+- **Claude and Claude Desktop chat:** Add a remote custom connector in `Customize → Connectors → Add custom connector`, enter `https://seedance.mcp.acedata.cloud/mcp`, select sign-in, and choose **Register automatically** if Claude asks how to register its OAuth client. Complete consent. Claude Desktop's local `claude_desktop_config.json` is a separate setup. [Claude connector guide](https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp).
+- **Claude Code:** `claude mcp add --transport http --scope user seedance https://seedance.mcp.acedata.cloud/mcp`, then `claude mcp login seedance`. Check `/mcp`. [Claude Code MCP guide](https://code.claude.com/docs/en/mcp).
+- **Cursor:** Add a remote server with only `https://seedance.mcp.acedata.cloud/mcp`. For a project, merge the entry below into `<project>/.cursor/mcp.json`; for personal use, use `~/.cursor/mcp.json`. [Cursor MCP guide](https://cursor.com/docs/mcp).
+- **VS Code / Copilot:** Run **MCP: Add Server**, select HTTP, enter `https://seedance.mcp.acedata.cloud/mcp`, then finish the browser sign-in. New portable workspace configs use `<project>/.mcp.json`; the VS Code-specific format below uses `<project>/.vscode/mcp.json` or the user profile. Check **MCP: List Servers**. [VS Code MCP setup](https://code.visualstudio.com/docs/agent-customization/mcp-servers).
+- **Codex:** `codex mcp add seedance --url https://seedance.mcp.acedata.cloud/mcp`, then `codex mcp login seedance`. Its user settings are in `~/.codex/config.toml`. [Official Codex MCP guide](https://developers.openai.com/codex/mcp/).
+
+Cursor project config (OAuth):
+
+```json
+{
+  "mcpServers": {
+    "seedance": {"url": "https://seedance.mcp.acedata.cloud/mcp"}
+  }
+}
+```
+
+VS Code-specific workspace config (OAuth):
+
+```json
+{
+  "servers": {
+    "seedance": {"type": "http", "url": "https://seedance.mcp.acedata.cloud/mcp"}
+  }
+}
+```
+
+### Hosted API token
+
+<!-- BEGIN TOKEN ONBOARDING -->
+1. Open [Ace Data Cloud → Applications](https://platform.acedata.cloud/console/applications?utm_source=github&utm_medium=referral&utm_campaign=evergreen). Sign in, or register an account first.
+2. Find **General application**. If it has not been created, choose **Initialize General Application**. A general key can use the services available to your account; a dedicated application's key is limited to its service. Check the required service/model access and [current pricing](https://platform.acedata.cloud/models?utm_source=github&utm_medium=referral&utm_campaign=evergreen).
+3. Copy the **API Key** from the application card, or open **Keys / Manage Keys → Create** to create a separate key for this integration. Give it a recognizable name so you can revoke or rotate it independently.
+4. When creating a key, review **Expiration Time**, **Set Usage Limitation**, and **Allowed APIs**. Enable only the restrictions you need, allow the operations you will call, then click **Create** and copy the token from the key list. Task lookup does not grant permission to submit a generation. Confirm the application's balance can cover your first request; any trial allowance is whatever your account currently displays.
+5. Copy only the token value, without quotation marks, spaces, or `Bearer `. An API Key / API Token field expects this raw value; only a manually configured HTTP `Authorization` header needs the `Bearer ` prefix. A `platform-...` account-management token cannot replace a generation API key.
+
+![Copy an application API key or open Manage Keys](https://raw.githubusercontent.com/AceDataCloud/NanoBananaDify/2522b2f57210597af2db866445319334a1677a23/_assets/tutorial/get-api-key-en.png)
+
+![Create a separately named key with optional restrictions](https://raw.githubusercontent.com/AceDataCloud/NanoBananaDify/2522b2f57210597af2db866445319334a1677a23/_assets/tutorial/create-api-key-en.png)
+
+Save the key in the client's credential store or the environment variable shown below. Never put it in a prompt, shared workflow, screenshot, or Git commit. If authentication fails, check the full copied value, application/service access, expiration, usage limit, and balance before creating another key.
+<!-- END TOKEN ONBOARDING -->
+
+A fixed Bearer header bypasses OAuth. If the header is invalid, remove it before trying browser sign-in; keep the saved credential private.
+
+For Claude Code, the shell expands the token when you add the server; treat the saved user MCP config as a secret:
+
+```bash
+export ACEDATACLOUD_API_TOKEN='YOUR_API_TOKEN'
+claude mcp add --transport http --scope user seedance https://seedance.mcp.acedata.cloud/mcp \
+  --header "Authorization: Bearer $ACEDATACLOUD_API_TOKEN"
+```
+
+For a Claude Code project config, put a variable reference in `<project>/.mcp.json` and set that variable in the environment that launches Claude Code:
+
+```json
+{
+  "mcpServers": {
+    "seedance": {
+      "type": "http",
+      "url": "https://seedance.mcp.acedata.cloud/mcp",
+      "headers": {"Authorization": "Bearer ${ACEDATACLOUD_API_TOKEN}"}
+    }
+  }
+}
+```
+
+Cursor uses a different environment-variable syntax in `~/.cursor/mcp.json` or an uncommitted project config:
+
+```json
+{
+  "mcpServers": {
+    "seedance": {
+      "url": "https://seedance.mcp.acedata.cloud/mcp",
+      "headers": {"Authorization": "Bearer ${env:ACEDATACLOUD_API_TOKEN}"}
+    }
+  }
+}
+```
+
+In VS Code, run **MCP: Open User Configuration** and merge this server plus its masked input; `${input:...}` is for VS Code's user/workspace format and is not portable to the Agent Host `.mcp.json` format:
+
+```json
+{
+  "inputs": [
+    {"id": "acedata-seedance-token", "type": "promptString", "description": "AceDataCloud API token", "password": true}
+  ],
+  "servers": {
+    "seedance": {
+      "type": "http",
+      "url": "https://seedance.mcp.acedata.cloud/mcp",
+      "headers": {"Authorization": "Bearer ${input:acedata-seedance-token}"}
+    }
+  }
+}
+```
+
+For **Cline**, use its MCP configuration UI or CLI file `~/.cline/data/settings/cline_mcp_settings.json`; its remote transport value is `streamableHttp`. For **JetBrains AI Assistant**, add a remote URL from **Settings → Tools → AI Assistant → Model Context Protocol (MCP)**. For **Zed**, use a `context_servers` entry with the URL only for OAuth or add a local Bearer header. These clients have different configuration schemas; follow their current UI rather than copying another client's JSON. [Cline](https://docs.cline.bot/mcp/mcp-overview) · [JetBrains](https://www.jetbrains.com/help/ai-assistant/mcp.html) · [Zed](https://zed.dev/docs/ai/mcp).
+
+### Local stdio
+
+Install the package and give the local process an API token:
+
+```bash
+python -m pip install mcp-seedance
+export ACEDATACLOUD_API_TOKEN='YOUR_API_TOKEN'
+mcp-seedance
+```
+
+For Claude Desktop local MCP, merge this entry into the file opened by its developer settings (`~/Library/Application Support/Claude/claude_desktop_config.json` on macOS). `uvx` requires [uv](https://docs.astral.sh/uv/) on `PATH`:
+
+```json
+{
+  "mcpServers": {
+    "seedance": {
+      "command": "uvx",
+      "args": ["mcp-seedance"],
+      "env": {"ACEDATACLOUD_API_TOKEN": "YOUR_API_TOKEN"}
+    }
+  }
+}
+```
+
+Keep this user-level file private. Self-hosted HTTP uses `mcp-seedance --transport http --port 8000`; expose it only with suitable network and TLS controls. Local execution still calls the AceDataCloud API.
+
+[Example prompt](#verify-your-first-result)
+
+### Verify your first result
+
+> Generate a short video of clouds moving over a mountain, then retrieve the completed task and final video URL.
+
+This is an example prompt, not a promised runtime or recorded success. Save the task ID, wait for terminal success, and inspect the final media.
+
+### Check before using the service
+
+1. `https://seedance.mcp.acedata.cloud/health` returning `{"status":"ok"}` checks endpoint reachability only.
+2. Confirm that the MCP client loads tools. `seedance_list_models` is a reference tool; it does not verify downstream API access or balance.
+3. If you need a full API check, call `seedance_generate_video` with your own valid input after reviewing [current service documentation](https://platform.acedata.cloud/documents/seedance-mcp?utm_source=github&utm_medium=referral&utm_campaign=evergreen) and displayed pricing. If the result contains a task ID, call `seedance_get_task` on that same ID until terminal success or failure. Do not resubmit the operation just to check progress.
+
+For **401**, check which auth route the client used and whether the token or OAuth session is valid. A **403** may mean an account permission or content moderation failure; read the returned error. Insufficient balance and downstream service failures need their own diagnosis. A listed tool or submitted task does not prove a successful result.
 
 ## Features
 
@@ -34,278 +214,6 @@ Generate AI videos directly from Claude, VS Code, or any MCP-compatible client.
 | `seedance_list_models` | List all available Seedance models with their capabilities and pricing. |
 | `seedance_list_resolutions` | List all available resolutions and aspect ratios for Seedance. |
 | `seedance_list_actions` | List all available Seedance API actions and corresponding tools. |
-
-## Quick Start
-
-### 1. Get Your API Token
-
-1. Sign up at [AceDataCloud Platform](https://platform.acedata.cloud)
-2. Go to the [API documentation page](https://platform.acedata.cloud/documents/seedance-videos)
-3. Click **"Acquire"** to get your API token
-4. Copy the token for use below
-
-### 2. Use the Hosted Server (Recommended)
-
-AceDataCloud hosts a managed MCP server — **no local installation required**.
-
-**Endpoint:** `https://seedance.mcp.acedata.cloud/mcp`
-
-All requests require a Bearer token. Use the API token from Step 1.
-
-#### Claude.ai
-
-Connect directly on [Claude.ai](https://claude.ai) with OAuth — **no API token needed**:
-
-1. Go to Claude.ai **Settings → Integrations → Add More**
-2. Enter the server URL: `https://seedance.mcp.acedata.cloud/mcp`
-3. Complete the OAuth login flow
-4. Start using the tools in your conversation
-
-#### Claude Desktop
-
-Add to your config (`~/Library/Application Support/Claude/claude_desktop_config.json` on macOS):
-
-```json
-{
-  "mcpServers": {
-    "seedance": {
-      "type": "streamable-http",
-      "url": "https://seedance.mcp.acedata.cloud/mcp",
-      "headers": {
-        "Authorization": "Bearer YOUR_API_TOKEN"
-      }
-    }
-  }
-}
-```
-
-#### Cursor / Windsurf
-
-Add to your MCP config (`.cursor/mcp.json` or `.windsurf/mcp.json`):
-
-```json
-{
-  "mcpServers": {
-    "seedance": {
-      "type": "streamable-http",
-      "url": "https://seedance.mcp.acedata.cloud/mcp",
-      "headers": {
-        "Authorization": "Bearer YOUR_API_TOKEN"
-      }
-    }
-  }
-}
-```
-
-#### VS Code (Copilot)
-
-Add to your VS Code MCP config (`.vscode/mcp.json`):
-
-```json
-{
-  "servers": {
-    "seedance": {
-      "type": "streamable-http",
-      "url": "https://seedance.mcp.acedata.cloud/mcp",
-      "headers": {
-        "Authorization": "Bearer YOUR_API_TOKEN"
-      }
-    }
-  }
-}
-```
-
-Or install the [Ace Data Cloud MCP extension](https://marketplace.visualstudio.com/items?itemName=acedatacloud.acedatacloud-mcp) for VS Code, which registers the hosted MCP servers with one-click setup.
-
-#### JetBrains IDEs
-
-1. Go to **Settings → Tools → AI Assistant → Model Context Protocol (MCP)**
-2. Click **Add** → **HTTP**
-3. Paste:
-
-```json
-{
-  "mcpServers": {
-    "seedance": {
-      "url": "https://seedance.mcp.acedata.cloud/mcp",
-      "headers": {
-        "Authorization": "Bearer YOUR_API_TOKEN"
-      }
-    }
-  }
-}
-```
-
-
-#### Claude Code
-
-Claude Code supports MCP servers natively:
-
-```bash
-claude mcp add seedance --transport http https://seedance.mcp.acedata.cloud/mcp \
-  -h "Authorization: Bearer YOUR_API_TOKEN"
-```
-
-Or add to your project's `.mcp.json`:
-
-```json
-{
-  "mcpServers": {
-    "seedance": {
-      "type": "streamable-http",
-      "url": "https://seedance.mcp.acedata.cloud/mcp",
-      "headers": {
-        "Authorization": "Bearer YOUR_API_TOKEN"
-      }
-    }
-  }
-}
-```
-
-#### Cline
-
-Add to Cline's MCP settings (`.cline/mcp_settings.json`):
-
-```json
-{
-  "mcpServers": {
-    "seedance": {
-      "type": "streamable-http",
-      "url": "https://seedance.mcp.acedata.cloud/mcp",
-      "headers": {
-        "Authorization": "Bearer YOUR_API_TOKEN"
-      }
-    }
-  }
-}
-```
-
-#### Amazon Q Developer
-
-Add to your MCP configuration:
-
-```json
-{
-  "mcpServers": {
-    "seedance": {
-      "type": "streamable-http",
-      "url": "https://seedance.mcp.acedata.cloud/mcp",
-      "headers": {
-        "Authorization": "Bearer YOUR_API_TOKEN"
-      }
-    }
-  }
-}
-```
-
-#### Roo Code
-
-Add to Roo Code MCP settings:
-
-```json
-{
-  "mcpServers": {
-    "seedance": {
-      "type": "streamable-http",
-      "url": "https://seedance.mcp.acedata.cloud/mcp",
-      "headers": {
-        "Authorization": "Bearer YOUR_API_TOKEN"
-      }
-    }
-  }
-}
-```
-
-#### Continue.dev
-
-Add to `.continue/config.yaml`:
-
-```yaml
-mcpServers:
-  - name: seedance
-    type: streamable-http
-    url: https://seedance.mcp.acedata.cloud/mcp
-    headers:
-      Authorization: "Bearer YOUR_API_TOKEN"
-```
-
-#### Zed
-
-Add to Zed's settings (`~/.config/zed/settings.json`):
-
-```json
-{
-  "language_models": {
-    "mcp_servers": {
-      "seedance": {
-        "url": "https://seedance.mcp.acedata.cloud/mcp",
-        "headers": {
-          "Authorization": "Bearer YOUR_API_TOKEN"
-        }
-      }
-    }
-  }
-}
-```
-
-#### cURL Test
-
-```bash
-# Health check (no auth required)
-curl https://seedance.mcp.acedata.cloud/health
-
-# MCP initialize
-curl -X POST https://seedance.mcp.acedata.cloud/mcp \
-  -H "Content-Type: application/json" \
-  -H "Accept: application/json" \
-  -H "Authorization: Bearer YOUR_API_TOKEN" \
-  -d '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2025-03-26","capabilities":{},"clientInfo":{"name":"test","version":"1.0"}}}'
-```
-
-### 3. Or Run Locally (Alternative)
-
-If you prefer to run the server on your own machine:
-
-```bash
-# Install from PyPI
-pip install mcp-seedance
-# or
-uvx mcp-seedance
-
-# Set your API token
-export ACEDATACLOUD_API_TOKEN="your_token_here"
-
-# Run (stdio mode for Claude Desktop / local clients)
-mcp-seedance
-
-# Run (HTTP mode for remote access)
-mcp-seedance --transport http --port 8000
-```
-
-#### Claude Desktop (Local)
-
-```json
-{
-  "mcpServers": {
-    "seedance": {
-      "command": "uvx",
-      "args": ["mcp-seedance"],
-      "env": {
-        "ACEDATACLOUD_API_TOKEN": "your_token_here"
-      }
-    }
-  }
-}
-```
-
-#### Docker (Self-Hosting)
-
-```bash
-docker pull ghcr.io/acedatacloud/mcp-seedance:latest
-docker run -p 8000:8000 ghcr.io/acedatacloud/mcp-seedance:latest
-```
-
-Clients connect with their own Bearer token — the server extracts the token from each request's `Authorization` header.
 
 ## Available Tools
 
@@ -391,7 +299,7 @@ Claude: I'll generate a video with synchronized audio.
 
 | Variable                      | Description                 | Default                          |
 | ----------------------------- | --------------------------- | -------------------------------- |
-| `ACEDATACLOUD_API_TOKEN`      | API token from AceDataCloud | **Required**                     |
+| `ACEDATACLOUD_API_TOKEN`      | Local stdio API token; hosted OAuth/client Bearer header is separate | Required for local stdio                     |
 | `ACEDATACLOUD_API_BASE_URL`   | API base URL                | `https://api.acedata.cloud`      |
 | `ACEDATACLOUD_OAUTH_CLIENT_ID`  | OAuth client ID (hosted mode) | —                           |
 | `ACEDATACLOUD_PLATFORM_BASE_URL` | Platform base URL            | `https://platform.acedata.cloud` |
@@ -512,10 +420,10 @@ SeedanceMCP/
 
 ## API Reference
 
-This server wraps the [AceDataCloud Seedance API](https://platform.acedata.cloud/documents/seedance-videos):
+This server wraps the [AceDataCloud Seedance API](https://platform.acedata.cloud/documents/seedance-videos?utm_source=github&utm_medium=referral&utm_campaign=evergreen):
 
-- [Seedance Videos API](https://platform.acedata.cloud/documents/seedance-videos) - Video generation
-- [Seedance Tasks API](https://platform.acedata.cloud/documents/seedance-tasks) - Task queries
+- [Seedance Videos API](https://platform.acedata.cloud/documents/seedance-videos?utm_source=github&utm_medium=referral&utm_campaign=evergreen) - Video generation
+- [Seedance Tasks API](https://platform.acedata.cloud/documents/seedance-tasks?utm_source=github&utm_medium=referral&utm_campaign=evergreen) - Task queries
 
 ## Contributing
 
@@ -530,7 +438,7 @@ Contributions are welcome! Please:
 ## Documentation
 
 <!-- canonical-documentation -->
-[Documentation](https://platform.acedata.cloud/documents/seedance-mcp)
+[Documentation](https://platform.acedata.cloud/documents/seedance-mcp?utm_source=github&utm_medium=referral&utm_campaign=evergreen)
 
 ## License
 
@@ -538,11 +446,19 @@ MIT License - see [LICENSE](LICENSE) for details.
 
 ## Links
 
-- [AceDataCloud Platform](https://platform.acedata.cloud)
+- [AceDataCloud Platform](https://platform.acedata.cloud?utm_source=github&utm_medium=referral&utm_campaign=evergreen)
 - [ByteDance Seedance](https://seedance.ai)
 - [Model Context Protocol](https://modelcontextprotocol.io)
 - [MCP Python SDK](https://github.com/modelcontextprotocol/python-sdk)
 
 ---
 
-Made with love by [AceDataCloud](https://platform.acedata.cloud)
+Made with love by [AceDataCloud](https://platform.acedata.cloud?utm_source=github&utm_medium=referral&utm_campaign=evergreen)
+
+## Cline setup / Cline 图文接入
+
+[Seedance by Ace Data Cloud — English guide](https://github.com/AceDataCloud/MCPs/blob/4a2fb4e17d322bc22c5742ab3a5bd48b24ec5bdc/seedance/docs/cline.md) · [完整中文图文步骤](https://github.com/AceDataCloud/MCPs/blob/4a2fb4e17d322bc22c5742ab3a5bd48b24ec5bdc/seedance/docs/cline.md#中文步骤). The Cline marketplace submission is pending review as of 2026-10-18; the guide labels the manual fallback separately. / Cline 官方目录投稿仍待审核，手动接入不等于已上架。
+
+## API parameter behavior
+
+The default model remains `doubao-seedance-2-0-260128`. Omitted controls honor inline prompt options such as `--rs`, `--rt`, and `--dur`; explicit named arguments take precedence. Without either form, defaults remain 720p, 16:9 and 5 seconds. Seedance 2.5 first/last-frame mode defaults to its required `adaptive` ratio. Both generation tools expose camera and watermark controls. Seedance 2.5 accepts up to 30 images, 10 audio references and 10 video references (50 total), including audio-only reference; 2.0 has smaller limits. Read current pricing from the service page; USD conversion depends on the credit package.

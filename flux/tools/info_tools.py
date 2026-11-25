@@ -27,19 +27,19 @@ Image Generation Models:
   Best for: Production use, higher quality requirements
 
 - flux-2-flex
-  Speed: Medium  |  Quality: High  |  Size: pixel dims (x >= 64, multiples of 32)
+  Speed: Medium  |  Quality: High  |  Size: Aspect ratios only
   Best for: Flexible Flux 2 generation with fine size control
 
 - flux-2-pro
-  Speed: Medium  |  Quality: Higher  |  Size: pixel dims (x >= 64, multiples of 32)
+  Speed: Medium  |  Quality: Higher  |  Size: Aspect ratios only
   Best for: Professional Flux 2 production output
 
 - flux-2-max
-  Speed: Slower  |  Quality: Highest  |  Size: pixel dims (x >= 64, multiples of 32)
+  Speed: Slower  |  Quality: Highest  |  Size: Aspect ratios only
   Best for: Maximum-quality Flux 2 output, final renders
 
 - flux-2-klein
-  Speed: Fast  |  Quality: Good  |  Size: pixel dims (x >= 64, multiples of 32)
+  Speed: Fast  |  Quality: Good  |  Size: Aspect ratios only
   Best for: Efficient Flux 2 generation with lower latency
 
 Context-Aware Models (Best for Editing):
@@ -56,15 +56,15 @@ Context-Aware Models (Best for Editing):
 
 Size Guide:
 ━━━━━━━━━━━
-Pixel dimensions (flux-dev, flux-2-flex/pro/max):
+Pixel presets (flux-dev/pro/2-klein):
   Square: 1024x1024
   Landscape: 1344x768, 1280x720
   Portrait: 768x1344, 720x1280
 
-Image ratios (kontext models):
+Image ratios (kontext and flux-2-flex/pro/max):
   Square: 1:1
-  Landscape: 16:9, 21:9, 4:3, 3:2, 5:4
-  Portrait: 9:16, 9:21, 3:4, 2:3, 4:5
+  Landscape: 16:9, 21:9, 4:3, 3:2
+  Portrait: 9:16, 9:21, 3:4, 2:3
 
 Recommendations:
 ━━━━━━━━━━━━━━━
@@ -95,6 +95,10 @@ Image Editing:
 - flux_edit_image: Edit existing images with text instructions
   Best with flux-kontext-pro or flux-kontext-max models.
 
+Video Generation and Utilities:
+- flux_generate_video: FLUX 3 text/image/video generation and temporary owned draft enhancement
+  Video tools return a platform task ID asynchronously by default.
+
 Task Management:
 - flux_get_task: Check status of a single generation task
 - flux_get_tasks_batch: Check status of multiple tasks at once
@@ -109,7 +113,7 @@ Workflows:
    flux_generate_image(prompt="...", size="1024x1024") → get image_url
 
 2. High Quality Generation:
-   flux_generate_image(prompt="...", model="flux-2-max", size="1024x1024")
+   flux_generate_image(prompt="...", model="flux-2-max", size="1:1")
 
 3. Image Editing:
    flux_edit_image(prompt="Change the sky to sunset", image_url="https://...", size="1:1")

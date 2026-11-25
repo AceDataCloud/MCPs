@@ -177,6 +177,10 @@ class FishClient:
             headers=request_headers,
         )
 
+    async def create_model(self, **kwargs: Any) -> dict[str, Any]:
+        """Create a persistent public voice; HTTP 201 returns its reusable _id."""
+        return await self.request("POST", "/fish/model", payload=kwargs)
+
     async def list_models(self, params: dict[str, Any] | None = None) -> dict[str, Any]:
         """List available Fish voice models."""
         logger.info("📚 Listing Fish models")

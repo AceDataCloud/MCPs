@@ -1,0 +1,16 @@
+{
+  "mcpServers": {
+    "ace-happyhorse": {
+      "type": "stdio",
+      "command": "uvx",
+      "args": [
+        "--from",
+        "mcp-happyhorse==2026.10.12.0",
+        "mcp-happyhorse"
+      ],
+      "env": {
+        "ACEDATACLOUD_API_TOKEN": "YOUR_API_TOKEN"
+      }
+    }
+  }
+}

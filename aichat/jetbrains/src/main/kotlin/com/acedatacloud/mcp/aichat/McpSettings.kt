@@ -30,11 +30,11 @@ class McpSettings : PersistentStateComponent<McpSettings.State> {
 
     fun getStdioConfig(): String {
         val token = myState.apiToken.ifEmpty { "YOUR_API_TOKEN" }
-        return """{"mcpServers": {"aichat": {"command": "uvx", "args": ["mcp-aichat"], "env": {"ACEDATACLOUD_API_TOKEN": "$$token"}}}}"""
+        return """{"mcpServers": {"aichat": {"command": "uvx", "args": ["mcp-aichat"], "env": {"ACEDATACLOUD_API_TOKEN": "$token"}}}}"""
     }
 
     fun getHttpConfig(): String {
         val token = myState.apiToken.ifEmpty { "YOUR_API_TOKEN" }
-        return """{"mcpServers": {"aichat": {"url": "https://aichat.mcp.acedata.cloud/mcp", "headers": {"Authorization": "Bearer $$token"}}}}"""
+        return """{"mcpServers": {"aichat": {"url": "https://aichat.mcp.acedata.cloud/mcp", "headers": {"Authorization": "Bearer $token"}}}}"""
     }
 }

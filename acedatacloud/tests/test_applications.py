@@ -31,23 +31,27 @@ async def test_list_applications_sends_repeated_filters_and_subject():
     respx.get(f"{API}/platform-tokens/me/").mock(
         return_value=httpx.Response(200, json={"id": "user-1"})
     )
+    application = {"id": APP_ID, "allow_overdraft": True, "remaining_amount": -1.25}
     route = respx.get(f"{API}/applications/").mock(
-        return_value=httpx.Response(200, json={"count": 0, "items": []})
+        return_value=httpx.Response(200, json={"count": 1, "items": [application]})
     )
     set_request_api_token("platform-token")
     try:
-        await acedatacloud_list_applications(
-            service_id=["svc-1", "svc-2"],
-            application_type=["Usage", "Period"],
-            scope=["Individual", "Global"],
-            affiliation=["owner", "granted"],
-            ordering="-created_at",
-            limit=10,
-            offset=20,
+        result = json.loads(
+            await acedatacloud_list_applications(
+                service_id=["svc-1", "svc-2"],
+                application_type=["Usage", "Period"],
+                scope=["Individual", "Global"],
+                affiliation=["owner", "granted"],
+                ordering="-created_at",
+                limit=10,
+                offset=20,
+            )
         )
     finally:
         set_request_api_token(None)
 
+    assert result["items"] == [application]
     params = route.calls[0].request.url.params
     assert params.get_list("service_id") == ["svc-1", "svc-2"]
     assert params.get_list("type") == ["Usage", "Period"]
@@ -88,9 +92,10 @@ async def test_create_application_confirmation_and_body():
 @respx.mock
 @pytest.mark.asyncio
 async def test_application_reads_use_exact_routes():
+    application = {"id": APP_ID, "allow_overdraft": True, "remaining_amount": -1.25}
     routes = {
         "detail": respx.get(f"{API}/applications/{APP_ID}").mock(
-            return_value=httpx.Response(200, json={"id": APP_ID})
+            return_value=httpx.Response(200, json=application)
         ),
         "status": respx.get(f"{API}/applications/{APP_ID}/deployment-status/").mock(
             return_value=httpx.Response(200, json={"deployment": {"status": "ready"}})
@@ -102,7 +107,7 @@ async def test_application_reads_use_exact_routes():
             return_value=httpx.Response(200, json={"events": []})
         ),
     }
-    await acedatacloud_get_application(APP_ID)
+    assert json.loads(await acedatacloud_get_application(APP_ID)) == application
     await acedatacloud_get_deployment_status(APP_ID)
     await acedatacloud_get_deployment_logs(APP_ID, tail=500, since="5m", container="worker")
     await acedatacloud_get_deployment_events(APP_ID)
@@ -167,7 +172,7 @@ async def test_all_application_mutation_previews_make_zero_http_calls():
         await acedatacloud_update_application_balance_policy(APP_ID, True),
         await acedatacloud_save_deployment_config(APP_ID, {"secret": "value"}),
         await acedatacloud_deploy_application(APP_ID, helm_overrides={"token": "value"}),
-        await acedatacloud_control_deployment(APP_ID, "stop"),
+        await acedatacloud_control_deployment(APP_ID, "restart"),
         await acedatacloud_teardown_deployment(APP_ID, force=True),
     ]
     assert all(json.loads(result)["status"] == "confirmation_required" for result in results)

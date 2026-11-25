@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+- Preserve supplied lyrics in extension and section replacement requests by selecting custom mode.
+- Allow instrumental extensions and validate the conditional lyric requirement before submission.
+
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),

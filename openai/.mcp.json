@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "gpt-image": {
+      "command": "uvx",
+      "args": [
+        "--from",
+        "mcp-openai-pro==2026.10.19.3",
+        "mcp-openai-pro",
+        "--profile",
+        "gpt-image"
+      ]
+    }
+  }
+}

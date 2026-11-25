@@ -7,7 +7,7 @@ from typing import Annotated, Any, Literal
 from pydantic import Field
 
 from core.client import client
-from core.exceptions import OpenAIAPIError, OpenAIAuthError
+from core.exceptions import format_tool_error
 from core.server import mcp
 from core.utils import _task_outcome, format_task_result
 
@@ -93,12 +93,8 @@ async def openai_get_task(
 
         return format_task_result(result)
 
-    except OpenAIAuthError as e:
-        return json.dumps({"error": "Authentication Error", "message": e.message})
-    except OpenAIAPIError as e:
-        return json.dumps({"error": "API Error", "message": e.message})
     except Exception as e:
-        return json.dumps({"error": "Error retrieving task", "message": str(e)})
+        return format_tool_error(e, "Error retrieving task")
 
 
 @mcp.tool()
@@ -135,6 +131,12 @@ async def openai_list_tasks(
         int | None,
         Field(description="Number of tasks per page. Default is 12."),
     ] = None,
+    count_mode: Annotated[
+        Literal["none", "exact"],
+        Field(
+            description="Count mode. none (default) avoids a full count; exact attempts a total within 2 seconds and may fall back to a lower bound."
+        ),
+    ] = "none",
     created_at_min: Annotated[
         float | None,
         Field(description="Earliest task creation timestamp (Unix seconds, inclusive)."),
@@ -161,7 +163,7 @@ async def openai_list_tasks(
         JSON object with 'items' array and 'count' field.
     """
     try:
-        payload: dict[str, Any] = {"action": "retrieve_batch"}
+        payload: dict[str, Any] = {"action": "retrieve_batch", "count_mode": count_mode}
         if ids is not None:
             payload["ids"] = ids
         if trace_ids is not None:
@@ -188,9 +190,5 @@ async def openai_list_tasks(
 
         return json.dumps(result, ensure_ascii=False, indent=2)
 
-    except OpenAIAuthError as e:
-        return json.dumps({"error": "Authentication Error", "message": e.message})
-    except OpenAIAPIError as e:
-        return json.dumps({"error": "API Error", "message": e.message})
     except Exception as e:
-        return json.dumps({"error": "Error listing tasks", "message": str(e)})
+        return format_tool_error(e, "Error listing tasks")

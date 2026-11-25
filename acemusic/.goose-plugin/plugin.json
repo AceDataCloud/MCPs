@@ -1,0 +1,29 @@
+{
+  "name": "ace-music-by-acedatacloud",
+  "version": "0.1.0",
+  "description": "Create songs, import references, cover tracks and query original ACE Music tasks in goose.",
+  "author": {
+    "name": "Ace Data Cloud"
+  },
+  "homepage": "https://github.com/AceDataCloud/AceMusicMCP/blob/main/goose/README.md",
+  "repository": "https://github.com/AceDataCloud/AceMusicMCP",
+  "license": "MIT",
+  "keywords": [
+    "acemusic",
+    "music-generation",
+    "goose",
+    "mcp"
+  ],
+  "skills": {
+    "paths": [
+      "./goose/skills"
+    ],
+    "exclusive": true
+  },
+  "mcpServers": {
+    "paths": [
+      "./.mcp.json"
+    ],
+    "exclusive": true
+  }
+}

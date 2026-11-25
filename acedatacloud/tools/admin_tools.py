@@ -1,10 +1,10 @@
 """Admin-only tools for the platform management API.
 
-These require a SUPERUSER platform token; a normal token gets 403. Like all
+The backend enforces announcement permissions and site ownership. Like all
 mutating tools, they require an explicit ``confirm=True``.
 """
 
-from typing import Annotated
+from typing import Annotated, Literal
 
 from pydantic import Field
 
@@ -12,6 +12,36 @@ from core.client import client
 from core.exceptions import PlatformError
 from core.server import mcp
 from core.utils import confirmation_required, dumps, error_json
+
+InvoiceStatus = Literal[
+    "Pending", "Processing", "Issued", "Failed", "Rejected", "Voided", "Cancelled"
+]
+
+
+@mcp.tool()
+async def acedatacloud_list_admin_invoices(
+    status: Annotated[InvoiceStatus | None, Field(description="Optional invoice status.")] = None,
+    user_id: Annotated[str | None, Field(description="Optional customer user UUID.")] = None,
+    order_id: Annotated[str | None, Field(description="Optional linked order UUID.")] = None,
+    limit: Annotated[int, Field(description="Max invoices to return.", ge=1, le=100)] = 50,
+    offset: Annotated[int, Field(description="Pagination offset.", ge=0)] = 0,
+) -> str:
+    """List invoices across accounts with invoices:read:any permission."""
+    try:
+        return dumps(
+            await client.get(
+                "/invoices/admin/",
+                {
+                    "status": status,
+                    "user_id": user_id,
+                    "order_id": order_id,
+                    "limit": limit,
+                    "offset": offset,
+                },
+            )
+        )
+    except PlatformError as error:
+        return error_json(error.code, error.message)
 
 
 @mcp.tool()
@@ -27,7 +57,7 @@ async def acedatacloud_create_announcement(
     ] = True,
     confirm: Annotated[bool, Field(description="Must be true to actually publish.")] = False,
 ) -> str:
-    """Publish a platform announcement (SUPERUSER token only).
+    """Publish a platform announcement with announcements:write permission.
 
     The Chinese content is stored as the source-of-truth and other locales are
     auto-translated by a background job. Requires ``confirm=true``.

@@ -1,0 +1,44 @@
+name: Publish Ace Data Cloud Chat Models
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: vscode-chat-models-publish
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: AceDataCloud/VSCodeModelProvider
+          ref: main
+          path: model-provider
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: model-provider/package-lock.json
+      - run: npm ci
+        working-directory: model-provider
+      - run: npm run check
+        working-directory: model-provider
+      - run: npm run package
+        working-directory: model-provider
+      - name: Publish to VS Code Marketplace
+        working-directory: model-provider
+        env:
+          VSCE_PAT: ${{ secrets.VSCE_PAT }}
+        run: |
+          test -n "$VSCE_PAT"
+          VERSION=$(node -p "require('./package.json').version")
+          npx vsce publish --packagePath "chat-models-${VERSION}.vsix"
+          echo "VERSION=$VERSION" >> "$GITHUB_ENV"
+      - name: Verify validated public version
+        run: node scripts/verify-marketplace.js "$VERSION" chat-models

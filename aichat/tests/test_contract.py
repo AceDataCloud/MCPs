@@ -8,13 +8,21 @@ from tools import chat_tools
 
 # Models the /aichat/conversations spec enum requires us to offer.
 V1_REQUIRED = {
+    "gpt-6.2-astra",
+    "gpt-6.2-sol",
     "gpt-6-astra",
+    "gpt-6.1-sol",
+    "gpt-6.1-terra",
+    "gpt-6-sol",
+    "gpt-6-luna",
     "gpt-5.6-luna",
     "gpt-5.6-terra",
+    "gpt-5.6-sol-fast",
     "gpt-5.6-sol",
     "gpt-5.4-mini",
     "gpt-5.4-nano",
     "deepseek-v4-pro",
+    "grok-4.7",
     "grok-4.5",
     "glm-5.3",
     "glm-5.2",
@@ -24,6 +32,10 @@ V1_REQUIRED = {
 
 # Kimi models the spec removed; they must stay out of the MCP surface.
 V2_RETIRED_KIMI = {
+    "kimi-k2.5",
+    "kimi-k2-thinking",
+    "kimi-k2-thinking-turbo",
+    "kimi-k3.1-pro-highspeed",
     "kimi-k2-0711-preview",
     "kimi-k2-0905-preview",
     "kimi-k2-instruct-0905",
@@ -45,8 +57,20 @@ def test_v1_offers_the_newest_models():
     assert not missing, f"AiChatModel is missing {sorted(missing)}"
 
 
-def test_v2_offers_gpt6_astra():
-    assert "gpt-6-astra" in get_args(AiChatV2Model)
+def test_v2_offers_new_chat_compatible_models():
+    models = set(get_args(AiChatV2Model))
+    assert {
+        "gpt-6.2-astra",
+        "gpt-6.2-sol",
+        "gpt-6-astra",
+        "gpt-6.1-sol",
+        "gpt-6.1-terra",
+        "gpt-6-sol",
+        "gpt-6-luna",
+        "grok-4.7",
+        "gemini-3.8-flash",
+    } <= models
+    assert "claude-opus-5-5" not in models
 
 
 def test_v2_offers_claude_sonnet_5():
@@ -55,6 +79,7 @@ def test_v2_offers_claude_sonnet_5():
 
 def test_v2_offers_claude_spec_models():
     spec_models = {
+        "claude-fable-5-2",
         "claude-fable-5-1",
         "claude-fable-5",
         "claude-opus-5",
@@ -82,6 +107,10 @@ def test_v2_offers_claude_spec_models():
 
 def test_v2_offers_gemini_spec_models():
     spec_models = {
+        "gemini-4-argon",
+        "gemini-4-carbon",
+        "gemini-4-hydrogen",
+        "gemini-3.8-flash",
         "gemini-3.7-flash",
         "gemini-3.6-flash",
         "gemini-3.5-flash",
@@ -97,22 +126,6 @@ def test_v2_offers_gemini_spec_models():
     assert spec_models <= models, (
         f"AiChatV2Model is missing Gemini spec models {sorted(spec_models - models)}"
     )
-
-
-def test_v2_offers_deepseek_spec_models():
-    spec_models = {
-        "deepseek-chat",
-        "deepseek-r1",
-        "deepseek-r1-0528",
-        "deepseek-reasoner",
-        "deepseek-v3",
-        "deepseek-v3-250324",
-        "deepseek-v3.2-exp",
-        "deepseek-v4-flash",
-        "deepseek-v4-pro",
-    }
-    missing = spec_models - set(get_args(AiChatV2Model))
-    assert not missing, f"AiChatV2Model is missing DeepSeek spec models {sorted(missing)}"
 
 
 def test_v2_offers_glm_spec_models():

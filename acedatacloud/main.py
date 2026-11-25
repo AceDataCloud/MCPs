@@ -63,6 +63,7 @@ Environment Variables:
   PLATFORM_API_BASE_URL           API base (default: https://platform.acedata.cloud)
   PLATFORM_REQUEST_TIMEOUT        Request timeout in seconds (default: 30)
   LOG_LEVEL                       Logging level (default: INFO)
+  ACEDATACLOUD_TOOL_PROFILE        Discovery: curated (default) or full
         """,
     )
     parser.add_argument(

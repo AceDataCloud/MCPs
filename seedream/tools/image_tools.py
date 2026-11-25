@@ -2,6 +2,7 @@
 
 from typing import Annotated
 
+from mcp.types import ToolAnnotations
 from pydantic import Field
 
 from core.client import client
@@ -10,6 +11,7 @@ from core.types import (
     BackgroundMode,
     OutputFormat,
     ResponseFormat,
+    SeedreamLayerModel,
     SeedreamModel,
     SeedreamSize,
     SequentialMode,
@@ -18,7 +20,15 @@ from core.types import (
 from core.utils import format_image_result
 
 
-@mcp.tool()
+@mcp.tool(
+    title="Generate a Seedream image",
+    annotations=ToolAnnotations(
+        readOnlyHint=False,
+        destructiveHint=True,
+        idempotentHint=False,
+        openWorldHint=True,
+    ),
+)
 async def seedream_generate_image(
     prompt: Annotated[
         str,
@@ -33,13 +43,14 @@ async def seedream_generate_image(
         SeedreamModel,
         Field(
             description="Model to use for generation. "
-            "'doubao-seedream-5-0-pro-260628' (v5.0 Pro, flagship single image, highest quality; "
-            "no sequential generation, streaming, or web search). "
-            "'doubao-seedream-5-0-260128' (v5.0 Lite, latest flagship, sequential generation, streaming, web search). "
+            "'doubao-seedream-5-5-261028' (5.5, transparent generation and multi-turn editing). "
+            "'doubao-seedream-5-0-flash-260915' (5.0 Flash, fast generation and editing). "
+            "'doubao-seedream-5-0-pro-260628' (5.0 Pro, single images and editable layers). "
+            "'doubao-seedream-5-0-lite-260128' (v5.0 Lite, sequential generation, streaming, web search). "
             "'doubao-seedream-4-5-251128' (v4.5, previous flagship, great quality). "
             "'doubao-seedream-4-0-250828' (v4.0, stable, best value)."
         ),
-    ] = "doubao-seedream-5-0-260128",
+    ] = "doubao-seedream-5-0-lite-260128",
     size: Annotated[
         SeedreamSize | None,
         Field(
@@ -89,7 +100,7 @@ async def seedream_generate_image(
         Field(
             description="Optional list of tool types for the model to use during generation. "
             "Currently only 'web_search' is supported. "
-            "Only supported by doubao-seedream-5-0-260128 (v5.0)."
+            "Only supported by doubao-seedream-5-0-lite-260128 (v5.0 Lite)."
         ),
     ] = None,
     optimize_prompt_options: Annotated[
@@ -97,7 +108,13 @@ async def seedream_generate_image(
         Field(
             description="Optional prompt optimization configuration. Supports `mode` with values "
             "'standard' (higher quality, slower) or 'fast' (quicker, lower quality). "
-            "Only supported on doubao-seedream-4.5 (standard mode only) and doubao-seedream-4.0."
+            "Seedream 5.0 Pro and 4.0 support standard/fast; 5.0 Lite and 4.5 support standard only."
+        ),
+    ] = None,
+    background: Annotated[
+        BackgroundMode | None,
+        Field(
+            description="Use Seedream 5.5 with transparent for transparent text-to-image output."
         ),
     ] = None,
 ) -> str:
@@ -117,7 +134,7 @@ async def seedream_generate_image(
     - You need to combine multiple images (use seedream_edit_image instead)
 
     Model selection guide:
-    - v5.0 (doubao-seedream-5-0-260128): Latest flagship, highest quality
+    - v5.0 Lite (doubao-seedream-5-0-lite-260128): Image sets, streaming, and web search
     - v4.5 (doubao-seedream-4-5-251128): Previous flagship, great quality and detail
     - v4.0 (doubao-seedream-4-0-250828): Stable and cost-effective, great for most tasks
     Returns:
@@ -147,12 +164,22 @@ async def seedream_generate_image(
         payload["tools"] = [{"type": t} for t in tools]
     if optimize_prompt_options is not None:
         payload["optimize_prompt_options"] = optimize_prompt_options
+    if background is not None:
+        payload["background"] = background
 
     result = await client.generate_image(**payload)
     return format_image_result(result)
 
 
-@mcp.tool()
+@mcp.tool(
+    title="Edit an image with Seedream",
+    annotations=ToolAnnotations(
+        readOnlyHint=False,
+        destructiveHint=True,
+        idempotentHint=False,
+        openWorldHint=True,
+    ),
+)
 async def seedream_edit_image(
     prompt: Annotated[
         str,
@@ -173,10 +200,9 @@ async def seedream_edit_image(
     model: Annotated[
         SeedreamModel,
         Field(
-            description="Model to use for editing. Seedream 5.0 Pro, 5.0 Lite, 4.5, and 4.0 "
-            "all support image editing when images are provided."
+            description="Model to use for editing. Seedream 5.5 and 5.0 Flash support up to ten reference images."
         ),
-    ] = "doubao-seedream-5-0-260128",
+    ] = "doubao-seedream-5-0-lite-260128",
     size: Annotated[
         SeedreamSize | None,
         Field(
@@ -216,7 +242,8 @@ async def seedream_edit_image(
     background: Annotated[
         BackgroundMode | None,
         Field(
-            description="Seedream 5.0 Pro background mode. transparent requires one PNG input and PNG output."
+            description="5.5 supports auto, transparent and opaque. 5.0 Pro/Flash transparent edits "
+            "require one reference image with transparency and PNG output."
         ),
     ] = None,
     callback_url: Annotated[
@@ -279,7 +306,15 @@ async def seedream_edit_image(
     return format_image_result(result)
 
 
-@mcp.tool()
+@mcp.tool(
+    title="Decompose an image with Seedream",
+    annotations=ToolAnnotations(
+        readOnlyHint=False,
+        destructiveHint=True,
+        idempotentHint=False,
+        openWorldHint=True,
+    ),
+)
 async def seedream_decompose_image(
     image: Annotated[str, Field(description="One PNG or JPEG URL/base64 image to decompose.")],
     prompt: Annotated[
@@ -298,16 +333,38 @@ async def seedream_decompose_image(
     callback_url: Annotated[
         str, Field(description="Optional webhook URL for async delivery.")
     ] = "",
+    model: SeedreamLayerModel = "doubao-seedream-5-0-pro-260628",
+    max_images: Annotated[
+        int | None,
+        Field(
+            ge=2, le=100, description="Seedream 5.5 maximum image count, including the base image."
+        ),
+    ] = None,
+    text_recognition: Annotated[
+        bool | None,
+        Field(description="Return styled OCR for recognized text layers in Seedream 5.5."),
+    ] = None,
 ) -> str:
-    """Decompose one image into a base image and up to 16 editable transparent layers."""
+    """Split an image into a base image and editable layers. Seedream 5.5 supports up to 99 layers and OCR."""
     payload: dict = {
-        "model": "doubao-seedream-5-0-pro-260628",
+        "model": model,
         "image": image,
         "layer_decomposition": True,
         "size": size,
         "output_format": output_format,
         "watermark": watermark,
     }
+    if max_images is not None or text_recognition is not None:
+        if model != "doubao-seedream-5-5-261028":
+            raise ValueError("max_images and text_recognition require Seedream 5.5")
+        payload["layer_decomposition_options"] = {
+            key: value
+            for key, value in {
+                "max_images": max_images,
+                "text_recognition": text_recognition,
+            }.items()
+            if value is not None
+        }
     if prompt:
         payload["prompt"] = prompt
     if callback_url:

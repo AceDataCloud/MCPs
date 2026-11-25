@@ -30,11 +30,11 @@ class McpSettings : PersistentStateComponent<McpSettings.State> {
 
     fun getStdioConfig(): String {
         val token = myState.apiToken.ifEmpty { "YOUR_API_TOKEN" }
-        return """{"mcpServers": {"kling": {"command": "uvx", "args": ["mcp-kling"], "env": {"ACEDATACLOUD_API_TOKEN": "$$token"}}}}"""
+        return """{"mcpServers": {"kling": {"command": "uvx", "args": ["mcp-kling"], "env": {"ACEDATACLOUD_API_TOKEN": "$token"}}}}"""
     }
 
     fun getHttpConfig(): String {
         val token = myState.apiToken.ifEmpty { "YOUR_API_TOKEN" }
-        return """{"mcpServers": {"kling": {"url": "https://kling.mcp.acedata.cloud/mcp", "headers": {"Authorization": "Bearer $$token"}}}}"""
+        return """{"mcpServers": {"kling": {"url": "https://kling.mcp.acedata.cloud/mcp", "headers": {"Authorization": "Bearer $token"}}}}"""
     }
 }

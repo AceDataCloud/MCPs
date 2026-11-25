@@ -121,7 +121,10 @@ async def acedatacloud_create_order(
 async def acedatacloud_get_order(order_id: Annotated[str, Field(description="Order UUID.")]) -> str:
     """Get one caller-owned order in its authenticated detail representation."""
     try:
-        return dumps(await client.get(f"/orders/{order_id}"))
+        return dumps(
+            await client.get(f"/orders/{order_id}"),
+            disclose={"/ace_burn/swap_signature", "/ace_burn/burn_signature"},
+        )
     except PlatformError as error:
         return error_json(error.code, error.message)
 

@@ -80,6 +80,10 @@ async def wan_generate_video(
         str | None,
         Field(description="The size of the generated video (e.g., '1280x720')."),
     ] = None,
+    shot_type: Annotated[
+        ShotType | None,
+        Field(description="Shot type: single for one continuous shot, multi for multiple cuts."),
+    ] = None,
     callback_url: Annotated[
         str | None,
         Field(
@@ -123,6 +127,8 @@ async def wan_generate_video(
         "prompt_extend": prompt_extend,
     }
 
+    if shot_type is not None:
+        payload["shot_type"] = shot_type
     if negative_prompt:
         payload["negative_prompt"] = negative_prompt
     if duration is not None:

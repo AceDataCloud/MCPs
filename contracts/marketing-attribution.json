@@ -1,0 +1,53 @@
+{
+  "contract": {
+    "link_defaults": {
+      "campaign": "evergreen"
+    },
+    "max_tag_length": 96,
+    "sources": {
+      "agent_skill": "referral",
+      "bilibili": "social",
+      "cli": "referral",
+      "csdn": "referral",
+      "devto": "referral",
+      "dify": "referral",
+      "discord": "social",
+      "docker_hub": "referral",
+      "email": "email",
+      "github": "referral",
+      "google": "cpc",
+      "hacker_news": "referral",
+      "jetbrains": "referral",
+      "jetbrains_marketplace": "referral",
+      "juejin": "referral",
+      "linkedin": "social",
+      "mcp_registry": "referral",
+      "medium": "referral",
+      "npm": "referral",
+      "offline": "qr",
+      "opensource": "referral",
+      "product_hunt": "referral",
+      "pypi": "referral",
+      "reddit": "social",
+      "skills_sh": "referral",
+      "vscode": "referral",
+      "vscode_marketplace": "referral",
+      "wechat": "social",
+      "x": "social",
+      "xiaohongshu": "social",
+      "youtube": "social",
+      "zhihu": "social"
+    },
+    "tag_pattern": "^[a-z0-9][a-z0-9_.-]{0,95}$",
+    "utm_keys": [
+      "utm_source",
+      "utm_medium",
+      "utm_campaign"
+    ],
+    "version": 3
+  },
+  "producer": "AceDataCloud/PlatformBackend",
+  "profile": "links",
+  "sha256": "c50fccbbdf02096fd6912bd566189f0e1157c25775ac76a1153df2ecc1690790",
+  "source_sha": "9505629a38d8117399797c72ad11cb594f02ab6c"
+}

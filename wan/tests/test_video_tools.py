@@ -152,3 +152,16 @@ async def test_wan3_all_in_one_omits_absent_media(monkeypatch):
     await video_tools.wan_generate_video_all_in_one(prompt="Generate from text only.", media=None)
 
     assert "media" not in captured_payload
+
+
+async def test_text_to_video_forwards_shot_type_through_mcp_schema():
+    from unittest.mock import AsyncMock, patch
+
+    from core.server import mcp
+
+    with patch(
+        "tools.video_tools.client.generate_video", new=AsyncMock(return_value={"task_id": "t"})
+    ) as call:
+        await mcp.call_tool("wan_generate_video", {"prompt": "Two scenes", "shot_type": "multi"})
+    assert call.await_args.kwargs["action"] == "text2video"
+    assert call.await_args.kwargs["shot_type"] == "multi"

@@ -43,7 +43,7 @@ class HCaptchaClient:
             raise HCaptchaAuthError("API token not configured")
         return {
             "accept": "application/json",
-            "authorization": "******",
+            "authorization": f"Bearer {token}",
             "content-type": "application/json",
         }
 

@@ -6,7 +6,7 @@ from typing import Annotated, Any
 from pydantic import Field
 
 from core.client import client
-from core.exceptions import OpenAIAPIError, OpenAIAuthError
+from core.exceptions import format_tool_error
 from core.server import mcp
 from core.types import (
     DEFAULT_RESPONSES_MODEL,
@@ -72,7 +72,9 @@ async def openai_create_response(
     ] = None,
     stream: Annotated[
         bool | None,
-        Field(description="Whether to stream partial response output. Default is false."),
+        Field(
+            description="This MCP tool returns a complete JSON response. Omit or set false; stream=true is rejected before sending a request."
+        ),
     ] = None,
     tools: Annotated[
         list[dict[str, Any]] | None,
@@ -124,6 +126,15 @@ async def openai_create_response(
     Returns:
         JSON response containing the model's output and usage information.
     """
+    if stream:
+        return json.dumps(
+            {
+                "error": "Validation Error",
+                "code": "streaming_not_supported",
+                "message": "This MCP tool returns a complete JSON response. Omit stream or set it to false. No API request was sent.",
+            }
+        )
+
     try:
         payload: dict[str, Any] = {
             "model": model,
@@ -168,9 +179,5 @@ async def openai_create_response(
 
         return json.dumps(result, ensure_ascii=False, indent=2)
 
-    except OpenAIAuthError as e:
-        return json.dumps({"error": "Authentication Error", "message": e.message})
-    except OpenAIAPIError as e:
-        return json.dumps({"error": "API Error", "message": e.message})
     except Exception as e:
-        return json.dumps({"error": "Error creating response", "message": str(e)})
+        return format_tool_error(e, "Error creating response")

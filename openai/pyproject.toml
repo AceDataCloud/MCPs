@@ -1,8 +1,8 @@
 [project]
-name = "mcp-openai"
+name = "mcp-openai-pro"
 version = "2026.4.25.1"
 description = "MCP Server for OpenAI API via AceDataCloud"
-readme = "README.md"
+readme = "README.pypi.md"
 license = { text = "MIT" }
 requires-python = ">=3.10"
 authors = [
@@ -23,6 +23,11 @@ keywords = [
     "acedata",
     "llm",
     "claude",
+    "gpt-image",
+    "gpt image",
+    "image-generation",
+    "image-editing",
+    "acedatacloud",
 ]
 classifiers = [
     "Development Status :: 4 - Beta",
@@ -41,6 +46,8 @@ dependencies = [
     "python-dotenv>=1.0.0",
     "pydantic>=2.0.0",
     "loguru>=0.7.0",
+    "redis>=5.0.0,<7",
+    "cryptography>=42.0.0",
 ]
 
 [project.optional-dependencies]
@@ -60,15 +67,15 @@ release = [
     "twine>=5.0.0",
 ]
 all = [
-    "mcp-openai[dev,test,release]",
+    "mcp-openai-pro[dev,test,release]",
 ]
 
 [project.scripts]
-mcp-openai = "main:main"
+mcp-openai-pro = "main:main"
 
 [project.urls]
 Homepage = "https://github.com/AceDataCloud/OpenAIMCP"
-Documentation = "https://platform.acedata.cloud/documents/openai"
+Documentation = "https://platform.acedata.cloud/documents/openai?utm_source=pypi&utm_medium=referral&utm_campaign=evergreen"
 Repository = "https://github.com/AceDataCloud/OpenAIMCP"
 Issues = "https://github.com/AceDataCloud/OpenAIMCP/issues"
 Changelog = "https://github.com/AceDataCloud/OpenAIMCP/blob/main/CHANGELOG.md"
@@ -78,16 +85,25 @@ requires = ["hatchling>=1.21.0,<1.30.0"]
 build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
-packages = ["core", "tools", "prompts", "main.py"]
+packages = ["core", "tools", "prompts", "main.py", "gpt_image_tools.py"]
 
 [tool.hatch.build.targets.sdist]
 include = [
+    "goose/",
+    ".goose-plugin/",
+    ".mcp.json",
+    "kilo/",
     "core/",
     "tools/",
     "prompts/",
     "tests/",
     "main.py",
+    "gpt_image_tools.py",
+    "gpt-image.server.json",
+    "GPT_IMAGE.md",
+    "readme/",
     "README.md",
+    "README.pypi.md",
     "LICENSE",
     "CHANGELOG.md",
     ".env.example",

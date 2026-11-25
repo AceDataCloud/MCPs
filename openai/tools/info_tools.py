@@ -1,13 +1,14 @@
 """Informational tools for OpenAI API."""
 
 import json
-from typing import Annotated, Literal
+from typing import Annotated, Literal, get_args
 
 from pydantic import Field
 
 from core.client import client
-from core.exceptions import OpenAIAPIError, OpenAIAuthError
+from core.exceptions import format_tool_error
 from core.server import mcp
+from core.types import DEFAULT_CHAT_MODEL, DEFAULT_RESPONSES_MODEL, ChatModel, ResponsesModel
 
 RealtimeModel = Literal[
     "gpt-realtime-2.1",
@@ -40,12 +41,8 @@ async def openai_get_models() -> str:
     try:
         result = await client.models()
         return json.dumps(result, ensure_ascii=False, indent=2)
-    except OpenAIAuthError as e:
-        return json.dumps({"error": "Authentication Error", "message": e.message})
-    except OpenAIAPIError as e:
-        return json.dumps({"error": "API Error", "message": e.message})
     except Exception as e:
-        return json.dumps({"error": "Error listing models", "message": str(e)})
+        return format_tool_error(e, "Error listing models")
 
 
 @mcp.tool()
@@ -68,12 +65,8 @@ async def openai_get_realtime_connection_info(
     try:
         result = await client.realtime(model=model, voice=voice)
         return json.dumps(result, ensure_ascii=False, indent=2)
-    except OpenAIAuthError as e:
-        return json.dumps({"error": "Authentication Error", "message": e.message})
-    except OpenAIAPIError as e:
-        return json.dumps({"error": "API Error", "message": e.message})
     except Exception as e:
-        return json.dumps({"error": "Error getting realtime connection info", "message": str(e)})
+        return format_tool_error(e, "Error getting realtime connection info")
 
 
 @mcp.tool()
@@ -86,72 +79,13 @@ async def openai_list_chat_models() -> str:
     Returns:
         Table of all chat models with descriptions.
     """
-    # Last updated: 2026-09-05
-    return """Available OpenAI Chat Completion Models:
-
-## GPT-6 Series (latest)
-| Model       | Description                                      |
-|-------------|--------------------------------------------------|
-| gpt-6-astra | Most capable model for end-to-end complex work   |
-
-## GPT-5.6 Series
-| Model           | Description                              |
-|-----------------|------------------------------------------|
-| gpt-5.6-luna    | GPT-5.6 Luna variant                     |
-| gpt-5.6-terra   | GPT-5.6 Terra variant                    |
-| gpt-5.6-sol     | GPT-5.6 Sol variant                      |
-
-## GPT-5 Series
-| Model         | Description                              |
-|---------------|------------------------------------------|
-| gpt-5.5       | GPT-5.5 model                            |
-| gpt-5.5-pro   | GPT-5.5 Pro variant                      |
-| gpt-5.4       | GPT-5.4 model                            |
-| gpt-5.4-mini  | GPT-5.4 Mini - cost efficient            |
-| gpt-5.4-nano  | GPT-5.4 Nano - ultra cost efficient      |
-| gpt-5.4-pro   | GPT-5.4 Pro variant                      |
-| gpt-5.2       | GPT-5.2 model                            |
-| gpt-5.1       | GPT-5.1 model                            |
-| gpt-5.1-all   | GPT-5.1 all-access variant               |
-| gpt-5         | GPT-5 standard                           |
-| gpt-5-mini    | GPT-5 Mini - cost efficient              |
-| gpt-5-nano    | GPT-5 Nano - ultra cost efficient        |
-
-## Free Tier
-| Model            | Description                              |
-|------------------|------------------------------------------|
-| gpt-oss:free     | Open-source model, free tier             |
-| gpt-5.5:free     | GPT-5.5 free tier                        |
-| gpt-5:free       | GPT-5 free tier                          |
-| gpt-4.1:free     | GPT-4.1 free tier                        |
-| gpt-4o:free      | GPT-4o free tier                         |
-| gpt-4o-mini:free | GPT-4o Mini free tier                    |
-
-## GPT-4 Series
-| Model              | Description                         |
-|--------------------|-------------------------------------|
-| gpt-4.1            | GPT-4.1 (recommended default)       |
-| gpt-4.1-mini       | GPT-4.1 Mini - cost efficient       |
-| gpt-4.1-nano       | GPT-4.1 Nano - ultra cost efficient |
-| gpt-4o             | GPT-4o multimodal                   |
-| gpt-4o-2024-05-13  | GPT-4o dated variant                |
-| gpt-4o-all         | GPT-4o all-access                   |
-| gpt-4o-image       | GPT-4o with image capabilities      |
-| gpt-4o-mini        | GPT-4o Mini                         |
-| gpt-4              | GPT-4 standard                      |
-| gpt-35-turbo-16k   | GPT-3.5 Turbo 16K                   |
-
-## Reasoning (o-series)
-| Model    | Description                               |
-|----------|-------------------------------------------|
-| o4-mini  | o4 Mini - fast reasoning                  |
-| o3       | o3 - advanced reasoning                   |
-| o3-mini  | o3 Mini                                   |
-| o3-pro   | o3 Pro                                    |
-| o1       | o1 - original reasoning model             |
-| o1-mini  | o1 Mini                                   |
-| o1-pro   | o1 Pro                                    |
-"""
+    chat_models = "\n".join(f"- {model}" for model in get_args(ChatModel))
+    responses_models = "\n".join(f"- {model}" for model in get_args(ResponsesModel))
+    return (
+        "# OpenAI models available through this MCP\n\n"
+        f"## openai_chat_completion (default: {DEFAULT_CHAT_MODEL})\n{chat_models}\n\n"
+        f"## openai_create_response (default: {DEFAULT_RESPONSES_MODEL})\n{responses_models}\n"
+    )
 
 
 @mcp.tool()
@@ -172,7 +106,17 @@ async def openai_list_image_models() -> str:
 | gpt-image-1.5        | GPT Image 1.5 - improved quality                  |
 | gpt-image-2          | GPT Image 2 - established default                |
 | gpt-image-2.5-flare  | GPT Image 2.5 Flare - faster generation           |
+| gpt-image-2.6-flare  | GPT Image 2.6 Flare - faster generation           |
+| gpt-image-2.5-flare:reverse | Explicit alias of gpt-image-2.5-flare      |
+| gpt-image-2.6-flare:reverse | Explicit alias of gpt-image-2.6-flare      |
+| gpt-image-2.5-flare:official | GPT Image 2.5 Flare official mode         |
+| gpt-image-2.6-flare:official | GPT Image 2.6 Flare official mode         |
 | gpt-image-2.5-sunburst | GPT Image 2.5 Sunburst - high-fidelity control  |
+| gpt-image-2.6-sunburst | GPT Image 2.6 Sunburst - high-fidelity control  |
+| gpt-image-2.5-sunburst:reverse | Explicit alias of gpt-image-2.5-sunburst |
+| gpt-image-2.6-sunburst:reverse | Explicit alias of gpt-image-2.6-sunburst |
+| gpt-image-2.5-sunburst:official | GPT Image 2.5 Sunburst official mode   |
+| gpt-image-2.6-sunburst:official | GPT Image 2.6 Sunburst official mode   |
 | gpt-image-2:reverse  | GPT Image 2 reverse mode                          |
 | gpt-image-2:official | GPT Image 2 official mode                         |
 | dall-e-3             | DALL-E 3 - high quality artistic generation       |
@@ -180,6 +124,7 @@ async def openai_list_image_models() -> str:
 | nano-banana          | Nano Banana - fast, efficient generation          |
 | nano-banana-2-lite   | Nano Banana 2 Lite - lightweight version          |
 | nano-banana-2        | Nano Banana 2 - improved version                  |
+| nano-banana-2.1      | Nano Banana 2.1 - 1K/2K/4K generation and editing |
 | nano-banana-pro      | Nano Banana Pro - highest quality                 |
 
 ## Supported Sizes
@@ -204,19 +149,39 @@ async def openai_list_image_models() -> str:
 | 256x256     | 1:1             | Small, legacy (dall-e-2)     |
 | 512x512     | 1:1             | Medium, legacy (dall-e-2)    |
 | auto        | Varies          | Model chooses                |
-| WIDTHxHEIGHT | Custom         | GPT Image 2/2.5: valid dims |
+| WIDTHxHEIGHT | Custom         | GPT Image 2/2.5/2.6: valid dims |
 
-**GPT Image 2/2.5 custom dimensions**: multiples of 16, longer side ≤ 3840, total pixels 655,360–8,294,400, aspect ratio ≤ 3:1.
+**GPT Image 2/2.5/2.6 custom dimensions**: multiples of 16, longer side ≤ 3840, total pixels 655,360–8,294,400, aspect ratio ≤ 3:1.
 
 ## Quality Options
 | Quality   | Description                                    |
 |-----------|------------------------------------------------|
 | auto      | Model chooses quality (default)                |
-| high      | Maximum quality                                |
+| high      | High quality                                   |
+| xhigh     | GPT Image 2.5/2.6 Flare/Sunburst only (including :reverse and :official) |
+| max       | GPT Image 2.5/2.6 Flare/Sunburst only (including :reverse and :official) |
 | medium    | Balanced quality/speed                         |
 | low       | Faster, lower quality                          |
 | hd        | High detail (dall-e-3 only)                    |
-| standard  | Standard detail (dall-e-3 only)                |
+| standard  | Standard detail (DALL-E; only option for dall-e-2) |
+
+GPT Image 2/2.5 unsuffixed models and their :reverse aliases bill per successful image
+(base price: 0.19 Credits/image; check current account pricing and usage).
+2.0/2.5 reverse requests may be fulfilled by compatible GPT Image 2.5 Flare during recovery;
+the requested model and per-image billing stay unchanged.
+GPT Image 2.6 unsuffixed models and their :reverse aliases bill per successful image
+(base price: 0.22 Credits/image), even when token statistics are returned.
+Use complete gpt-image-2.6-flare or gpt-image-2.6-sunburst IDs and their listed variants,
+not gpt-image-2.6 or a bare :reverse/:official alias.
+GPT Image 2.6 has no cross-model fallback. Static PNG/JPEG/WebP generation and editing support 4K pixel presets.
+Native GIF generation/editing is available for gpt-image-2.6-flare, its :reverse/:official variants,
+and gpt-image-2.6-sunburst with :reverse/:official variants.
+GIF accepts 2-16 frames and a 20-655350ms frame delay (rounded to 10ms).
+GPT Image 2.6 accepts complexity=low/medium/high; static edits support transparent PNG markup matching the first reference.
+GIF uses a 512x512 preview when size is omitted or auto, with frame_count=9 and frame_duration_ms=200 by default.
+Models may adjust actual GIF dimensions; the static 4K size contract does not apply to GIF. SVG is not supported.
+GPT Image official variants bill actual token usage; 2.6 uses the same token rates as 2.5.
+Pre-request estimates are not fixed per-image charges; check current pricing and usage.
 """
 
 
@@ -236,11 +201,9 @@ async def openai_list_embedding_models() -> str:
 |--------------------------|------------|------------------------------------------|
 | text-embedding-3-small   | 1536       | Cost-efficient, good quality (default)   |
 | text-embedding-3-large   | 3072       | Higher quality, larger vectors           |
-| text-embedding-ada-002   | 1536       | Legacy model, widely supported           |
 
 ## Notes
 - text-embedding-3 models support custom dimensions via the `dimensions` parameter
-- text-embedding-ada-002 does not support custom dimensions
 - Larger dimensions provide better quality but cost more
 
 ## Use Cases
@@ -279,6 +242,13 @@ async def openai_get_usage_guide() -> str:
 - input: Conversation messages (required)
 - model: Model to use (default: gpt-4.1)
 - background: Run in background mode
+
+### Chat and Responses Billing
+Accepted compatible-model requests are billed by model input, output and cache usage,
+not a fixed fee per request or interface format. Chat Completions prompt_tokens and
+the Responses input total include reported cached tokens; the cached portion uses
+the corresponding cache price. Check current model prices and response usage.cost.
+Billing support does not expand the tools' published model lists or grant access.
 
 ### Image Generation
 **openai_generate_image** - Create images from text descriptions (async: returns a task_id, poll openai_get_task)
@@ -336,6 +306,7 @@ Returns base64-encoded audio in the 'audio' field. Decode with base64 to get raw
 - user_id: List all tasks for an end user
 - type: Filter by type ('images', 'images_generations', 'images_edits')
 - offset / limit: Pagination (default: 0 / 12)
+- count_mode: none (default) or exact; exact has a 2-second budget and can fall back to a lower bound
 - created_at_min / created_at_max: Unix timestamp range filter
 
 ### Information Tools

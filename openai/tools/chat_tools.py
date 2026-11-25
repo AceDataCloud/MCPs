@@ -6,7 +6,7 @@ from typing import Annotated, Any
 from pydantic import Field
 
 from core.client import client
-from core.exceptions import OpenAIAPIError, OpenAIAuthError
+from core.exceptions import format_tool_error
 from core.server import mcp
 from core.types import (
     DEFAULT_CHAT_MODEL,
@@ -65,8 +65,8 @@ async def openai_chat_completion(
         ReasoningEffort | None,
         Field(
             description=(
-                "Constrains effort on reasoning for reasoning models. Options: 'minimal', "
-                "'low', 'medium', 'high'. Default is 'medium'."
+                "Reasoning effort: minimal, low, medium, high, xhigh, or max, depending on the model. "
+                "GPT-6.1 Terra supports low through max, not minimal; start with low."
             )
         ),
     ] = None,
@@ -81,7 +81,9 @@ async def openai_chat_completion(
     ] = None,
     stream: Annotated[
         bool | None,
-        Field(description="Whether to stream partial message deltas. Default is false."),
+        Field(
+            description="This MCP tool returns a complete JSON response. Omit or set false; stream=true is rejected before sending a request."
+        ),
     ] = None,
     response_format: Annotated[
         dict[str, Any] | None,
@@ -169,6 +171,10 @@ async def openai_chat_completion(
         dict[str, Any] | None,
         Field(description="Web search configuration for search-capable models."),
     ] = None,
+    thinking: Annotated[
+        dict[str, Any] | None,
+        Field(description="MiMo reasoning control: {'type': 'enabled'} or {'type': 'disabled'}."),
+    ] = None,
 ) -> str:
     """Create a chat completion using OpenAI models via AceDataCloud.
 
@@ -183,6 +189,15 @@ async def openai_chat_completion(
     Returns:
         JSON response containing the model's reply and usage information.
     """
+    if stream:
+        return json.dumps(
+            {
+                "error": "Validation Error",
+                "code": "streaming_not_supported",
+                "message": "This MCP tool returns a complete JSON response. Omit stream or set it to false. No API request was sent.",
+            }
+        )
+
     try:
         payload: dict[str, Any] = {
             "model": model,
@@ -222,6 +237,7 @@ async def openai_chat_completion(
             "audio": audio,
             "prediction": prediction,
             "web_search_options": web_search_options,
+            "thinking": thinking,
         }
         payload.update({key: value for key, value in optional_params.items() if value is not None})
 
@@ -232,9 +248,5 @@ async def openai_chat_completion(
 
         return json.dumps(result, ensure_ascii=False, indent=2)
 
-    except OpenAIAuthError as e:
-        return json.dumps({"error": "Authentication Error", "message": e.message})
-    except OpenAIAPIError as e:
-        return json.dumps({"error": "API Error", "message": e.message})
     except Exception as e:
-        return json.dumps({"error": "Error creating chat completion", "message": str(e)})
+        return format_tool_error(e, "Error creating chat completion")

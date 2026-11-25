@@ -1,6 +1,9 @@
 """Informational tools for Grok Imagine API."""
 
+from typing import get_args
+
 from core.server import mcp
+from core.types import DEFAULT_CHAT_MODEL, DEFAULT_MODEL, GrokChatModel, GrokVideoModel
 
 
 @mcp.tool()
@@ -13,25 +16,17 @@ async def grok_list_models() -> str:
     Returns:
         Tables of all models with their capabilities.
     """
-    # Last updated: 2026-06-13
-    return """Available Grok Chat Models (grok_chat_completions):
-
-| Model                          | Notes                                            |
-|--------------------------------|--------------------------------------------------|
-| grok-4.5                       | Default. Latest flagship reasoning model.        |
-| grok-4                         | Previous flagship reasoning model.               |
-| grok-3                         | Earlier-generation model.                        |
-
-Available Grok Imagine Video Models:
-
-| Model                                | Text2Video | Image2Video | Notes                              |
-|--------------------------------------|------------|-------------|------------------------------------|
-| grok-imagine-video-1.5-fast:reverse  | ✅         | ✅          | Default. Fastest & cheapest. 6-30s, duration-banded billing. |
-| grok-imagine-video:reverse           | ✅         | ✅          | Standard. 1-15s, billed per output second. |
-| grok-imagine-video:official          | ✅         | ✅          | Official endpoint, higher fidelity. 1-15s, per second. |
-| grok-imagine-video-1.5:official      | ❌         | ✅          | Official image-to-video ONLY (image_url required). Up to 1080p, per second. |
-
-Usage:
+    chat_models = "\n".join(f"- {model}" for model in get_args(GrokChatModel))
+    video_models = "\n".join(f"- {model}" for model in get_args(GrokVideoModel))
+    return (
+        (
+            f"Available Grok Chat Models (grok_chat_completions, default {DEFAULT_CHAT_MODEL}):\n"
+            f"{chat_models}\n\n"
+            f"Available Grok Imagine Video Models (default {DEFAULT_MODEL}):\n{video_models}\n\n"
+            "grok-imagine-video-1.5:official is image-to-video only; other listed models "
+            "support both text-to-video and image-to-video.\n\n"
+        )
+        + """Usage:
 - grok_chat_completions: chat/reason/vision/tool-calling with the chat models
 - grok_text_to_video: any model EXCEPT grok-imagine-video-1.5:official (that one is image-only)
 - grok_image_to_video: any video model; grok-imagine-video-1.5:official requires an input image
@@ -52,6 +47,7 @@ Duration:
 - all other models: 1-15 seconds, billed per output second
 - Default 6 seconds
 """
+    )
 
 
 @mcp.tool()

@@ -1,7 +1,7 @@
 {
   "name": "mcp-nanobanana",
-  "displayName": "NanoBanana MCP",
-  "description": "Gemini-powered NanoBanana — generate and edit images via natural language.",
+  "displayName": "Nano Banana by Ace Data Cloud",
+  "description": "Nano Banana image generation and editing by Ace Data Cloud — create images and retrieve task results in VS Code Chat.",
   "version": "0.3.0",
   "publisher": "acedatacloud",
   "icon": "icon.png",
@@ -43,18 +43,18 @@
     "mcpServerDefinitionProviders": [
       {
         "id": "acedatacloud.nanobanana",
-        "label": "NanoBanana MCP"
+        "label": "Nano Banana by Ace Data Cloud"
       }
     ],
     "commands": [
       {
         "command": "acedatacloud.nanobanana.setApiToken",
-        "title": "NanoBanana MCP: Set Ace Data Cloud API Key",
+        "title": "Nano Banana by Ace Data Cloud: Set Ace Data Cloud API Key",
         "category": "MCP"
       },
       {
         "command": "acedatacloud.nanobanana.clearApiToken",
-        "title": "NanoBanana MCP: Clear Ace Data Cloud API Key",
+        "title": "Nano Banana by Ace Data Cloud: Clear Ace Data Cloud API Key",
         "category": "MCP"
       }
     ]

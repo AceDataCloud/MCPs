@@ -13,6 +13,7 @@ KlingModel = Literal[
     "kling-v2-5-turbo",
     "kling-v2-6",
     "kling-v3",
+    "kling-v3-turbo",
     "kling-v3-omni",
     "kling-o1",
 ]

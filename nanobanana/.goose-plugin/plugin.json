@@ -1,0 +1,28 @@
+{
+  "name": "nano-banana-by-acedatacloud",
+  "version": "0.1.0",
+  "description": "Nano Banana by Ace Data Cloud: Nano Banana image generation and editing. Independent goose MCP and Skill plugin.",
+  "author": {
+    "name": "Ace Data Cloud"
+  },
+  "homepage": "https://github.com/AceDataCloud/NanoBananaMCP/blob/main/goose/README.md",
+  "repository": "https://github.com/AceDataCloud/NanoBananaMCP",
+  "license": "MIT",
+  "keywords": [
+    "nano-banana",
+    "goose",
+    "acedatacloud"
+  ],
+  "skills": {
+    "paths": [
+      "./goose/skills"
+    ],
+    "exclusive": true
+  },
+  "mcpServers": {
+    "paths": [
+      "./.mcp.json"
+    ],
+    "exclusive": true
+  }
+}

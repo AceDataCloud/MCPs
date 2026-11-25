@@ -2,12 +2,12 @@
   "name": "mcp-fish",
   "displayName": "Fish Audio MCP",
   "description": "Fish Audio TTS — generate natural speech and browse the Fish voice library.",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "publisher": "acedatacloud",
   "icon": "icon.png",
   "license": "MIT",
   "engines": {
-    "vscode": "^1.99.0"
+    "vscode": "^1.101.0"
   },
   "categories": [
     "AI",
@@ -39,22 +39,25 @@
   "bugs": {
     "url": "https://github.com/AceDataCloud/FishMCP/issues"
   },
+  "activationEvents": [],
+  "main": "./extension.js",
   "contributes": {
-    "mcpServers": {
-      "fish": {
-        "type": "http",
-        "url": "https://fish.mcp.acedata.cloud/mcp",
-        "headers": {
-          "Authorization": "Bearer ${input:acedatacloud_api_token}"
-        }
-      }
-    },
-    "inputs": [
+    "mcpServerDefinitionProviders": [
       {
-        "type": "promptString",
-        "id": "acedatacloud_api_token",
-        "description": "Ace Data Cloud API token. Sign in at https://platform.acedata.cloud and create a token in 'API Keys'. Stored securely by VS Code.",
-        "password": true
+        "id": "acedatacloud.fish",
+        "label": "Fish Audio MCP"
+      }
+    ],
+    "commands": [
+      {
+        "command": "acedatacloud.fish.setApiToken",
+        "title": "Fish Audio MCP: Set Ace Data Cloud API Key",
+        "category": "MCP"
+      },
+      {
+        "command": "acedatacloud.fish.clearApiToken",
+        "title": "Fish Audio MCP: Clear Ace Data Cloud API Key",
+        "category": "MCP"
       }
     ]
   }

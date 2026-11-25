@@ -1,0 +1,54 @@
+name: Publish VS Code Extension
+
+on:
+  push:
+    branches: [main]
+  repository_dispatch:
+    types: [mcp-updated]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: vscode-marketplace-publish
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm test
+      - run: npm run check
+      - name: Generate release version
+        run: |
+          YEAR=$(date -u +'%Y')
+          MMDD=$(date -u +'%-m%d')
+          BUILD=$((GITHUB_RUN_NUMBER * 100 + GITHUB_RUN_ATTEMPT))
+          VERSION="${YEAR}.${MMDD}.${BUILD}"
+          echo "VERSION=$VERSION" >> "$GITHUB_ENV"
+          npm version "$VERSION" --no-git-tag-version
+      - run: npm run package
+      - uses: actions/upload-artifact@v4
+        with:
+          name: vscode-extension
+          path: '*.vsix'
+      - name: Publish to VS Code Marketplace
+        env:
+          VSCE_PAT: ${{ secrets.VSCE_PAT }}
+        run: |
+          test -n "$VSCE_PAT"
+          npx vsce publish --packagePath "mcp-toolbox-${VERSION}.vsix"
+      - name: Verify public Marketplace version
+        run: node scripts/verify-marketplace.js "$VERSION"
+      - name: Publish to Open VSX Registry
+        if: vars.OVSX_ENABLED == 'true'
+        env:
+          OVSX_PAT: ${{ secrets.OVSX_PAT }}
+        run: npx --yes ovsx publish "mcp-toolbox-${VERSION}.vsix" --pat "$OVSX_PAT"

@@ -52,10 +52,10 @@ async def maestro_create_video(
         list[str] | None,
         Field(
             description=(
-                "Output language codes, such as zh-cn, en, ja, or pt-br. Each language produces "
-                "a localized video variant."
+                "Exactly one output language code per task, such as zh-cn, en, ja, or pt-br."
             ),
-            max_length=4,
+            min_length=1,
+            max_length=1,
         ),
     ] = None,
     aspect: Annotated[
@@ -94,13 +94,17 @@ async def maestro_create_video(
             description=(
                 "Visual style preset. Named presets: cinematic, glass, "
                 "luxury, swiss, modern, editorial, warm, vibrant, neon, mono, pastel, bold, "
-                "industrial, futuristic, retro. Use 'auto' or omit to let the server decide."
+                "industrial, futuristic, retro. Free text is also accepted as a soft visual hint. Use 'auto' or omit to let the server decide."
             )
         ),
     ] = None,
     voice: Annotated[
         MaestroVoice | None,
-        Field(description=("Narration voice preset. Use 'auto' or omit to let the server decide.")),
+        Field(
+            description=(
+                "Narration voice preset or a 32-character hexadecimal voice reference ID. Use 'auto' or omit to let the server decide."
+            )
+        ),
     ] = None,
     callback_url: Annotated[
         str | None,
@@ -109,11 +113,17 @@ async def maestro_create_video(
 ) -> str:
     """Create a complete video or iterate on a prior Maestro video.
 
+    One task delivers one video in one language. Successful jobs cost 0.7 Credits per actual
+    delivered second, never above the requested duration, with no scenario or language surcharge.
+    Failed jobs and task polling are free.
+
     The call returns immediately with a task_id. Use maestro_get_task to monitor progress and obtain
-    each completed language variant's output_url, captions_url, cover_url, duration, and QC score.
+    the completed video's output_url, captions_url, cover_url, duration, and QC score.
     """
     if action != "generate" and not ref_task_id:
         return f"Error: action={action} requires ref_task_id."
+    if langs is not None and len(langs) != 1:
+        return "Error: langs must contain exactly one output language."
 
     payload: dict[str, Any] = {"prompt": prompt, "action": action}
     if ref_task_id:

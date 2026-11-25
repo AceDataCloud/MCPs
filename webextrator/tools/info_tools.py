@@ -24,12 +24,15 @@ Extract structured content from a web page.
 - `url` (required): The URL of the web page to extract content from.
 - `expected_type` (optional): Hint about expected content type — 'product', 'article', or 'general'.
 - `enable_llm` (optional): Enable LLM-based semantic normalization (boolean). Default: false.
-- `wait_until` (optional): Page load condition — 'load', 'domcontentloaded', 'networkidle', 'commit'. Default: 'networkidle'.
-- `timeout` (optional): Total timeout in seconds. Default: 30.
-- `delay` (optional): Extra delay in seconds after page load.
+- `wait_until` (optional): Page load condition — 'load', 'domcontentloaded', 'networkidle', 'commit'. Default: 'load'.
+- `timeout` (optional): Total timeout in positive whole seconds. Default: 30.
+- `delay` (optional): Extra delay in nonnegative whole seconds after page load.
 - `wait_for_selector` (optional): CSS selector to wait for before extracting.
 - `block_resources` (optional): List of resource types to block — 'image', 'font', 'media', 'stylesheet', 'xhr', 'fetch'.
 - `headers` (optional): Extra HTTP headers as key-value pairs.
+- `cookies` (optional): Cookie objects with name, value, domain, and optional path, expires, httpOnly, secure, sameSite.
+- `bypass_cache` (optional): Skip cached reads; fresh results can still be cached. Default false.
+- `cache_ttl_seconds` (optional): Cache lifetime in whole seconds; 0 disables writes. Default 3600.
 - `user_agent` (optional): Override the User-Agent header.
 - `callback_url` (optional): Async callback URL — triggers async processing.
 
@@ -38,12 +41,15 @@ Render a web page with a headless browser and return the rendered HTML.
 
 **Parameters:**
 - `url` (required): The URL of the web page to render.
-- `wait_until` (optional): Page load condition. Default: 'networkidle'.
-- `timeout` (optional): Total timeout in seconds. Default: 30.
-- `delay` (optional): Extra delay in seconds after page load.
+- `wait_until` (optional): Page load condition. Default: 'load'.
+- `timeout` (optional): Total timeout in positive whole seconds. Default: 30.
+- `delay` (optional): Extra delay in nonnegative whole seconds after page load.
 - `wait_for_selector` (optional): CSS selector to wait for before capturing HTML.
 - `block_resources` (optional): Resource types to block.
 - `headers` (optional): Extra HTTP headers.
+- `cookies` (optional): Cookie objects with name, value, domain, and optional path, expires, httpOnly, secure, sameSite.
+- `bypass_cache` (optional): Skip cached reads; fresh results can still be cached. Default false.
+- `cache_ttl_seconds` (optional): Cache lifetime in whole seconds; 0 disables writes. Default 3600.
 - `user_agent` (optional): Override User-Agent.
 - `callback_url` (optional): Async callback URL.
 

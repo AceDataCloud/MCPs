@@ -86,7 +86,13 @@ class SunoClient:
 
         if status == 401:
             raise SunoAuthError(message)
-        raise SunoAPIError(message=message, code=code, status_code=status)
+        raise SunoAPIError(
+            message=message,
+            code=code,
+            status_code=status,
+            task_id=body.get("task_id"),
+            trace_id=body.get("trace_id"),
+        )
 
     async def request(
         self,
@@ -195,6 +201,9 @@ class SunoClient:
         logger.info(f"⏱️ Getting timing for audio: {kwargs.get('audio_id', '')}")
         return await self.request("/suno/timing", kwargs)
 
+    async def check_audio_availability(self, audio_id: str) -> dict[str, Any]:
+        return await self.request("/suno/availability", {"audio_id": audio_id})
+
     async def get_vox(self, **kwargs: Any) -> dict[str, Any]:
         """Extract vocals from a song."""
         logger.info(f"🎙️ Extracting vocals for audio: {kwargs.get('audio_id', '')}")
@@ -249,6 +258,13 @@ class SunoClient:
             else kwargs
         )
         return await self.request("/suno/custom-models", payload, extra_headers=headers)
+
+    async def manage_project(
+        self, idempotency_key: str | None = None, **kwargs: Any
+    ) -> dict[str, Any]:
+        """Manage a Studio project using the caller's stable write-operation key."""
+        headers = {"Idempotency-Key": idempotency_key} if idempotency_key is not None else None
+        return await self.request("/suno/projects", kwargs, extra_headers=headers)
 
     async def list_personas(self, **kwargs: Any) -> dict[str, Any]:
         """List personas for a user."""

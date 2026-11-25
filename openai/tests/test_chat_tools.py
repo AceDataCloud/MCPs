@@ -4,7 +4,50 @@ import json
 
 import pytest
 
-from tools import chat_tools
+from core.server import mcp
+from tools import chat_tools, info_tools
+
+
+@pytest.mark.asyncio
+async def test_usage_guide_explains_token_and_cache_billing():
+    guide = await info_tools.openai_get_usage_guide()
+    assert "billed by model input, output and cache usage" in guide
+    assert "not a fixed fee per request or interface format" in guide
+    assert "Responses input total include reported cached tokens" in guide
+    assert "current model prices and response usage.cost" in guide
+    assert "does not expand the tools' published model lists" in guide
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize(
+    ("tool_name", "client_method", "arguments"),
+    [
+        (
+            "openai_chat_completion",
+            "chat_completions",
+            {"messages": [{"role": "user", "content": "hello"}]},
+        ),
+        ("openai_create_response", "responses", {"input": "hello"}),
+    ],
+)
+async def test_sol_fast_dispatch_preserves_public_alias(
+    monkeypatch, mock_chat_response, tool_name, client_method, arguments
+):
+    captured_payload = {}
+
+    async def mock_request(**kwargs):
+        captured_payload.update(kwargs)
+        return mock_chat_response
+
+    monkeypatch.setattr(chat_tools.client, client_method, mock_request)
+    tools = {tool.name: tool for tool in await mcp.list_tools()}
+    model_schema = tools[tool_name].inputSchema["properties"]["model"]
+    assert "gpt-5.6-sol-fast" in model_schema["enum"]
+    assert model_schema["default"] == "gpt-4.1"
+
+    await mcp.call_tool(tool_name, {**arguments, "model": "gpt-5.6-sol-fast"})
+
+    assert captured_payload["model"] == "gpt-5.6-sol-fast"
 
 
 @pytest.mark.asyncio

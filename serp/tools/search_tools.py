@@ -3,6 +3,7 @@
 import json
 from typing import Annotated, Literal
 
+from mcp.types import ToolAnnotations
 from pydantic import Field
 
 from core.client import client
@@ -19,7 +20,15 @@ ResultCount = Annotated[int | None, Field(ge=1, le=100)]
 PageNumber = Annotated[int | None, Field(ge=1, le=100)]
 
 
-@mcp.tool()
+@mcp.tool(
+    title="Search Google",
+    annotations=ToolAnnotations(
+        readOnlyHint=True,
+        destructiveHint=False,
+        idempotentHint=False,
+        openWorldHint=True,
+    ),
+)
 async def serp_google_search(
     query: Annotated[
         SearchQuery,
@@ -150,7 +159,15 @@ async def serp_google_search(
         return json.dumps({"error": "Error performing search", "message": str(e)})
 
 
-@mcp.tool()
+@mcp.tool(
+    title="Search Google Images",
+    annotations=ToolAnnotations(
+        readOnlyHint=True,
+        destructiveHint=False,
+        idempotentHint=False,
+        openWorldHint=True,
+    ),
+)
 async def serp_google_images(
     query: Annotated[
         SearchQuery,
@@ -216,7 +233,15 @@ async def serp_google_images(
     return result
 
 
-@mcp.tool()
+@mcp.tool(
+    title="Search Google News",
+    annotations=ToolAnnotations(
+        readOnlyHint=True,
+        destructiveHint=False,
+        idempotentHint=False,
+        openWorldHint=True,
+    ),
+)
 async def serp_google_news(
     query: Annotated[
         SearchQuery,
@@ -267,7 +292,15 @@ async def serp_google_news(
     return result
 
 
-@mcp.tool()
+@mcp.tool(
+    title="Search Google Videos",
+    annotations=ToolAnnotations(
+        readOnlyHint=True,
+        destructiveHint=False,
+        idempotentHint=False,
+        openWorldHint=True,
+    ),
+)
 async def serp_google_videos(
     query: Annotated[
         SearchQuery,
@@ -311,7 +344,15 @@ async def serp_google_videos(
     return result
 
 
-@mcp.tool()
+@mcp.tool(
+    title="Search Google Places",
+    annotations=ToolAnnotations(
+        readOnlyHint=True,
+        destructiveHint=False,
+        idempotentHint=False,
+        openWorldHint=True,
+    ),
+)
 async def serp_google_places(
     query: Annotated[
         SearchQuery,
@@ -355,7 +396,15 @@ async def serp_google_places(
     return result
 
 
-@mcp.tool()
+@mcp.tool(
+    title="Search Google Maps",
+    annotations=ToolAnnotations(
+        readOnlyHint=True,
+        destructiveHint=False,
+        idempotentHint=False,
+        openWorldHint=True,
+    ),
+)
 async def serp_google_maps(
     query: Annotated[
         SearchQuery,

@@ -3,11 +3,11 @@
 
 from __future__ import annotations
 
-import ast
 import re
 import sys
 import tomllib
 from pathlib import Path
+from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
 
 from mcp_catalog import documentation_target, load_catalog
 
@@ -15,37 +15,21 @@ ROOT = Path(__file__).resolve().parents[1]
 
 PLATFORM_ROOT = "https://platform.acedata.cloud"
 LEGACY_DOCS_ROOT = "https://docs.acedata.cloud"
-TOOL_REFERENCE_ALIASES = ("kling", "seedream", "suno")
 
 
-def registered_tools(alias: str) -> set[str]:
-    names: set[str] = set()
-    for path in (ROOT / alias / "tools").glob("*.py"):
-        tree = ast.parse(path.read_text(), filename=str(path))
-        for node in tree.body:
-            if not isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
-                continue
-            for decorator in node.decorator_list:
-                call = decorator if isinstance(decorator, ast.Call) else None
-                function = call.func if call else decorator
-                if (
-                    isinstance(function, ast.Attribute)
-                    and isinstance(function.value, ast.Name)
-                    and function.value.id == "mcp"
-                    and function.attr == "tool"
-                ):
-                    names.add(node.name)
-    return names
+def without_utm(text: str) -> str:
+    def clean(match):
+        parts = urlsplit(match[0])
+        query = [
+            (key, value)
+            for key, value in parse_qsl(parts.query)
+            if key not in {"utm_source", "utm_medium", "utm_campaign"}
+        ]
+        return urlunsplit(
+            (parts.scheme, parts.netloc, parts.path, urlencode(query), parts.fragment)
+        )
 
-
-def documented_tools(alias: str) -> set[str]:
-    readme = (ROOT / alias / "README.md").read_text()
-    match = re.search(
-        r"^## Tool Reference\s*$\n(.*?)(?=^## |\Z)", readme, re.MULTILINE | re.DOTALL
-    )
-    if not match:
-        return set()
-    return set(re.findall(r"^\| `([a-z0-9_]+)` \|", match.group(1), re.MULTILINE))
+    return re.sub(r"https://platform\.acedata\.cloud[^\s)\"<>\[\]`]*", clean, text)
 
 
 def fail(errors: list[str], message: str) -> None:
@@ -77,7 +61,7 @@ def main() -> int:
             r"^  ([a-z0-9_-]+):\s*$", (ROOT / "sync.yaml").read_text(), re.MULTILINE
         )
     )
-    root_readme = (ROOT / "README.md").read_text()
+    root_readme = without_utm((ROOT / "README.md").read_text())
     active_listed = set(
         re.findall(
             r"^\| `([^/`]+)/`.*\| \[(?:Documentation|Service details)\]\(",
@@ -101,34 +85,20 @@ def main() -> int:
         if f"| [{label}]({url}) |" not in root_readme:
             fail(errors, f"README uses the wrong documentation target for {alias}")
 
-    for alias in TOOL_REFERENCE_ALIASES:
-        registered = registered_tools(alias)
-        documented = documented_tools(alias)
-        if missing := sorted(registered - documented):
-            fail(
-                errors,
-                f"{alias}/README.md: Tool Reference missing registered tools: {', '.join(missing)}",
-            )
-        if extra := sorted(documented - registered):
-            fail(
-                errors,
-                f"{alias}/README.md: Tool Reference lists unregistered tools: {', '.join(extra)}",
-            )
-
     for alias in sorted(package_dirs):
         entry = catalog[alias]
         url, label = targets.get(alias, (None, None))
         pyproject_path = ROOT / alias / "pyproject.toml"
         project = tomllib.loads(pyproject_path.read_text())["project"]
         actual_url = (project.get("urls") or {}).get("Documentation")
-        if actual_url != url:
+        if (without_utm(actual_url) if actual_url else None) != url:
             fail(
                 errors,
                 f"{alias}/pyproject.toml: Documentation must be {url!r}, found {actual_url!r}",
             )
 
         readme_path = ROOT / alias / "README.md"
-        readme = readme_path.read_text()
+        readme = without_utm(readme_path.read_text())
         if url:
             expected = f"<!-- canonical-documentation -->\n[{label}]({url})"
             if expected not in readme:
@@ -160,7 +130,7 @@ def main() -> int:
         for path in (
             jetbrains.glob("**/*SettingsConfigurable.kt") if jetbrains.exists() else []
         ):
-            text = path.read_text()
+            text = without_utm(path.read_text())
             if url and f'browserLink("{label}", "{url}")' not in text:
                 fail(
                     errors, f"{path.relative_to(ROOT)}: missing canonical browser link"

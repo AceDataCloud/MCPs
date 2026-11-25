@@ -3,7 +3,29 @@
 <!-- mcp-name: io.github.AceDataCloud/mcp-aichat -->
 
 A Model Context Protocol (MCP) server for AI dialogue via the AceDataCloud platform.
-Supports a wide range of models including GPT-4/5, o-series, DeepSeek, Grok, and GLM.
+Supports the published AiChat and native Messages models, including GPT, Claude, Gemini, DeepSeek, Grok, Kimi, and GLM.
+
+## Ace Data Cloud in goose
+
+[Named provider preset and upstream acceptance status](goose/README.md). This independently installed preset is not an official built-in provider.
+
+## Native Messages, including Claude 5.5
+
+Use `aichat_create_message` for models listed under native Messages by `aichat_list_models`, including `claude-opus-5-5` and `claude-sonnet-5-5`. This tool calls the actual `/v1/messages` endpoint. Models keep their exact public identifiers.
+
+Use the API token of your **General application** with access to the **Claude Messages API**. A token limited to AiChat conversation services does not automatically authorize Messages. Hosted HTTP uses `Authorization: Bearer`; the existing OAuth and local stdio configuration remain available.
+
+The tool requires `model`, a nonempty `messages` history, and a positive `max_tokens` output budget. The budget is a caller-selected request limit, not a claim about the model's context capacity. Native system content, tools, thinking and other optional Messages fields are forwarded without converting them to AiChat conversation fields. Capability availability and pricing follow the selected model and your application. The call uses the application's balance and does not automatically retry.
+
+```json
+{
+  "model": "claude-sonnet-5-5",
+  "messages": [{"role": "user", "content": "Summarize this design."}],
+  "max_tokens": 1024
+}
+```
+
+For contract updates, the existing PlatformBackend bundle maps `claude` to `aichat`. Generate this tool's model choices with `python scripts/sync_messages_models.py --bundle-dir /path/to/verified-bundle` from the `aichat/` directory, then run the normal tests. `--check` verifies that the committed choices still match that bundle.
 
 ## Features
 
@@ -12,35 +34,151 @@ Supports a wide range of models including GPT-4/5, o-series, DeepSeek, Grok, and
 - **Stateful mode**: Optional server-side conversation state management
 - **Reference sources**: Include external references for context-aware responses
 
-## Installation
+## Connect: hosted OAuth, API token, or local stdio
 
-```bash
-pip install mcp-aichat
+The hosted endpoint is `https://aichat.mcp.acedata.cloud/mcp`. Choose one route for the MCP client:
+
+| Route | When to use it | Credential setup |
+|---|---|---|
+| Hosted OAuth | The client supports remote MCP OAuth | Add only the URL, then sign in to AceDataCloud and approve access. No token needs to be pasted into client configuration. |
+| Hosted API token | The client cannot finish OAuth, or you need an explicit integration credential | Send an AceDataCloud API token in the `Authorization: Bearer …` header. Keep it in a local secret store or environment variable. |
+| Local stdio | The client runs a local MCP process | Install `mcp-aichat` and pass `ACEDATACLOUD_API_TOKEN` to that process. It still calls the AceDataCloud API. |
+
+The hosted service advertises OAuth metadata and Dynamic Client Registration (DCR). **DCR registers the client application; it is not an API key.** OAuth signs you in and the client sends the resulting Bearer token; it may reuse or create an API credential for the account. Browser sign-in still requires an AceDataCloud account. The hosted service can be metered: review [current service documentation](https://platform.acedata.cloud/documents/aichat?utm_source=github&utm_medium=referral&utm_campaign=evergreen) and displayed pricing before a real operation. Do not configure both an OAuth login and a fixed `Authorization` header for the same server.
+
+### Hosted OAuth examples
+
+- **Claude and Claude Desktop chat:** Add a remote custom connector in `Customize → Connectors → Add custom connector`, enter `https://aichat.mcp.acedata.cloud/mcp`, select sign-in, and choose **Register automatically** if Claude asks how to register its OAuth client. Complete consent. Claude Desktop's local `claude_desktop_config.json` is a separate setup. [Claude connector guide](https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp).
+- **Claude Code:** `claude mcp add --transport http --scope user aichat https://aichat.mcp.acedata.cloud/mcp`, then `claude mcp login aichat`. Check `/mcp`. [Claude Code MCP guide](https://code.claude.com/docs/en/mcp).
+- **Cursor:** Add a remote server with only `https://aichat.mcp.acedata.cloud/mcp`. For a project, merge the entry below into `<project>/.cursor/mcp.json`; for personal use, use `~/.cursor/mcp.json`. [Cursor MCP guide](https://cursor.com/docs/mcp).
+- **VS Code / Copilot:** Run **MCP: Add Server**, select HTTP, enter `https://aichat.mcp.acedata.cloud/mcp`, then finish the browser sign-in. New portable workspace configs use `<project>/.mcp.json`; the VS Code-specific format below uses `<project>/.vscode/mcp.json` or the user profile. Check **MCP: List Servers**. [VS Code MCP setup](https://code.visualstudio.com/docs/agent-customization/mcp-servers).
+- **Codex:** `codex mcp add aichat --url https://aichat.mcp.acedata.cloud/mcp`, then `codex mcp login aichat`. Its user settings are in `~/.codex/config.toml`. [Official Codex MCP guide](https://developers.openai.com/codex/mcp/).
+
+Cursor project config (OAuth):
+
+```json
+{
+  "mcpServers": {
+    "aichat": {"url": "https://aichat.mcp.acedata.cloud/mcp"}
+  }
+}
 ```
 
-## Configuration
+VS Code-specific workspace config (OAuth):
 
-Set your AceDataCloud API token:
-
-```bash
-export ACEDATACLOUD_API_TOKEN=your_token_here
+```json
+{
+  "servers": {
+    "aichat": {"type": "http", "url": "https://aichat.mcp.acedata.cloud/mcp"}
+  }
+}
 ```
 
-Get your token from [https://platform.acedata.cloud](https://platform.acedata.cloud).
+### Hosted API token
 
-## Usage
+<!-- BEGIN TOKEN ONBOARDING -->
+1. Open [Ace Data Cloud → Applications](https://platform.acedata.cloud/console/applications?utm_source=github&utm_medium=referral&utm_campaign=evergreen). Sign in, or register an account first.
+2. Find **General application**. If it has not been created, choose **Initialize General Application**. A general key can use the services available to your account; a dedicated application's key is limited to its service. Check the required service/model access and [current pricing](https://platform.acedata.cloud/models?utm_source=github&utm_medium=referral&utm_campaign=evergreen).
+3. Copy the **API Key** from the application card, or open **Keys / Manage Keys → Create** to create a separate key for this integration. Give it a recognizable name so you can revoke or rotate it independently.
+4. When creating a key, review **Expiration Time**, **Set Usage Limitation**, and **Allowed APIs**. Enable only the restrictions you need, allow the operations you will call, then click **Create** and copy the token from the key list. Task lookup does not grant permission to submit a generation. Confirm the application's balance can cover your first request; any trial allowance is whatever your account currently displays.
+5. Copy only the token value, without quotation marks, spaces, or `Bearer `. An API Key / API Token field expects this raw value; only a manually configured HTTP `Authorization` header needs the `Bearer ` prefix. A `platform-...` account-management token cannot replace a generation API key.
 
-### stdio mode (default)
+![Copy an application API key or open Manage Keys](https://raw.githubusercontent.com/AceDataCloud/NanoBananaDify/2522b2f57210597af2db866445319334a1677a23/_assets/tutorial/get-api-key-en.png)
+
+![Create a separately named key with optional restrictions](https://raw.githubusercontent.com/AceDataCloud/NanoBananaDify/2522b2f57210597af2db866445319334a1677a23/_assets/tutorial/create-api-key-en.png)
+
+Save the key in the client's credential store or the environment variable shown below. Never put it in a prompt, shared workflow, screenshot, or Git commit. If authentication fails, check the full copied value, application/service access, expiration, usage limit, and balance before creating another key.
+<!-- END TOKEN ONBOARDING -->
+
+A fixed Bearer header bypasses OAuth. If the header is invalid, remove it before trying browser sign-in; keep the saved credential private.
+
+For Claude Code, the shell expands the token when you add the server; treat the saved user MCP config as a secret:
 
 ```bash
+export ACEDATACLOUD_API_TOKEN='YOUR_API_TOKEN'
+claude mcp add --transport http --scope user aichat https://aichat.mcp.acedata.cloud/mcp \
+  --header "Authorization: Bearer $ACEDATACLOUD_API_TOKEN"
+```
+
+For a Claude Code project config, put a variable reference in `<project>/.mcp.json` and set that variable in the environment that launches Claude Code:
+
+```json
+{
+  "mcpServers": {
+    "aichat": {
+      "type": "http",
+      "url": "https://aichat.mcp.acedata.cloud/mcp",
+      "headers": {"Authorization": "Bearer ${ACEDATACLOUD_API_TOKEN}"}
+    }
+  }
+}
+```
+
+Cursor uses a different environment-variable syntax in `~/.cursor/mcp.json` or an uncommitted project config:
+
+```json
+{
+  "mcpServers": {
+    "aichat": {
+      "url": "https://aichat.mcp.acedata.cloud/mcp",
+      "headers": {"Authorization": "Bearer ${env:ACEDATACLOUD_API_TOKEN}"}
+    }
+  }
+}
+```
+
+In VS Code, run **MCP: Open User Configuration** and merge this server plus its masked input; `${input:...}` is for VS Code's user/workspace format and is not portable to the Agent Host `.mcp.json` format:
+
+```json
+{
+  "inputs": [
+    {"id": "acedata-aichat-token", "type": "promptString", "description": "AceDataCloud API token", "password": true}
+  ],
+  "servers": {
+    "aichat": {
+      "type": "http",
+      "url": "https://aichat.mcp.acedata.cloud/mcp",
+      "headers": {"Authorization": "Bearer ${input:acedata-aichat-token}"}
+    }
+  }
+}
+```
+
+For **Cline**, use its MCP configuration UI or CLI file `~/.cline/data/settings/cline_mcp_settings.json`; its remote transport value is `streamableHttp`. For **JetBrains AI Assistant**, add a remote URL from **Settings → Tools → AI Assistant → Model Context Protocol (MCP)**. For **Zed**, use a `context_servers` entry with the URL only for OAuth or add a local Bearer header. These clients have different configuration schemas; follow their current UI rather than copying another client's JSON. [Cline](https://docs.cline.bot/mcp/mcp-overview) · [JetBrains](https://www.jetbrains.com/help/ai-assistant/mcp.html) · [Zed](https://zed.dev/docs/ai/mcp).
+
+### Local stdio
+
+Install the package and give the local process an API token:
+
+```bash
+python -m pip install mcp-aichat
+export ACEDATACLOUD_API_TOKEN='YOUR_API_TOKEN'
 mcp-aichat
 ```
 
-### HTTP mode
+For Claude Desktop local MCP, merge this entry into the file opened by its developer settings (`~/Library/Application Support/Claude/claude_desktop_config.json` on macOS). `uvx` requires [uv](https://docs.astral.sh/uv/) on `PATH`:
 
-```bash
-mcp-aichat --transport http --port 8000
+```json
+{
+  "mcpServers": {
+    "aichat": {
+      "command": "uvx",
+      "args": ["mcp-aichat"],
+      "env": {"ACEDATACLOUD_API_TOKEN": "YOUR_API_TOKEN"}
+    }
+  }
+}
 ```
+
+Keep this user-level file private. Self-hosted HTTP uses `mcp-aichat --transport http --port 8000`; expose it only with suitable network and TLS controls. Local execution still calls the AceDataCloud API.
+
+### Check before using the service
+
+1. `https://aichat.mcp.acedata.cloud/health` returning `{"status":"ok"}` checks endpoint reachability only.
+2. Confirm that the MCP client loads tools. `aichat_list_models` is a reference tool; it does not verify downstream API access or balance.
+3. If you need a full API check, call `aichat_create_conversation` with your own valid input after reviewing [current service documentation](https://platform.acedata.cloud/documents/aichat?utm_source=github&utm_medium=referral&utm_campaign=evergreen) and displayed pricing.
+
+For **401**, check which auth route the client used and whether the token or OAuth session is valid. A **403** may mean an account permission or content moderation failure; read the returned error. Insufficient balance and downstream service failures need their own diagnosis. A listed tool or submitted task does not prove a successful result.
 
 ## Available Tools
 
@@ -51,9 +189,18 @@ mcp-aichat --transport http --port 8000
 | `aichat_list_models` | List all available AI models |
 | `aichat_get_usage_guide` | Get API usage guide |
 
+### AiChat v2 agent iterations
+
+`aichat_create_conversation_v2` accepts `max_turns` from 1 to 500. Omit it to use
+the Backend default of 500. This limits agent iterations for one request, not
+conversation-history length; `max_turns=1` prevents tool calls. Each model call
+is billed by actual usage, and execution may end earlier due to timeouts,
+authorization or other execution conditions.
+
 ## Supported Models
 
 ### OpenAI
+- GPT-5.6 Sol Fast: `gpt-5.6-sol-fast`, supported by both `aichat_create_conversation` and `aichat_create_conversation_v2`. Existing defaults are unchanged.
 - GPT-5 series: gpt-5.5, gpt-5.4, gpt-5.2, gpt-5.1, gpt-5, gpt-5-mini, gpt-5-nano
 - GPT-4.1 series: gpt-4.1, gpt-4.1-mini, gpt-4.1-nano
 - GPT-4o series: gpt-4o, gpt-4o-mini, gpt-4o-all, gpt-4o-image
@@ -61,7 +208,7 @@ mcp-aichat --transport http --port 8000
 - o-series: o1, o1-mini, o1-pro, o3, o3-mini, o3-pro, o4-mini
 
 ### DeepSeek
-- deepseek-r1, deepseek-r1-0528, deepseek-v3, deepseek-v3-250324, deepseek-v4-flash, deepseek-v4-pro
+- deepseek-v4.1-flash-1017, deepseek-v4.1-flash, deepseek-v4-flash, deepseek-flash, deepseek-v4-pro, deepseek-v3.2
 
 ### xAI
 - grok-3
@@ -69,11 +216,46 @@ mcp-aichat --transport http --port 8000
 ### Zhipu AI
 - glm-5.1, glm-4.7, glm-4.6, glm-3-turbo
 
+### Google Gemini
+
+`gemini-3.8-flash` is available through both conversation tools.
+Use `aichat_create_conversation_v2` with `model="gemini-4-argon"`,
+`model="gemini-4-carbon"` or `model="gemini-4-hydrogen"` for Gemini 4
+Argon. It is not available through the v1 tool; the default remains `gpt-4.1`.
+
+```json
+{"model":"gemini-4-argon","question":"Review this code and identify its key risks."}
+```
+
+Pass these arguments to `aichat_create_conversation_v2`. This uses
+`/aichat2/conversations`, not native Gemini Generate Content or Google
+Interactions. The MCP tool does not expose `max_tokens`, thinking-level or
+explicit-cache controls; native endpoint capabilities do not imply those controls
+are available through this conversation wrapper.
+
+### Kimi (AiChat v2 only)
+
+Use `aichat_create_conversation_v2` with `model="kimi-k3.1-pro"` to use Kimi
+K3.1 Pro. `kimi-k3`, `kimi-k2.6`, and `kimi-k2.7-code` are also available; the default
+model is still `gpt-4.1`. These models are not available through the v1 tool.
+
+```json
+{"model":"kimi-k3.1-pro","question":"Review this code and identify its key risks."}
+```
+
+Pass these arguments to `aichat_create_conversation_v2`. The tool calls
+`/aichat2/conversations`, not `/kimi/chat/completions`, and does not expose the
+latter endpoint's `reasoning_effort` control.
+
 ## Documentation
 
 <!-- canonical-documentation -->
-[Documentation](https://platform.acedata.cloud/documents/aichat)
+[Documentation](https://platform.acedata.cloud/documents/aichat?utm_source=github&utm_medium=referral&utm_campaign=evergreen)
 
 ## License
 
 MIT
+
+## MiMo integration status
+
+The typed inputs include `mimo-v2.6-pro`, `mimo-v2.6-flash` and the v2 `mimo` group. Check the current model catalog, service status and account access before calling them. Initial scope is text, reasoning and function tools; built-in web search and multimodal inputs are not enabled.

@@ -31,7 +31,7 @@ def test_server_module_loads():
 
 
 def test_extract_and_render_tools_match_openapi_request_fields():
-    """Extract/render tools expose the documented async field, not legacy mode/cache fields."""
+    """Extract/render tools expose documented async, cookie and cache controls."""
     import tools  # noqa: F401
     from core.server import mcp
 
@@ -41,6 +41,6 @@ def test_extract_and_render_tools_match_openapi_request_fields():
 
         assert "async" in properties
         assert "mode" not in properties
-        assert "cookies" not in properties
-        assert "bypass_cache" not in properties
-        assert "cache_ttl_seconds" not in properties
+        assert "cookies" in properties
+        assert "bypass_cache" in properties
+        assert "cache_ttl_seconds" in properties

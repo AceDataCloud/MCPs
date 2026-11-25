@@ -1,9 +1,19 @@
 """Information and reference tools for Seedream API."""
 
+from mcp.types import ToolAnnotations
+
 from core.server import mcp
 
 
-@mcp.tool()
+@mcp.tool(
+    title="List Seedream models",
+    annotations=ToolAnnotations(
+        readOnlyHint=True,
+        destructiveHint=False,
+        idempotentHint=True,
+        openWorldHint=False,
+    ),
+)
 async def seedream_list_models() -> str:
     """List all available Seedream models with their capabilities and pricing.
 
@@ -15,19 +25,26 @@ async def seedream_list_models() -> str:
     Returns:
         Formatted table of all Seedream models with descriptions.
     """
-    # Last updated: 2026-09-05
     return """# Available Seedream Models
 
 | Model | Version | Type | Features | Price |
 |-------|---------|------|----------|-------|
+| `doubao-seedream-5-5-261028` | v5.5 | Generate/Edit | Multi-turn editing, native transparent output, and layers with OCR | Tiered Credits |
+| `doubao-seedream-5-0-flash-260915` | v5.0 Flash | Generate/Edit | Fast single images and editable layers | Per successful image |
 | `doubao-seedream-5-0-pro-260628` | v5.0 Pro | Generate/Edit | Flagship single image, transparent background, layer decomposition | Tiered Credits |
-| `doubao-seedream-5-0-260128` (alias: `doubao-seedream-5-0-lite-260128`) | v5.0 Lite | Generate/Edit | Sequential generation, streaming, web search | Per successful image |
+| `doubao-seedream-5-0-lite-260128` | v5.0 Lite | Generate/Edit | Sequential generation, streaming, web search | Per successful image |
 | `doubao-seedream-4-5-251128` | v4.5 | Generate/Edit | Previous flagship, sequential generation, streaming | Credits |
 | `doubao-seedream-4-0-250828` | v4.0 | Generate/Edit | Stable, sequential generation, streaming | Credits |
 
 ## Model Selection Guide
 
-### For Best Quality (single image)
+### For Native Transparent Images or Layers with OCR
+→ **doubao-seedream-5-5-261028** (v5.5)
+
+### For Fast Generation and Editing
+→ **doubao-seedream-5-0-flash-260915** (v5.0 Flash)
+
+### For Prompt Optimization in Fast Mode
 → **doubao-seedream-5-0-pro-260628** (v5.0 Pro)
 - Flagship single-image model with highest quality
 - Best for professional/commercial single images, transparent edits, or layer decomposition
@@ -35,8 +52,8 @@ async def seedream_list_models() -> str:
 - Does NOT support sequential generation, streaming, or web search
 
 ### For Sequential / Streaming (v5.0)
-→ **doubao-seedream-5-0-260128** (v5.0 Lite)
-- Latest flagship with sequential generation, streaming, web search
+→ **doubao-seedream-5-0-lite-260128** (v5.0 Lite)
+- Supports sequential generation, streaming, web search
 - Best when you need image sets or progressive output
 
 ### For Previous Flagship Quality
@@ -50,7 +67,7 @@ async def seedream_list_models() -> str:
 - Recommended for most use cases
 
 ### For Image Editing
-→ **doubao-seedream-5-0-260128** (v5.0 Lite)
+→ **doubao-seedream-5-0-lite-260128** (v5.0 Lite)
 - Accepts one or more input images
 - Best for style transfer, background changes, and multi-image composition
 
@@ -72,7 +89,15 @@ See the live pricing page for current Credits: https://platform.acedata.cloud/se
 """
 
 
-@mcp.tool()
+@mcp.tool(
+    title="List Seedream image sizes",
+    annotations=ToolAnnotations(
+        readOnlyHint=True,
+        destructiveHint=False,
+        idempotentHint=True,
+        openWorldHint=False,
+    ),
+)
 async def seedream_list_sizes() -> str:
     """List all available image sizes and resolution options for Seedream.
 
