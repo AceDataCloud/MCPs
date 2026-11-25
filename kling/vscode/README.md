@@ -57,7 +57,7 @@ For the full VS Code walkthrough, see [All Ace Data Cloud MCP servers in VS Code
 
 ## Tool Reference
 
-**8 tools** available via this server.
+**15 tools** available via this server.
 
 | Tool | Description |
 | --- | --- |
@@ -65,6 +65,13 @@ For the full VS Code walkthrough, see [All Ace Data Cloud MCP servers in VS Code
 | `kling_generate_video_from_image` | Generate AI video using reference images as start and/or end frames. |
 | `kling_extend_video` | Extend an existing video with additional content. |
 | `kling_generate_motion` | Transfer motion from a reference video to a character image. |
+| `kling_generate_storyboard` | Generate a multishot storyboard video with optional reference elements. |
+| `kling_generate_turbo_video` | Generate a Turbo video from text or a first frame. |
+| `kling_generate_with_assets` | Generate a video with platform element or voice IDs. |
+| `kling_goods_studio` | Generate a product studio video from a reference image and product title. |
+| `kling_lip_sync` | Synchronize text or recorded speech with a video. |
+| `kling_talking_photo` | Animate a portrait using text or audio. |
+| `kling_video_commerce` | Generate a creator or product voiceover video from an avatar and speech script. |
 | `kling_get_task` | Query the status and result of a video generation task. |
 | `kling_get_tasks_batch` | Query multiple video generation tasks at once. |
 | `kling_list_models` | List all available Kling models for video generation. |
