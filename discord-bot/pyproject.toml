@@ -1,7 +1,7 @@
 [project]
 name = "mcp-discord-bot"
 version = "2026.8.1.1"
-description = "MCP Server for Discord automation via Discord Agent Proxy"
+description = "MCP server for Discord application bots and Discord Agent Proxy instances"
 readme = "README.pypi.md"
 license = "MIT"
 requires-python = ">=3.10"
