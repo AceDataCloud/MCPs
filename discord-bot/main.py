@@ -1,9 +1,6 @@
 #!/usr/bin/env python3
 """
-MCP Discord Bot Server - Discord automation via Discord Agent Proxy.
-
-A Model Context Protocol (MCP) server that provides tools for interacting
-with Discord through a self-hosted Discord Agent Proxy instance.
+MCP server for Discord application bots and Discord Agent Proxy instances.
 """
 
 import argparse
@@ -17,7 +14,6 @@ from dotenv import load_dotenv
 load_dotenv()
 
 from core.config import settings
-from core.server import mcp
 
 # Configure logging
 logging.basicConfig(
@@ -50,17 +46,19 @@ def get_version() -> str:
 def main() -> None:
     """Run the MCP Discord Bot server."""
     parser = argparse.ArgumentParser(
-        description="MCP Discord Bot Server - Discord automation via Agent Proxy",
+        description="MCP server for Discord bot accounts and Discord Agent Proxy instances",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
-  mcp-discord-bot                    # Run with stdio transport (default)
+  mcp-discord-bot --bot-account      # Read-only Discord application bot over stdio
+  mcp-discord-bot                    # Connect to an existing proxy over stdio
   mcp-discord-bot --transport http   # Run with HTTP transport
   mcp-discord-bot --version          # Show version
 
 Environment Variables:
-  DISCORD_BOT_BASE_URL          URL of the deployed Discord Agent Proxy (required)
-  DISCORD_BOT_TOKEN             Access token for the Discord Agent Proxy (required)
+  DISCORDBOT_TOKEN              Discord application bot token for --bot-account
+  DISCORD_BOT_BASE_URL          URL of the deployed Discord Agent Proxy (proxy mode)
+  DISCORD_BOT_TOKEN             Access token for the Discord Agent Proxy (proxy mode)
   DISCORD_BOT_REQUEST_TIMEOUT   Request timeout in seconds (default: 30)
   LOG_LEVEL                     Logging level (default: INFO)
         """,
@@ -82,7 +80,21 @@ Environment Variables:
         default=8000,
         help="Port for HTTP transport (default: 8000)",
     )
+    parser.add_argument(
+        "--bot-account",
+        action="store_true",
+        help="Use Discord's read-only bot tools over local stdio",
+    )
     args = parser.parse_args()
+    if args.bot_account:
+        if args.transport != "stdio":
+            parser.error("--bot-account uses local stdio")
+        from core.bot_account import mcp as bot_mcp
+
+        bot_mcp.run(transport="stdio")
+        return
+
+    from core.server import mcp
 
     # Print startup banner
     safe_print("")
