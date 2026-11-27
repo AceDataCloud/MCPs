@@ -137,3 +137,7 @@ mappings:
     repo: AceDataCloud/AceMusicMCP
     exclude:
       - .gitbooks
+  tripo:
+    repo: AceDataCloud/TripoMCP
+    exclude:
+      - .gitbooks

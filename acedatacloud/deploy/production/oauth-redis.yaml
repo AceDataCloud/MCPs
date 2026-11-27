@@ -121,6 +121,7 @@ spec:
                   - mcp-serp
                   - mcp-shorturl
                   - mcp-suno
+                  - mcp-tripo
                   - mcp-veo
                   - mcp-wan
                   - mcp-webextrator

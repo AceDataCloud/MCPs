@@ -1,0 +1,37 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.AceDataCloud/mcp-tripo",
+  "description": "Generate and edit 3D models, rig characters, retarget animations and retrieve their tasks.",
+  "version": "2026.11.27.0",
+  "repository": {
+    "url": "https://github.com/AceDataCloud/TripoMCP",
+    "source": "github"
+  },
+  "packages": [
+    {
+      "identifier": "mcp-tripo",
+      "version": "2026.11.27.0",
+      "transport": {
+        "type": "stdio"
+      },
+      "registryType": "pypi",
+      "runtimeHint": "uvx",
+      "environmentVariables": [
+        {
+          "name": "ACEDATACLOUD_API_TOKEN",
+          "description": "API token from Ace Data Cloud (https://platform.acedata.cloud)",
+          "isRequired": true,
+          "isSecret": true
+        }
+      ]
+    }
+  ],
+  "websiteUrl": "https://platform.acedata.cloud/documents/tripo?utm_source=mcp_registry&utm_medium=referral&utm_campaign=evergreen",
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://tripo.mcp.acedata.cloud/mcp"
+    }
+  ],
+  "title": "Tripo 3D by Ace Data Cloud"
+}

@@ -318,6 +318,11 @@
         }
       }
     },
+    "tripo": {
+      "status": "active",
+      "type": "document",
+      "alias": "tripo"
+    },
     "turnstile": {
       "status": "active",
       "type": "document",
