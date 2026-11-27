@@ -155,7 +155,7 @@ Environment Variables:
                 return JSONResponse({"status": "ok"})
 
             async def favicon(_request: Request) -> RedirectResponse:
-                return RedirectResponse("https://cdn.acedata.cloud/ahjfwi.png", status_code=301)
+                return RedirectResponse("https://cdn.acedata.cloud/2440b75bb8.png", status_code=301)
 
             async def server_card(_request: Request) -> JSONResponse:
                 """MCP Server Card for Smithery and other registries."""

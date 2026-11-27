@@ -32,5 +32,11 @@
       "type": "streamable-http",
       "url": "https://wan.mcp.acedata.cloud/mcp"
     }
+  ],
+  "icons": [
+    {
+      "src": "https://cdn.acedata.cloud/a033884259.png",
+      "mimeType": "image/png"
+    }
   ]
 }

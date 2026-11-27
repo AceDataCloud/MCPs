@@ -36,10 +36,12 @@ def without_icons(source):
 
 class RuntimeMetadataTest(unittest.TestCase):
     def test_only_explicit_services_are_projected_and_copies_are_current(self):
-        self.assertEqual(
-            set(runtime_icons(load_catalog())),
-            {"aichat", "seedance", "nanobanana", "happyhorse", "openai"},
-        )
+        catalog = load_catalog()
+        active_opt_ins = {
+            alias for alias, service in catalog.items()
+            if service["status"] == "active" and "runtime_icon" in service
+        }
+        self.assertEqual(set(runtime_icons(catalog)), active_opt_ins)
         self.assertEqual(sync(check=True), [])
         for alias, icon in runtime_icons(load_catalog()).items():
             source = (ROOT / alias / "core/server.py").read_bytes()

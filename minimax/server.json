@@ -32,5 +32,11 @@
       "type": "streamable-http",
       "url": "https://minimax.mcp.acedata.cloud/mcp"
     }
+  ],
+  "icons": [
+    {
+      "src": "https://cdn.acedata.cloud/2440b75bb8.png",
+      "mimeType": "image/png"
+    }
   ]
 }

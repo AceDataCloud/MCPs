@@ -24,7 +24,8 @@
           "src": "https://cdn.acedata.cloud/acemusic-icon-52deddfc87b9.png",
           "mimeType": "image/png"
         }
-      }
+      },
+      "runtime_icon": "registry"
     },
     "aichat": {
       "status": "active",
@@ -66,6 +67,10 @@
       "vscode_bundle": {
         "label": "Fish Audio",
         "default": false
+      },
+      "runtime_icon": {
+        "src": "https://raw.githubusercontent.com/AceDataCloud/FishAudioDify/main/_assets/icon.png",
+        "mimeType": "image/png"
       }
     },
     "flux": {
@@ -75,6 +80,10 @@
       "vscode_bundle": {
         "label": "Flux",
         "default": true
+      },
+      "runtime_icon": {
+        "src": "https://cdn.acedata.cloud/ogm2oa.png",
+        "mimeType": "image/png"
       }
     },
     "glm": {
@@ -84,6 +93,10 @@
       "vscode_bundle": {
         "label": "GLM",
         "default": false
+      },
+      "runtime_icon": {
+        "src": "https://cdn.acedata.cloud/uploads/71c11f3e-043a-4974-833d-a346d489a232",
+        "mimeType": "image/png"
       }
     },
     "grok": {
@@ -93,6 +106,10 @@
       "vscode_bundle": {
         "label": "Grok Imagine",
         "default": false
+      },
+      "runtime_icon": {
+        "src": "https://cdn.acedata.cloud/p1ge98.png",
+        "mimeType": "image/png"
       }
     },
     "hailuo": {
@@ -102,6 +119,10 @@
       "vscode_bundle": {
         "label": "Hailuo",
         "default": false
+      },
+      "runtime_icon": {
+        "src": "https://cdn.acedata.cloud/0qg4gp.png",
+        "mimeType": "image/png"
       }
     },
     "happyhorse": {
@@ -131,7 +152,11 @@
     "image2text": {
       "status": "active",
       "type": "service",
-      "id": "2aaa7faf-099e-410e-82f3-8d78170f25bb"
+      "id": "2aaa7faf-099e-410e-82f3-8d78170f25bb",
+      "runtime_icon": {
+        "src": "https://cdn.acedata.cloud/uploads/ad333990-ea8e-4889-83c5-67385fc8d7b0",
+        "mimeType": "image/png"
+      }
     },
     "kling": {
       "status": "active",
@@ -140,6 +165,10 @@
       "vscode_bundle": {
         "label": "Kling",
         "default": false
+      },
+      "runtime_icon": {
+        "src": "https://cdn.acedata.cloud/qpbbbb.jpg",
+        "mimeType": "image/jpeg"
       }
     },
     "luma": {
@@ -149,6 +178,10 @@
       "vscode_bundle": {
         "label": "Luma",
         "default": true
+      },
+      "runtime_icon": {
+        "src": "https://cdn.acedata.cloud/ahjfwi.png",
+        "mimeType": "image/png"
       }
     },
     "maestro": {
@@ -177,6 +210,10 @@
       "vscode_bundle": {
         "label": "MiniMax",
         "default": false
+      },
+      "runtime_icon": {
+        "src": "https://cdn.acedata.cloud/2440b75bb8.png",
+        "mimeType": "image/png"
       }
     },
     "nanobanana": {
@@ -206,7 +243,7 @@
         "default": false
       },
       "runtime_icon": {
-        "src": "https://cdn.acedata.cloud/2870040497.png",
+        "src": "https://cdn.acedata.cloud/7dljuv.png",
         "mimeType": "image/png"
       },
       "registry_profiles": [
@@ -224,7 +261,7 @@
             }
           ],
           "icon": {
-            "src": "https://cdn.acedata.cloud/2870040497.png",
+            "src": "https://raw.githubusercontent.com/AceDataCloud/GPTImageDify/main/_assets/icon.png",
             "mimeType": "image/png"
           }
         }
@@ -237,6 +274,10 @@
       "vscode_bundle": {
         "label": "Producer",
         "default": false
+      },
+      "runtime_icon": {
+        "src": "https://cdn.acedata.cloud/id0mz5.jpg",
+        "mimeType": "image/jpeg"
       }
     },
     "qwen-image": {
@@ -246,6 +287,10 @@
       "vscode_bundle": {
         "label": "Qwen Image",
         "default": false
+      },
+      "runtime_icon": {
+        "src": "https://avatars.githubusercontent.com/u/141221163?s=192&v=4",
+        "mimeType": "image/png"
       }
     },
     "recaptcha": {
@@ -278,6 +323,10 @@
       "vscode_bundle": {
         "label": "Seedream",
         "default": true
+      },
+      "runtime_icon": {
+        "src": "https://cdn.acedata.cloud/9egrbn.png",
+        "mimeType": "image/png"
       }
     },
     "serp": {
@@ -287,6 +336,10 @@
       "vscode_bundle": {
         "label": "Google Search",
         "default": true
+      },
+      "runtime_icon": {
+        "src": "https://cdn.acedata.cloud/27e11e555d.png",
+        "mimeType": "image/png"
       }
     },
     "shorturl": {
@@ -316,12 +369,17 @@
           "src": "https://cdn.acedata.cloud/l3ffw7.jpg",
           "mimeType": "image/jpeg"
         }
-      }
+      },
+      "runtime_icon": "registry"
     },
     "tripo": {
       "status": "active",
       "type": "document",
-      "alias": "tripo"
+      "alias": "tripo",
+      "runtime_icon": {
+        "src": "https://cdn.acedata2.cloud/tripo/catalog/tripo-icon-a80c573eb58a.png",
+        "mimeType": "image/png"
+      }
     },
     "turnstile": {
       "status": "active",
@@ -335,6 +393,10 @@
       "vscode_bundle": {
         "label": "Veo",
         "default": true
+      },
+      "runtime_icon": {
+        "src": "https://cdn.acedata.cloud/8nxyy9.jpg",
+        "mimeType": "image/jpeg"
       }
     },
     "wan": {
@@ -344,6 +406,10 @@
       "vscode_bundle": {
         "label": "Wan",
         "default": false
+      },
+      "runtime_icon": {
+        "src": "https://cdn.acedata.cloud/a033884259.png",
+        "mimeType": "image/png"
       }
     },
     "webextrator": {

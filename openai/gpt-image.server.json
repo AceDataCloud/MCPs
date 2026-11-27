@@ -34,11 +34,11 @@
     }
   ],
   "websiteUrl": "https://github.com/AceDataCloud/OpenAIMCP/blob/main/GPT_IMAGE.md",
-  "title": "GPT Image by Ace Data Cloud",
   "icons": [
     {
-      "src": "https://cdn.acedata.cloud/2870040497.png",
+      "src": "https://raw.githubusercontent.com/AceDataCloud/GPTImageDify/main/_assets/icon.png",
       "mimeType": "image/png"
     }
-  ]
+  ],
+  "title": "GPT Image by Ace Data Cloud"
 }
