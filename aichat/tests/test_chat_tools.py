@@ -55,7 +55,9 @@ async def test_gemini_argon_discovery_identifies_v2_and_wrapper_limits() -> None
 
 
 @pytest.mark.asyncio
-@pytest.mark.parametrize("model", ["gemini-4-argon", "gemini-4-carbon", "gemini-4-hydrogen"])
+@pytest.mark.parametrize(
+    "model", ["gemini-4-argon", "gemini-4-carbon", "gemini-4-neon", "gemini-4-hydrogen"]
+)
 async def test_gemini_argon_v2_dispatch_preserves_public_model(
     mock_conversation_response, model
 ) -> None:

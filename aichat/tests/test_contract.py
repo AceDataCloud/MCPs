@@ -109,6 +109,7 @@ def test_v2_offers_gemini_spec_models():
     spec_models = {
         "gemini-4-argon",
         "gemini-4-carbon",
+        "gemini-4-neon",
         "gemini-4-hydrogen",
         "gemini-3.8-flash",
         "gemini-3.7-flash",
