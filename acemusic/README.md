@@ -32,7 +32,7 @@ Select **Test**, confirm that `acemusic_list_models` is available, then enable
 the server for your intended agent. Retrieve existing work with
 `acemusic_get_task` and the original task ID.
 
-Read the [privacy policy](https://platform.acedata.cloud/privacy). For setup or
+Read the [privacy policy](https://platform.acedata.cloud/privacy?utm_source=github&utm_medium=referral&utm_campaign=evergreen). For setup or
 billing help, contact [Ace Data Cloud support](https://github.com/AceDataCloud/AceMusicMCP/issues).
 Keep tokens, private task IDs and audio out of public support tickets.
 
