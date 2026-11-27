@@ -1,5 +1,47 @@
 {
   "context_servers": {
+    "ace-google-search": {
+      "command": "uvx",
+      "args": [
+        "mcp-serp"
+      ]
+    },
+    "ace-aichat": {
+      "command": "uvx",
+      "args": [
+        "mcp-aichat"
+      ]
+    },
+    "ace-grok": {
+      "command": "uvx",
+      "args": [
+        "mcp-grok"
+      ]
+    },
+    "ace-glm": {
+      "command": "uvx",
+      "args": [
+        "mcp-glm"
+      ]
+    },
+    "ace-image2text": {
+      "command": "uvx",
+      "args": [
+        "mcp-image2text"
+      ]
+    },
+    "ace-shorturl": {
+      "command": "uvx",
+      "args": [
+        "mcp-shorturl"
+      ]
+    },
+    "ace-webextrator": {
+      "command": "uvx",
+      "args": [
+        "mcp-webextrator"
+      ]
+    },
     "ace-music": {
       "command": "uvx",
       "args": [
@@ -10,6 +52,18 @@
       "command": "uvx",
       "args": [
         "mcp-suno"
+      ]
+    },
+    "ace-producer": {
+      "command": "uvx",
+      "args": [
+        "mcp-producer"
+      ]
+    },
+    "ace-fish": {
+      "command": "uvx",
+      "args": [
+        "mcp-fish"
       ]
     },
     "ace-nano-banana": {
@@ -32,10 +86,34 @@
         "mcp-seedream-pro"
       ]
     },
+    "ace-flux": {
+      "command": "uvx",
+      "args": [
+        "mcp-flux-pro"
+      ]
+    },
+    "ace-qwen-image": {
+      "command": "uvx",
+      "args": [
+        "mcp-qwen-image"
+      ]
+    },
+    "ace-tripo": {
+      "command": "uvx",
+      "args": [
+        "mcp-tripo"
+      ]
+    },
     "ace-seedance": {
       "command": "uvx",
       "args": [
         "mcp-seedance"
+      ]
+    },
+    "ace-kling": {
+      "command": "uvx",
+      "args": [
+        "mcp-kling"
       ]
     },
     "ace-veo": {
@@ -44,10 +122,46 @@
         "mcp-veo"
       ]
     },
-    "ace-google-search": {
+    "ace-hailuo": {
       "command": "uvx",
       "args": [
-        "mcp-serp"
+        "mcp-hailuo"
+      ]
+    },
+    "ace-happyhorse": {
+      "command": "uvx",
+      "args": [
+        "mcp-happyhorse"
+      ]
+    },
+    "ace-luma": {
+      "command": "uvx",
+      "args": [
+        "mcp-luma"
+      ]
+    },
+    "ace-minimax": {
+      "command": "uvx",
+      "args": [
+        "mcp-minimax"
+      ]
+    },
+    "ace-wan": {
+      "command": "uvx",
+      "args": [
+        "mcp-wan"
+      ]
+    },
+    "ace-digitalhuman": {
+      "command": "uvx",
+      "args": [
+        "mcp-digitalhuman"
+      ]
+    },
+    "ace-maestro": {
+      "command": "uvx",
+      "args": [
+        "mcp-maestro"
       ]
     }
   }

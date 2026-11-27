@@ -1,10 +1,34 @@
 {
   "context_servers": {
+    "ace-google-search": {
+      "url": "https://serp.mcp.acedata.cloud/mcp"
+    },
+    "ace-aichat": {
+      "url": "https://aichat.mcp.acedata.cloud/mcp"
+    },
+    "ace-grok": {
+      "url": "https://grok.mcp.acedata.cloud/mcp"
+    },
+    "ace-glm": {
+      "url": "https://glm.mcp.acedata.cloud/mcp"
+    },
+    "ace-shorturl": {
+      "url": "https://shorturl.mcp.acedata.cloud/mcp"
+    },
+    "ace-webextrator": {
+      "url": "https://webextrator.mcp.acedata.cloud/mcp"
+    },
     "ace-music": {
       "url": "https://acemusic.mcp.acedata.cloud/mcp"
     },
     "ace-suno": {
       "url": "https://suno.mcp.acedata.cloud/mcp"
+    },
+    "ace-producer": {
+      "url": "https://producer.mcp.acedata.cloud/mcp"
+    },
+    "ace-fish": {
+      "url": "https://fish.mcp.acedata.cloud/mcp"
     },
     "ace-nano-banana": {
       "url": "https://nanobanana.mcp.acedata.cloud/mcp"
@@ -15,14 +39,41 @@
     "ace-seedream": {
       "url": "https://seedream.mcp.acedata.cloud/mcp"
     },
+    "ace-flux": {
+      "url": "https://flux.mcp.acedata.cloud/mcp"
+    },
+    "ace-qwen-image": {
+      "url": "https://qwen-image.mcp.acedata.cloud/mcp"
+    },
+    "ace-tripo": {
+      "url": "https://tripo.mcp.acedata.cloud/mcp"
+    },
     "ace-seedance": {
       "url": "https://seedance.mcp.acedata.cloud/mcp"
+    },
+    "ace-kling": {
+      "url": "https://kling.mcp.acedata.cloud/mcp"
     },
     "ace-veo": {
       "url": "https://veo.mcp.acedata.cloud/mcp"
     },
-    "ace-google-search": {
-      "url": "https://serp.mcp.acedata.cloud/mcp"
+    "ace-hailuo": {
+      "url": "https://hailuo.mcp.acedata.cloud/mcp"
+    },
+    "ace-happyhorse": {
+      "url": "https://happyhorse.mcp.acedata.cloud/mcp"
+    },
+    "ace-luma": {
+      "url": "https://luma.mcp.acedata.cloud/mcp"
+    },
+    "ace-minimax": {
+      "url": "https://minimax.mcp.acedata.cloud/mcp"
+    },
+    "ace-wan": {
+      "url": "https://wan.mcp.acedata.cloud/mcp"
+    },
+    "ace-maestro": {
+      "url": "https://maestro.mcp.acedata.cloud/mcp"
     }
   }
 }

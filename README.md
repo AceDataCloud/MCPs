@@ -80,7 +80,7 @@ has fetched or rendered the image.
 
 ## Zed
 
-[Connect hosted or local media and search servers in Zed](zed/README.md). Select individual services in Zed settings or use the five-tool GPT Image profile locally.
+[Connect media, search, chat, speech and utility tools in Zed](zed/README.md). Choose from 27 local service configurations and 25 hosted connections. The local GPT Image profile exposes five image tools.
 
 ## LangBot Space
 
