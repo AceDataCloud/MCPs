@@ -41,6 +41,7 @@ SHARED_SERVERS = (
     "shorturl",
     "sora",
     "suno",
+    "tripo",
     "turnstile",
     "veo",
     "wan",

@@ -1,0 +1,30 @@
+# Tripo 3D MCP
+
+Generate a 3D model from text, an image or multiple views. Import, texture and convert a model, check its riggability, bind a skeleton or retarget animation presets through Ace Data Cloud.
+
+<!-- canonical-documentation -->
+[Documentation](https://platform.acedata.cloud/documents/tripo?utm_source=github&utm_medium=referral&utm_campaign=evergreen)
+
+## Connect
+
+For a local MCP client, set the command to `uvx` and the argument to `mcp-tripo`. Supply `ACEDATACLOUD_API_TOKEN` through the client's secret or environment settings. The hosted Streamable HTTP endpoint is `https://tripo.mcp.acedata.cloud/mcp` and supports authorization through Ace Data Cloud.
+
+## Tools
+
+| Tool | Operation |
+| --- | --- |
+| `tripo_generate_model` | Generate from one prompt, one image or 2–4 views |
+| `tripo_import_model` | Import a public model URL and obtain a reusable asset ID |
+| `tripo_texture_model` | Texture an owned asset or a public model URL |
+| `tripo_convert_model` | Export GLTF, OBJ, FBX, USDZ, STL or 3MF |
+| `tripo_check_rig` | Check whether a model can be rigged |
+| `tripo_rig_model` | Bind a skeleton |
+| `tripo_retarget_animation` | Apply one to five motion presets to an owned rigged asset |
+| `tripo_get_task` | Retrieve by task ID or trace ID |
+| `tripo_get_tasks` | Retrieve up to 100 task IDs or trace IDs in order |
+
+Operations submit asynchronously. Save the returned `task_id` and call `tripo_get_task` with that ID until the record contains `response.success`. Finished file operations expose `response.data[0].model_url` and a reusable asset `id`. A successful rig check returns a boolean `riggable`, which may be false. OBJ and selected FBX exports can be ZIP files. Callers retrying a submission should reuse its `idempotency_key` and unchanged arguments.
+
+Generation, texturing, conversion, rigging and retargeting consume credits. Import, riggability checks and task queries are free. Use the same Ace account for dependent model and animation operations.
+
+<!-- mcp-name: io.github.AceDataCloud/mcp-tripo -->
