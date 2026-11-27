@@ -43,7 +43,11 @@
     "digitalhuman": {
       "status": "active",
       "type": "document",
-      "alias": "digitalhuman"
+      "alias": "digitalhuman",
+      "runtime_icon": {
+        "src": "https://cdn.acedata.cloud/uploads/1083534c-b49d-4242-899e-b0d9190dddbc",
+        "mimeType": "image/png"
+      }
     },
     "discord-bot": {
       "status": "active",
@@ -191,6 +195,15 @@
       "vscode_bundle": {
         "label": "Maestro",
         "default": false
+      },
+      "runtime_icon": "registry",
+      "registry": {
+        "title": "Maestro by Ace Data Cloud",
+        "description": "Produce complete AI videos from a brief with Maestro",
+        "icon": {
+          "src": "https://cdn.acedata.cloud/uploads/c05acf25-8990-4004-9a29-6fa6865ed66f",
+          "mimeType": "image/png"
+        }
       }
     },
     "midjourney": {
@@ -349,6 +362,15 @@
       "vscode_bundle": {
         "label": "Short URL",
         "default": true
+      },
+      "runtime_icon": "registry",
+      "registry": {
+        "title": "Short URL by Ace Data Cloud",
+        "description": "MCP server for URL shortening and management",
+        "icon": {
+          "src": "https://cdn.acedata.cloud/4f9642f3b6.svg",
+          "mimeType": "image/svg+xml"
+        }
       }
     },
     "sora": {
@@ -419,6 +441,15 @@
       "vscode_bundle": {
         "label": "Web Extractor",
         "default": false
+      },
+      "runtime_icon": "registry",
+      "registry": {
+        "title": "Web Extractor by Ace Data Cloud",
+        "description": "MCP server for web extraction and rendering via AceDataCloud WebExtrator",
+        "icon": {
+          "src": "https://cdn.acedata.cloud/0442b4af2f.png",
+          "mimeType": "image/png"
+        }
       }
     }
   }
