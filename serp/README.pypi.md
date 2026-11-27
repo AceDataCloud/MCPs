@@ -13,6 +13,16 @@ A [Model Context Protocol (MCP)](https://modelcontextprotocol.io) server for Goo
 
 Perform Google searches and get structured results directly from Claude, VS Code, or any MCP-compatible client.
 
+## Use in Kiro
+
+[![Add Google Search to Kiro](https://kiro.dev/images/add-to-kiro.svg)](https://kiro.dev/launch/mcp/add?name=acedatacloud-serp&config=%7B%22command%22%3A%22uvx%22%2C%22args%22%3A%5B%22--from%22%2C%22mcp-serp%3D%3D2026.11.27.0%22%2C%22mcp-serp%22%5D%2C%22env%22%3A%7B%22ACEDATACLOUD_API_TOKEN%22%3A%22%24%7BACEDATACLOUD_API_TOKEN%7D%22%7D%2C%22disabled%22%3Afalse%2C%22autoApprove%22%3A%5B%5D%7D)
+
+Install [uv](https://docs.astral.sh/uv/getting-started/installation/) and make `uvx` available to Kiro. Set `ACEDATACLOUD_API_TOKEN` in the environment that launches Kiro using your own [Ace application key](https://platform.acedata.cloud/console/applications?utm_source=pypi&utm_medium=referral&utm_campaign=evergreen). Open the install link and allow Kiro to expand that variable. Kiro asks for approval before tool calls.
+
+Start with `serp_list_countries` and `serp_list_languages`. Choose results from web, news, images, maps, places or videos for the location you need. Search requests use Ace credits.
+
+[Privacy policy](https://platform.acedata.cloud/privacy?utm_source=pypi&utm_medium=referral&utm_campaign=evergreen) · [Support](https://github.com/AceDataCloud/SerpMCP/issues)
+
 ## Features
 
 - **Web Search** - Regular Google web search with structured results
