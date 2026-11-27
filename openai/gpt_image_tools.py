@@ -11,6 +11,7 @@ from functools import wraps
 from typing import Annotated, Any, Literal, get_args
 
 from mcp.server.fastmcp import FastMCP
+from mcp.types import Icon
 from pydantic import Field
 
 from core.types import ImageModel
@@ -59,6 +60,12 @@ async def gpt_image_list_models() -> str:
 def create_server() -> FastMCP:
     server = FastMCP(
         "GPT Image by Ace Data Cloud",
+        icons=[
+            Icon(
+                src="https://raw.githubusercontent.com/AceDataCloud/GPTImageDify/main/_assets/icon.png",
+                mimeType="image/png",
+            )
+        ],
         instructions=(
             "GPT Image generation, editing, and task retrieval through Ace Data Cloud. "
             "Ask before a billable creation. Query the same task ID until terminal. "

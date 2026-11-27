@@ -1,13 +1,25 @@
 """Exercise the real narrowed MCP dispatch without sending a paid API request."""
 
 import json
+from pathlib import Path
 from unittest.mock import AsyncMock, patch
 
 import pytest
 from mcp.server.fastmcp.exceptions import ToolError
+from mcp.shared.memory import create_connected_server_and_client_session
 
 from gpt_image_tools import GPT_IMAGE_MODELS, create_server
 from tools import image_tools, tasks_tools
+
+
+@pytest.mark.asyncio
+async def test_profile_initialize_advertises_the_registry_artwork():
+    manifest = Path(__file__).resolve().parents[1] / "gpt-image.server.json"
+    expected_icons = json.loads(manifest.read_text())["icons"]
+    async with create_connected_server_and_client_session(create_server()) as session:
+        initialized = await session.initialize()
+    icons = initialized.serverInfo.icons or []
+    assert [icon.model_dump(exclude_none=True) for icon in icons] == expected_icons
 
 
 @pytest.mark.asyncio
