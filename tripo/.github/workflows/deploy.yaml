@@ -14,16 +14,9 @@ jobs:
   run:
     runs-on: ubuntu-latest
     steps:
-      - name: Generate Build Number
-        uses: einaregilsson/build-number@v3
-        with:
-          token: ${{ secrets.github_token }}
-        env:
-          ACTIONS_ALLOW_UNSECURE_COMMANDS: "true"
-
-      - name: Get Build Number
-        run: |
-          echo $BUILD_NUMBER
+      # A rerun verifies the same image and rollout even when TKE schedules slowly.
+      - name: Select deployment image tag
+        run: echo "BUILD_NUMBER=$GITHUB_RUN_ID" >> "$GITHUB_ENV"
 
       - name: Checkout
         uses: actions/checkout@master
@@ -46,10 +39,27 @@ jobs:
         with:
           kubeconfig: ${{ secrets.KUBE_CONFIG }}
 
+      - name: Check for the image from this run
+        id: image
+        shell: bash
+        run: |
+          set -euo pipefail
+          image="ghcr.io/acedatacloud/mcp-tripo:${BUILD_NUMBER}"
+          if metadata=$(docker buildx imagetools inspect "$image" 2>&1); then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          elif [[ "$metadata" == *"not found"* || "$metadata" == *"manifest unknown"* ]]; then
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          else
+            printf '%s\n' "$metadata" >&2
+            exit 1
+          fi
+
       - name: Build Docker images
+        if: steps.image.outputs.exists == 'false'
         run: docker compose build
 
       - name: Push Docker images
+        if: steps.image.outputs.exists == 'false'
         run: docker compose push
 
       - name: Deploy
