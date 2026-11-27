@@ -37,4 +37,13 @@ if settings.server_url:
         required_scopes=["mcp:access"],
     )
 
-mcp = FastMCP(settings.server_name, icons=[Icon(src="https://cdn.acedata.cloud/uploads/c05acf25-8990-4004-9a29-6fa6865ed66f", mimeType="image/png")], **mcp_kwargs)
+mcp = FastMCP(
+    settings.server_name,
+    icons=[
+        Icon(
+            src="https://cdn.acedata.cloud/uploads/c05acf25-8990-4004-9a29-6fa6865ed66f",
+            mimeType="image/png",
+        )
+    ],
+    **mcp_kwargs,
+)
