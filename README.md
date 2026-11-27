@@ -78,6 +78,10 @@ This changes neither server names/tools nor Registry manifests, Smithery server
 cards or listing metadata. Valid protocol metadata does not prove that a client
 has fetched or rendered the image.
 
+## Zed
+
+[Connect hosted or local media and search servers in Zed](zed/README.md). Select individual services in Zed settings or use the five-tool GPT Image profile locally.
+
 ## LangBot Space
 
 Each [LangBot Space listing](langbot/) has a Markdown file named after its existing Space slug. This text is the service’s README in the marketplace. To update a live listing from the connected server, choose **Update existing** in Share to Space, select the existing item, and use that file as its README. Preview the configuration and required inputs before sending it for review. [LangBot sharing guide](https://github.com/langbot-app/LangBot/blob/master/docs/en/usage/mcp/readme.mdx#share-to-langbot-space)
