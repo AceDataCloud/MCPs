@@ -18,6 +18,25 @@ Create songs from an idea or custom lyrics, import reference audio, cover a trac
 
 Get an application API key in [Applications](https://platform.acedata.cloud/console/applications?utm_source=pypi&utm_medium=referral&utm_campaign=evergreen). A general application with ACE Music access or a dedicated ACE Music application can run the tools. For a first read-only check, list the models or retrieve an existing task. To add the companion instructions to an agent, install the [ACE Music Skill](https://skills.sh/acedatacloud/skills/ace-music).
 
+## Kiro and LangBot
+
+[![Add ACE Music to Kiro](https://kiro.dev/images/add-to-kiro.svg)](https://kiro.dev/launch/mcp/add?name=ace-music&config=%7B%22url%22%3A%22https%3A%2F%2Facemusic.mcp.acedata.cloud%2Fmcp%22%2C%22disabled%22%3Afalse%2C%22autoApprove%22%3A%5B%5D%7D)
+
+In Kiro, review the server URL and complete the OAuth sign-in for your own Ace
+application. Start with `acemusic_list_models`. Music generation and uploads spend
+credits. The install link leaves tool auto-approval empty.
+
+In LangBot, add a **Remote** MCP server using
+`https://acemusic.mcp.acedata.cloud/mcp`. In your private connection settings,
+set the `Authorization` header to `Bearer <your Ace application token>`.
+Select **Test**, confirm that `acemusic_list_models` is available, then enable
+the server for your intended agent. Retrieve existing work with
+`acemusic_get_task` and the original task ID.
+
+Read the [privacy policy](https://platform.acedata.cloud/privacy?utm_source=pypi&utm_medium=referral&utm_campaign=evergreen). For setup or
+billing help, contact [Ace Data Cloud support](https://github.com/AceDataCloud/AceMusicMCP/issues).
+Keep tokens, private task IDs and audio out of public support tickets.
+
 ## Other integrations
 
 [REST API, OpenAPI and examples](https://github.com/AceDataCloud/ACEMusicAPI) · [CLI](https://github.com/AceDataCloud/AceMusicCli) · [Python, TypeScript and Go SDKs](https://github.com/AceDataCloud/SDK) · [n8n community node](https://github.com/AceDataCloud/ACEMusicN8N)
