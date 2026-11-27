@@ -147,7 +147,8 @@ Environment Variables:
 
             async def favicon(_request: Request) -> RedirectResponse:
                 return RedirectResponse(
-                    "https://cdn.acedata.cloud/uploads/71c11f3e-043a-4974-833d-a346d489a232", status_code=301
+                    "https://cdn.acedata.cloud/uploads/71c11f3e-043a-4974-833d-a346d489a232",
+                    status_code=301,
                 )
 
             async def server_card(_request: Request) -> JSONResponse:

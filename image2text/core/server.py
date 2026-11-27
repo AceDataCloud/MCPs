@@ -38,5 +38,14 @@ if settings.server_url:
     )
     logger.info(f"OAuth enabled: issuer_url={settings.server_url}")
 
-mcp = FastMCP(settings.server_name, icons=[Icon(src="https://cdn.acedata.cloud/uploads/ad333990-ea8e-4889-83c5-67385fc8d7b0", mimeType="image/png")], **mcp_kwargs)
+mcp = FastMCP(
+    settings.server_name,
+    icons=[
+        Icon(
+            src="https://cdn.acedata.cloud/uploads/ad333990-ea8e-4889-83c5-67385fc8d7b0",
+            mimeType="image/png",
+        )
+    ],
+    **mcp_kwargs,
+)
 logger.info(f"Initialized MCP server: {settings.server_name}")
