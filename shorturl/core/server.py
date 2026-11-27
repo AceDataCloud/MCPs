@@ -47,7 +47,7 @@ if settings.server_url:
 # Initialize FastMCP server
 mcp = FastMCP(
     settings.server_name,
-    icons=[Icon(src="", mimeType="image/png")],
+    icons=[Icon(src="https://cdn.acedata.cloud/4f9642f3b6.svg", mimeType="image/svg+xml")],
     **mcp_kwargs,
 )
 

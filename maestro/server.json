@@ -11,7 +11,9 @@
     {
       "identifier": "mcp-maestro",
       "version": "0.1.0",
-      "transport": { "type": "stdio" },
+      "transport": {
+        "type": "stdio"
+      },
       "registryType": "pypi",
       "runtimeHint": "uvx",
       "environmentVariables": [
@@ -29,6 +31,13 @@
     {
       "type": "streamable-http",
       "url": "https://maestro.mcp.acedata.cloud/mcp"
+    }
+  ],
+  "title": "Maestro by Ace Data Cloud",
+  "icons": [
+    {
+      "src": "https://cdn.acedata.cloud/uploads/c05acf25-8990-4004-9a29-6fa6865ed66f",
+      "mimeType": "image/png"
     }
   ]
 }

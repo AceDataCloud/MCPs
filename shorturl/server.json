@@ -32,5 +32,12 @@
       "type": "streamable-http",
       "url": "https://shorturl.mcp.acedata.cloud/mcp"
     }
+  ],
+  "title": "Short URL by Ace Data Cloud",
+  "icons": [
+    {
+      "src": "https://cdn.acedata.cloud/4f9642f3b6.svg",
+      "mimeType": "image/svg+xml"
+    }
   ]
 }
