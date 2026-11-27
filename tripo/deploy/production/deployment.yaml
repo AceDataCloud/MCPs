@@ -7,6 +7,8 @@ metadata:
   namespace: acedatacloud
 spec:
   replicas: 2
+  # The hosted OAuth bootstrap waits up to fifteen minutes for TKE to allocate its first pod.
+  progressDeadlineSeconds: 900
   revisionHistoryLimit: 5
   selector:
     matchLabels:
