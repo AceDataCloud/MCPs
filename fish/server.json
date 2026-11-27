@@ -32,5 +32,11 @@
       "type": "streamable-http",
       "url": "https://fish.mcp.acedata.cloud/mcp"
     }
+  ],
+  "icons": [
+    {
+      "src": "https://raw.githubusercontent.com/AceDataCloud/FishAudioDify/main/_assets/icon.png",
+      "mimeType": "image/png"
+    }
   ]
 }

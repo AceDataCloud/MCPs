@@ -32,5 +32,11 @@
       "type": "streamable-http",
       "url": "https://qwen-image.mcp.acedata.cloud/mcp"
     }
+  ],
+  "icons": [
+    {
+      "src": "https://avatars.githubusercontent.com/u/141221163?s=192&v=4",
+      "mimeType": "image/png"
+    }
   ]
 }

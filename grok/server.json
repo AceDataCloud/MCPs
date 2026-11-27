@@ -32,5 +32,11 @@
       "type": "streamable-http",
       "url": "https://grok.mcp.acedata.cloud/mcp"
     }
+  ],
+  "icons": [
+    {
+      "src": "https://cdn.acedata.cloud/p1ge98.png",
+      "mimeType": "image/png"
+    }
   ]
 }

@@ -32,5 +32,11 @@
       "type": "streamable-http",
       "url": "https://openai.mcp.acedata.cloud/mcp"
     }
+  ],
+  "icons": [
+    {
+      "src": "https://cdn.acedata.cloud/7dljuv.png",
+      "mimeType": "image/png"
+    }
   ]
 }

@@ -47,7 +47,12 @@ if settings.server_url:
 # Initialize FastMCP server
 mcp = FastMCP(
     settings.server_name,
-    icons=[Icon(src="", mimeType="image/png")],
+    icons=[
+        Icon(
+            src="https://raw.githubusercontent.com/AceDataCloud/FishAudioDify/main/_assets/icon.png",
+            mimeType="image/png",
+        )
+    ],
     **mcp_kwargs,
 )
 

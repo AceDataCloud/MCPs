@@ -129,7 +129,7 @@
       "generation_tool": "openai_generate_image",
       "first_prompt": "List the GPT Image models available through this integration. Do not generate an image.",
       "first_prompt_zh": "列出本集成可用的 GPT Image 模型，不生成图片。",
-      "icon_url": "https://cdn.acedata.cloud/2870040497.png"
+      "icon_url": "https://raw.githubusercontent.com/AceDataCloud/GPTImageDify/main/_assets/icon.png"
     },
     {
       "alias": "nanobanana",
