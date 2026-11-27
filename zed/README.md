@@ -51,6 +51,12 @@ Choose the services you need for your project. For example, use Google Search to
 | <img src="https://cdn.acedata.cloud/uploads/1083534c-b49d-4242-899e-b0d9190dddbc" width="28" alt=""> | Digital Human (local only) | `ace-digitalhuman` | Create a talking-character video and retrieve an existing task. |
 | <img src="https://cdn.acedata.cloud/uploads/c05acf25-8990-4004-9a29-6fa6865ed66f" width="28" alt=""> | Maestro | `ace-maestro` | Create a composed video and retrieve existing productions. |
 
+## Use Claude Messages and other chat models
+
+Choose `ace-aichat` for chat. The `aichat_create_message` tool calls Claude's native `/v1/messages` endpoint. Use a General application token with access to Claude Messages, then supply a `model`, `messages` and `max_tokens`. The [native Messages guide](../aichat/README.md#native-messages-including-claude-55) includes an example.
+
+For a conversation with Gemini, Kimi or DeepSeek, use `aichat_create_conversation_v2` in the same server. Choose a supported model from the tool's `model` field. These requests use the AiChat conversation API and its application permissions.
+
 ## Connect a hosted server
 
 1. Open **Settings → AI → MCP Servers** in Zed. Choose **Add Server → Add Remote Server**.
