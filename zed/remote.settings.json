@@ -1,0 +1,28 @@
+{
+  "context_servers": {
+    "ace-music": {
+      "url": "https://acemusic.mcp.acedata.cloud/mcp"
+    },
+    "ace-suno": {
+      "url": "https://suno.mcp.acedata.cloud/mcp"
+    },
+    "ace-nano-banana": {
+      "url": "https://nanobanana.mcp.acedata.cloud/mcp"
+    },
+    "ace-gpt-image": {
+      "url": "https://openai.mcp.acedata.cloud/mcp"
+    },
+    "ace-seedream": {
+      "url": "https://seedream.mcp.acedata.cloud/mcp"
+    },
+    "ace-seedance": {
+      "url": "https://seedance.mcp.acedata.cloud/mcp"
+    },
+    "ace-veo": {
+      "url": "https://veo.mcp.acedata.cloud/mcp"
+    },
+    "ace-google-search": {
+      "url": "https://serp.mcp.acedata.cloud/mcp"
+    }
+  }
+}

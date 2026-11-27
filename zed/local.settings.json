@@ -1,0 +1,54 @@
+{
+  "context_servers": {
+    "ace-music": {
+      "command": "uvx",
+      "args": [
+        "mcp-acemusic"
+      ]
+    },
+    "ace-suno": {
+      "command": "uvx",
+      "args": [
+        "mcp-suno"
+      ]
+    },
+    "ace-nano-banana": {
+      "command": "uvx",
+      "args": [
+        "mcp-nanobanana-pro"
+      ]
+    },
+    "ace-gpt-image": {
+      "command": "uvx",
+      "args": [
+        "mcp-openai-pro",
+        "--profile",
+        "gpt-image"
+      ]
+    },
+    "ace-seedream": {
+      "command": "uvx",
+      "args": [
+        "mcp-seedream-pro"
+      ]
+    },
+    "ace-seedance": {
+      "command": "uvx",
+      "args": [
+        "mcp-seedance"
+      ]
+    },
+    "ace-veo": {
+      "command": "uvx",
+      "args": [
+        "mcp-veo"
+      ]
+    },
+    "ace-google-search": {
+      "command": "uvx",
+      "args": [
+        "mcp-serp"
+      ]
+    }
+  }
+}
