@@ -13,7 +13,7 @@ The AceDataCloud distribution is `mcp-openai-pro`. The unrelated
 
 ## GPT Image in Kiro
 
-[![Add GPT Image to Kiro](https://kiro.dev/images/add-to-kiro.svg)](https://kiro.dev/launch/mcp/add?name=acedatacloud-gpt-image&config=%7B%22command%22%3A%22uvx%22%2C%22args%22%3A%5B%22--from%22%2C%22mcp-openai-pro%3D%3D2026.11.24.0%22%2C%22mcp-openai-pro%22%2C%22--profile%22%2C%22gpt-image%22%5D%2C%22env%22%3A%7B%22ACEDATACLOUD_API_TOKEN%22%3A%22%24%7BACEDATACLOUD_API_TOKEN%7D%22%7D%2C%22disabled%22%3Afalse%2C%22autoApprove%22%3A%5B%5D%7D)
+[![Add GPT Image to Kiro](https://kiro.dev/images/add-to-kiro.svg)](https://kiro.dev/launch/mcp/add?name=acedatacloud-gpt-image&config=%7B%22command%22%3A%22uvx%22%2C%22args%22%3A%5B%22--from%22%2C%22mcp-openai-pro%3D%3D2026.11.27.1%22%2C%22mcp-openai-pro%22%2C%22--profile%22%2C%22gpt-image%22%5D%2C%22env%22%3A%7B%22ACEDATACLOUD_API_TOKEN%22%3A%22%24%7BACEDATACLOUD_API_TOKEN%7D%22%7D%2C%22disabled%22%3Afalse%2C%22autoApprove%22%3A%5B%5D%7D)
 
 Install [uv](https://docs.astral.sh/uv/getting-started/installation/) and make `uvx` available to Kiro. Set `ACEDATACLOUD_API_TOKEN` in the environment that launches Kiro using your own [Ace application key](https://platform.acedata.cloud/console/applications?utm_source=github&utm_medium=referral&utm_campaign=evergreen). Open the install link and allow Kiro to expand that variable. Kiro asks for approval before tool calls.
 
