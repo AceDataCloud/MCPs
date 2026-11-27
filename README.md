@@ -78,6 +78,10 @@ This changes neither server names/tools nor Registry manifests, Smithery server
 cards or listing metadata. Valid protocol metadata does not prove that a client
 has fetched or rendered the image.
 
+## LangBot Space
+
+The LangBot **Share to Space** README fields are maintained in `langbot/README.md` under the service directories for `acemusic`, `suno`, `serp`, `nanobanana`, `seedance`, `openai`, `kling`, and `veo`. To update a live listing from the connected server, choose **Update existing** in Share to Space, select the existing item, and use that file as its README. Preview the configuration and required inputs before sending it for review. [LangBot sharing guide](https://github.com/langbot-app/LangBot/blob/master/docs/en/usage/mcp/readme.mdx#share-to-langbot-space)
+
 ## Publishing
 
 The combined [Ace Data Cloud MCP extension](https://marketplace.visualstudio.com/items?itemName=acedatacloud.mcp-toolbox)
