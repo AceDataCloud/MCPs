@@ -49,7 +49,7 @@ class LobeHubListingsTest(unittest.TestCase):
             for name in ("README.md", "README_zh-CN.md"):
                 with self.subTest(service=service, language=name):
                     text = (ROOT / service / "lobehub" / name).read_text()
-                    self.assertIn("General application", text)
+                    self.assertRegex(text, r"(?i)general application|通用应用")
                     self.assertIn("Manage Keys", text)
                     self.assertIn("get-api-key-en.png", text)
                     self.assertIn("create-api-key-en.png", text)

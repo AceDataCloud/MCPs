@@ -7,7 +7,7 @@
 ## 1. 注册、登录并获取服务 API Token
 
 1. 打开 [Ace Data Cloud → Applications](https://platform.acedata.cloud/console/applications?utm_source=opensource&utm_medium=referral&utm_campaign=evergreen)，先注册或登录。
-2. 打开 **General application**；没有通用应用时先选择 **Initialize General Application**。核对聊天服务访问权限、余额及[当前模型价格](https://platform.acedata.cloud/models?utm_source=opensource&utm_medium=referral&utm_campaign=evergreen)。不要把历史示例价格当当前报价。
+2. 打开 **General application**。核对聊天服务访问权限、余额及[当前模型价格](https://platform.acedata.cloud/models?utm_source=opensource&utm_medium=referral&utm_campaign=evergreen)。不要把历史示例价格当当前报价。
 3. 复制应用卡片的 API Key，或打开 **Manage Keys → Create**，创建可独立撤销的专用 Key，例如 `goose models`。根据实际需要设置过期、用量限制和 Allowed APIs；聊天模型需要访问 `/openai/chat/completions`。
 4. 复制原始 Token 字符串，不加 `Bearer `、引号或空格。`platform-...` 管理 Token 不能替代服务 API Key。不要把 Key 写到聊天、Git、共享配置或截图里。
 

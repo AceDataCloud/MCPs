@@ -4,7 +4,7 @@
 
 Create and extend songs, write lyrics, separate stems, and look up the resulting audio.
 
-1. Sign in to [Ace Data Cloud Applications](https://platform.acedata.cloud/console/applications?utm_source=langbot&utm_medium=referral&utm_campaign=evergreen) and open **General Application**. If it is missing, select **Initialize General Application**. Copy the key from the right of the **API KEY** field and check that the application has access to Suno.
+1. Sign in to [Ace Data Cloud Applications](https://platform.acedata.cloud/console/applications?utm_source=langbot&utm_medium=referral&utm_campaign=evergreen) and open **General Application**. Copy the key from the right of the **API KEY** field and check that the application has access to Suno.
 
    ![API key in the General Application card](https://cdn.acedata.cloud/dvc3cg.jpg)
 

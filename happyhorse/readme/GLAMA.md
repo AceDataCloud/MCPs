@@ -18,7 +18,7 @@ The public connector was marked **Unhealthy** during the 2026-10-18 audit. That 
 
 ## 2. Register/sign in and obtain the right API Token
 
-1. [Register or sign in to Ace Data Cloud](https://platform.acedata.cloud/?utm_source=glama&utm_medium=referral&utm_campaign=evergreen) and open [Applications](https://platform.acedata.cloud/console/applications?utm_source=glama&utm_medium=referral&utm_campaign=evergreen). If there is no General application, choose **Initialize General Application**.
+1. [Register or sign in to Ace Data Cloud](https://platform.acedata.cloud/?utm_source=glama&utm_medium=referral&utm_campaign=evergreen) and open [Applications](https://platform.acedata.cloud/console/applications?utm_source=glama&utm_medium=referral&utm_campaign=evergreen). Open **General Application**.
 2. Open **General application**. Check access to HappyHorse (Happy Horse), the current model/operation price, balance, expiration and usage limits. No fixed trial balance is promised.
 3. Copy an existing API Key using **①**, or choose **② Manage Keys → Create** for a dedicated key named `Glama happyhorse`. The screenshot's values are redacted.
 
@@ -66,7 +66,7 @@ Your chosen input and API credential are used by the connection to reach Ace's A
 ## 中文操作指南
 
 1. 打开上方 **Glama 服务条目／远程 Connector**，确认作者 **AceDataCloud**。这是 Ace 提供的 HappyHorse (Happy Horse) 集成，不冒充模型厂商官方插件。目录、个人连接和作者检测是三个不同状态；目前不能把 Unhealthy 写成已安装成功。
-2. [注册或登录 Ace](https://platform.acedata.cloud/?utm_source=glama&utm_medium=referral&utm_campaign=evergreen) → [Applications／我的应用](https://platform.acedata.cloud/console/applications?utm_source=glama&utm_medium=referral&utm_campaign=evergreen) → **General application／通用应用**。没有时先初始化。核对服务权限、余额、有效期、用量限制和[当前价格](https://platform.acedata.cloud/models?utm_source=glama&utm_medium=referral&utm_campaign=evergreen)。
+2. [注册或登录 Ace](https://platform.acedata.cloud/?utm_source=glama&utm_medium=referral&utm_campaign=evergreen) → [Applications／我的应用](https://platform.acedata.cloud/console/applications?utm_source=glama&utm_medium=referral&utm_campaign=evergreen) → **General application／通用应用**。核对服务权限、余额、有效期、用量限制和[当前价格](https://platform.acedata.cloud/models?utm_source=glama&utm_medium=referral&utm_campaign=evergreen)。
 3. 按真实图中的①复制已有 Key；或② **Manage Keys／管理密钥 → Create／创建**，给 Glama 建可独立撤销的专用 Token。启用 API 限制时同时允许所需生成和查询接口。图中值已遮挡，`Dify tutorial`只是原图例名；不要抄遮挡字符，不要用平台管理 Token 代替 API Token。
 4. 在 Glama 远程连接选择 OAuth 时完成 Ace 登录；选择 API Token 时按实际界面填入 Bearer token，若是原始 Header 表则使用 `Authorization: Bearer ...`。不要在提示词、URL、截图或共享配置里放 Key；实际登录后的字段尚待逐项截图验收，不能虚构按钮位置。
 5. 先检查工具列表，免费调用 `happyhorse_list_models`。确认首用费用后才调用一次 `happyhorse_generate_video`；保存任务 ID，只用 `happyhorse_get_task`查同一任务直到终态。中间预览不是成功结果，不能重复生成来查询进度。

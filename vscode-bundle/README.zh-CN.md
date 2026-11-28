@@ -14,7 +14,7 @@
 
 ### 2. 获取正确的 API Key
 
-首次使用请先注册并登录；如果还没有通用应用，点击 **初始化通用应用（Initialize General Application）**。创建独立密钥时填写便于识别的名称，并检查有效期、额度和 API 限制后保存。
+首次使用请先注册并登录；打开**通用应用**。创建独立密钥时填写便于识别的名称，并检查有效期、额度和 API 限制后保存。
 
 1. 登录 [Ace Data Cloud → Applications](https://platform.acedata.cloud/console/applications?utm_source=vscode_marketplace&utm_medium=referral&utm_campaign=evergreen)。
 2. 打开 **General application**，复制其 API Key；也可以选择 **Manage Keys → Create** 为 VS Code 单独创建。提交任务前确认 OpenAI 图片生成权限、当前价格和余额。

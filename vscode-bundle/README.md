@@ -18,7 +18,7 @@ Open [Ace Data Cloud MCP](https://marketplace.visualstudio.com/items?itemName=ac
 
 ### 2. Get the right API key
 
-New account? Register and sign in first. If no General application is shown, choose **Initialize General Application**. When creating a separate key, name it for VS Code and review expiration, usage limits and API restrictions before saving.
+New account? Register and sign in first. Open **General Application**. When creating a separate key, name it for VS Code and review expiration, usage limits and API restrictions before saving.
 
 1. Sign in to [Ace Data Cloud → Applications](https://platform.acedata.cloud/console/applications?utm_source=vscode_marketplace&utm_medium=referral&utm_campaign=evergreen).
 2. Open **General application**. Copy its API key, or choose **Manage Keys → Create** to make a separate VS Code key. Check OpenAI image-generation access, current price, and balance before submitting a task.

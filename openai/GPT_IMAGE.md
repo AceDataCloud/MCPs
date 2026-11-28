@@ -9,7 +9,7 @@ The `io.github.AceDataCloud/mcp-gpt-image` [official Registry entry](https://reg
 ## 1. Get a token with image and task permissions
 
 1. [Register or sign in to Ace Data Cloud](https://platform.acedata.cloud/console/applications?utm_source=github&utm_medium=referral&utm_campaign=evergreen).
-2. Open **Applications → General application**. If absent, select **Initialize General Application**. Copy its API token or choose **Keys / Manage Keys → Create** for a separately named integration token.
+2. Open **Applications → General application**. Copy its API token or choose **Keys / Manage Keys → Create** for a separately named integration token.
 3. Review expiration, usage limits and Allowed APIs. Allow the image operation you need and `/openai/tasks` for retrieving its result. Check model access, current balance and [current pricing](https://platform.acedata.cloud/models?utm_source=github&utm_medium=referral&utm_campaign=evergreen). An account-management `platform-...` token is not an application API token.
 
 ![Real Ace Applications screenshot: copy an existing key or open Manage Keys](https://raw.githubusercontent.com/AceDataCloud/SunoDify/8d3d03570e73324220f111f7fe343da0792a8071/_assets/tutorial/get-api-key-en.png)

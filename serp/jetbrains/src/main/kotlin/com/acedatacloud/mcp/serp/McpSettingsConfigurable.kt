@@ -28,7 +28,7 @@ class McpSettingsConfigurable : Configurable {
                     browserLink("Get an API key", "https://platform.acedata.cloud/console/applications?utm_source=jetbrains_marketplace&utm_medium=referral&utm_campaign=evergreen")
                 }
                 row {
-                    comment("Sign in, initialize General Application if needed, then copy an API key.")
+                    comment("Sign in and copy the API key from the General Application card.")
                 }
                 // END TOKEN ONBOARDING
                 row("API Token:") {
