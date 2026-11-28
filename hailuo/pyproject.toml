@@ -70,7 +70,7 @@ mcp-hailuo = "main:main"
 
 [project.urls]
 Homepage = "https://github.com/AceDataCloud/HailuoMCP"
-Documentation = "https://platform.acedata.cloud/documents/hailuo?utm_source=pypi&utm_medium=referral&utm_campaign=evergreen"
+Documentation = "https://platform.acedata.cloud/documents/hailuo-mcp?utm_source=pypi&utm_medium=referral&utm_campaign=evergreen"
 Repository = "https://github.com/AceDataCloud/HailuoMCP"
 Issues = "https://github.com/AceDataCloud/HailuoMCP/issues"
 Changelog = "https://github.com/AceDataCloud/HailuoMCP/blob/main/CHANGELOG.md"

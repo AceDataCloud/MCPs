@@ -49,7 +49,7 @@ mcp-happyhorse = "main:main"
 
 [project.urls]
 Homepage = "https://github.com/AceDataCloud/HappyHorseMCP"
-Documentation = "https://platform.acedata.cloud/documents/happyhorse?utm_source=pypi&utm_medium=referral&utm_campaign=evergreen"
+Documentation = "https://platform.acedata.cloud/documents/happyhorse-mcp?utm_source=pypi&utm_medium=referral&utm_campaign=evergreen"
 Repository = "https://github.com/AceDataCloud/HappyHorseMCP"
 Issues = "https://github.com/AceDataCloud/HappyHorseMCP/issues"
 

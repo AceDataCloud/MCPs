@@ -250,7 +250,7 @@ latter endpoint's `reasoning_effort` control.
 ## Documentation
 
 <!-- canonical-documentation -->
-[Documentation](https://platform.acedata.cloud/documents/aichat?utm_source=pypi&utm_medium=referral&utm_campaign=evergreen)
+[Documentation](https://platform.acedata.cloud/documents/aichat-mcp?utm_source=pypi&utm_medium=referral&utm_campaign=evergreen)
 
 ## License
 

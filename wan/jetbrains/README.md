@@ -72,7 +72,7 @@ Connects to the hosted MCP server at `wan.mcp.acedata.cloud`. No local install n
 ## Links
 
 - [Ace Data Cloud Platform](https://platform.acedata.cloud?utm_source=jetbrains_marketplace&utm_medium=referral&utm_campaign=evergreen)
-- [Documentation](https://platform.acedata.cloud/documents/wan?utm_source=jetbrains_marketplace&utm_medium=referral&utm_campaign=evergreen)
+- [Documentation](https://platform.acedata.cloud/documents/wan-mcp?utm_source=jetbrains_marketplace&utm_medium=referral&utm_campaign=evergreen)
 - [PyPI Package](https://pypi.org/project/mcp-wan/)
 - [Source Code](https://github.com/AceDataCloud/WanMCP)
 

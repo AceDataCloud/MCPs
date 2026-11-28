@@ -220,7 +220,7 @@ ruff check .
 ## Documentation
 
 <!-- canonical-documentation -->
-[Documentation](https://platform.acedata.cloud/documents/grok?utm_source=pypi&utm_medium=referral&utm_campaign=evergreen)
+[Documentation](https://platform.acedata.cloud/documents/grok-mcp?utm_source=pypi&utm_medium=referral&utm_campaign=evergreen)
 
 ## License
 

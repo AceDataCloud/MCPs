@@ -155,7 +155,7 @@ version, install [`uv`](https://docs.astral.sh/uv/) and use:
 - **PyPI package:** [`mcp-grok`](https://pypi.org/project/mcp-grok/)
 - **Source repository:** https://github.com/AceDataCloud/GrokMCP
 - **Ace Data Cloud platform:** https://platform.acedata.cloud?utm_source=vscode_marketplace&utm_medium=referral&utm_campaign=evergreen
-- **MCP documentation:** https://platform.acedata.cloud/documents/grok?utm_source=vscode_marketplace&utm_medium=referral&utm_campaign=evergreen
+- **MCP documentation:** https://platform.acedata.cloud/documents/grok-mcp?utm_source=vscode_marketplace&utm_medium=referral&utm_campaign=evergreen
 
 ## License
 

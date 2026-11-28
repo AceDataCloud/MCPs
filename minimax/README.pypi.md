@@ -190,7 +190,7 @@ mypy core tools
 ## Documentation
 
 <!-- canonical-documentation -->
-[Documentation](https://platform.acedata.cloud/documents/minimax-videos?utm_source=pypi&utm_medium=referral&utm_campaign=evergreen)
+[Documentation](https://platform.acedata.cloud/documents/minimax-mcp?utm_source=pypi&utm_medium=referral&utm_campaign=evergreen)
 
 ## License
 

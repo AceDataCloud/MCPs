@@ -34,7 +34,7 @@
         "mimeType": "image/png"
       },
       "type": "document",
-      "alias": "aichat",
+      "alias": "aichat-mcp",
       "vscode_bundle": {
         "label": "AI Chat",
         "default": false
@@ -73,7 +73,7 @@
     "fish": {
       "status": "active",
       "type": "document",
-      "alias": "fish",
+      "alias": "fish-mcp",
       "vscode_bundle": {
         "label": "Fish Audio",
         "default": false
@@ -99,7 +99,7 @@
     "glm": {
       "status": "active",
       "type": "document",
-      "alias": "glm-chat-completions",
+      "alias": "glm-mcp",
       "vscode_bundle": {
         "label": "GLM",
         "default": false
@@ -112,7 +112,7 @@
     "grok": {
       "status": "active",
       "type": "document",
-      "alias": "grok",
+      "alias": "grok-mcp",
       "vscode_bundle": {
         "label": "Grok Imagine",
         "default": false
@@ -125,7 +125,7 @@
     "hailuo": {
       "status": "active",
       "type": "document",
-      "alias": "hailuo",
+      "alias": "hailuo-mcp",
       "vscode_bundle": {
         "label": "Hailuo",
         "default": false
@@ -139,14 +139,13 @@
       "status": "active",
       "runtime_icon": "registry",
       "type": "document",
-      "alias": "happyhorse",
+      "alias": "happyhorse-mcp",
       "vscode_bundle": {
         "label": "HappyHorse",
         "default": false
       },
       "registry": {
         "title": "HappyHorse",
-        "guide": "README.md",
         "description": "Generate and edit HappyHorse videos with Ace Data Cloud; retrieve the original task for results.",
         "icon": {
           "src": "https://cdn.acedata.cloud/2841e8c719.png",
@@ -171,7 +170,7 @@
     "kling": {
       "status": "active",
       "type": "document",
-      "alias": "kling",
+      "alias": "kling-mcp",
       "vscode_bundle": {
         "label": "Kling",
         "default": false
@@ -197,7 +196,7 @@
     "maestro": {
       "status": "active",
       "type": "document",
-      "alias": "maestro",
+      "alias": "maestro-mcp",
       "vscode_bundle": {
         "label": "Maestro",
         "default": false
@@ -225,7 +224,7 @@
     "minimax": {
       "status": "active",
       "type": "document",
-      "alias": "minimax-videos",
+      "alias": "minimax-mcp",
       "vscode_bundle": {
         "label": "MiniMax",
         "default": false
@@ -256,7 +255,7 @@
     "openai": {
       "status": "active",
       "type": "document",
-      "alias": "openai",
+      "alias": "openai-mcp",
       "vscode_bundle": {
         "label": "OpenAI",
         "default": false
@@ -289,7 +288,7 @@
     "producer": {
       "status": "active",
       "type": "document",
-      "alias": "producer",
+      "alias": "producer-mcp",
       "vscode_bundle": {
         "label": "Producer",
         "default": false
@@ -302,7 +301,7 @@
     "qwen-image": {
       "status": "active",
       "type": "document",
-      "alias": "qwen-image",
+      "alias": "qwen-image-mcp",
       "vscode_bundle": {
         "label": "Qwen Image",
         "default": false
@@ -403,7 +402,7 @@
     "tripo": {
       "status": "active",
       "type": "document",
-      "alias": "tripo",
+      "alias": "tripo-mcp",
       "runtime_icon": {
         "src": "https://cdn.acedata2.cloud/tripo/catalog/tripo-icon-a80c573eb58a.png",
         "mimeType": "image/png"
@@ -430,7 +429,7 @@
     "wan": {
       "status": "active",
       "type": "document",
-      "alias": "wan",
+      "alias": "wan-mcp",
       "vscode_bundle": {
         "label": "Wan",
         "default": false
@@ -443,7 +442,7 @@
     "webextrator": {
       "status": "active",
       "type": "document",
-      "alias": "webextrator",
+      "alias": "webextrator-mcp",
       "vscode_bundle": {
         "label": "Web Extractor",
         "default": false

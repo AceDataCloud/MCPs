@@ -52,4 +52,4 @@ Public pricing is $0.057143/s for 768P and $0.091429/s for 2K. Failed tasks are 
 
 ## Documentation
 
-[Documentation](https://platform.acedata.cloud/documents/minimax-videos?utm_source=vscode_marketplace&utm_medium=referral&utm_campaign=evergreen)
+[Documentation](https://platform.acedata.cloud/documents/minimax-mcp?utm_source=vscode_marketplace&utm_medium=referral&utm_campaign=evergreen)

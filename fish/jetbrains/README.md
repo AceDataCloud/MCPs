@@ -73,7 +73,7 @@ Connects to the hosted MCP server at `fish.mcp.acedata.cloud`. No local install 
 ## Links
 
 - [Ace Data Cloud Platform](https://platform.acedata.cloud?utm_source=jetbrains_marketplace&utm_medium=referral&utm_campaign=evergreen)
-- [Documentation](https://platform.acedata.cloud/documents/fish?utm_source=jetbrains_marketplace&utm_medium=referral&utm_campaign=evergreen)
+- [Documentation](https://platform.acedata.cloud/documents/fish-mcp?utm_source=jetbrains_marketplace&utm_medium=referral&utm_campaign=evergreen)
 - [PyPI Package](https://pypi.org/project/mcp-fish/)
 - [Source Code](https://github.com/AceDataCloud/FishMCP)
 

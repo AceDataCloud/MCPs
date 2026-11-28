@@ -156,7 +156,7 @@ version, install [`uv`](https://docs.astral.sh/uv/) and use:
 - **PyPI package:** [`mcp-producer`](https://pypi.org/project/mcp-producer/)
 - **Source repository:** https://github.com/AceDataCloud/ProducerMCP
 - **Ace Data Cloud platform:** https://platform.acedata.cloud?utm_source=vscode_marketplace&utm_medium=referral&utm_campaign=evergreen
-- **MCP documentation:** https://platform.acedata.cloud/documents/producer?utm_source=vscode_marketplace&utm_medium=referral&utm_campaign=evergreen
+- **MCP documentation:** https://platform.acedata.cloud/documents/producer-mcp?utm_source=vscode_marketplace&utm_medium=referral&utm_campaign=evergreen
 
 ## License
 

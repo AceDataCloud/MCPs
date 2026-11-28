@@ -48,4 +48,4 @@ VS Code 1.141历史真实截图于2026-10-09收入教程；工具图以OpenAI为
 - 401/403：查Key完整性、应用/服务访问权限、有效期、限额、Allowed APIs与余额。
 - 任务未完成：保留原ID继续查；429或5xx先核原任务和Usage，不自动付费重试。
 
-更多服务说明见 [Documentation](https://platform.acedata.cloud/documents/openai?utm_source=vscode_marketplace&utm_medium=referral&utm_campaign=evergreen)。支持排查时提供task/trace ID，不提供Key。
+更多服务说明见 [Documentation](https://platform.acedata.cloud/documents/openai-mcp?utm_source=vscode_marketplace&utm_medium=referral&utm_campaign=evergreen)。支持排查时提供task/trace ID，不提供Key。

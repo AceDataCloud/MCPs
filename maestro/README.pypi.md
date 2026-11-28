@@ -215,7 +215,7 @@ See the [Maestro API documentation](https://platform.acedata.cloud/documents/mae
 ## Documentation
 
 <!-- canonical-documentation -->
-[Documentation](https://platform.acedata.cloud/documents/maestro?utm_source=pypi&utm_medium=referral&utm_campaign=evergreen)
+[Documentation](https://platform.acedata.cloud/documents/maestro-mcp?utm_source=pypi&utm_medium=referral&utm_campaign=evergreen)
 
 ## API parameter behavior
 

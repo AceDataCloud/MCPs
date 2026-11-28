@@ -7,12 +7,12 @@ from scripts.registry_metadata import listing_url, outputs
 
 
 class RegistryMetadataTest(unittest.TestCase):
-    def test_happyhorse_listing_lands_on_existing_mcp_and_token_guide(self):
+    def test_happyhorse_listing_links_to_its_platform_mcp_guide(self):
         catalog = load_catalog()
         url = listing_url(
             "happyhorse", catalog["happyhorse"], "https://github.com/AceDataCloud/HappyHorseMCP"
         )
-        self.assertEqual(urlsplit(url).path, "/AceDataCloud/HappyHorseMCP/blob/main/README.md")
+        self.assertEqual(urlsplit(url).path, "/documents/happyhorse-mcp")
         self.assertEqual(parse_qs(urlsplit(url).query)["utm_source"], ["mcp_registry"])
         for guide in ("../README.md", "https://example.com/README.md", "missing.md"):
             entry = {**catalog["happyhorse"], "registry": {"guide": guide}}

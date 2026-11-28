@@ -168,7 +168,7 @@ For **401**, check which auth route the client used and whether the token or OAu
 ## Documentation
 
 <!-- canonical-documentation -->
-[Documentation](https://platform.acedata.cloud/documents/glm-chat-completions?utm_source=pypi&utm_medium=referral&utm_campaign=evergreen)
+[Documentation](https://platform.acedata.cloud/documents/glm-mcp?utm_source=pypi&utm_medium=referral&utm_campaign=evergreen)
 
 ## License
 
