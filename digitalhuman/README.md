@@ -1,4 +1,8 @@
-# MCP Digital Human Server
+# Digital Human
+
+<!-- mcp-name: io.github.AceDataCloud/mcp-digitalhuman -->
+
+<img src="https://cdn.acedata.cloud/uploads/1083534c-b49d-4242-899e-b0d9190dddbc" width="64" height="64" alt="Digital Human">
 
 A [Model Context Protocol](https://modelcontextprotocol.io) (MCP) server for the
 AceDataCloud Digital Human API.
@@ -29,6 +33,8 @@ Save the key in the client's credential store or the environment variable shown 
 
 
 ### Local stdio
+
+In a client with MCP Registry support, search for `io.github.AceDataCloud/mcp-digitalhuman` and select the PyPI stdio package. Supply your application token in the client’s secret settings. After connecting, open the tool list and check for `digitalhuman_create_video` and `digitalhuman_get_task`. Listing tools confirms the local connection without submitting a generation. Use only media you own or have permission to use.
 
 Install the package and give the local process an API token:
 

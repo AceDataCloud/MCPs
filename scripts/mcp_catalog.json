@@ -44,9 +44,15 @@
       "status": "active",
       "type": "document",
       "alias": "digitalhuman",
-      "runtime_icon": {
-        "src": "https://cdn.acedata.cloud/uploads/1083534c-b49d-4242-899e-b0d9190dddbc",
-        "mimeType": "image/png"
+      "runtime_icon": "registry",
+      "registry": {
+        "title": "Digital Human",
+        "description": "Create lip-synced videos and voice clips from authorized media, and check existing tasks.",
+        "icon": {
+          "src": "https://cdn.acedata.cloud/uploads/1083534c-b49d-4242-899e-b0d9190dddbc",
+          "mimeType": "image/png"
+        },
+        "local_only": true
       }
     },
     "discord-bot": {

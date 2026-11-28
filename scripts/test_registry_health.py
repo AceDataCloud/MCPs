@@ -93,6 +93,11 @@ class RegistryHealthTest(unittest.TestCase):
         self.assertEqual(urlopen.call_count, 1)
         self.assertEqual(urlopen.call_args.args[0].full_url, surface.website)
 
+    def test_digitalhuman_has_only_its_installable_stdio_package(self):
+        server = local_surfaces()[NAMESPACE + "mcp-digitalhuman"]
+        self.assertEqual(server.package, "mcp-digitalhuman")
+        self.assertEqual(server.remote, "")
+
     def test_detects_missing_retired_and_contract_drift(self) -> None:
         local = {
             "active": Surface(
