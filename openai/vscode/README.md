@@ -70,7 +70,7 @@ Save the key in the client's credential store or the environment variable shown 
 
 ## Pricing
 
-Image generation is metered. Check the exact model, quality, count, pricing and account balance before submitting. See [Documentation](https://platform.acedata.cloud/documents/openai?utm_source=vscode_marketplace&utm_medium=referral&utm_campaign=evergreen).
+Image generation is metered. Check the exact model, quality, count, pricing and account balance before submitting. See [Documentation](https://platform.acedata.cloud/documents/openai-mcp?utm_source=vscode_marketplace&utm_medium=referral&utm_campaign=evergreen).
 
 ---
 
@@ -142,7 +142,7 @@ version, install [`uv`](https://docs.astral.sh/uv/) and use:
 - **PyPI package:** [`mcp-openai-pro`](https://pypi.org/project/mcp-openai-pro/)
 - **Source repository:** https://github.com/AceDataCloud/OpenAIMCP
 - **Ace Data Cloud platform:** https://platform.acedata.cloud?utm_source=vscode_marketplace&utm_medium=referral&utm_campaign=evergreen
-- **Documentation:** https://platform.acedata.cloud/documents/openai?utm_source=vscode_marketplace&utm_medium=referral&utm_campaign=evergreen
+- **Documentation:** https://platform.acedata.cloud/documents/openai-mcp?utm_source=vscode_marketplace&utm_medium=referral&utm_campaign=evergreen
 
 ## License
 

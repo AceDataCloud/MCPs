@@ -337,7 +337,7 @@ ruff check .
 ## Documentation
 
 <!-- canonical-documentation -->
-[Documentation](https://platform.acedata.cloud/documents/openai?utm_source=github&utm_medium=referral&utm_campaign=evergreen)
+[Documentation](https://platform.acedata.cloud/documents/openai-mcp?utm_source=github&utm_medium=referral&utm_campaign=evergreen)
 
 ## License
 

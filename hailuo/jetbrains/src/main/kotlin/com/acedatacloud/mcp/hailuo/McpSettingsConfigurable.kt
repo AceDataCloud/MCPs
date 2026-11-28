@@ -93,7 +93,7 @@ class McpSettingsConfigurable : Configurable {
                     browserLink("Ace Data Cloud Platform", "https://platform.acedata.cloud?utm_source=jetbrains_marketplace&utm_medium=referral&utm_campaign=evergreen")
                 }
                 row {
-                    browserLink("Documentation", "https://platform.acedata.cloud/documents/hailuo?utm_source=jetbrains_marketplace&utm_medium=referral&utm_campaign=evergreen")
+                    browserLink("Documentation", "https://platform.acedata.cloud/documents/hailuo-mcp?utm_source=jetbrains_marketplace&utm_medium=referral&utm_campaign=evergreen")
                 }
                 row {
                     browserLink("Source Code", "https://github.com/AceDataCloud/HailuoMCP")

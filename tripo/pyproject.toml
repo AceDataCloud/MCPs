@@ -21,7 +21,7 @@ mcp-tripo = "main:main"
 
 [project.urls]
 Homepage = "https://github.com/AceDataCloud/TripoMCP"
-Documentation = "https://platform.acedata.cloud/documents/tripo?utm_source=pypi&utm_medium=referral&utm_campaign=evergreen"
+Documentation = "https://platform.acedata.cloud/documents/tripo-mcp?utm_source=pypi&utm_medium=referral&utm_campaign=evergreen"
 Repository = "https://github.com/AceDataCloud/TripoMCP"
 
 [build-system]

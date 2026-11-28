@@ -368,7 +368,7 @@ Contributions are welcome! Please:
 ## Documentation
 
 <!-- canonical-documentation -->
-[Documentation](https://platform.acedata.cloud/documents/hailuo?utm_source=pypi&utm_medium=referral&utm_campaign=evergreen)
+[Documentation](https://platform.acedata.cloud/documents/hailuo-mcp?utm_source=pypi&utm_medium=referral&utm_campaign=evergreen)
 
 ## License
 

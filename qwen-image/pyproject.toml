@@ -70,7 +70,7 @@ mcp-qwen-image = "main:main"
 
 [project.urls]
 Homepage = "https://github.com/AceDataCloud/QwenImageMCP"
-Documentation = "https://platform.acedata.cloud/documents/qwen-image?utm_source=pypi&utm_medium=referral&utm_campaign=evergreen"
+Documentation = "https://platform.acedata.cloud/documents/qwen-image-mcp?utm_source=pypi&utm_medium=referral&utm_campaign=evergreen"
 Repository = "https://github.com/AceDataCloud/QwenImageMCP"
 Issues = "https://github.com/AceDataCloud/QwenImageMCP/issues"
 Changelog = "https://github.com/AceDataCloud/QwenImageMCP/blob/main/CHANGELOG.md"

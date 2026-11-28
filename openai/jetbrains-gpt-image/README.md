@@ -68,4 +68,4 @@ Source: [JetBrains MCP documentation](https://www.jetbrains.com/help/ai-assistan
 
 ## Source and support
 
-[Source repository](https://github.com/AceDataCloud/OpenAIMCP) · [Service documentation](https://platform.acedata.cloud/documents/openai?utm_source=jetbrains_marketplace&utm_medium=referral&utm_campaign=evergreen) · [Current pricing](https://platform.acedata.cloud/models?utm_source=jetbrains_marketplace&utm_medium=referral&utm_campaign=evergreen). Source of truth: [AceDataCloud/MCPs](https://github.com/AceDataCloud/MCPs). Existing MCP server and billing are reused. MIT.
+[Source repository](https://github.com/AceDataCloud/OpenAIMCP) · [Service documentation](https://platform.acedata.cloud/documents/openai-mcp?utm_source=jetbrains_marketplace&utm_medium=referral&utm_campaign=evergreen) · [Current pricing](https://platform.acedata.cloud/models?utm_source=jetbrains_marketplace&utm_medium=referral&utm_campaign=evergreen). Source of truth: [AceDataCloud/MCPs](https://github.com/AceDataCloud/MCPs). Existing MCP server and billing are reused. MIT.

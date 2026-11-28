@@ -26,7 +26,7 @@
       ]
     }
   ],
-  "websiteUrl": "https://platform.acedata.cloud/documents/wan?utm_source=mcp_registry&utm_medium=referral&utm_campaign=evergreen",
+  "websiteUrl": "https://platform.acedata.cloud/documents/wan-mcp?utm_source=mcp_registry&utm_medium=referral&utm_campaign=evergreen",
   "remotes": [
     {
       "type": "streamable-http",

@@ -140,7 +140,7 @@ version, install [`uv`](https://docs.astral.sh/uv/) and use:
 - **PyPI package:** [`mcp-hailuo`](https://pypi.org/project/mcp-hailuo/)
 - **Source repository:** https://github.com/AceDataCloud/HailuoMCP
 - **Ace Data Cloud platform:** https://platform.acedata.cloud?utm_source=vscode_marketplace&utm_medium=referral&utm_campaign=evergreen
-- **MCP documentation:** https://platform.acedata.cloud/documents/hailuo?utm_source=vscode_marketplace&utm_medium=referral&utm_campaign=evergreen
+- **MCP documentation:** https://platform.acedata.cloud/documents/hailuo-mcp?utm_source=vscode_marketplace&utm_medium=referral&utm_campaign=evergreen
 
 ## License
 

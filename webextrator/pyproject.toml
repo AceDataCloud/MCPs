@@ -68,7 +68,7 @@ mcp-webextrator = "main:main"
 
 [project.urls]
 Homepage = "https://github.com/AceDataCloud/WebExtraterMCP"
-Documentation = "https://platform.acedata.cloud/documents/webextrator?utm_source=pypi&utm_medium=referral&utm_campaign=evergreen"
+Documentation = "https://platform.acedata.cloud/documents/webextrator-mcp?utm_source=pypi&utm_medium=referral&utm_campaign=evergreen"
 Repository = "https://github.com/AceDataCloud/WebExtraterMCP"
 Issues = "https://github.com/AceDataCloud/WebExtraterMCP/issues"
 

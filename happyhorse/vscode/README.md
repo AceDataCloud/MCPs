@@ -73,7 +73,7 @@ Save the key in the client's credential store or the environment variable shown 
 
 ## Pricing
 
-Video generation is metered. Check current model pricing and your account balance before submitting. See [Documentation](https://platform.acedata.cloud/documents/happyhorse?utm_source=vscode_marketplace&utm_medium=referral&utm_campaign=evergreen).
+Video generation is metered. Check current model pricing and your account balance before submitting. See [Documentation](https://platform.acedata.cloud/documents/happyhorse-mcp?utm_source=vscode_marketplace&utm_medium=referral&utm_campaign=evergreen).
 
 ---
 
@@ -145,7 +145,7 @@ version, install [`uv`](https://docs.astral.sh/uv/) and use:
 - **PyPI package:** [`mcp-happyhorse`](https://pypi.org/project/mcp-happyhorse/)
 - **Source repository:** https://github.com/AceDataCloud/HappyHorseMCP
 - **Ace Data Cloud platform:** https://platform.acedata.cloud?utm_source=vscode_marketplace&utm_medium=referral&utm_campaign=evergreen
-- **Documentation:** https://platform.acedata.cloud/documents/happyhorse?utm_source=vscode_marketplace&utm_medium=referral&utm_campaign=evergreen
+- **Documentation:** https://platform.acedata.cloud/documents/happyhorse-mcp?utm_source=vscode_marketplace&utm_medium=referral&utm_campaign=evergreen
 
 ## License
 

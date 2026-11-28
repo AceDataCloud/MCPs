@@ -70,7 +70,7 @@ mcp-kling = "main:main"
 
 [project.urls]
 Homepage = "https://github.com/AceDataCloud/KlingMCP"
-Documentation = "https://platform.acedata.cloud/documents/kling?utm_source=pypi&utm_medium=referral&utm_campaign=evergreen"
+Documentation = "https://platform.acedata.cloud/documents/kling-mcp?utm_source=pypi&utm_medium=referral&utm_campaign=evergreen"
 Repository = "https://github.com/AceDataCloud/KlingMCP"
 Issues = "https://github.com/AceDataCloud/KlingMCP/issues"
 Changelog = "https://github.com/AceDataCloud/KlingMCP/blob/main/CHANGELOG.md"

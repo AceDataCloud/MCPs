@@ -4,7 +4,7 @@
 Generate a 3D model from text, an image or multiple views. Import, texture and convert a model, check its riggability, bind a skeleton or retarget animation presets through Ace Data Cloud.
 
 <!-- canonical-documentation -->
-[Documentation](https://platform.acedata.cloud/documents/tripo?utm_source=pypi&utm_medium=referral&utm_campaign=evergreen)
+[Documentation](https://platform.acedata.cloud/documents/tripo-mcp?utm_source=pypi&utm_medium=referral&utm_campaign=evergreen)
 
 ## Connect
 
