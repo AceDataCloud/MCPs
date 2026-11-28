@@ -4,7 +4,10 @@
 
 Generate video from text or animate a reference image.
 
-1. Open [Ace Data Cloud Applications](https://platform.acedata.cloud/console/applications?utm_source=langbot&utm_medium=referral&utm_campaign=evergreen) and copy an application API key with access to Seedance.
+1. Sign in to [Ace Data Cloud Applications](https://platform.acedata.cloud/console/applications?utm_source=langbot&utm_medium=referral&utm_campaign=evergreen) and open **General Application**. Copy the key from the right of the **API KEY** field and check that the application has access to Seedance.
+
+   ![API key in the General Application card](https://cdn.acedata.cloud/dvc3cg.jpg)
+
 2. Install this server from [LangBot Space](https://space.langbot.app/market/acedatacloud/seedance). Paste the key into the private token field without the `Bearer` prefix. LangBot supplies that prefix when it connects.
 3. Enable the server for your agent. Run `seedance_list_resolutions` to see the supported sizes. Retrieve an existing video with `seedance_get_task` and its original task ID.
 

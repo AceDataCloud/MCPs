@@ -19,7 +19,7 @@ This real **2026-10-17 Suno page** illustrates Glama's directory navigation only
 ## 2. Obtain an application API Token
 
 1. [Register/sign in to Ace Data Cloud](https://platform.acedata.cloud/?utm_source=glama&utm_medium=referral&utm_campaign=evergreen), then open [Applications](https://platform.acedata.cloud/console/applications?utm_source=glama&utm_medium=referral&utm_campaign=evergreen).
-2. Open **General application**, or choose **Initialize General Application** if it is absent. Check GPT Image model access, the chosen API, expiration, usage limit, current balance and price. No fixed trial allowance is promised.
+2. Open **General application**. Check GPT Image model access, the chosen API, expiration, usage limit, current balance and price. No fixed trial allowance is promised.
 3. Copy an existing API Key using **①**, or choose **② Manage Keys → Create** to create a separate `Glama GPT Image` key. Values in the source image are redacted.
 
 ![Real Ace Applications screenshot: copy an API Key or open Manage Keys](https://raw.githubusercontent.com/AceDataCloud/SunoDify/8d3d03570e73324220f111f7fe343da0792a8071/_assets/tutorial/get-api-key-en.png)
@@ -77,7 +77,7 @@ Save the returned `task_id`. Call `gpt_image_get_task` with that same `id` until
 ## 中文操作指南
 
 1. 搜索 Glama 的 **GPT Image** 并核对作者 AceDataCloud、独立五个 `gpt_image_*` 工具和 `--profile gpt-image` 参数。官方 MCP Registry 已有独立配置，不等于 Glama 已导入；截至2026-10-19普通 Glama 搜索、安装和授权仍未完成验收。现有 OpenAIMCP 页面是通用服务，不能冒充独立影像入口。
-2. [注册或登录 Ace](https://platform.acedata.cloud/?utm_source=glama&utm_medium=referral&utm_campaign=evergreen) → [Applications／我的应用](https://platform.acedata.cloud/console/applications?utm_source=glama&utm_medium=referral&utm_campaign=evergreen) → **General application／通用应用**。缺少时先初始化；核对模型/API权限、有效期、用量、余额和当前价格。
+2. [注册或登录 Ace](https://platform.acedata.cloud/?utm_source=glama&utm_medium=referral&utm_campaign=evergreen) → [Applications／我的应用](https://platform.acedata.cloud/console/applications?utm_source=glama&utm_medium=referral&utm_campaign=evergreen) → **General application／通用应用**。核对模型/API权限、有效期、用量、余额和当前价格。
 3. 用图中①复制已有Key，或② **Manage Keys → Create**建立专用Token。API限制要同时允许所需图片操作和`/openai/tasks`。图片已打码，原图Dify示例名不要求照抄；不要用平台管理Token代替应用API Token。
 4. 包配置必须保留上方stdio命令的`--profile gpt-image`，原始Token放在私密`ACEDATACLOUD_API_TOKEN`环境变量中，不加Bearer。没有独立GPT Image远程URL；不能用genericOpenAI远程地址代替。Glama托管包的具体参数/密钥表单尚待真实登录核验，不虚构按钮或部署成功。
 5. 先检查五工具并调用免费`gpt_image_list_models`；确认实际价格和预算后才提交一次生成/编辑，保存任务ID，之后只查同一ID到终态再展示最终图片。未跑收费示例，没有Glama终态、媒体或账单成功截图。

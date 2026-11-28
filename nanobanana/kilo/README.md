@@ -18,7 +18,7 @@ Choose **Hosted (API token)** to connect without installing Python. Alternativel
 
 ## 2. Get the correct application API token
 
-1. Register or sign in to [Ace Data Cloud → Applications](https://platform.acedata.cloud/console/applications?utm_source=opensource&utm_medium=referral&utm_campaign=evergreen). If no General application exists, choose **Initialize General Application**.
+1. Register or sign in to [Ace Data Cloud → Applications](https://platform.acedata.cloud/console/applications?utm_source=opensource&utm_medium=referral&utm_campaign=evergreen). Open **General Application**.
 2. Open **General application**. Confirm Nano Banana access, [current pricing and account balance](https://platform.acedata.cloud/models?utm_source=opensource&utm_medium=referral&utm_campaign=evergreen) before any generation. A General application token can cover multiple entitled services; a service-specific token only covers that service.
 3. Use the copy icon for an existing key, or **Manage Keys → Create** for a dedicated `Kilo Nano Banana` key. Set expiry and usage limits as needed. If API restrictions are enabled, allow **/nano-banana/images and /nano-banana/tasks** so both generation and result retrieval work.
 

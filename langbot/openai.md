@@ -4,7 +4,10 @@
 
 Use the OpenAI chat, image, audio, and embedding tools provided through Ace Data Cloud.
 
-1. Open [Ace Data Cloud Applications](https://platform.acedata.cloud/console/applications?utm_source=langbot&utm_medium=referral&utm_campaign=evergreen) and copy an application API key with access to OpenAI API.
+1. Sign in to [Ace Data Cloud Applications](https://platform.acedata.cloud/console/applications?utm_source=langbot&utm_medium=referral&utm_campaign=evergreen) and open **General Application**. Copy the key from the right of the **API KEY** field and check that the application has access to OpenAI API.
+
+   ![API key in the General Application card](https://cdn.acedata.cloud/dvc3cg.jpg)
+
 2. Install this server from [LangBot Space](https://space.langbot.app/market/acedatacloud/openai). Paste the key into the private token field without the `Bearer` prefix. LangBot supplies that prefix when it connects.
 3. Enable the server for your agent. Run `openai_list_chat_models` to inspect chat options or `openai_list_image_models` to inspect image options. Use `openai_get_task` to check an existing asynchronous task.
 

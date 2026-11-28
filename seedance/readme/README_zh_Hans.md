@@ -17,7 +17,7 @@ Registry 是目录，不是运行工具的聊天软件，也没有统一的“�
 ## 2. 注册/登录并取得专用 API Token
 
 1. 打开 [Ace Data Cloud → Applications](https://platform.acedata.cloud/console/applications?utm_source=github&utm_medium=referral&utm_campaign=evergreen)，注册或登录。
-2. 进入 **General application**；如果没有，先点 **Initialize General Application**。通用应用可访问账户已开通的服务；单服务应用 Key 的范围限于该应用。
+2. 进入 **General application**。通用应用可访问账户已开通的服务；单服务应用 Key 的范围限于该应用。
 3. 复制应用卡片的 **API Key**，或打开 **Keys / Manage Keys → Create** 创建单独命名的集成凭据，例如 `Seedance MCP`。它与 `platform-...` 账户管理 Token 不同，后者不能代替生成 API Key。
 4. 核对 **Expiration Time、Set Usage Limitation、Allowed APIs**。若限制接口，至少覆盖本次使用的 `/seedance/videos` 与查询 `/seedance/tasks`。同时确认服务/模型权限、余额和[当前价格](https://platform.acedata.cloud/models?utm_source=github&utm_medium=referral&utm_campaign=evergreen)，不要把历史额度或价格当今天可用。
 5. 只复制 Token 原值；客户端 **API Token/API Key** 或环境变量字段不加 `Bearer `，手动 HTTP `Authorization` 头才写 `Bearer <TOKEN>`。不要把 Key 放在聊天正文、截图、共享配置或 Git。

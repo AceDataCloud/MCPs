@@ -194,7 +194,7 @@ class CredentialGuideTest(unittest.TestCase):
         self.assertIn("/console/platform-tokens?utm_source=vscode_marketplace", account)
         self.assertNotIn("/console/applications", account)
         self.assertIn("/console/applications?utm_source=pypi", service)
-        self.assertIn("Initialize General Application", service)
+        self.assertIn("General application", service)
         self.assertEqual(render(account, "acedatacloud", "vscode_marketplace"), account)
         self.assertEqual(
             refresh_token_guide("no managed block", "suno"), "no managed block"
@@ -264,7 +264,7 @@ class JetBrainsDescriptionTest(unittest.TestCase):
                     self.assertIn("/console/platform-tokens?", description)
                     self.assertNotIn("/console/applications", description)
                 else:
-                    self.assertIn("Initialize General Application", description)
+                    self.assertIn("General application", description)
                     self.assertIn("Manage Keys", description)
                     self.assertIn("<img ", description)
                 for url in re.findall(

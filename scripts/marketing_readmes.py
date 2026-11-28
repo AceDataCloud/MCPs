@@ -167,7 +167,7 @@ def render_jetbrains_settings(text, alias, rules):
     hint = (
         "Create a platform token with only the account permissions you need."
         if account
-        else "Sign in, initialize General Application if needed, then copy an API key."
+        else "Sign in and copy the API key from the General Application card."
     )
     guide = (
         "\n                // BEGIN TOKEN ONBOARDING\n"

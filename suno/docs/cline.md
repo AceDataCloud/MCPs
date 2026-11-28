@@ -19,7 +19,7 @@ This installs one named server, not all Ace services. It does not create an acco
 ## 2. Register or sign in and obtain your API Token
 
 1. Open [Ace Data Cloud → Applications](https://platform.acedata.cloud/console/applications?utm_source=cli&utm_medium=referral&utm_campaign=evergreen). Register/sign in if needed.
-2. Open **General application**; if none exists, choose **Initialize General Application**. A general key can access services enabled for your account; a service-specific key is limited to that service. Confirm **Suno** access, current pricing and a sufficient account balance.
+2. Open **General application**. A general key can access services enabled for your account; a service-specific key is limited to that service. Confirm **Suno** access, current pricing and a sufficient account balance.
 3. Copy the API Key on the application card, or open **Manage Keys → Create** to make a dedicated key named `Cline Suno`.
 
 ![Copy a key or open Manage Keys](https://raw.githubusercontent.com/AceDataCloud/SunoDify/8d3d03570e73324220f111f7fe343da0792a8071/_assets/tutorial/get-api-key-en.png)
@@ -105,7 +105,7 @@ cline mcp add suno-acedatacloud https://suno.mcp.acedata.cloud/mcp --transport h
 ### 2. 注册登录并获取专用 API Token
 
 1. 打开 [Ace Data Cloud → Applications](https://platform.acedata.cloud/console/applications?utm_source=cli&utm_medium=referral&utm_campaign=evergreen)，新用户先注册并登录。
-2. 进入 **General application**；尚未创建时先点 **Initialize General Application**。通用应用的 Key 能访问账号已开通服务；专用应用的 Key 受对应服务限制。确认 **Suno** 权限、[当前模型和价格](https://platform.acedata.cloud/models?utm_source=cli&utm_medium=referral&utm_campaign=evergreen)及余额，不假定有固定免费额度。
+2. 进入 **General application**。通用应用的 Key 能访问账号已开通服务；专用应用的 Key 受对应服务限制。确认 **Suno** 权限、[当前模型和价格](https://platform.acedata.cloud/models?utm_source=cli&utm_medium=referral&utm_campaign=evergreen)及余额，不假定有固定免费额度。
 3. 点应用卡片的复制按钮取得现有 API Key，或 **Manage Keys → Create** 创建名为 `Cline Suno` 的独立 Key，方便撤销和轮换。
 
 ![复制已有 API Key 或打开 Manage Keys](https://raw.githubusercontent.com/AceDataCloud/SunoDify/8d3d03570e73324220f111f7fe343da0792a8071/_assets/tutorial/get-api-key-en.png)

@@ -16,7 +16,7 @@ The command installs only this service plugin, not a media bundle. Its MCP confi
 
 ## 2. Register, sign in and get your service API Token
 
-1. Open [Ace Data Cloud → Applications](https://platform.acedata.cloud/console/applications?utm_source=opensource&utm_medium=referral&utm_campaign=evergreen); register/sign in. If needed select **Initialize General Application**, then open **General application**.
+1. Open [Ace Data Cloud → Applications](https://platform.acedata.cloud/console/applications?utm_source=opensource&utm_medium=referral&utm_campaign=evergreen); register/sign in. Open **General Application**.
 2. Check **Suno** access, available balance, current pricing and any account quota. A trial allowance is whatever your account displays now.
 3. Copy the API Key on the card, or **Manage Keys → Create** a dedicated key named `goose Suno`. For restrictions, allow the generation/edit and task-query APIs you will use: `/suno/audios, /suno/tasks`. Further operations may need other routes.
 4. Copy the raw key value without `Bearer `, quotes or spaces. A `platform-...` management token is not this service API key. Never paste the key into a prompt, shared JSON, screenshot or Git.

@@ -32,7 +32,7 @@ LobeHub stable v2.2.19 quick import reads only the first entry and drops HTTP `h
 ## 2. Register/sign in and obtain your API Token
 
 1. Sign in or register at [Ace → Applications](https://platform.acedata.cloud/console/applications?utm_source=opensource&utm_medium=referral&utm_campaign=evergreen).
-2. Initialize **General application** if absent, then open it. Check **HappyHorse** service entitlement, current balance and pricing. A service-specific key can be restricted to that service.
+2. Open **General Application**. Check **HappyHorse** service entitlement, current balance and pricing. A service-specific key can be restricted to that service.
 3. Copy the existing service API Token, or open **Manage Keys** and create a dedicated LobeHub key. Do not use a platform management token or a model vendor's key.
 
 ![Copy an API Token in Ace Applications; real historical screenshot, referenced 2026-10-18](https://raw.githubusercontent.com/AceDataCloud/SunoDify/8d3d03570e73324220f111f7fe343da0792a8071/_assets/tutorial/get-api-key-en.png)

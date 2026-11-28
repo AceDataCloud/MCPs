@@ -262,7 +262,7 @@ Ace Data Cloud 提供的独立 {service["brand"]} {service["kind"]} 集成，并
 ## 2. 注册、登录并取得专用 API Token
 
 1. 打开 [Ace Data Cloud → Applications](https://platform.acedata.cloud/console/applications)，先注册或登录自己的 Ace 账号。
-2. 找到 **General application**。尚未初始化时选择 **Initialize General Application**；通用应用 Key 可使用账号已开放的服务，专用应用 Key 受其服务范围限制。确认 {service["brand"]} 的服务/模型权限，并查看[当前模型与价格](https://platform.acedata.cloud/models)，不要使用旧文章的报价或假定有免费额度。
+2. 找到 **General application**。通用应用 Key 可使用账号已开放的服务，专用应用 Key 受其服务范围限制。确认 {service["brand"]} 的服务/模型权限，并查看[当前模型与价格](https://platform.acedata.cloud/models)，不要使用旧文章的报价或假定有免费额度。
 3. 在应用卡片复制 **API Key**；或进入 **Keys / Manage Keys → Create**，创建一个独立命名的 Key，例如 `{alias}-jetbrains`，便于单独撤销、轮换和核对使用。
 4. 创建时检查 **Expiration Time、Set Usage Limitation、Allowed APIs**。仅开放自己需要的操作；只允许任务查询不代表允许生成。检查应用当前余额能覆盖准备提交的请求，再点 Create 并从 Key 列表复制 Token。
 5. 只复制原始 Token，不要带引号、空格或 `Bearer `。`platform-...` 是账号管理 Token，不能替代本服务生成 API Key；仅手动配置 HTTP Authorization 时加 `Bearer ` 前缀。

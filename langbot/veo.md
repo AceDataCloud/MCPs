@@ -4,7 +4,10 @@
 
 Generate video from text or reference frames, then retrieve the finished clips.
 
-1. Open [Ace Data Cloud Applications](https://platform.acedata.cloud/console/applications?utm_source=langbot&utm_medium=referral&utm_campaign=evergreen) and copy an application API key with access to Veo.
+1. Sign in to [Ace Data Cloud Applications](https://platform.acedata.cloud/console/applications?utm_source=langbot&utm_medium=referral&utm_campaign=evergreen) and open **General Application**. Copy the key from the right of the **API KEY** field and check that the application has access to Veo.
+
+   ![API key in the General Application card](https://cdn.acedata.cloud/dvc3cg.jpg)
+
 2. Install this server from [LangBot Space](https://space.langbot.app/market/acedatacloud/veo). Paste the key into the private token field without the `Bearer` prefix. LangBot supplies that prefix when it connects.
 3. Enable the server for your agent. Run `veo_list_models` to inspect available models. Use `veo_get_task` with the original task ID to look up an existing clip.
 
