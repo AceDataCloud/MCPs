@@ -55,7 +55,12 @@ def local_surfaces() -> dict[str, Surface]:
     statuses = json.loads(CATALOG_PATH.read_text())["services"]
     surfaces: dict[str, Surface] = {}
     manifests = [
-        (path, path.parent.name, True) for path in sorted(ROOT.glob("*/server.json"))
+        (
+            path,
+            path.parent.name,
+            not statuses[path.parent.name].get("registry", {}).get("local_only", False),
+        )
+        for path in sorted(ROOT.glob("*/server.json"))
     ]
     for alias, entry in statuses.items():
         for profile in entry.get("registry_profiles", []):
@@ -76,7 +81,7 @@ def local_surfaces() -> dict[str, Surface]:
             or (require_remote and len(remotes) != 1)
         ):
             raise RuntimeError(
-                f"{alias}: expected one package and at most one remote; root manifests require a remote"
+                f"{alias}: expected one package and at most one remote; hosted manifests require a remote"
             )
         if data["name"] in surfaces:
             raise RuntimeError(f"duplicate local Registry name: {data['name']}")
