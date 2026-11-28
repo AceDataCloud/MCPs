@@ -21,7 +21,9 @@
 3. 核对过期时间、使用额度限制与 Allowed APIs。如果启用接口限制，允许本次图像生成/编辑及 `/openai/tasks` 查询；查询权限不授予生成权限。
 4. 查看当前服务/模型权限、余额和[当前价格](https://platform.acedata.cloud/models?utm_source=github&utm_medium=referral&utm_campaign=evergreen)。不要从旧教程推断免费额度或价格，也不要把 `platform-...` 账户管理 Token 当成生成 Key。
 
-![真实 Ace 应用 Key 界面，敏感内容已遮挡](https://raw.githubusercontent.com/AceDataCloud/SunoDify/8d3d03570e73324220f111f7fe343da0792a8071/_assets/tutorial/get-api-key-en.png)
+通用应用卡片上，**API KEY** 旁标注 **1** 的按钮用于复制。
+
+![通用应用中 API KEY 旁标注 1 的复制按钮](https://raw.githubusercontent.com/AceDataCloud/NanoBananaDify/2522b2f57210597af2db866445319334a1677a23/_assets/tutorial/get-api-key-en.png)
 
 ![真实 Ace 创建 Key 界面，可设置过期、额度和接口范围](https://raw.githubusercontent.com/AceDataCloud/SunoDify/8d3d03570e73324220f111f7fe343da0792a8071/_assets/tutorial/create-api-key-en.png)
 

@@ -8,7 +8,9 @@ This is a shareable, independently installed preset for goose 1.55.0+, not an of
 
 Register/sign in at [Applications](https://platform.acedata.cloud/console/applications?utm_source=opensource&utm_medium=referral&utm_campaign=evergreen), open General application, copy or create a separately named API Key. Check chat permissions, expiry/Allowed APIs, balance and [current model price](https://platform.acedata.cloud/models?utm_source=opensource&utm_medium=referral&utm_campaign=evergreen). Do not use a `platform-...` management token.
 
-![Copy the API Key or Manage Keys — real Ace console reference](https://raw.githubusercontent.com/AceDataCloud/SunoDify/8d3d03570e73324220f111f7fe343da0792a8071/_assets/tutorial/get-api-key-en.png)
+On the General Application card, click the copy button marked **1** beside **API KEY**.
+
+![Copy the General Application API key with the button marked 1](https://raw.githubusercontent.com/AceDataCloud/NanoBananaDify/2522b2f57210597af2db866445319334a1677a23/_assets/tutorial/get-api-key-en.png)
 
 ![Create a dedicated API Key — real Ace console reference](https://raw.githubusercontent.com/AceDataCloud/SunoDify/8d3d03570e73324220f111f7fe343da0792a8071/_assets/tutorial/create-api-key-en.png)
 

@@ -16,7 +16,9 @@ goose plugin install https://github.com/AceDataCloud/SeedanceMCP.git
 
 先[注册或登录 Ace → Applications](https://platform.acedata.cloud/console/applications?utm_source=opensource&utm_medium=referral&utm_campaign=evergreen)，打开 **General application**；没有通用应用时先初始化。检查 Seedance 权限、余额和[当前价格](https://platform.acedata.cloud/models?utm_source=opensource&utm_medium=referral&utm_campaign=evergreen)。复制卡片 API Key，或 **Manage Keys → Create** 创建专用 `goose Seedance` Key。限制 Allowed APIs 时需同时放行 `/seedance/videos, /seedance/tasks` 等本次流程会用的接口。
 
-![真实 Ace 页面：复制已有 Key 或管理 Key](https://raw.githubusercontent.com/AceDataCloud/SunoDify/8d3d03570e73324220f111f7fe343da0792a8071/_assets/tutorial/get-api-key-en.png)
+在通用应用卡片上，点击 **API KEY** 旁标注 **1** 的按钮复制。
+
+![通用应用中 API KEY 旁标注 1 的复制按钮](https://raw.githubusercontent.com/AceDataCloud/NanoBananaDify/2522b2f57210597af2db866445319334a1677a23/_assets/tutorial/get-api-key-en.png)
 
 ![真实 Ace 页面：创建专用 Key](https://raw.githubusercontent.com/AceDataCloud/SunoDify/8d3d03570e73324220f111f7fe343da0792a8071/_assets/tutorial/create-api-key-en.png)
 

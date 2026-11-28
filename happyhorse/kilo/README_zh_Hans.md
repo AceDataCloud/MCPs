@@ -22,7 +22,9 @@
 2. 打开 **General application**。生成前确认 HappyHorse 服务权限、[当前价格和账户余额](https://platform.acedata.cloud/models?utm_source=opensource&utm_medium=referral&utm_campaign=evergreen)。通用应用 Token 可访问账户已有权限的多个服务；专用服务 Token 仅覆盖对应服务。
 3. 使用复制图标获取现有 Key，或选择 **Manage Keys → Create**，创建名为 `Kilo HappyHorse` 的专用 Key。按需设置有效期、用量限制。若启用 Allowed APIs，需同时允许 **/happyhorse/videos and /happyhorse/tasks**，以免只允许生成却无法查询结果。
 
-![复制应用 API Key 或打开 Manage Keys](https://raw.githubusercontent.com/AceDataCloud/SunoDify/8d3d03570e73324220f111f7fe343da0792a8071/_assets/tutorial/get-api-key-en.png)
+通用应用卡片上，**API KEY** 旁标注 **1** 的按钮用于复制。
+
+![通用应用中 API KEY 旁标注 1 的复制按钮](https://raw.githubusercontent.com/AceDataCloud/NanoBananaDify/2522b2f57210597af2db866445319334a1677a23/_assets/tutorial/get-api-key-en.png)
 
 ![按需创建单独的应用 Key](https://raw.githubusercontent.com/AceDataCloud/SunoDify/8d3d03570e73324220f111f7fe343da0792a8071/_assets/tutorial/create-api-key-en.png)
 
