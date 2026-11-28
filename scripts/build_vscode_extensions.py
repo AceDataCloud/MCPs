@@ -681,17 +681,15 @@ def render_chinese_readme(svc: Service) -> str:
 ## 2. 注册并复制应用 API Token
 
 1. 打开 [Ace Applications](https://platform.acedata.cloud/console/applications)，先注册或登录 Ace。
-2. 找到 **General application（通用应用）**；若不存在，先点 **Initialize General Application**。点击 **API KEY** 旁标注 **1** 的复制按钮。也可在 **Manage Keys** 创建本扩展专用 Key。
-
-![通用应用中 API KEY 旁标注 1 的复制按钮](https://raw.githubusercontent.com/AceDataCloud/NanoBananaDify/2522b2f57210597af2db866445319334a1677a23/_assets/tutorial/get-api-key-en.png)
-
+2. 找到 **General application（通用应用）**；若不存在，先点 **Initialize General Application**。可复制卡片上的 API Key，或进入 **Keys / Manage Keys → Create** 创建本扩展专用 Key。
 3. 创建时检查有效期、使用限额、Allowed APIs。只开放需要的生成/查询接口，确认服务权限、[当前价格](https://platform.acedata.cloud/models)及余额。生成和任务查询是两个操作，允许查询不等于允许生成。
 4. 复制裸 token，不加引号或 `Bearer `。`platform-...` 是账号管理令牌，不能替代图片、视频或音乐服务的应用 Key。
 
+![通用应用的API Key复制入口，真实界面参考](https://raw.githubusercontent.com/AceDataCloud/SunoDify/8d3d03570e73324220f111f7fe343da0792a8071/_assets/tutorial/get-api-key-en.png)
 
 ![创建独立Key和可选权限限制，真实界面参考](https://raw.githubusercontent.com/AceDataCloud/SunoDify/8d3d03570e73324220f111f7fe343da0792a8071/_assets/tutorial/create-api-key-en.png)
 
-两张图是平台操作参考，界面标签为英文。不要把真实 Key 放到截图、提示词或Git提交。
+上图来自 Ace SunoDify 已有真实平台截图，固定到原始提交；界面标签为英文，仅说明取 Key，不证明本扩展已发布。不要把真实 Key 放到截图、提示词或Git提交。
 
 ## 3. 粘贴到VS Code并选工具
 

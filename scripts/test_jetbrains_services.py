@@ -87,8 +87,7 @@ class JetBrainsServiceTest(unittest.TestCase):
             directory = ROOT / service["directory"]
             guide = (directory / "README.md").read_text()
             for text in [
-                "General Application",
-                "get-api-key-en.png",
+                "General application",
                 "Allowed APIs",
                 "current pricing",
                 "Existing task ID",

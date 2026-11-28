@@ -22,9 +22,7 @@ Choose **Hosted (API token)** to connect without installing Python. Alternativel
 2. Open **General application**. Confirm Suno access, [current pricing and account balance](https://platform.acedata.cloud/models?utm_source=opensource&utm_medium=referral&utm_campaign=evergreen) before any generation. A General application token can cover multiple entitled services; a service-specific token only covers that service.
 3. Use the copy icon for an existing key, or **Manage Keys → Create** for a dedicated `Kilo Suno` key. Set expiry and usage limits as needed. If API restrictions are enabled, allow **/suno/audios and /suno/tasks** so both generation and result retrieval work.
 
-Use the copy button marked **1** beside **API KEY** on the General Application card.
-
-![Copy the General Application API key with the button marked 1](https://raw.githubusercontent.com/AceDataCloud/NanoBananaDify/2522b2f57210597af2db866445319334a1677a23/_assets/tutorial/get-api-key-en.png)
+![Copy an application API key or open Manage Keys](https://raw.githubusercontent.com/AceDataCloud/SunoDify/8d3d03570e73324220f111f7fe343da0792a8071/_assets/tutorial/get-api-key-en.png)
 
 ![Create an optional dedicated application key](https://raw.githubusercontent.com/AceDataCloud/SunoDify/8d3d03570e73324220f111f7fe343da0792a8071/_assets/tutorial/create-api-key-en.png)
 

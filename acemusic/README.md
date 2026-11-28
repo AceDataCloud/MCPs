@@ -15,11 +15,7 @@ Create songs from an idea or custom lyrics, import reference audio, cover a trac
 - **Remote MCP clients** use the Streamable HTTP URL `https://acemusic.mcp.acedata.cloud/mcp`. Choose the client's OAuth sign-in flow or configure a Bearer application API key in its private credential settings. The [server card](https://acemusic.mcp.acedata.cloud/.well-known/mcp/server-card.json) lists the available tools.
 - **Local stdio clients** launch the [published Python package](https://pypi.org/project/mcp-acemusic/) with command `uvx` and argument `mcp-acemusic`. Supply `ACEDATACLOUD_API_TOKEN` through the client's private environment settings.
 
-Sign in to [Applications](https://platform.acedata.cloud/console/applications?utm_source=github&utm_medium=referral&utm_campaign=evergreen) and open **General Application**. If it is missing, select **Initialize General Application**. Click the copy button marked **1** beside **API KEY**.
-
-![Copy the General Application API key with the button marked 1](https://raw.githubusercontent.com/AceDataCloud/NanoBananaDify/2522b2f57210597af2db866445319334a1677a23/_assets/tutorial/get-api-key-en.png)
-
-A general application with ACE Music access or a dedicated ACE Music application can run the tools. For a first read-only check, list the models or retrieve an existing task. To add the companion instructions to an agent, install the [ACE Music Skill](https://skills.sh/acedatacloud/skills/ace-music).
+Get an application API key in [Applications](https://platform.acedata.cloud/console/applications?utm_source=github&utm_medium=referral&utm_campaign=evergreen). A general application with ACE Music access or a dedicated ACE Music application can run the tools. For a first read-only check, list the models or retrieve an existing task. To add the companion instructions to an agent, install the [ACE Music Skill](https://skills.sh/acedatacloud/skills/ace-music).
 
 ## Kiro and LangBot
 

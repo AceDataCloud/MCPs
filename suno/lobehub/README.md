@@ -35,9 +35,7 @@ LobeHub stable v2.2.19 quick import reads only the first entry and drops HTTP `h
 2. Initialize **General application** if absent, then open it. Check **Suno** service entitlement, current balance and pricing. A service-specific key can be restricted to that service.
 3. Copy the existing service API Token, or open **Manage Keys** and create a dedicated LobeHub key. Do not use a platform management token or a model vendor's key.
 
-Use the copy button marked **1** beside **API KEY** on the General Application card.
-
-![Copy the General Application API key with the button marked 1](https://raw.githubusercontent.com/AceDataCloud/NanoBananaDify/2522b2f57210597af2db866445319334a1677a23/_assets/tutorial/get-api-key-en.png)
+![Copy an API Token in Ace Applications; real historical screenshot, referenced 2026-10-18](https://raw.githubusercontent.com/AceDataCloud/SunoDify/8d3d03570e73324220f111f7fe343da0792a8071/_assets/tutorial/get-api-key-en.png)
 
 ![Create a dedicated key; credentials hidden; historical screenshot](https://raw.githubusercontent.com/AceDataCloud/SunoDify/8d3d03570e73324220f111f7fe343da0792a8071/_assets/tutorial/create-api-key-en.png)
 

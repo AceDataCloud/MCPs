@@ -22,9 +22,7 @@ This real **2026-10-17 Suno page** illustrates Glama's directory navigation only
 2. Open **General application**, or choose **Initialize General Application** if it is absent. Check GPT Image model access, the chosen API, expiration, usage limit, current balance and price. No fixed trial allowance is promised.
 3. Copy an existing API Key using **①**, or choose **② Manage Keys → Create** to create a separate `Glama GPT Image` key. Values in the source image are redacted.
 
-Use the copy button marked **1** beside **API KEY** on the General Application card.
-
-![Copy the General Application API key with the button marked 1](https://raw.githubusercontent.com/AceDataCloud/NanoBananaDify/2522b2f57210597af2db866445319334a1677a23/_assets/tutorial/get-api-key-en.png)
+![Real Ace Applications screenshot: copy an API Key or open Manage Keys](https://raw.githubusercontent.com/AceDataCloud/SunoDify/8d3d03570e73324220f111f7fe343da0792a8071/_assets/tutorial/get-api-key-en.png)
 
 4. When using **Allowed APIs**, allow the image operation you actually need (`/openai/images/generations` or `/openai/images/edits`) and `/openai/tasks` to retrieve the same task. Creation and task-query permission are separate. Copy the token after creation.
 

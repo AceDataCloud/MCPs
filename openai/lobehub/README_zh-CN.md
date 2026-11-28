@@ -18,9 +18,7 @@
 
 登录或注册 [Ace → Applications（我的应用）](https://platform.acedata.cloud/console/applications?utm_source=opensource&utm_medium=referral&utm_campaign=evergreen)。如果还没有 **General application（通用应用）**，先初始化，再打开应用；确认 GPT Image 服务权限、余额和当前价格。复制已有服务 API Token，或在 **Manage Keys** 创建专用于 LobeHub 的 Key。不要填平台管理 Token 或原厂 Key。
 
-在通用应用卡片上，点击 **API KEY** 旁标注 **1** 的按钮复制。
-
-![通用应用中 API KEY 旁标注 1 的复制按钮](https://raw.githubusercontent.com/AceDataCloud/NanoBananaDify/2522b2f57210597af2db866445319334a1677a23/_assets/tutorial/get-api-key-en.png)
+![复制 API Token，Ace 真实历史截图；2026-10-18 引用](https://raw.githubusercontent.com/AceDataCloud/SunoDify/8d3d03570e73324220f111f7fe343da0792a8071/_assets/tutorial/get-api-key-en.png)
 
 ![创建专用 Key，真实凭据已隐藏；历史截图](https://raw.githubusercontent.com/AceDataCloud/SunoDify/8d3d03570e73324220f111f7fe343da0792a8071/_assets/tutorial/create-api-key-en.png)
 

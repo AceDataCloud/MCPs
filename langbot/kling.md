@@ -4,9 +4,10 @@
 
 Generate video, animate a still, extend a clip, or apply motion and lip sync.
 
-1. Open [Ace Data Cloud Applications](https://platform.acedata.cloud/console/applications?utm_source=langbot&utm_medium=referral&utm_campaign=evergreen). Sign in and open **General Application**. Select **Initialize General Application** if it is missing. Click the copy button marked **1** beside **API KEY**. Verify that the application can access the service.
+1. Sign in to [Ace Data Cloud Applications](https://platform.acedata.cloud/console/applications?utm_source=langbot&utm_medium=referral&utm_campaign=evergreen) and open **General Application**. If it is missing, select **Initialize General Application**. Copy the key from the right of the **API KEY** field and check that the application has access to Kling.
 
-   ![Copy the General Application API key with the button marked 1](https://raw.githubusercontent.com/AceDataCloud/NanoBananaDify/2522b2f57210597af2db866445319334a1677a23/_assets/tutorial/get-api-key-en.png)
+   ![API key in the General Application card](https://cdn.acedata.cloud/dvc3cg.jpg)
+
 2. Install this server from [LangBot Space](https://space.langbot.app/market/acedatacloud/kling). Paste the key into the private token field without the `Bearer` prefix. LangBot supplies that prefix when it connects.
 3. Enable the server for your agent. Run `kling_list_actions` to explore the supported operations. Use `kling_get_task` with an existing task ID to retrieve the video.
 

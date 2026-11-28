@@ -21,9 +21,7 @@ The command installs only this service plugin, not a media bundle. Its MCP confi
 3. Copy the API Key on the card, or **Manage Keys → Create** a dedicated key named `goose HappyHorse`. For restrictions, allow the generation/edit and task-query APIs you will use: `/happyhorse/videos, /happyhorse/tasks`. Further operations may need other routes.
 4. Copy the raw key value without `Bearer `, quotes or spaces. A `platform-...` management token is not this service API key. Never paste the key into a prompt, shared JSON, screenshot or Git.
 
-Use the copy button marked **1** beside **API KEY** on the General Application card.
-
-![Copy the General Application API key with the button marked 1](https://raw.githubusercontent.com/AceDataCloud/NanoBananaDify/2522b2f57210597af2db866445319334a1677a23/_assets/tutorial/get-api-key-en.png)
+![Actual Ace Applications screenshot: copy API Key or Manage Keys](https://raw.githubusercontent.com/AceDataCloud/SunoDify/8d3d03570e73324220f111f7fe343da0792a8071/_assets/tutorial/get-api-key-en.png)
 
 ![Actual Ace key creation screenshot: optional restrictions](https://raw.githubusercontent.com/AceDataCloud/SunoDify/8d3d03570e73324220f111f7fe343da0792a8071/_assets/tutorial/create-api-key-en.png)
 

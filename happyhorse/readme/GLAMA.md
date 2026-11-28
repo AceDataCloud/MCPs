@@ -22,9 +22,7 @@ The public connector was marked **Unhealthy** during the 2026-10-18 audit. That 
 2. Open **General application**. Check access to HappyHorse (Happy Horse), the current model/operation price, balance, expiration and usage limits. No fixed trial balance is promised.
 3. Copy an existing API Key using **①**, or choose **② Manage Keys → Create** for a dedicated key named `Glama happyhorse`. The screenshot's values are redacted.
 
-Use the copy button marked **1** beside **API KEY** on the General Application card.
-
-![Copy the General Application API key with the button marked 1](https://raw.githubusercontent.com/AceDataCloud/NanoBananaDify/2522b2f57210597af2db866445319334a1677a23/_assets/tutorial/get-api-key-en.png)
+![Ace Applications: copy API Key or manage keys](https://raw.githubusercontent.com/AceDataCloud/SunoDify/8d3d03570e73324220f111f7fe343da0792a8071/_assets/tutorial/get-api-key-en.png)
 
 4. If creating a key, use a recognizable name and review expiration, usage limit and Allowed APIs. For this service, check the exact operations you intend to use, including generation **and** task lookup: `/happyhorse/videos, /happyhorse/tasks`. Copy the token after creation. Do not reuse the example name `Dify tutorial` shown in the source image as a requirement.
 

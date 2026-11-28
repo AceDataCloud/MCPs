@@ -11,9 +11,7 @@
 3. 复制应用卡片的 API Key，或打开 **Manage Keys → Create**，创建可独立撤销的专用 Key，例如 `goose models`。根据实际需要设置过期、用量限制和 Allowed APIs；聊天模型需要访问 `/openai/chat/completions`。
 4. 复制原始 Token 字符串，不加 `Bearer `、引号或空格。`platform-...` 管理 Token 不能替代服务 API Key。不要把 Key 写到聊天、Git、共享配置或截图里。
 
-通用应用卡片上，**API KEY** 旁标注 **1** 的按钮用于复制。
-
-![通用应用中 API KEY 旁标注 1 的复制按钮](https://raw.githubusercontent.com/AceDataCloud/NanoBananaDify/2522b2f57210597af2db866445319334a1677a23/_assets/tutorial/get-api-key-en.png)
+![真实脱敏 Ace 页面：复制 API Key 或打开 Manage Keys](https://raw.githubusercontent.com/AceDataCloud/SunoDify/8d3d03570e73324220f111f7fe343da0792a8071/_assets/tutorial/get-api-key-en.png)
 
 ![真实 Ace 页面：创建可选的专用 Key](https://raw.githubusercontent.com/AceDataCloud/SunoDify/8d3d03570e73324220f111f7fe343da0792a8071/_assets/tutorial/create-api-key-en.png)
 
