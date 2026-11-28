@@ -1,4 +1,4 @@
-# GPT Image by Ace Data Cloud
+# GPT Image
 
 [简体中文完整安装与首用指南](https://github.com/AceDataCloud/OpenAIMCP/blob/main/readme/GPT_IMAGE_zh_Hans.md)
 

@@ -59,7 +59,7 @@ async def gpt_image_list_models() -> str:
 
 def create_server() -> FastMCP:
     server = FastMCP(
-        "GPT Image by Ace Data Cloud",
+        "GPT Image",
         icons=[
             Icon(
                 src="https://raw.githubusercontent.com/AceDataCloud/GPTImageDify/main/_assets/icon.png",

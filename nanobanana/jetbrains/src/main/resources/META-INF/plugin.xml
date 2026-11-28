@@ -1,6 +1,6 @@
 <idea-plugin>
     <id>com.acedatacloud.mcp.nanobanana</id>
-    <name>Nano Banana by Ace Data Cloud</name>
+    <name>Nano Banana</name>
     <vendor email="dev@acedata.cloud" url="https://acedata.cloud">Ace Data Cloud</vendor>
 
     <description><![CDATA[

@@ -4,7 +4,7 @@ description: Use GPT Image through Ace Data Cloud in goose for GPT Image generat
 license: MIT
 ---
 
-# GPT Image by Ace Data Cloud
+# GPT Image
 
 Use the MCP tools installed by this plugin. Match tools by their suffix because goose namespaces them with `gpt-image-by-acedatacloud`.
 

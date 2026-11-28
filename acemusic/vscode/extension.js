@@ -14,7 +14,7 @@
 const vscode = require("vscode");
 
 const PROVIDER_ID = "acedatacloud.acemusic";
-const SERVER_LABEL = "ACE Music by Ace Data Cloud";
+const SERVER_LABEL = "ACE Music";
 const SERVER_URL = "https://acemusic.mcp.acedata.cloud/mcp";
 const SET_TOKEN_CMD = "acedatacloud.acemusic.setApiToken";
 const CLEAR_TOKEN_CMD = "acedatacloud.acemusic.clearApiToken";

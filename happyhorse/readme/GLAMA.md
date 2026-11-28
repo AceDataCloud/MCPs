@@ -1,4 +1,4 @@
-# HappyHorse (Happy Horse) in Glama — by Ace Data Cloud
+# HappyHorse (Happy Horse) in Glama
 
 [简体中文](#中文操作指南) · [Open the service listing](https://glama.ai/mcp/servers/AceDataCloud/HappyHorseMCP) · [Current access and pricing](https://platform.acedata.cloud/models?utm_source=glama&utm_medium=referral&utm_campaign=evergreen)
 

@@ -97,7 +97,7 @@ Environment Variables:
     safe_print("")
     safe_print("=" * 50)
     safe_print(
-        "  GPT Image by Ace Data Cloud" if args.profile == "gpt-image" else "  MCP OpenAI Server"
+        "  GPT Image" if args.profile == "gpt-image" else "  MCP OpenAI Server"
     )
     safe_print("=" * 50)
     safe_print("")

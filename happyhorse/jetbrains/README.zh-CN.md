@@ -1,4 +1,4 @@
-# HappyHorse by Ace Data Cloud：中文完整教程
+# HappyHorse：中文完整教程
 
 [English](README.md)
 

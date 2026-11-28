@@ -48,7 +48,7 @@ services:
     pricing_note: "Free — management API calls are not billed. Recharges use your existing balance."
 
   suno:
-    display_name: Suno by Ace Data Cloud
+    display_name: Suno
     repo: SunoMCP
     domain: music
     tagline: "Suno music generation by Ace Data Cloud — songs, lyrics, covers and task results in VS Code Chat."
@@ -113,7 +113,7 @@ services:
     pricing_note: "From $0.02 per image. Free trial credit on sign-up."
 
   nanobanana:
-    display_name: Nano Banana by Ace Data Cloud
+    display_name: Nano Banana
     repo: NanoBananaMCP
     pypi_override: mcp-nanobanana-pro
     domain: image
@@ -231,7 +231,7 @@ services:
     pricing_note: "From $0.18 per clip. Free trial credit on sign-up."
 
   seedance:
-    display_name: Seedance by Ace Data Cloud
+    display_name: Seedance
     repo: SeedanceMCP
     domain: video
     tagline: "Seedance video generation by Ace Data Cloud — text, image and existing task results in VS Code Chat."
@@ -325,7 +325,7 @@ services:
     pricing_note: "Per-character billing. Free trial credit on sign-up."
 
   happyhorse:
-    display_name: HappyHorse by Ace Data Cloud
+    display_name: HappyHorse
     repo: HappyHorseMCP
     domain: video
     tagline: "HappyHorse video generation by Ace Data Cloud — text, image, references, editing and task results in VS Code Chat."
@@ -340,7 +340,7 @@ services:
     pricing_note: "Video generation is metered. Check current model pricing and your account balance before submitting."
 
   openai:
-    display_name: GPT Image by Ace Data Cloud
+    display_name: GPT Image
     ext_name: mcp-gpt-image
     repo: OpenAIMCP
     domain: image
@@ -356,7 +356,7 @@ services:
     pricing_note: "Image generation is metered. Check the exact model, quality, count, pricing and account balance before submitting."
 
   acemusic:
-    display_name: ACE Music by Ace Data Cloud
+    display_name: ACE Music
     repo: AceMusicMCP
     domain: music
     tagline: "ACE Music songs and lyrics with Ace Data Cloud; retrieve original task results."

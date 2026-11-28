@@ -1,4 +1,4 @@
-# GPT Image by Ace Data Cloud
+# GPT Image
 
 Independent GPT Image image integration provided by Ace Data Cloud for JetBrains IDEs. Not an official GPT Image or JetBrains product.
 

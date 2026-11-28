@@ -1,5 +1,5 @@
 {
-  "displayName": "ACE Music by Ace Data Cloud",
+  "displayName": "ACE Music",
   "description": "Generate songs and lyrics, import reference audio, cover or blend tracks and query the original task. Obtain an application API key from Ace Data Cloud. Creation uses account credits.",
   "homepage": "https://platform.acedata.cloud/documents/mcp-acemusic?utm_source=opensource&utm_medium=referral&utm_campaign=evergreen",
   "repositoryUrl": "https://github.com/AceDataCloud/AceMusicMCP",

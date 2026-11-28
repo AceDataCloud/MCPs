@@ -1,4 +1,4 @@
-# GPT Image by Ace Data Cloud
+# GPT Image
 
 ## Unreleased
 

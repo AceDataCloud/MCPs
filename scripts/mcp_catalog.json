@@ -18,7 +18,7 @@
         "default": false
       },
       "registry": {
-        "title": "ACE Music by Ace Data Cloud",
+        "title": "ACE Music",
         "description": "Create ACE Music songs and lyrics with Ace Data Cloud; query the original task for results.",
         "icon": {
           "src": "https://cdn.acedata.cloud/acemusic-icon-52deddfc87b9.png",
@@ -139,7 +139,7 @@
         "default": false
       },
       "registry": {
-        "title": "HappyHorse by Ace Data Cloud",
+        "title": "HappyHorse",
         "guide": "README.md",
         "description": "Generate and edit HappyHorse videos with Ace Data Cloud; retrieve the original task for results.",
         "icon": {
@@ -198,7 +198,7 @@
       },
       "runtime_icon": "registry",
       "registry": {
-        "title": "Maestro by Ace Data Cloud",
+        "title": "Maestro",
         "description": "Produce complete AI videos from a brief with Maestro",
         "icon": {
           "src": "https://cdn.acedata.cloud/uploads/c05acf25-8990-4004-9a29-6fa6865ed66f",
@@ -239,7 +239,7 @@
         "default": true
       },
       "registry": {
-        "title": "Nano Banana by Ace Data Cloud",
+        "title": "Nano Banana",
         "description": "Generate and edit Nano Banana images with Ace Data Cloud; retrieve the same task for results.",
         "icon": {
           "src": "https://cdn.acedata.cloud/859plc.jpg",
@@ -263,7 +263,7 @@
         {
           "manifest": "gpt-image.server.json",
           "name": "io.github.AceDataCloud/mcp-gpt-image",
-          "title": "GPT Image by Ace Data Cloud",
+          "title": "GPT Image",
           "description": "Generate and edit GPT Image pictures with Ace Data Cloud; query the original image task.",
           "guide": "GPT_IMAGE.md",
           "package_arguments": [
@@ -321,7 +321,7 @@
         "default": true
       },
       "registry": {
-        "title": "Seedance by Ace Data Cloud",
+        "title": "Seedance",
         "description": "Generate Seedance videos with Ace Data Cloud; retrieve the original task for finished video.",
         "icon": {
           "src": "https://cdn.acedata.cloud/9q90dl.png",
@@ -365,7 +365,7 @@
       },
       "runtime_icon": "registry",
       "registry": {
-        "title": "Short URL by Ace Data Cloud",
+        "title": "Short URL",
         "description": "MCP server for URL shortening and management",
         "icon": {
           "src": "https://cdn.acedata.cloud/4f9642f3b6.svg",
@@ -385,7 +385,7 @@
         "default": true
       },
       "registry": {
-        "title": "Suno by Ace Data Cloud",
+        "title": "Suno",
         "description": "Create Suno music, lyrics and covers with Ace Data Cloud; retrieve the same task for results.",
         "icon": {
           "src": "https://cdn.acedata.cloud/l3ffw7.jpg",
@@ -444,7 +444,7 @@
       },
       "runtime_icon": "registry",
       "registry": {
-        "title": "Web Extractor by Ace Data Cloud",
+        "title": "Web Extractor",
         "description": "MCP server for web extraction and rendering via AceDataCloud WebExtrator",
         "icon": {
           "src": "https://cdn.acedata.cloud/0442b4af2f.png",

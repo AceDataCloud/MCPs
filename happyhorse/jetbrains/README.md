@@ -1,4 +1,4 @@
-# HappyHorse by Ace Data Cloud
+# HappyHorse
 
 Independent HappyHorse video integration provided by Ace Data Cloud for JetBrains IDEs. Not an official HappyHorse or JetBrains product.
 

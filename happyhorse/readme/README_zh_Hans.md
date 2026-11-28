@@ -1,4 +1,4 @@
-# HappyHorse by Ace Data Cloud：中文安装与首用指南
+# HappyHorse：中文安装与首用指南
 
 [English](https://github.com/AceDataCloud/HappyHorseMCP/blob/main/README.md)
 

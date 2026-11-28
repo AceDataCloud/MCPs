@@ -1,6 +1,6 @@
 {
   "name": "mcp-acemusic",
-  "displayName": "ACE Music by Ace Data Cloud",
+  "displayName": "ACE Music",
   "description": "ACE Music songs and lyrics with Ace Data Cloud; retrieve original task results.",
   "version": "0.3.0",
   "publisher": "acedatacloud",
@@ -44,18 +44,18 @@
     "mcpServerDefinitionProviders": [
       {
         "id": "acedatacloud.acemusic",
-        "label": "ACE Music by Ace Data Cloud"
+        "label": "ACE Music"
       }
     ],
     "commands": [
       {
         "command": "acedatacloud.acemusic.setApiToken",
-        "title": "ACE Music by Ace Data Cloud: Set Ace Data Cloud API Key",
+        "title": "ACE Music: Set Ace Data Cloud API Key",
         "category": "MCP"
       },
       {
         "command": "acedatacloud.acemusic.clearApiToken",
-        "title": "ACE Music by Ace Data Cloud: Clear Ace Data Cloud API Key",
+        "title": "ACE Music: Clear Ace Data Cloud API Key",
         "category": "MCP"
       }
     ]

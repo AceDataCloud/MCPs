@@ -23,7 +23,7 @@ class LobeHubListingsTest(unittest.TestCase):
                 directory = ROOT / service / "lobehub"
                 manifest = json.loads((directory / "lhm.plugin.json").read_text())
                 self.assertEqual(manifest["identifier"], identifier)
-                self.assertEqual(manifest["name"], f"{brand} by Ace Data Cloud")
+                self.assertEqual(manifest["name"], brand)
                 self.assertEqual(manifest["cloudEndpoint"], f"https://{service}.mcp.acedata.cloud/mcp")
                 source_names = set()
                 for path in (ROOT / service / "tools").glob("*.py"):

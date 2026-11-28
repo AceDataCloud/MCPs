@@ -1,6 +1,6 @@
 <img src="https://cdn.acedata.cloud/7dljuv.png" alt="OpenAI API" width="64" height="64" />
 
-## OpenAI API by Ace Data Cloud
+## OpenAI API
 
 Use the OpenAI chat, image, audio, and embedding tools provided through Ace Data Cloud.
 

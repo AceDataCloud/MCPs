@@ -1,6 +1,6 @@
 <img src="https://cdn.acedata.cloud/acemusic-icon-52deddfc87b9.png" alt="ACE Music" width="64" height="64" />
 
-## ACE Music by Ace Data Cloud
+## ACE Music
 
 Create music from a prompt or your own lyrics, cover or mash up audio, and retrieve the finished tracks.
 

@@ -50,7 +50,7 @@ def metadata(service):
         else ""
     )
     return {
-        "displayName": name + " by Ace Data Cloud",
+        "displayName": name,
         "description": service["summary"]
         + " Independently provided by Ace Data Cloud; not the model vendor's official integration."
         + limitation

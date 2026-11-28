@@ -1,6 +1,6 @@
 {
   "name": "mcp-gpt-image",
-  "displayName": "GPT Image by Ace Data Cloud",
+  "displayName": "GPT Image",
   "description": "GPT Image generation and editing by Ace Data Cloud — GPT Image 2, image tasks and results in VS Code Chat.",
   "version": "0.3.0",
   "publisher": "acedatacloud",
@@ -43,18 +43,18 @@
     "mcpServerDefinitionProviders": [
       {
         "id": "acedatacloud.openai",
-        "label": "GPT Image by Ace Data Cloud"
+        "label": "GPT Image"
       }
     ],
     "commands": [
       {
         "command": "acedatacloud.openai.setApiToken",
-        "title": "GPT Image by Ace Data Cloud: Set Ace Data Cloud API Key",
+        "title": "GPT Image: Set Ace Data Cloud API Key",
         "category": "MCP"
       },
       {
         "command": "acedatacloud.openai.clearApiToken",
-        "title": "GPT Image by Ace Data Cloud: Clear Ace Data Cloud API Key",
+        "title": "GPT Image: Clear Ace Data Cloud API Key",
         "category": "MCP"
       }
     ]

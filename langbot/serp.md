@@ -1,6 +1,6 @@
 <img src="https://cdn.acedata.cloud/27e11e555d.png" alt="Google Search" width="64" height="64" />
 
-## Google Search by Ace Data Cloud
+## Google Search
 
 Search the web, images, news, videos, maps, and places with country and language controls.
 

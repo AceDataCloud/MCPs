@@ -4,7 +4,7 @@ description: Use HappyHorse through Ace Data Cloud in goose for HappyHorse text/
 license: MIT
 ---
 
-# HappyHorse by Ace Data Cloud
+# HappyHorse
 
 Use the MCP tools installed by this plugin. Match tools by their suffix because goose namespaces them with `happyhorse-by-acedatacloud`.
 

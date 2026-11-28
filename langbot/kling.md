@@ -1,6 +1,6 @@
 <img src="https://cdn.acedata.cloud/qpbbbb.jpg" alt="Kling" width="64" height="64" />
 
-## Kling by Ace Data Cloud
+## Kling
 
 Generate video, animate a still, extend a clip, or apply motion and lip sync.
 

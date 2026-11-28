@@ -1,4 +1,4 @@
-# Nano Banana by Ace Data Cloud · VS Code 中文教程
+# Nano Banana · VS Code 中文教程
 
 [English](https://github.com/AceDataCloud/NanoBananaMCP/blob/main/vscode/README.md) · [官方扩展市场安装](https://marketplace.visualstudio.com/items?itemName=acedatacloud.mcp-nanobanana)
 
@@ -23,7 +23,7 @@
 
 ## 3. 粘贴到VS Code并选工具
 
-运行命令 **Nano Banana by Ace Data Cloud: Set Ace Data Cloud API Key**，粘贴应用 Token；保存于 VS Code SecretStorage。服务器地址为 `https://nanobanana.mcp.acedata.cloud/mcp`。若要求信任服务器，先核对地址。
+运行命令 **Nano Banana: Set Ace Data Cloud API Key**，粘贴应用 Token；保存于 VS Code SecretStorage。服务器地址为 `https://nanobanana.mcp.acedata.cloud/mcp`。若要求信任服务器，先核对地址。
 
 打开 **Chat: Manage Language Models**，使所选模型可见，再在 Chat 选择它；可安装独立的 [Ace Chat Models](https://marketplace.visualstudio.com/items?itemName=acedatacloud.chat-models)。打开 **Agent → Configure Tools**，只勾选 `nanobanana_list_models`，列表为空时先 Update Tools。组织禁用 BYOK 时遵守管理员政策。
 

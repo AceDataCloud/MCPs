@@ -1,5 +1,5 @@
 {
-  "name": "ACE Music by Ace Data Cloud",
+  "name": "ACE Music",
   "type": "streamableHttp",
   "baseUrl": "https://acemusic.mcp.acedata.cloud/mcp",
   "headers": {}

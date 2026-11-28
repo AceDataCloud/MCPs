@@ -1,4 +1,4 @@
-# ACE Music by Ace Data Cloud：中文完整教程
+# ACE Music：中文完整教程
 
 [English](README.md)
 

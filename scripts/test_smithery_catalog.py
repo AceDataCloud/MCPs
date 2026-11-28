@@ -27,7 +27,7 @@ class SmitheryCatalogTest(unittest.TestCase):
         for service in services:
             self.assertEqual(
                 metadata(service)["displayName"],
-                service["service"] + " by Ace Data Cloud",
+                service["service"],
             )
 
     def test_every_entry_reuses_the_owned_package_and_endpoint(self):
