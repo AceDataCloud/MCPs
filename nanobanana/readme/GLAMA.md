@@ -1,4 +1,4 @@
-# Nano Banana (NanoBanana) in Glama — by Ace Data Cloud
+# Nano Banana (NanoBanana) in Glama
 
 [简体中文](#中文操作指南) · [Open the service listing](https://glama.ai/mcp/servers/AceDataCloud/NanoBananaMCP) · [Current access and pricing](https://platform.acedata.cloud/models?utm_source=glama&utm_medium=referral&utm_campaign=evergreen)
 

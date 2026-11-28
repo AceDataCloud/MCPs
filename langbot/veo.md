@@ -1,6 +1,6 @@
 <img src="https://cdn.acedata.cloud/8nxyy9.jpg" alt="Veo" width="64" height="64" />
 
-## Veo by Ace Data Cloud
+## Veo
 
 Generate video from text or reference frames, then retrieve the finished clips.
 

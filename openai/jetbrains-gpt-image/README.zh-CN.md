@@ -1,4 +1,4 @@
-# GPT Image by Ace Data Cloud：中文完整教程
+# GPT Image：中文完整教程
 
 [English](README.md)
 

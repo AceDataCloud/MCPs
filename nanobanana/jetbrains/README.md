@@ -1,4 +1,4 @@
-# Nano Banana by Ace Data Cloud
+# Nano Banana
 
 Independent Nano Banana image integration provided by Ace Data Cloud for JetBrains IDEs. Not an official Nano Banana or JetBrains product.
 

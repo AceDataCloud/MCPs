@@ -1,4 +1,4 @@
-# GPT Image by Ace Data Cloud：中文安装与首用指南
+# GPT Image：中文安装与首用指南
 
 [English](https://github.com/AceDataCloud/OpenAIMCP/blob/main/GPT_IMAGE.md)
 

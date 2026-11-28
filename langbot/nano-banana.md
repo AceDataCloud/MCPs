@@ -1,6 +1,6 @@
 <img src="https://cdn.acedata.cloud/859plc.jpg" alt="Nano Banana" width="64" height="64" />
 
-## Nano Banana by Ace Data Cloud
+## Nano Banana
 
 Generate an image from a prompt, or edit a reference image with text instructions.
 

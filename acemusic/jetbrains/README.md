@@ -1,4 +1,4 @@
-# ACE Music by Ace Data Cloud
+# ACE Music
 
 Independent ACE Music music integration provided by Ace Data Cloud for JetBrains IDEs. Not an official ACE Music or JetBrains product.
 

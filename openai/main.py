@@ -96,9 +96,7 @@ Environment Variables:
     # Print startup banner
     safe_print("")
     safe_print("=" * 50)
-    safe_print(
-        "  GPT Image by Ace Data Cloud" if args.profile == "gpt-image" else "  MCP OpenAI Server"
-    )
+    safe_print("  GPT Image" if args.profile == "gpt-image" else "  MCP OpenAI Server")
     safe_print("=" * 50)
     safe_print("")
     safe_print(f"  Version:   {get_version()}")

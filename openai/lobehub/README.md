@@ -1,4 +1,4 @@
-# GPT Image by Ace Data Cloud for LobeHub
+# GPT Image for LobeHub
 
 [简体中文](README_zh-CN.md) · [Install in the official MCP market](https://lobehub.com/mcp/acedatacloud-openaimcp) · [Current API/pricing](https://platform.acedata.cloud/documents/openai-images-generations?utm_source=opensource&utm_medium=referral&utm_campaign=evergreen)
 

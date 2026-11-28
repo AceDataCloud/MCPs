@@ -1,6 +1,6 @@
 <img src="https://cdn.acedata.cloud/l3ffw7.jpg" alt="Suno" width="64" height="64" />
 
-## Suno by Ace Data Cloud
+## Suno
 
 Create and extend songs, write lyrics, separate stems, and look up the resulting audio.
 

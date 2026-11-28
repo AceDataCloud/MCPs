@@ -4,7 +4,7 @@ description: Use Nano Banana through Ace Data Cloud in goose for Nano Banana ima
 license: MIT
 ---
 
-# Nano Banana by Ace Data Cloud
+# Nano Banana
 
 Use the MCP tools installed by this plugin. Match tools by their suffix because goose namespaces them with `nano-banana-by-acedatacloud`.
 

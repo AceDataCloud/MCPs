@@ -1,7 +1,7 @@
 {
   "name": "gpt-image-by-acedatacloud",
   "version": "0.1.0",
-  "description": "GPT Image by Ace Data Cloud: GPT Image generation and image editing. Independent goose MCP and Skill plugin.",
+  "description": "GPT Image: GPT Image generation and image editing. Independent goose MCP and Skill plugin.",
   "author": {
     "name": "Ace Data Cloud"
   },

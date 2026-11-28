@@ -1,4 +1,4 @@
-# GPT Image by Ace Data Cloud in Glama
+# GPT Image in Glama
 
 [简体中文](#中文操作指南) · [GPT Image profile source](../GPT_IMAGE.md) · [Current models and price](https://platform.acedata.cloud/models?utm_source=glama&utm_medium=referral&utm_campaign=evergreen)
 

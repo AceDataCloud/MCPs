@@ -1,4 +1,4 @@
-# Nano Banana by Ace Data Cloud for goose
+# Nano Banana for goose
 
 An independent **Nano Banana** plugin maintained by **Ace Data Cloud**. It installs the existing published `mcp-nanobanana-pro` MCP server and the `nano-banana-by-acedatacloud:nano-banana-image` workflow through goose's native Open Plugins support. It is not made or endorsed by the Nano Banana brand, is not bundled with goose, and is not a listing in goose's retired extension directory.
 

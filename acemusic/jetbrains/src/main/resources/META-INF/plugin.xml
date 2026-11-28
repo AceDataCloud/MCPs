@@ -1,6 +1,6 @@
 <idea-plugin>
     <id>com.acedatacloud.mcp.acemusic</id>
-    <name>ACE Music by Ace Data Cloud</name>
+    <name>ACE Music</name>
     <vendor email="dev@acedata.cloud" url="https://acedata.cloud">Ace Data Cloud</vendor>
 
     <description><![CDATA[

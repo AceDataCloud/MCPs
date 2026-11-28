@@ -14,7 +14,7 @@
 const vscode = require("vscode");
 
 const PROVIDER_ID = "acedatacloud.happyhorse";
-const SERVER_LABEL = "HappyHorse by Ace Data Cloud";
+const SERVER_LABEL = "HappyHorse";
 const SERVER_URL = "https://happyhorse.mcp.acedata.cloud/mcp";
 const SET_TOKEN_CMD = "acedatacloud.happyhorse.setApiToken";
 const CLEAR_TOKEN_CMD = "acedatacloud.happyhorse.clearApiToken";

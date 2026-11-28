@@ -1,4 +1,4 @@
-# Nano Banana by Ace Data Cloud for Cline
+# Nano Banana for Cline
 
 Use Nano Banana image tools inside Cline through the existing Ace Data Cloud MCP server. This is an Ace Data Cloud integration, not an official Nano Banana or Cline first-party plugin.
 
@@ -6,7 +6,7 @@ English guide · [中文步骤](#中文步骤) · [API access and current pricin
 
 ## 1. Install from the Cline directory
 
-Open Cline's **Marketplace**, search **Nano Banana**, and select **Nano Banana by Ace Data Cloud**. Check the author is **Ace Data Cloud** and the repository is [AceDataCloud/NanoBananaMCP](https://github.com/AceDataCloud/NanoBananaMCP).
+Open Cline's **Marketplace**, search **Nano Banana**, and select **Nano Banana**. Check the author is **Ace Data Cloud** and the repository is [AceDataCloud/NanoBananaMCP](https://github.com/AceDataCloud/NanoBananaMCP).
 
 **Submission status (2026-10-18): this directory entry is being proposed; it is not yet an approved/public listing.** If the card is unavailable, use this manual equivalent while review is pending:
 
@@ -88,11 +88,11 @@ The MCP integration is free to install; the server receives your selected prompt
 
 ## 中文步骤
 
-这是 **Nano Banana by Ace Data Cloud** 的 Cline 接入指南：服务能力由 Ace Data Cloud 提供，不是 Nano Banana 或 Cline 第一方官方插件。
+这是 **Nano Banana** 的 Cline 接入指南：服务能力由 Ace Data Cloud 提供，不是 Nano Banana 或 Cline 第一方官方插件。
 
 ### 1. 查找并安装正确的条目
 
-在 Cline **Marketplace** 搜索 **Nano Banana**，核对标题 **Nano Banana by Ace Data Cloud**、作者 **Ace Data Cloud**、[源仓 AceDataCloud/NanoBananaMCP](https://github.com/AceDataCloud/NanoBananaMCP)。
+在 Cline **Marketplace** 搜索 **Nano Banana**，核对标题 **Nano Banana**、作者 **Ace Data Cloud**、[源仓 AceDataCloud/NanoBananaMCP](https://github.com/AceDataCloud/NanoBananaMCP)。
 
 **2026-10-18 状态：官方目录投稿仍待审核，尚未收录。** 若搜索不到卡片，可在审核期间使用以下手动等效配置；不要把这条命令视为官方上架证明：
 

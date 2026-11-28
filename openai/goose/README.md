@@ -1,4 +1,4 @@
-# GPT Image by Ace Data Cloud for goose
+# GPT Image for goose
 
 An independent **GPT Image** plugin maintained by **Ace Data Cloud**. It installs the existing published `mcp-openai-pro` MCP server and the `gpt-image-by-acedatacloud:gpt-image` workflow through goose's native Open Plugins support. It is not made or endorsed by the GPT Image brand, is not bundled with goose, and is not a listing in goose's retired extension directory.
 

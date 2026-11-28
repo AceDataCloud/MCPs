@@ -1,4 +1,4 @@
-# Nano Banana by Ace Data Cloud：中文完整教程
+# Nano Banana：中文完整教程
 
 [English](README.md)
 

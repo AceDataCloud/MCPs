@@ -14,7 +14,7 @@
 const vscode = require("vscode");
 
 const PROVIDER_ID = "acedatacloud.openai";
-const SERVER_LABEL = "GPT Image by Ace Data Cloud";
+const SERVER_LABEL = "GPT Image";
 const SERVER_URL = "https://openai.mcp.acedata.cloud/mcp";
 const SET_TOKEN_CMD = "acedatacloud.openai.setApiToken";
 const CLEAR_TOKEN_CMD = "acedatacloud.openai.clearApiToken";

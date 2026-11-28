@@ -1,6 +1,6 @@
 {
   "name": "mcp-happyhorse",
-  "displayName": "HappyHorse by Ace Data Cloud",
+  "displayName": "HappyHorse",
   "description": "HappyHorse video generation by Ace Data Cloud — text, image, references, editing and task results in VS Code Chat.",
   "version": "0.3.0",
   "publisher": "acedatacloud",
@@ -43,18 +43,18 @@
     "mcpServerDefinitionProviders": [
       {
         "id": "acedatacloud.happyhorse",
-        "label": "HappyHorse by Ace Data Cloud"
+        "label": "HappyHorse"
       }
     ],
     "commands": [
       {
         "command": "acedatacloud.happyhorse.setApiToken",
-        "title": "HappyHorse by Ace Data Cloud: Set Ace Data Cloud API Key",
+        "title": "HappyHorse: Set Ace Data Cloud API Key",
         "category": "MCP"
       },
       {
         "command": "acedatacloud.happyhorse.clearApiToken",
-        "title": "HappyHorse by Ace Data Cloud: Clear Ace Data Cloud API Key",
+        "title": "HappyHorse: Clear Ace Data Cloud API Key",
         "category": "MCP"
       }
     ]

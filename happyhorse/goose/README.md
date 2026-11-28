@@ -1,4 +1,4 @@
-# HappyHorse by Ace Data Cloud for goose
+# HappyHorse for goose
 
 An independent **HappyHorse** plugin maintained by **Ace Data Cloud**. It installs the existing published `mcp-happyhorse` MCP server and the `happyhorse-by-acedatacloud:happyhorse-video` workflow through goose's native Open Plugins support. It is not made or endorsed by the HappyHorse brand, is not bundled with goose, and is not a listing in goose's retired extension directory.
 

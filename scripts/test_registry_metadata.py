@@ -52,6 +52,6 @@ class RegistryMetadataTest(unittest.TestCase):
                 self.assertEqual(query["utm_medium"], ["referral"])
                 if metadata := catalog[path.parent.name].get("registry"):
                     self.assertEqual(actual["title"], metadata["title"])
-                    self.assertTrue(actual["title"].endswith(" by Ace Data Cloud"))
+                    self.assertNotIn("by Ace Data Cloud", actual["title"])
                     self.assertLessEqual(len(actual["description"]), 100)
                     self.assertTrue(actual["icons"][0]["src"].startswith("https://"))

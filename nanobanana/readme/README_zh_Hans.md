@@ -1,4 +1,4 @@
-# Nano Banana by Ace Data Cloud：中文安装与首用指南
+# Nano Banana：中文安装与首用指南
 
 [English](https://github.com/AceDataCloud/NanoBananaMCP/blob/main/README.md)
 

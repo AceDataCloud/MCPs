@@ -1,4 +1,4 @@
-# GPT Image by Ace Data Cloud for Cline
+# GPT Image for Cline
 
 Use GPT Image image tools inside Cline through the existing Ace Data Cloud MCP server. This entry reuses **OpenAIMCP / mcp-openai-pro**, which exposes more than GPT Image. Its other chat/audio tools remain visible; this is not an image-only permission boundary or an OpenAI official connector.
 
@@ -6,7 +6,7 @@ English guide · [中文步骤](#中文步骤) · [API access and current pricin
 
 ## 1. Install from the Cline directory
 
-Open Cline's **Marketplace**, search **GPT Image**, and select **GPT Image by Ace Data Cloud**. Check the author is **Ace Data Cloud** and the repository is [AceDataCloud/OpenAIMCP](https://github.com/AceDataCloud/OpenAIMCP).
+Open Cline's **Marketplace**, search **GPT Image**, and select **GPT Image**. Check the author is **Ace Data Cloud** and the repository is [AceDataCloud/OpenAIMCP](https://github.com/AceDataCloud/OpenAIMCP).
 
 **Submission status (2026-10-18): this directory entry is being proposed; it is not yet an approved/public listing.** If the card is unavailable, use this manual equivalent while review is pending:
 
@@ -88,11 +88,11 @@ The MCP integration is free to install; the server receives your selected prompt
 
 ## 中文步骤
 
-这是 **GPT Image by Ace Data Cloud** 的 Cline 接入指南：服务能力由 Ace Data Cloud 提供，不是 GPT Image 或 Cline 第一方官方插件。本条目复用 **OpenAIMCP / mcp-openai-pro**，还会暴露聊天、音频等工具；不是只允许图像操作的权限边界。
+这是 **GPT Image** 的 Cline 接入指南：服务能力由 Ace Data Cloud 提供，不是 GPT Image 或 Cline 第一方官方插件。本条目复用 **OpenAIMCP / mcp-openai-pro**，还会暴露聊天、音频等工具；不是只允许图像操作的权限边界。
 
 ### 1. 查找并安装正确的条目
 
-在 Cline **Marketplace** 搜索 **GPT Image**，核对标题 **GPT Image by Ace Data Cloud**、作者 **Ace Data Cloud**、[源仓 AceDataCloud/OpenAIMCP](https://github.com/AceDataCloud/OpenAIMCP)。
+在 Cline **Marketplace** 搜索 **GPT Image**，核对标题 **GPT Image**、作者 **Ace Data Cloud**、[源仓 AceDataCloud/OpenAIMCP](https://github.com/AceDataCloud/OpenAIMCP)。
 
 **2026-10-18 状态：官方目录投稿仍待审核，尚未收录。** 若搜索不到卡片，可在审核期间使用以下手动等效配置；不要把这条命令视为官方上架证明：
 

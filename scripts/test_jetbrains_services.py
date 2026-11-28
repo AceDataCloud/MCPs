@@ -34,8 +34,7 @@ class JetBrainsServiceTest(unittest.TestCase):
                 ROOT / service["directory"] / "src/main/resources/META-INF/plugin.xml"
             ).getroot()
             self.assertEqual(root.findtext("name"), service["title"])
-            self.assertTrue(service["title"].startswith(service["brand"]))
-            self.assertIn("by Ace Data Cloud", service["title"])
+            self.assertEqual(service["title"], service["brand"])
             self.assertLessEqual(len(service["title"]), 30)
             self.assertEqual(root.findtext("id"), service["package"])
             self.assertNotIn(root.findtext("id"), identities)

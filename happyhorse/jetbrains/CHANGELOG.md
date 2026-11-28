@@ -1,4 +1,4 @@
-# HappyHorse by Ace Data Cloud
+# HappyHorse
 
 ## Unreleased
 

@@ -1,6 +1,6 @@
 <img src="https://cdn.acedata.cloud/9q90dl.png" alt="Seedance" width="64" height="64" />
 
-## Seedance by Ace Data Cloud
+## Seedance
 
 Generate video from text or animate a reference image.
 
